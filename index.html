@@ -7,6 +7,12 @@
 <meta name="description" content="Full-stack offensive security training. Two tracks: coders learning attack tradecraft, and security people learning to code. 22 modules, 8 interactive labs. Free.">
 <meta name="author" content="George Wu">
 <meta name="robots" content="index, follow">
+<script>
+// Set lock class BEFORE body renders — no flash
+if (localStorage.getItem('22div_gate_auth') !== '1') {
+  document.documentElement.classList.add('course-locked');
+}
+</script>
 <meta property="og:title" content="22nd Survey Division — Offensive Security Training">
 <meta property="og:description" content="The course that teaches coders to think like attackers — and attackers to code like engineers.">
 <meta property="og:type" content="website">
@@ -288,6 +294,8 @@ section + section{border-top:1px solid var(--border);}
 .mod-desc{font-size:.68rem;color:var(--text-dim);line-height:1.7;margin-bottom:1rem;}
 .mod-card.mod-locked .mod-desc{color:var(--text-mute);}
 
+.mod-detail{font-size:.62rem;color:#555;line-height:1.75;margin-bottom:.7rem;border-left:2px solid #1a1a1a;padding-left:.7rem;}
+.mod-detail strong{color:#3a7a3a;font-weight:400;}
 .mod-tags{display:flex;gap:.4rem;flex-wrap:wrap;}
 .mod-tag{
   font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;
@@ -447,6 +455,42 @@ footer{
 #pin-submit:disabled{opacity:.25;cursor:default;}
 #pin-error{font-size:.58rem;color:var(--red);letter-spacing:.1em;min-height:1.2em;margin-bottom:.7rem;}
 .pin-footer-note{font-size:.47rem;color:#1e1e1e;letter-spacing:.05em;line-height:1.7;}
+
+/* ── GATE LOCK ── */
+html.course-locked #courses,
+html.course-locked #curriculum,
+html.course-locked #labs { display: none !important; }
+
+/* ── COURSE TEASER (shown when locked, hidden when unlocked) ── */
+#course-teaser { padding: 4rem 0; text-align: center; }
+html:not(.course-locked) #course-teaser { display: none !important; }
+.teaser-label { font-size: .52rem; letter-spacing: .26em; color: var(--green-dim); margin-bottom: 1rem; }
+.teaser-headline { font-size: 1rem; color: #fff; letter-spacing: .12em; margin-bottom: .6rem; }
+.teaser-sub { font-size: .7rem; color: var(--text-dim); max-width: 480px; margin: 0 auto 2rem; line-height: 1.85; }
+.teaser-btn { display: inline-block; font-family: inherit; font-size: .64rem; letter-spacing: .2em; padding: .65rem 2rem; border: 1px solid var(--green); color: var(--green); background: transparent; cursor: pointer; transition: all .2s; }
+.teaser-btn:hover { background: var(--green); color: #000; }
+.teaser-modules { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+.teaser-chip { font-size: .5rem; letter-spacing: .1em; padding: .2rem .6rem; border: 1px solid #1a1a1a; color: var(--text-mute); }
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  :root { font-size: 13px; }
+  nav#main-nav { padding: .5rem .9rem; }
+  .hero-headline { font-size: clamp(1.6rem, 8vw, 2.8rem) !important; }
+  .hero-sub { font-size: .76rem !important; }
+  section { padding: 2.5rem 0 !important; }
+  .section-inner, .wrap { padding: 0 1rem !important; }
+  .proof-grid { grid-template-columns: 1fr !important; }
+  .curriculum-grid { grid-template-columns: 1fr !important; gap: 1px; }
+  .mod-card { padding: 1rem; }
+  .mod-detail { display: none; } /* collapse verbose details on mobile to save space */
+  #pin-box { padding: 1.8rem 1.2rem; }
+  #pin-input { font-size: 1.2rem; letter-spacing: .4em; }
+  .mod-price-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .mod-price-table { min-width: 520px; }
+  .research-item { grid-template-columns: 1fr !important; gap: .6rem; }
+  .ri-status { align-self: flex-start; }
+}
 
 /* ── PROOF SECTION ── */
 #proof{padding:5rem 0 4rem;}
@@ -863,7 +907,7 @@ footer{
     <div style="margin-top:2.5rem;">
       <div style="font-size:.52rem;letter-spacing:.22em;color:var(--text-mute);margin-bottom:.4rem;">// OR — BUY INDIVIDUAL MODULES</div>
       <p style="font-size:.7rem;color:var(--text-dim);margin-bottom:.4rem;">Each module unlocks the specific private repo. AU: PayID <strong style="color:var(--green);">gwu0738@gmail.com</strong> → include module name as reference → access PIN + GitHub collaborator invite within 24h. INT: email for invoice.</p>
-      <table class="mod-price-table">
+      <div class="mod-price-table-wrap"><table class="mod-price-table">
         <thead><tr><th>#</th><th>MODULE</th><th>PRIVATE REPO UNLOCK</th><th>PRICE</th></tr></thead>
         <tbody>
           <tr><td class="mp-num">01</td><td class="mp-title">Offensive Mindset</td><td class="mp-repo">// doctrine — no repo</td><td class="mp-price">$29</td></tr>
@@ -889,7 +933,7 @@ footer{
           <tr><td class="mp-num">21</td><td class="mp-title">Mobile Security</td><td class="mp-repo">starkiller</td><td class="mp-price">$79</td></tr>
           <tr><td class="mp-num">22</td><td class="mp-title">OSINT &amp; Social Engineering</td><td class="mp-repo">// OSINT methodology</td><td class="mp-price">$39</td></tr>
         </tbody>
-      </table>
+      </table></div>
       <p style="font-size:.62rem;color:var(--text-mute);margin-top:.8rem;">Individual total: ~$1,271 AUD. <strong style="color:var(--green);">Full bundle $497 saves you $774.</strong> Purchase individual modules via <a href="mailto:gwu0738@gmail.com?subject=22DIV Module Purchase" style="color:#2a6e2a;">gwu0738@gmail.com</a></p>
     </div>
 
@@ -949,12 +993,51 @@ footer{
   </div>
 </section>
 
+<!-- ── COURSE TEASER (locked state) ── -->
+<section id="course-teaser" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-inner" style="text-align:center;padding:4rem 1.5rem;">
+    <div class="teaser-label">// 22 MODULES — ACCESS RESTRICTED</div>
+    <div class="teaser-headline">FULL CURRICULUM IS PIN-GATED</div>
+    <div class="teaser-sub">22 field manual chapters. C, PowerShell, Python, Assembly. Real tradecraft against live Windows 11 defences. From attacker psychology to rootkits, C2 frameworks, and Android RATs.</div>
+    <button class="teaser-btn" onclick="showGate()">ENTER ACCESS PIN →</button>
+    <div class="teaser-modules">
+      <span class="teaser-chip">01 OFFENSIVE MINDSET</span>
+      <span class="teaser-chip">02 RECON</span>
+      <span class="teaser-chip">03 VULN RESEARCH</span>
+      <span class="teaser-chip">04 MITIGATIONS</span>
+      <span class="teaser-chip">05 EXPLOIT DEV</span>
+      <span class="teaser-chip">06 WINDOWS INTERNALS</span>
+      <span class="teaser-chip">07 EXPLOIT PRIMITIVES</span>
+      <span class="teaser-chip">08 PRIVESC</span>
+      <span class="teaser-chip">09 MALWARE DEV</span>
+      <span class="teaser-chip">10 CODE INJECTION</span>
+      <span class="teaser-chip">11 ROOTKITS</span>
+      <span class="teaser-chip">12 AV EVASION</span>
+      <span class="teaser-chip">13 MEMORY FORENSICS</span>
+      <span class="teaser-chip">14 REVERSE ENGINEERING</span>
+      <span class="teaser-chip">15 POST-EXPLOITATION</span>
+      <span class="teaser-chip">16 C2 FRAMEWORKS</span>
+      <span class="teaser-chip">17 NETWORK WARFARE</span>
+      <span class="teaser-chip">18 CRYPTOGRAPHY</span>
+      <span class="teaser-chip">19 LOTL</span>
+      <span class="teaser-chip">20 ACTIVE DIRECTORY</span>
+      <span class="teaser-chip">21 MOBILE</span>
+      <span class="teaser-chip">22 OSINT</span>
+    </div>
+  </div>
+</section>
+
 <!-- ── CURRICULUM ── -->
 <section id="curriculum">
   <div class="container">
     <div class="section-eyebrow">// FIELD MANUALS</div>
     <div class="section-title">CURRICULUM <span class="slash">//</span> 22DIV <span class="accent">DOCTRINE LIBRARY</span></div>
 
+    <div style="border:1px solid #1a3a1a;background:#070f07;padding:1.2rem 1.5rem;margin-bottom:1.5rem;font-size:.64rem;line-height:1.9;color:#4a7a4a;">
+      <span style="color:var(--green);letter-spacing:.1em;">// COURSE STRUCTURE</span> — 22 modules, executed in sequence. You don't watch. You build.<br>
+      Each module has: <strong style="color:#3a8a3a;">Windows Setup</strong> (install, configure), <strong style="color:#3a8a3a;">Theory</strong> (why it works, how it fails), <strong style="color:#3a8a3a;">Drills</strong> (hands-on exercises), <strong style="color:#3a8a3a;">Expected Output</strong> (you know exactly what success looks like), and <strong style="color:#3a8a3a;">Defender Takeaway</strong> (the detection side).<br>
+      You code in C, PowerShell, and Python. You read assembly. You operate against live Windows 11 with Defender enabled. No VMs-with-AV-off. No sanitised CTF. Real operating system. Real defences.
+    </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
       <div class="progress-text" id="progress-text">0 / 22 MODULES COMPLETE</div>
@@ -975,6 +1058,7 @@ footer{
         </div>
         <div class="mod-title">Offensive Mindset</div>
         <div class="mod-desc">Attacker psychology &amp; kill chain</div>
+        <div class="mod-detail">You learn how attackers think before they touch a keyboard. <strong>MITRE ATT&amp;CK</strong> kill chain, Lockheed Martin model, defender's asymmetry — why the attacker only needs to win once. You leave this module thinking like the enemy.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -994,6 +1078,7 @@ footer{
         </div>
         <div class="mod-title">Recon &amp; Footprinting</div>
         <div class="mod-desc">OSINT, passive &amp; active recon</div>
+        <div class="mod-detail">You write Python to scrape, parse, and map a target before touching a single packet. <strong>nmap, theHarvester, Shodan, GitLeaks</strong> — all installed on Windows via WSL2. Every command has expected output so you know exactly what success looks like.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1014,6 +1099,7 @@ footer{
         </div>
         <div class="mod-title">Vulnerability Research</div>
         <div class="mod-desc">Methodology &amp; tools</div>
+        <div class="mod-detail">You learn to find real bugs — not CTF bugs. <strong>CWE taxonomy, CVSS scoring, fuzzing theory, binary diffing</strong>. You read CVE advisories like a professional, reverse a patch to find what it fixed, and understand what separates a crash from an exploitable vulnerability.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1034,6 +1120,7 @@ footer{
         </div>
         <div class="mod-title">Mitigations</div>
         <div class="mod-desc">ASLR, DEP, CFG, stack canaries</div>
+        <div class="mod-detail">You understand every modern Windows exploit mitigation at the binary level — not just what they do but <strong>exactly how they fail</strong>. Stack canaries, ASLR entropy, DEP/NX hardware enforcement, CFG graph validation. You leave knowing which mitigations can be bypassed and which ones actually hold.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1054,6 +1141,7 @@ footer{
         </div>
         <div class="mod-title">Exploit Development</div>
         <div class="mod-desc">BOF, ROP, heap spraying</div>
+        <div class="mod-detail">You write your first stack buffer overflow in C. You build a <strong>ROP chain by hand</strong> — finding gadgets with ROPgadget, chaining them to bypass DEP. Heap spray theory + heap feng shui. Compile with MinGW on Windows, test against your own vulnerable service.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1075,6 +1163,7 @@ footer{
         </div>
         <div class="mod-title">Windows Internals</div>
         <div class="mod-desc">Memory, handles, kernel objects</div>
+        <div class="mod-detail">You open <strong>WinDbg and attach to a live kernel</strong>. You read EPROCESS, PEB, TEB, VAD tree — the real data structures Windows uses. Virtual memory layout, handle tables, Section objects, kernel pool. You stop guessing and start reading the OS like source code.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1095,6 +1184,7 @@ footer{
         </div>
         <div class="mod-title">Exploit Primitives</div>
         <div class="mod-desc">Read/write primitives, AAAR</div>
+        <div class="mod-detail">You code the building blocks every exploit uses: <strong>arbitrary address read, arbitrary address write, arbitrary code execution</strong>. You construct each primitive in C from scratch — type confusions, use-after-free setups, integer overflows that land you controlled memory. No magic. Every byte is explained.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1115,6 +1205,7 @@ footer{
         </div>
         <div class="mod-title">Privilege Escalation</div>
         <div class="mod-desc">Token abuse, service exploits</div>
+        <div class="mod-detail">You go from standard user to <strong>SYSTEM without touching an exploit database</strong>. icacls binary replacement (CWE-732), DLL search order hijacking (CWE-427), unquoted service paths, SeImpersonatePrivilege Potato attacks. Every technique demonstrated live against Windows 11 with Defender running.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1136,6 +1227,7 @@ footer{
         </div>
         <div class="mod-title">Malware Development</div>
         <div class="mod-desc">Dropper, loader, stager patterns</div>
+        <div class="mod-detail">You write a <strong>reverse shell in C from scratch</strong> — Winsock, XOR encryption, socket comms, PE headers. Then you build a dropper that fetches and executes a payload without writing to disk. You compile with MinGW/MSYS2 on Windows. Output is a working EXE.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1156,6 +1248,7 @@ footer{
         </div>
         <div class="mod-title">Code Injection</div>
         <div class="mod-desc">DLL, shellcode, process hollowing</div>
+        <div class="mod-detail">You write <strong>three injection techniques in C</strong>: classic DLL injection via WriteProcessMemory + CreateRemoteThread, shellcode injection with VirtualAllocEx, and process hollowing (hollow a legitimate notepad.exe and execute your payload inside it). Each technique has expected Task Manager output proving the injection worked.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1177,6 +1270,7 @@ footer{
         </div>
         <div class="mod-title">Rootkits</div>
         <div class="mod-desc">User mode &amp; kernel rootkits</div>
+        <div class="mod-detail">You study the <strong>VADER rootkit</strong> (the real code from rainfantry/vader-rootkit). Hardware Breakpoint interception of AMSI and ETW. How kernel callbacks work. SSDT hooks. IRP manipulation. Then you understand MSRC VULN-195458 — the submitted Tamper Protection bypass. Real research, not a tutorial.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1197,6 +1291,7 @@ footer{
         </div>
         <div class="mod-title">AV Evasion</div>
         <div class="mod-desc">Signatures, heuristics, sandboxes</div>
+        <div class="mod-detail">You break AV the right way — by understanding what it actually detects. <strong>Signature bytes vs. behavioural patterns</strong>, sandbox evasion (timing, artifact checking, VM fingerprinting), polymorphic encryption with the eclipse builder, API unhooking, AMSI patching. All tested against Windows Defender on a live Windows 11 host.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1218,6 +1313,7 @@ footer{
         </div>
         <div class="mod-title">Memory Forensics</div>
         <div class="mod-desc">Volatility, EPROCESS, artefacts</div>
+        <div class="mod-detail">You learn to read a memory image like a detective and <strong>then burn your own artefacts</strong>. Volatility 3 setup on Windows, EPROCESS/VAD parsing, Prefetch analysis, event log forensics, MFT $USN journal. The flagship repo handles automated artefact cleanup — you read its code to understand what forensics looks for and why.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1238,6 +1334,7 @@ footer{
         </div>
         <div class="mod-title">Reverse Engineering</div>
         <div class="mod-desc">Ghidra, x64dbg, disassembly</div>
+        <div class="mod-detail">You install <strong>Ghidra and x64dbg on Windows</strong> and reverse a real binary. Reading x86-64 assembly without a decompiler, identifying function prologues, tracing control flow graphs, recognising malloc/free patterns, setting hardware breakpoints, bypassing anti-debug checks. You reverse the same shellcode you wrote in module 10 to verify your own work.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1259,6 +1356,7 @@ footer{
         </div>
         <div class="mod-title">Post-Exploitation</div>
         <div class="mod-desc">Lateral movement, persistence</div>
+        <div class="mod-detail">You own a box — now what? <strong>Pass-the-hash with mimikatz</strong>, lateral movement via WMI/PsExec/SMB, persistence via Run keys, schtasks, WMI subscriptions, BITS jobs. Every persistence mechanism has its corresponding detection event ID. You learn to be impossible to evict while staying invisible to the SOC analyst reviewing the same system.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1279,6 +1377,7 @@ footer{
         </div>
         <div class="mod-title">Command &amp; Control</div>
         <div class="mod-desc">C2 channels, beacons, profiles</div>
+        <div class="mod-detail">You read and understand <strong>the CHEYANNE C2 codebase</strong> — the real operational framework with Discord bridge, jitter, per-implant keys, and PENTEST_LOG tracking. HTTP/S beacon construction, DNS-over-HTTPS exfil, malleable C2 profile theory, traffic blending. You understand what makes a C2 network map-resistant and what gets operators burned by threat intel.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1300,6 +1399,7 @@ footer{
         </div>
         <div class="mod-title">Network Warfare</div>
         <div class="mod-desc">TCP/IP, pivoting, tunnelling</div>
+        <div class="mod-detail">You wire up a multi-hop network in Hyper-V and pivot through it. <strong>TCP handshake analysis in Wireshark</strong>, SOCKS5 proxychains, SSH dynamic forwarding, chisel/ligolo-ng tunnelling, network-level detection with Zeek/Suricata. You understand how every pivot looks on the wire and how to shape traffic to avoid signature matches.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1320,6 +1420,7 @@ footer{
         </div>
         <div class="mod-title">Cryptography &amp; Evasion</div>
         <div class="mod-desc">Encoding, encryption, obfuscation</div>
+        <div class="mod-detail">You implement <strong>XOR, AES-128-CBC, and RC4 in C</strong> — not by calling a library, by coding the algorithms yourself so you understand every byte. Then: base64 encoding for payload transport, per-vector key isolation (different key for AMSI bypass vs. shellcode), entropy analysis and why high entropy triggers YARA rules. You leave knowing why encryption alone doesn't beat AV.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1337,6 +1438,7 @@ footer{
         </div>
         <div class="mod-title">REDACTED</div>
         <div class="mod-desc" style="color:var(--red-dim);letter-spacing:.08em;">// COMING SOON // CONTENT UNDER DEVELOPMENT //</div>
+        <div class="mod-detail" style="color:#3a2222;">Chapter 19 is in active development. Preview: <strong>PowerShell cradles, certutil, regsvr32 Squiblydoo, BITS jobs, WMI persistence triad, schtasks, msiexec remote MSI</strong>. Every technique is native Windows — zero dropped executables. Field manual is written and committed; repo + MCQ pending.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-redacted">Classified</span>
         </div>
@@ -1355,6 +1457,7 @@ footer{
         </div>
         <div class="mod-title">Active Directory</div>
         <div class="mod-desc">Kerberoast, pass-the-hash, AD enum</div>
+        <div class="mod-detail">You set up a <strong>mini domain in Hyper-V</strong> (DC + workstation) and attack it. BloodHound/SharpHound AD enumeration, Kerberoasting SPN accounts, AS-REP roasting, pass-the-hash, over-pass-the-hash, DCSync attack with winrecon. You understand the entire Windows authentication stack — NTLM, Kerberos, tickets, delegation — at the protocol level, not just the tool level.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1376,6 +1479,7 @@ footer{
         </div>
         <div class="mod-title">Mobile Security</div>
         <div class="mod-desc">Android internals, APK analysis</div>
+        <div class="mod-detail">You reverse the <strong>STARKILLER Android RAT</strong> (the real code). APK structure, Smali bytecode reading, Dalvik VM, Android permissions model, Play Protect bypass techniques, GPS/SMS/camera exfil via Android API. You use JADX and apktool on Windows to disassemble a real production RAT and understand every line — then you know how defenders catch them.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1396,6 +1500,7 @@ footer{
         </div>
         <div class="mod-title">OSINT &amp; Social Engineering</div>
         <div class="mod-desc">Recon, phishing, pretexting</div>
+        <div class="mod-detail">You build a complete <strong>target intelligence dossier</strong> from public sources only — OSINT beyond Google. LinkedIn scraping, certificate transparency logs, GitHub leak hunting, breach databases, social graph mapping. Then: phishing campaign anatomy, GoPhish setup on Windows, pretexting scripts, vishing call flows. You understand why the human is always the weakest link — and how to harden yourself against the same techniques.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1908,6 +2013,13 @@ footer{
     gate.style.transition = 'opacity 0.35s';
     gate.style.opacity = '0';
     setTimeout(function() { gate.style.display = 'none'; }, 350);
+    // Reveal gated sections — remove lock class so CSS unhides them
+    document.documentElement.classList.remove('course-locked');
+    // Scroll to curriculum after short delay
+    setTimeout(function() {
+      var el = document.getElementById('curriculum');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 500);
   }
 
   function getFailCount() {
