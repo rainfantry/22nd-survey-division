@@ -1600,20 +1600,33 @@ footer{
     return n;
   }
 
-  // Already authenticated this session or ever?
-  if (localStorage.getItem(AUTH_KEY) === '1') {
-    gate.style.display = 'none';
-    return;
+  // pendingAction fires after successful unlock
+  var pendingAction = null;
+
+  function isAuthed() {
+    return localStorage.getItem(AUTH_KEY) === '1';
   }
 
-  gate.style.display = 'flex';
+  function isLockedOut() {
+    return getFailCount() >= MAX_FAILS;
+  }
 
-  // Check if already locked out
-  if (getFailCount() >= MAX_FAILS) {
-    err.textContent = '// ACCESS LOCKED — clear browser data to retry or contact gwu0738@gmail.com';
-    btn.disabled = true;
-    input.disabled = true;
-    return;
+  // Show gate, fire callback on success
+  function showGate(callback) {
+    pendingAction = callback || null;
+    input.value = '';
+    err.textContent = '';
+    gate.style.opacity = '1';
+    gate.style.display = 'flex';
+    if (isLockedOut()) {
+      err.textContent = '// ACCESS LOCKED — contact gwu0738@gmail.com';
+      btn.disabled = true;
+      input.disabled = true;
+    } else {
+      btn.disabled = false;
+      input.disabled = false;
+      setTimeout(function() { input.focus(); }, 60);
+    }
   }
 
   function attempt() {
@@ -1625,7 +1638,10 @@ footer{
       btn.textContent = '// ACCESS GRANTED';
       btn.style.borderColor = 'var(--green)';
       input.style.borderColor = 'var(--green)';
-      setTimeout(unlock, 400);
+      setTimeout(function() {
+        unlock();
+        if (pendingAction) { pendingAction(); pendingAction = null; }
+      }, 400);
     } else {
       var fails = bumpFail();
       input.value = '';
@@ -1644,6 +1660,62 @@ footer{
 
   btn.addEventListener('click', attempt);
   input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
+
+  // Close gate on backdrop click (not on pin-box)
+  gate.addEventListener('click', function(e) {
+    if (e.target === gate) {
+      gate.style.transition = 'opacity 0.25s';
+      gate.style.opacity = '0';
+      setTimeout(function() { gate.style.display = 'none'; pendingAction = null; }, 260);
+    }
+  });
+
+  // Intercept course-access clicks — show gate if not authed
+  function interceptCourseLink(el, action) {
+    el.addEventListener('click', function(e) {
+      if (isAuthed()) return; // already unlocked — let it through
+      e.preventDefault();
+      e.stopPropagation();
+      showGate(action);
+    }, true); // capture phase so it fires before other listeners
+  }
+
+  // Intercept all "Start Learning" / "Enrol" CTAs that link to #curriculum
+  document.querySelectorAll('a[href="#curriculum"], .nav-cta').forEach(function(a) {
+    interceptCourseLink(a, function() {
+      var el = document.getElementById('curriculum');
+      if (el) el.scrollIntoView({behavior:'smooth'});
+    });
+  });
+
+  // Intercept all module links (#mod-01 through #mod-22)
+  document.querySelectorAll('[id^="mod-"]').forEach(function(el) {
+    if (el.tagName === 'A') {
+      var href = el.getAttribute('href');
+      interceptCourseLink(el, function() {
+        if (href) window.location.href = href;
+      });
+    }
+  });
+
+  // Intercept evasion lab button
+  document.querySelectorAll('a[href*="evasion-lab"]').forEach(function(a) {
+    var href = a.getAttribute('href');
+    interceptCourseLink(a, function() { window.location.href = href; });
+  });
+
+  // Intercept field manual / reader links
+  document.querySelectorAll('a[href*="reader.html"], a[href*="books/"]').forEach(function(a) {
+    var href = a.getAttribute('href');
+    interceptCourseLink(a, function() { window.location.href = href; });
+  });
+
+  // Expose showGate globally so inline onclick can call it too
+  window.requireAuth = function(href) {
+    if (isAuthed()) { window.location.href = href; return; }
+    showGate(function() { window.location.href = href; });
+  };
+
 })();
 </script>
 
