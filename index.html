@@ -2157,6 +2157,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
   function unlock() {
     document.cookie = AUTH_KEY + '=1; path=/; SameSite=Strict';
+    try { localStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
     sessionStorage.removeItem(FAIL_KEY);
     gate.style.transition = 'opacity 0.35s';
     gate.style.opacity = '0';
