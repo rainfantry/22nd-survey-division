@@ -2291,7 +2291,9 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     interceptCourseLink(a, function() { window.location.href = href; });
   });
 
-  // Expose showGate globally so inline onclick can call it too
+  // Expose functions globally so inline onclick handlers can reach them
+  window.showGate = showGate;
+
   window.requireAuth = function(href) {
     if (isAuthed()) { window.location.href = href; return; }
     showGate(function() { window.location.href = href; });
