@@ -160,6 +160,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-even
 <nav>
   <div class="nav-brand">22ND <span style="color:#fff">SURVEY</span> DIVISION</div>
   <div class="nav-links">
+    <a href="#about">About</a>
     <a href="#arsenal">Arsenal</a>
     <a href="#research">Research</a>
     <a href="#manuals">Manuals</a>
@@ -174,7 +175,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-even
     <h1 class="callsign">22ND <span class="dim">SURVEY</span><br>DIVISION</h1>
     <div class="hero-tagline"><em>EXPLOIT PRIMITIVES</em> // <em>RED TEAM TOOLING</em> // <em>RESPONSIBLE DISCLOSURE</em></div>
     <p class="hero-desc">
-      Independent offensive security research unit. We build weapons from <strong>first principles</strong> — no published PoCs, no copy-paste. Windows internals, kernel-mode exploitation, Android malware research, C2 infrastructure, and OSINT tradecraft. All work conducted on <strong>own hardware</strong> under academic authorisation. Responsible disclosure via MSRC and MITRE.
+      Windows internals, kernel exploitation, AV evasion, and mobile attack research. Every tool built from <strong>first principles</strong> — no copy-paste PoCs, no borrowed exploits. Every technique understood line by line before it ships. All research on <strong>own hardware</strong> and explicitly authorised targets. Responsible disclosure via MSRC and MITRE.
     </p>
     <div class="hero-cta">
       <a href="#arsenal" class="btn btn-primary">View Arsenal</a>
@@ -192,6 +193,67 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-even
       <div class="stat"><div class="stat-num">22</div><div class="stat-label">Field Manual Chapters</div></div>
       <div class="stat"><div class="stat-num">26</div><div class="stat-label">Clean Binaries</div></div>
       <div class="stat"><div class="stat-num">0</div><div class="stat-label">Unauthorized Targets</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="container">
+    <div class="section-tag">// OPERATOR</div>
+    <div class="section-title">ABOUT <span>//</span> GEORGE WU</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
+      <div>
+        <p style="font-size:.82rem;color:var(--text);line-height:1.9;margin-bottom:1.4rem;">
+          Security researcher and programmer based in Sydney, Australia. Work focuses on Windows internals, anti-malware evasion, and privilege escalation research against modern defences. Every tool is built from scratch — no borrowed PoC code — and tested on own hardware with responsible disclosure as the endpoint.
+        </p>
+        <p style="font-size:.82rem;color:var(--text);line-height:1.9;margin-bottom:1.4rem;">
+          Current research: a race condition against a Windows kernel driver producing an arbitrary HKLM registry ACL write as a standard user (MSRC VULN-195458); a hardware breakpoint technique that eliminates AMSI and ETW telemetry simultaneously without modifying protected memory; a phantom DLL loading vector in a LocalSystem Microsoft Office service reachable via user-controlled PATH.
+        </p>
+        <p style="font-size:.82rem;color:var(--text);line-height:1.9;">
+          Before security research: CAD/GIS technician for a land surveying firm. Built the Python and AutoLISP automation pipeline still in production use. Survey-tech background informs a precise, measurement-first approach to vulnerability research.
+        </p>
+      </div>
+      <div>
+        <div style="border:1px solid var(--border);padding:1.4rem;background:var(--bg2);margin-bottom:1.2rem;">
+          <div style="font-size:.6rem;letter-spacing:.25em;color:var(--green-dim);text-transform:uppercase;margin-bottom:1rem;">Focus Areas</div>
+          <div style="display:flex;flex-direction:column;gap:.6rem;">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;">
+              <span style="color:var(--text-dim);">Windows Kernel &amp; Internals</span>
+              <span style="color:var(--green);">●●●●○</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;">
+              <span style="color:var(--text-dim);">AV/EDR Evasion</span>
+              <span style="color:var(--green);">●●●●○</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;">
+              <span style="color:var(--text-dim);">Privilege Escalation</span>
+              <span style="color:var(--green);">●●●○○</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;">
+              <span style="color:var(--text-dim);">C2 Framework Design</span>
+              <span style="color:var(--green);">●●●○○</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;">
+              <span style="color:var(--text-dim);">Android Attack Surface</span>
+              <span style="color:var(--green);">●●○○○</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;">
+              <span style="color:var(--text-dim);">Fuzzing &amp; Crash Research</span>
+              <span style="color:var(--green);">●●○○○</span>
+            </div>
+          </div>
+        </div>
+        <div style="border:1px solid var(--border);padding:1.4rem;background:var(--bg2);">
+          <div style="font-size:.6rem;letter-spacing:.25em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.8rem;">Credentials</div>
+          <div style="font-size:.75rem;color:var(--text-dim);line-height:1.9;">
+            Cert IV IT Programming — TAFE NSW 2026<br>
+            ACN-registered research entity — 22nd Survey Division<br>
+            MSRC responsible disclosure — VULN-195458<br>
+            Authorised penetration testing — own hardware + partner targets
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -227,7 +289,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-even
           <div class="tool-badge badge-amber">C2</div>
         </div>
         <div class="tool-desc">
-          Polymorphic red team C2 framework. Menu-driven operator interface with payload modules, persistence mechanisms, and post-exploitation capability. Full kill chain tested against authorised targets.
+          Red team C2 framework with per-build obfuscated payloads, parent process spoofing, and pre-shell delivery via Discord. Menu-driven operator interface, persistence mechanisms, and post-exploitation capability. Full kill chain tested against authorised targets.
         </div>
         <div class="tool-tags">
           <span class="tag">Python</span><span class="tag">C2</span><span class="tag">Post-Ex</span><span class="tag">Persistence</span>
@@ -317,7 +379,7 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-even
     <div class="research-list">
 
       <div class="research-item">
-        <div class="ri-status status-disclosed">Submitted</div>
+        <div class="ri-status status-pending">Submitted</div>
         <div class="ri-body">
           <div class="ri-title">MSRC VULN-195458 — Windows Defender TOCTOU Race Condition</div>
           <div class="ri-meta">
