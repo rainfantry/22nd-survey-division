@@ -8,8 +8,8 @@
 <meta name="author" content="George Wu">
 <meta name="robots" content="index, follow">
 <script>
-// Set lock class BEFORE body renders — no flash
-if (localStorage.getItem('22div_gate_auth') !== '1') {
+// Session-only auth — PIN required every visit, no persistent unlock
+if (sessionStorage.getItem('22div_gate_auth') !== '1') {
   document.documentElement.classList.add('course-locked');
 }
 </script>
@@ -457,9 +457,33 @@ footer{
 .pin-footer-note{font-size:.47rem;color:#1e1e1e;letter-spacing:.05em;line-height:1.7;}
 
 /* ── GATE LOCK ── */
-html.course-locked #courses,
-html.course-locked #curriculum,
-html.course-locked #labs { display: none !important; }
+/* Sections stay VISIBLE — per-card overlays handle the lock */
+/* (Removed hide-on-locked for #courses, #curriculum, #labs — use overlays instead) */
+/* Teaser section hidden — we use the in-curriculum banner instead */
+#course-teaser { display: none !important; }
+/* Curriculum lock banner: visible when locked, hidden when unlocked */
+html:not(.course-locked) #curriculum-lock-banner { display: none !important; }
+
+/* Per-card lock overlay */
+.mod-card { position: relative; }
+.mod-card-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(10,10,10,.88);
+  backdrop-filter: blur(2px);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  cursor: pointer;
+  transition: background .2s;
+  z-index: 5;
+}
+.mod-card-overlay:hover { background: rgba(10,10,10,.72); }
+.mod-card-overlay-icon { font-size: 1.3rem; color: var(--green-dim); }
+.mod-card-overlay-label { font-size: .54rem; letter-spacing: .2em; color: var(--green-dim); text-transform: uppercase; }
+.mod-card-overlay-sub { font-size: .5rem; color: var(--text-mute); letter-spacing: .1em; }
 
 /* ── COURSE TEASER (shown when locked, hidden when unlocked) ── */
 #course-teaser { padding: 4rem 0; text-align: center; }
@@ -1033,6 +1057,13 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     <div class="section-eyebrow">// FIELD MANUALS</div>
     <div class="section-title">CURRICULUM <span class="slash">//</span> 22DIV <span class="accent">DOCTRINE LIBRARY</span></div>
 
+    <!-- Lock banner — visible when PIN not entered this session -->
+    <div id="curriculum-lock-banner" style="background:#070a07;border:1px solid #0a2a0a;padding:1.1rem 1.5rem;margin-bottom:1.5rem;text-align:center;">
+      <div style="font-size:.56rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:.5rem;">// CURRICULUM LOCKED — PIN REQUIRED EACH SESSION</div>
+      <div style="font-size:.72rem;color:#fff;margin-bottom:.6rem;">You can see what's here. You can't open it without the PIN.</div>
+      <button onclick="showGate()" style="font-family:inherit;font-size:.6rem;letter-spacing:.18em;padding:.5rem 1.6rem;border:1px solid var(--green);color:var(--green);background:transparent;cursor:pointer;">ENTER PIN →</button>
+    </div>
+
     <div style="border:1px solid #1a3a1a;background:#070f07;padding:1.2rem 1.5rem;margin-bottom:1.5rem;font-size:.64rem;line-height:1.9;color:#4a7a4a;">
       <span style="color:var(--green);letter-spacing:.1em;">// COURSE STRUCTURE</span> — 22 modules, executed in sequence. You don't watch. You build.<br>
       Each module has: <strong style="color:#3a8a3a;">Windows Setup</strong> (install, configure), <strong style="color:#3a8a3a;">Theory</strong> (why it works, how it fails), <strong style="color:#3a8a3a;">Drills</strong> (hands-on exercises), <strong style="color:#3a8a3a;">Expected Output</strong> (you know exactly what success looks like), and <strong style="color:#3a8a3a;">Defender Takeaway</strong> (the detection side).<br>
@@ -1058,7 +1089,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Offensive Mindset</div>
         <div class="mod-desc">Attacker psychology &amp; kill chain</div>
-        <div class="mod-detail">You learn how attackers think before they touch a keyboard. <strong>MITRE ATT&amp;CK</strong> kill chain, Lockheed Martin model, defender's asymmetry — why the attacker only needs to win once. You leave this module thinking like the enemy.</div>
+        <div class="mod-detail"><strong>First principle:</strong> the defender has to protect everything. You only have to find one gap. That asymmetry is the entire reason offensive security exists as a field. The kill chain is your planning framework — Recon, Weaponise, Deliver, Exploit, Install, C2, Exfil. Every stage has a detection signature. Every stage has a bypass. You learn the chain forwards (attacker) and backwards (defender) simultaneously, because you can't evade detection you don't understand. <strong>MITRE ATT&CK</strong> is the reference matrix: 14 tactics, hundreds of techniques, each with real threat-actor usage examples. You learn to read it as a menu of options, not a checklist of things to do. By the end, when you read a CVE, you instinctively know which kill chain stage it hits and what the defender's detection window is.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1078,7 +1109,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Recon &amp; Footprinting</div>
         <div class="mod-desc">OSINT, passive &amp; active recon</div>
-        <div class="mod-detail">You write Python to scrape, parse, and map a target before touching a single packet. <strong>nmap, theHarvester, Shodan, GitLeaks</strong> — all installed on Windows via WSL2. Every command has expected output so you know exactly what success looks like.</div>
+        <div class="mod-detail"><strong>First principle:</strong> information is attack surface. Every domain name, IP address, email address, and employee name is a potential entry point. Before you scan anything, you extract what's already public — because public data leaves no forensic trace. WHOIS tells you who registered the domain and when. Certificate transparency logs (crt.sh) expose every subdomain the company ever issued a TLS cert for — including staging environments and internal tools they forgot were public. Shodan has already scanned every internet-facing IP on earth; you just query their database. theHarvester pulls email addresses from Google, Bing, and LinkedIn. GitLeaks scans GitHub for accidentally committed passwords, API keys, and credentials. By the time you run your first nmap scan, you have a prioritised target list. <strong>nmap -sC -sV</strong> tells you the service and its version — that version number is your CVE lookup key. You write Python wrappers that automate the whole pipeline and dump structured output you can feed into later modules.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1099,7 +1130,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Vulnerability Research</div>
         <div class="mod-desc">Methodology &amp; tools</div>
-        <div class="mod-detail">You learn to find real bugs — not CTF bugs. <strong>CWE taxonomy, CVSS scoring, fuzzing theory, binary diffing</strong>. You read CVE advisories like a professional, reverse a patch to find what it fixed, and understand what separates a crash from an exploitable vulnerability.</div>
+        <div class="mod-detail"><strong>First principle:</strong> a vulnerability is a gap between what the developer intended and what the software actually does. Your job is to find that gap before the defender patches it. A crash is not a vulnerability — it's a lead. You learn to triage crashes: is this a NULL dereference (usually not exploitable), a stack overflow (sometimes), a heap corruption (often), or a type confusion (jackpot)? <strong>CWE</strong> (Common Weakness Enumeration) is the taxonomy of how software fails — 900+ weakness classes. <strong>CVSS</strong> is the scoring system defenders use to prioritise fixes; you learn to read a CVSS vector and know exactly what it means about exploitability and impact. Binary diffing: when Microsoft ships a patch Tuesday update, you download both the old and new DLL and diff the assembly — the changed function is what they fixed, which tells you where the bug was. Fuzzing is automated crash discovery: you feed malformed input in loops until something breaks, then triage what broke. You write your first fuzzer in Python against a sample parser.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1120,7 +1151,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Mitigations</div>
         <div class="mod-desc">ASLR, DEP, CFG, stack canaries</div>
-        <div class="mod-detail">You understand every modern Windows exploit mitigation at the binary level — not just what they do but <strong>exactly how they fail</strong>. Stack canaries, ASLR entropy, DEP/NX hardware enforcement, CFG graph validation. You leave knowing which mitigations can be bypassed and which ones actually hold.</div>
+        <div class="mod-detail"><strong>First principle:</strong> every mitigation is a cost imposed on the attacker, not an impossibility. Your job is to understand the cost so you know when it's worth paying. <strong>Stack canary:</strong> a random value placed between local variables and the saved return address. If you overflow the buffer, you corrupt the canary. The OS checks it before the function returns — if it changed, crash. Bypass: leak the canary value first (information disclosure), then overwrite it with the same value. <strong>ASLR:</strong> randomises where executable, stack, and heap load in memory every run. Bypass: find a non-ASLR module (old DLL compiled without /DYNAMICBASE), or leak a pointer from a read primitive. <strong>DEP/NX:</strong> marks the stack and heap as non-executable — your shellcode sitting in memory can't run. Bypass: ROP (Return-Oriented Programming) — you don't inject code, you chain together small instruction sequences that already exist in legitimate DLLs. <strong>CFG:</strong> Control Flow Guard checks that every indirect call target is in a valid function list. Bypass: overwrite a non-CFG-checked pointer, or find a CFG bypass via forged dispatch tables. You understand each mitigation at the assembly level before learning to bypass it.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1141,7 +1172,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Exploit Development</div>
         <div class="mod-desc">BOF, ROP, heap spraying</div>
-        <div class="mod-detail">You write your first stack buffer overflow in C. You build a <strong>ROP chain by hand</strong> — finding gadgets with ROPgadget, chaining them to bypass DEP. Heap spray theory + heap feng shui. Compile with MinGW on Windows, test against your own vulnerable service.</div>
+        <div class="mod-detail"><strong>First principle:</strong> the CPU does exactly what you tell it, even if you tell it via a bug. A buffer overflow writes past the end of an array — if that array is on the stack, you overwrite the saved return address, which tells the CPU where to go when the function returns. You wrote the wrong address. The CPU goes there anyway. Your first exploit: write a C program with a stack buffer, overflow it with a debugger attached, watch EIP (the instruction pointer) become whatever you wrote. Then you make it go somewhere useful. <strong>ROP chains:</strong> DEP means your shellcode on the stack can't execute. So instead of running your code, you chain together tiny instruction sequences ("gadgets") that already exist in loaded DLLs — each ends in a RET instruction that pops the next address. ROPgadget finds every usable gadget in a binary. You build a chain that calls VirtualProtect() to mark your shellcode executable, then jumps to it. <strong>Heap exploitation:</strong> the heap is dynamic memory (malloc/free). Corrupting heap metadata can redirect free() to write an arbitrary pointer. You learn heap spray (fill heap with NOP sleds) and feng shui (groom the heap layout so your overflow lands where you want).</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1163,7 +1194,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Windows Internals</div>
         <div class="mod-desc">Memory, handles, kernel objects</div>
-        <div class="mod-detail">You open <strong>WinDbg and attach to a live kernel</strong>. You read EPROCESS, PEB, TEB, VAD tree — the real data structures Windows uses. Virtual memory layout, handle tables, Section objects, kernel pool. You stop guessing and start reading the OS like source code.</div>
+        <div class="mod-detail"><strong>First principle:</strong> Windows is software. It has data structures, function calls, and bugs just like any other software — you just need to know where to look. Every running process has an <strong>EPROCESS</strong> structure in kernel memory: it contains the PID, the process name, the handle table, the memory map, the token (security context), and links to every other EPROCESS in a doubly-linked list. The <strong>PEB</strong> (Process Environment Block) lives in user space: it has the list of loaded DLLs, command line, environment variables, and the heap pointer. The <strong>TEB</strong> (Thread Environment Block) is per-thread: stack base/limit, exception handlers, last error code. <strong>VAD tree:</strong> Windows tracks every memory allocation in a Virtual Address Descriptor binary tree — each node describes a memory region (base, size, protection, mapped file). You open WinDbg, attach to a VM, set a kernel breakpoint, and walk the EPROCESS list to enumerate every process including the hidden ones. Then you read the VAD tree of a running process and map its memory layout. You stop treating Windows as a black box and start treating it as readable source code that happens to run in kernel mode.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-mcq">MCQ</span>
@@ -1184,7 +1215,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Exploit Primitives</div>
         <div class="mod-desc">Read/write primitives, AAAR</div>
-        <div class="mod-detail">You code the building blocks every exploit uses: <strong>arbitrary address read, arbitrary address write, arbitrary code execution</strong>. You construct each primitive in C from scratch — type confusions, use-after-free setups, integer overflows that land you controlled memory. No magic. Every byte is explained.</div>
+        <div class="mod-detail"><strong>First principle:</strong> almost every modern exploit reduces to two primitives — read any address, write any address. Once you have both, code execution is a handful of steps away. <strong>Arbitrary Address Read (AAR):</strong> you can read memory at any location. This lets you leak ASLR randomisation (read a pointer, calculate the module base). <strong>Arbitrary Address Write (AAW):</strong> you can write any value to any address. This lets you overwrite a function pointer, a security cookie, or a dispatch table entry. Together they're called AAAR. You implement each from three different vulnerability classes: a <strong>type confusion</strong> (tell the program an object is type A when it's type B — it reads A's fields at B's memory offsets, giving you controlled read), a <strong>use-after-free</strong> (allocate, free, reallocate with controlled data — the original pointer still exists and references your data), and an <strong>integer overflow</strong> (2^32 + 1 = 1 — undersize an allocation and overflow into adjacent memory). No libraries. You write each primitive in C with inline assembly to understand the exact memory operations. Then you chain AAR + AAW into a full code execution demonstration.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1205,7 +1236,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Privilege Escalation</div>
         <div class="mod-desc">Token abuse, service exploits</div>
-        <div class="mod-detail">You go from standard user to <strong>SYSTEM without touching an exploit database</strong>. icacls binary replacement (CWE-732), DLL search order hijacking (CWE-427), unquoted service paths, SeImpersonatePrivilege Potato attacks. Every technique demonstrated live against Windows 11 with Defender running.</div>
+        <div class="mod-detail"><strong>First principle:</strong> SYSTEM is just a token. A Windows token is a kernel object that says who you are and what groups you belong to. If you get the right token attached to your process, you ARE the user it represents. The question is how to get it. <strong>CWE-732 (incorrect permissions on resource):</strong> a service binary sitting in C:\Program Files\VendorApp\service.exe with "Everyone: Full Control" permissions means you replace it with your own EXE and wait for it to restart — it runs as SYSTEM because the service runs as SYSTEM. icacls shows you who can write where. <strong>CWE-427 (uncontrolled search path):</strong> Windows looks for DLLs in the process directory first, then System32. If a privileged process loads a DLL that doesn't exist in its own folder, you drop your DLL there and the privileged process loads yours. <strong>Unquoted service paths:</strong> Windows parses "C:\Program Files\My App\service.exe" as "C:\Program" with arguments "Files\My App\service.exe" — so C:\Program.exe (which you control) runs instead. <strong>Potato attacks:</strong> SeImpersonatePrivilege (held by service accounts) lets you impersonate any token — including SYSTEM. You trigger an NTLM negotiation from SYSTEM, capture it, and impersonate it. All demonstrated live against a hardened Windows 11 host with Defender and UAC enabled.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1227,7 +1258,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Malware Development</div>
         <div class="mod-desc">Dropper, loader, stager patterns</div>
-        <div class="mod-detail">You write a <strong>reverse shell in C from scratch</strong> — Winsock, XOR encryption, socket comms, PE headers. Then you build a dropper that fetches and executes a payload without writing to disk. You compile with MinGW/MSYS2 on Windows. Output is a working EXE.</div>
+        <div class="mod-detail"><strong>First principle:</strong> a reverse shell is two programs talking over TCP — your implant on the target connects OUT to your listener, and you send commands through that connection. Outbound traffic is far less filtered than inbound. <strong>Winsock:</strong> Windows' socket library. WSAStartup() initialises it. socket() creates the file descriptor. connect() dials your C2 server. After that, recv() and send() are just read/write over the network. <strong>Shell redirect:</strong> CreateProcess() with STARTUPINFO.hStdInput/hStdOutput/hStdError set to your socket — every byte the user types goes to cmd.exe's input, every output comes back over the socket. That's the whole reverse shell in 60 lines of C. <strong>XOR encryption:</strong> XOR each byte of your shellcode with a key — AV signature doesn't match. Decrypt at runtime with a loop before execution. <strong>Dropper:</strong> your EXE is just a loader. It calls URLDownloadToFile() or a raw Winsock fetch to pull the payload from your server, writes it to memory (not disk), and executes it with VirtualAlloc + a function pointer cast. No file dropped = no AV scan on write. You compile with MinGW on Windows — no Linux cross-compilation environment needed. Output is a working standalone EXE tested against Defender.</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1248,7 +1279,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
         <div class="mod-title">Code Injection</div>
         <div class="mod-desc">DLL, shellcode, process hollowing</div>
-        <div class="mod-detail">You write <strong>three injection techniques in C</strong>: classic DLL injection via WriteProcessMemory + CreateRemoteThread, shellcode injection with VirtualAllocEx, and process hollowing (hollow a legitimate notepad.exe and execute your payload inside it). Each technique has expected Task Manager output proving the injection worked.</div>
+        <div class="mod-detail"><strong>First principle:</strong> every process has its own virtual address space. Windows normally prevents one process from touching another's memory. The Win32 API deliberately provides exceptions — because legitimate programs need them. You use those exceptions offensively. <strong>DLL injection:</strong> OpenProcess() with PROCESS_ALL_ACCESS gives you a handle to any process you have the rights to open. VirtualAllocEx() allocates memory inside that process. WriteProcessMemory() writes your DLL path into that memory. CreateRemoteThread() tells the target process to call LoadLibrary() on your path — it loads your DLL into the target's address space and your DllMain() runs inside it. <strong>Shellcode injection:</strong> same VirtualAllocEx + WriteProcessMemory, but instead of a DLL path you write raw shellcode. Change the memory protection to EXECUTE_READWRITE with VirtualProtectEx(), CreateRemoteThread() points at your shellcode directly. <strong>Process hollowing:</strong> CreateProcess() with CREATE_SUSPENDED flag — the process starts but the main thread is paused before executing a single instruction. NtUnmapViewOfSection() removes the original EXE from memory. WriteProcessMemory() writes your payload where the EXE was. SetThreadContext() updates the instruction pointer to your payload's entry point. ResumeThread() — the process runs your code but Task Manager shows a legitimate process name. You detect each technique with Process Hacker and Sysmon Event ID 8 (CreateRemoteThread) and 10 (process access).</div>
         <div class="mod-tags">
           <span class="mod-tag tag-theory">Theory</span>
           <span class="mod-tag tag-lab">Lab</span>
@@ -1669,6 +1700,91 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   </div>
 </section>
 
+<!-- ── ARSENAL ── -->
+<section id="arsenal" style="padding:4rem 0;border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-tag">// OPEN SOURCE</div>
+    <div class="section-title">ARSENAL <span class="slash">//</span> PUBLIC REPOS</div>
+    <p style="color:var(--text-dim);font-size:.78rem;margin-bottom:2rem;max-width:640px;line-height:1.8;">Everything below is already public. Fork, study, break it. The private repos unlock when you purchase the corresponding module — they contain the actual operational tools the field manual was written against.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);margin-bottom:2.5rem;">
+
+      <a href="https://github.com/rainfantry/22sd-research-findings" target="_blank" style="background:var(--bg2);padding:1.3rem 1.5rem;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--green);margin-bottom:.4rem;">PUBLIC REPO</div>
+        <div style="font-size:.78rem;color:#fff;letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/22sd-research-findings</div>
+        <div style="font-size:.65rem;color:var(--text-dim);line-height:1.7;">F001–F004 published findings + PoC code. Real Windows Defender internals research. Read before buying anything — judge the standard first.</div>
+      </a>
+
+      <a href="https://github.com/rainfantry/csec-research-authorization" target="_blank" style="background:var(--bg2);padding:1.3rem 1.5rem;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--green);margin-bottom:.4rem;">PUBLIC REPO</div>
+        <div style="font-size:.78rem;color:#fff;letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/csec-research-authorization</div>
+        <div style="font-size:.65rem;color:var(--text-dim);line-height:1.7;">Authorization scope doc with company details (ABN 50 692 429 397). Defines what hardware, what IP ranges, what research is authorized. MSRC-compliant format.</div>
+      </a>
+
+      <a href="https://github.com/rainfantry/rainfantry" target="_blank" style="background:var(--bg2);padding:1.3rem 1.5rem;text-decoration:none;display:block;transition:background .2s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--green);margin-bottom:.4rem;">PUBLIC REPO</div>
+        <div style="font-size:.78rem;color:#fff;letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/rainfantry</div>
+        <div style="font-size:.65rem;color:var(--text-dim);line-height:1.7;">Profile README. Links every public project, research finding, and contact channel. Ground truth index for the whole operation.</div>
+      </a>
+
+    </div>
+
+    <div style="font-size:.52rem;letter-spacing:.22em;color:var(--text-mute);margin-bottom:1.2rem;">// PRIVATE — UNLOCK WITH MODULE PURCHASE</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);">
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--amber-dim);margin-bottom:.4rem;">PRIVATE · MOD 16</div>
+        <div style="font-size:.78rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/cheyanne</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">Full C2 framework. Mutation engine, metamorph builder, KAV evasion log, Discord bridge, PENTEST_LOG tracking. The actual tool the C2 chapter is written against.</div>
+        <div style="font-size:.56rem;color:var(--amber-dim);margin-top:.7rem;letter-spacing:.1em;">Unlocks: Module 16 · $79 AUD</div>
+      </div>
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--amber-dim);margin-bottom:.4rem;">PRIVATE · MOD 11</div>
+        <div style="font-size:.78rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/vader-rootkit</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">HWBP-based AMSI/ETW bypass rootkit. MSRC VULN-195458 (Tamper Protection bypass). 26 binaries clean against Windows Defender. Kernel-mode research.</div>
+        <div style="font-size:.56rem;color:var(--amber-dim);margin-top:.7rem;letter-spacing:.1em;">Unlocks: Module 11 · $79 AUD</div>
+      </div>
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--amber-dim);margin-bottom:.4rem;">PRIVATE · MOD 09</div>
+        <div style="font-size:.78rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/iron-sun + rainfantry/eclipse</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">iron-sun: reverse shell in C (Winsock, XOR, process injection). eclipse: polymorphic payload builder with per-build key mutation. Both tested live against Defender.</div>
+        <div style="font-size:.56rem;color:var(--amber-dim);margin-top:.7rem;letter-spacing:.1em;">Unlocks: Module 09 · $79 AUD</div>
+      </div>
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--amber-dim);margin-bottom:.4rem;">PRIVATE · MOD 21</div>
+        <div style="font-size:.78rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/starkiller</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">Android RAT. Phase 1 complete: GPS exfil, SMS access, camera trigger, Play Protect bypass. Written in Kotlin. The APK the mobile chapter dissects line-by-line.</div>
+        <div style="font-size:.56rem;color:var(--amber-dim);margin-top:.7rem;letter-spacing:.1em;">Unlocks: Module 21 · $79 AUD</div>
+      </div>
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--amber-dim);margin-bottom:.4rem;">PRIVATE · MOD 02 / 08 / 17 / 20</div>
+        <div style="font-size:.78rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/winrecon</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">20-section Windows recon and privesc tool. CWE-732/427 scanner, AD enumeration, network recon. Unlocks with Recon, PrivEsc, Network, or AD module purchase.</div>
+        <div style="font-size:.56rem;color:var(--amber-dim);margin-top:.7rem;letter-spacing:.1em;">Unlocks: Module 02, 08, 17, or 20</div>
+      </div>
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--amber-dim);margin-bottom:.4rem;">PRIVATE · MOD 03</div>
+        <div style="font-size:.78rem;color:var(--text-dim);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/Ghost-Scraper</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">Full OSINT platform — TypeScript/Express/React. Scrapes, correlates, and maps a target from public sources. The framework the vuln research chapter is built around.</div>
+        <div style="font-size:.56rem;color:var(--amber-dim);margin-top:.7rem;letter-spacing:.1em;">Unlocks: Module 03 · $49 AUD</div>
+      </div>
+
+      <div style="background:var(--bg);padding:1.3rem 1.5rem;">
+        <div style="font-size:.64rem;letter-spacing:.1em;color:var(--red-dim);margin-bottom:.4rem;">RESTRICTED · RESEARCH ONLY</div>
+        <div style="font-size:.78rem;color:var(--text-mute);letter-spacing:.06em;margin-bottom:.35rem;">rainfantry/vader-fuzz</div>
+        <div style="font-size:.65rem;color:#333;line-height:1.7;">mpengine.dll fuzzer. Active research tool targeting Windows Defender's scanning engine. Not for sale — contact directly for research collaboration.</div>
+        <div style="font-size:.56rem;color:var(--red-dim);margin-top:.7rem;letter-spacing:.1em;">Research collab only · gwu0738@gmail.com</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── DOCTRINE ── -->
 <section id="doctrine">
   <div class="container">
@@ -2007,15 +2123,43 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   var btn = document.getElementById('pin-submit');
   var err = document.getElementById('pin-error');
 
+  function injectCardOverlays() {
+    var cards = document.querySelectorAll('#curriculum-grid .mod-card');
+    cards.forEach(function(card) {
+      if (card.querySelector('.mod-card-overlay')) return; // already injected
+      var ov = document.createElement('div');
+      ov.className = 'mod-card-overlay';
+      ov.innerHTML = '<div class="mod-card-overlay-icon">&#128274;</div>' +
+        '<div class="mod-card-overlay-label">PIN Required</div>' +
+        '<div class="mod-card-overlay-sub">Click to enter access PIN</div>';
+      ov.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        showGate(function() {
+          // After unlock, try navigating to this card's href
+          var href = card.getAttribute('href') || card.dataset.href;
+          if (href) window.open(href, '_blank');
+        });
+      });
+      card.appendChild(ov);
+    });
+  }
+
+  function removeCardOverlays() {
+    document.querySelectorAll('.mod-card-overlay').forEach(function(ov) {
+      ov.style.transition = 'opacity .3s';
+      ov.style.opacity = '0';
+      setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 320);
+    });
+  }
+
   function unlock() {
-    localStorage.setItem(AUTH_KEY, '1');
-    localStorage.removeItem(FAIL_KEY);
+    sessionStorage.setItem(AUTH_KEY, '1');
+    sessionStorage.removeItem(FAIL_KEY);
     gate.style.transition = 'opacity 0.35s';
     gate.style.opacity = '0';
     setTimeout(function() { gate.style.display = 'none'; }, 350);
-    // Reveal gated sections — remove lock class so CSS unhides them
     document.documentElement.classList.remove('course-locked');
-    // Scroll to curriculum after short delay
+    removeCardOverlays();
     setTimeout(function() {
       var el = document.getElementById('curriculum');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2023,12 +2167,12 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   }
 
   function getFailCount() {
-    return parseInt(localStorage.getItem(FAIL_KEY) || '0', 10);
+    return parseInt(sessionStorage.getItem(FAIL_KEY) || '0', 10);
   }
 
   function bumpFail() {
     var n = getFailCount() + 1;
-    localStorage.setItem(FAIL_KEY, n);
+    sessionStorage.setItem(FAIL_KEY, n);
     return n;
   }
 
@@ -2036,7 +2180,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   var pendingAction = null;
 
   function isAuthed() {
-    return localStorage.getItem(AUTH_KEY) === '1';
+    return sessionStorage.getItem(AUTH_KEY) === '1';
   }
 
   function isLockedOut() {
@@ -2110,6 +2254,11 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       e.stopPropagation();
       showGate(action);
     }, true); // capture phase so it fires before other listeners
+  }
+
+  // Inject per-card overlays when not authed — session-only
+  if (!isAuthed()) {
+    injectCardOverlays();
   }
 
   // Intercept all "Start Learning" / "Enrol" CTAs that link to #curriculum
