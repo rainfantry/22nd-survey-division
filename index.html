@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>22nd Survey Division — Offensive Security Research</title>
+<meta name="description" content="22nd Survey Division. Offensive security research, red team tooling, and vulnerability disclosure. Sydney, Australia.">
+<meta name="author" content="George Wu">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="22nd Survey Division — Offensive Security Research">
+<meta property="og:description" content="Offensive security research, red team tooling, and responsible disclosure. Sydney, Australia.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rainfantry.github.io/22nd-survey-division/">
+<style>
+:root {
+  --bg:        #060a06;
+  --bg2:       #0a110a;
+  --bg3:       #0e180e;
+  --border:    #1a2e1a;
+  --green:     #00cc33;
+  --green-dim: #007a1f;
+  --cyan:      #00e5ff;
+  --amber:     #ffb000;
+  --red:       #ff4444;
+  --text:      #c8ddc8;
+  --text-dim:  #6a886a;
+  --text-mute: #3a4e3a;
+  font-size: 15px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Courier New',Courier,monospace;line-height:1.6;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,10,6,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{font-size:.75rem;letter-spacing:.25em;color:var(--green);text-transform:uppercase;}
+.nav-links{display:flex;gap:1.8rem;}
+.nav-links a{color:var(--text-dim);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--green);}
+
+/* ── HERO ── */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:6rem 2rem 4rem;max-width:1100px;margin:0 auto;}
+.hero-tag{font-size:.65rem;letter-spacing:.3em;color:var(--green-dim);text-transform:uppercase;margin-bottom:1.2rem;}
+.hero-tag span{color:var(--green);}
+h1.callsign{font-size:clamp(2.4rem,6vw,5rem);letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#fff;margin-bottom:.5rem;}
+h1.callsign .dim{color:var(--green-dim);}
+.hero-tagline{font-size:.9rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2.5rem;}
+.hero-tagline em{color:var(--text);font-style:normal;}
+.hero-desc{max-width:620px;font-size:.88rem;color:var(--text);line-height:1.85;border-left:2px solid var(--green-dim);padding-left:1.2rem;margin-bottom:2.8rem;}
+.hero-desc strong{color:var(--green);}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn{display:inline-block;padding:.6rem 1.4rem;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;border:1px solid;transition:all .2s;font-family:inherit;}
+.btn-primary{border-color:var(--green);color:var(--green);}
+.btn-primary:hover{background:var(--green);color:var(--bg);}
+.btn-ghost{border-color:var(--border);color:var(--text-dim);}
+.btn-ghost:hover{border-color:var(--text-dim);color:var(--text);}
+
+/* ── SECTION ── */
+section{padding:5rem 2rem;border-top:1px solid var(--border);}
+.container{max-width:1100px;margin:0 auto;}
+.section-tag{font-size:.6rem;letter-spacing:.35em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.5rem;}
+.section-title{font-size:clamp(1.2rem,3vw,1.8rem);letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:2.5rem;}
+.section-title span{color:var(--green);}
+
+/* ── STAT ROW ── */
+.stat-row{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--border);margin-bottom:3rem;}
+.stat{flex:1;min-width:130px;padding:1.2rem 1.4rem;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat-num{font-size:2rem;color:var(--green);letter-spacing:.05em;line-height:1;}
+.stat-label{font-size:.6rem;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;margin-top:.3rem;}
+
+/* ── ARSENAL GRID ── */
+.arsenal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);}
+.tool-card{background:var(--bg2);padding:1.6rem;transition:background .2s;position:relative;overflow:hidden;}
+.tool-card:hover{background:var(--bg3);}
+.tool-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--tc-color,var(--green));}
+.tc-red{--tc-color:var(--red);}
+.tc-amber{--tc-color:var(--amber);}
+.tc-cyan{--tc-color:var(--cyan);}
+.tc-green{--tc-color:var(--green);}
+.tc-purple{--tc-color:#b060ff;}
+.tool-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;}
+.tool-name{font-size:.88rem;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
+.tool-badge{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .5rem;border:1px solid;opacity:.7;}
+.badge-red{color:var(--red);border-color:var(--red);}
+.badge-amber{color:var(--amber);border-color:var(--amber);}
+.badge-cyan{color:var(--cyan);border-color:var(--cyan);}
+.badge-green{color:var(--green);border-color:var(--green);}
+.badge-purple{color:#b060ff;border-color:#b060ff;}
+.tool-desc{font-size:.78rem;color:var(--text-dim);line-height:1.7;margin-bottom:1rem;}
+.tool-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+.tag{font-size:.58rem;letter-spacing:.1em;padding:.15rem .5rem;background:var(--bg);border:1px solid var(--text-mute);color:var(--text-dim);text-transform:uppercase;}
+.tool-links{display:flex;gap:.8rem;}
+.tool-link{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;color:var(--text-dim);transition:color .2s;}
+.tool-link:hover{color:var(--text);}
+.tool-link.primary{color:var(--green);}
+.tool-link.primary:hover{color:#fff;}
+
+/* ── RESEARCH ── */
+.research-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
+.research-item{background:var(--bg2);padding:1.4rem 1.6rem;display:grid;grid-template-columns:auto 1fr auto;gap:1.2rem;align-items:center;transition:background .2s;}
+.research-item:hover{background:var(--bg3);}
+.ri-status{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.25rem .6rem;border:1px solid;white-space:nowrap;}
+.status-disclosed{color:var(--green);border-color:var(--green);}
+.status-pending{color:var(--amber);border-color:var(--amber);}
+.status-active{color:var(--cyan);border-color:var(--cyan);}
+.ri-body{}
+.ri-title{font-size:.82rem;color:#fff;letter-spacing:.06em;margin-bottom:.3rem;}
+.ri-meta{font-size:.68rem;color:var(--text-dim);}
+.ri-meta span{color:var(--text);}
+.ri-link{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--text-dim);transition:color .2s;white-space:nowrap;}
+.ri-link:hover{color:var(--green);}
+
+/* ── DOCTRINE ── */
+.doctrine-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem;}
+.doctrine-card{padding:1.4rem;border:1px solid var(--border);background:var(--bg2);}
+.dc-num{font-size:2.5rem;color:var(--text-mute);line-height:1;margin-bottom:.5rem;}
+.dc-title{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:.6rem;}
+.dc-body{font-size:.75rem;color:var(--text-dim);line-height:1.7;}
+
+/* ── FIELD MANUALS ── */
+.fm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);}
+.fm-card{background:var(--bg2);padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:background .2s;text-decoration:none;}
+.fm-card:hover{background:var(--bg3);}
+.fm-num{font-size:1.4rem;color:var(--text-mute);min-width:2.5rem;text-align:right;font-weight:bold;}
+.fm-info{}
+.fm-title{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:.2rem;}
+.fm-sub{font-size:.62rem;color:var(--text-dim);}
+
+/* ── CONTACT ── */
+.contact-block{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+@media(max-width:640px){.contact-block{grid-template-columns:1fr;}}
+.contact-item{margin-bottom:1.2rem;}
+.ci-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.25rem;}
+.ci-value{font-size:.82rem;color:var(--text);}
+.ci-value a{color:var(--green);text-decoration:none;}
+.ci-value a:hover{text-decoration:underline;}
+.ops-note{border:1px solid var(--border);padding:1.2rem 1.4rem;background:var(--bg2);font-size:.75rem;color:var(--text-dim);line-height:1.8;margin-top:2rem;}
+.ops-note strong{color:var(--amber);}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:.62rem;color:var(--text-mute);letter-spacing:.15em;text-transform:uppercase;}
+
+/* ── SCANLINE overlay ── */
+body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);z-index:999;}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  nav{padding:.5rem 1rem;}
+  .nav-links{gap:1rem;}
+  #hero{padding:5rem 1rem 3rem;}
+  section{padding:3rem 1rem;}
+  .stat-row{flex-direction:column;}
+  .stat{border-right:none;border-bottom:1px solid var(--border);}
+  .stat:last-child{border-bottom:none;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">22ND <span style="color:#fff">SURVEY</span> DIVISION</div>
+  <div class="nav-links">
+    <a href="#arsenal">Arsenal</a>
+    <a href="#research">Research</a>
+    <a href="#manuals">Manuals</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero" style="border-top:none;">
+  <div class="container">
+    <div class="hero-tag">// CSEC — OFFENSIVE SECURITY RESEARCH // <span>SYDNEY, AUSTRALIA</span></div>
+    <h1 class="callsign">22ND <span class="dim">SURVEY</span><br>DIVISION</h1>
+    <div class="hero-tagline"><em>EXPLOIT PRIMITIVES</em> // <em>RED TEAM TOOLING</em> // <em>RESPONSIBLE DISCLOSURE</em></div>
+    <p class="hero-desc">
+      Independent offensive security research unit. We build weapons from <strong>first principles</strong> — no published PoCs, no copy-paste. Windows internals, kernel-mode exploitation, Android malware research, C2 infrastructure, and OSINT tradecraft. All work conducted on <strong>own hardware</strong> under academic authorisation. Responsible disclosure via MSRC and MITRE.
+    </p>
+    <div class="hero-cta">
+      <a href="#arsenal" class="btn btn-primary">View Arsenal</a>
+      <a href="https://rainfantry.github.io" class="btn btn-ghost" target="_blank">Research Site</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ── -->
+<section id="stats" style="padding:0;border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Tools Built</div></div>
+      <div class="stat"><div class="stat-num">1</div><div class="stat-label">MSRC Submission</div></div>
+      <div class="stat"><div class="stat-num">22</div><div class="stat-label">Field Manual Chapters</div></div>
+      <div class="stat"><div class="stat-num">26</div><div class="stat-label">Clean Binaries</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Unauthorized Targets</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ARSENAL ── -->
+<section id="arsenal">
+  <div class="container">
+    <div class="section-tag">// DEVELOPED SYSTEMS</div>
+    <div class="section-title">ARSENAL <span>//</span> RED TEAM TOOLING</div>
+    <div class="arsenal-grid">
+
+      <div class="tool-card tc-red">
+        <div class="tool-header">
+          <div class="tool-name">VADER Rootkit</div>
+          <div class="tool-badge badge-red">Kernel</div>
+        </div>
+        <div class="tool-desc">
+          Modular offensive security toolkit built from first principles. AMSI bypass, ETW patching, DLL sideloading, process injection. 26 binaries — all AV-clean. MSRC submission VULN-195458. Architecture complete.
+        </div>
+        <div class="tool-tags">
+          <span class="tag">C</span><span class="tag">Windows</span><span class="tag">Kernel</span><span class="tag">AMSI</span><span class="tag">ETW</span>
+        </div>
+        <div class="tool-links">
+          <a href="https://rainfantry.github.io/labs/vader.html" class="tool-link primary">Course →</a>
+          <a href="https://github.com/rainfantry/vader-rootkit" class="tool-link" target="_blank">GitHub</a>
+          <a href="https://rainfantry.github.io/labs/" class="tool-link">Labs</a>
+        </div>
+      </div>
+
+      <div class="tool-card tc-amber">
+        <div class="tool-header">
+          <div class="tool-name">CHEYANNE</div>
+          <div class="tool-badge badge-amber">C2</div>
+        </div>
+        <div class="tool-desc">
+          Polymorphic red team C2 framework. Menu-driven operator interface with payload modules, persistence mechanisms, and post-exploitation capability. Full kill chain tested against authorised targets.
+        </div>
+        <div class="tool-tags">
+          <span class="tag">Python</span><span class="tag">C2</span><span class="tag">Post-Ex</span><span class="tag">Persistence</span>
+        </div>
+        <div class="tool-links">
+          <a href="https://rainfantry.github.io/labs/cheyanne.html" class="tool-link primary">Course →</a>
+          <a href="https://github.com/rainfantry/cheyanne" class="tool-link" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <div class="tool-card tc-cyan">
+        <div class="tool-header">
+          <div class="tool-name">StarKiller</div>
+          <div class="tool-badge badge-cyan">Android RAT</div>
+        </div>
+        <div class="tool-desc">
+          Android remote access tool. Kotlin client with obfuscation, APK binder, C2 integration, and test harness. Phase 1 complete: C2 server, persistent beaconing, capability scaffolding.
+        </div>
+        <div class="tool-tags">
+          <span class="tag">Kotlin</span><span class="tag">Python</span><span class="tag">Android</span><span class="tag">RAT</span><span class="tag">APK</span>
+        </div>
+        <div class="tool-links">
+          <a href="https://rainfantry.github.io/labs/starkiller.html" class="tool-link primary">Course →</a>
+          <a href="https://github.com/rainfantry/starkiller" class="tool-link" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <div class="tool-card tc-green">
+        <div class="tool-header">
+          <div class="tool-name">Ghost Encoder</div>
+          <div class="tool-badge badge-green">Evasion</div>
+        </div>
+        <div class="tool-desc">
+          Unicode steganographic payload encoder. Conceals shellcode inside Unicode homoglyphs and zero-width characters. Signature-less, no binary artifacts. Written for CSEC research on encoding-based AV evasion.
+        </div>
+        <div class="tool-tags">
+          <span class="tag">Python</span><span class="tag">Unicode</span><span class="tag">Steganography</span><span class="tag">AV Evasion</span>
+        </div>
+        <div class="tool-links">
+          <a href="https://rainfantry.github.io/labs/ghost.html" class="tool-link primary">Course →</a>
+          <a href="https://github.com/rainfantry/ghost-encoder" class="tool-link" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <div class="tool-card tc-red">
+        <div class="tool-header">
+          <div class="tool-name">VADER TOCTOU</div>
+          <div class="tool-badge badge-red">CVE Research</div>
+        </div>
+        <div class="tool-desc">
+          Custom TOCTOU race condition exploit study targeting Windows Defender RTP. 11-chapter field manual, annotated weapon systems, dry-fire drills. Built from first principles, not published PoCs. MSRC submitted.
+        </div>
+        <div class="tool-tags">
+          <span class="tag">C</span><span class="tag">TOCTOU</span><span class="tag">Windows Defender</span><span class="tag">Race Condition</span>
+        </div>
+        <div class="tool-links">
+          <a href="https://rainfantry.github.io/labs/rootkit.html" class="tool-link primary">Course →</a>
+          <a href="https://github.com/rainfantry/vader-toctou" class="tool-link" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+      <div class="tool-card tc-purple">
+        <div class="tool-header">
+          <div class="tool-name">ECLIPSE</div>
+          <div class="tool-badge badge-purple">OPSEC</div>
+        </div>
+        <div class="tool-desc">
+          Operational security toolkit. Anti-forensics, counter-surveillance, and digital presence management for authorised red team operations. Designed for clean ingress and egress on authorised engagements.
+        </div>
+        <div class="tool-tags">
+          <span class="tag">Python</span><span class="tag">OPSEC</span><span class="tag">Anti-Forensics</span>
+        </div>
+        <div class="tool-links">
+          <a href="https://github.com/rainfantry/eclipse" class="tool-link" target="_blank">GitHub</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── RESEARCH ── -->
+<section id="research">
+  <div class="container">
+    <div class="section-tag">// VULNERABILITY DISCLOSURE</div>
+    <div class="section-title">RESEARCH <span>//</span> CVE &amp; MSRC</div>
+    <div class="research-list">
+
+      <div class="research-item">
+        <div class="ri-status status-disclosed">Submitted</div>
+        <div class="ri-body">
+          <div class="ri-title">MSRC VULN-195458 — Windows Defender TOCTOU Race Condition</div>
+          <div class="ri-meta">
+            Vendor: <span>Microsoft</span> &nbsp;|&nbsp;
+            Channel: <span>MSRC</span> &nbsp;|&nbsp;
+            Category: <span>Privilege Escalation / Defence Bypass</span>
+          </div>
+        </div>
+        <a href="https://github.com/rainfantry/vader-toctou" class="ri-link" target="_blank">Details →</a>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-status status-active">Active</div>
+        <div class="ri-body">
+          <div class="ri-title">mpengine.dll Mutation Fuzzing — Crash Surface Mapping</div>
+          <div class="ri-meta">
+            Target: <span>Windows Defender Engine</span> &nbsp;|&nbsp;
+            Method: <span>9 mutation strategies via MpCmdRun.exe</span> &nbsp;|&nbsp;
+            Status: <span>Crash triage ongoing</span>
+          </div>
+        </div>
+        <a href="https://github.com/rainfantry/vader-fuzz" class="ri-link" target="_blank">Repo →</a>
+      </div>
+
+      <div class="research-item">
+        <div class="ri-status status-pending">Ongoing</div>
+        <div class="ri-body">
+          <div class="ri-title">Android Attack Surface — APK Binder &amp; Capability Injection</div>
+          <div class="ri-meta">
+            Platform: <span>Android</span> &nbsp;|&nbsp;
+            Tool: <span>StarKiller</span> &nbsp;|&nbsp;
+            Focus: <span>Manifest permission injection, obfuscated payload delivery</span>
+          </div>
+        </div>
+        <a href="https://rainfantry.github.io/labs/starkiller.html" class="ri-link">Course →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── DOCTRINE ── -->
+<section id="doctrine">
+  <div class="container">
+    <div class="section-tag">// OPERATING PRINCIPLES</div>
+    <div class="section-title">DOCTRINE <span>//</span> HOW WE OPERATE</div>
+    <div class="doctrine-grid">
+      <div class="doctrine-card">
+        <div class="dc-num">01</div>
+        <div class="dc-title">Own Hardware Only</div>
+        <div class="dc-body">All offensive research conducted exclusively on own machines or explicitly authorised targets. No mass-targeting. No unauthorised access. No exceptions.</div>
+      </div>
+      <div class="doctrine-card">
+        <div class="dc-num">02</div>
+        <div class="dc-title">First Principles</div>
+        <div class="dc-body">We don't copy-paste PoCs. Every tool is built from scratch with full understanding of underlying mechanics. If we can't explain it line by line, we don't ship it.</div>
+      </div>
+      <div class="doctrine-card">
+        <div class="dc-num">03</div>
+        <div class="dc-title">Responsible Disclosure</div>
+        <div class="dc-body">Novel vulnerabilities go to MSRC or MITRE before anywhere else. We give vendors 90 days. We don't burn zero-days for clout.</div>
+      </div>
+      <div class="doctrine-card">
+        <div class="dc-num">04</div>
+        <div class="dc-title">Crash → Leak → Execute</div>
+        <div class="dc-body">The research methodology. Find the crash surface, build a leak primitive, develop controlled execution. Document every step. No magic.</div>
+      </div>
+      <div class="doctrine-card">
+        <div class="dc-num">05</div>
+        <div class="dc-title">Hunt, Don't Defend</div>
+        <div class="dc-body">Think like an attacker to build better defences. Understand the kill chain from ingress to persistence. See paths, see blocks, find substitutes.</div>
+      </div>
+      <div class="doctrine-card">
+        <div class="dc-num">06</div>
+        <div class="dc-title">Document Everything</div>
+        <div class="dc-body">No undocumented capability. Field manuals, annotated source, lesson materials. If it's not written down, it doesn't exist and can't be defended.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FIELD MANUALS ── -->
+<section id="manuals">
+  <div class="container">
+    <div class="section-tag">// KNOWLEDGE BASE</div>
+    <div class="section-title">FIELD MANUALS <span>//</span> 22DIV DOCTRINE LIBRARY</div>
+    <div class="fm-grid">
+      <a href="https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET" class="fm-card" target="_blank">
+        <div class="fm-num">01</div>
+        <div class="fm-info"><div class="fm-title">Offensive Mindset</div><div class="fm-sub">Attacker psychology &amp; kill chain</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=02_RECON_FOOTPRINTING" class="fm-card" target="_blank">
+        <div class="fm-num">02</div>
+        <div class="fm-info"><div class="fm-title">Recon &amp; Footprinting</div><div class="fm-sub">OSINT, passive &amp; active recon</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=03_VULNERABILITY_RESEARCH" class="fm-card" target="_blank">
+        <div class="fm-num">03</div>
+        <div class="fm-info"><div class="fm-title">Vulnerability Research</div><div class="fm-sub">Methodology &amp; tools</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=04_MITIGATIONS" class="fm-card" target="_blank">
+        <div class="fm-num">04</div>
+        <div class="fm-info"><div class="fm-title">Mitigations</div><div class="fm-sub">ASLR, DEP, CFG, stack canaries</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=05_EXPLOIT_DEVELOPMENT" class="fm-card" target="_blank">
+        <div class="fm-num">05</div>
+        <div class="fm-info"><div class="fm-title">Exploit Development</div><div class="fm-sub">BOF, ROP, heap spraying</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=06_WINDOWS_INTERNALS" class="fm-card" target="_blank">
+        <div class="fm-num">06</div>
+        <div class="fm-info"><div class="fm-title">Windows Internals</div><div class="fm-sub">Memory, handles, kernel objects</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=07_EXPLOIT_PRIMITIVES" class="fm-card" target="_blank">
+        <div class="fm-num">07</div>
+        <div class="fm-info"><div class="fm-title">Exploit Primitives</div><div class="fm-sub">Read/write primitives, AAAR</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=08_PRIVILEGE_ESCALATION" class="fm-card" target="_blank">
+        <div class="fm-num">08</div>
+        <div class="fm-info"><div class="fm-title">Privilege Escalation</div><div class="fm-sub">Token abuse, service exploits</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=09_MALWARE_DEVELOPMENT" class="fm-card" target="_blank">
+        <div class="fm-num">09</div>
+        <div class="fm-info"><div class="fm-title">Malware Development</div><div class="fm-sub">Dropper, loader, stager patterns</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=10_CODE_INJECTION" class="fm-card" target="_blank">
+        <div class="fm-num">10</div>
+        <div class="fm-info"><div class="fm-title">Code Injection</div><div class="fm-sub">DLL, shellcode, process hollowing</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=11_ROOTKITS" class="fm-card" target="_blank">
+        <div class="fm-num">11</div>
+        <div class="fm-info"><div class="fm-title">Rootkits</div><div class="fm-sub">User mode &amp; kernel rootkits</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=12_ANTIVIRUS_EVASION" class="fm-card" target="_blank">
+        <div class="fm-num">12</div>
+        <div class="fm-info"><div class="fm-title">AV Evasion</div><div class="fm-sub">Signatures, heuristics, sandboxes</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=13_MEMORY_FORENSICS" class="fm-card" target="_blank">
+        <div class="fm-num">13</div>
+        <div class="fm-info"><div class="fm-title">Memory Forensics</div><div class="fm-sub">Volatility, EPROCESS, artefacts</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=14_REVERSE_ENGINEERING" class="fm-card" target="_blank">
+        <div class="fm-num">14</div>
+        <div class="fm-info"><div class="fm-title">Reverse Engineering</div><div class="fm-sub">Ghidra, x64dbg, disassembly</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=15_POST_EXPLOITATION" class="fm-card" target="_blank">
+        <div class="fm-num">15</div>
+        <div class="fm-info"><div class="fm-title">Post-Exploitation</div><div class="fm-sub">Lateral movement, persistence</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=16_COMMAND_AND_CONTROL" class="fm-card" target="_blank">
+        <div class="fm-num">16</div>
+        <div class="fm-info"><div class="fm-title">Command &amp; Control</div><div class="fm-sub">C2 channels, beacons, profiles</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=17_NETWORK_WARFARE" class="fm-card" target="_blank">
+        <div class="fm-num">17</div>
+        <div class="fm-info"><div class="fm-title">Network Warfare</div><div class="fm-sub">TCP/IP, pivoting, tunnelling</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=18_CRYPTOGRAPHY_EVASION" class="fm-card" target="_blank">
+        <div class="fm-num">18</div>
+        <div class="fm-info"><div class="fm-title">Cryptography &amp; Evasion</div><div class="fm-sub">Encoding, encryption, obfuscation</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=20_ACTIVE_DIRECTORY" class="fm-card" target="_blank">
+        <div class="fm-num">20</div>
+        <div class="fm-info"><div class="fm-title">Active Directory</div><div class="fm-sub">Kerberoast, pass-the-hash, AD enum</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=21_MOBILE_SECURITY" class="fm-card" target="_blank">
+        <div class="fm-num">21</div>
+        <div class="fm-info"><div class="fm-title">Mobile Security</div><div class="fm-sub">Android internals, APK analysis</div></div>
+      </a>
+      <a href="https://rainfantry.github.io/books/reader.html?b=22_OSINT_SOCIAL_ENGINEERING" class="fm-card" target="_blank">
+        <div class="fm-num">22</div>
+        <div class="fm-info"><div class="fm-title">OSINT &amp; Social Engineering</div><div class="fm-sub">Recon, phishing, pretexting</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="container">
+    <div class="section-tag">// OPERATOR CONTACT</div>
+    <div class="section-title">CONTACT <span>//</span> GEORGE WU — VADER</div>
+    <div class="contact-block">
+      <div>
+        <div class="contact-item">
+          <div class="ci-label">Callsign</div>
+          <div class="ci-value">VADER // George Wu</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Location</div>
+          <div class="ci-value">Sydney, NSW — Australia</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Email</div>
+          <div class="ci-value"><a href="mailto:gwu0738@gmail.com">gwu0738@gmail.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">GitHub</div>
+          <div class="ci-value"><a href="https://github.com/rainfantry" target="_blank">github.com/rainfantry</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Research Site</div>
+          <div class="ci-value"><a href="https://rainfantry.github.io" target="_blank">rainfantry.github.io</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Credentials</div>
+          <div class="ci-value">Cert IV IT Programming — TAFE NSW 2026</div>
+        </div>
+      </div>
+      <div>
+        <div class="contact-item">
+          <div class="ci-label">Available For</div>
+          <div class="ci-value">Authorised penetration testing, red team engagements, security tooling development, vulnerability research collaboration.</div>
+        </div>
+        <div class="ops-note">
+          <strong>⚠ AUTHORISATION REQUIRED</strong><br>
+          All engagements require documented authorisation before commencement. We do not take on unlawful work. Scope is agreed in writing. We operate under Australian Cybercrime Act compliance at all times.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  // 22ND SURVEY DIVISION // SYDNEY, AUSTRALIA // OFFENSIVE SECURITY RESEARCH //
+  <br><br>
+  All research conducted on own hardware under academic authorisation. Responsible disclosure via MSRC / MITRE.
+</footer>
+
+</body>
+</html>
