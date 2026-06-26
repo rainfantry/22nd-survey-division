@@ -457,35 +457,23 @@ footer{
 .pin-footer-note{font-size:.47rem;color:#1e1e1e;letter-spacing:.05em;line-height:1.7;}
 
 /* ── GATE LOCK ── */
-/* Sections stay VISIBLE — per-card overlays handle the lock */
-/* Teaser section hidden — we use the in-curriculum banner instead */
 #course-teaser { display: none !important; }
-/* Curriculum lock banner: visible when locked, hidden when unlocked */
 html:not(.course-locked) #curriculum-lock-banner { display: none !important; }
-/* Per-card overlays: flex when locked, force-hidden when unlocked */
-html.course-locked .mod-card-overlay { display: flex !important; }
-html:not(.course-locked) .mod-card-overlay { display: none !important; }
 
-/* Per-card lock overlay */
-.mod-card { position: relative; }
-.mod-card-overlay {
-  display: none;
+/* Locked state: small badge per card — content stays readable */
+.mod-card { position: relative; cursor: pointer; }
+html.course-locked .mod-card { border-color: #1a2a1a; }
+html.course-locked .mod-card::after {
+  content: '🔒 CLICK TO UNLOCK';
   position: absolute;
-  inset: 0;
-  background: rgba(10,10,10,.88);
-  backdrop-filter: blur(2px);
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  cursor: pointer;
-  transition: background .2s;
-  z-index: 5;
+  bottom: .55rem;
+  right: .6rem;
+  font-size: .44rem;
+  letter-spacing: .14em;
+  color: var(--green-dim);
+  font-family: inherit;
+  pointer-events: none;
 }
-.mod-card-overlay:hover { background: rgba(10,10,10,.72); }
-.mod-card-overlay-icon { font-size: 1.3rem; color: var(--green-dim); }
-.mod-card-overlay-label { font-size: .54rem; letter-spacing: .2em; color: var(--green-dim); text-transform: uppercase; }
-.mod-card-overlay-sub { font-size: .5rem; color: var(--text-mute); letter-spacing: .1em; }
 
 /* ── COURSE TEASER (shown when locked, hidden when unlocked) ── */
 #course-teaser { padding: 4rem 0; text-align: center; }
@@ -509,7 +497,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   .proof-grid { grid-template-columns: 1fr !important; }
   .curriculum-grid { grid-template-columns: 1fr !important; gap: 1px; }
   .mod-card { padding: 1rem; }
-  .mod-detail { display: none; } /* collapse verbose details on mobile to save space */
+  .mod-detail { font-size: .58rem; }
   #pin-box { padding: 1.8rem 1.2rem; }
   #pin-input { font-size: 1.2rem; letter-spacing: .4em; }
   .mod-price-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -600,6 +588,8 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 </style>
 </head>
 <body>
+
+<canvas id="bg-net" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.55;"></canvas>
 
 <!-- ── PIN GATE ── -->
 <div id="pin-gate">
@@ -2125,36 +2115,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   var btn = document.getElementById('pin-submit');
   var err = document.getElementById('pin-error');
 
-  function injectCardOverlays() {
-    var cards = document.querySelectorAll('#curriculum-grid .mod-card');
-    cards.forEach(function(card) {
-      if (card.querySelector('.mod-card-overlay')) return; // already injected
-      var ov = document.createElement('div');
-      ov.className = 'mod-card-overlay';
-      ov.style.display = 'flex'; // set inline — CSS rule is fallback
-      ov.innerHTML = '<div class="mod-card-overlay-icon">&#128274;</div>' +
-        '<div class="mod-card-overlay-label">PIN Required</div>' +
-        '<div class="mod-card-overlay-sub">Click to enter access PIN</div>';
-      ov.addEventListener('click', function(e) {
-        e.preventDefault(); e.stopPropagation();
-        showGate(function() {
-          // After unlock, try navigating to this card's href
-          var href = card.getAttribute('href') || card.dataset.href;
-          if (href) window.open(href, '_blank');
-        });
-      });
-      card.appendChild(ov);
-    });
-  }
-
-  function removeCardOverlays() {
-    document.querySelectorAll('.mod-card-overlay').forEach(function(ov) {
-      ov.style.transition = 'opacity .3s';
-      ov.style.opacity = '0';
-      setTimeout(function() { if (ov.parentNode) ov.parentNode.removeChild(ov); }, 320);
-    });
-  }
-
   function unlock() {
     document.cookie = AUTH_KEY + '=1; path=/; SameSite=Strict';
     try { localStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
@@ -2163,7 +2123,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     gate.style.opacity = '0';
     setTimeout(function() { gate.style.display = 'none'; }, 350);
     document.documentElement.classList.remove('course-locked');
-    removeCardOverlays();
     setTimeout(function() {
       var el = document.getElementById('curriculum');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2260,11 +2219,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     }, true); // capture phase so it fires before other listeners
   }
 
-  // Inject per-card overlays when not authed — session-only
-  if (!isAuthed()) {
-    injectCardOverlays();
-  }
-
   // Intercept all "Start Learning" / "Enrol" CTAs that link to #curriculum
   document.querySelectorAll('a[href="#curriculum"], .nav-cta').forEach(function(a) {
     interceptCourseLink(a, function() {
@@ -2315,6 +2269,74 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     }
   })();
 
+})();
+</script>
+
+<script>
+/* ── Parrot OS particle network background ── */
+(function() {
+  var canvas = document.getElementById('bg-net');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W, H, nodes = [];
+  var N = 80, MAX_DIST = 160;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function mkNode() {
+    return {
+      x:  Math.random() * W,
+      y:  Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.45,
+      vy: (Math.random() - 0.5) * 0.45,
+      r:  Math.random() * 1.4 + 0.7
+    };
+  }
+
+  function init() {
+    resize();
+    nodes = [];
+    for (var i = 0; i < N; i++) nodes.push(mkNode());
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    for (var i = 0; i < nodes.length; i++) {
+      var a = nodes[i];
+      a.x += a.vx; a.y += a.vy;
+      if (a.x < 0 || a.x > W) a.vx *= -1;
+      if (a.y < 0 || a.y > H) a.vy *= -1;
+
+      for (var j = i + 1; j < nodes.length; j++) {
+        var b = nodes[j];
+        var dx = a.x - b.x, dy = a.y - b.y;
+        var d  = Math.sqrt(dx*dx + dy*dy);
+        if (d < MAX_DIST) {
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(34,100,34,' + ((1 - d / MAX_DIST) * 0.35) + ')';
+          ctx.lineWidth = 0.6;
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+
+      ctx.beginPath();
+      ctx.arc(a.x, a.y, a.r, 0, 6.2832);
+      ctx.fillStyle = 'rgba(50,160,50,0.75)';
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
 })();
 </script>
 
