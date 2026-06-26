@@ -2177,10 +2177,9 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       btn.textContent = '// ACCESS GRANTED';
       btn.style.borderColor = 'var(--green)';
       input.style.borderColor = 'var(--green)';
-      setTimeout(function() {
-        unlock();
-        if (pendingAction) { pendingAction(); pendingAction = null; }
-      }, 400);
+      btn.disabled = true;
+      unlock();
+      if (pendingAction) { var pa = pendingAction; pendingAction = null; setTimeout(pa, 380); }
     } else {
       var fails = bumpFail();
       input.value = '';
