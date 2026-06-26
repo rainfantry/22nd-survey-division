@@ -458,11 +458,13 @@ footer{
 
 /* ── GATE LOCK ── */
 /* Sections stay VISIBLE — per-card overlays handle the lock */
-/* (Removed hide-on-locked for #courses, #curriculum, #labs — use overlays instead) */
 /* Teaser section hidden — we use the in-curriculum banner instead */
 #course-teaser { display: none !important; }
 /* Curriculum lock banner: visible when locked, hidden when unlocked */
 html:not(.course-locked) #curriculum-lock-banner { display: none !important; }
+/* Per-card overlays: flex when locked, force-hidden when unlocked */
+html.course-locked .mod-card-overlay { display: flex !important; }
+html:not(.course-locked) .mod-card-overlay { display: none !important; }
 
 /* Per-card lock overlay */
 .mod-card { position: relative; }
@@ -2129,6 +2131,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       if (card.querySelector('.mod-card-overlay')) return; // already injected
       var ov = document.createElement('div');
       ov.className = 'mod-card-overlay';
+      ov.style.display = 'flex'; // set inline — CSS rule is fallback
       ov.innerHTML = '<div class="mod-card-overlay-icon">&#128274;</div>' +
         '<div class="mod-card-overlay-label">PIN Required</div>' +
         '<div class="mod-card-overlay-sub">Click to enter access PIN</div>';
