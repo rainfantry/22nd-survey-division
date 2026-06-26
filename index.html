@@ -463,6 +463,20 @@ footer{
 .proof-lede{max-width:780px;font-size:.76rem;color:var(--text-dim);line-height:1.9;margin-top:.9rem;}
 .proof-verdict{display:inline-block;margin-top:1.5rem;font-size:.55rem;letter-spacing:.18em;padding:.3rem .9rem;border:1px solid var(--green-dim);color:var(--green-dim);text-transform:uppercase;}
 @media(max-width:600px){.proof-grid{grid-template-columns:1fr;}}
+/* ghost encoder terminal card */
+.ghost-term{background:#030806;border-bottom:1px solid #0d1a0d;min-height:185px;padding:.85rem 1rem;font-family:"Cascadia Code","Consolas","Courier New",monospace;font-size:.66rem;line-height:1.9;overflow:hidden;}
+.ghost-line{display:block;opacity:0;transform:translateX(-6px);animation:ghost-appear .25s ease forwards;}
+.g-cmd{color:#00ff41;}.g-ok{color:#00cc33;}.g-dim{color:#445544;}.g-warn{color:#667733;}
+@keyframes ghost-appear{to{opacity:1;transform:translateX(0);}}
+/* per-module pricing */
+.mod-price-table{width:100%;border-collapse:collapse;font-size:.7rem;margin-top:2rem;max-width:860px;}
+.mod-price-table th{text-align:left;color:var(--green-dim);font-weight:400;font-size:.58rem;letter-spacing:.14em;padding:.4rem .7rem;border-bottom:1px solid var(--border);}
+.mod-price-table td{padding:.35rem .7rem;border-bottom:1px solid #111;vertical-align:top;color:var(--text-dim);}
+.mod-price-table tr:hover td{background:#0a0a0a;}
+.mod-price-table .mp-num{color:#333;font-size:.6rem;width:28px;}
+.mod-price-table .mp-title{color:var(--text);}
+.mod-price-table .mp-repo{color:#2a6e2a;font-size:.62rem;}
+.mod-price-table .mp-price{color:var(--green);font-weight:600;text-align:right;white-space:nowrap;}
 .research-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
 .research-item{background:var(--bg2);padding:1.4rem 1.6rem;display:grid;grid-template-columns:auto 1fr auto;gap:1.2rem;align-items:center;transition:background .2s;}
 .research-item:hover{background:var(--bg3);}
@@ -725,6 +739,26 @@ footer{
         </div>
       </div>
 
+      <!-- GHOST-ENCODER animated proof card — no static screenshot, simulated terminal -->
+      <div class="proof-card">
+        <div class="ghost-term" id="ghost-card-term">
+          <span class="ghost-line g-cmd" style="animation-delay:.2s">$ python ghost.py --encode --cover portrait.png --payload shell.bin</span>
+          <span class="ghost-line g-dim" style="animation-delay:.9s">[*] Cover image : portrait_512x512.png (786 KB)</span>
+          <span class="ghost-line g-dim" style="animation-delay:1.4s">[*] Payload     : iron_sun_enc.bin (4 KB shellcode)</span>
+          <span class="ghost-line g-dim" style="animation-delay:1.9s">[*] Method      : LSB steg — RGB channel interleave</span>
+          <span class="ghost-line g-dim" style="animation-delay:2.4s">[*] Entropy delta: 0.0023 bits/pixel</span>
+          <span class="ghost-line g-ok"  style="animation-delay:3.1s">[+] Output      : portrait_stego.png (visually identical)</span>
+          <span class="ghost-line g-ok"  style="animation-delay:3.7s">[+] AV scan     : CLEAN  (0/72 engines)</span>
+          <span class="ghost-line g-ok"  style="animation-delay:4.2s">[+] Channel     : ACTIVE — exfil via CDN attachment</span>
+          <span class="ghost-line g-warn" style="animation-delay:4.9s">// payload hidden inside a .png. defenders see an image.</span>
+        </div>
+        <div class="proof-info">
+          <div class="proof-tag">// GHOST-ENCODER — COVERT CHANNEL</div>
+          <div class="proof-caption">Steganography engine: shellcode hidden in PNG pixels via LSB channel mixing. 0.002 bits/pixel entropy delta — statistically undetectable. Exfiltrate via Discord CDN, S3, any image host. AV sees an image. You see a covert channel.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=18_CRYPTOGRAPHY_EVASION" target="_blank">read module 18 →</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -824,6 +858,40 @@ footer{
       </div>
 
     </div>
+
+    <div style="margin-top:2.5rem;">
+      <div style="font-size:.52rem;letter-spacing:.22em;color:var(--text-mute);margin-bottom:.4rem;">// OR — BUY INDIVIDUAL MODULES</div>
+      <p style="font-size:.7rem;color:var(--text-dim);margin-bottom:.4rem;">Each module purchase unlocks the specific private repo for that technique. GitHub collaborator invite within 24h. PIN <strong style="color:var(--green);">668340</strong> issued on payment.</p>
+      <table class="mod-price-table">
+        <thead><tr><th>#</th><th>MODULE</th><th>PRIVATE REPO UNLOCK</th><th>PRICE</th></tr></thead>
+        <tbody>
+          <tr><td class="mp-num">01</td><td class="mp-title">Offensive Mindset</td><td class="mp-repo">// doctrine — no repo</td><td class="mp-price">$29</td></tr>
+          <tr><td class="mp-num">02</td><td class="mp-title">Recon &amp; Footprinting</td><td class="mp-repo">winrecon</td><td class="mp-price">$39</td></tr>
+          <tr><td class="mp-num">03</td><td class="mp-title">Vulnerability Research</td><td class="mp-repo">csec-research-authorization</td><td class="mp-price">$49</td></tr>
+          <tr><td class="mp-num">04</td><td class="mp-title">Mitigations</td><td class="mp-repo">// theory — no repo</td><td class="mp-price">$29</td></tr>
+          <tr><td class="mp-num">05</td><td class="mp-title">Exploit Development</td><td class="mp-repo">// primitives</td><td class="mp-price">$49</td></tr>
+          <tr><td class="mp-num">06</td><td class="mp-title">Windows Internals</td><td class="mp-repo">// internals reference</td><td class="mp-price">$39</td></tr>
+          <tr><td class="mp-num">07</td><td class="mp-title">Exploit Primitives</td><td class="mp-repo">// primitive construction</td><td class="mp-price">$49</td></tr>
+          <tr><td class="mp-num">08</td><td class="mp-title">Privilege Escalation</td><td class="mp-repo">winrecon</td><td class="mp-price">$69</td></tr>
+          <tr><td class="mp-num">09</td><td class="mp-title">Malware Development</td><td class="mp-repo">iron-sun + eclipse</td><td class="mp-price">$79</td></tr>
+          <tr><td class="mp-num">10</td><td class="mp-title">Code Injection</td><td class="mp-repo">iron-sun</td><td class="mp-price">$69</td></tr>
+          <tr><td class="mp-num">11</td><td class="mp-title">Rootkits</td><td class="mp-repo">vader-rootkit</td><td class="mp-price">$79</td></tr>
+          <tr><td class="mp-num">12</td><td class="mp-title">Antivirus Evasion</td><td class="mp-repo">iron-sun + eclipse + vader-rootkit</td><td class="mp-price">$79</td></tr>
+          <tr><td class="mp-num">13</td><td class="mp-title">Memory Forensics</td><td class="mp-repo">flagship</td><td class="mp-price">$59</td></tr>
+          <tr><td class="mp-num">14</td><td class="mp-title">Reverse Engineering</td><td class="mp-repo">// RE methodology</td><td class="mp-price">$49</td></tr>
+          <tr><td class="mp-num">15</td><td class="mp-title">Post-Exploitation</td><td class="mp-repo">flagship</td><td class="mp-price">$79</td></tr>
+          <tr><td class="mp-num">16</td><td class="mp-title">Command &amp; Control</td><td class="mp-repo">cheyanne</td><td class="mp-price">$79</td></tr>
+          <tr><td class="mp-num">17</td><td class="mp-title">Network Warfare</td><td class="mp-repo">winrecon</td><td class="mp-price">$59</td></tr>
+          <tr><td class="mp-num">18</td><td class="mp-title">Cryptography Evasion</td><td class="mp-repo">iron-sun + eclipse</td><td class="mp-price">$59</td></tr>
+          <tr><td class="mp-num">19</td><td class="mp-title">Living Off the Land</td><td class="mp-repo">// LOTL techniques</td><td class="mp-price">$39</td></tr>
+          <tr><td class="mp-num">20</td><td class="mp-title">Active Directory</td><td class="mp-repo">winrecon</td><td class="mp-price">$69</td></tr>
+          <tr><td class="mp-num">21</td><td class="mp-title">Mobile Security</td><td class="mp-repo">starkiller</td><td class="mp-price">$79</td></tr>
+          <tr><td class="mp-num">22</td><td class="mp-title">OSINT &amp; Social Engineering</td><td class="mp-repo">// OSINT methodology</td><td class="mp-price">$39</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.62rem;color:var(--text-mute);margin-top:.8rem;">Individual total: ~$1,271 AUD. <strong style="color:var(--green);">Full bundle $497 saves you $774.</strong> Purchase individual modules via <a href="mailto:gwu0738@gmail.com?subject=22DIV Module Purchase" style="color:#2a6e2a;">gwu0738@gmail.com</a></p>
+    </div>
+
   </div>
 </section>
 
