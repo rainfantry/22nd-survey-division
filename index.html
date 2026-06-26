@@ -1919,6 +1919,18 @@ footer{
     showGate(function() { window.location.href = href; });
   };
 
+  // Handle redirect from reader.html — show gate immediately, then return
+  (function() {
+    var params = new URLSearchParams(location.search);
+    if (params.get('unlock') === '1' && !isAuthed()) {
+      var retUrl = params.get('ret') ? decodeURIComponent(params.get('ret')) : null;
+      history.replaceState(null, '', location.pathname);
+      showGate(function() {
+        if (retUrl) window.location.href = retUrl;
+      });
+    }
+  })();
+
 })();
 </script>
 
