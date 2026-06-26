@@ -481,6 +481,38 @@ footer{
 .dc-title{font-size:.8rem;color:#fff;margin-bottom:.5rem;letter-spacing:.04em;}
 .dc-body{font-size:.7rem;color:var(--text-dim);line-height:1.7;}
 .section-tag{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.5rem;}
+/* ── demo exercise components ── */
+.demo-ex{margin:1.4rem 0;font-family:var(--mono);font-size:.8rem;}
+.demo-terminal{border:1px solid #003311;background:#060d06;}
+.demo-bar{background:#0a150a;padding:.4rem 1rem;font-size:.65rem;letter-spacing:.09em;color:#3a5a3a;}
+.demo-screen{padding:.9rem 1rem;min-height:80px;font-size:.74rem;line-height:1.75;}
+.demo-line{color:#00ff41;display:block;opacity:0;transition:opacity .08s;}
+.demo-line.show{opacity:1;}
+.demo-line.dim{color:#3a5a3a;}
+.demo-line.ok{color:var(--green);}
+.demo-line.bad{color:var(--red);}
+.demo-controls{border-top:1px solid #0a1a0a;padding:.45rem .9rem;display:flex;gap:.7rem;align-items:center;}
+.demo-btn{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;padding:.22rem .65rem;border:1px solid #1a3a1a;background:transparent;color:var(--green);cursor:pointer;transition:all .15s;}
+.demo-btn:hover:not(:disabled){border-color:var(--green);background:#010d01;}
+.demo-btn:disabled{opacity:.3;cursor:default;}
+.demo-mcq,.demo-fillin{border:1px solid #1e1e1e;background:#0c0c0c;padding:1rem 1.2rem;}
+.demo-tag{font-size:.6rem;letter-spacing:.13em;color:var(--amber);margin-bottom:.6rem;}
+.demo-question{color:#ddd;font-size:.82rem;line-height:1.6;margin-bottom:.9rem;}
+.demo-choices{display:flex;flex-direction:column;gap:.4rem;}
+.demo-choice{background:#111;border:1px solid #222;color:#aaa;padding:.45rem .85rem;cursor:pointer;text-align:left;font-family:var(--mono);font-size:.76rem;transition:all .12s;width:100%;}
+.demo-choice:hover:not(:disabled){border-color:#004d18;color:#eee;}
+.demo-choice.correct{border-color:var(--green)!important;color:var(--green)!important;background:#020d02;}
+.demo-choice.wrong{border-color:var(--red)!important;color:var(--red)!important;background:#0d0202;}
+.demo-feedback{font-size:.73rem;margin-top:.7rem;padding:.5rem .8rem;display:none;border-left:3px solid;}
+.demo-feedback.show{display:block;}
+.demo-feedback.fb-ok{color:#00cc33;border-color:var(--green);background:#020d02;}
+.demo-feedback.fb-err{color:#ff8888;border-color:var(--red);background:#0d0202;}
+.demo-code{background:#090909;border:1px solid #141414;padding:.85rem 1rem;margin:.7rem 0 .8rem;overflow-x:auto;font-size:.74rem;line-height:1.7;color:#abb2bf;display:block;white-space:pre;}
+.demo-blank{background:#001200;border:none;border-bottom:1px solid var(--green);color:var(--green);font-family:var(--mono);font-size:.74rem;padding:.05em .3em;min-width:5ch;width:5ch;outline:none;}
+.demo-blank.fb-ok{border-color:var(--green);color:var(--green);}
+.demo-blank.fb-err{border-color:var(--red);color:var(--red);background:#0d0000;}
+.demo-hint-link{font-size:.7rem;color:#444;cursor:pointer;margin-left:.8rem;text-decoration:underline dashed;}
+.demo-hint-link:hover{color:#777;}
 </style>
 </head>
 <body>
@@ -691,6 +723,58 @@ footer{
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- ── INTERACTIVE DEMO ── -->
+<section id="demo" style="background:var(--bg);">
+  <div class="container">
+    <div class="section-eyebrow">// FREE DEMO — NO ACCESS REQUIRED</div>
+    <div class="section-title">TRY A <span class="accent">LESSON</span></div>
+    <p style="color:var(--text-dim);font-size:.82rem;margin-bottom:2rem;max-width:640px;">Three exercise types from Chapter 12: AV Evasion. This is what every lesson looks like behind the PIN. Real techniques. Real tools from our private repos. Tested on live targets.</p>
+
+    <!-- DEMO 1: Terminal Replay -->
+    <div class="demo-ex demo-terminal" id="demo-term">
+      <div class="demo-bar"><span style="color:var(--green);">▶ TERMINAL</span> &nbsp; static signature scan → encode → evade</div>
+      <div class="demo-screen" id="demo-screen"></div>
+      <div class="demo-controls">
+        <button class="demo-btn" id="demo-play">▶ PLAY</button>
+        <button class="demo-btn" id="demo-replay" disabled>↺ REPLAY</button>
+        <span style="font-size:.65rem;color:var(--text-dim);margin-left:.8rem;">// from: rainfantry/eclipse + rainfantry/iron-sun</span>
+      </div>
+    </div>
+
+    <!-- DEMO 2: MCQ -->
+    <div class="demo-ex demo-mcq" id="demo-mcq">
+      <div class="demo-tag">// MCQ — CHAPTER 12</div>
+      <div class="demo-question">XOR encoding defeats static AV signature detection because:</div>
+      <div class="demo-choices">
+        <button class="demo-choice" data-idx="0">It compresses the payload below the scan threshold</button>
+        <button class="demo-choice" data-idx="1">The encoded bytes no longer match the stored signature pattern</button>
+        <button class="demo-choice" data-idx="2">XOR is too CPU-intensive for real-time scanning</button>
+        <button class="demo-choice" data-idx="3">It randomises the PE header magic bytes</button>
+      </div>
+      <div class="demo-feedback" id="demo-fb"></div>
+    </div>
+
+    <!-- DEMO 3: Fill-in-blank -->
+    <div class="demo-ex demo-fillin" id="demo-fill">
+      <div class="demo-tag" style="color:var(--cyan);">// FILL IN THE BLANK — CHAPTER 12</div>
+      <div class="demo-question">Complete the XOR decode stub (runs in memory before payload executes):</div>
+      <pre class="demo-code">void xor_decode(unsigned char *buf, size_t len, unsigned char key) {
+    for (size_t i = 0; i &lt; len; i++) {
+        buf[i] <input type="text" id="demo-blank" class="demo-blank" placeholder="??" autocomplete="off" spellcheck="false"> key;
+    }
+}</pre>
+      <button class="demo-btn" id="demo-check">CHECK →</button>
+      <span class="demo-hint-link" id="demo-hint-link">hint</span>
+      <div class="demo-feedback" id="demo-fill-fb"></div>
+    </div>
+
+    <div style="margin-top:2.4rem;text-align:center;">
+      <div style="font-size:.72rem;color:var(--text-dim);letter-spacing:.1em;margin-bottom:.9rem;">// 22 chapters · 3 exercise types per chapter · all backed by working private-repo code</div>
+      <a href="#curriculum" class="btn-primary" style="display:inline-block;">UNLOCK FULL COURSE →</a>
     </div>
   </div>
 </section>
@@ -1596,6 +1680,98 @@ footer{
 })();
 </script>
 
+
+<script>
+// ── Demo Exercise Engine (landing page — no PIN required) ──────────────────
+(function() {
+  var FRAMES = [
+    {d:0,   t:'C:\\lab> defender_scan.exe payload.exe',          c:'dim'},
+    {d:600, t:'[!] THREAT DETECTED: Trojan.GenericKD.47291',     c:'bad'},
+    {d:900, t:'C:\\lab> xor_encode.exe payload.exe --key 0x4D',  c:'dim'},
+    {d:700, t:'[*] XOR encoding with per-vector key isolation...',c:''},
+    {d:700, t:'[+] payload_encoded.exe written (11,264 bytes)',   c:'ok'},
+    {d:600, t:'C:\\lab> defender_scan.exe payload_encoded.exe',   c:'dim'},
+    {d:800, t:'[+] No threats found.',                            c:'ok'},
+    {d:400, t:'// static signature engine: DEFEATED',            c:'ok'}
+  ];
+
+  var screen   = document.getElementById('demo-screen');
+  var playBtn  = document.getElementById('demo-play');
+  var replayBtn= document.getElementById('demo-replay');
+
+  function runTerminal() {
+    screen.innerHTML = '';
+    playBtn.style.display = 'none';
+    replayBtn.disabled = true;
+    var delay = 0;
+    FRAMES.forEach(function(f) {
+      delay += f.d;
+      setTimeout(function() {
+        var line = document.createElement('span');
+        line.className = 'demo-line ' + (f.c || '');
+        line.textContent = f.t;
+        screen.appendChild(line);
+        setTimeout(function() { line.classList.add('show'); }, 20);
+      }, delay);
+    });
+    setTimeout(function() { replayBtn.disabled = false; }, delay + 400);
+  }
+
+  if (playBtn)  playBtn.addEventListener('click', runTerminal);
+  if (replayBtn) replayBtn.addEventListener('click', function() { runTerminal(); });
+
+  // MCQ
+  var CORRECT_MCQ = 1;
+  var MCQ_EXP = 'Static AV stores byte signatures of known malware. XOR scrambles every byte — the signature is gone. The encoder stub decodes back to original code in memory at runtime, after the scanner has already passed it.';
+  document.querySelectorAll('.demo-choice').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var chosen = +btn.dataset.idx;
+      document.querySelectorAll('.demo-choice').forEach(function(b) { b.disabled = true; });
+      var fb = document.getElementById('demo-fb');
+      if (chosen === CORRECT_MCQ) {
+        btn.classList.add('correct');
+        fb.textContent = '✓ CORRECT — ' + MCQ_EXP;
+        fb.className = 'demo-feedback show fb-ok';
+      } else {
+        btn.classList.add('wrong');
+        document.querySelectorAll('.demo-choice')[CORRECT_MCQ].classList.add('correct');
+        fb.textContent = '✗ WRONG — ' + MCQ_EXP;
+        fb.className = 'demo-feedback show fb-err';
+      }
+    });
+  });
+
+  // Fill-in
+  var BLANK_ANSWERS = ['^=', '= buf[i] ^ key'];
+  function checkBlank() {
+    var val = (document.getElementById('demo-blank').value || '').trim();
+    var ok = BLANK_ANSWERS.some(function(a) { return val === a; });
+    var blank = document.getElementById('demo-blank');
+    var fb    = document.getElementById('demo-fill-fb');
+    blank.className = 'demo-blank ' + (ok ? 'fb-ok' : 'fb-err');
+    fb.textContent = ok
+      ? '✓ CORRECT — ^= applies XOR in-place. Same key decodes what it encoded — XOR is its own inverse.'
+      : '✗ Try again. XOR assignment operator in C/C++.';
+    fb.className = 'demo-feedback show ' + (ok ? 'fb-ok' : 'fb-err');
+    if (ok) {
+      document.getElementById('demo-check').disabled = true;
+      blank.disabled = true;
+    }
+  }
+
+  var checkBtn = document.getElementById('demo-check');
+  var blankEl  = document.getElementById('demo-blank');
+  var hintLink = document.getElementById('demo-hint-link');
+  if (checkBtn) checkBtn.addEventListener('click', checkBlank);
+  if (blankEl)  blankEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') checkBlank(); });
+  if (hintLink) hintLink.addEventListener('click', function() {
+    var fb = document.getElementById('demo-fill-fb');
+    fb.textContent = '// HINT: XOR compound assignment operator — two characters';
+    fb.className = 'demo-feedback show fb-err';
+  });
+})();
+// ── End Demo Engine ────────────────────────────────────────────────────────
+</script>
 
 <script>
 (function() {
