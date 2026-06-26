@@ -8,8 +8,8 @@
 <meta name="author" content="George Wu">
 <meta name="robots" content="index, follow">
 <script>
-// Session-only auth — PIN required every visit, no persistent unlock
-if (sessionStorage.getItem('22div_gate_auth') !== '1') {
+// Session cookie auth — clears when browser closes, works across tabs
+if (document.cookie.indexOf('22div_gate_auth=1') === -1) {
   document.documentElement.classList.add('course-locked');
 }
 </script>
@@ -2156,7 +2156,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   }
 
   function unlock() {
-    sessionStorage.setItem(AUTH_KEY, '1');
+    document.cookie = AUTH_KEY + '=1; path=/; SameSite=Strict';
     sessionStorage.removeItem(FAIL_KEY);
     gate.style.transition = 'opacity 0.35s';
     gate.style.opacity = '0';
@@ -2183,7 +2183,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   var pendingAction = null;
 
   function isAuthed() {
-    return sessionStorage.getItem(AUTH_KEY) === '1';
+    return document.cookie.indexOf(AUTH_KEY + '=1') > -1;
   }
 
   function isLockedOut() {
