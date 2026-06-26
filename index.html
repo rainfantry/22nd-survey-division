@@ -3,554 +3,1271 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>22nd Survey Division — Offensive Security Research</title>
-<meta name="description" content="22nd Survey Division. Offensive security research, red team tooling, and vulnerability disclosure. Sydney, Australia.">
+<title>22nd Survey Division — Offensive Security Training</title>
+<meta name="description" content="Full-stack offensive security training. Two tracks: coders learning attack tradecraft, and security people learning to code. 22 modules, 8 interactive labs. Free.">
 <meta name="author" content="George Wu">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="22nd Survey Division — Offensive Security Research">
-<meta property="og:description" content="Offensive security research, red team tooling, and responsible disclosure. Sydney, Australia.">
+<meta property="og:title" content="22nd Survey Division — Offensive Security Training">
+<meta property="og:description" content="The course that teaches coders to think like attackers — and attackers to code like engineers.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://rainfantry.github.io/22nd-survey-division/">
 <style>
 :root {
-  --bg:        #060a06;
-  --bg2:       #0a110a;
-  --bg3:       #0e180e;
-  --border:    #1a2e1a;
-  --green:     #00cc33;
-  --green-dim: #007a1f;
-  --cyan:      #00e5ff;
-  --amber:     #ffb000;
-  --red:       #ff4444;
-  --text:      #c8ddc8;
-  --text-dim:  #6a886a;
-  --text-mute: #3a4e3a;
+  --bg:         #0a0a0a;
+  --bg2:        #0f0f0f;
+  --bg3:        #141414;
+  --bg4:        #1a1a1a;
+  --border:     #1e1e1e;
+  --border2:    #2a2a2a;
+  --green:      #00ff41;
+  --green-dim:  #00882a;
+  --green-dark: #003310;
+  --amber:      #ffb000;
+  --amber-dim:  #7a5500;
+  --red:        #ff3333;
+  --red-dim:    #7a0000;
+  --cyan:       #00e5ff;
+  --cyan-dim:   #006e7a;
+  --purple:     #b060ff;
+  --text:       #c8c8c8;
+  --text-dim:   #6a6a6a;
+  --text-mute:  #333333;
   font-size: 15px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Courier New',Courier,monospace;line-height:1.6;overflow-x:hidden;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Consolas','Courier New',Courier,monospace;line-height:1.6;overflow-x:hidden;}
 
-/* ── NAV ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,10,6,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:.6rem 2rem;display:flex;align-items:center;justify-content:space-between;}
-.nav-brand{font-size:.75rem;letter-spacing:.25em;color:var(--green);text-transform:uppercase;}
-.nav-links{display:flex;gap:1.8rem;}
-.nav-links a{color:var(--text-dim);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;transition:color .2s;}
-.nav-links a:hover{color:var(--green);}
+/* ── SCANLINE ── */
+body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);z-index:9999;}
 
-/* ── HERO ── */
-#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:6rem 2rem 4rem;max-width:1100px;margin:0 auto;}
-.hero-tag{font-size:.65rem;letter-spacing:.3em;color:var(--green-dim);text-transform:uppercase;margin-bottom:1.2rem;}
-.hero-tag span{color:var(--green);}
-h1.callsign{font-size:clamp(2.4rem,6vw,5rem);letter-spacing:.08em;text-transform:uppercase;line-height:1;color:#fff;margin-bottom:.5rem;}
-h1.callsign .dim{color:var(--green-dim);}
-.hero-tagline{font-size:.9rem;color:var(--text-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:2.5rem;}
-.hero-tagline em{color:var(--text);font-style:normal;}
-.hero-desc{max-width:620px;font-size:.88rem;color:var(--text);line-height:1.85;border-left:2px solid var(--green-dim);padding-left:1.2rem;margin-bottom:2.8rem;}
-.hero-desc strong{color:var(--green);}
-.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;}
-.btn{display:inline-block;padding:.6rem 1.4rem;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;border:1px solid;transition:all .2s;font-family:inherit;}
-.btn-primary{border-color:var(--green);color:var(--green);}
-.btn-primary:hover{background:var(--green);color:var(--bg);}
-.btn-ghost{border-color:var(--border);color:var(--text-dim);}
-.btn-ghost:hover{border-color:var(--text-dim);color:var(--text);}
-
-/* ── SECTION ── */
-section{padding:5rem 2rem;border-top:1px solid var(--border);}
-.container{max-width:1100px;margin:0 auto;}
-.section-tag{font-size:.6rem;letter-spacing:.35em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.5rem;}
-.section-title{font-size:clamp(1.2rem,3vw,1.8rem);letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:2.5rem;}
-.section-title span{color:var(--green);}
-
-/* ── STAT ROW ── */
-.stat-row{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--border);margin-bottom:3rem;}
-.stat{flex:1;min-width:130px;padding:1.2rem 1.4rem;border-right:1px solid var(--border);}
-.stat:last-child{border-right:none;}
-.stat-num{font-size:2rem;color:var(--green);letter-spacing:.05em;line-height:1;}
-.stat-label{font-size:.6rem;letter-spacing:.2em;color:var(--text-dim);text-transform:uppercase;margin-top:.3rem;}
-
-/* ── ARSENAL GRID ── */
-.arsenal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);}
-.tool-card{background:var(--bg2);padding:1.6rem;transition:background .2s;position:relative;overflow:hidden;}
-.tool-card:hover{background:var(--bg3);}
-.tool-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--tc-color,var(--green));}
-.tc-red{--tc-color:var(--red);}
-.tc-amber{--tc-color:var(--amber);}
-.tc-cyan{--tc-color:var(--cyan);}
-.tc-green{--tc-color:var(--green);}
-.tc-purple{--tc-color:#b060ff;}
-.tool-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;}
-.tool-name{font-size:.88rem;letter-spacing:.12em;text-transform:uppercase;color:#fff;}
-.tool-badge{font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;padding:.2rem .5rem;border:1px solid;opacity:.7;}
-.badge-red{color:var(--red);border-color:var(--red);}
-.badge-amber{color:var(--amber);border-color:var(--amber);}
-.badge-cyan{color:var(--cyan);border-color:var(--cyan);}
-.badge-green{color:var(--green);border-color:var(--green);}
-.badge-purple{color:#b060ff;border-color:#b060ff;}
-.tool-desc{font-size:.78rem;color:var(--text-dim);line-height:1.7;margin-bottom:1rem;}
-.tool-tags{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;}
-.tag{font-size:.58rem;letter-spacing:.1em;padding:.15rem .5rem;background:var(--bg);border:1px solid var(--text-mute);color:var(--text-dim);text-transform:uppercase;}
-.tool-links{display:flex;gap:.8rem;}
-.tool-link{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;color:var(--text-dim);transition:color .2s;}
-.tool-link:hover{color:var(--text);}
-.tool-link.primary{color:var(--green);}
-.tool-link.primary:hover{color:#fff;}
-
-/* ── RESEARCH ── */
-.research-list{display:flex;flex-direction:column;gap:1px;background:var(--border);}
-.research-item{background:var(--bg2);padding:1.4rem 1.6rem;display:grid;grid-template-columns:auto 1fr auto;gap:1.2rem;align-items:center;transition:background .2s;}
-.research-item:hover{background:var(--bg3);}
-.ri-status{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;padding:.25rem .6rem;border:1px solid;white-space:nowrap;}
-.status-disclosed{color:var(--green);border-color:var(--green);}
-.status-pending{color:var(--amber);border-color:var(--amber);}
-.status-active{color:var(--cyan);border-color:var(--cyan);}
-.ri-body{}
-.ri-title{font-size:.82rem;color:#fff;letter-spacing:.06em;margin-bottom:.3rem;}
-.ri-meta{font-size:.68rem;color:var(--text-dim);}
-.ri-meta span{color:var(--text);}
-.ri-link{font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;color:var(--text-dim);transition:color .2s;white-space:nowrap;}
-.ri-link:hover{color:var(--green);}
-
-/* ── DOCTRINE ── */
-.doctrine-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.2rem;}
-.doctrine-card{padding:1.4rem;border:1px solid var(--border);background:var(--bg2);}
-.dc-num{font-size:2.5rem;color:var(--text-mute);line-height:1;margin-bottom:.5rem;}
-.dc-title{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--green);margin-bottom:.6rem;}
-.dc-body{font-size:.75rem;color:var(--text-dim);line-height:1.7;}
-
-/* ── FIELD MANUALS ── */
-.fm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:var(--border);}
-.fm-card{background:var(--bg2);padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;cursor:pointer;transition:background .2s;text-decoration:none;}
-.fm-card:hover{background:var(--bg3);}
-.fm-num{font-size:1.4rem;color:var(--text-mute);min-width:2.5rem;text-align:right;font-weight:bold;}
-.fm-info{}
-.fm-title{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:.2rem;}
-.fm-sub{font-size:.62rem;color:var(--text-dim);}
-
-/* ── CONTACT ── */
-.contact-block{display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
-@media(max-width:640px){.contact-block{grid-template-columns:1fr;}}
-.contact-item{margin-bottom:1.2rem;}
-.ci-label{font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.25rem;}
-.ci-value{font-size:.82rem;color:var(--text);}
-.ci-value a{color:var(--green);text-decoration:none;}
-.ci-value a:hover{text-decoration:underline;}
-.ops-note{border:1px solid var(--border);padding:1.2rem 1.4rem;background:var(--bg2);font-size:.75rem;color:var(--text-dim);line-height:1.8;margin-top:2rem;}
-.ops-note strong{color:var(--amber);}
-
-/* ── FOOTER ── */
-footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:.62rem;color:var(--text-mute);letter-spacing:.15em;text-transform:uppercase;}
-
-/* ── SCANLINE overlay ── */
-body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px);z-index:999;}
-
-/* ── MOBILE ── */
-@media(max-width:640px){
-  nav{padding:.5rem 1rem;}
-  .nav-links{gap:1rem;}
-  #hero{padding:5rem 1rem 3rem;}
-  section{padding:3rem 1rem;}
-  .stat-row{flex-direction:column;}
-  .stat{border-right:none;border-bottom:1px solid var(--border);}
-  .stat:last-child{border-bottom:none;}
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav {
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(10,10,10,.96);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border);
+  padding:.65rem 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;
 }
+.nav-brand {
+  font-size:.7rem;letter-spacing:.3em;color:var(--green);
+  text-transform:uppercase;white-space:nowrap;text-decoration:none;
+  display:flex;align-items:center;gap:.6rem;
+}
+.nav-brand .slash{color:var(--text-mute);}
+.nav-brand .white{color:#fff;}
+.nav-links{display:flex;gap:1.8rem;align-items:center;}
+.nav-links a{
+  color:var(--text-dim);font-size:.65rem;letter-spacing:.18em;
+  text-transform:uppercase;text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(--green);}
+.nav-cta {
+  font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;
+  padding:.35rem .9rem;border:1px solid var(--green);color:var(--green);
+  text-decoration:none;transition:all .2s;white-space:nowrap;
+}
+.nav-cta:hover{background:var(--green);color:var(--bg);}
+.hamburger {
+  display:none;flex-direction:column;gap:5px;cursor:pointer;
+  background:none;border:none;padding:4px;
+}
+.hamburger span{display:block;width:22px;height:1px;background:var(--text-dim);transition:all .3s;}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+.mobile-menu {
+  display:none;position:fixed;top:43px;left:0;right:0;z-index:999;
+  background:rgba(10,10,10,.98);border-bottom:1px solid var(--border);
+  padding:1.5rem 2rem;flex-direction:column;gap:1.2rem;
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+  color:var(--text-dim);font-size:.7rem;letter-spacing:.18em;
+  text-transform:uppercase;text-decoration:none;transition:color .2s;
+  border-bottom:1px solid var(--border);padding-bottom:.8rem;
+}
+.mobile-menu a:last-child{border-bottom:none;}
+.mobile-menu a:hover{color:var(--green);}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+#hero {
+  min-height:100vh;display:flex;align-items:center;
+  padding:7rem 2rem 5rem;position:relative;overflow:hidden;
+}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1;}
+.hero-pre {
+  font-size:.62rem;letter-spacing:.4em;color:var(--green-dim);
+  text-transform:uppercase;margin-bottom:1.4rem;
+  display:flex;align-items:center;gap:.8rem;
+}
+.hero-pre::before{content:'';display:block;width:30px;height:1px;background:var(--green-dim);}
+h1.hero-headline {
+  font-size:clamp(1.8rem,5vw,4rem);letter-spacing:.06em;
+  text-transform:uppercase;line-height:1.1;color:#fff;
+  margin-bottom:1.2rem;max-width:900px;
+}
+h1.hero-headline .accent{color:var(--green);}
+h1.hero-headline .amber{color:var(--amber);}
+.hero-sub {
+  font-size:clamp(.82rem,1.5vw,1rem);color:var(--text-dim);
+  max-width:680px;line-height:1.8;margin-bottom:2.8rem;
+  border-left:2px solid var(--green-dim);padding-left:1.2rem;
+}
+.hero-sub em{color:var(--text);font-style:normal;}
+.hero-ctas{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem;}
+.btn {
+  display:inline-block;padding:.65rem 1.6rem;
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  text-decoration:none;border:1px solid;transition:all .2s;
+  font-family:inherit;cursor:pointer;
+}
+.btn-primary{border-color:var(--green);color:var(--green);background:transparent;}
+.btn-primary:hover{background:var(--green);color:var(--bg);}
+.btn-secondary{border-color:var(--amber);color:var(--amber);background:transparent;}
+.btn-secondary:hover{background:var(--amber);color:var(--bg);}
+.btn-ghost{border-color:var(--border2);color:var(--text-dim);background:transparent;}
+.btn-ghost:hover{border-color:var(--text-dim);color:var(--text);}
+.hero-terminal {
+  font-size:.72rem;color:var(--text-dim);line-height:2;
+  border:1px solid var(--border);background:var(--bg2);
+  padding:1rem 1.4rem;max-width:500px;display:inline-block;
+}
+.ht-line .prompt{color:var(--green);}
+.ht-line .cmd{color:var(--text);}
+.ht-line .out{color:var(--cyan-dim);}
+.ht-line .ok{color:var(--green);}
+.ht-line .warn{color:var(--amber);}
+.hero-bg-grid {
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  background-image:
+    linear-gradient(rgba(0,255,65,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,255,65,.03) 1px,transparent 1px);
+  background-size:40px 40px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 20%,transparent 100%);
+}
+
+/* ─────────────────────────────────────────
+   STATS STRIP
+───────────────────────────────────────── */
+#stats-strip{
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.stats-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;flex-wrap:wrap;
+}
+.stat-item{
+  flex:1;min-width:140px;
+  padding:1.4rem 1.6rem;
+  border-right:1px solid var(--border);
+  text-align:center;
+}
+.stat-item:last-child{border-right:none;}
+.stat-num{font-size:2.2rem;color:var(--green);letter-spacing:.04em;line-height:1;font-weight:normal;}
+.stat-label{font-size:.58rem;letter-spacing:.22em;color:var(--text-dim);text-transform:uppercase;margin-top:.35rem;}
+
+/* ─────────────────────────────────────────
+   SECTIONS
+───────────────────────────────────────── */
+section{padding:5rem 2rem;}
+section + section{border-top:1px solid var(--border);}
+.container{max-width:1100px;margin:0 auto;}
+.section-eyebrow{font-size:.58rem;letter-spacing:.4em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.5rem;}
+.section-title{
+  font-size:clamp(1.1rem,2.8vw,1.7rem);letter-spacing:.12em;
+  text-transform:uppercase;color:#fff;margin-bottom:2.5rem;
+}
+.section-title .accent{color:var(--green);}
+.section-title .slash{color:var(--text-mute);}
+
+/* ─────────────────────────────────────────
+   TRACKS
+───────────────────────────────────────── */
+.tracks-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--border);margin-top:2.5rem;
+}
+.track-card{
+  background:var(--bg2);padding:2.4rem 2rem;
+  position:relative;overflow:hidden;transition:background .2s;
+}
+.track-card:hover{background:var(--bg3);}
+.track-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;
+}
+.track-a::before{background:var(--cyan);}
+.track-b::before{background:var(--amber);}
+.track-badge{
+  display:inline-block;font-size:.58rem;letter-spacing:.2em;
+  text-transform:uppercase;padding:.3rem .7rem;
+  border:1px solid;margin-bottom:1.2rem;
+}
+.track-a .track-badge{color:var(--cyan);border-color:var(--cyan);}
+.track-b .track-badge{color:var(--amber);border-color:var(--amber);}
+.track-title{
+  font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;margin-bottom:.8rem;line-height:1.2;
+}
+.track-sub{
+  font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:1.2rem;
+}
+.track-a .track-sub{color:var(--cyan);}
+.track-b .track-sub{color:var(--amber);}
+.track-desc{font-size:.8rem;color:var(--text-dim);line-height:1.8;margin-bottom:1.8rem;}
+.track-desc strong{color:var(--text);}
+.track-topics{list-style:none;display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.8rem;}
+.track-topics li{
+  font-size:.72rem;color:var(--text-dim);
+  display:flex;align-items:center;gap:.6rem;
+}
+.track-topics li::before{
+  content:'→';font-size:.65rem;flex-shrink:0;
+}
+.track-a .track-topics li::before{color:var(--cyan);}
+.track-b .track-topics li::before{color:var(--amber);}
+
+/* ─────────────────────────────────────────
+   CURRICULUM
+───────────────────────────────────────── */
+.curriculum-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1px;background:var(--border);
+}
+.mod-card{
+  background:var(--bg2);padding:1.4rem;
+  position:relative;overflow:hidden;
+  transition:background .2s;
+  text-decoration:none;display:block;
+  cursor:pointer;
+}
+.mod-card:not(.mod-redacted):not(.mod-locked):hover{background:var(--bg3);}
+.mod-card::before{
+  content:'';position:absolute;top:0;left:0;
+  width:2px;height:100%;background:var(--green);
+  opacity:.3;transition:opacity .2s;
+}
+.mod-card:not(.mod-locked):not(.mod-redacted):hover::before{opacity:1;}
+.mod-card.mod-unlocked::before{opacity:.6;}
+.mod-card.mod-done::before{background:var(--green);opacity:1;}
+.mod-card.mod-locked{cursor:default;}
+.mod-card.mod-locked::before{background:var(--border2);opacity:1;}
+.mod-card.mod-redacted{cursor:default;background:var(--bg);border:none;}
+.mod-card.mod-redacted::before{background:var(--red);opacity:.4;}
+
+.mod-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.9rem;}
+.mod-num{
+  font-size:1.8rem;color:var(--text-mute);line-height:1;
+  font-weight:normal;letter-spacing:.04em;
+}
+.mod-card.mod-unlocked .mod-num{color:var(--green-dim);}
+.mod-card.mod-done .mod-num{color:var(--green);}
+.mod-card.mod-redacted .mod-num{color:var(--red-dim);}
+.mod-status{display:flex;align-items:center;gap:.4rem;}
+.mod-lock{font-size:.8rem;color:var(--text-mute);}
+.mod-check{font-size:.85rem;color:var(--green);display:none;}
+.mod-card.mod-done .mod-check{display:inline;}
+.mod-card.mod-done .mod-lock{display:none;}
+
+.mod-title{
+  font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;margin-bottom:.35rem;line-height:1.3;
+}
+.mod-card.mod-locked .mod-title{color:var(--text-dim);}
+.mod-card.mod-redacted .mod-title{color:var(--red);letter-spacing:.2em;}
+.mod-desc{font-size:.68rem;color:var(--text-dim);line-height:1.7;margin-bottom:1rem;}
+.mod-card.mod-locked .mod-desc{color:var(--text-mute);}
+
+.mod-tags{display:flex;gap:.4rem;flex-wrap:wrap;}
+.mod-tag{
+  font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.15rem .45rem;border:1px solid;
+}
+.tag-theory{color:var(--cyan);border-color:var(--cyan-dim);}
+.tag-lab{color:var(--amber);border-color:var(--amber-dim);}
+.tag-mcq{color:var(--green);border-color:var(--green-dim);}
+.tag-locked{color:var(--text-mute);border-color:var(--text-mute);}
+.tag-redacted{color:var(--red-dim);border-color:var(--red-dim);}
+
+.mod-locked-overlay{
+  display:none;
+}
+.mod-card.mod-locked .mod-locked-overlay{
+  display:block;
+  font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--text-mute);margin-top:.6rem;
+}
+
+/* ─────────────────────────────────────────
+   EVASION LAB
+───────────────────────────────────────── */
+.lab-feature{
+  border:1px solid var(--border);background:var(--bg2);
+  padding:2.5rem;position:relative;overflow:hidden;
+}
+.lab-feature::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--red),var(--amber),var(--red));
+}
+.lab-feature-grid{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;}
+.lab-feature-badge{
+  font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;
+  padding:.3rem .7rem;border:1px solid var(--red);color:var(--red);
+  display:inline-block;margin-bottom:1rem;
+}
+.lab-feature-title{
+  font-size:clamp(1rem,2.5vw,1.5rem);letter-spacing:.1em;
+  text-transform:uppercase;color:#fff;margin-bottom:.8rem;line-height:1.2;
+}
+.lab-feature-sub{
+  font-size:.8rem;color:var(--text-dim);line-height:1.8;
+  margin-bottom:1.6rem;max-width:600px;
+}
+.lab-feature-sub strong{color:var(--amber);}
+.lab-layers{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.6rem;}
+.layer-pip{
+  font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.25rem .6rem;border:1px solid var(--border2);color:var(--text-dim);
+  background:var(--bg3);transition:all .2s;
+}
+.lab-feature:hover .layer-pip:nth-child(1){border-color:var(--red);color:var(--red);}
+.lab-feature:hover .layer-pip:nth-child(2){border-color:var(--red);color:var(--red);transition-delay:.05s;}
+.lab-feature:hover .layer-pip:nth-child(3){border-color:var(--amber);color:var(--amber);transition-delay:.1s;}
+.lab-feature:hover .layer-pip:nth-child(4){border-color:var(--amber);color:var(--amber);transition-delay:.15s;}
+.lab-feature:hover .layer-pip:nth-child(5){border-color:var(--amber);color:var(--amber);transition-delay:.2s;}
+.lab-feature:hover .layer-pip:nth-child(6){border-color:var(--green);color:var(--green);transition-delay:.25s;}
+.lab-feature:hover .layer-pip:nth-child(7){border-color:var(--green);color:var(--green);transition-delay:.3s;}
+.lab-feature:hover .layer-pip:nth-child(8){border-color:var(--cyan);color:var(--cyan);transition-delay:.35s;}
+.lab-stat-block{
+  display:flex;flex-direction:column;gap:1rem;
+  border-left:1px solid var(--border);padding-left:2rem;min-width:160px;
+  flex-shrink:0;
+}
+.lab-stat{text-align:center;}
+.lab-stat-num{font-size:2.5rem;color:var(--red);line-height:1;}
+.lab-stat-label{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-mute);margin-top:.25rem;}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer{
+  border-top:1px solid var(--border);padding:3rem 2rem 2rem;
+  background:var(--bg2);
+}
+.footer-inner{max-width:1100px;margin:0 auto;}
+.footer-top{
+  display:grid;grid-template-columns:1fr 1fr 1fr;
+  gap:2rem;margin-bottom:2.5rem;
+}
+.footer-brand{
+  font-size:.7rem;letter-spacing:.28em;color:var(--green);
+  text-transform:uppercase;margin-bottom:.8rem;line-height:1.6;
+}
+.footer-brand span{color:#fff;}
+.footer-acn{
+  font-size:.65rem;color:var(--text-dim);letter-spacing:.1em;margin-bottom:.4rem;
+}
+.footer-location{font-size:.65rem;color:var(--text-mute);letter-spacing:.1em;}
+.footer-col-title{
+  font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--text-mute);margin-bottom:1rem;
+}
+.footer-links{display:flex;flex-direction:column;gap:.6rem;}
+.footer-links a{
+  font-size:.68rem;color:var(--text-dim);text-decoration:none;
+  letter-spacing:.08em;transition:color .2s;
+}
+.footer-links a:hover{color:var(--green);}
+.footer-bottom{
+  border-top:1px solid var(--border);padding-top:1.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-copy{font-size:.6rem;color:var(--text-mute);letter-spacing:.15em;text-transform:uppercase;}
+.footer-disclaimer{font-size:.6rem;color:var(--text-mute);letter-spacing:.08em;max-width:500px;text-align:right;}
+
+/* ─────────────────────────────────────────
+   PROGRESS BAR
+───────────────────────────────────────── */
+.progress-bar-wrap{
+  margin-bottom:2rem;
+  display:flex;align-items:center;gap:1.2rem;
+}
+.progress-bar{
+  flex:1;height:2px;background:var(--border);
+  position:relative;overflow:hidden;
+}
+.progress-fill{height:100%;background:var(--green);transition:width .5s ease;width:0%;}
+.progress-text{font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);white-space:nowrap;}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media(max-width:900px){
+  .tracks-grid{grid-template-columns:1fr;}
+  .lab-feature-grid{grid-template-columns:1fr;}
+  .lab-stat-block{border-left:none;padding-left:0;flex-direction:row;border-top:1px solid var(--border);padding-top:1.5rem;}
+  .footer-top{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  nav{padding:.55rem 1rem;}
+  .nav-links,.nav-cta{display:none;}
+  .hamburger{display:flex;}
+  #hero{padding:5.5rem 1rem 3.5rem;}
+  section{padding:3rem 1rem;}
+  .stat-item{min-width:120px;}
+  .curriculum-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-bottom{flex-direction:column;align-items:flex-start;}
+  .footer-disclaimer{text-align:left;}
+  .progress-bar-wrap{flex-direction:column;align-items:flex-start;gap:.5rem;}
+}
+
+/* ── PIN GATE ── */
+#pin-gate{position:fixed;inset:0;background:rgba(8,8,8,.99);z-index:99999;display:none;align-items:center;justify-content:center;}
+#pin-box{border:1px solid #1a3a1a;padding:3rem 3.2rem;max-width:420px;width:92%;text-align:center;background:#070707;}
+.pin-brand{font-size:.52rem;letter-spacing:.42em;color:var(--green);margin-bottom:.25rem;}
+.pin-acn{font-size:.46rem;letter-spacing:.18em;color:#252525;margin-bottom:2.2rem;}
+.pin-title{font-size:.88rem;color:var(--green);letter-spacing:.14em;margin-bottom:.5rem;}
+.pin-sub{font-size:.62rem;color:#555;letter-spacing:.06em;line-height:1.7;margin-bottom:2rem;}
+#pin-input{width:100%;background:#040404;border:1px solid #1a3a1a;color:var(--green);font-family:inherit;font-size:1.6rem;letter-spacing:.55em;padding:.75rem 1rem;text-align:center;outline:none;margin-bottom:.9rem;}
+#pin-input:focus{border-color:var(--green);}
+#pin-submit{width:100%;background:transparent;border:1px solid var(--green);color:var(--green);font-family:inherit;font-size:.62rem;letter-spacing:.22em;padding:.65rem 1.5rem;cursor:pointer;text-transform:uppercase;transition:all .2s;margin-bottom:1rem;}
+#pin-submit:hover:not(:disabled){background:var(--green);color:#000;}
+#pin-submit:disabled{opacity:.25;cursor:default;}
+#pin-error{font-size:.58rem;color:var(--red);letter-spacing:.1em;min-height:1.2em;margin-bottom:.7rem;}
+.pin-footer-note{font-size:.47rem;color:#1e1e1e;letter-spacing:.05em;line-height:1.7;}
+
+/* ── PROOF SECTION ── */
+#proof{padding:5rem 0 4rem;}
+.proof-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.4rem;margin-top:2.4rem;}
+.proof-card{border:1px solid var(--border);background:var(--bg2);overflow:hidden;transition:border-color .25s;}
+.proof-card:hover{border-color:#004d18;}
+.proof-img{width:100%;height:185px;object-fit:cover;display:block;border-bottom:1px solid var(--border);filter:saturate(.55) contrast(1.1);transition:filter .35s;}
+.proof-card:hover .proof-img{filter:saturate(1) contrast(1.05);}
+.proof-info{padding:.9rem 1.1rem;}
+.proof-tag{font-size:.47rem;letter-spacing:.24em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.35rem;}
+.proof-caption{font-size:.7rem;color:var(--text);line-height:1.65;margin-bottom:.5rem;}
+.proof-link{font-size:.52rem;letter-spacing:.1em;color:var(--text-dim);text-decoration:none;transition:color .2s;}
+.proof-link:hover{color:var(--green);}
+.proof-lede{max-width:780px;font-size:.76rem;color:var(--text-dim);line-height:1.9;margin-top:.9rem;}
+.proof-verdict{display:inline-block;margin-top:1.5rem;font-size:.55rem;letter-spacing:.18em;padding:.3rem .9rem;border:1px solid var(--green-dim);color:var(--green-dim);text-transform:uppercase;}
+@media(max-width:600px){.proof-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-brand">22ND <span style="color:#fff">SURVEY</span> DIVISION</div>
+<!-- ── PIN GATE ── -->
+<div id="pin-gate">
+  <div id="pin-box">
+    <div class="pin-brand">22ND SURVEY DIVISION</div>
+    <div class="pin-acn">ACN 692 429 397 // SYDNEY // AUSTRALIA</div>
+    <div class="pin-title">// ACCESS Restricted</div>
+    <div class="pin-sub">Enter your access code to continue.<br>Stripe / Square integration coming — contact <a href="mailto:gwu0738@gmail.com" style="color:#555;">gwu0738@gmail.com</a> to enrol early.</div>
+    <input type="password" id="pin-input" maxlength="8" placeholder="_ _ _ _ _ _" autocomplete="off" autofocus>
+    <button id="pin-submit">AUTHENTICATE</button>
+    <div id="pin-error"></div>
+    <div class="pin-footer-note">OCCUPATION FORCE CALLSIGN GSW PTY LTD // ABN 50 692 429 397<br>All content for authorised use. Australian Cybercrime Act compliant.</div>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav id="main-nav">
+  <a href="#hero" class="nav-brand">22ND <span class="white">SURVEY</span> DIVISION</a>
   <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#arsenal">Arsenal</a>
-    <a href="#research">Research</a>
-    <a href="#manuals">Manuals</a>
+    <a href="#courses">Courses</a>
+    <a href="#labs">Labs</a>
+    <a href="#curriculum">Curriculum</a>
+    <a href="#about-section">About</a>
     <a href="#contact">Contact</a>
   </div>
+  <a href="#curriculum" class="nav-cta">Start Learning</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#courses" onclick="closeMobile()">Courses</a>
+  <a href="#labs" onclick="closeMobile()">Labs</a>
+  <a href="#curriculum" onclick="closeMobile()">Curriculum</a>
+  <a href="#about-section" onclick="closeMobile()">About</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="#curriculum" onclick="closeMobile()">Start Learning →</a>
+</div>
 
 <!-- ── HERO ── -->
 <section id="hero" style="border-top:none;">
-  <div class="container">
-    <div class="hero-tag">// CSEC — OFFENSIVE SECURITY RESEARCH // <span>SYDNEY, AUSTRALIA</span></div>
-    <h1 class="callsign">22ND <span class="dim">SURVEY</span><br>DIVISION</h1>
-    <div class="hero-tagline"><em>EXPLOIT PRIMITIVES</em> // <em>RED TEAM TOOLING</em> // <em>RESPONSIBLE DISCLOSURE</em></div>
-    <p class="hero-desc">
-      Windows internals, kernel exploitation, AV evasion, and mobile attack research. Every tool built from <strong>first principles</strong> — no copy-paste PoCs, no borrowed exploits. Every technique understood line by line before it ships. All research on <strong>own hardware</strong> and explicitly authorised targets. Responsible disclosure via MSRC and MITRE.
+  <div class="hero-bg-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-pre">// OFFENSIVE SECURITY TRAINING // SYDNEY, AUSTRALIA //</div>
+    <h1 class="hero-headline">
+      OFFENSIVE SECURITY<br>TRAINING FOR THE<br>
+      <span class="accent">MODERN THREAT</span><br>
+      <span class="amber">LANDSCAPE</span>
+    </h1>
+    <p class="hero-sub">
+      The course that teaches <em>coders to think like attackers</em> — and <em>attackers to code like engineers.</em> No hand-holding. No toy examples. Real tradecraft, first principles, working tools.
     </p>
-    <div class="hero-cta">
-      <a href="#arsenal" class="btn btn-primary">View Arsenal</a>
-      <a href="https://rainfantry.github.io" class="btn btn-ghost" target="_blank">Research Site</a>
+    <div class="hero-ctas">
+      <a href="#curriculum" class="btn btn-primary">Start Learning</a>
+      <a href="#courses" class="btn btn-secondary">View Curriculum</a>
+    </div>
+    <div class="hero-terminal">
+      <div class="ht-line"><span class="prompt">22DIV&gt;</span> <span class="cmd">enumerate_target --self</span></div>
+      <div class="ht-line"><span class="out">[*] Track selected: auto-detect...</span></div>
+      <div class="ht-line"><span class="out">[*] Prior coding XP: checking...</span></div>
+      <div class="ht-line"><span class="ok">[+] TRACK_A: Coder → Attacker</span></div>
+      <div class="ht-line"><span class="ok">[+] TRACK_B: Attacker → Coder</span></div>
+      <div class="ht-line"><span class="warn">[!] Select your entry point ↓</span></div>
     </div>
   </div>
 </section>
 
-<!-- ── STATS ── -->
-<section id="stats" style="padding:0;border-top:1px solid var(--border);">
+<!-- ── STATS STRIP ── -->
+<div id="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">22</div><div class="stat-label">Modules</div></div>
+    <div class="stat-item"><div class="stat-num">8</div><div class="stat-label">Interactive Labs</div></div>
+    <div class="stat-item"><div class="stat-num">2</div><div class="stat-label">Learning Tracks</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Free</div></div>
+    <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">Prerequisites</div></div>
+  </div>
+</div>
+
+<!-- ── PROOF SECTION ── -->
+<section id="proof">
   <div class="container">
-    <div class="stat-row">
-      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Tools Built</div></div>
-      <div class="stat"><div class="stat-num">1</div><div class="stat-label">MSRC Submission</div></div>
-      <div class="stat"><div class="stat-num">22</div><div class="stat-label">Field Manual Chapters</div></div>
-      <div class="stat"><div class="stat-num">26</div><div class="stat-label">Clean Binaries</div></div>
-      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Unauthorized Targets</div></div>
+    <div class="section-eyebrow">// REAL ATTACKS — DOCUMENTED — TESTED — REPORTED</div>
+    <div class="section-title">WHY THIS COURSE <span class="slash">//</span> <span class="accent">EXISTS</span></div>
+    <div class="proof-lede">
+      Modern malware evades every major endpoint security product. We know — because we built it, tested it live against Kaspersky Premium with RTP enabled, and submitted findings to Microsoft Security Response Center. Every technique in this course comes from documented research on owned hardware. We don't teach theory. We teach what actually works, why defences fail, and how to build defences that don't.
     </div>
+    <div class="proof-verdict">IRON-DOME v4.0.0 — VERDICT: PASS 10/10 — 0 DETECTIONS — KASPERSKY PREMIUM ACTIVE</div>
+
+    <div class="proof-grid">
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/iron_dome_build_complete_154613.jpg" alt="IRON-DOME build complete" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// IRON-DOME v4.0.0</div>
+          <div class="proof-caption">8-layer evasion stack compiled and tested. 0 detections on Kaspersky Premium. XOR + dynamic API + anti-sandbox + PE stomp + ISUN gate + jitter + MinGW + AMSI/ETW bypass.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/irondome.html" target="_blank">view full release →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/iron_dome_v4_killchain.png" alt="Kill chain 10/10 PASS" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// KILL CHAIN — 10/10</div>
+          <div class="proof-caption">Full kill chain: C2 connect → AMSI/ETW disabled → recon → privilege escalation → tri-vector persistence (registry + startup LNK + scheduled task). 0 detections throughout.</div>
+          <a class="proof-link" href="https://github.com/rainfantry" target="_blank">github.com/rainfantry →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/GaySun_ImportTable_Evasion.png" alt="Import table fingerprinting" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// MODULE 12 — AV EVASION</div>
+          <div class="proof-caption">Import table fingerprinting: Defender matches your binary's API import topology — not just strings. Understanding this is why Layer 2 dynamic API resolution exists. Course teaches both sides.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=12_ANTIVIRUS_EVASION" target="_blank">read chapter 12 →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/AMSI_ETW_DLL_Research_Agents.png" alt="AMSI ETW bypass research" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// MODULE 12 — AMSI/ETW BYPASS</div>
+          <div class="proof-caption">Hardware debug register (HWBP DR0/DR1) bypass of AMSI and ETW — zero memory modification, undetectable by Tamper Protection. Submitted to MSRC as VULN-195458.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=12_ANTIVIRUS_EVASION" target="_blank">read chapter →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/MSRC_VULN195458_Submission.png" alt="MSRC submission VULN-195458" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// RESPONSIBLE DISCLOSURE</div>
+          <div class="proof-caption">MSRC Case VULN-195458: HWBP Tamper Protection bypass, CVSS 7.1 High. Submitted June 2026. Microsoft reviewed and rejected — "outside security boundary." Embargo void, published openly.</div>
+          <a class="proof-link" href="https://github.com/rainfantry/csec-research-authorization" target="_blank">read submission context →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/TOCTOU_Exploit_Live_Execution.png" alt="TOCTOU live exploit execution" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// VULNERABILITY RESEARCH</div>
+          <div class="proof-caption">TOCTOU race condition: standard user achieves SYSTEM via Defender's own quarantine pipeline. Batch oplock timing, NTFS junction swap. This is what your AV does when it "protects" you.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=03_VULNERABILITY_RESEARCH" target="_blank">read chapter 3 →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/starkiller_android_rat_gps.png" alt="StarKiller Android RAT GPS" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// MODULE 21 — MOBILE SECURITY</div>
+          <div class="proof-caption">StarKiller Android RAT: GPS location exfil, contacts harvest, reverse TCP shell, Play Protect evasion. Your phone's attack surface is larger than your laptop's — and defended worse.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=21_MOBILE_SECURITY" target="_blank">read chapter 21 →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/eclipse_polymorphic_payload_builder.png" alt="ECLIPSE polymorphic payload builder" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// MODULE 9 — MALWARE DEVELOPMENT</div>
+          <div class="proof-caption">ECLIPSE payload builder: polymorphic PE generation, per-run mutation, EDR evasion. A binary that's different every compile. How do you write a signature for something that doesn't look the same twice?</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=09_MALWARE_DEVELOPMENT" target="_blank">read chapter 9 →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/GaySun_XOR_Obfuscation_Explained.png" alt="XOR string obfuscation" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// MODULE 18 — CRYPTOGRAPHY + EVASION</div>
+          <div class="proof-caption">Layer 1: XOR string obfuscation with per-vector key isolation. Why static signature scanning fails the moment you encode your strings. The detection gap that's been exploited for 30 years.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=18_CRYPTOGRAPHY_EVASION" target="_blank">read chapter 18 →</a>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/0x1security_Mentorship_0day_Methodology.png" alt="0x1security doctrine" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// THE DOCTRINE</div>
+          <div class="proof-caption">"Search for knowledge. Not bugs." — 0x1security (Unit 8200 methodology, ~15 CVEs). Every technique in this course follows this framework: understand the defence architecture, and the bypass becomes obvious.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET" target="_blank">read the doctrine →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── LEARNING TRACKS ── -->
+<section id="courses">
+  <div class="container">
+    <div class="section-eyebrow">// ENTRY POINTS</div>
+    <div class="section-title">TWO TRACKS <span class="slash">//</span> ONE <span class="accent">DESTINATION</span></div>
+    <div class="tracks-grid">
+
+      <!-- TRACK A -->
+      <div class="track-card track-a">
+        <div class="track-badge">Track A</div>
+        <div class="track-title">I CAN CODE</div>
+        <div class="track-sub">Coder → Attacker</div>
+        <p class="track-desc">
+          You know Python, C, or PowerShell. You can read code, write scripts, build tools. But you've never thought like an attacker.
+          <strong> This track skips the syntax tutorials and goes straight to tradecraft.</strong>
+          Windows internals from a weaponisation perspective. Malware evasion theory that actually maps to working code. Exploit development from first principles.
+        </p>
+        <ul class="track-topics">
+          <li>Windows memory model — what the kernel actually does</li>
+          <li>AV/EDR detection logic — so you know what to beat</li>
+          <li>AMSI, ETW, and PPL — bypass theory and implementation</li>
+          <li>DLL sideloading, process hollowing, shellcode injection</li>
+          <li>Building a dropper from scratch — no metasploit</li>
+          <li>Race conditions, handle abuse, token impersonation</li>
+        </ul>
+        <a href="#curriculum" class="btn btn-ghost" style="border-color:var(--cyan);color:var(--cyan);">Start Track A →</a>
+      </div>
+
+      <!-- TRACK B -->
+      <div class="track-card track-b">
+        <div class="track-badge">Track B</div>
+        <div class="track-title">I KNOW SECURITY</div>
+        <div class="track-sub">Attacker → Coder</div>
+        <p class="track-desc">
+          You can run tools, understand CVEs, operate a C2. But when someone says "write a custom loader" you open a StackOverflow tab.
+          <strong> This track teaches C, PowerShell, and Python from an attacker's perspective.</strong>
+          Every concept is anchored to something you already know from the offensive side. Code that does real work, not Hello World.
+        </p>
+        <ul class="track-topics">
+          <li>C from zero — pointers, memory layout, WinAPI calls</li>
+          <li>PowerShell for red teamers — bypasses, reflective loading</li>
+          <li>Python payload engineering — encoders, stagers, obfuscation</li>
+          <li>Reading assembly — enough to analyse shellcode</li>
+          <li>Building your own C2 beacon — HTTP/S comms from scratch</li>
+          <li>From PoC to working tool — the engineering step most skip</li>
+        </ul>
+        <a href="#curriculum" class="btn btn-ghost" style="border-color:var(--amber);color:var(--amber);">Start Track B →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── CURRICULUM ── -->
+<section id="curriculum">
+  <div class="container">
+    <div class="section-eyebrow">// FIELD MANUALS</div>
+    <div class="section-title">CURRICULUM <span class="slash">//</span> 22DIV <span class="accent">DOCTRINE LIBRARY</span></div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-text" id="progress-text">0 / 22 MODULES COMPLETE</div>
+    </div>
+
+    <div class="curriculum-grid" id="curriculum-grid">
+
+      <!-- 01 -->
+      <a class="mod-card mod-unlocked" id="mod-01"
+         href="https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET"
+         target="_blank" data-mod="01">
+        <div class="mod-header">
+          <div class="mod-num">01</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#9650;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Offensive Mindset</div>
+        <div class="mod-desc">Attacker psychology &amp; kill chain</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+      </a>
+
+      <!-- 02 -->
+      <a class="mod-card mod-locked" id="mod-02"
+         href="https://rainfantry.github.io/books/reader.html?b=02_RECON_FOOTPRINTING"
+         target="_blank" data-mod="02">
+        <div class="mod-header">
+          <div class="mod-num">02</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Recon &amp; Footprinting</div>
+        <div class="mod-desc">OSINT, passive &amp; active recon</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 01 to unlock</div>
+      </a>
+
+      <!-- 03 -->
+      <a class="mod-card mod-locked" id="mod-03"
+         href="https://rainfantry.github.io/books/reader.html?b=03_VULNERABILITY_RESEARCH"
+         target="_blank" data-mod="03">
+        <div class="mod-header">
+          <div class="mod-num">03</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Vulnerability Research</div>
+        <div class="mod-desc">Methodology &amp; tools</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 02 to unlock</div>
+      </a>
+
+      <!-- 04 -->
+      <a class="mod-card mod-locked" id="mod-04"
+         href="https://rainfantry.github.io/books/reader.html?b=04_MITIGATIONS"
+         target="_blank" data-mod="04">
+        <div class="mod-header">
+          <div class="mod-num">04</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Mitigations</div>
+        <div class="mod-desc">ASLR, DEP, CFG, stack canaries</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 03 to unlock</div>
+      </a>
+
+      <!-- 05 -->
+      <a class="mod-card mod-locked" id="mod-05"
+         href="https://rainfantry.github.io/books/reader.html?b=05_EXPLOIT_DEVELOPMENT"
+         target="_blank" data-mod="05">
+        <div class="mod-header">
+          <div class="mod-num">05</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Exploit Development</div>
+        <div class="mod-desc">BOF, ROP, heap spraying</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 04 to unlock</div>
+      </a>
+
+      <!-- 06 -->
+      <a class="mod-card mod-locked" id="mod-06"
+         href="https://rainfantry.github.io/books/reader.html?b=06_WINDOWS_INTERNALS"
+         target="_blank" data-mod="06">
+        <div class="mod-header">
+          <div class="mod-num">06</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Windows Internals</div>
+        <div class="mod-desc">Memory, handles, kernel objects</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 05 to unlock</div>
+      </a>
+
+      <!-- 07 -->
+      <a class="mod-card mod-locked" id="mod-07"
+         href="https://rainfantry.github.io/books/reader.html?b=07_EXPLOIT_PRIMITIVES"
+         target="_blank" data-mod="07">
+        <div class="mod-header">
+          <div class="mod-num">07</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Exploit Primitives</div>
+        <div class="mod-desc">Read/write primitives, AAAR</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 06 to unlock</div>
+      </a>
+
+      <!-- 08 -->
+      <a class="mod-card mod-locked" id="mod-08"
+         href="https://rainfantry.github.io/books/reader.html?b=08_PRIVILEGE_ESCALATION"
+         target="_blank" data-mod="08">
+        <div class="mod-header">
+          <div class="mod-num">08</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Privilege Escalation</div>
+        <div class="mod-desc">Token abuse, service exploits</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 07 to unlock</div>
+      </a>
+
+      <!-- 09 -->
+      <a class="mod-card mod-locked" id="mod-09"
+         href="https://rainfantry.github.io/books/reader.html?b=09_MALWARE_DEVELOPMENT"
+         target="_blank" data-mod="09">
+        <div class="mod-header">
+          <div class="mod-num">09</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Malware Development</div>
+        <div class="mod-desc">Dropper, loader, stager patterns</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 08 to unlock</div>
+      </a>
+
+      <!-- 10 -->
+      <a class="mod-card mod-locked" id="mod-10"
+         href="https://rainfantry.github.io/books/reader.html?b=10_CODE_INJECTION"
+         target="_blank" data-mod="10">
+        <div class="mod-header">
+          <div class="mod-num">10</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Code Injection</div>
+        <div class="mod-desc">DLL, shellcode, process hollowing</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 09 to unlock</div>
+      </a>
+
+      <!-- 11 -->
+      <a class="mod-card mod-locked" id="mod-11"
+         href="https://rainfantry.github.io/books/reader.html?b=11_ROOTKITS"
+         target="_blank" data-mod="11">
+        <div class="mod-header">
+          <div class="mod-num">11</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Rootkits</div>
+        <div class="mod-desc">User mode &amp; kernel rootkits</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 10 to unlock</div>
+      </a>
+
+      <!-- 12 -->
+      <a class="mod-card mod-locked" id="mod-12"
+         href="https://rainfantry.github.io/books/reader.html?b=12_ANTIVIRUS_EVASION"
+         target="_blank" data-mod="12">
+        <div class="mod-header">
+          <div class="mod-num">12</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">AV Evasion</div>
+        <div class="mod-desc">Signatures, heuristics, sandboxes</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 11 to unlock</div>
+      </a>
+
+      <!-- 13 -->
+      <a class="mod-card mod-locked" id="mod-13"
+         href="https://rainfantry.github.io/books/reader.html?b=13_MEMORY_FORENSICS"
+         target="_blank" data-mod="13">
+        <div class="mod-header">
+          <div class="mod-num">13</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Memory Forensics</div>
+        <div class="mod-desc">Volatility, EPROCESS, artefacts</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 12 to unlock</div>
+      </a>
+
+      <!-- 14 -->
+      <a class="mod-card mod-locked" id="mod-14"
+         href="https://rainfantry.github.io/books/reader.html?b=14_REVERSE_ENGINEERING"
+         target="_blank" data-mod="14">
+        <div class="mod-header">
+          <div class="mod-num">14</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Reverse Engineering</div>
+        <div class="mod-desc">Ghidra, x64dbg, disassembly</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 13 to unlock</div>
+      </a>
+
+      <!-- 15 -->
+      <a class="mod-card mod-locked" id="mod-15"
+         href="https://rainfantry.github.io/books/reader.html?b=15_POST_EXPLOITATION"
+         target="_blank" data-mod="15">
+        <div class="mod-header">
+          <div class="mod-num">15</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Post-Exploitation</div>
+        <div class="mod-desc">Lateral movement, persistence</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 14 to unlock</div>
+      </a>
+
+      <!-- 16 -->
+      <a class="mod-card mod-locked" id="mod-16"
+         href="https://rainfantry.github.io/books/reader.html?b=16_COMMAND_AND_CONTROL"
+         target="_blank" data-mod="16">
+        <div class="mod-header">
+          <div class="mod-num">16</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Command &amp; Control</div>
+        <div class="mod-desc">C2 channels, beacons, profiles</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 15 to unlock</div>
+      </a>
+
+      <!-- 17 -->
+      <a class="mod-card mod-locked" id="mod-17"
+         href="https://rainfantry.github.io/books/reader.html?b=17_NETWORK_WARFARE"
+         target="_blank" data-mod="17">
+        <div class="mod-header">
+          <div class="mod-num">17</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Network Warfare</div>
+        <div class="mod-desc">TCP/IP, pivoting, tunnelling</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 16 to unlock</div>
+      </a>
+
+      <!-- 18 -->
+      <a class="mod-card mod-locked" id="mod-18"
+         href="https://rainfantry.github.io/books/reader.html?b=18_CRYPTOGRAPHY_EVASION"
+         target="_blank" data-mod="18">
+        <div class="mod-header">
+          <div class="mod-num">18</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Cryptography &amp; Evasion</div>
+        <div class="mod-desc">Encoding, encryption, obfuscation</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 17 to unlock</div>
+      </a>
+
+      <!-- 19 REDACTED -->
+      <div class="mod-card mod-redacted" id="mod-19" data-mod="19">
+        <div class="mod-header">
+          <div class="mod-num">19</div>
+          <div class="mod-status">
+            <span style="font-size:.65rem;color:var(--red-dim);">&#9632;</span>
+          </div>
+        </div>
+        <div class="mod-title">REDACTED</div>
+        <div class="mod-desc" style="color:var(--red-dim);letter-spacing:.08em;">// COMING SOON // CONTENT UNDER DEVELOPMENT //</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-redacted">Classified</span>
+        </div>
+      </div>
+
+      <!-- 20 -->
+      <a class="mod-card mod-locked" id="mod-20"
+         href="https://rainfantry.github.io/books/reader.html?b=20_ACTIVE_DIRECTORY"
+         target="_blank" data-mod="20">
+        <div class="mod-header">
+          <div class="mod-num">20</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Active Directory</div>
+        <div class="mod-desc">Kerberoast, pass-the-hash, AD enum</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 18 to unlock</div>
+      </a>
+
+      <!-- 21 -->
+      <a class="mod-card mod-locked" id="mod-21"
+         href="https://rainfantry.github.io/books/reader.html?b=21_MOBILE_SECURITY"
+         target="_blank" data-mod="21">
+        <div class="mod-header">
+          <div class="mod-num">21</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">Mobile Security</div>
+        <div class="mod-desc">Android internals, APK analysis</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 20 to unlock</div>
+      </a>
+
+      <!-- 22 -->
+      <a class="mod-card mod-locked" id="mod-22"
+         href="https://rainfantry.github.io/books/reader.html?b=22_OSINT_SOCIAL_ENGINEERING"
+         target="_blank" data-mod="22">
+        <div class="mod-header">
+          <div class="mod-num">22</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#128274;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title">OSINT &amp; Social Engineering</div>
+        <div class="mod-desc">Recon, phishing, pretexting</div>
+        <div class="mod-tags">
+          <span class="mod-tag tag-theory">Theory</span>
+          <span class="mod-tag tag-mcq">MCQ</span>
+        </div>
+        <div class="mod-locked-overlay">Complete module 21 to unlock</div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── EVASION LAB ── -->
+<section id="labs">
+  <div class="container">
+    <div class="section-eyebrow">// INTERACTIVE LABS</div>
+    <div class="section-title">LABS <span class="slash">//</span> HANDS-ON <span class="accent">TRADECRAFT</span></div>
+
+    <div class="lab-feature">
+      <div class="lab-feature-grid">
+        <div>
+          <div class="lab-feature-badge">&#9632; Featured Lab</div>
+          <div class="lab-feature-title">8-LAYER EVASION GAUNTLET</div>
+          <p class="lab-feature-sub">
+            Master the techniques. Pass the MCQ gates. Unlock the next layer.
+            Each layer targets a specific AV/EDR detection mechanism —
+            <strong>signature scanning, heuristic analysis, sandbox detection, AMSI hooking, ETW telemetry, behavioural monitoring, memory scanning, and kernel callbacks.</strong>
+            You don't progress until you understand what you bypassed and why.
+          </p>
+          <div class="lab-layers">
+            <span class="layer-pip">Layer 1: Sig Scan</span>
+            <span class="layer-pip">Layer 2: Heuristics</span>
+            <span class="layer-pip">Layer 3: Sandbox</span>
+            <span class="layer-pip">Layer 4: AMSI</span>
+            <span class="layer-pip">Layer 5: ETW</span>
+            <span class="layer-pip">Layer 6: Behaviour</span>
+            <span class="layer-pip">Layer 7: Memory</span>
+            <span class="layer-pip">Layer 8: Kernel CB</span>
+          </div>
+          <a href="https://rainfantry.github.io/csec/evasion-lab.html"
+             class="btn btn-primary" target="_blank">Enter the Gauntlet →</a>
+        </div>
+        <div class="lab-stat-block">
+          <div class="lab-stat">
+            <div class="lab-stat-num">8</div>
+            <div class="lab-stat-label">Layers</div>
+          </div>
+          <div class="lab-stat">
+            <div class="lab-stat-num" style="color:var(--amber);">MCQ</div>
+            <div class="lab-stat-label">Gated</div>
+          </div>
+          <div class="lab-stat">
+            <div class="lab-stat-num" style="color:var(--cyan);">C</div>
+            <div class="lab-stat-label">Language</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- ── ABOUT ── -->
-<section id="about">
+<section id="about-section">
   <div class="container">
-    <div class="section-tag">// OPERATOR</div>
-    <div class="section-title">ABOUT <span>//</span> GEORGE WU</div>
+    <div class="section-eyebrow">// OPERATOR</div>
+    <div class="section-title">ABOUT <span class="slash">//</span> 22ND SURVEY <span class="accent">DIVISION</span></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
       <div>
         <p style="font-size:.82rem;color:var(--text);line-height:1.9;margin-bottom:1.4rem;">
-          Security researcher and programmer based in Sydney, Australia. Work focuses on Windows internals, anti-malware evasion, and privilege escalation research against modern defences. Every tool is built from scratch — no borrowed PoC code — and tested on own hardware with responsible disclosure as the endpoint.
+          22nd Survey Division is a CSEC research and training entity based in Sydney, Australia. Work focuses on Windows internals, anti-malware evasion, privilege escalation, and mobile attack surface research. Every tool built from first principles — no copy-paste PoCs — tested on own hardware with responsible disclosure as the endpoint.
         </p>
         <p style="font-size:.82rem;color:var(--text);line-height:1.9;margin-bottom:1.4rem;">
-          Current research: a race condition against a Windows kernel driver producing an arbitrary HKLM registry ACL write as a standard user (MSRC VULN-195458); a hardware breakpoint technique that eliminates AMSI and ETW telemetry simultaneously without modifying protected memory; a phantom DLL loading vector in a LocalSystem Microsoft Office service reachable via user-controlled PATH.
+          The training materials here are the actual field manuals written during live research — not sanitised tutorial content. They document real techniques as they were developed and understood.
         </p>
         <p style="font-size:.82rem;color:var(--text);line-height:1.9;">
-          Before security research: CAD/GIS technician for a land surveying firm. Built the Python and AutoLISP automation pipeline still in production use. Survey-tech background informs a precise, measurement-first approach to vulnerability research.
+          Active research: MSRC VULN-195458 (Windows Defender TOCTOU race condition, submitted); mpengine.dll mutation fuzzing; Android APK capability injection research.
         </p>
       </div>
       <div>
-        <div style="border:1px solid var(--border);padding:1.4rem;background:var(--bg2);margin-bottom:1.2rem;">
-          <div style="font-size:.6rem;letter-spacing:.25em;color:var(--green-dim);text-transform:uppercase;margin-bottom:1rem;">Focus Areas</div>
-          <div style="display:flex;flex-direction:column;gap:.6rem;">
+        <div style="border:1px solid var(--border);padding:1.4rem;background:var(--bg2);margin-bottom:1px;">
+          <div style="font-size:.58rem;letter-spacing:.3em;color:var(--green-dim);text-transform:uppercase;margin-bottom:1rem;">Focus Areas</div>
+          <div style="display:flex;flex-direction:column;gap:.7rem;">
             <div style="display:flex;justify-content:space-between;font-size:.75rem;">
               <span style="color:var(--text-dim);">Windows Kernel &amp; Internals</span>
-              <span style="color:var(--green);">●●●●○</span>
+              <span style="color:var(--green);">&#9679;&#9679;&#9679;&#9679;&#9675;</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:.75rem;">
               <span style="color:var(--text-dim);">AV/EDR Evasion</span>
-              <span style="color:var(--green);">●●●●○</span>
+              <span style="color:var(--green);">&#9679;&#9679;&#9679;&#9679;&#9675;</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:.75rem;">
               <span style="color:var(--text-dim);">Privilege Escalation</span>
-              <span style="color:var(--green);">●●●○○</span>
+              <span style="color:var(--green);">&#9679;&#9679;&#9679;&#9675;&#9675;</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:.75rem;">
               <span style="color:var(--text-dim);">C2 Framework Design</span>
-              <span style="color:var(--green);">●●●○○</span>
+              <span style="color:var(--green);">&#9679;&#9679;&#9679;&#9675;&#9675;</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:.75rem;">
               <span style="color:var(--text-dim);">Android Attack Surface</span>
-              <span style="color:var(--green);">●●○○○</span>
+              <span style="color:var(--green);">&#9679;&#9679;&#9675;&#9675;&#9675;</span>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:.75rem;">
               <span style="color:var(--text-dim);">Fuzzing &amp; Crash Research</span>
-              <span style="color:var(--green);">●●○○○</span>
+              <span style="color:var(--green);">&#9679;&#9679;&#9675;&#9675;&#9675;</span>
             </div>
           </div>
         </div>
         <div style="border:1px solid var(--border);padding:1.4rem;background:var(--bg2);">
-          <div style="font-size:.6rem;letter-spacing:.25em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.8rem;">Credentials</div>
+          <div style="font-size:.58rem;letter-spacing:.3em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.8rem;">Entity</div>
           <div style="font-size:.75rem;color:var(--text-dim);line-height:1.9;">
-            Cert IV IT Programming — TAFE NSW 2026<br>
-            ACN-registered research entity — 22nd Survey Division<br>
-            MSRC responsible disclosure — VULN-195458<br>
-            Authorised penetration testing — own hardware + partner targets
+            OCCUPATION FORCE CALLSIGN GSW PTY LTD<br>
+            t/a 22ND SURVEY DIVISION<br>
+            ACN 692 429 397 — Pty Ltd, NSW, est. Nov 2025<br>
+            MSRC responsible disclosure — VULN-195458
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── ARSENAL ── -->
-<section id="arsenal">
-  <div class="container">
-    <div class="section-tag">// DEVELOPED SYSTEMS</div>
-    <div class="section-title">ARSENAL <span>//</span> RED TEAM TOOLING</div>
-    <div class="arsenal-grid">
-
-      <div class="tool-card tc-red">
-        <div class="tool-header">
-          <div class="tool-name">VADER Rootkit</div>
-          <div class="tool-badge badge-red">Kernel</div>
-        </div>
-        <div class="tool-desc">
-          Modular offensive security toolkit built from first principles. AMSI bypass, ETW patching, DLL sideloading, process injection. 26 binaries — all AV-clean. MSRC submission VULN-195458. Architecture complete.
-        </div>
-        <div class="tool-tags">
-          <span class="tag">C</span><span class="tag">Windows</span><span class="tag">Kernel</span><span class="tag">AMSI</span><span class="tag">ETW</span>
-        </div>
-        <div class="tool-links">
-          <a href="https://rainfantry.github.io/labs/vader.html" class="tool-link primary">Course →</a>
-          <a href="https://github.com/rainfantry/vader-rootkit" class="tool-link" target="_blank">GitHub</a>
-          <a href="https://rainfantry.github.io/labs/" class="tool-link">Labs</a>
-        </div>
-      </div>
-
-      <div class="tool-card tc-amber">
-        <div class="tool-header">
-          <div class="tool-name">CHEYANNE</div>
-          <div class="tool-badge badge-amber">C2</div>
-        </div>
-        <div class="tool-desc">
-          Red team C2 framework with per-build obfuscated payloads, parent process spoofing, and pre-shell delivery via Discord. Menu-driven operator interface, persistence mechanisms, and post-exploitation capability. Full kill chain tested against authorised targets.
-        </div>
-        <div class="tool-tags">
-          <span class="tag">Python</span><span class="tag">C2</span><span class="tag">Post-Ex</span><span class="tag">Persistence</span>
-        </div>
-        <div class="tool-links">
-          <a href="https://rainfantry.github.io/labs/cheyanne.html" class="tool-link primary">Course →</a>
-          <a href="https://github.com/rainfantry/cheyanne" class="tool-link" target="_blank">GitHub</a>
-        </div>
-      </div>
-
-      <div class="tool-card tc-cyan">
-        <div class="tool-header">
-          <div class="tool-name">StarKiller</div>
-          <div class="tool-badge badge-cyan">Android RAT</div>
-        </div>
-        <div class="tool-desc">
-          Android remote access tool. Kotlin client with obfuscation, APK binder, C2 integration, and test harness. Phase 1 complete: C2 server, persistent beaconing, capability scaffolding.
-        </div>
-        <div class="tool-tags">
-          <span class="tag">Kotlin</span><span class="tag">Python</span><span class="tag">Android</span><span class="tag">RAT</span><span class="tag">APK</span>
-        </div>
-        <div class="tool-links">
-          <a href="https://rainfantry.github.io/labs/starkiller.html" class="tool-link primary">Course →</a>
-          <a href="https://github.com/rainfantry/starkiller" class="tool-link" target="_blank">GitHub</a>
-        </div>
-      </div>
-
-      <div class="tool-card tc-green">
-        <div class="tool-header">
-          <div class="tool-name">Ghost Encoder</div>
-          <div class="tool-badge badge-green">Evasion</div>
-        </div>
-        <div class="tool-desc">
-          Unicode steganographic payload encoder. Conceals shellcode inside Unicode homoglyphs and zero-width characters. Signature-less, no binary artifacts. Written for CSEC research on encoding-based AV evasion.
-        </div>
-        <div class="tool-tags">
-          <span class="tag">Python</span><span class="tag">Unicode</span><span class="tag">Steganography</span><span class="tag">AV Evasion</span>
-        </div>
-        <div class="tool-links">
-          <a href="https://rainfantry.github.io/labs/ghost.html" class="tool-link primary">Course →</a>
-          <a href="https://github.com/rainfantry/ghost-encoder" class="tool-link" target="_blank">GitHub</a>
-        </div>
-      </div>
-
-      <div class="tool-card tc-red">
-        <div class="tool-header">
-          <div class="tool-name">VADER TOCTOU</div>
-          <div class="tool-badge badge-red">CVE Research</div>
-        </div>
-        <div class="tool-desc">
-          Custom TOCTOU race condition exploit study targeting Windows Defender RTP. 11-chapter field manual, annotated weapon systems, dry-fire drills. Built from first principles, not published PoCs. MSRC submitted.
-        </div>
-        <div class="tool-tags">
-          <span class="tag">C</span><span class="tag">TOCTOU</span><span class="tag">Windows Defender</span><span class="tag">Race Condition</span>
-        </div>
-        <div class="tool-links">
-          <a href="https://rainfantry.github.io/labs/rootkit.html" class="tool-link primary">Course →</a>
-          <a href="https://github.com/rainfantry/vader-toctou" class="tool-link" target="_blank">GitHub</a>
-        </div>
-      </div>
-
-      <div class="tool-card tc-purple">
-        <div class="tool-header">
-          <div class="tool-name">ECLIPSE</div>
-          <div class="tool-badge badge-purple">OPSEC</div>
-        </div>
-        <div class="tool-desc">
-          Operational security toolkit. Anti-forensics, counter-surveillance, and digital presence management for authorised red team operations. Designed for clean ingress and egress on authorised engagements.
-        </div>
-        <div class="tool-tags">
-          <span class="tag">Python</span><span class="tag">OPSEC</span><span class="tag">Anti-Forensics</span>
-        </div>
-        <div class="tool-links">
-          <a href="https://github.com/rainfantry/eclipse" class="tool-link" target="_blank">GitHub</a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── RESEARCH ── -->
-<section id="research">
-  <div class="container">
-    <div class="section-tag">// VULNERABILITY DISCLOSURE</div>
-    <div class="section-title">RESEARCH <span>//</span> CVE &amp; MSRC</div>
-    <div class="research-list">
-
-      <div class="research-item">
-        <div class="ri-status status-pending">Submitted</div>
-        <div class="ri-body">
-          <div class="ri-title">MSRC VULN-195458 — Windows Defender TOCTOU Race Condition</div>
-          <div class="ri-meta">
-            Vendor: <span>Microsoft</span> &nbsp;|&nbsp;
-            Channel: <span>MSRC</span> &nbsp;|&nbsp;
-            Category: <span>Privilege Escalation / Defence Bypass</span>
-          </div>
-        </div>
-        <a href="https://github.com/rainfantry/vader-toctou" class="ri-link" target="_blank">Details →</a>
-      </div>
-
-      <div class="research-item">
-        <div class="ri-status status-active">Active</div>
-        <div class="ri-body">
-          <div class="ri-title">mpengine.dll Mutation Fuzzing — Crash Surface Mapping</div>
-          <div class="ri-meta">
-            Target: <span>Windows Defender Engine</span> &nbsp;|&nbsp;
-            Method: <span>9 mutation strategies via MpCmdRun.exe</span> &nbsp;|&nbsp;
-            Status: <span>Crash triage ongoing</span>
-          </div>
-        </div>
-        <a href="https://github.com/rainfantry/vader-fuzz" class="ri-link" target="_blank">Repo →</a>
-      </div>
-
-      <div class="research-item">
-        <div class="ri-status status-pending">Ongoing</div>
-        <div class="ri-body">
-          <div class="ri-title">Android Attack Surface — APK Binder &amp; Capability Injection</div>
-          <div class="ri-meta">
-            Platform: <span>Android</span> &nbsp;|&nbsp;
-            Tool: <span>StarKiller</span> &nbsp;|&nbsp;
-            Focus: <span>Manifest permission injection, obfuscated payload delivery</span>
-          </div>
-        </div>
-        <a href="https://rainfantry.github.io/labs/starkiller.html" class="ri-link">Course →</a>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── DOCTRINE ── -->
-<section id="doctrine">
-  <div class="container">
-    <div class="section-tag">// OPERATING PRINCIPLES</div>
-    <div class="section-title">DOCTRINE <span>//</span> HOW WE OPERATE</div>
-    <div class="doctrine-grid">
-      <div class="doctrine-card">
-        <div class="dc-num">01</div>
-        <div class="dc-title">Own Hardware Only</div>
-        <div class="dc-body">All offensive research conducted exclusively on own machines or explicitly authorised targets. No mass-targeting. No unauthorised access. No exceptions.</div>
-      </div>
-      <div class="doctrine-card">
-        <div class="dc-num">02</div>
-        <div class="dc-title">First Principles</div>
-        <div class="dc-body">We don't copy-paste PoCs. Every tool is built from scratch with full understanding of underlying mechanics. If we can't explain it line by line, we don't ship it.</div>
-      </div>
-      <div class="doctrine-card">
-        <div class="dc-num">03</div>
-        <div class="dc-title">Responsible Disclosure</div>
-        <div class="dc-body">Novel vulnerabilities go to MSRC or MITRE before anywhere else. We give vendors 90 days. We don't burn zero-days for clout.</div>
-      </div>
-      <div class="doctrine-card">
-        <div class="dc-num">04</div>
-        <div class="dc-title">Crash → Leak → Execute</div>
-        <div class="dc-body">The research methodology. Find the crash surface, build a leak primitive, develop controlled execution. Document every step. No magic.</div>
-      </div>
-      <div class="doctrine-card">
-        <div class="dc-num">05</div>
-        <div class="dc-title">Hunt, Don't Defend</div>
-        <div class="dc-body">Think like an attacker to build better defences. Understand the kill chain from ingress to persistence. See paths, see blocks, find substitutes.</div>
-      </div>
-      <div class="doctrine-card">
-        <div class="dc-num">06</div>
-        <div class="dc-title">Document Everything</div>
-        <div class="dc-body">No undocumented capability. Field manuals, annotated source, lesson materials. If it's not written down, it doesn't exist and can't be defended.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── FIELD MANUALS ── -->
-<section id="manuals">
-  <div class="container">
-    <div class="section-tag">// KNOWLEDGE BASE</div>
-    <div class="section-title">FIELD MANUALS <span>//</span> 22DIV DOCTRINE LIBRARY</div>
-    <div class="fm-grid">
-      <a href="https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET" class="fm-card" target="_blank">
-        <div class="fm-num">01</div>
-        <div class="fm-info"><div class="fm-title">Offensive Mindset</div><div class="fm-sub">Attacker psychology &amp; kill chain</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=02_RECON_FOOTPRINTING" class="fm-card" target="_blank">
-        <div class="fm-num">02</div>
-        <div class="fm-info"><div class="fm-title">Recon &amp; Footprinting</div><div class="fm-sub">OSINT, passive &amp; active recon</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=03_VULNERABILITY_RESEARCH" class="fm-card" target="_blank">
-        <div class="fm-num">03</div>
-        <div class="fm-info"><div class="fm-title">Vulnerability Research</div><div class="fm-sub">Methodology &amp; tools</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=04_MITIGATIONS" class="fm-card" target="_blank">
-        <div class="fm-num">04</div>
-        <div class="fm-info"><div class="fm-title">Mitigations</div><div class="fm-sub">ASLR, DEP, CFG, stack canaries</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=05_EXPLOIT_DEVELOPMENT" class="fm-card" target="_blank">
-        <div class="fm-num">05</div>
-        <div class="fm-info"><div class="fm-title">Exploit Development</div><div class="fm-sub">BOF, ROP, heap spraying</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=06_WINDOWS_INTERNALS" class="fm-card" target="_blank">
-        <div class="fm-num">06</div>
-        <div class="fm-info"><div class="fm-title">Windows Internals</div><div class="fm-sub">Memory, handles, kernel objects</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=07_EXPLOIT_PRIMITIVES" class="fm-card" target="_blank">
-        <div class="fm-num">07</div>
-        <div class="fm-info"><div class="fm-title">Exploit Primitives</div><div class="fm-sub">Read/write primitives, AAAR</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=08_PRIVILEGE_ESCALATION" class="fm-card" target="_blank">
-        <div class="fm-num">08</div>
-        <div class="fm-info"><div class="fm-title">Privilege Escalation</div><div class="fm-sub">Token abuse, service exploits</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=09_MALWARE_DEVELOPMENT" class="fm-card" target="_blank">
-        <div class="fm-num">09</div>
-        <div class="fm-info"><div class="fm-title">Malware Development</div><div class="fm-sub">Dropper, loader, stager patterns</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=10_CODE_INJECTION" class="fm-card" target="_blank">
-        <div class="fm-num">10</div>
-        <div class="fm-info"><div class="fm-title">Code Injection</div><div class="fm-sub">DLL, shellcode, process hollowing</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=11_ROOTKITS" class="fm-card" target="_blank">
-        <div class="fm-num">11</div>
-        <div class="fm-info"><div class="fm-title">Rootkits</div><div class="fm-sub">User mode &amp; kernel rootkits</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=12_ANTIVIRUS_EVASION" class="fm-card" target="_blank">
-        <div class="fm-num">12</div>
-        <div class="fm-info"><div class="fm-title">AV Evasion</div><div class="fm-sub">Signatures, heuristics, sandboxes</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=13_MEMORY_FORENSICS" class="fm-card" target="_blank">
-        <div class="fm-num">13</div>
-        <div class="fm-info"><div class="fm-title">Memory Forensics</div><div class="fm-sub">Volatility, EPROCESS, artefacts</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=14_REVERSE_ENGINEERING" class="fm-card" target="_blank">
-        <div class="fm-num">14</div>
-        <div class="fm-info"><div class="fm-title">Reverse Engineering</div><div class="fm-sub">Ghidra, x64dbg, disassembly</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=15_POST_EXPLOITATION" class="fm-card" target="_blank">
-        <div class="fm-num">15</div>
-        <div class="fm-info"><div class="fm-title">Post-Exploitation</div><div class="fm-sub">Lateral movement, persistence</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=16_COMMAND_AND_CONTROL" class="fm-card" target="_blank">
-        <div class="fm-num">16</div>
-        <div class="fm-info"><div class="fm-title">Command &amp; Control</div><div class="fm-sub">C2 channels, beacons, profiles</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=17_NETWORK_WARFARE" class="fm-card" target="_blank">
-        <div class="fm-num">17</div>
-        <div class="fm-info"><div class="fm-title">Network Warfare</div><div class="fm-sub">TCP/IP, pivoting, tunnelling</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=18_CRYPTOGRAPHY_EVASION" class="fm-card" target="_blank">
-        <div class="fm-num">18</div>
-        <div class="fm-info"><div class="fm-title">Cryptography &amp; Evasion</div><div class="fm-sub">Encoding, encryption, obfuscation</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=20_ACTIVE_DIRECTORY" class="fm-card" target="_blank">
-        <div class="fm-num">20</div>
-        <div class="fm-info"><div class="fm-title">Active Directory</div><div class="fm-sub">Kerberoast, pass-the-hash, AD enum</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=21_MOBILE_SECURITY" class="fm-card" target="_blank">
-        <div class="fm-num">21</div>
-        <div class="fm-info"><div class="fm-title">Mobile Security</div><div class="fm-sub">Android internals, APK analysis</div></div>
-      </a>
-      <a href="https://rainfantry.github.io/books/reader.html?b=22_OSINT_SOCIAL_ENGINEERING" class="fm-card" target="_blank">
-        <div class="fm-num">22</div>
-        <div class="fm-info"><div class="fm-title">OSINT &amp; Social Engineering</div><div class="fm-sub">Recon, phishing, pretexting</div></div>
-      </a>
     </div>
   </div>
 </section>
@@ -558,54 +1275,273 @@ body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-even
 <!-- ── CONTACT ── -->
 <section id="contact">
   <div class="container">
-    <div class="section-tag">// OPERATOR CONTACT</div>
-    <div class="section-title">CONTACT <span>//</span> GEORGE WU — VADER</div>
-    <div class="contact-block">
+    <div class="section-eyebrow">// CONTACT</div>
+    <div class="section-title">CONTACT <span class="slash">//</span> GEORGE WU <span class="accent">— VADER</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;">
       <div>
-        <div class="contact-item">
-          <div class="ci-label">Callsign</div>
-          <div class="ci-value">VADER // George Wu</div>
+        <div style="margin-bottom:1.2rem;">
+          <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.3rem;">Email</div>
+          <div style="font-size:.82rem;"><a href="mailto:gwu0738@gmail.com" style="color:var(--green);text-decoration:none;">gwu0738@gmail.com</a></div>
         </div>
-        <div class="contact-item">
-          <div class="ci-label">Location</div>
-          <div class="ci-value">Sydney, NSW — Australia</div>
+        <div style="margin-bottom:1.2rem;">
+          <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.3rem;">GitHub</div>
+          <div style="font-size:.82rem;"><a href="https://github.com/rainfantry" target="_blank" style="color:var(--green);text-decoration:none;">github.com/rainfantry</a></div>
         </div>
-        <div class="contact-item">
-          <div class="ci-label">Email</div>
-          <div class="ci-value"><a href="mailto:gwu0738@gmail.com">gwu0738@gmail.com</a></div>
+        <div style="margin-bottom:1.2rem;">
+          <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.3rem;">Research Site</div>
+          <div style="font-size:.82rem;"><a href="https://rainfantry.github.io" target="_blank" style="color:var(--green);text-decoration:none;">rainfantry.github.io</a></div>
         </div>
-        <div class="contact-item">
-          <div class="ci-label">GitHub</div>
-          <div class="ci-value"><a href="https://github.com/rainfantry" target="_blank">github.com/rainfantry</a></div>
-        </div>
-        <div class="contact-item">
-          <div class="ci-label">Research Site</div>
-          <div class="ci-value"><a href="https://rainfantry.github.io" target="_blank">rainfantry.github.io</a></div>
-        </div>
-        <div class="contact-item">
-          <div class="ci-label">Credentials</div>
-          <div class="ci-value">Cert IV IT Programming — TAFE NSW 2026</div>
+        <div style="margin-bottom:1.2rem;">
+          <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.3rem;">Location</div>
+          <div style="font-size:.82rem;color:var(--text);">Sydney, NSW — Australia</div>
         </div>
       </div>
       <div>
-        <div class="contact-item">
-          <div class="ci-label">Available For</div>
-          <div class="ci-value">Authorised penetration testing, red team engagements, security tooling development, vulnerability research collaboration.</div>
+        <div style="margin-bottom:1.2rem;">
+          <div style="font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.3rem;">Available For</div>
+          <div style="font-size:.8rem;color:var(--text-dim);line-height:1.8;">
+            Authorised penetration testing, red team engagements, security tooling development, vulnerability research collaboration.
+          </div>
         </div>
-        <div class="ops-note">
-          <strong>⚠ AUTHORISATION REQUIRED</strong><br>
-          All engagements require documented authorisation before commencement. We do not take on unlawful work. Scope is agreed in writing. We operate under Australian Cybercrime Act compliance at all times.
+        <div style="border:1px solid var(--border2);padding:1.2rem 1.4rem;background:var(--bg2);font-size:.75rem;color:var(--text-dim);line-height:1.8;margin-top:.8rem;">
+          <strong style="color:var(--amber);">AUTHORISATION REQUIRED</strong><br>
+          All engagements require documented authorisation before commencement. Scope agreed in writing. Australian Cybercrime Act compliant at all times.
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ── FOOTER ── -->
 <footer>
-  // 22ND SURVEY DIVISION // SYDNEY, AUSTRALIA // OFFENSIVE SECURITY RESEARCH //
-  <br><br>
-  All research conducted on own hardware under academic authorisation. Responsible disclosure via MSRC / MITRE.
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">OCCUPATION FORCE CALLSIGN<br>GSW PTY LTD<br>t/a <span>22ND SURVEY DIVISION</span></div>
+        <div class="footer-acn">ACN 692 429 397</div>
+        <div class="footer-location">Sydney, NSW — Australia</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Training</div>
+        <div class="footer-links">
+          <a href="#curriculum">Curriculum — 22 Modules</a>
+          <a href="#labs">Evasion Gauntlet Lab</a>
+          <a href="#courses">Learning Tracks</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Research</div>
+        <div class="footer-links">
+          <a href="https://github.com/rainfantry" target="_blank">GitHub — rainfantry</a>
+          <a href="https://rainfantry.github.io" target="_blank">Research Site</a>
+          <a href="https://www.linkedin.com/company/22div/" target="_blank">LinkedIn — 22DIV</a>
+          <a href="mailto:gwu0738@gmail.com">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">// 22ND SURVEY DIVISION // SYDNEY 2026 //</div>
+      <div class="footer-disclaimer">All research on own hardware under academic authorisation. Responsible disclosure via MSRC / MITRE. Training content for authorised use only.</div>
+    </div>
+  </div>
 </footer>
+
+<script>
+(function() {
+  'use strict';
+
+  // ── MODULE ORDER (sequential, 19 is redacted/skipped) ──
+  var MODULE_ORDER = ['01','02','03','04','05','06','07','08','09','10',
+                      '11','12','13','14','15','16','17','18','20','21','22'];
+  var TOTAL = 22; // including 19 in count for display
+
+  // ── LOCALSTORAGE KEY ──
+  var STORE_KEY = '22div_progress';
+
+  function getProgress() {
+    try {
+      return JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+    } catch(e) { return {}; }
+  }
+
+  function saveProgress(p) {
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify(p));
+    } catch(e) {}
+  }
+
+  function padMod(n) {
+    return n < 10 ? '0' + n : '' + n;
+  }
+
+  function isUnlocked(modStr, progress) {
+    if (modStr === '01') return true;
+    // Find previous module in order
+    var idx = MODULE_ORDER.indexOf(modStr);
+    if (idx <= 0) return false;
+    var prev = MODULE_ORDER[idx - 1];
+    return !!progress[prev];
+  }
+
+  function applyStates() {
+    var progress = getProgress();
+
+    MODULE_ORDER.forEach(function(mod) {
+      var el = document.getElementById('mod-' + mod);
+      if (!el) return;
+
+      var done = !!progress[mod];
+      var unlocked = isUnlocked(mod, progress);
+
+      el.classList.remove('mod-locked', 'mod-unlocked', 'mod-done');
+
+      if (done) {
+        el.classList.add('mod-done');
+      } else if (unlocked) {
+        el.classList.add('mod-unlocked');
+      } else {
+        el.classList.add('mod-locked');
+      }
+    });
+
+    // Update progress bar
+    var completed = MODULE_ORDER.filter(function(m) { return !!progress[m]; }).length;
+    var fill = document.getElementById('progress-fill');
+    var txt = document.getElementById('progress-text');
+    if (fill) fill.style.width = (completed / MODULE_ORDER.length * 100) + '%';
+    if (txt) txt.textContent = completed + ' / ' + MODULE_ORDER.length + ' MODULES COMPLETE';
+  }
+
+  // ── CLICK HANDLER: mark visited, check unlock ──
+  function handleModuleClick(e) {
+    var card = e.currentTarget;
+    var mod = card.dataset.mod;
+    if (!mod) return;
+    if (card.classList.contains('mod-redacted')) { e.preventDefault(); return; }
+    if (card.classList.contains('mod-locked')) { e.preventDefault(); return; }
+
+    // Mark as done
+    var progress = getProgress();
+    progress[mod] = true;
+    saveProgress(progress);
+    applyStates();
+  }
+
+  // Attach listeners
+  MODULE_ORDER.forEach(function(mod) {
+    var el = document.getElementById('mod-' + mod);
+    if (el && el.tagName === 'A') {
+      el.addEventListener('click', handleModuleClick);
+    }
+  });
+
+  // Initial render
+  applyStates();
+
+  // ── HAMBURGER ──
+  var ham = document.getElementById('hamburger');
+  var mob = document.getElementById('mobile-menu');
+  if (ham && mob) {
+    ham.addEventListener('click', function() {
+      ham.classList.toggle('open');
+      mob.classList.toggle('open');
+    });
+  }
+
+  window.closeMobile = function() {
+    if (ham) ham.classList.remove('open');
+    if (mob) mob.classList.remove('open');
+  };
+
+  // Close mobile menu on outside click
+  document.addEventListener('click', function(e) {
+    if (mob && mob.classList.contains('open')) {
+      if (!mob.contains(e.target) && e.target !== ham && !ham.contains(e.target)) {
+        window.closeMobile();
+      }
+    }
+  });
+
+})();
+</script>
+
+
+<script>
+(function() {
+  var CORRECT = '668340';
+  var AUTH_KEY = '22div_gate_auth';
+  var FAIL_KEY = '22div_gate_fails';
+  var MAX_FAILS = 5;
+
+  var gate = document.getElementById('pin-gate');
+  var input = document.getElementById('pin-input');
+  var btn = document.getElementById('pin-submit');
+  var err = document.getElementById('pin-error');
+
+  function unlock() {
+    localStorage.setItem(AUTH_KEY, '1');
+    localStorage.removeItem(FAIL_KEY);
+    gate.style.transition = 'opacity 0.35s';
+    gate.style.opacity = '0';
+    setTimeout(function() { gate.style.display = 'none'; }, 350);
+  }
+
+  function getFailCount() {
+    return parseInt(localStorage.getItem(FAIL_KEY) || '0', 10);
+  }
+
+  function bumpFail() {
+    var n = getFailCount() + 1;
+    localStorage.setItem(FAIL_KEY, n);
+    return n;
+  }
+
+  // Already authenticated this session or ever?
+  if (localStorage.getItem(AUTH_KEY) === '1') {
+    gate.style.display = 'none';
+    return;
+  }
+
+  gate.style.display = 'flex';
+
+  // Check if already locked out
+  if (getFailCount() >= MAX_FAILS) {
+    err.textContent = '// ACCESS LOCKED — clear browser data to retry or contact gwu0738@gmail.com';
+    btn.disabled = true;
+    input.disabled = true;
+    return;
+  }
+
+  function attempt() {
+    var val = (input.value || '').trim();
+    if (!val) { input.focus(); return; }
+
+    if (val === CORRECT) {
+      err.textContent = '';
+      btn.textContent = '// ACCESS GRANTED';
+      btn.style.borderColor = 'var(--green)';
+      input.style.borderColor = 'var(--green)';
+      setTimeout(unlock, 400);
+    } else {
+      var fails = bumpFail();
+      input.value = '';
+      input.focus();
+      if (fails >= MAX_FAILS) {
+        err.textContent = '// ACCESS LOCKED — too many attempts. Contact gwu0738@gmail.com';
+        btn.disabled = true;
+        input.disabled = true;
+      } else {
+        err.textContent = '// WRONG CODE — ' + (MAX_FAILS - fails) + ' attempt' + (MAX_FAILS - fails === 1 ? '' : 's') + ' remaining';
+        input.style.borderColor = 'var(--red)';
+        setTimeout(function() { input.style.borderColor = ''; }, 800);
+      }
+    }
+  }
+
+  btn.addEventListener('click', attempt);
+  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
+})();
+</script>
 
 </body>
 </html>
