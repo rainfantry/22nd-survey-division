@@ -2208,44 +2208,40 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     }
   });
 
-  // Intercept course-access clicks — show gate if not authed
+  var BASE_URL = 'https://rainfantry.github.io/books/reader.html';
+  var MOD01    = BASE_URL + '?b=01_OFFENSIVE_MINDSET';
+
+  // Intercept course-access clicks — show gate if not authed, open course if authed
   function interceptCourseLink(el, action) {
     el.addEventListener('click', function(e) {
-      if (isAuthed()) return; // already unlocked — let it through
       e.preventDefault();
-      e.stopPropagation();
+      e.stopImmediatePropagation();
+      if (isAuthed()) { action(); return; }
       showGate(action);
-    }, true); // capture phase so it fires before other listeners
+    }, true);
   }
 
-  // Intercept all "Start Learning" / "Enrol" CTAs that link to #curriculum
-  document.querySelectorAll('a[href="#curriculum"], .nav-cta').forEach(function(a) {
-    interceptCourseLink(a, function() {
-      var el = document.getElementById('curriculum');
-      if (el) el.scrollIntoView({behavior:'smooth'});
-    });
+  // Nav / hero / mobile CTAs that reference curriculum → go to Module 01
+  document.querySelectorAll(
+    'a[href="#curriculum"], a[href="#courses"], .nav-cta, .btn-primary, .btn-secondary'
+  ).forEach(function(a) {
+    interceptCourseLink(a, function() { window.location.href = MOD01; });
   });
 
-  // Intercept all module links (#mod-01 through #mod-22)
+  // Module cards — each goes to its own chapter
   document.querySelectorAll('[id^="mod-"]').forEach(function(el) {
     if (el.tagName === 'A') {
       var href = el.getAttribute('href');
-      interceptCourseLink(el, function() {
-        if (href) window.location.href = href;
-      });
+      interceptCourseLink(el, function() { window.location.href = href; });
     }
   });
 
-  // Intercept evasion lab button
-  document.querySelectorAll('a[href*="evasion-lab"]').forEach(function(a) {
-    var href = a.getAttribute('href');
-    interceptCourseLink(a, function() { window.location.href = href; });
-  });
-
-  // Intercept field manual / reader links
+  // Proof-of-work reader links and any other reader.html links
   document.querySelectorAll('a[href*="reader.html"], a[href*="books/"]').forEach(function(a) {
-    var href = a.getAttribute('href');
-    interceptCourseLink(a, function() { window.location.href = href; });
+    if (!a.id || !a.id.match(/^mod-/)) { // skip mod-cards already handled
+      var href = a.getAttribute('href');
+      interceptCourseLink(a, function() { window.location.href = href; });
+    }
   });
 
   // Expose functions globally so inline onclick handlers can reach them
