@@ -10,6 +10,8 @@
 <script>
 // Content is open — no gate
 </script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23010901'/><text x='50%25' y='60%25' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='%2300cc44' font-family='monospace' font-weight='bold'>22</text></svg>">
+<link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23010901'/><text x='50%25' y='60%25' font-size='20' text-anchor='middle' dominant-baseline='middle' fill='%2300cc44' font-family='monospace' font-weight='bold'>22</text></svg>">
 <meta property="og:title" content="22nd Survey Division — Offensive Security Training">
 <meta property="og:description" content="The course that teaches coders to think like attackers — and attackers to code like engineers.">
 <meta property="og:type" content="website">
@@ -30,16 +32,12 @@
   "@type": "Organization",
   "name": "22nd Survey Division",
   "legalName": "Occupation Force Callsign GSW Pty Ltd",
-  "alternateName": "22DIV",
   "url": "https://rainfantry.github.io/22nd-survey-division/",
-  "description": "Full-stack offensive security training. MITRE ATT&CK aligned. 22 modules, working tool repos, documented research.",
-  "founder": {
-    "@type": "Person",
-    "name": "George Wu",
-    "jobTitle": "Security Researcher"
-  },
-  "areaServed": "AU",
-  "sameAs": ["https://github.com/rainfantry"]
+  "logo": "https://rainfantry.github.io/22nd-survey-division/og-image.png",
+  "contactPoint": {"@type": "ContactPoint", "email": "gwu0738@gmail.com", "contactType": "sales"},
+  "sameAs": ["https://github.com/rainfantry", "https://linkedin.com/in/georgewu108"],
+  "address": {"@type": "PostalAddress", "addressLocality": "Sydney", "addressRegion": "NSW", "addressCountry": "AU"},
+  "taxID": "50 692 429 397"
 }
 </script>
 <script type="application/ld+json">
@@ -47,24 +45,10 @@
   "@context": "https://schema.org",
   "@type": "Course",
   "name": "22nd Survey Division — Offensive Security Training",
-  "description": "22-module kill chain curriculum: recon, exploit development, malware development, rootkits, AV evasion, C2, mobile security. Includes working private repos.",
-  "provider": {
-    "@type": "Organization",
-    "name": "22nd Survey Division",
-    "url": "https://rainfantry.github.io/22nd-survey-division/"
-  },
-  "educationalLevel": "Advanced",
-  "teaches": ["Offensive Security", "Red Teaming", "Malware Development", "Exploit Development", "Windows Internals", "AMSI Bypass", "C2 Frameworks", "Android Security"],
-  "hasCourseInstance": {
-    "@type": "CourseInstance",
-    "courseMode": "online",
-    "offers": {
-      "@type": "Offer",
-      "price": "497",
-      "priceCurrency": "AUD",
-      "availability": "https://schema.org/InStock"
-    }
-  }
+  "description": "22-module field manual covering Windows offensive security: kernel exploitation, C2 development, AV evasion, Android RATs, MSRC-submitted research. Built by a practitioner who filed VULN-195458.",
+  "provider": {"@type": "Organization", "name": "22nd Survey Division", "url": "https://rainfantry.github.io/22nd-survey-division/"},
+  "offers": {"@type": "Offer", "price": "247.50", "priceCurrency": "AUD", "availability": "https://schema.org/InStock"},
+  "hasCourseInstance": {"@type": "CourseInstance", "courseMode": "online"}
 }
 </script>
 <style>
@@ -199,7 +183,8 @@ h1.hero-headline .amber{color:var(--amber);}
 .hero-right{display:flex;flex-direction:column;justify-content:flex-start;padding-top:.5rem;}
 .ht-line .prompt{color:var(--green);}
 .ht-line .cmd{color:var(--text);}
-.ht-line .out{color:var(--cyan-dim);}
+.ht-line .out{color:#00b5c8;}
+.section-eyebrow{color:#4a9a4a!important;}
 .ht-line .ok{color:var(--green);}
 .ht-line .warn{color:var(--amber);}
 .hero-bg-grid {
@@ -447,6 +432,7 @@ footer{
 .footer-links a{
   font-size:.68rem;color:var(--text-dim);text-decoration:none;
   letter-spacing:.08em;transition:color .2s;
+  padding:.3rem 0;display:block;line-height:1.8;
 }
 .footer-links a:hover{color:var(--green);}
 .footer-bottom{
@@ -3491,202 +3477,14 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
 <script>
 (function() {
-  var CORRECT = '668340';
-  var AUTH_KEY = '22div_gate_auth';
-  var FAIL_KEY = '22div_gate_fails';
-  var MAX_FAILS = 5;
+  // Gate removed — all content open, tools are the paywall
+  window.showGate = function(cb) { if (typeof cb === 'function') cb(); };
+  window.requireAuth = function(href) { window.location.href = href; };
 
-  var gate = document.getElementById('pin-gate');
-  var input = document.getElementById('pin-input');
-  var btn = document.getElementById('pin-submit');
-  var err = document.getElementById('pin-error');
-
-  function unlock() {
-    try { sessionStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
-    sessionStorage.removeItem(FAIL_KEY);
-    gate.style.transition = 'opacity 0.35s';
-    gate.style.opacity = '0';
-    setTimeout(function() { gate.classList.remove('show'); gate.style.opacity = ''; gate.style.transition = ''; }, 350);
-    document.documentElement.classList.remove('course-locked');
-    applyStates();
-    var sh = document.getElementById('start-here-banner');
-    if (sh) sh.style.display = 'block';
-    var contrib = document.getElementById('contributor-repo-section');
-    if (contrib) contrib.style.display = 'block';
-    setTimeout(function() {
-      var el = document.getElementById('curriculum');
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 500);
-  }
-
-  function getFailCount() {
-    return parseInt(sessionStorage.getItem(FAIL_KEY) || '0', 10);
-  }
-
-  function bumpFail() {
-    var n = getFailCount() + 1;
-    sessionStorage.setItem(FAIL_KEY, n);
-    return n;
-  }
-
-  // pendingAction fires after successful unlock
-  var pendingAction = null;
-
-  function isAuthed() {
-    try { return sessionStorage.getItem(AUTH_KEY) === '1'; } catch(e) { return false; }
-  }
-
-  function isLockedOut() {
-    return getFailCount() >= MAX_FAILS;
-  }
-
-  // Show gate, fire callback on success
-  function showGate(callback) {
-    pendingAction = callback || null;
-    input.value = '';
-    err.textContent = '';
-    gate.style.opacity = '1';
-    gate.classList.add('show');
-    if (isLockedOut()) {
-      err.textContent = '// ACCESS LOCKED — contact gwu0738@gmail.com';
-      btn.disabled = true;
-      input.disabled = true;
-    } else {
-      btn.disabled = false;
-      input.disabled = false;
-      setTimeout(function() { input.focus(); }, 60);
-    }
-  }
-
-  var API_URL = 'https://22div.com.au/api/auth.php';
-
-  function doUnlock() {
-    err.textContent = '';
-    btn.textContent = '// ACCESS GRANTED';
-    btn.style.borderColor = 'var(--green)';
-    input.style.borderColor = 'var(--green)';
-    btn.disabled = true;
-    unlock();
-    if (pendingAction) { var pa = pendingAction; pendingAction = null; setTimeout(pa, 380); }
-  }
-
-  function doFail(msg, lock) {
-    btn.disabled = false;
-    btn.textContent = '// ENTER';
-    var fails = bumpFail();
-    input.value = '';
-    input.focus();
-    if (lock || fails >= MAX_FAILS) {
-      err.textContent = msg || '// ACCESS LOCKED — too many attempts. Contact gwu0738@gmail.com';
-      btn.disabled = true;
-      input.disabled = true;
-    } else {
-      err.textContent = msg || ('// WRONG CODE — ' + (MAX_FAILS - fails) + ' attempt' + (MAX_FAILS - fails === 1 ? '' : 's') + ' remaining');
-      input.style.borderColor = 'var(--red)';
-      setTimeout(function() { input.style.borderColor = ''; }, 800);
-    }
-  }
-
-  function attempt() {
-    var val = (input.value || '').trim();
-    if (!val) { input.focus(); return; }
-    if (isLockedOut()) return;
-
-    btn.disabled = true;
-    btn.textContent = '// VERIFYING...';
-
-    fetch(API_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({pin: val})
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.ok) {
-        try { localStorage.setItem('22div_token', data.token || ''); } catch(e) {}
-        if (data.token) try { sessionStorage.setItem('22div_token', data.token); } catch(e) {}
-        doUnlock();
-      } else if (data.error === 'rate_limited') {
-        doFail('// RATE LIMITED — try again in 15 minutes', true);
-      } else {
-        var rem = typeof data.attempts_remaining === 'number' ? data.attempts_remaining : null;
-        doFail(rem !== null ? ('// WRONG CODE — ' + rem + ' attempt' + (rem === 1 ? '' : 's') + ' remaining') : null, false);
-      }
-    })
-    .catch(function() {
-      // API not reachable — temporary client-side fallback
-      btn.disabled = false;
-      btn.textContent = '// ENTER';
-      if (val === CORRECT) {
-        doUnlock();
-      } else {
-        doFail(null, false);
-      }
-    });
-  }
-
-  btn.addEventListener('click', attempt);
-  input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
-
-  var BASE_URL = 'https://rainfantry.github.io/books/reader.html';
-  var MOD01    = BASE_URL + '?b=01_OFFENSIVE_MINDSET';
-
-  // Intercept course-access clicks — show gate if not authed, open course if authed
-  function interceptCourseLink(el, action) {
-    el.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      if (isAuthed()) { action(); return; }
-      showGate(action);
-    }, true);
-  }
-
-  // Nav / hero / mobile CTAs that reference curriculum → go to Module 01
-  document.querySelectorAll(
-    'a[href="#curriculum"], a[href="#courses"], .nav-cta, .btn-primary, .btn-secondary'
-  ).forEach(function(a) {
-    interceptCourseLink(a, function() { window.location.href = MOD01; });
-  });
-
-  // Module cards — each goes to its own chapter
+  // Module cards — direct navigation, no gate intercept
   document.querySelectorAll('[id^="mod-"]').forEach(function(el) {
-    if (el.tagName === 'A') {
-      var href = el.getAttribute('href');
-      interceptCourseLink(el, function() { window.location.href = href; });
-    }
+    if (el.tagName === 'A') el.removeAttribute('data-locked');
   });
-
-  // Proof-of-work reader links and any other reader.html links
-  document.querySelectorAll('a[href*="reader.html"], a[href*="books/"]').forEach(function(a) {
-    if (!a.id || !a.id.match(/^mod-/)) { // skip mod-cards already handled
-      var href = a.getAttribute('href');
-      interceptCourseLink(a, function() { window.location.href = href; });
-    }
-  });
-
-  // Expose functions globally so inline onclick handlers can reach them
-  window.showGate = showGate;
-
-  window.requireAuth = function(href) {
-    if (isAuthed()) { window.location.href = href; return; }
-    showGate(function() { window.location.href = href; });
-  };
-
-  // Handle redirect from reader.html — show gate immediately, then return
-  (function() {
-    var params = new URLSearchParams(location.search);
-    if (params.get('unlock') === '1' && !isAuthed()) {
-      var retUrl = params.get('ret') ? decodeURIComponent(params.get('ret')) : null;
-      history.replaceState(null, '', location.pathname);
-      showGate(function() {
-        if (retUrl) window.location.href = retUrl;
-      });
-      return;
-    }
-  })();
-
-  // Gate removed — content open
-
 })();
 </script>
 
