@@ -535,6 +535,15 @@ html:not(.course-locked) #curriculum-lock-banner { display: none !important; }
 /* Locked state: small badge per card — content stays readable */
 .mod-card { position: relative; cursor: pointer; }
 html.course-locked .mod-card { border-color: #1a2a1a; }
+
+/* After PIN auth — ALL mod-locked cards become accessible (override sequential lock) */
+html:not(.course-locked) .mod-card.mod-locked { cursor: pointer; }
+html:not(.course-locked) .mod-card.mod-locked .mod-locked-overlay { display: none !important; }
+html:not(.course-locked) .mod-card.mod-locked .mod-num { color: var(--green-dim); }
+html:not(.course-locked) .mod-card.mod-locked .mod-title { color: var(--text); }
+html:not(.course-locked) .mod-card.mod-locked .mod-desc { color: var(--text-dim); }
+html:not(.course-locked) .mod-card.mod-locked::before { opacity: .4; }
+
 html.course-locked .mod-card::after {
   content: '🔒 CLICK TO UNLOCK';
   position: absolute;
@@ -1185,6 +1194,25 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       <button onclick="showGate()" style="font-family:inherit;font-size:.6rem;letter-spacing:.18em;padding:.5rem 1.6rem;border:1px solid var(--green);color:var(--green);background:transparent;cursor:pointer;">ENTER PIN →</button>
     </div>
 
+    <!-- START HERE — visible only when unlocked -->
+    <div id="start-here-banner" style="display:none;background:#030f03;border:1px solid #0d3a0d;padding:1.4rem 1.6rem;margin-bottom:1.6rem;">
+      <div style="font-size:.54rem;letter-spacing:.25em;color:var(--green);margin-bottom:.8rem;">// YOU'RE IN — 23 MODULES UNLOCKED</div>
+      <div style="font-size:.8rem;color:#e0e0e0;margin-bottom:1.2rem;line-height:1.7;">All chapters are open. Start at <strong style="color:var(--green);">Module 00</strong> if you've never coded. Jump to <strong style="color:#ffb000;">Module 06</strong> if you already know your way around a terminal and can write basic Python.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.2rem;">
+        <a href="https://rainfantry.github.io/books/reader.html?b=00_START_HERE" target="_blank"
+           style="display:block;padding:.9rem 1.2rem;border:1px solid var(--green);color:var(--green);text-decoration:none;font-size:.6rem;letter-spacing:.14em;background:#020a02;text-align:center;transition:background .2s;"
+           onmouseover="this.style.background='#0a200a'" onmouseout="this.style.background='#020a02'">
+          TRACK A — START FROM ZERO →<br><span style="color:#2a6a2a;font-size:.52rem;letter-spacing:.06em;display:block;margin-top:.3rem;">Never coded? Start here. Module 00 → 22.</span>
+        </a>
+        <a href="https://rainfantry.github.io/books/reader.html?b=06_WINDOWS_INTERNALS" target="_blank"
+           style="display:block;padding:.9rem 1.2rem;border:1px solid #ffb000;color:#ffb000;text-decoration:none;font-size:.6rem;letter-spacing:.14em;background:#0a0700;text-align:center;transition:background .2s;"
+           onmouseover="this.style.background='#1a1000'" onmouseout="this.style.background='#0a0700'">
+          TRACK B — I CAN CODE →<br><span style="color:#6a5000;font-size:.52rem;letter-spacing:.06em;display:block;margin-top:.3rem;">Know Python/C? Jump to Module 06 — Windows Internals.</span>
+        </a>
+      </div>
+      <div style="font-size:.56rem;color:#2a4a2a;letter-spacing:.08em;">Click any module card below to open the chapter. Your progress is saved locally in this browser.</div>
+    </div>
+
     <div style="border:1px solid #1a3a1a;background:#070f07;padding:1.2rem 1.5rem;margin-bottom:1.5rem;font-size:.64rem;line-height:1.9;color:#4a7a4a;">
       <span style="color:var(--green);letter-spacing:.1em;">// COURSE STRUCTURE</span> — 22 modules, executed in sequence. You don't watch. You build.<br>
       Each module has: <strong style="color:#3a8a3a;">Windows Setup</strong> (install, configure), <strong style="color:#3a8a3a;">Theory</strong> (why it works, how it fails), <strong style="color:#3a8a3a;">Drills</strong> (hands-on exercises), <strong style="color:#3a8a3a;">Expected Output</strong> (you know exactly what success looks like), and <strong style="color:#3a8a3a;">Defender Takeaway</strong> (the detection side).<br>
@@ -1196,6 +1224,26 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     </div>
 
     <div class="curriculum-grid" id="curriculum-grid">
+
+      <!-- 00 -->
+      <a class="mod-card mod-unlocked" id="mod-00"
+         href="https://rainfantry.github.io/books/reader.html?b=00_START_HERE"
+         target="_blank" data-mod="00">
+        <div class="mod-header">
+          <div class="mod-num" style="color:var(--cyan);">00</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#9650;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title" style="color:var(--cyan);">Start Here</div>
+        <div class="mod-desc">Absolute beginner onboarding — zero assumed</div>
+        <div class="mod-detail"><strong>This is Module 00.</strong> If you've never written code, never opened a terminal, and don't know what RAM is — start here. No prerequisites. No assumed knowledge. You will learn: what a CPU, RAM, and disk actually do. What a process is and why attackers care. What the Windows API is and why it's the attacker's toolkit. What a shell is and how reverse shells work. Why C is the language of offensive security. How to set up every tool you'll use across all 22 modules — MinGW compiler, Python, x64dbg, Process Hacker, Wireshark. By the end of Module 00, you know the vocabulary. From Module 01, you start using it.</div>
+        <div class="mod-tags">
+          <span class="mod-tag" style="background:#001a2a;color:var(--cyan);border:1px solid #00405a;">Beginners</span>
+          <span class="mod-tag" style="background:#001a2a;color:var(--cyan);border:1px solid #00405a;">Setup</span>
+        </div>
+      </a>
 
       <!-- 01 -->
       <a class="mod-card mod-unlocked" id="mod-01"
@@ -1661,6 +1709,50 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </a>
 
     </div>
+
+    <!-- CONTRIBUTOR REPO ACCESS — shown after PIN auth -->
+    <div id="contributor-repo-section" style="display:none;margin-top:2.4rem;border:1px solid #0a2a0a;background:#030a03;padding:1.4rem 1.6rem;">
+      <div style="font-size:.54rem;letter-spacing:.25em;color:var(--green);margin-bottom:.4rem;">// CONTRIBUTOR REPO ACCESS</div>
+      <div style="font-size:.68rem;color:#4a7a4a;margin-bottom:1.2rem;line-height:1.7;">Students granted contributor access can clone the private tool repos and study annotated source code used throughout the course. Each repo ships with encrypted releases (password provided separately).</div>
+      <table style="width:100%;border-collapse:collapse;font-size:.62rem;">
+        <thead>
+          <tr style="border-bottom:1px solid #0a2a0a;">
+            <td style="padding:.4rem .6rem;color:#2a6a2a;letter-spacing:.1em;font-size:.54rem;">REPO</td>
+            <td style="padding:.4rem .6rem;color:#2a6a2a;letter-spacing:.1em;font-size:.54rem;">WHAT'S INSIDE</td>
+            <td style="padding:.4rem .6rem;color:#2a6a2a;letter-spacing:.1em;font-size:.54rem;">ACCESS</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/vader-rootkit</td>
+            <td style="padding:.5rem .6rem;color:#888;">HWBP AMSI+ETW bypass — <code style="color:#aaa;font-size:.58rem;">amsi_bypass_hwbp_annotated.c</code>, <code style="color:#aaa;font-size:.58rem;">etw_hwbp_annotated.c</code></td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - vader-rootkit&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">REQUEST ACCESS →</a></td>
+          </tr>
+          <tr style="border-bottom:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/ghost-encoder</td>
+            <td style="padding:.5rem .6rem;color:#888;"><code style="color:#aaa;font-size:.58rem;">ghost_encode.py</code>, <code style="color:#aaa;font-size:.58rem;">ghost_dropper.c</code> — zero-width Unicode steganographic encoder</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - ghost-encoder&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">REQUEST ACCESS →</a></td>
+          </tr>
+          <tr style="border-bottom:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/cheyanne</td>
+            <td style="padding:.5rem .6rem;color:#888;">Full C2 framework source — beacon, listener, Discord bridge, sleep jitter</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - cheyanne&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">REQUEST ACCESS →</a></td>
+          </tr>
+          <tr style="border-bottom:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/starkiller</td>
+            <td style="padding:.5rem .6rem;color:#888;">Android RAT — Kotlin client, Python server, GPS/SMS/camera/contacts exfil</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - starkiller&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">REQUEST ACCESS →</a></td>
+          </tr>
+          <tr>
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/eclipse</td>
+            <td style="padding:.5rem .6rem;color:#888;">GPS C2 operator panel — AES beacon, service persistence, reverse shell</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - eclipse&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">REQUEST ACCESS →</a></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="font-size:.56rem;color:#2a4a2a;margin-top:.9rem;line-height:1.7;">Reply to your PIN email with your GitHub username. Access granted within 24h. All repos have annotated comments matching the course chapter they belong to.</div>
+    </div>
+
   </div>
 </section>
 
@@ -2025,9 +2117,9 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   'use strict';
 
   // ── MODULE ORDER (sequential, 19 is redacted/skipped) ──
-  var MODULE_ORDER = ['01','02','03','04','05','06','07','08','09','10',
-                      '11','12','13','14','15','16','17','18','20','21','22'];
-  var TOTAL = 22; // including 19 in count for display
+  var MODULE_ORDER = ['00','01','02','03','04','05','06','07','08','09','10',
+                      '11','12','13','14','15','16','17','18','19','20','21','22'];
+  var TOTAL = 23;
 
   // ── LOCALSTORAGE KEY ──
   var STORE_KEY = '22div_progress';
@@ -2049,8 +2141,9 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   }
 
   function isUnlocked(modStr, progress) {
-    if (modStr === '01') return true;
-    // Find previous module in order
+    // After PIN auth — all modules open. Sequential lock only for unauthenticated view.
+    if (typeof isAuthed === 'function' && isAuthed()) return true;
+    if (modStr === '00' || modStr === '01') return true;
     var idx = MODULE_ORDER.indexOf(modStr);
     if (idx <= 0) return false;
     var prev = MODULE_ORDER[idx - 1];
@@ -2092,7 +2185,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     var mod = card.dataset.mod;
     if (!mod) return;
     if (card.classList.contains('mod-redacted')) { e.preventDefault(); return; }
-    if (card.classList.contains('mod-locked')) { e.preventDefault(); return; }
+    if (card.classList.contains('mod-locked') && document.documentElement.classList.contains('course-locked')) { e.preventDefault(); return; }
 
     // Mark as done
     var progress = getProgress();
@@ -2251,6 +2344,11 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     gate.style.opacity = '0';
     setTimeout(function() { gate.classList.remove('show'); gate.style.opacity = ''; gate.style.transition = ''; }, 350);
     document.documentElement.classList.remove('course-locked');
+    applyStates();
+    var sh = document.getElementById('start-here-banner');
+    if (sh) sh.style.display = 'block';
+    var contrib = document.getElementById('contributor-repo-section');
+    if (contrib) contrib.style.display = 'block';
     setTimeout(function() {
       var el = document.getElementById('curriculum');
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
