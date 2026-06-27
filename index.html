@@ -676,7 +676,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 }
 /* Mobile (≤640px): hide full widget (keep it loaded), show button only */
 @media(max-width:640px){
-  .stripe-desktop-wrap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;visibility:hidden;}
+  .stripe-desktop-wrap{position:fixed;left:-9999px;top:0;width:280px;height:120px;overflow:hidden;}
   .stripe-mobile-btn{display:block!important;width:100%;background:#0a2a0a;border:1px solid #1a6a1a;color:#4adc6a;font-family:monospace;font-size:.72rem;letter-spacing:.12em;font-weight:700;padding:.7rem 1rem;cursor:pointer;text-align:center;}
   .stripe-mobile-btn:hover{background:#0d3a0d;color:#6aff8a;}
   .stripe-mobile-btn.monthly{border-color:#1a5a4a;color:#4adcaa;}
@@ -1173,7 +1173,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
             publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
           </stripe-buy-button>
         </div>
-        <button class="stripe-mobile-btn" onclick="document.getElementById('sbtn-sc-1').click()">BUY — A$247.50 →</button>
+        <button class="stripe-mobile-btn" onclick="stripeClick('sbtn-sc-1')">BUY — A$247.50 →</button>
       </div>
 
       <!-- OPTION 2: MONTHLY -->
@@ -1186,7 +1186,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
             publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
           </stripe-buy-button>
         </div>
-        <button class="stripe-mobile-btn monthly" onclick="document.getElementById('sbtn-sc-2').click()">SUBSCRIBE — A$21.99/mo →</button>
+        <button class="stripe-mobile-btn monthly" onclick="stripeClick('sbtn-sc-2')">SUBSCRIBE — A$21.99/mo →</button>
       </div>
 
     </div>
@@ -2053,7 +2053,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
                 publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
               </stripe-buy-button>
             </div>
-            <button class="stripe-mobile-btn" onclick="document.getElementById('sbtn-price-1').click()">BUY — A$247.50 →</button>
+            <button class="stripe-mobile-btn" onclick="stripeClick('sbtn-price-1')">BUY — A$247.50 →</button>
           </div>
 
           <!-- OPTION 2: SECOND TIER -->
@@ -2066,7 +2066,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
                 publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
               </stripe-buy-button>
             </div>
-            <button class="stripe-mobile-btn monthly" onclick="document.getElementById('sbtn-price-2').click()">SUBSCRIBE — A$21.99/mo →</button>
+            <button class="stripe-mobile-btn monthly" onclick="stripeClick('sbtn-price-2')">SUBSCRIBE — A$21.99/mo →</button>
           </div>
         </div>
 
@@ -3500,6 +3500,17 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   // Gate removed — all content open, tools are the paywall
   window.showGate = function(cb) { if (typeof cb === 'function') cb(); };
   window.requireAuth = function(href) { window.location.href = href; };
+
+  // Stripe mobile trigger — shadow DOM first, element click fallback
+  window.stripeClick = function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    try {
+      var inner = el.shadowRoot && el.shadowRoot.querySelector('button, a, [role="button"]');
+      if (inner) { inner.click(); return; }
+    } catch(e) {}
+    el.click();
+  };
 
   // Module cards — direct navigation, no gate intercept
   document.querySelectorAll('[id^="mod-"]').forEach(function(el) {
