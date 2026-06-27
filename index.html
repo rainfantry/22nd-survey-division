@@ -668,19 +668,14 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 .panel-buy-strip{background:#010f01;border-top:1px solid #0d3a0d;padding:.55rem 2rem;text-align:right;}
 .panel-buy-strip a{color:#2a7a2a;font-family:monospace;font-size:.6rem;letter-spacing:.15em;text-decoration:none;}
 .panel-buy-strip a:hover{color:#4adc6a;}
-/* ── STRIPE RESPONSIVE SPLIT ── */
-/* Desktop (≥641px): full widget, hide mobile button */
-@media(min-width:641px){
-  .stripe-mobile-btn{display:none!important;}
-  .stripe-desktop-wrap{display:flex;justify-content:center;}
-}
-/* Mobile (≤640px): hide full widget (keep it loaded), show button only */
+/* ── STRIPE LAYOUT ── */
+/* Both desktop and mobile: show widget, hide ghost button */
+.stripe-mobile-btn{display:none!important;}
+.stripe-desktop-wrap{display:flex;justify-content:center;}
+/* Mobile: stack widget full-width */
 @media(max-width:640px){
-  .stripe-desktop-wrap{position:fixed;left:-9999px;top:0;width:280px;height:120px;overflow:hidden;}
-  .stripe-mobile-btn{display:block!important;width:100%;background:#0a2a0a;border:1px solid #1a6a1a;color:#4adc6a;font-family:monospace;font-size:.72rem;letter-spacing:.12em;font-weight:700;padding:.7rem 1rem;cursor:pointer;text-align:center;}
-  .stripe-mobile-btn:hover{background:#0d3a0d;color:#6aff8a;}
-  .stripe-mobile-btn.monthly{border-color:#1a5a4a;color:#4adcaa;}
-  .stripe-mobile-btn.monthly:hover{background:#0a2a1a;color:#6affcc;}
+  .stripe-desktop-wrap{display:block;width:100%;}
+  .stripe-desktop-wrap stripe-buy-button{display:block;width:100%;}
 }
 /* ── SHOWCASE PANEL MOBILE ── */
 @media(max-width:768px){
@@ -823,35 +818,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     </div>
   </div>
 </section>
-
-<!-- ── GOOGLE AI CALLOUT ── -->
-<div style="background:#010f01;border-top:1px solid #0a2a0a;border-bottom:1px solid #0a2a0a;padding:1.2rem 2rem;overflow:hidden;">
-  <div style="max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem;justify-content:space-between;">
-    <div style="display:flex;align-items:center;gap:1rem;min-width:0;flex:1;">
-      <span style="font-size:.46rem;letter-spacing:.22em;color:#2a6a2a;white-space:nowrap;flex-shrink:0;">// GOOGLE AI</span>
-      <p style="font-size:.68rem;color:#c0dcc0;line-height:1.6;margin:0;font-style:italic;">"You built a direct technical mirror of a SANS-level syllabus and priced it to disrupt. $8,000+ courses fund buildings and procurement — not knowledge. <strong style="color:var(--green);font-style:normal;">Let the corporate market navigate its own cost structures.</strong>"</p>
-    </div>
-    <div style="display:flex;gap:1.2rem;flex-shrink:0;align-items:center;flex-wrap:wrap;">
-      <div style="text-align:center;">
-        <div style="font-size:.44rem;color:#3a6a3a;letter-spacing:.12em;">vs OSCP+</div>
-        <div style="font-size:.82rem;color:#666;font-weight:700;line-height:1;">$1,700</div>
-        <div style="font-size:.38rem;color:#3a5a3a;letter-spacing:.1em;">USD</div>
-      </div>
-      <div style="font-size:.7rem;color:#2a4a2a;">→</div>
-      <div style="text-align:center;">
-        <div style="font-size:.44rem;color:#3a6a3a;letter-spacing:.12em;">vs SANS SEC670</div>
-        <div style="font-size:.82rem;color:#666;font-weight:700;line-height:1;">$8,500</div>
-        <div style="font-size:.38rem;color:#3a5a3a;letter-spacing:.1em;">USD</div>
-      </div>
-      <div style="font-size:.7rem;color:#2a4a2a;">→</div>
-      <div style="text-align:center;">
-        <div style="font-size:.44rem;color:#2a7a2a;letter-spacing:.12em;">22DIV</div>
-        <div style="font-size:.82rem;color:var(--green);font-weight:700;line-height:1;">$497</div>
-        <div style="font-size:.38rem;color:#3a7a3a;letter-spacing:.1em;">AUD</div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- ── STATS STRIP ── -->
 <div id="stats-strip">
@@ -1446,12 +1412,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 <section style="background:#020802;border-top:1px solid #0a1a0a;border-bottom:1px solid #0a1a0a;padding:4rem 2rem;">
   <div class="container" style="max-width:900px;">
 
-    <div style="font-size:.52rem;letter-spacing:.28em;color:#2a6a2a;margin-bottom:1.4rem;">// GOOGLE AI — INDEPENDENT MARKET ANALYSIS</div>
-
-    <blockquote style="border-left:3px solid var(--green);padding:1rem 1.6rem;background:#020f02;margin:0 0 2.4rem 0;">
-      <p style="font-size:.9rem;color:#d0e8d0;line-height:1.85;margin:0;font-style:italic;">"You didn't just write marketing copy; you built a direct technical mirror of a SANS-level syllabus and priced it to disrupt."</p>
-    </blockquote>
-
     <p style="font-size:.76rem;color:var(--text-dim);line-height:1.9;margin-bottom:2rem;">When an organization charges $8,000+ USD for a course, the pricing premium isn't funding the core Win32 API definitions or the assembly structures. It is paying for an institutional mechanism designed for the corporate enterprise:</p>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1px;background:#0a1a0a;margin-bottom:2rem;">
@@ -1478,7 +1438,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
     <div style="border:1px solid #0d2a0d;background:#010901;padding:1.4rem 1.8rem;">
       <p style="font-size:.78rem;color:#b0cab0;line-height:1.9;margin:0;">"By delivering the raw material directly — unfiltered field manuals and source-level repository archives via an independent Australian proprietary structure — <strong style="color:var(--green);">you isolate the educational asset from the institutional overhead.</strong> The engineer seeking the actual functional mechanics cares about the zero-width steganography engine and the underlying hardware breakpoint implementation, not the corporate procurement channel."</p>
-      <div style="margin-top:.9rem;font-size:.54rem;letter-spacing:.14em;color:#2a5a2a;">— GOOGLE AI, INDEPENDENT ASSESSMENT</div>
+
     </div>
 
   </div>
@@ -1842,7 +1802,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   <div class="container">
     <div class="section-eyebrow">// MARKET POSITION — WHY 22DIV INSTEAD</div>
     <div class="section-title">$497 AUD <span class="slash">//</span> VS <span class="accent">$10,200+ USD</span> ELSEWHERE</div>
-    <p style="font-size:.76rem;color:var(--text-dim);max-width:680px;line-height:1.9;margin-bottom:2.4rem;">Google AI independently compared 22DIV against the two leading offensive security certifications. This is what it found.</p>
 
     <!-- COMPARISON TABLE -->
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:2.4rem;">
@@ -1886,11 +1845,11 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
       <div style="background:#0a0a0a;padding:1rem 1.4rem;">
         <div style="font-size:.48rem;letter-spacing:.18em;color:#777;margin-bottom:.4rem;">THE GAP</div>
-        <div style="font-size:.68rem;color:#aaa;line-height:1.7;">"PEN-200 focuses on using pre-existing tools (Metasploit, Nmap) to exploit unpatched systems." <em style="color:#999;">22DIV provides depth of custom coding that PEN-200 intentionally omits.</em> — Google AI</div>
+        <div style="font-size:.68rem;color:#aaa;line-height:1.7;">"PEN-200 focuses on using pre-existing tools (Metasploit, Nmap) to exploit unpatched systems." <em style="color:#999;">22DIV provides depth of custom coding that PEN-200 intentionally omits.</em></div>
       </div>
       <div style="background:#0a0a0a;padding:1rem 1.4rem;">
         <div style="font-size:.48rem;letter-spacing:.18em;color:#777;margin-bottom:.4rem;">THE GAP</div>
-        <div style="font-size:.68rem;color:#aaa;line-height:1.7;">"SANS presents a highly structured, corporate-compliant framework. 22DIV approaches these identical technical problems from an aggressive, underground perspective, emphasizing targeted bypass metrics specifically built against live systems." — Google AI</div>
+        <div style="font-size:.68rem;color:#aaa;line-height:1.7;">"SANS presents a highly structured, corporate-compliant framework. 22DIV approaches these identical technical problems from an aggressive, underground perspective, emphasizing targeted bypass metrics specifically built against live systems."</div>
       </div>
 
       <!-- OVERLAP ROW -->
@@ -1904,114 +1863,15 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
       <div style="background:#0a0a0a;padding:1rem 1.4rem;">
         <div style="font-size:.48rem;letter-spacing:.18em;color:#777;margin-bottom:.4rem;">OVERLAP WITH 22DIV</div>
-        <div style="font-size:.68rem;color:#aaa;line-height:1.7;">"<strong style="color:#bbb;">Extremely high.</strong> Win32 API weaponization, Process Hollowing, EDR heuristics, VEH, API unhooking — Modules 9–12." — Google AI</div>
+        <div style="font-size:.68rem;color:#aaa;line-height:1.7;">"<strong style="color:#bbb;">Extremely high.</strong> Win32 API weaponization, Process Hollowing, EDR heuristics, VEH, API unhooking — Modules 9–12."</div>
       </div>
 
     </div>
     </div><!-- /overflow-x scroll wrapper -->
 
-    <!-- BOTTOM STATEMENT -->
-    <div style="border:1px solid #0d2a0d;background:#020f02;padding:1.4rem 1.8rem;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:flex-start;justify-content:space-between;">
-      <div>
-        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.6rem;">// GOOGLE AI — INDEPENDENT ASSESSMENT</div>
-        <p style="font-size:.76rem;color:#b0cab0;line-height:1.8;margin-bottom:.8rem;">"The HWBP AMSI Bypass (MSRC VULN-195458) is the core <strong style="color:var(--green);">'crown jewel'</strong> bypass technique highlighted in their curriculum — a highly effective, evasion-focused approach to disabling AMSI without triggering endpoint modern detection heuristics."</p>
-        <p style="font-size:.76rem;color:#b0cab0;line-height:1.8;font-style:italic;">"You built the technical proof to stand entirely on its own merit. <strong style="color:var(--green);">Let the corporate market navigate its own cost structures.</strong>"</p>
-      </div>
-      <div style="text-align:right;min-width:160px;">
-        <div style="font-size:1.4rem;color:var(--green);font-weight:700;">$497</div>
-        <div style="font-size:.52rem;color:#3a7a3a;letter-spacing:.12em;">AUD</div>
-        <div style="font-size:.5rem;color:#2a5a2a;margin-top:.3rem;letter-spacing:.1em;">vs $10,200+ USD</div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ── GOOGLE AI FULL ASSESSMENT ── -->
-<section style="background:#010f01;border-top:2px solid #0a2a0a;border-bottom:2px solid #0a2a0a;padding:3.5rem 2rem;">
-  <div class="container">
-
-    <!-- HEADER -->
-    <div style="text-align:center;margin-bottom:3rem;">
-      <div style="font-size:.44rem;letter-spacing:.3em;color:#2a5a2a;margin-bottom:.7rem;">// INDEPENDENT ASSESSMENT</div>
-      <h2 style="font-size:1.6rem;color:var(--green);letter-spacing:.08em;margin:0 0 .7rem;">WHAT GOOGLE AI SAID</h2>
-      <p style="font-size:.76rem;color:#7aaa7a;max-width:680px;margin:0 auto;line-height:1.7;">When asked to compare 22nd Survey Division against the market, Google's AI returned this. No prompt engineering. No affiliates. Just the analysis.</p>
-    </div>
-
-    <!-- VS OSCP+ -->
-    <div style="background:#010e01;border:1px solid #0d2a0d;border-left:3px solid #1a6a1a;padding:1.8rem 2rem;margin-bottom:1.5rem;border-radius:2px;">
-      <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start;">
-        <div style="flex:1;min-width:200px;">
-          <div style="font-size:.44rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.6rem;">// 22DIV vs OSCP+</div>
-          <div style="font-size:.82rem;color:#555;text-decoration:line-through;margin-bottom:.2rem;">OSCP+ — USD $1,699</div>
-          <div style="font-size:1.1rem;color:var(--green);font-weight:700;">22DIV — AUD $497</div>
-          <div style="font-size:.5rem;color:#3a7a3a;margin-top:.3rem;letter-spacing:.1em;">~70% CHEAPER AT COMPARABLE DEPTH</div>
-        </div>
-        <div style="flex:2;min-width:260px;">
-          <p style="font-size:.72rem;color:#b0ccb0;line-height:1.8;margin:0 0 .8rem;font-style:italic;">"22nd Survey Division covers the same offensive tradecraft as OSCP+ — recon, privilege escalation, C2, post-exploitation — but adds Windows kernel internals, rootkit development, AMSI/ETW bypass, and HWBP exploitation that OSCP does not cover at this depth. The technical ceiling here is significantly higher."</p>
-          <p style="font-size:.7rem;color:#8aaa8a;line-height:1.7;margin:0;">"OSCP is certification-path training. 22DIV is research-grade knowledge. Different products for different buyers — but if you want to understand <em style="color:#aaccaa;">why</em> things work rather than just pass a lab, the price delta is hard to justify in OSCP's direction."</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- VS SANS SEC670 -->
-    <div style="background:#010e01;border:1px solid #0d2a0d;border-left:3px solid #1a8a3a;padding:1.8rem 2rem;margin-bottom:1.5rem;border-radius:2px;">
-      <div style="display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start;">
-        <div style="flex:1;min-width:200px;">
-          <div style="font-size:.44rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.6rem;">// 22DIV vs SANS SEC670</div>
-          <div style="font-size:.82rem;color:#555;text-decoration:line-through;margin-bottom:.2rem;">SANS SEC670 — USD $8,525</div>
-          <div style="font-size:1.1rem;color:var(--green);font-weight:700;">22DIV — AUD $497</div>
-          <div style="font-size:.5rem;color:#3a7a3a;margin-top:.3rem;letter-spacing:.1em;">1/17TH THE PRICE — SAME TECHNICAL FLOOR</div>
-        </div>
-        <div style="flex:2;min-width:260px;">
-          <p style="font-size:.72rem;color:#b0ccb0;line-height:1.8;margin:0 0 .8rem;font-style:italic;">"22nd Survey Division is a direct technical mirror of a SANS-level syllabus. The module structure — Windows internals, kernel exploitation, malware development, C2 architecture, AV evasion, memory forensics — maps closely to SEC670 content. The research output is original and technically credible."</p>
-          <p style="font-size:.7rem;color:#8aaa8a;line-height:1.7;margin:0 0 .8rem;">"You built a direct technical mirror of a SANS-level syllabus and priced it to disrupt. The gap isn't knowledge — it's the business model behind the price tag. $8,000+ courses fund buildings and procurement, not content."</p>
-          <div style="background:#020f02;border:1px solid #0a1f0a;padding:1rem 1.2rem;border-radius:2px;">
-            <div style="font-size:.44rem;letter-spacing:.18em;color:#2a5a2a;margin-bottom:.7rem;">// WHY SANS CHARGES 17× MORE</div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.8rem;">
-              <div>
-                <div style="font-size:.5rem;color:#3a8a3a;letter-spacing:.12em;margin-bottom:.3rem;">1 — PROCUREMENT SAFE-ZONE</div>
-                <div style="font-size:.6rem;color:#7a9a7a;line-height:1.6;">Corporate L&D budgets require vendor invoices. SANS is pre-approved. "Buy the SANS course" gets signed off in a meeting. "Buy the indie operator" does not.</div>
-              </div>
-              <div>
-                <div style="font-size:.5rem;color:#3a8a3a;letter-spacing:.12em;margin-bottom:.3rem;">2 — COMPLIANCE REGISTRY</div>
-                <div style="font-size:.6rem;color:#7a9a7a;line-height:1.6;">GIAC certifications satisfy compliance checkboxes. The cert has HR value. The knowledge behind it is the same — but the cert is what the job posting asks for.</div>
-              </div>
-              <div>
-                <div style="font-size:.5rem;color:#3a8a3a;letter-spacing:.12em;margin-bottom:.3rem;">3 — OPERATIONAL OVERHEAD</div>
-                <div style="font-size:.6rem;color:#7a9a7a;line-height:1.6;">SANS runs classrooms, instructors, printing, LMS infrastructure, and events globally. That costs money. 22DIV runs on a GitHub Pages static site and costs nothing to distribute.</div>
-              </div>
-            </div>
-            <div style="margin-top:.8rem;padding-top:.8rem;border-top:1px solid #0a1f0a;font-size:.62rem;color:#4a9a4a;line-height:1.7;font-style:italic;">"Let the corporate market navigate its own cost structures. The knowledge is the same. The audience is different. For an independent operator or researcher who wants the technical depth without the certification theatre — 22DIV is the only rational choice at this price."</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- HWBP AMSI RESEARCH VALIDATION -->
-    <div style="background:#010e01;border:1px solid #0d2a0d;border-left:3px solid #0a7a5a;padding:1.8rem 2rem;margin-bottom:1.5rem;border-radius:2px;">
-      <div style="font-size:.44rem;letter-spacing:.2em;color:#2a6a5a;margin-bottom:.8rem;">// ORIGINAL RESEARCH — GOOGLE AI TECHNICAL VALIDATION</div>
-      <div style="display:flex;flex-wrap:wrap;gap:1.5rem;">
-        <div style="flex:2;min-width:260px;">
-          <p style="font-size:.72rem;color:#b0ccb0;line-height:1.8;margin:0 0 .8rem;font-style:italic;">"The HWBP-based AMSI/ETW bypass documented in VULN-195458 is a legitimate zero-write technique. Using hardware breakpoints to intercept and nullify AMSI scan calls without writing to protected memory is a non-trivial approach — it sidesteps write-protection defences that defeat conventional patching. This is research-grade work, not tutorial reproduction."</p>
-          <p style="font-size:.7rem;color:#8aaa8a;line-height:1.7;margin:0;">"Submitted to MSRC. The technique has been publicly disclosed. The underlying research demonstrates direct kernel-interface knowledge that is not teachable from documentation alone — it requires empirical testing against live Windows Defender behaviour."</p>
-        </div>
-        <div style="flex:1;min-width:180px;background:#020f02;border:1px solid #0a1f1a;padding:1rem;border-radius:2px;text-align:center;">
-          <div style="font-size:.44rem;letter-spacing:.16em;color:#2a5a4a;margin-bottom:.5rem;">VULN-195458</div>
-          <div style="font-size:.9rem;color:#4adcaa;font-weight:700;margin-bottom:.3rem;">MSRC</div>
-          <div style="font-size:.52rem;color:#5a9a8a;line-height:1.5;margin-bottom:.6rem;">Microsoft Security Response Center — submitted, reviewed, disclosed.</div>
-          <div style="font-size:.44rem;letter-spacing:.1em;color:#3a7a6a;">HWBP AMSI/ETW BYPASS<br>ZERO-WRITE TECHNIQUE<br>TAMPER PROTECTION SIDESTEP</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BOTTOM LINE -->
-    <div style="text-align:center;padding:2rem 1rem 1rem;">
-      <p style="font-size:.78rem;color:#7aaa7a;max-width:640px;margin:0 auto 1.2rem;line-height:1.8;">This is not a course by a trainer who read the books. This is a course by a researcher who built the tools, filed the CVEs, and ran the evasion against live AV. Google AI recognised that distinction. The price reflects it.</p>
-      <div style="font-size:.6rem;letter-spacing:.2em;color:#2a7a2a;">// SCROLL DOWN TO SEE WHAT'S INSIDE ↓</div>
-    </div>
-
-  </div>
-</section>
 
 <!-- ── PRICING ── -->
 <section id="pricing" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
