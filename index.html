@@ -475,6 +475,12 @@ html.course-locked .mod-card::after {
   pointer-events: none;
 }
 
+/* ── STICKY UNLOCK BUTTON (visible when locked) ── */
+#sticky-unlock{position:fixed;bottom:1.4rem;right:1.4rem;z-index:9000;display:none;}
+html.course-locked #sticky-unlock{display:block;}
+.sticky-unlock-btn{background:#010f01;border:1px solid var(--green);color:var(--green);font-family:inherit;font-size:.58rem;letter-spacing:.2em;padding:.7rem 1.5rem;cursor:pointer;text-transform:uppercase;transition:all .25s;box-shadow:0 0 18px rgba(0,200,0,.12);}
+.sticky-unlock-btn:hover{background:var(--green);color:#000;box-shadow:0 0 28px rgba(0,200,0,.25);}
+
 /* ── COURSE TEASER (shown when locked, hidden when unlocked) ── */
 #course-teaser { padding: 4rem 0; text-align: center; }
 html:not(.course-locked) #course-teaser { display: none !important; }
@@ -590,6 +596,11 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 <body>
 
 <canvas id="bg-net" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.55;"></canvas>
+
+<!-- Sticky unlock button — visible when course-locked class present -->
+<div id="sticky-unlock">
+  <button class="sticky-unlock-btn" onclick="window.showGate(function(){ window.location.href='https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET'; })">🔒 ENTER ACCESS PIN</button>
+</div>
 
 <!-- ── PIN GATE ── -->
 <div id="pin-gate">
@@ -738,10 +749,10 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/starkiller_android_rat_gps.png" alt="StarKiller Android RAT GPS" loading="lazy">
+        <img class="proof-img" src="https://raw.githubusercontent.com/rainfantry/eclipse/master/screenshots/gps_sms_proof.jpg" alt="StarKiller GPS SMS proof" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// MODULE 21 — MOBILE SECURITY</div>
-          <div class="proof-caption">StarKiller Android RAT: GPS location exfil, contacts harvest, reverse TCP shell, Play Protect evasion. Your phone's attack surface is larger than your laptop's — and defended worse.</div>
+          <div class="proof-caption">StarKiller Android RAT: GPS location exfil, SMS intercept, contacts harvest, reverse TCP shell, Play Protect evasion. Your phone's attack surface is larger than your laptop's — and defended worse.</div>
           <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=21_MOBILE_SECURITY" target="_blank">read chapter 21 →</a>
         </div>
       </div>
@@ -821,6 +832,15 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
     </div>
+      <div class="proof-card">
+        <img class="proof-img" src="https://raw.githubusercontent.com/rainfantry/GeoDefend/master/DOCUMENTATION/FINDINGS.jpg" alt="SKYWALKER RECON — winrecon output" loading="lazy">
+        <div class="proof-info">
+          <div class="proof-tag">// MODULE 02 — RECON & MODULE 08 — PRIVESC</div>
+          <div class="proof-caption">SKYWALKER recon script live output: full system identity, UAC config, Tamper Protection status, privilege context. One script. Every surface. Tamper Protection off — Defender can be stopped programmatically post-SYSTEM.</div>
+          <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=02_RECON" target="_blank">read chapter 2 →</a>
+        </div>
+      </div>
+
   </div>
 </section>
 
