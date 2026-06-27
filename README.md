@@ -166,3 +166,17 @@ Previously the gate only appeared when you clicked a CTA (like "START LEARNING")
    - Argon2id hashed PINs, rate limiting per IP, HMAC session tokens.
    - cPanel: `https://S06ee.syd5.hostingplatform.net.au:2083` — login: `divcom22`.
    - See `HANDOFF.md` → Option B for 7-step cPanel deployment.
+
+---
+
+## TODO — Release Blackops
+
+_Automated read-only assessment — what a full public-release pass would do for this repo. Suggestions only; nothing above has been changed or removed._
+
+- [ ] Audit git history for AI/Claude attribution; scrub if any is found.
+- [ ] Add a `LICENSE` file (MIT or your choice + holder).
+- [ ] Add discovery topics for SEO (`gh repo edit --add-topic ...`, up to 20).
+- [ ] Add a screenshot or diagram to the README if there's a GUI or visual output.
+- [ ] Verify a clean from-scratch build/run against the README quick start (produce a real artifact, don't trust the docs).
+
+<sub>Workflow: https://github.com/rainfantry/release-blackops-skill</sub>
