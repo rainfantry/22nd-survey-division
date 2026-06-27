@@ -8,10 +8,7 @@
 <meta name="author" content="George Wu">
 <meta name="robots" content="index, follow">
 <script>
-// sessionStorage auth — always re-gate on new session (no persistent cookie)
-if (sessionStorage.getItem('22div_gate_auth') !== '1') {
-  document.documentElement.classList.add('course-locked');
-}
+// Content is open — no gate
 </script>
 <meta property="og:title" content="22nd Survey Division — Offensive Security Training">
 <meta property="og:description" content="The course that teaches coders to think like attackers — and attackers to code like engineers.">
@@ -690,6 +687,20 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   .stripe-mobile-btn.monthly{border-color:#1a5a4a;color:#4adcaa;}
   .stripe-mobile-btn.monthly:hover{background:#0a2a1a;color:#6affcc;}
 }
+/* ── SHOWCASE PANEL MOBILE ── */
+@media(max-width:768px){
+  #showcase [style*="grid-template-columns:1fr 1fr 1fr"],
+  #showcase [style*="grid-template-columns:1fr 1fr"],
+  #showcase [style*="grid-template-columns:3fr 2fr"]{
+    display:flex!important;flex-direction:column!important;
+  }
+  #showcase [style*="max-height:340px"],
+  #showcase [style*="max-height:320px"],
+  #showcase [style*="max-height:400px"],
+  #showcase [style*="max-height:480px"]{
+    max-height:260px!important;object-fit:cover!important;
+  }
+}
 /* ── MOBILE PAYMENT LAYOUT ── */
 @media(max-width:640px){
   .pay-grid{display:flex!important;flex-direction:column!important;gap:8px!important;background:transparent!important;}
@@ -707,102 +718,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
 <canvas id="bg-net" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.55;"></canvas>
 
-<!-- Sticky unlock bar — full-width, visible when course-locked -->
-<div id="sticky-unlock" style="background:rgba(1,9,1,.97);border-top:1px solid #0d3a0d;padding:.65rem 2rem;display:flex;align-items:center;gap:1.4rem;box-shadow:0 -4px 24px rgba(0,160,0,.1);">
-  <div style="flex:1;min-width:0;">
-    <span style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;">// ACCESS RESTRICTED</span>
-    <span style="font-size:.58rem;letter-spacing:.1em;color:#5a9a5a;margin-left:1rem;">23 modules · 5 private repos · full kill chain · ENTER PIN TO UNLOCK</span>
-  </div>
-  <button class="sticky-unlock-btn" onclick="window.showGate(function(){ window.location.href='https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET'; })" style="white-space:nowrap;animation:pulse-glow 2.4s ease-in-out infinite;">ENTER PIN →</button>
-  <a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="font-size:.5rem;letter-spacing:.1em;color:#2a6a4a;white-space:nowrap;text-decoration:none;">PAY VIA WISE →</a>
-</div>
-
-<!-- ── PIN GATE ── -->
-<div id="pin-gate">
-
-  <!-- LEFT — product showcase -->
-  <div id="pin-showcase">
-    <div class="psc-header">// WHAT THIS COURSE BUILDS — DOCUMENTED — LIVE — WORKING</div>
-
-    <div class="psc-item">
-      <div class="psc-label">// GPS EXFIL — ECLIPSE C2 — MODULE 16</div>
-      <img class="psc-img" src="https://rainfantry.github.io/showcase/eclipse_c2_gps_live.png" alt="ECLIPSE GPS live" loading="eager">
-      <div class="psc-caption">Real-time GPS coordinates exfiltrated every 5 seconds. Agent running as SYSTEM inside svchost.exe. AES-256-CBC beacon. Service persistence — survives reboot.</div>
-    </div>
-
-    <div class="psc-item">
-      <div class="psc-label">// ANDROID RAT — STARKILLER — MODULE 21</div>
-      <img class="psc-img" src="https://rainfantry.github.io/showcase/starkiller_agents_live.png" alt="StarKiller agents live" loading="eager">
-      <div class="psc-caption">Two Android agents live. GPS polled. SMS thread dumped (47 messages). Camera accessed. Play Protect process killed and persistence reinstated. Built from scratch in Kotlin.</div>
-    </div>
-
-    <div class="psc-item">
-      <div class="psc-label">// VNC CALLBACK + SHELL — MODULE 16</div>
-      <img class="psc-img" src="https://rainfantry.github.io/showcase/eclipse_c2_browser_live.png" alt="ECLIPSE browser C2 live" loading="eager">
-      <div class="psc-caption">ECLIPSE C2 operator panel — browser-based. VNC stream active. Reverse shell connected. SeDebugPrivilege confirmed. Defender disabled. C2 beacon 5s interval.</div>
-    </div>
-
-    <div class="psc-item">
-      <div class="psc-label">// WINDOWS RECON — WINRECON — MODULE 01</div>
-      <img class="psc-img" src="https://rainfantry.github.io/showcase/winrecon_skywalker_findings.jpg" alt="winrecon live output" loading="lazy">
-      <div class="psc-caption">WMI enumeration. AD discovery. Privilege audit. CWE scanner. Full target profile before a single payload is deployed. Know the box before you touch it.</div>
-    </div>
-
-    <div class="psc-item">
-      <div class="psc-label">// AV EVASION — IRON-DOME v4 — MODULE 12</div>
-      <img class="psc-img" src="https://rainfantry.github.io/showcase/iron_dome_build_complete_154613.jpg" alt="IRON-DOME 0 detections" loading="lazy">
-      <div class="psc-caption">0 detections. Kaspersky Premium + Windows Defender + MalwareBytes active simultaneously. 8-layer evasion stack built from source. MSRC VULN-195458 submitted.</div>
-    </div>
-
-    <div class="psc-item">
-      <div class="psc-label">// VNC TERMINAL — CHEYANNE C2 — MODULE 16</div>
-      <img class="psc-img" src="https://rainfantry.github.io/showcase/iron_dome_v4_vnc_terminal.png" alt="VNC terminal shell" loading="lazy">
-      <div class="psc-caption">Full VNC callback through CHEYANNE C2. Shell connected, CHEYANNE WATCH live. Remote desktop control over encrypted beacon. Discord bridge operational.</div>
-    </div>
-
-  </div>
-
-  <!-- RIGHT — PIN input -->
-  <div id="pin-box">
-    <div class="pin-brand">22ND SURVEY DIVISION</div>
-    <div class="pin-acn">ACN 692 429 397 // SYDNEY // AUSTRALIA</div>
-    <div class="pin-title">// ACCESS Restricted</div>
-    <div class="pin-sub">Enter your access PIN to continue.<br><span style="color:#2a6e2a;">No PIN? Purchase below — emailed within 24h.</span></div>
-    <div class="pay-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:.8rem 0;">
-      <div style="background:#020f02;border:1px solid #0d2a0d;padding:.7rem;text-align:center;border-radius:4px;">
-        <div class="pay-card-title" style="font-size:.42rem;letter-spacing:.14em;color:#2a7a2a;margin-bottom:.3rem;">FULL BUNDLE — A$247.50</div>
-        <div class="pay-card-desc" style="font-size:.52rem;color:#8aba8a;margin-bottom:.5rem;line-height:1.4;">22 modules + all 5 private repos</div>
-        <div class="stripe-desktop-wrap">
-          <stripe-buy-button id="sbtn-gate-1"
-            buy-button-id="buy_btn_1Tmp4iS5K1Ttf6KaIUlvp1xr"
-            publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
-          </stripe-buy-button>
-        </div>
-        <button class="stripe-mobile-btn" onclick="document.getElementById('sbtn-gate-1').click()">BUY — A$247.50 →</button>
-      </div>
-      <div style="background:#020f02;border:1px solid #0d2a0d;padding:.7rem;text-align:center;border-radius:4px;">
-        <div class="pay-card-title" style="font-size:.42rem;letter-spacing:.14em;color:#0d9a5a;margin-bottom:.3rem;">MONTHLY — A$21.99/mo</div>
-        <div class="pay-card-desc" style="font-size:.52rem;color:#8aba8a;margin-bottom:.5rem;line-height:1.4;">Private repos forever. All tools updated as research ships.</div>
-        <div class="stripe-desktop-wrap">
-          <stripe-buy-button id="sbtn-gate-2"
-            buy-button-id="buy_btn_1Tmp9SS5K1Ttf6KaxgbBvxcw"
-            publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
-          </stripe-buy-button>
-        </div>
-        <button class="stripe-mobile-btn monthly" onclick="document.getElementById('sbtn-gate-2').click()">SUBSCRIBE — A$21.99/mo →</button>
-      </div>
-    </div>
-    <div style="font-size:.46rem;color:#2a5a3a;text-align:center;margin-bottom:.5rem;line-height:1.7;">
-      Alt: <a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="color:#2a8e6a;">Wise bank transfer →</a>
-      &nbsp;|&nbsp; <a href="mailto:gwu0738@gmail.com?subject=22DIV Invoice Request" style="color:#2a7a5a;">Invoice →</a>
-    </div>
-    <input type="password" id="pin-input" maxlength="8" placeholder="_ _ _ _ _ _" autocomplete="off" autofocus>
-    <button id="pin-submit">AUTHENTICATE</button>
-    <div id="pin-error"></div>
-    <div class="pin-footer-note">OCCUPATION FORCE CALLSIGN GSW PTY LTD // ABN 50 692 429 397<br>All content for authorised use. Australian Cybercrime Act compliant.</div>
-  </div>
-
-</div>
 
 <!-- ── NAV ── -->
 <nav id="main-nav">
@@ -1069,8 +984,169 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   </div>
 </section>
 
-<!-- ── PROOF SECTION ── -->
-<section id="proof">
+<!-- ── SHOWCASE ── -->
+<section id="showcase" style="padding:0;margin:0;">
+
+<!-- PANEL 1: IRON-DOME -->
+<div style="background:#010901;border-top:3px solid #1a4a1a;">
+  <div style="max-width:960px;margin:0 auto;padding:3rem 2rem 1.5rem;">
+    <div style="font-size:.44rem;letter-spacing:.28em;color:#2a5a2a;margin-bottom:.5rem;">// TOOL 01 — AV EVASION STACK</div>
+    <h2 style="font-size:2rem;color:var(--green);letter-spacing:.06em;margin:0 0 .3rem;font-family:monospace;">IRON-DOME v4</h2>
+    <p style="font-size:.66rem;color:#4a8a4a;margin:0;letter-spacing:.1em;">0 DETECTIONS · KASPERSKY PREMIUM + DEFENDER + MALWAREBYTES · LIVE TESTED · KILL CHAIN 10/10</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#050505;">
+    <img src="https://rainfantry.github.io/showcase/iron_dome_build_complete_154613.jpg" alt="IRON-DOME 0 detections build" style="width:100%;display:block;object-fit:cover;max-height:340px;">
+    <img src="https://rainfantry.github.io/showcase/iron_dome_v4_killchain.png" alt="Kill chain 10/10 PASS" style="width:100%;display:block;object-fit:cover;max-height:340px;">
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#050505;margin-bottom:2px;">
+    <img src="https://rainfantry.github.io/showcase/Defender_Quarantine_GaySun.png" alt="Defender quarantine — import table detection" style="width:100%;display:block;object-fit:cover;max-height:300px;">
+    <img src="https://rainfantry.github.io/showcase/UnDefend_Engine_Unavailable.png" alt="Windows Security engine unavailable — HWBP bypass" style="width:100%;display:block;object-fit:cover;max-height:300px;">
+  </div>
+  <div style="max-width:960px;margin:0 auto;padding:2rem 2rem 3rem;display:grid;grid-template-columns:3fr 2fr;gap:2rem;align-items:start;">
+    <div>
+      <p style="font-size:.72rem;color:#b0ccb0;line-height:1.85;margin:0 0 .8rem;">Complete 8-layer Windows evasion stack. Built from source. Tested live. <strong style="color:var(--green);">Layer 1:</strong> XOR obfuscation. <strong style="color:var(--green);">Layer 2:</strong> dynamic API resolution — no IAT fingerprint. <strong style="color:var(--green);">Layer 3:</strong> anti-sandbox timing. <strong style="color:var(--green);">Layer 4:</strong> PE header stomping. <strong style="color:var(--green);">Layer 5:</strong> ISUN auth gate — shellcode self-authenticates. <strong style="color:var(--green);">Layer 6:</strong> beacon jitter. <strong style="color:var(--green);">Layer 7:</strong> MinGW cross-compile (no MSVC signatures). <strong style="color:var(--green);">Layer 8:</strong> HWBP AMSI/ETW bypass — zero memory writes, sidesteps Tamper Protection entirely.</p>
+      <p style="font-size:.68rem;color:#7aaa7a;line-height:1.75;margin:0;">The two screenshots top-left show: build output with 0 detections across three AV products simultaneously, and the full 10/10 kill chain — C2 connect → AMSI disabled → recon → privesc → tri-vector persistence. Bottom-left: what Defender looks like <em>before</em> evasion layers are applied. Bottom-right: what Windows Security looks like <em>after</em> the HWBP bypass runs.</p>
+    </div>
+    <div style="background:#010f01;border:1px solid #0d2a0d;padding:1.4rem;border-radius:2px;">
+      <div style="font-size:.44rem;letter-spacing:.2em;color:#2a7a2a;margin-bottom:.8rem;">// WHAT YOU GET</div>
+      <ul style="font-size:.66rem;color:#9acc9a;line-height:2;list-style:none;padding:0;margin:0 0 1rem;">
+        <li>→ IRON-DOME v4 full source (C + PS1)</li>
+        <li>→ 8-layer builder — compile your payload</li>
+        <li>→ VADER HWBP bypass module</li>
+        <li>→ 26 pre-built binaries — Defender clean</li>
+        <li>→ MSRC VULN-195458 writeup</li>
+        <li>→ Module 11 + 12 field manuals</li>
+      </ul>
+      <div style="font-size:.5rem;color:#3a6a3a;border-top:1px solid #0d2a0d;padding-top:.7rem;line-height:1.7;">AES-256 encrypted 7z archive.<br>Password emailed within 24h.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 2: CHEYANNE C2 -->
+<div style="background:#010802;border-top:3px solid #050505;">
+  <div style="max-width:960px;margin:0 auto;padding:3rem 2rem 1.5rem;">
+    <div style="font-size:.44rem;letter-spacing:.28em;color:#2a5a2a;margin-bottom:.5rem;">// TOOL 02 — C2 FRAMEWORK</div>
+    <h2 style="font-size:2rem;color:var(--green);letter-spacing:.06em;margin:0 0 .3rem;font-family:monospace;">CHEYANNE C2</h2>
+    <p style="font-size:.66rem;color:#4a8a4a;margin:0;letter-spacing:.1em;">GPS EXFIL · BROWSER OPERATOR PANEL · VNC SHELL · AES-256-CBC BEACON · DISCORD BRIDGE · SERVICE PERSISTENCE</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:#050505;margin-bottom:2px;">
+    <img src="https://rainfantry.github.io/showcase/eclipse_c2_gps_live.png" alt="ECLIPSE GPS live" style="width:100%;display:block;object-fit:cover;max-height:320px;">
+    <img src="https://rainfantry.github.io/showcase/eclipse_c2_browser_live.png" alt="ECLIPSE browser C2 panel" style="width:100%;display:block;object-fit:cover;max-height:320px;">
+    <img src="https://rainfantry.github.io/showcase/iron_dome_v4_vnc_terminal.png" alt="VNC shell via CHEYANNE" style="width:100%;display:block;object-fit:cover;max-height:320px;">
+  </div>
+  <div style="max-width:960px;margin:0 auto;padding:2rem 2rem 3rem;display:grid;grid-template-columns:3fr 2fr;gap:2rem;align-items:start;">
+    <div>
+      <p style="font-size:.72rem;color:#b0ccb0;line-height:1.85;margin:0 0 .8rem;">Full C2 framework built from scratch. Browser-based operator panel — open a tab, run your ops. Agent runs as SYSTEM inside svchost.exe. AES-256-CBC encrypted beacons at configurable intervals. GPS polling every 5 seconds — coordinates exfiltrated live, plotted in the operator panel. VNC callback: full shell, CHEYANNE WATCH streaming screenshots, Discord bridge for remote tasking when you're off the keyboard.</p>
+      <p style="font-size:.68rem;color:#7aaa7a;line-height:1.75;margin:0;">Left: real-time GPS coordinates landing in the operator panel — lat/long, accurate to 5m, device live. Centre: browser C2 — target enumerated, SeDebugPrivilege confirmed, Defender disabled, VNC stream active. Right: shell session through CHEYANNE C2 — full terminal access, IRON-SUN payload delivered via the beacon chain.</p>
+    </div>
+    <div style="background:#010f01;border:1px solid #0d2a0d;padding:1.4rem;border-radius:2px;">
+      <div style="font-size:.44rem;letter-spacing:.2em;color:#2a7a2a;margin-bottom:.8rem;">// WHAT YOU GET</div>
+      <ul style="font-size:.66rem;color:#9acc9a;line-height:2;list-style:none;padding:0;margin:0 0 1rem;">
+        <li>→ CHEYANNE C2 full source</li>
+        <li>→ ECLIPSE browser operator panel</li>
+        <li>→ GPS + VNC + shell modules</li>
+        <li>→ AES beacon implementation</li>
+        <li>→ Discord bridge integration</li>
+        <li>→ Module 16 field manual</li>
+      </ul>
+      <div style="font-size:.5rem;color:#3a6a3a;border-top:1px solid #0d2a0d;padding-top:.7rem;line-height:1.7;">AES-256 encrypted 7z archive.<br>Password emailed within 24h.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 3: STARKILLER -->
+<div style="background:#010a01;border-top:3px solid #050505;">
+  <div style="max-width:960px;margin:0 auto;padding:3rem 2rem 1.5rem;">
+    <div style="font-size:.44rem;letter-spacing:.28em;color:#2a5a2a;margin-bottom:.5rem;">// TOOL 03 — ANDROID RAT</div>
+    <h2 style="font-size:2rem;color:var(--green);letter-spacing:.06em;margin:0 0 .3rem;font-family:monospace;">STARKILLER</h2>
+    <p style="font-size:.66rem;color:#4a8a4a;margin:0;letter-spacing:.1em;">2 AGENTS LIVE · GPS · SMS DUMP (47 MESSAGES) · CAMERA · PLAY PROTECT BYPASSED · BUILT IN KOTLIN</p>
+  </div>
+  <div style="background:#050505;margin-bottom:2px;">
+    <img src="https://rainfantry.github.io/showcase/starkiller_agents_live.png" alt="StarKiller — 2 Android agents connected live" style="width:100%;display:block;max-height:480px;object-fit:cover;">
+  </div>
+  <div style="max-width:960px;margin:0 auto;padding:2rem 2rem 3rem;display:grid;grid-template-columns:3fr 2fr;gap:2rem;align-items:start;">
+    <div>
+      <p style="font-size:.72rem;color:#b0ccb0;line-height:1.85;margin:0 0 .8rem;">Android RAT built from scratch in Kotlin. Two agents connected live in this screenshot — real phones, real hardware, no emulators. GPS polled and streaming. SMS thread dumped — 47 messages extracted in one call. Camera accessible on demand. Play Protect process killed; persistence reinstated post-kill. adb logcat visible showing full device comms in real time.</p>
+      <p style="font-size:.68rem;color:#7aaa7a;line-height:1.75;margin:0;">This is what mobile attack surface looks like from the operator side. Not a tutorial on Metasploit msfvenom payloads — a purpose-built RAT that you build yourself from Module 21 up. You understand every line because you wrote every line.</p>
+    </div>
+    <div style="background:#010f01;border:1px solid #0d2a0d;padding:1.4rem;border-radius:2px;">
+      <div style="font-size:.44rem;letter-spacing:.2em;color:#2a7a2a;margin-bottom:.8rem;">// WHAT YOU GET</div>
+      <ul style="font-size:.66rem;color:#9acc9a;line-height:2;list-style:none;padding:0;margin:0 0 1rem;">
+        <li>→ STARKILLER Android RAT source (Kotlin)</li>
+        <li>→ C2 server component</li>
+        <li>→ GPS / SMS / camera modules</li>
+        <li>→ Play Protect bypass technique</li>
+        <li>→ Module 21 field manual — mobile security</li>
+      </ul>
+      <div style="font-size:.5rem;color:#3a6a3a;border-top:1px solid #0d2a0d;padding-top:.7rem;line-height:1.7;">AES-256 encrypted 7z archive.<br>Password emailed within 24h.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 4: WINRECON -->
+<div style="background:#010901;border-top:3px solid #050505;">
+  <div style="max-width:960px;margin:0 auto;padding:3rem 2rem 1.5rem;">
+    <div style="font-size:.44rem;letter-spacing:.28em;color:#2a5a2a;margin-bottom:.5rem;">// TOOL 04 — WINDOWS RECON</div>
+    <h2 style="font-size:2rem;color:var(--green);letter-spacing:.06em;margin:0 0 .3rem;font-family:monospace;">WINRECON / SKYWALKER</h2>
+    <p style="font-size:.66rem;color:#4a8a4a;margin:0;letter-spacing:.1em;">WMI ENUMERATION · AD DISCOVERY · PRIVILEGE AUDIT · CWE SCANNER · UAC CONFIG · TAMPER PROTECTION STATUS</p>
+  </div>
+  <div style="background:#050505;margin-bottom:2px;">
+    <img src="https://rainfantry.github.io/showcase/winrecon_skywalker_findings.jpg" alt="WinRecon SKYWALKER — full system recon output" style="width:100%;display:block;max-height:480px;object-fit:cover;">
+  </div>
+  <div style="max-width:960px;margin:0 auto;padding:2rem 2rem 3rem;display:grid;grid-template-columns:3fr 2fr;gap:2rem;align-items:start;">
+    <div>
+      <p style="font-size:.72rem;color:#b0ccb0;line-height:1.85;margin:0 0 .8rem;">One script. Every surface. Full system identity, UAC configuration, Tamper Protection status (OFF — Defender stoppable), token privileges enumerated, installed hotfixes, AV engine version and state. WMI enumeration feeds directly into privilege audit. AD discovery maps the domain. CWE scanner flags known misconfigurations.</p>
+      <p style="font-size:.68rem;color:#7aaa7a;line-height:1.75;margin:0;">Built across Modules 02 (Recon) and 08 (Privilege Escalation). This is the first thing that runs before a payload ever touches the box — know the surface, know the gaps, know the escalation path before you move. The screenshot shows a live target: Tamper Protection OFF, SeDebugPrivilege available, Defender stoppable.</p>
+    </div>
+    <div style="background:#010f01;border:1px solid #0d2a0d;padding:1.4rem;border-radius:2px;">
+      <div style="font-size:.44rem;letter-spacing:.2em;color:#2a7a2a;margin-bottom:.8rem;">// WHAT YOU GET</div>
+      <ul style="font-size:.66rem;color:#9acc9a;line-height:2;list-style:none;padding:0;margin:0 0 1rem;">
+        <li>→ WinRecon / SKYWALKER full source (PS1 + C#)</li>
+        <li>→ WMI + AD enumeration modules</li>
+        <li>→ Privilege audit + CWE scanner</li>
+        <li>→ Module 02 — recon field manual</li>
+        <li>→ Module 08 — privilege escalation manual</li>
+      </ul>
+      <div style="font-size:.5rem;color:#3a6a3a;border-top:1px solid #0d2a0d;padding-top:.7rem;line-height:1.7;">AES-256 encrypted 7z archive.<br>Password emailed within 24h.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 5: RESEARCH — MSRC + TOCTOU -->
+<div style="background:#010a02;border-top:3px solid #050505;">
+  <div style="max-width:960px;margin:0 auto;padding:3rem 2rem 1.5rem;">
+    <div style="font-size:.44rem;letter-spacing:.28em;color:#2a5a2a;margin-bottom:.5rem;">// RESEARCH — ORIGINAL VULN DISCOVERY</div>
+    <h2 style="font-size:2rem;color:var(--green);letter-spacing:.06em;margin:0 0 .3rem;font-family:monospace;">MSRC VULN-195458</h2>
+    <p style="font-size:.66rem;color:#4a8a4a;margin:0;letter-spacing:.1em;">HWBP AMSI/ETW BYPASS · TAMPER PROTECTION SIDESTEP · TOCTOU DEFENDER PRIVILEGE ESCALATION · PUBLICLY DISCLOSED</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#050505;margin-bottom:2px;">
+    <img src="https://rainfantry.github.io/showcase/MSRC_VULN195458_Submission.png" alt="MSRC VULN-195458 submission" style="width:100%;display:block;object-fit:cover;max-height:400px;">
+    <img src="https://rainfantry.github.io/showcase/TOCTOU_Exploit_Live_Execution.png" alt="TOCTOU Defender privilege escalation live" style="width:100%;display:block;object-fit:cover;max-height:400px;">
+  </div>
+  <div style="max-width:960px;margin:0 auto;padding:2rem 2rem 3rem;display:grid;grid-template-columns:3fr 2fr;gap:2rem;align-items:start;">
+    <div>
+      <p style="font-size:.72rem;color:#b0ccb0;line-height:1.85;margin:0 0 .8rem;"><strong style="color:var(--green);">Left: MSRC VULN-195458.</strong> Hardware Breakpoint-based AMSI/ETW bypass submitted to Microsoft Security Response Center. Technique: set a hardware debug register breakpoint on AmsiScanBuffer — when Defender calls it, the breakpoint fires, we intercept and nullify the scan before it runs. Zero writes to protected memory. Tamper Protection has no vector to detect it. CVSS 7.1 High. Microsoft reviewed and rejected as "outside security boundary" — embargo void, published openly.</p>
+      <p style="font-size:.68rem;color:#7aaa7a;line-height:1.75;margin:0;"><strong style="color:#8aaa8a;">Right: TOCTOU privilege escalation.</strong> Standard user achieves SYSTEM via Defender's own quarantine pipeline. Batch oplock timing attack — intercept the file between scan and quarantine, swap via NTFS junction. Defender carries your payload to a privileged location and executes it. The AV becomes the attack vector. This is the reality of defensive software complexity.</p>
+    </div>
+    <div style="background:#010f01;border:1px solid #0d2a0d;padding:1.4rem;border-radius:2px;">
+      <div style="font-size:.44rem;letter-spacing:.2em;color:#2a7a2a;margin-bottom:.8rem;">// WHAT YOU GET</div>
+      <ul style="font-size:.66rem;color:#9acc9a;line-height:2;list-style:none;padding:0;margin:0 0 1rem;">
+        <li>→ HWBP bypass — full annotated source</li>
+        <li>→ TOCTOU exploit PoC</li>
+        <li>→ MSRC submission docs</li>
+        <li>→ 22sd-research-findings repo access</li>
+        <li>→ Module 03 — vulnerability research manual</li>
+        <li>→ Module 13 — memory forensics manual</li>
+      </ul>
+      <div style="font-size:.5rem;color:#3a6a3a;border-top:1px solid #0d2a0d;padding-top:.7rem;line-height:1.7;">All research on own hardware.<br>Authorised use. ACT compliant.</div>
+    </div>
+  </div>
+</div>
+
+</section>
+
+<!-- ── OLD PROOF SECTION PLACEHOLDER ── -->
+<section id="proof" style="display:none;">
   <div class="container">
     <div class="section-eyebrow">// REAL ATTACKS — DOCUMENTED — TESTED — REPORTED</div>
     <div class="section-title">WHY THIS COURSE <span class="slash">//</span> <span class="accent">EXISTS</span></div>
@@ -2117,13 +2193,12 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   </div>
 </section>
 
-<!-- ── COURSE TEASER (locked state) ── -->
+<!-- ── COURSE TEASER ── -->
 <section id="course-teaser" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
   <div class="section-inner" style="text-align:center;padding:4rem 1.5rem;">
-    <div class="teaser-label">// 22 MODULES — ACCESS RESTRICTED</div>
-    <div class="teaser-headline">FULL CURRICULUM IS PIN-GATED</div>
-    <div class="teaser-sub">22 field manual chapters. C, PowerShell, Python, Assembly. Real tradecraft against live Windows 11 defences. From attacker psychology to rootkits, C2 frameworks, and Android RATs.</div>
-    <button class="teaser-btn" onclick="showGate()">ENTER ACCESS PIN →</button>
+    <div class="teaser-label">// 22 MODULES — FULL CURRICULUM BELOW</div>
+    <div class="teaser-headline">DOCTRINE LIBRARY — ALL OPEN</div>
+    <div class="teaser-sub">22 field manual chapters. C, PowerShell, Python, Assembly. Real tradecraft against live Windows 11 defences. From attacker psychology to rootkits, C2 frameworks, and Android RATs. Buy to get the tools.</div>
     <div class="teaser-modules">
       <span class="teaser-chip">01 OFFENSIVE MINDSET</span>
       <span class="teaser-chip">02 RECON</span>
@@ -2157,11 +2232,10 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     <div class="section-eyebrow">// FIELD MANUALS</div>
     <div class="section-title">CURRICULUM <span class="slash">//</span> 22DIV <span class="accent">DOCTRINE LIBRARY</span></div>
 
-    <!-- Lock banner — visible when PIN not entered this session -->
+    <!-- Open banner -->
     <div id="curriculum-lock-banner" style="background:#070a07;border:1px solid #0a2a0a;padding:1.1rem 1.5rem;margin-bottom:1.5rem;text-align:center;">
-      <div style="font-size:.56rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:.5rem;">// CURRICULUM LOCKED — PIN REQUIRED EACH SESSION</div>
-      <div style="font-size:.72rem;color:#fff;margin-bottom:.6rem;">You can see what's here. You can't open it without the PIN.</div>
-      <button onclick="showGate()" style="font-family:inherit;font-size:.6rem;letter-spacing:.18em;padding:.5rem 1.6rem;border:1px solid var(--green);color:var(--green);background:transparent;cursor:pointer;">ENTER PIN →</button>
+      <div style="font-size:.56rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:.5rem;">// KNOWLEDGE IS OPEN — TOOLS REQUIRE PURCHASE</div>
+      <div style="font-size:.72rem;color:#aaccaa;">Read everything. <strong style="color:var(--green);">Buy to get the source.</strong></div>
     </div>
 
     <!-- START HERE — visible only when unlocked -->
@@ -3562,8 +3636,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     }
   })();
 
-  // Always gate on new session — show PIN modal on every page load until authed
-  if (!isAuthed()) { showGate(); }
+  // Gate removed — content open
 
 })();
 </script>
