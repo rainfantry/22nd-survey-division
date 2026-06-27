@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ECLIPSE C2 — GPS Tracking + Reverse Shell</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a14;font-family:'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.container{width:820px;border:1px solid #1c1c3a;}
+.bar{background:#070713;padding:.4rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid #1c1c3a;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#ff5f56;}.dot.y{background:#ffbd2e;}.dot.g{background:#27c93f;}
+.bar-title{color:#333;font-size:.7rem;margin:0 auto;}
+.grid{display:grid;grid-template-columns:1fr 280px;height:480px;}
+
+/* Map panel */
+.map{position:relative;overflow:hidden;background:#060610;}
+.map-grid{position:absolute;inset:0;opacity:.07;background-image:linear-gradient(#5555ff 1px,transparent 1px),linear-gradient(90deg,#5555ff 1px,transparent 1px);background-size:40px 40px;}
+.map-label{position:absolute;top:.5rem;left:.5rem;color:#3333aa;font-size:.55rem;letter-spacing:.2em;}
+canvas{position:absolute;inset:0;width:100%;height:100%;}
+.target-pin{position:absolute;width:8px;height:8px;border-radius:50%;background:#ff3333;border:2px solid #ff0000;box-shadow:0 0 12px #ff0000;transition:all 1.5s ease;}
+.target-ring{position:absolute;width:24px;height:24px;border-radius:50%;border:1px solid rgba(255,0,0,.4);transform:translate(-50%,-50%);animation:ringpulse 2s ease-out infinite;}
+@keyframes ringpulse{0%{width:10px;height:10px;opacity:.8;}100%{width:60px;height:60px;opacity:0;}}
+.coords{position:absolute;bottom:.5rem;left:.5rem;color:#5555aa;font-size:.55rem;}
+.coords span{color:#ff4444;}
+.status-badge{position:absolute;top:.5rem;right:.5rem;background:#0a0a1f;border:1px solid #ff3333;padding:.15rem .4rem;font-size:.5rem;color:#ff3333;letter-spacing:.1em;}
+
+/* Right panel */
+.right{background:#070712;border-left:1px solid #1c1c3a;display:flex;flex-direction:column;}
+.panel{padding:.6rem .8rem;border-bottom:1px solid #111;font-size:.6rem;}
+.panel-title{color:#4444aa;letter-spacing:.15em;font-size:.5rem;margin-bottom:.3rem;}
+.info-row{display:flex;justify-content:space-between;padding:.1rem 0;}
+.info-label{color:#333;}
+.info-val{color:#7777cc;}
+.info-val.hot{color:#ff4444;}
+.info-val.ok{color:#44ff88;}
+.shell{flex:1;padding:.6rem;font-size:.55rem;overflow-y:auto;background:#050510;}
+.shell-line{padding:.06rem 0;line-height:1.5;}
+.sh-ps{color:#4444aa;}
+.sh-cmd{color:#aaaaff;}
+.sh-out{color:#888;}
+.sh-ok{color:#44ff88;}
+.sh-err{color:#ff4444;}
+.sh-target{color:#ff8844;}
+.cursor-blink{display:inline-block;width:5px;height:10px;background:#5555cc;animation:blink .8s step-end infinite;vertical-align:middle;}
+@keyframes blink{50%{opacity:0;}}
+.status-row{background:#050510;border-top:1px solid #1c1c3a;padding:.25rem .8rem;display:flex;gap:1.2rem;font-size:.5rem;color:#222;}
+.status-row span{color:#5555aa;}
+.status-row .hot{color:#ff4444;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="bar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <span class="bar-title">ECLIPSE C2 — GPS TRACKER + REVERSE SHELL — MODULE 16</span>
+  </div>
+  <div class="grid">
+    <div class="map" id="map">
+      <div class="map-grid"></div>
+      <canvas id="trail"></canvas>
+      <div class="map-label">// ECLIPSE — GEOGRAPHIC TARGETING</div>
+      <div class="target-ring" id="ring" style="left:50%;top:50%;"></div>
+      <div class="target-pin" id="pin" style="left:calc(50% - 4px);top:calc(50% - 4px);"></div>
+      <div class="coords">
+        LAT: <span id="lat">-33.8688</span> &nbsp;&nbsp;
+        LONG: <span id="long">151.2093</span> &nbsp;&nbsp;
+        ALT: <span id="alt">42m</span>
+      </div>
+      <div class="status-badge" id="badge">ACQUIRING</div>
+    </div>
+    <div class="right">
+      <div class="panel">
+        <div class="panel-title">// AGENT STATUS</div>
+        <div class="info-row"><span class="info-label">HOST:</span><span class="info-val" id="host">DESKTOP-K7R2P1</span></div>
+        <div class="info-row"><span class="info-label">USER:</span><span class="info-val hot" id="user">george (SYSTEM)</span></div>
+        <div class="info-row"><span class="info-label">PID:</span><span class="info-val">4882</span></div>
+        <div class="info-row"><span class="info-label">PROCESS:</span><span class="info-val">svchost.exe</span></div>
+        <div class="info-row"><span class="info-label">BEACON:</span><span class="info-val ok" id="beacon">LIVE — 5s</span></div>
+        <div class="info-row"><span class="info-label">PERSIST:</span><span class="info-val ok">SERVICE — AUTO</span></div>
+        <div class="info-row"><span class="info-label">GPS:</span><span class="info-val hot" id="gpsstatus">TRACKING</span></div>
+        <div class="info-row"><span class="info-label">ENCRYPT:</span><span class="info-val">AES-256-CBC</span></div>
+      </div>
+      <div class="panel" style="border-bottom:none;font-size:.5rem;">
+        <div class="panel-title">// SHELL</div>
+      </div>
+      <div class="shell" id="shell"></div>
+    </div>
+  </div>
+  <div class="status-row">
+    SESSIONS: <span>1</span> &nbsp;|&nbsp;
+    GPS: <span class="hot">ACTIVE</span> &nbsp;|&nbsp;
+    LISTEN: <span>0.0.0.0:4444</span> &nbsp;|&nbsp;
+    ENCRYPT: <span>ON</span> &nbsp;|&nbsp;
+    PERSISTENCE: <span class="hot">SERVICE INSTALLED</span>
+  </div>
+</div>
+
+<script>
+// Map animation
+var mapEl = document.getElementById('map');
+var pinEl = document.getElementById('pin');
+var ringEl = document.getElementById('ring');
+var canvas = document.getElementById('trail');
+var ctx = canvas.getContext('2d');
+var lat = -33.8688, lon = 151.2093;
+var points = [];
+var W, H;
+
+function resize() {
+  W = canvas.width = mapEl.clientWidth;
+  H = canvas.height = mapEl.clientHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+function latLonToXY(la, lo) {
+  var cx = W/2 + (lo - lon)*W*18;
+  var cy = H/2 - (la - lat)*H*20;
+  return {x:cx, y:cy};
+}
+
+var curLat = lat, curLon = lon;
+var targetLat = lat, targetLon = lon;
+
+function moveTarget() {
+  targetLat = lat + (Math.random()-0.5)*0.008;
+  targetLon = lon + (Math.random()-0.5)*0.012;
+  setTimeout(moveTarget, 3000 + Math.random()*4000);
+}
+setTimeout(moveTarget, 2000);
+
+function animatePin() {
+  curLat += (targetLat - curLat) * 0.02;
+  curLon += (targetLon - curLon) * 0.02;
+  var p = latLonToXY(curLat, curLon);
+  pinEl.style.left = (p.x - 4) + 'px';
+  pinEl.style.top = (p.y - 4) + 'px';
+  ringEl.style.left = p.x + 'px';
+  ringEl.style.top = p.y + 'px';
+  document.getElementById('lat').textContent = curLat.toFixed(6);
+  document.getElementById('long').textContent = curLon.toFixed(6);
+  document.getElementById('alt').textContent = (42 + Math.round(Math.sin(Date.now()/8000)*5)) + 'm';
+
+  points.push({x:p.x, y:p.y});
+  if (points.length > 200) points.shift();
+
+  ctx.clearRect(0,0,W,H);
+  if (points.length > 1) {
+    for (var i=1;i<points.length;i++) {
+      var alpha = i/points.length * 0.6;
+      ctx.beginPath();
+      ctx.moveTo(points[i-1].x, points[i-1].y);
+      ctx.lineTo(points[i].x, points[i].y);
+      ctx.strokeStyle = 'rgba(255,50,50,'+alpha+')';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+    // Draw dot at each historical point
+    for (var j=0;j<points.length;j+=8) {
+      var a2 = j/points.length * 0.5;
+      ctx.beginPath();
+      ctx.arc(points[j].x, points[j].y, 1.5, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(255,80,80,'+a2+')';
+      ctx.fill();
+    }
+  }
+  requestAnimationFrame(animatePin);
+}
+animatePin();
+
+// After delay, show LOCKED
+setTimeout(function() {
+  document.getElementById('badge').textContent = 'TARGET LOCKED';
+  document.getElementById('badge').style.borderColor = '#00ff44';
+  document.getElementById('badge').style.color = '#00ff44';
+  document.getElementById('gpsstatus').textContent = 'LOCKED';
+  document.getElementById('gpsstatus').style.color = '#00ff44';
+}, 5000);
+
+// Shell log
+var SHELL = [
+  {t:'ps', c:'whoami'},
+  {t:'out', c:'desktop-k7r2p1\\\\george'},
+  {t:'ps', c:'whoami /priv | findstr "Enabled"'},
+  {t:'ok', c:'SeDebugPrivilege                  Enabled'},
+  {t:'ok', c:'SeTcbPrivilege                    Enabled'},
+  {t:'target', c:'[+] SeDebugPrivilege — process injection ready'},
+  {t:'ps', c:'sc qc svchost_update'},
+  {t:'ok', c:'SERVICE_NAME: svchost_update  START_TYPE: AUTO_START'},
+  {t:'target', c:'[+] persistence confirmed — survives reboot'},
+  {t:'ps', c:'python gps_exfil.py --target self --interval 5'},
+  {t:'ok', c:'[*] GPS polling via Windows Location API'},
+  {t:'ok', c:'[+] -33.868812, 151.209314 — Sydney NSW'},
+  {t:'ok', c:'[+] -33.870041, 151.208891 — movement detected'},
+  {t:'ps', c:'net localgroup administrators'},
+  {t:'out', c:'Members: George, Administrator'},
+  {t:'target', c:'[+] local admin — UAC bypass available'},
+  {t:'ps', c:'reg query HKLM\\\\SYSTEM\\\\CurrentControlSet\\\\Services\\\\WinDefend'},
+  {t:'out', c:'Start    REG_DWORD    0x4 (DISABLED)'},
+  {t:'target', c:'[+] Defender disabled — IRON-DOME running'},
+  {t:'ps', c:'ipconfig | findstr IPv4'},
+  {t:'out', c:'IPv4 Address. . . : 192.168.1.88'},
+  {t:'target', c:'[+] C2 beacon active — 5s interval — AES-256-CBC'},
+];
+var shellEl = document.getElementById('shell');
+var si = 0;
+function shellTick() {
+  if (si >= SHELL.length) { si = 10; }
+  var l = SHELL[si];
+  var div = document.createElement('div');
+  div.className = 'shell-line';
+  if (l.t==='ps') div.innerHTML = '<span class="sh-ps">PS &gt; </span><span class="sh-cmd">'+l.c+'</span>';
+  else if (l.t==='out') div.innerHTML = '<span class="sh-out">'+l.c+'</span>';
+  else if (l.t==='ok') div.innerHTML = '<span class="sh-ok">'+l.c+'</span>';
+  else if (l.t==='err') div.innerHTML = '<span class="sh-err">'+l.c+'</span>';
+  else if (l.t==='target') div.innerHTML = '<span class="sh-target">'+l.c+'</span>';
+  shellEl.appendChild(div);
+  shellEl.scrollTop = shellEl.scrollHeight;
+  si++;
+  setTimeout(shellTick, 500 + Math.random()*800);
+}
+setTimeout(shellTick, 1000);
+
+// Beacon pulse
+var bc = document.getElementById('beacon');
+setInterval(function() {
+  bc.textContent = 'LIVE — ' + Math.round(Date.now()/1000 % 5 + 1) + 's';
+}, 1000);
+</script>
+</body>
+</html>

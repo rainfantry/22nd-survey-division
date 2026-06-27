@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IRON-DOME v4.0.0 — AV Evasion Suite</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;color:#00ff41;font-family:'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.term{width:720px;border:1px solid #006820;padding:0;}
+.titlebar{background:#111;padding:.4rem 1rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid #006820;}
+.dot{width:12px;height:12px;border-radius:50%;}
+.dot.r{background:#ff5f56;}
+.dot.y{background:#ffbd2e;}
+.dot.g{background:#27c93f;}
+.title{color:#666;font-size:.75rem;margin-left:auto;margin-right:auto;}
+.body{padding:1.2rem;font-size:.75rem;line-height:1.7;}
+.banner{color:#00ff41;white-space:pre;font-size:.6rem;line-height:1.2;margin-bottom:1rem;}
+.cyan{color:#00ffff;}
+.amber{color:#ffb000;}
+.red{color:#ff3333;}
+.dim{color:#444;}
+.green{color:#00ff41;}
+.white{color:#fff;}
+.line{border:none;border-top:1px solid #111;margin:.6rem 0;}
+.cursor{display:inline-block;width:8px;height:14px;background:#00ff41;animation:blink .8s step-end infinite;vertical-align:middle;}
+@keyframes blink{50%{opacity:0;}}
+.layer{display:flex;align-items:center;gap:.8rem;padding:.15rem 0;}
+.layer-num{color:#006820;width:1.5rem;flex-shrink:0;}
+.layer-name{color:#fff;width:12rem;flex-shrink:0;}
+.layer-status{color:#00ff41;}
+.progress{display:flex;gap:.1rem;margin:.6rem 0;}
+.bar{height:4px;flex:1;background:#006820;transition:background .3s;}
+.bar.done{background:#00ff41;}
+.stat-row{display:flex;justify-content:space-between;padding:.1rem 0;}
+.stat-label{color:#666;}
+.stat-val{color:#00ff41;}
+.verdict{text-align:center;padding:.8rem;border:1px solid #00ff41;margin-top:1rem;background:#001a00;}
+.verdict-big{font-size:1.4rem;font-weight:700;letter-spacing:.3em;color:#00ff41;}
+.verdict-sub{font-size:.6rem;color:#666;margin-top:.2rem;letter-spacing:.15em;}
+</style>
+</head>
+<body>
+<div class="term">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <span class="title">IRON-DOME v4.0.0 — FULL PLATFORM</span>
+  </div>
+  <div class="body">
+<pre class="banner" id="banner"></pre>
+<div class="dim">// AV EVASION SUITE — 8-LAYER STACK — MODULE 12</div>
+<hr class="line">
+
+<div id="layers"></div>
+
+<hr class="line">
+<div class="progress" id="progress"></div>
+
+<div class="stat-row"><span class="stat-label">TARGET:</span><span class="stat-val" id="target">initialising...</span></div>
+<div class="stat-row"><span class="stat-label">AV ACTIVE:</span><span class="stat-val amber">Kaspersky Premium + Windows Defender</span></div>
+<div class="stat-row"><span class="stat-label">DETECTIONS:</span><span class="stat-val" id="detections">scanning...</span></div>
+<div class="stat-row"><span class="stat-label">AMSI STATUS:</span><span class="stat-val" id="amsi">armed</span></div>
+<div class="stat-row"><span class="stat-label">BUILD:</span><span class="stat-val">MinGW-w64 cross-compile — no MSVC signature</span></div>
+
+<div class="verdict" id="verdict" style="display:none">
+  <div class="verdict-big">0 / 1 DETECTIONS</div>
+  <div class="verdict-sub">KASPERSKY PREMIUM ACTIVE — IRON-DOME RUNNING — ALL LAYERS PASSED</div>
+</div>
+
+<div style="margin-top:.8rem;font-size:.65rem;color:#333;">
+  22ND SURVEY DIVISION — MODULE 12 — rainfantry.github.io/22nd-survey-division
+</div>
+  </div>
+</div>
+
+<script>
+var BANNER = `
+██╗██████╗  ██████╗ ███╗   ██╗      ██████╗  ██████╗ ███╗   ███╗███████╗
+██║██╔══██╗██╔═══██╗████╗  ██║      ██╔══██╗██╔═══██╗████╗ ████║██╔════╝
+██║██████╔╝██║   ██║██╔██╗ ██║█████╗██║  ██║██║   ██║██╔████╔██║█████╗
+██║██╔══██╗██║   ██║██║╚██╗██║╚════╝██║  ██║██║   ██║██║╚██╔╝██║██╔══╝
+██║██║  ██║╚██████╔╝██║ ╚████║      ██████╔╝╚██████╔╝██║ ╚═╝ ██║███████╗
+╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝      ╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝`.trim();
+
+var LAYERS = [
+  ['01', 'XOR ENCODING', 'per-binary key — payload unrecognisable at rest'],
+  ['02', 'DYNAMIC API RESOLVE', 'no import table — GetProcAddress at runtime'],
+  ['03', 'ANTI-SANDBOX', 'timing + CPU count + GPU presence check'],
+  ['04', 'PE HEADER STOMP', 'MZ/PE magic bytes zeroed after load'],
+  ['05', 'ISUN GATE', 'invalid instruction trap — terminates in sandbox'],
+  ['06', 'EXECUTION JITTER', 'randomised sleep — breaks timing heuristics'],
+  ['07', 'MINGW CROSS-COMPILE', 'removes MSVC compiler signature patterns'],
+  ['08', 'AMSI/ETW BYPASS', 'vader-rootkit HWBP — scanner sees clean'],
+];
+
+document.getElementById('banner').textContent = BANNER;
+
+var layerEl = document.getElementById('layers');
+var progressEl = document.getElementById('progress');
+var bars = [];
+
+LAYERS.forEach(function(l, i) {
+  var row = document.createElement('div');
+  row.className = 'layer';
+  row.style.opacity = '0.2';
+  row.innerHTML = '<span class="layer-num">['+l[0]+']</span><span class="layer-name">'+l[1]+'</span><span class="layer-status dim" id="ls'+i+'">pending</span>';
+  layerEl.appendChild(row);
+  row._el = row;
+
+  var b = document.createElement('div');
+  b.className = 'bar';
+  progressEl.appendChild(b);
+  bars.push({row:row, bar:b, status:document.getElementById('ls'+i)});
+});
+
+var i = 0;
+function runLayer() {
+  if (i >= bars.length) {
+    document.getElementById('detections').textContent = '0 / 1';
+    document.getElementById('detections').style.color = '#00ff41';
+    document.getElementById('amsi').textContent = 'BYPASSED — vader-rootkit HWBP active';
+    document.getElementById('amsi').style.color = '#00ff41';
+    document.getElementById('target').textContent = 'RoguePlanet.exe — CLEAN — Kaspersky did not flag';
+    document.getElementById('verdict').style.display = 'block';
+    return;
+  }
+  var cur = bars[i];
+  cur.row.style.opacity = '1';
+  cur.status.textContent = 'loading...';
+  cur.status.style.color = '#ffb000';
+  setTimeout(function() {
+    cur.status.textContent = '✓ PASS';
+    cur.status.style.color = '#00ff41';
+    cur.bar.classList.add('done');
+    i++;
+    setTimeout(runLayer, 220 + Math.random()*180);
+  }, 280 + Math.random()*220);
+}
+
+document.getElementById('target').textContent = 'RoguePlanet.exe — building...';
+setTimeout(runLayer, 800);
+</script>
+</body>
+</html>

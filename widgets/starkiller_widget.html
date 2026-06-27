@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StarKiller C2 — Android RAT — Module 21</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;font-family:'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.term{width:760px;border:1px solid #1a1a2e;}
+.titlebar{background:#0d0d1a;padding:.4rem 1rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid #1a1a2e;}
+.dot{width:12px;height:12px;border-radius:50%;}
+.dot.r{background:#ff5f56;}.dot.y{background:#ffbd2e;}.dot.g{background:#27c93f;}
+.title{color:#444;font-size:.75rem;margin:0 auto;}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:400px;}
+.sidebar{background:#050510;border-right:1px solid #1a1a2e;padding:.8rem;}
+.main{background:#000;padding:.8rem;font-size:.65rem;line-height:1.6;}
+.sk-logo{color:#7b2fff;font-size:.8rem;font-weight:700;letter-spacing:.2em;margin-bottom:.6rem;}
+.agent-count{color:#00ff41;font-size:.65rem;margin-bottom:.8rem;}
+.agent-card{background:#0a0a1a;border:1px solid #1a1a2e;padding:.5rem .7rem;margin-bottom:.4rem;border-radius:2px;}
+.agent-card.active{border-color:#7b2fff;}
+.agent-name{color:#fff;font-size:.6rem;font-weight:700;}
+.agent-os{color:#666;font-size:.55rem;}
+.agent-ip{color:#7b2fff;font-size:.55rem;}
+.agent-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#00ff41;margin-right:.3rem;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.ops{margin-top:.6rem;}
+.op-label{color:#333;font-size:.55rem;letter-spacing:.15em;margin-bottom:.3rem;}
+.op-btn{display:block;color:#666;font-size:.55rem;padding:.2rem 0;cursor:pointer;}
+.op-btn:hover,.op-btn.active{color:#7b2fff;}
+.log-header{color:#666;font-size:.6rem;letter-spacing:.15em;border-bottom:1px solid #1a1a2e;padding-bottom:.3rem;margin-bottom:.4rem;}
+.log-line{font-size:.6rem;padding:.05rem 0;}
+.log-line .ts{color:#333;}
+.log-line .dev{color:#7b2fff;}
+.log-line .msg{color:#888;}
+.log-line .ok{color:#00ff41;}
+.log-line .err{color:#ff3333;}
+.log-line .data{color:#ffb000;}
+.cursor{display:inline-block;width:6px;height:11px;background:#7b2fff;animation:blink .8s step-end infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{50%{opacity:0;}}
+.status-bar{background:#050510;border-top:1px solid #1a1a2e;padding:.3rem .8rem;display:flex;gap:1.5rem;font-size:.55rem;color:#333;}
+.status-bar span{color:#7b2fff;}
+</style>
+</head>
+<body>
+<div class="term">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <span class="title">STARKILLER C2 — CONTROLLER — MODULE 21</span>
+  </div>
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sk-logo">★ STARKILLER</div>
+      <div class="agent-count" id="agt-count">AGENTS: <span id="agt-num">0</span> / ONLINE</div>
+
+      <div id="agent-list"></div>
+
+      <div class="ops">
+        <div class="op-label">// OPERATIONS</div>
+        <div class="op-btn" id="op-gps">GPS LOCATION</div>
+        <div class="op-btn" id="op-sms">SMS INTERCEPT</div>
+        <div class="op-btn" id="op-cam">CAMERA ACCESS</div>
+        <div class="op-btn" id="op-files">FILE SYSTEM</div>
+        <div class="op-btn" id="op-contacts">CONTACTS</div>
+        <div class="op-btn" id="op-shell">REVERSE SHELL</div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="log-header">// ADB LOGCAT — LIVE DEVICE COMMS</div>
+      <div id="log"></div>
+      <div class="cursor"></div>
+    </div>
+  </div>
+  <div class="status-bar">
+    AGENTS: <span id="sb-agents">0</span> &nbsp;|&nbsp;
+    PLAY PROTECT: <span style="color:#ff3333">BYPASSED</span> &nbsp;|&nbsp;
+    DEVICE: <span id="sb-device">waiting...</span> &nbsp;|&nbsp;
+    STATUS: <span id="sb-status">CONNECTING</span>
+  </div>
+</div>
+
+<script>
+var AGENTS = [
+  {name:'Samsung GT-S8780', os:'Android 13', ip:'192.168.1.78', id:'agt_001'},
+  {name:'Samsung SM-G973U', os:'Android 12', ip:'10.0.1.44', id:'agt_002'},
+];
+
+var LOG_LINES = [
+  ['I','ActivityManager','Start proc com.android.settings for activity'],
+  ['W','STARKILLER','[*] beacon registered — agt_001 — 192.168.1.78'],
+  ['I','GPS_PROVIDER','location: -33.8688, 151.2093 (Sydney NSW)'],
+  ['W','STARKILLER','[+] GPS exfil — LAT -33.8688 LONG 151.2093'],
+  ['I','SMS_MANAGER','reading thread 0xA4 — 12 messages'],
+  ['W','STARKILLER','[+] SMS dump complete — 12 messages exfiltrated'],
+  ['I','CameraManager','openCamera: 0 (rear) granted'],
+  ['W','STARKILLER','[+] camera frame captured — 3.2MB'],
+  ['E','PackageInstaller','Verification failed: INSTALL_FAILED_VERIFICATION_FAILURE'],
+  ['W','STARKILLER','[!] Play Protect triggered — bypassing via sideload gate'],
+  ['I','ActivityManager','Killing app com.google.android.gms — Play Protect'],
+  ['W','STARKILLER','[+] Play Protect process killed — reinstating persistence'],
+  ['W','STARKILLER','[*] beacon registered — agt_002 — 10.0.1.44'],
+  ['I','GPS_PROVIDER','location: -33.8651, 151.1991 (Strathfield NSW)'],
+  ['W','STARKILLER','[+] GPS exfil — agt_002 — LAT -33.8651 LONG 151.1991'],
+  ['I','ContentResolver','query: content://sms/inbox — 47 rows'],
+  ['W','STARKILLER','[+] SMS intercept active — 47 messages staged'],
+  ['I','CONTACTS','read_contacts permission granted — 312 entries'],
+  ['W','STARKILLER','[+] contacts dump — 312 entries exfiltrated'],
+  ['I','SensorManager','TYPE_ACCELEROMETER registered'],
+  ['W','STARKILLER','[+] agt_001 shell — $ id'],
+  ['I','shell','uid=2000(shell) gid=2000(shell) groups=2000(shell)'],
+  ['W','STARKILLER','[+] both agents ACTIVE — PERSISTENT'],
+];
+
+var agentListEl = document.getElementById('agent-list');
+var logEl = document.getElementById('log');
+var lineIdx = 0;
+var agentsShown = 0;
+
+function ts() {
+  var d = new Date();
+  return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2)+'.'+('00'+d.getMilliseconds()).slice(-3);
+}
+
+function addAgent(a) {
+  var card = document.createElement('div');
+  card.className = 'agent-card active';
+  card.innerHTML = '<div class="agent-name"><span class="agent-dot"></span>'+a.name+'</div><div class="agent-os">'+a.os+'</div><div class="agent-ip">'+a.ip+' | '+a.id+'</div>';
+  agentListEl.appendChild(card);
+  agentsShown++;
+  document.getElementById('agt-num').textContent = agentsShown;
+  document.getElementById('sb-agents').textContent = agentsShown;
+  document.getElementById('sb-device').textContent = a.name;
+  document.getElementById('sb-status').textContent = 'ACTIVE';
+}
+
+function addLog(tag, src, msg) {
+  var line = document.createElement('div');
+  line.className = 'log-line';
+  var col = tag==='W' ? 'ok' : tag==='E' ? 'err' : 'msg';
+  if (msg.includes('[+]')||msg.includes('[*]')) col='ok';
+  if (msg.includes('[!]')) col='data';
+  line.innerHTML = '<span class="ts">['+ts()+']</span> <span class="'+col+'">'+tag+'/'+src+'</span>: <span class="'+col+'">'+msg+'</span>';
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+function tick() {
+  if (lineIdx >= LOG_LINES.length) { lineIdx = 8; }
+  var l = LOG_LINES[lineIdx];
+  if (lineIdx === 1) addAgent(AGENTS[0]);
+  if (lineIdx === 12) addAgent(AGENTS[1]);
+  addLog(l[0], l[1], l[2]);
+  lineIdx++;
+  setTimeout(tick, 400 + Math.random()*600);
+}
+
+// op button flash
+var ops = ['op-gps','op-sms','op-cam','op-files','op-contacts','op-shell'];
+setInterval(function() {
+  var prev = document.querySelector('.op-btn.active');
+  if (prev) prev.classList.remove('active');
+  document.getElementById(ops[Math.floor(Math.random()*ops.length)]).classList.add('active');
+}, 2800);
+
+setTimeout(tick, 600);
+</script>
+</body>
+</html>

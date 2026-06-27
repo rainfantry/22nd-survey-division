@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>22DIV Kill Chain — Full Spectrum Ops</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;font-family:'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.container{width:780px;}
+.header{text-align:center;margin-bottom:1rem;}
+.h-title{color:#fff;font-size:.9rem;font-weight:700;letter-spacing:.3em;}
+.h-sub{color:#444;font-size:.55rem;letter-spacing:.2em;margin-top:.2rem;}
+.chain{display:flex;flex-direction:column;gap:.25rem;}
+.phase{display:grid;grid-template-columns:120px 1fr;gap:.5rem;align-items:stretch;}
+.phase-label{background:#050505;border:1px solid #111;padding:.4rem .6rem;display:flex;flex-direction:column;justify-content:center;}
+.phase-num{font-size:.5rem;color:#333;letter-spacing:.1em;}
+.phase-name{font-size:.65rem;font-weight:700;margin-top:.1rem;}
+.phase-body{background:#050505;border:1px solid #111;padding:.5rem .7rem;display:grid;grid-template-columns:1fr auto;gap:.5rem;align-items:center;}
+.tools{font-size:.55rem;line-height:1.8;color:#666;}
+.tools span{color:#888;}
+.status-col{text-align:right;}
+.phase-status{font-size:.55rem;letter-spacing:.05em;padding:.15rem .4rem;border:1px solid;display:inline-block;}
+.phase-status.complete{border-color:#00ff41;color:#00ff41;background:#001a00;}
+.phase-status.active{border-color:#ffb000;color:#ffb000;background:#1a0e00;animation:pulse-amber 1.5s ease-in-out infinite;}
+.phase-status.pending{border-color:#222;color:#333;}
+@keyframes pulse-amber{50%{opacity:.5;}}
+.connector{height:.5rem;display:flex;align-items:center;padding-left:59px;}
+.connector-line{width:2px;height:100%;background:#111;margin:0 auto;}
+.connector-inner{width:1px;background:#333;height:100%;}
+.score-bar{margin-top:.8rem;background:#050505;border:1px solid #111;padding:.6rem 1rem;display:flex;align-items:center;gap:1rem;}
+.score-label{color:#444;font-size:.55rem;width:80px;flex-shrink:0;}
+.bar-outer{flex:1;background:#0a0a0a;height:6px;border-radius:0;}
+.bar-inner{height:6px;background:#00ff41;width:0%;transition:width 2s ease;border-radius:0;}
+.score-val{color:#00ff41;font-size:.7rem;font-weight:700;width:40px;text-align:right;flex-shrink:0;}
+.bottom{margin-top:.8rem;display:flex;justify-content:space-between;align-items:center;font-size:.5rem;color:#222;}
+.bottom span{color:#444;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="h-title">22ND SURVEY DIVISION — FULL KILL CHAIN</div>
+    <div class="h-sub">MITRE ATT&CK ALIGNED — 22 MODULES — BUILT FROM SCRATCH — NOT BORROWED</div>
+  </div>
+
+  <div class="chain" id="chain"></div>
+
+  <div class="score-bar">
+    <span class="score-label">KILL CHAIN</span>
+    <div class="bar-outer"><div class="bar-inner" id="scorebar"></div></div>
+    <span class="score-val" id="scoreval">0%</span>
+  </div>
+  <div class="score-bar" style="margin-top:.25rem;">
+    <span class="score-label">AV EVASION</span>
+    <div class="bar-outer"><div class="bar-inner" id="avbar" style="width:0%;background:#00ff41;"></div></div>
+    <span class="score-val" id="avval">0%</span>
+  </div>
+  <div class="score-bar" style="margin-top:.25rem;">
+    <span class="score-label">DETECTIONS</span>
+    <div class="bar-outer"><div class="bar-inner" id="detbar" style="width:0%;background:#ff3333;"></div></div>
+    <span class="score-val" id="detval" style="color:#00ff41;">0 / 3</span>
+  </div>
+
+  <div class="bottom">
+    <span>OCCUPATION FORCE CALLSIGN GSW PTY. LTD. — ABN 50 692 429 397</span>
+    <span>rainfantry.github.io/22nd-survey-division</span>
+  </div>
+</div>
+
+<script>
+var PHASES = [
+  {
+    num:'01', name:'RECONNAISSANCE', color:'#5577ff',
+    tools:'winrecon.py — WMI query + CWE scanner + AD enumeration',
+    result:'DESKTOP-K7R2P1 | george (Admin) | Defender disabled',
+    status:'complete'
+  },
+  {
+    num:'02', name:'WEAPONISATION', color:'#aa44ff',
+    tools:'ghost-encoder → ghost_dropper.c → XOR encoder → IRON-DOME build',
+    result:'RoguePlanet.exe — 8-layer stack — 0/72 VT detections',
+    status:'complete'
+  },
+  {
+    num:'03', name:'DELIVERY', color:'#ff44aa',
+    tools:'LNK spoof + email pretext + sideload APK (StarKiller)',
+    result:'Payload executed — svchost_update.exe running as SYSTEM',
+    status:'complete'
+  },
+  {
+    num:'04', name:'EXPLOITATION', color:'#ff6644',
+    tools:'vader-rootkit HWBP → AMSI bypass → ETW silenced',
+    result:'VULN-195458 — AmsiScanBuffer redirected — scanner blind',
+    status:'complete'
+  },
+  {
+    num:'05', name:'INSTALLATION', color:'#ff8844',
+    tools:'SCM service install → HKLM autorun → reflective DLL inject',
+    result:'svchost_update SERVICE — START_TYPE: AUTO_START — survives reboot',
+    status:'complete'
+  },
+  {
+    num:'06', name:'C2', color:'#ffbb44',
+    tools:'CHEYANNE C2 + ECLIPSE GPS + Discord bridge + VNC callback',
+    result:'ECLIPSE beacon live | GPS -33.8688, 151.2093 | VNC stream up',
+    status:'active'
+  },
+  {
+    num:'07', name:'EXFILTRATION', color:'#44ff88',
+    tools:'ghost-encoder steg + AES-256 + covert DNS + CDN tunnel',
+    result:'12.4 MB staged → ghost-encoded → zero-width Unicode stream',
+    status:'pending'
+  },
+];
+
+var chainEl = document.getElementById('chain');
+
+PHASES.forEach(function(p, i) {
+  if (i > 0) {
+    var conn = document.createElement('div');
+    conn.className = 'connector';
+    conn.innerHTML = '<div class="connector-line"><div class="connector-inner"></div></div>';
+    chainEl.appendChild(conn);
+  }
+  var div = document.createElement('div');
+  div.className = 'phase';
+  div.id = 'phase-'+i;
+  div.style.opacity = '0.3';
+  div.innerHTML =
+    '<div class="phase-label" style="border-left:3px solid '+p.color+'40;">'+
+      '<div class="phase-num">PHASE '+p.num+'</div>'+
+      '<div class="phase-name" style="color:'+p.color+'">'+p.name+'</div>'+
+    '</div>'+
+    '<div class="phase-body">'+
+      '<div class="tools">'+
+        '<span style="color:'+p.color+60+'">TOOLS: </span>'+p.tools+'<br>'+
+        '<span style="color:#444">RESULT: </span><span style="color:#888">'+p.result+'</span>'+
+      '</div>'+
+      '<div class="status-col">'+
+        '<div class="phase-status '+p.status+'" id="ps-'+i+'">'+
+          (p.status==='complete'?'✓ COMPLETE':p.status==='active'?'▶ ACTIVE':'○ PENDING')+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  chainEl.appendChild(div);
+});
+
+// Animate phases in sequence
+var pi = 0;
+function showPhase() {
+  if (pi >= PHASES.length) {
+    // animate score bars
+    setTimeout(function() {
+      document.getElementById('scorebar').style.width = '100%';
+      document.getElementById('scoreval').textContent = '10/10';
+      document.getElementById('avbar').style.width = '100%';
+      document.getElementById('avval').textContent = '100%';
+    }, 400);
+    return;
+  }
+  document.getElementById('phase-'+pi).style.opacity = '1';
+  document.getElementById('phase-'+pi).style.transition = 'opacity .4s';
+  pi++;
+  setTimeout(showPhase, 350);
+}
+setTimeout(showPhase, 400);
+</script>
+</body>
+</html>

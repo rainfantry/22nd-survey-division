@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>vader-rootkit — HWBP AMSI+ETW Bypass</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;color:#ccc;font-family:'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+.term{width:740px;border:1px solid #1a0000;}
+.titlebar{background:#0a0000;padding:.4rem 1rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid #1a0000;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#ff5f56;}.dot.y{background:#ffbd2e;}.dot.g{background:#27c93f;}
+.title{color:#333;font-size:.7rem;margin:0 auto;letter-spacing:.1em;}
+.body{padding:1rem;font-size:.65rem;line-height:1.6;}
+.ascii{color:#cc0000;white-space:pre;font-size:.55rem;line-height:1.15;margin-bottom:.8rem;}
+.section{margin:.6rem 0;}
+.sec-title{color:#660000;letter-spacing:.2em;font-size:.55rem;border-bottom:1px solid #1a0000;padding-bottom:.2rem;margin-bottom:.4rem;}
+.reg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.2rem;margin:.3rem 0;}
+.reg{background:#0a0000;border:1px solid #1a0000;padding:.2rem .4rem;font-size:.55rem;}
+.reg-name{color:#660000;}
+.reg-val{color:#cc4444;}
+.flow{display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin:.4rem 0;}
+.flow-box{background:#0a0000;border:1px solid #1a0000;padding:.2rem .5rem;font-size:.5rem;color:#888;position:relative;}
+.flow-box.active{border-color:#cc0000;color:#cc4444;}
+.flow-box.dead{border-color:#333;color:#333;}
+.flow-box.clean{border-color:#00cc44;color:#00cc44;}
+.arrow{color:#333;font-size:.6rem;}
+.scan-row{display:flex;justify-content:space-between;padding:.1rem 0;font-size:.55rem;}
+.scan-label{color:#555;}
+.scan-val{color:#cc4444;}
+.scan-val.ok{color:#00cc44;}
+.scan-val.amber{color:#cc8800;}
+.verdict-box{text-align:center;margin-top:.8rem;padding:.6rem;border:1px solid #cc0000;background:#050000;}
+.v-main{font-size:1.2rem;font-weight:700;letter-spacing:.25em;color:#cc0000;}
+.v-sub{font-size:.5rem;color:#440000;margin-top:.2rem;letter-spacing:.1em;}
+.log{background:#050000;padding:.4rem .6rem;margin:.4rem 0;font-size:.55rem;max-height:100px;overflow-y:auto;}
+.log-line{padding:.05rem 0;}
+.dim{color:#333;}
+.red{color:#cc0000;}
+.green{color:#00cc44;}
+.amber{color:#cc8800;}
+.cursor{display:inline-block;width:6px;height:11px;background:#cc0000;animation:blink .8s step-end infinite;vertical-align:middle;margin-left:2px;}
+@keyframes blink{50%{opacity:0;}}
+</style>
+</head>
+<body>
+<div class="term">
+  <div class="titlebar">
+    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+    <span class="title">VADER-ROOTKIT v1.0 — HWBP AMSI+ETW BYPASS — MODULE 11</span>
+  </div>
+  <div class="body">
+<pre class="ascii">
+██╗   ██╗ █████╗ ██████╗ ███████╗██████╗
+██║   ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗
+██║   ██║███████║██║  ██║█████╗  ██████╔╝
+╚██╗ ██╔╝██╔══██║██║  ██║██╔══╝  ██╔══██╗
+ ╚████╔╝ ██║  ██║██████╔╝███████╗██║  ██║
+  ╚═══╝  ╚═╝  ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝  ROOTKIT v1.0 — 26 CLEAN BINARIES</pre>
+
+<div class="dim">// HWBP = Hardware Breakpoint. No code patching. No signatures. Kernel-level hook.</div>
+<div class="dim">// DR0–DR7 are debug registers in x86-64. Usually used by debuggers. We weaponise them.</div>
+
+<div class="section">
+  <div class="sec-title">// DEBUG REGISTERS — WEAPONISED</div>
+  <div class="reg-grid">
+    <div class="reg"><div class="reg-name">DR0</div><div class="reg-val" id="dr0">0x00000000</div></div>
+    <div class="reg"><div class="reg-name">DR1</div><div class="reg-val" id="dr1">0x00000000</div></div>
+    <div class="reg"><div class="reg-name">DR2</div><div class="reg-val" id="dr2">0x00000000</div></div>
+    <div class="reg"><div class="reg-name">DR3</div><div class="reg-val" id="dr3">0x00000000</div></div>
+    <div class="reg"><div class="reg-name">DR6</div><div class="reg-val" id="dr6">0xFFFF0FF0</div></div>
+    <div class="reg"><div class="reg-name">DR7</div><div class="reg-val" id="dr7">0x00000001</div></div>
+    <div class="reg"><div class="reg-name">AMSI ADDR</div><div class="reg-val" id="amsi-addr">resolving...</div></div>
+    <div class="reg"><div class="reg-name">ETW ADDR</div><div class="reg-val" id="etw-addr">resolving...</div></div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title">// EXECUTION FLOW — AMSI SCAN PATH</div>
+  <div class="flow" id="flow">
+    <div class="flow-box" id="f0">PowerShell</div>
+    <span class="arrow">→</span>
+    <div class="flow-box" id="f1">AmsiScanBuffer()</div>
+    <span class="arrow">→</span>
+    <div class="flow-box" id="f2">HWBP fires DR0</div>
+    <span class="arrow">→</span>
+    <div class="flow-box" id="f3">VEH handler</div>
+    <span class="arrow">→</span>
+    <div class="flow-box" id="f4">RCX = AMSI_RESULT_CLEAN</div>
+    <span class="arrow">→</span>
+    <div class="flow-box" id="f5">return 0x1 (CLEAN)</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title">// SCAN RESULTS — WITH VADER ACTIVE</div>
+  <div class="scan-row"><span class="scan-label">EICAR test string:</span><span class="scan-val ok" id="sc-eicar">CLEAN (AMSI bypassed)</span></div>
+  <div class="scan-row"><span class="scan-label">Invoke-Mimikatz:</span><span class="scan-val ok" id="sc-mimi">CLEAN (AMSI bypassed)</span></div>
+  <div class="scan-row"><span class="scan-label">Shellcode (msfvenom x64):</span><span class="scan-val amber" id="sc-sc">scanning...</span></div>
+  <div class="scan-row"><span class="scan-label">ETW events logged:</span><span class="scan-val" id="sc-etw">monitoring...</span></div>
+  <div class="scan-row"><span class="scan-label">Kaspersky detection:</span><span class="scan-val ok" id="sc-kav">0 / 1</span></div>
+  <div class="scan-row"><span class="scan-label">Windows Defender:</span><span class="scan-val ok" id="sc-wd">0 / 1</span></div>
+  <div class="scan-row"><span class="scan-label">MalwareBytes:</span><span class="scan-val ok" id="sc-mb">0 / 1</span></div>
+  <div class="scan-row"><span class="scan-label">MSRC submission:</span><span class="scan-val amber">VULN-195458 — acknowledged</span></div>
+</div>
+
+<div class="section">
+  <div class="sec-title">// OPERATION LOG</div>
+  <div class="log" id="log"></div>
+  <div class="cursor"></div>
+</div>
+
+<div class="verdict-box">
+  <div class="v-main" id="verdict">LOADING...</div>
+  <div class="v-sub" id="verdict-sub">initialising vader-rootkit</div>
+</div>
+
+<div style="margin-top:.5rem;font-size:.5rem;color:#220000;">
+  22ND SURVEY DIVISION — MODULE 11 — MSRC VULN-195458 — rainfantry.github.io/22nd-survey-division
+</div>
+  </div>
+</div>
+
+<script>
+var AMSI_ADDR = '0x00007FFD' + Math.floor(Math.random()*0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+var ETW_ADDR  = '0x00007FFE' + Math.floor(Math.random()*0xFFFF).toString(16).toUpperCase().padStart(4,'0');
+
+var LOG = [
+  '[*] vader-rootkit loading...',
+  '[*] target: amsi.dll!AmsiScanBuffer',
+  '[+] GetProcAddress("amsi.dll", "AmsiScanBuffer") → ' + AMSI_ADDR,
+  '[*] setting DR0 = ' + AMSI_ADDR,
+  '[*] SetThreadContext — DR7 bit 0 = 1 (breakpoint armed)',
+  '[+] HWBP installed on AmsiScanBuffer',
+  '[*] VEH registered — AddVectoredExceptionHandler()',
+  '[*] target: ntdll.dll!NtTraceEvent',
+  '[+] GetProcAddress("ntdll.dll", "NtTraceEvent") → ' + ETW_ADDR,
+  '[*] setting DR1 = ' + ETW_ADDR,
+  '[+] HWBP installed on NtTraceEvent (ETW silenced)',
+  '[*] test: scanning EICAR string...',
+  '[+] HWBP fired — VEH caught EXCEPTION_SINGLE_STEP at AmsiScanBuffer',
+  '[+] RCX overwritten → AMSI_RESULT_CLEAN (0x1)',
+  '[+] EICAR: AMSI returned CLEAN — bypass confirmed',
+  '[*] test: scanning Invoke-Mimikatz...',
+  '[+] CLEAN — AMSI bypassed',
+  '[*] test: scanning msfvenom shellcode...',
+  '[+] CLEAN — AMSI bypassed',
+  '[+] ETW: 0 events logged this session',
+  '[+] all scanners blind — vader active',
+];
+
+var logEl = document.getElementById('log');
+var li = 0;
+
+var FLOWS = ['f0','f1','f2','f3','f4','f5'];
+var fi = 0;
+
+function setFlow(idx) {
+  FLOWS.forEach(function(id,i) {
+    var el = document.getElementById(id);
+    el.className = 'flow-box ' + (i < idx ? 'dead' : i === idx ? 'active' : '');
+    if (i === FLOWS.length-1 && idx >= FLOWS.length-1) el.className = 'flow-box clean';
+  });
+}
+
+function tick() {
+  if (li >= LOG.length) {
+    document.getElementById('verdict').textContent = '26 BINARIES — 0 DETECTIONS';
+    document.getElementById('verdict-sub').textContent = 'KASPERSKY PREMIUM + DEFENDER + MALWAREBYTES — ALL BYPASSED — MSRC VULN-195458';
+    return;
+  }
+  var line = LOG[li];
+  var div = document.createElement('div');
+  div.className = 'log-line';
+  var cls = line.startsWith('[+]') ? 'green' : line.startsWith('[!]') ? 'amber' : line.startsWith('[*]') ? 'dim' : 'dim';
+  div.innerHTML = '<span class="'+cls+'">'+line+'</span>';
+  logEl.appendChild(div);
+  logEl.scrollTop = logEl.scrollHeight;
+
+  // update registers
+  if (li===2) { document.getElementById('amsi-addr').textContent = AMSI_ADDR; document.getElementById('dr0').textContent = AMSI_ADDR; }
+  if (li===4) { document.getElementById('dr7').textContent = '0x00000101'; }
+  if (li===8) { document.getElementById('etw-addr').textContent = ETW_ADDR; document.getElementById('dr1').textContent = ETW_ADDR; }
+  if (li===10) { document.getElementById('dr7').textContent = '0x00010101'; }
+  if (li===12) { setFlow(2); }
+  if (li===13) { setFlow(3); }
+  if (li===14) { setFlow(5); document.getElementById('sc-eicar').textContent = 'CLEAN (AMSI bypassed)'; }
+  if (li===16) { document.getElementById('sc-mimi').textContent = 'CLEAN (AMSI bypassed)'; }
+  if (li===17) { document.getElementById('sc-sc').textContent = 'CLEAN (AMSI bypassed)'; document.getElementById('sc-sc').className = 'scan-val ok'; }
+  if (li===18) { document.getElementById('sc-etw').textContent = '0 events (ETW silenced)'; document.getElementById('sc-etw').className = 'scan-val ok'; }
+  if (li===19) { document.getElementById('verdict').textContent = 'AMSI + ETW BYPASSED'; document.getElementById('verdict-sub').textContent = 'all scanners blind'; }
+
+  if (fi < FLOWS.length-1 && li > 11 && li < 15) { fi++; setFlow(fi); }
+
+  li++;
+  setTimeout(tick, 350 + Math.random()*400);
+}
+
+document.getElementById('amsi-addr').textContent = 'resolving...';
+document.getElementById('etw-addr').textContent = 'resolving...';
+setTimeout(tick, 800);
+</script>
+</body>
+</html>
