@@ -495,10 +495,22 @@ footer{
 }
 
 /* ── PIN GATE ── */
-#pin-gate{position:fixed;inset:0;background:rgba(8,8,8,.99);z-index:99999;display:none;align-items:center;justify-content:center;}
-#pin-box{border:1px solid #1a3a1a;padding:3rem 3.2rem;max-width:420px;width:92%;text-align:center;background:#070707;}
+/* ── PIN GATE — two-panel fullscreen ── */
+#pin-gate{position:fixed;inset:0;background:#050505;z-index:99999;display:none;flex-direction:row;}
+#pin-gate.show{display:flex;}
+
+/* LEFT — product showcase */
+#pin-showcase{flex:1;overflow-y:auto;padding:2.4rem 2rem;display:flex;flex-direction:column;gap:0;border-right:1px solid #0f2a0f;}
+.psc-header{font-size:.5rem;letter-spacing:.3em;color:var(--green);margin-bottom:1.4rem;padding-bottom:.6rem;border-bottom:1px solid #0f2a0f;}
+.psc-item{display:grid;grid-template-columns:1fr;gap:0;margin-bottom:1.6rem;}
+.psc-label{font-size:.48rem;letter-spacing:.2em;color:#2a6e2a;margin-bottom:.35rem;}
+.psc-img{width:100%;display:block;border:1px solid #0f1f0f;image-rendering:auto;}
+.psc-caption{font-size:.5rem;color:#3a3a3a;letter-spacing:.04em;line-height:1.6;margin-top:.3rem;padding:.35rem .5rem;border-left:2px solid #0f2a0f;}
+
+/* RIGHT — PIN input panel */
+#pin-box{width:380px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:3rem 2.6rem;text-align:center;background:#040404;border-left:1px solid #0a1f0a;}
 .pin-brand{font-size:.52rem;letter-spacing:.42em;color:var(--green);margin-bottom:.25rem;}
-.pin-acn{font-size:.46rem;letter-spacing:.18em;color:#252525;margin-bottom:2.2rem;}
+.pin-acn{font-size:.46rem;letter-spacing:.18em;color:#1e1e1e;margin-bottom:2rem;}
 .pin-title{font-size:.88rem;color:var(--green);letter-spacing:.14em;margin-bottom:.5rem;}
 .pin-sub{font-size:.62rem;color:#555;letter-spacing:.06em;line-height:1.7;margin-bottom:2rem;}
 #pin-input{width:100%;background:#040404;border:1px solid #1a3a1a;color:var(--green);font-family:inherit;font-size:1.6rem;letter-spacing:.55em;padding:.75rem 1rem;text-align:center;outline:none;margin-bottom:.9rem;}
@@ -507,7 +519,14 @@ footer{
 #pin-submit:hover:not(:disabled){background:var(--green);color:#000;}
 #pin-submit:disabled{opacity:.25;cursor:default;}
 #pin-error{font-size:.58rem;color:var(--red);letter-spacing:.1em;min-height:1.2em;margin-bottom:.7rem;}
-.pin-footer-note{font-size:.47rem;color:#1e1e1e;letter-spacing:.05em;line-height:1.7;}
+.pin-footer-note{font-size:.47rem;color:#161616;letter-spacing:.05em;line-height:1.7;}
+
+/* Mobile: stack vertically */
+@media(max-width:700px){
+  #pin-gate{flex-direction:column;}
+  #pin-showcase{border-right:none;border-bottom:1px solid #0f2a0f;padding:1.4rem 1rem;max-height:55vh;}
+  #pin-box{width:100%;padding:1.6rem 1.2rem;}
+}
 
 /* ── GATE LOCK ── */
 #course-teaser { display: none !important; }
@@ -657,6 +676,50 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
 <!-- ── PIN GATE ── -->
 <div id="pin-gate">
+
+  <!-- LEFT — product showcase -->
+  <div id="pin-showcase">
+    <div class="psc-header">// WHAT THIS COURSE BUILDS — DOCUMENTED — LIVE — WORKING</div>
+
+    <div class="psc-item">
+      <div class="psc-label">// GPS EXFIL — ECLIPSE C2 — MODULE 16</div>
+      <img class="psc-img" src="https://rainfantry.github.io/showcase/eclipse_c2_gps_live.png" alt="ECLIPSE GPS live" loading="eager">
+      <div class="psc-caption">Real-time GPS coordinates exfiltrated every 5 seconds. Agent running as SYSTEM inside svchost.exe. AES-256-CBC beacon. Service persistence — survives reboot.</div>
+    </div>
+
+    <div class="psc-item">
+      <div class="psc-label">// ANDROID RAT — STARKILLER — MODULE 21</div>
+      <img class="psc-img" src="https://rainfantry.github.io/showcase/starkiller_agents_live.png" alt="StarKiller agents live" loading="eager">
+      <div class="psc-caption">Two Android agents live. GPS polled. SMS thread dumped (47 messages). Camera accessed. Play Protect process killed and persistence reinstated. Built from scratch in Kotlin.</div>
+    </div>
+
+    <div class="psc-item">
+      <div class="psc-label">// VNC CALLBACK + SHELL — MODULE 16</div>
+      <img class="psc-img" src="https://rainfantry.github.io/showcase/eclipse_c2_browser_live.png" alt="ECLIPSE browser C2 live" loading="eager">
+      <div class="psc-caption">ECLIPSE C2 operator panel — browser-based. VNC stream active. Reverse shell connected. SeDebugPrivilege confirmed. Defender disabled. C2 beacon 5s interval.</div>
+    </div>
+
+    <div class="psc-item">
+      <div class="psc-label">// WINDOWS RECON — WINRECON — MODULE 01</div>
+      <img class="psc-img" src="https://rainfantry.github.io/showcase/winrecon_skywalker_findings.jpg" alt="winrecon live output" loading="lazy">
+      <div class="psc-caption">WMI enumeration. AD discovery. Privilege audit. CWE scanner. Full target profile before a single payload is deployed. Know the box before you touch it.</div>
+    </div>
+
+    <div class="psc-item">
+      <div class="psc-label">// AV EVASION — IRON-DOME v4 — MODULE 12</div>
+      <img class="psc-img" src="https://rainfantry.github.io/showcase/iron_dome_build_complete_154613.jpg" alt="IRON-DOME 0 detections" loading="lazy">
+      <div class="psc-caption">0 detections. Kaspersky Premium + Windows Defender + MalwareBytes active simultaneously. 8-layer evasion stack built from source. MSRC VULN-195458 submitted.</div>
+    </div>
+
+    <div class="psc-item">
+      <div class="psc-label">// VNC TERMINAL — CHEYANNE C2 — MODULE 16</div>
+      <img class="psc-img" src="https://rainfantry.github.io/showcase/iron_dome_v4_vnc_terminal.png" alt="VNC terminal shell" loading="lazy">
+      <div class="psc-caption">Full VNC callback through CHEYANNE C2. Shell connected, CHEYANNE WATCH live. Remote desktop control over encrypted beacon. Discord bridge operational.</div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT — PIN input -->
   <div id="pin-box">
     <div class="pin-brand">22ND SURVEY DIVISION</div>
     <div class="pin-acn">ACN 692 429 397 // SYDNEY // AUSTRALIA</div>
@@ -667,6 +730,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     <div id="pin-error"></div>
     <div class="pin-footer-note">OCCUPATION FORCE CALLSIGN GSW PTY LTD // ABN 50 692 429 397<br>All content for authorised use. Australian Cybercrime Act compliant.</div>
   </div>
+
 </div>
 
 <!-- ── NAV ── -->
@@ -2185,7 +2249,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     sessionStorage.removeItem(FAIL_KEY);
     gate.style.transition = 'opacity 0.35s';
     gate.style.opacity = '0';
-    setTimeout(function() { gate.style.display = 'none'; }, 350);
+    setTimeout(function() { gate.classList.remove('show'); gate.style.opacity = ''; gate.style.transition = ''; }, 350);
     document.documentElement.classList.remove('course-locked');
     setTimeout(function() {
       var el = document.getElementById('curriculum');
@@ -2220,7 +2284,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     input.value = '';
     err.textContent = '';
     gate.style.opacity = '1';
-    gate.style.display = 'flex';
+    gate.classList.add('show');
     if (isLockedOut()) {
       err.textContent = '// ACCESS LOCKED — contact gwu0738@gmail.com';
       btn.disabled = true;

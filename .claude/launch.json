@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "22div-preview",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "7723"],
+      "port": 7723
+    }
+  ]
+}
