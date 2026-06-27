@@ -1067,6 +1067,67 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   </div>
 </section>
 
+<!-- ── DEPTH SECTION ── -->
+<section style="background:#030903;border-top:1px solid #0a1a0a;border-bottom:1px solid #0a1a0a;">
+  <div class="container">
+    <div class="section-eyebrow">// TECHNICAL DEPTH — WHAT THIS COURSE ACTUALLY TEACHES</div>
+    <div class="section-title">KNOWLEDGE <span class="slash">//</span> FIRST PRINCIPLES <span class="accent">FROM SCRATCH</span></div>
+    <p style="font-size:.8rem;color:var(--text-dim);max-width:680px;line-height:1.9;margin-bottom:2.8rem;">This isn't a course about clicking through a UI or memorising tool syntax. Every technique below is taught from the underlying mechanism. You learn why it works, how defences detect it, and how to engineer around the detection.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;background:#0a1a0a;margin-bottom:2.4rem;">
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 11 // AMSI BYPASS</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">Hardware Breakpoint AMSI Bypass</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">AMSI (Antimalware Scan Interface) is a userspace hook. <code style="color:#aaa;font-size:.65rem;">AmsiScanBuffer</code> sits in <code style="color:#aaa;font-size:.65rem;">amsi.dll</code> — when PowerShell runs a command, it calls this function before execution. The naive bypass patches the function's first bytes in memory. Windows Defender's Tamper Protection detects memory writes to protected regions. The hardware breakpoint bypass sidesteps this entirely: set DR0 = address of <code style="color:#aaa;font-size:.65rem;">AmsiScanBuffer</code>, arm DR7 bit 0, install a VEH (Vectored Exception Handler). When the CPU hits the breakpoint, your VEH fires. You set RCX = <code style="color:#aaa;font-size:.65rem;">AMSI_RESULT_CLEAN</code> and return. Zero bytes written to memory. Tamper Protection sees nothing. This is MSRC VULN-195458.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 10 // PROCESS HOLLOWING</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">Spawn → Suspend → Overwrite → Resume</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">You call <code style="color:#aaa;font-size:.65rem;">CreateProcess(CREATE_SUSPENDED)</code>. The OS spawns a new process — your target (<code style="color:#aaa;font-size:.65rem;">svchost.exe</code>, <code style="color:#aaa;font-size:.65rem;">notepad.exe</code>) — but doesn't start executing. You call <code style="color:#aaa;font-size:.65rem;">NtQueryInformationProcess</code> to get the PEB address, then <code style="color:#aaa;font-size:.65rem;">ReadProcessMemory</code> to extract the image base from the PEB (offset 0x10 on x64). You <code style="color:#aaa;font-size:.65rem;">VirtualAllocEx</code> at that base address and <code style="color:#aaa;font-size:.65rem;">WriteProcessMemory</code> your payload. Then <code style="color:#aaa;font-size:.65rem;">GetThreadContext</code> → patch RCX (entry point register on x64) → <code style="color:#aaa;font-size:.65rem;">SetThreadContext</code> → <code style="color:#aaa;font-size:.65rem;">ResumeThread</code>. Task Manager shows svchost.exe. Your code is running inside it.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 12 // AV EVASION</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">8-Layer IRON-DOME Evasion Stack</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;"><strong style="color:#bbb;">Layer 1:</strong> XOR encode the payload — static signature doesn't match. <strong style="color:#bbb;">Layer 2:</strong> Dynamic API resolution — import table empty, <code style="color:#aaa;font-size:.65rem;">GetProcAddress</code> at runtime. <strong style="color:#bbb;">Layer 3:</strong> Anti-sandbox gate — CPUID, timing checks, process count, foreground window. <strong style="color:#bbb;">Layer 4:</strong> PE stomping — overwrite the DOS/NT headers after mapping, break static analysis. <strong style="color:#bbb;">Layer 5:</strong> ISUN auth token — the shellcode checks for a magic value before running. <strong style="color:#bbb;">Layer 6:</strong> Sleep jitter — randomised delays break timing-based sandbox detonation. <strong style="color:#bbb;">Layer 7:</strong> MinGW toolchain — no MSVC strings, no PDB paths. <strong style="color:#bbb;">Layer 8:</strong> HWBP AMSI+ETW bypass. Result: 0/72 on Kaspersky Premium + Defender + MalwareBytes simultaneously.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 16 // C2 FRAMEWORK</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">C Beacon → Python Listener → Discord Bridge</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">The CHEYANNE C2 beacon is written in C. It connects outbound over TCP (no inbound firewall hole), sends an AES-256-CBC encrypted check-in, receives commands, executes them, sends encrypted responses back. The listener is Python — it decrypts, parses commands, and relays operator input. The Discord bridge lets you run the entire C2 from a Discord channel: type a command, the bot relays it to the beacon, response comes back as a message. Service persistence via <code style="color:#aaa;font-size:.65rem;">sc.exe</code> — beacon runs as a Windows service, survives reboot. Sleep jitter ±30% randomises the check-in interval to defeat traffic analysis. You build all of this from scratch across Module 16.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 18 // CRYPTOGRAPHY</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">Ghost-Encoder — Zero-Width Unicode Steganography</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">Ghost-Encoder uses a 16-character alphabet of zero-width Unicode characters — characters that exist in the Unicode standard but render as invisible glyphs in every major application. Each byte of your payload is encoded as two zero-width characters from this alphabet. The encoded payload can be embedded inside any text — a Word document, a Discord message, an email subject line. To an AV scanner, entropy is near-zero (zero-width chars are not flagged). To a human, the text looks clean. To the decoder, it's shellcode. Exfiltrate through Discord CDN, S3, any image host — the delivery channel sees a PNG. You see a covert channel.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 21 // ANDROID RAT</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">StarKiller — GPS, SMS, Camera, Play Protect Bypass</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">The Android permission model is the attack surface. <code style="color:#aaa;font-size:.65rem;">ACCESS_FINE_LOCATION</code> gives GPS. <code style="color:#aaa;font-size:.65rem;">READ_SMS</code> gives message history. <code style="color:#aaa;font-size:.65rem;">CAMERA</code> + <code style="color:#aaa;font-size:.65rem;">READ_CONTACTS</code> + <code style="color:#aaa;font-size:.65rem;">RECORD_AUDIO</code>. The APK bundles these permissions, requests them on first launch using social engineering (disguised as a legitimate utility), and establishes a persistent background service using <code style="color:#aaa;font-size:.65rem;">JobScheduler</code> that survives screen lock and battery optimisation. GPS coordinates exfiltrated every 5 seconds via HTTPS to the ECLIPSE C2. Play Protect bypass: side-loaded via ADB before installation — no Play Store scan path. You build the Kotlin client and Python C2 server from scratch in Module 21.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 05-07 // EXPLOITATION</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">Stack Overflows, ROP Chains, ASLR Bypass</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">A buffer overflow is memory corruption: you write past the end of a fixed-size buffer and overwrite adjacent memory. On the stack, that adjacent memory is the saved return address — overwrite it and you control the next instruction the CPU executes. Modern mitigations complicate this: DEP (Data Execution Prevention) marks the stack non-executable; ASLR randomises module base addresses; stack canaries detect corruption before the return. ROP (Return-Oriented Programming) defeats DEP: you don't inject code, you chain existing code fragments (gadgets) ending in <code style="color:#aaa;font-size:.65rem;">ret</code>. An info leak defeats ASLR: find one pointer, calculate the module base, rebuild your gadget chain. You write these exploits in C against a deliberately vulnerable binary.</p>
+      </div>
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;margin-bottom:.5rem;">MODULE 08 // PRIVILEGE ESCALATION</div>
+        <div style="font-size:.78rem;color:#e0e0e0;margin-bottom:.7rem;letter-spacing:.04em;">Token Impersonation, UAC Bypass, SYSTEM</div>
+        <p style="font-size:.68rem;color:#888;line-height:1.8;">Every Windows process has a security token. The token determines what the process can access. If your process has <code style="color:#aaa;font-size:.65rem;">SeImpersonatePrivilege</code> — which services get by default — you can steal the token of any process and impersonate it. <code style="color:#aaa;font-size:.65rem;">OpenProcessToken</code> → <code style="color:#aaa;font-size:.65rem;">DuplicateTokenEx</code> → <code style="color:#aaa;font-size:.65rem;">CreateProcessWithTokenW</code>. You now have a SYSTEM shell. UAC bypass exploits auto-elevation: certain Windows binaries are marked <code style="color:#aaa;font-size:.65rem;">autoElevate: true</code> in their manifest and run elevated without a prompt. If you can hijack one of these binaries — COM object hijack, DLL search order abuse, environment variable injection — you get SYSTEM without the UAC dialog ever appearing.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <!-- ── INTERACTIVE DEMO ── -->
 <section id="demo" style="background:var(--bg);">
   <div class="container">
@@ -1196,6 +1257,62 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       <p style="font-size:.62rem;color:var(--text-mute);margin-top:.8rem;">Individual total: ~$1,271 AUD. <strong style="color:var(--green);">Full bundle $497 saves you $774.</strong> Purchase individual modules via <a href="mailto:gwu0738@gmail.com?subject=22DIV Module Purchase" style="color:#2a6e2a;">gwu0738@gmail.com</a></p>
     </div>
 
+  </div>
+</section>
+
+<!-- ── OUTCOMES ── -->
+<section style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="container">
+    <div class="section-eyebrow">// PROGRESSION — WHAT YOU BUILD</div>
+    <div class="section-title">BY THE TIME <span class="slash">//</span> YOU FINISH <span class="accent">MODULE 22</span></div>
+    <p style="font-size:.78rem;color:var(--text-dim);max-width:640px;line-height:1.9;margin-bottom:2.4rem;">This is a concrete list of working tools and techniques you will have built and demonstrated before you reach the final module. Not watched. Not read about. Built and run against live targets.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.4rem;max-width:900px;">
+      <div>
+        <div style="font-size:.54rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:1rem;">// MODULES 00–06 — FOUNDATIONS</div>
+        <ul style="list-style:none;font-size:.7rem;color:var(--text-dim);line-height:2.2;">
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Complete dev environment — MinGW, Python, x64dbg, Process Hacker, Wireshark</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Custom Python recon tool pulling WHOIS, cert transparency, Shodan, theHarvester</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Binary diff of a patched Windows DLL — located the vulnerability from the patch delta</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Python fuzzer targeting a sample parser — crash triage, CWE classification</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Can read an EPROCESS structure in WinDbg. Walked the active process list in kernel</li>
+          <li style="padding:.3rem 0;">✓ Understand ASLR, DEP, CFG, Tamper Protection — not as marketing, as code</li>
+        </ul>
+
+        <div style="font-size:.54rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:1rem;margin-top:1.6rem;">// MODULES 07–12 — ATTACK SURFACE</div>
+        <ul style="list-style:none;font-size:.7rem;color:var(--text-dim);line-height:2.2;">
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Stack overflow exploit — DEP defeated via ROP chain, ASLR defeated via info leak</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Token impersonation via SeImpersonatePrivilege → SYSTEM shell</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Reverse shell in C — Winsock, XOR payload, anti-sandbox, dynamic API resolution</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Process hollowing — svchost.exe is your process, Task Manager sees nothing wrong</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ APC injection — no Sysmon Event ID 8, no thread creation events</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ HWBP AMSI+ETW bypass — zero memory writes, bypasses Tamper Protection entirely</li>
+          <li style="padding:.3rem 0;">✓ IRON-DOME 8-layer evasion stack — 0 detections on Kaspersky Premium</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:.54rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:1rem;">// MODULES 13–18 — DEEP TRADECRAFT</div>
+        <ul style="list-style:none;font-size:.7rem;color:var(--text-dim);line-height:2.2;">
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Volatility analysis of a compromised memory image — found injected shellcode in svchost</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Read assembly in x64dbg well enough to locate the vulnerability in an unpacked binary</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Tri-vector persistence — registry run key + startup LNK + scheduled task simultaneously</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Full CHEYANNE C2 — C beacon + Python listener + Discord bridge, service persistence</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Ghost-Encoder — shellcode hidden in a PNG using zero-width Unicode, 0 AV detections</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ AES-256-CBC encrypted beacon comms — Wireshark shows nothing useful to a defender</li>
+          <li style="padding:.3rem 0;">✓ Covert exfil channel — payload delivered via Discord CDN attachment, never touches disk</li>
+        </ul>
+
+        <div style="font-size:.54rem;letter-spacing:.22em;color:var(--green-dim);margin-bottom:1rem;margin-top:1.6rem;">// MODULES 19–22 — FULL KILL CHAIN</div>
+        <ul style="list-style:none;font-size:.7rem;color:var(--text-dim);line-height:2.2;">
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ LOLBin abuse — payload delivered via certutil.exe, regsvr32.exe, mshta.exe. No dropped binary</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ AD attack chain — Kerberoasting → cracked service hash → lateral movement via Pass-the-Hash</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ StarKiller Android RAT deployed — GPS, SMS, camera, contacts exfiltrated from owned device</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ OSINT target profile built — domain, employees, leaked credentials, network map</li>
+          <li style="border-bottom:1px solid #0a1a0a;padding:.3rem 0;">✓ Full kill chain automated — Recon → Weaponise → Deliver → Exploit → Install → C2 → Exfil</li>
+          <li style="padding:.3rem 0;color:var(--green);">✓ Understand every alert your target's SOC would receive — and how to stop generating them</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
 
