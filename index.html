@@ -1145,6 +1145,55 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
 </section>
 
+<!-- ── SHOWCASE BUY CTA ── -->
+<div style="background:#010f01;border-top:3px solid #1a6a1a;padding:3rem 2rem;">
+  <div style="max-width:960px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:2rem;">
+      <div style="font-size:.44rem;letter-spacing:.28em;color:#2a5a2a;margin-bottom:.6rem;">// GET THE TOOLS</div>
+      <h2 style="font-size:1.5rem;color:var(--green);letter-spacing:.06em;margin:0 0 .5rem;font-family:monospace;">ALL 5 TOOLS. ONE PURCHASE.</h2>
+      <p style="font-size:.72rem;color:#8aba8a;max-width:560px;margin:0 auto;line-height:1.7;">IRON-DOME · CHEYANNE C2 · STARKILLER · WINRECON · VULN-195458 PoC<br>AES-256 encrypted archives · password emailed within 24h</p>
+    </div>
+
+    <!-- STRIPE BUTTONS — desktop full widget / mobile button only -->
+    <div class="pay-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#0d2a0d;margin-bottom:1rem;">
+
+      <!-- OPTION 1: FULL BUNDLE -->
+      <div style="background:#020f02;padding:1.4rem 1.6rem;text-align:center;">
+        <div class="pay-card-title" style="font-size:.48rem;letter-spacing:.18em;color:#2a7a2a;margin-bottom:.4rem;">FULL BUNDLE — A$247.50</div>
+        <div class="pay-card-desc" style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">All 22 modules + all 5 tool repos + lifetime access. One payment.</div>
+        <div class="stripe-desktop-wrap">
+          <stripe-buy-button id="sbtn-sc-1"
+            buy-button-id="buy_btn_1Tmp4iS5K1Ttf6KaIUlvp1xr"
+            publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
+          </stripe-buy-button>
+        </div>
+        <button class="stripe-mobile-btn" onclick="document.getElementById('sbtn-sc-1').click()">BUY — A$247.50 →</button>
+      </div>
+
+      <!-- OPTION 2: MONTHLY -->
+      <div style="background:#020f02;padding:1.4rem 1.6rem;text-align:center;">
+        <div class="pay-card-title" style="font-size:.48rem;letter-spacing:.18em;color:#0d9a5a;margin-bottom:.4rem;">MONTHLY — A$21.99/mo</div>
+        <div class="pay-card-desc" style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">Private repos forever. Every new push — VADER, Ghost-Encoder, CHEYANNE, IRON-SUN, WinRecon. Cancel anytime.</div>
+        <div class="stripe-desktop-wrap">
+          <stripe-buy-button id="sbtn-sc-2"
+            buy-button-id="buy_btn_1Tmp9SS5K1Ttf6KaxgbBvxcw"
+            publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
+          </stripe-buy-button>
+        </div>
+        <button class="stripe-mobile-btn monthly" onclick="document.getElementById('sbtn-sc-2').click()">SUBSCRIBE — A$21.99/mo →</button>
+      </div>
+
+    </div>
+
+    <!-- ALT PAYMENT -->
+    <div style="text-align:center;font-size:.5rem;color:#2a5a3a;line-height:2;">
+      <a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="color:#2a8e6a;text-decoration:none;">Wise bank transfer →</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <a href="mailto:gwu0738@gmail.com?subject=22DIV Invoice Request" style="color:#2a7a5a;text-decoration:none;">Request invoice →</a>
+    </div>
+  </div>
+</div>
+
 <!-- ── OLD PROOF SECTION PLACEHOLDER ── -->
 <section id="proof" style="display:none;">
   <div class="container">
