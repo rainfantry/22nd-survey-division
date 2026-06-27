@@ -677,6 +677,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 .demo-hint-link{font-size:.7rem;color:#444;cursor:pointer;margin-left:.8rem;text-decoration:underline dashed;}
 .demo-hint-link:hover{color:#777;}
 </style>
+<script async src="https://js.stripe.com/v3/buy-button.js"></script>
 </head>
 <body>
 
@@ -742,7 +743,14 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     <div class="pin-brand">22ND SURVEY DIVISION</div>
     <div class="pin-acn">ACN 692 429 397 // SYDNEY // AUSTRALIA</div>
     <div class="pin-title">// ACCESS Restricted</div>
-    <div class="pin-sub">Enter your access PIN to continue.<br><a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="color:#2a8e6a;font-weight:700;">PAY VIA WISE →</a> <span style="color:#2a6e2a;">— PIN emailed within 24h.</span><br><span style="font-size:.56rem;color:#555;">INT: <a href="mailto:gwu0738@gmail.com?subject=22DIV Enrol" style="color:#444;">gwu0738@gmail.com</a> — invoice available.</span></div>
+    <div class="pin-sub">Enter your access PIN to continue.<br><span style="color:#2a6e2a;">No PIN? Purchase below — emailed within 24h.</span></div>
+    <div style="display:flex;justify-content:center;margin:.8rem 0;">
+      <stripe-buy-button
+        buy-button-id="buy_btn_1Tmp4iS5K1Ttf6KaIUlvp1xr"
+        publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
+      </stripe-buy-button>
+    </div>
+    <div style="font-size:.5rem;color:#3a5a3a;text-align:center;margin-bottom:.6rem;">Alt: <a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="color:#2a7a5a;">Wise →</a> &nbsp;|&nbsp; <a href="mailto:gwu0738@gmail.com?subject=22DIV Enrol" style="color:#2a5a3a;">Invoice →</a></div>
     <input type="password" id="pin-input" maxlength="8" placeholder="_ _ _ _ _ _" autocomplete="off" autofocus>
     <button id="pin-submit">AUTHENTICATE</button>
     <div id="pin-error"></div>
@@ -1737,8 +1745,18 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           <li>✓ MSRC-submitted research (VULN-195458)</li>
           <li>✓ Lifetime access — no subscription</li>
         </ul>
-        <a href="mailto:gwu0738@gmail.com?subject=22DIV Course Access — $497 AUD" class="btn btn-primary" style="display:block;text-align:center;">ENROL NOW →</a>
-        <div style="font-size:.52rem;color:var(--text-mute);text-align:center;margin-top:.7rem;"><a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="color:#2a8e6a;font-weight:700;letter-spacing:.08em;">PAY VIA WISE →</a> — PIN + encrypted source packages emailed within 24h. GST not applicable (below $75k threshold).</div>
+        <!-- STRIPE BUY BUTTON — PRIMARY -->
+        <div style="margin-bottom:.8rem;display:flex;justify-content:center;">
+          <stripe-buy-button
+            buy-button-id="buy_btn_1Tmp4iS5K1Ttf6KaIUlvp1xr"
+            publishable-key="pk_live_51SOog7S5K1Ttf6KaHTIbEAiN80J2FHk7l1alno8IR7bliBd0gcOSqjpFmGQ1DXOKMMZkD7ec7nz6ewJhxuyW9C4z00y6JxsrH6">
+          </stripe-buy-button>
+        </div>
+        <div style="font-size:.52rem;color:var(--text-mute);text-align:center;margin-top:.4rem;line-height:1.8;">
+          PIN + encrypted source packages emailed within 24h. GST not applicable (below $75k threshold).<br>
+          Alt: <a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="color:#2a8e6a;font-weight:700;letter-spacing:.06em;">PAY VIA WISE →</a>
+          &nbsp;|&nbsp; <a href="mailto:gwu0738@gmail.com?subject=22DIV Course Access — $497 AUD" style="color:#3a7a5a;letter-spacing:.06em;">REQUEST INVOICE →</a>
+        </div>
       </div>
 
       <div style="border:1px solid var(--border);background:var(--bg);padding:2rem 1.8rem;">
