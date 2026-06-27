@@ -8,8 +8,8 @@
 <meta name="author" content="George Wu">
 <meta name="robots" content="index, follow">
 <script>
-// Session cookie auth — clears when browser closes, works across tabs
-if (document.cookie.indexOf('22div_gate_auth=1') === -1) {
+// sessionStorage auth — always re-gate on new session (no persistent cookie)
+if (sessionStorage.getItem('22div_gate_auth') !== '1') {
   document.documentElement.classList.add('course-locked');
 }
 </script>
@@ -2181,8 +2181,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   var err = document.getElementById('pin-error');
 
   function unlock() {
-    document.cookie = AUTH_KEY + '=1; path=/; SameSite=Strict';
-    try { localStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
+    try { sessionStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
     sessionStorage.removeItem(FAIL_KEY);
     gate.style.transition = 'opacity 0.35s';
     gate.style.opacity = '0';
@@ -2208,7 +2207,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   var pendingAction = null;
 
   function isAuthed() {
-    return document.cookie.indexOf(AUTH_KEY + '=1') > -1;
+    try { return sessionStorage.getItem(AUTH_KEY) === '1'; } catch(e) { return false; }
   }
 
   function isLockedOut() {
@@ -2279,7 +2278,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     .then(function(data) {
       if (data.ok) {
         try { localStorage.setItem('22div_token', data.token || ''); } catch(e) {}
-        if (data.token) document.cookie = '22div_token=' + encodeURIComponent(data.token) + '; path=/; SameSite=Strict';
+        if (data.token) try { sessionStorage.setItem('22div_token', data.token); } catch(e) {}
         doUnlock();
       } else if (data.error === 'rate_limited') {
         doFail('// RATE LIMITED — try again in 15 minutes', true);
@@ -2302,15 +2301,6 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
   btn.addEventListener('click', attempt);
   input.addEventListener('keydown', function(e) { if (e.key === 'Enter') attempt(); });
-
-  // Close gate on backdrop click (not on pin-box)
-  gate.addEventListener('click', function(e) {
-    if (e.target === gate) {
-      gate.style.transition = 'opacity 0.25s';
-      gate.style.opacity = '0';
-      setTimeout(function() { gate.style.display = 'none'; pendingAction = null; }, 260);
-    }
-  });
 
   var BASE_URL = 'https://rainfantry.github.io/books/reader.html';
   var MOD01    = BASE_URL + '?b=01_OFFENSIVE_MINDSET';
@@ -2365,8 +2355,12 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       showGate(function() {
         if (retUrl) window.location.href = retUrl;
       });
+      return;
     }
   })();
+
+  // Always gate on new session — show PIN modal on every page load until authed
+  if (!isAuthed()) { showGate(); }
 
 })();
 </script>
