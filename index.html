@@ -156,10 +156,11 @@ nav {
    HERO
 ───────────────────────────────────────── */
 #hero {
-  min-height:100vh;display:flex;align-items:center;
-  padding:7rem 2rem 5rem;position:relative;overflow:hidden;
+  display:flex;align-items:center;
+  padding:6rem 2rem 4rem;position:relative;overflow:hidden;
 }
-.hero-inner{max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1;}
+.hero-inner{max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+@media(max-width:800px){.hero-inner{grid-template-columns:1fr;gap:2rem;}}
 .hero-pre {
   font-size:.62rem;letter-spacing:.4em;color:var(--green-dim);
   text-transform:uppercase;margin-bottom:1.4rem;
@@ -195,8 +196,10 @@ h1.hero-headline .amber{color:var(--amber);}
 .hero-terminal {
   font-size:.72rem;color:var(--text-dim);line-height:2;
   border:1px solid var(--border);background:var(--bg2);
-  padding:1rem 1.4rem;max-width:500px;display:inline-block;
+  padding:1rem 1.4rem;
 }
+.hero-left{display:flex;flex-direction:column;justify-content:center;}
+.hero-right{display:flex;flex-direction:column;justify-content:flex-start;padding-top:.5rem;}
 .ht-line .prompt{color:var(--green);}
 .ht-line .cmd{color:var(--text);}
 .ht-line .out{color:var(--cyan-dim);}
@@ -773,26 +776,66 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 <section id="hero" style="border-top:none;">
   <div class="hero-bg-grid"></div>
   <div class="hero-inner">
-    <div class="hero-pre">// OFFENSIVE SECURITY TRAINING // SYDNEY, AUSTRALIA //</div>
-    <h1 class="hero-headline">
-      OFFENSIVE SECURITY<br>TRAINING FOR THE<br>
-      <span class="accent">MODERN THREAT</span><br>
-      <span class="amber">LANDSCAPE</span>
-    </h1>
-    <p class="hero-sub">
-      The course that teaches <em>coders to think like attackers</em> — and <em>attackers to code like engineers.</em> No hand-holding. No toy examples. Real tradecraft, first principles, working tools.
-    </p>
-    <div class="hero-ctas">
-      <a href="#curriculum" class="btn btn-primary">Start Learning</a>
-      <a href="#courses" class="btn btn-secondary">View Curriculum</a>
+    <!-- LEFT COLUMN -->
+    <div class="hero-left">
+      <div class="hero-pre">// OFFENSIVE SECURITY TRAINING // SYDNEY, AUSTRALIA //</div>
+      <h1 class="hero-headline">
+        OFFENSIVE SECURITY<br>TRAINING FOR THE<br>
+        <span class="accent">MODERN THREAT</span><br>
+        <span class="amber">LANDSCAPE</span>
+      </h1>
+      <p class="hero-sub">
+        The course that teaches <em>coders to think like attackers</em> — and <em>attackers to code like engineers.</em> No hand-holding. No toy examples. Real tradecraft, first principles, working tools.
+      </p>
+      <div class="hero-ctas">
+        <a href="#curriculum" class="btn btn-primary">Start Learning</a>
+        <a href="#courses" class="btn btn-secondary">View Curriculum</a>
+      </div>
     </div>
-    <div class="hero-terminal">
-      <div class="ht-line"><span class="prompt">22DIV&gt;</span> <span class="cmd">enumerate_target --self</span></div>
-      <div class="ht-line"><span class="out">[*] Track selected: auto-detect...</span></div>
-      <div class="ht-line"><span class="out">[*] Prior coding XP: checking...</span></div>
-      <div class="ht-line"><span class="ok">[+] TRACK_A: Coder → Attacker</span></div>
-      <div class="ht-line"><span class="ok">[+] TRACK_B: Attacker → Coder</span></div>
-      <div class="ht-line"><span class="warn">[!] Select your entry point ↓</span></div>
+    <!-- RIGHT COLUMN -->
+    <div class="hero-right">
+      <div class="hero-terminal" style="max-width:none;width:100%;">
+        <div class="ht-line"><span class="prompt">22DIV&gt;</span> <span class="cmd">enumerate_target --self</span></div>
+        <div class="ht-line"><span class="out">[*] Track selected: auto-detect...</span></div>
+        <div class="ht-line"><span class="out">[*] Prior coding XP: checking...</span></div>
+        <div class="ht-line"><span class="ok">[+] TRACK_A: Coder → Attacker</span></div>
+        <div class="ht-line"><span class="ok">[+] TRACK_B: Attacker → Coder</span></div>
+        <div class="ht-line"><span class="warn">[!] Select your entry point ↓</span></div>
+      </div>
+      <div style="margin-top:1.4rem;border:1px solid #0a2a0a;background:#020902;padding:1.2rem 1.4rem;">
+        <div style="font-size:.5rem;letter-spacing:.25em;color:#2a6a2a;margin-bottom:.9rem;">// KILL CHAIN — 23 MODULES — FULL COVERAGE</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem .8rem;">
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Recon &amp; OSINT</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Binary Exploitation</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Windows Internals</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Privilege Escalation</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Fuzzing &amp; Vuln Research</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Reverse Engineering</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Process Injection</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> AV/EDR Evasion</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Persistence</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> C2 Framework (C)</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Covert Channels</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Android RAT</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Active Directory</div>
+          <div style="font-size:.62rem;color:#888;"><span style="color:#0d6a0d;">▸</span> Full Kill Chain</div>
+        </div>
+        <div style="margin-top:.9rem;padding-top:.7rem;border-top:1px solid #0a1a0a;font-size:.6rem;color:#2a6a2a;letter-spacing:.1em;">WRITTEN CODE IN EVERY LESSON — ZERO TOOL-CLICKING</div>
+      </div>
+      <div style="margin-top:.8rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#0a1a0a;">
+        <div style="background:#020c02;padding:.7rem .6rem;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--green);letter-spacing:.04em;">26</div>
+          <div style="font-size:.48rem;letter-spacing:.12em;color:#3a6a3a;">CLEAN BINARIES</div>
+        </div>
+        <div style="background:#020c02;padding:.7rem .6rem;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--green);letter-spacing:.04em;">0</div>
+          <div style="font-size:.48rem;letter-spacing:.12em;color:#3a6a3a;">AV DETECTIONS</div>
+        </div>
+        <div style="background:#020c02;padding:.7rem .6rem;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:700;color:var(--green);letter-spacing:.04em;">1</div>
+          <div style="font-size:.48rem;letter-spacing:.12em;color:#3a6a3a;">MSRC SUBMISSION</div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
