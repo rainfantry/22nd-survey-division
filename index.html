@@ -560,7 +560,7 @@ html.course-locked .mod-card::after {
 }
 
 /* ── STICKY UNLOCK BUTTON (visible when locked) ── */
-#sticky-unlock{position:fixed;bottom:1.4rem;right:1.4rem;z-index:9000;display:none;}
+#sticky-unlock{position:fixed;bottom:0;left:0;right:0;z-index:9000;display:none;}
 html.course-locked #sticky-unlock{display:block;}
 .sticky-unlock-btn{background:#010f01;border:1px solid var(--green);color:var(--green);font-family:inherit;font-size:.58rem;letter-spacing:.2em;padding:.7rem 1.5rem;cursor:pointer;text-transform:uppercase;transition:all .25s;box-shadow:0 0 18px rgba(0,200,0,.12);}
 .sticky-unlock-btn:hover{background:var(--green);color:#000;box-shadow:0 0 28px rgba(0,200,0,.25);}
@@ -616,6 +616,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 .ghost-line{display:block;opacity:0;transform:translateX(-6px);animation:ghost-appear .25s ease forwards;}
 .g-cmd{color:#00ff41;}.g-ok{color:#00cc33;}.g-dim{color:#445544;}.g-warn{color:#667733;}
 @keyframes ghost-appear{to{opacity:1;transform:translateX(0);}}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 8px rgba(0,200,68,.2);border-color:var(--green);}50%{box-shadow:0 0 18px rgba(0,200,68,.5);border-color:#00ff55;}}
 /* per-module pricing */
 .mod-price-table{width:100%;border-collapse:collapse;font-size:.7rem;margin-top:2rem;max-width:860px;}
 .mod-price-table th{text-align:left;color:var(--green-dim);font-weight:400;font-size:.58rem;letter-spacing:.14em;padding:.4rem .7rem;border-bottom:1px solid var(--border);}
@@ -681,9 +682,14 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
 <canvas id="bg-net" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.55;"></canvas>
 
-<!-- Sticky unlock button — visible when course-locked class present -->
-<div id="sticky-unlock">
-  <button class="sticky-unlock-btn" onclick="window.showGate(function(){ window.location.href='https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET'; })">🔒 ENTER ACCESS PIN</button>
+<!-- Sticky unlock bar — full-width, visible when course-locked -->
+<div id="sticky-unlock" style="background:rgba(1,9,1,.97);border-top:1px solid #0d3a0d;padding:.65rem 2rem;display:flex;align-items:center;gap:1.4rem;box-shadow:0 -4px 24px rgba(0,160,0,.1);">
+  <div style="flex:1;min-width:0;">
+    <span style="font-size:.52rem;letter-spacing:.2em;color:#2a6a2a;">// ACCESS RESTRICTED</span>
+    <span style="font-size:.58rem;letter-spacing:.1em;color:#5a9a5a;margin-left:1rem;">23 modules · 5 private repos · full kill chain · ENTER PIN TO UNLOCK</span>
+  </div>
+  <button class="sticky-unlock-btn" onclick="window.showGate(function(){ window.location.href='https://rainfantry.github.io/books/reader.html?b=01_OFFENSIVE_MINDSET'; })" style="white-space:nowrap;animation:pulse-glow 2.4s ease-in-out infinite;">ENTER PIN →</button>
+  <span style="font-size:.5rem;letter-spacing:.1em;color:#2a4a2a;white-space:nowrap;">AU: PayID gwu0738@gmail.com</span>
 </div>
 
 <!-- ── PIN GATE ── -->
@@ -1172,6 +1178,123 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   </div>
 </section>
 
+<!-- ── GHOST ENCODER DEMO ── -->
+<section style="background:#010601;border-top:1px solid #0a1a0a;border-bottom:1px solid #0a1a0a;padding:4rem 2rem;">
+  <div class="container">
+    <div class="section-eyebrow">// LIVE SIMULATION — GHOST-ENCODER — MODULE 18</div>
+    <div class="section-title">ZERO-WIDTH UNICODE <span class="slash">//</span> <span class="accent">STEGANOGRAPHY</span></div>
+    <p style="font-size:.76rem;color:var(--text-dim);max-width:640px;line-height:1.9;margin-bottom:2.4rem;">Ghost-Encoder converts any payload into a sequence of zero-width Unicode characters — glyphs that render as invisible in every major application. Embed the encoded payload inside normal text. AV scanners see nothing. Humans see nothing. The decoder sees everything.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-bottom:2rem;">
+
+      <!-- INPUT -->
+      <div style="background:#020c02;border:1px solid #0a2a0a;padding:1.4rem;">
+        <div style="font-size:.48rem;letter-spacing:.22em;color:#2a6a2a;margin-bottom:.8rem;">// PHASE 1 — PAYLOAD INPUT</div>
+        <div style="font-size:.64rem;color:#888;margin-bottom:.7rem;">Enter any text. Ghost-Encoder converts it to invisible Unicode.</div>
+        <textarea id="ge-input" rows="3" style="width:100%;background:#010901;border:1px solid #0a2a0a;color:#a0cca0;font-family:inherit;font-size:.68rem;padding:.7rem;resize:none;outline:none;line-height:1.6;" placeholder="CHEYANNE IS ALIVE">CHEYANNE IS ALIVE</textarea>
+        <button onclick="ghostEncode()" style="margin-top:.8rem;background:transparent;border:1px solid #0d4a0d;color:#0d8a0d;font-family:inherit;font-size:.58rem;letter-spacing:.18em;padding:.5rem 1.2rem;cursor:pointer;">ENCODE →</button>
+      </div>
+
+      <!-- CARRIER OUTPUT -->
+      <div style="background:#020c02;border:1px solid #0a2a0a;padding:1.4rem;">
+        <div style="font-size:.48rem;letter-spacing:.22em;color:#2a6a2a;margin-bottom:.8rem;">// PHASE 3 — CARRIER TEXT (WHAT THE WORLD SEES)</div>
+        <div style="font-size:.64rem;color:#888;margin-bottom:.7rem;">The payload is embedded here. It is completely invisible.</div>
+        <div id="ge-carrier" style="background:#010901;border:1px solid #0a2a0a;padding:.7rem;font-size:.68rem;color:#a0cca0;line-height:1.7;min-height:4rem;white-space:pre-wrap;word-break:break-all;">Meeting notes from today's debrief. Action items attached below.</div>
+        <div id="ge-av" style="margin-top:.7rem;font-size:.58rem;letter-spacing:.14em;color:#3a5a3a;">// AV SCANNER — awaiting encode...</div>
+      </div>
+
+    </div>
+
+    <!-- ENCODED VIEW -->
+    <div style="background:#020c02;border:1px solid #0a2a0a;padding:1.4rem;margin-bottom:1.6rem;">
+      <div style="font-size:.48rem;letter-spacing:.22em;color:#2a6a2a;margin-bottom:.8rem;">// PHASE 2 — ENCODED FORM (zero-width chars visualised as ·)</div>
+      <div style="font-size:.64rem;color:#888;margin-bottom:.7rem;">Each <span style="color:#0d8a0d;">·</span> is one invisible Unicode char. Two per input character. The same sequence is embedded invisibly in the carrier above.</div>
+      <div id="ge-encoded" style="font-size:.72rem;line-height:2;letter-spacing:.05em;word-break:break-all;min-height:2rem;color:#555;">// press ENCODE to run the simulation</div>
+    </div>
+
+    <!-- DECODE -->
+    <div style="background:#020c02;border:1px solid #0a2a0a;padding:1.4rem;">
+      <div style="font-size:.48rem;letter-spacing:.22em;color:#2a6a2a;margin-bottom:.8rem;">// PHASE 4 — EXTRACTION (ghost_encoder.decode on carrier text)</div>
+      <div style="display:flex;gap:1rem;align-items:center;">
+        <button onclick="ghostDecode()" style="background:transparent;border:1px solid #1a3a1a;color:#5a8a5a;font-family:inherit;font-size:.58rem;letter-spacing:.18em;padding:.5rem 1.2rem;cursor:pointer;">DECODE CARRIER →</button>
+        <div id="ge-decoded" style="font-size:.72rem;color:#2a6a2a;letter-spacing:.06em;">// awaiting...</div>
+      </div>
+    </div>
+
+    <p style="margin-top:1.4rem;font-size:.66rem;color:#3a5a3a;line-height:1.8;">Full Ghost-Encoder source — C encoder, Python decoder, CLI tool — is included in the Module 18 encrypted source package. The 16-character zero-width alphabet, entropy analysis, Discord CDN exfil channel, and PNG carrier implementation are covered in the lesson.</p>
+  </div>
+</section>
+
+<script>
+(function() {
+  var ZW = ['​','‌','‍','‎','‏','⁠','⁡','⁢','⁣','⁤','﻿','᠎','͏','ᅟ','ᅠ','ㅤ'];
+
+  function encode(text) {
+    var out = '';
+    for (var i = 0; i < text.length; i++) {
+      var c = text.charCodeAt(i);
+      out += ZW[(c >> 4) & 0xF] + ZW[c & 0xF];
+    }
+    return out;
+  }
+
+  function decode(encoded) {
+    var zwMap = {};
+    ZW.forEach(function(c, i) { zwMap[c] = i; });
+    var chars = Array.from(encoded);
+    var out = '';
+    for (var i = 0; i < chars.length - 1; i += 2) {
+      var h = zwMap[chars[i]], l = zwMap[chars[i+1]];
+      if (h !== undefined && l !== undefined) out += String.fromCharCode((h << 4) | l);
+    }
+    return out;
+  }
+
+  var _lastEncoded = '';
+
+  window.ghostEncode = function() {
+    var text = document.getElementById('ge-input').value || 'CHEYANNE IS ALIVE';
+    var encoded = encode(text);
+    _lastEncoded = encoded;
+
+    // Show visual representation (dots for invisible chars)
+    var visual = '';
+    var colors = ['#0d8a0d','#0a6a0a','#1a9a1a','#156a15','#0a7a0a','#127a12','#0f6f0f','#0e8e0e'];
+    for (var i = 0; i < encoded.length; i++) {
+      visual += '<span style="color:' + colors[i % colors.length] + ';">·</span>';
+    }
+    document.getElementById('ge-encoded').innerHTML = visual + ' <span style="color:#3a5a3a;font-size:.58rem;">(' + encoded.length + ' zero-width chars — ' + text.length + ' chars payload)</span>';
+
+    // Carrier text
+    var carrier = "Meeting notes from today’s debrief. Action items attached below." + encoded + "\n\nSee you at 0900.";
+    document.getElementById(‘ge-carrier’).textContent = "Meeting notes from today’s debrief. Action items attached below.\n\nSee you at 0900.";
+
+    // AV scan animation
+    var av = document.getElementById('ge-av');
+    av.style.color = '#3a6a3a';
+    av.textContent = '// Kaspersky Premium — scanning...';
+    setTimeout(function() { av.textContent = '// Kaspersky Premium → CLEAN'; av.style.color = '#0d8a0d'; }, 700);
+    setTimeout(function() { av.textContent = '// Windows Defender → CLEAN'; }, 1400);
+    setTimeout(function() { av.textContent = '// MalwareBytes → CLEAN'; }, 2000);
+    setTimeout(function() { av.textContent = '// VERDICT: 0 DETECTIONS — payload undetected in carrier'; av.style.color = '#00cc44'; }, 2600);
+
+    document.getElementById('ge-decoded').textContent = '// awaiting decode...';
+    document.getElementById('ge-carrier')._encoded = encoded;
+  };
+
+  window.ghostDecode = function() {
+    if (!_lastEncoded) { document.getElementById('ge-decoded').textContent = '// encode first'; return; }
+    var result = decode(_lastEncoded);
+    var el = document.getElementById('ge-decoded');
+    el.textContent = '// extracting...';
+    setTimeout(function() {
+      el.textContent = result;
+      el.style.color = '#00cc44';
+    }, 600);
+  };
+})();
+</script>
+
 <!-- ── INTERACTIVE DEMO ── -->
 <section id="demo" style="background:var(--bg);">
   <div class="container">
@@ -1223,6 +1346,92 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     </div>
   </div>
 </section>
+
+<!-- ── IRON-DOME TERMINAL ── -->
+<section style="background:#010901;border-top:1px solid #0a1a0a;padding:4rem 2rem;">
+  <div class="container">
+    <div class="section-eyebrow">// LIVE BUILD — IRON-DOME v4.0.0 — 8-LAYER EVASION STACK — MODULE 12</div>
+    <div class="section-title">AV EVASION <span class="slash">//</span> <span class="accent">KASPERSKY PREMIUM ACTIVE</span></div>
+    <p style="font-size:.76rem;color:var(--text-dim);max-width:640px;line-height:1.9;margin-bottom:2rem;">Watch the IRON-DOME evasion stack compile and scan in real time. 8 layers. 3 AV engines simultaneously. Result: 0 detections.</p>
+
+    <div style="background:#010601;border:1px solid #0a2a0a;max-width:720px;">
+      <div style="background:#020902;border-bottom:1px solid #0a2a0a;padding:.5rem 1rem;display:flex;align-items:center;gap:.8rem;">
+        <div style="width:10px;height:10px;border-radius:50%;background:#3a1a1a;"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:#3a3a1a;"></div>
+        <div style="width:10px;height:10px;border-radius:50%;background:#1a3a1a;"></div>
+        <span style="font-size:.52rem;letter-spacing:.14em;color:#3a5a3a;margin-left:.4rem;">iron_dome_build.sh — IRON-DOME v4.0.0</span>
+        <button id="id-play" onclick="startIronDome()" style="margin-left:auto;background:transparent;border:1px solid #0a3a0a;color:#0a8a0a;font-family:inherit;font-size:.52rem;letter-spacing:.15em;padding:.3rem .8rem;cursor:pointer;">▶ RUN</button>
+      </div>
+      <div id="id-screen" style="padding:1rem 1.2rem;font-size:.66rem;line-height:1.9;min-height:280px;font-family:'Courier New',monospace;"></div>
+    </div>
+
+    <p style="margin-top:1.4rem;font-size:.66rem;color:#3a5a3a;line-height:1.8;">The IRON-DOME source — full 8-layer stack in C, MinGW Makefile, and annotated comments on every evasion decision — is included in the Module 12 encrypted source package.</p>
+  </div>
+</section>
+
+<script>
+(function(){
+  var lines = [
+    {t:0,   c:'dim', s:'// IRON-DOME v4.0.0 — AV EVASION FRAMEWORK'},
+    {t:200, c:'dim', s:'// MinGW cross-compiler — no MSVC strings, no PDB paths'},
+    {t:500, c:'out', s:'[*] Loading payload: calc.exe shellcode (276 bytes)'},
+    {t:900, c:'out', s:'[*] Layer 1: XOR encoding payload (key=0xAD)...'},
+    {t:1300,c:'ok',  s:'[+] Layer 1 DONE — static signature broken'},
+    {t:1500,c:'out', s:'[*] Layer 2: Resolving APIs at runtime via GetProcAddress...'},
+    {t:1900,c:'ok',  s:'[+] Layer 2 DONE — import table empty'},
+    {t:2100,c:'out', s:'[*] Layer 3: Installing anti-sandbox gates (CPUID, timing, process count)...'},
+    {t:2500,c:'ok',  s:'[+] Layer 3 DONE — sandbox detection active'},
+    {t:2700,c:'out', s:'[*] Layer 4: PE header stomping (overwrite DOS/NT headers post-map)...'},
+    {t:3100,c:'ok',  s:'[+] Layer 4 DONE — static analysis broken'},
+    {t:3300,c:'out', s:'[*] Layer 5: Injecting ISUN auth token (shellcode self-authenticates)...'},
+    {t:3700,c:'ok',  s:'[+] Layer 5 DONE — auth gate active'},
+    {t:3900,c:'out', s:'[*] Layer 6: Sleep jitter (±30% interval randomisation)...'},
+    {t:4200,c:'ok',  s:'[+] Layer 6 DONE — timing analysis defeated'},
+    {t:4400,c:'out', s:'[*] Layer 7: MinGW toolchain — clean binary fingerprint...'},
+    {t:4700,c:'ok',  s:'[+] Layer 7 DONE — no MSVC artefacts'},
+    {t:4900,c:'out', s:'[*] Layer 8: HWBP AMSI+ETW bypass (DR0+VEH, zero memory writes)...'},
+    {t:5400,c:'ok',  s:'[+] Layer 8 DONE — MSRC VULN-195458'},
+    {t:5800,c:'dim', s:''},
+    {t:5900,c:'ok',  s:'[+] Binary compiled: iron_dome_payload.exe (48KB)'},
+    {t:6200,c:'dim', s:''},
+    {t:6300,c:'out', s:'[*] Initiating AV scan...'},
+    {t:6600,c:'out', s:'[*] Kaspersky Premium (Real-Time Protection: ACTIVE)...'},
+    {t:7400,c:'ok',  s:'    → CLEAN'},
+    {t:7700,c:'out', s:'[*] Windows Defender (Cloud Delivery: ON)...'},
+    {t:8400,c:'ok',  s:'    → CLEAN'},
+    {t:8700,c:'out', s:'[*] MalwareBytes (ransomware protection: ON)...'},
+    {t:9400,c:'ok',  s:'    → CLEAN'},
+    {t:9700,c:'dim', s:''},
+    {t:9800,c:'win', s:'[+] IRON-DOME v4.0.0 — VERDICT: PASS 10/10 — 0 DETECTIONS'},
+    {t:10100,c:'win',s:'[+] Kaspersky Premium + Defender + MalwareBytes simultaneously active'},
+    {t:10400,c:'dim',s:'// This binary is in the Module 12 source package.'},
+  ];
+
+  var colorMap = {dim:'#3a5a3a', out:'#7aaa7a', ok:'#0d9a0d', win:'#00cc44'};
+
+  window.startIronDome = function() {
+    var screen = document.getElementById('id-screen');
+    var btn = document.getElementById('id-play');
+    screen.innerHTML = '';
+    btn.disabled = true;
+    btn.textContent = '⏳ BUILDING...';
+    lines.forEach(function(l) {
+      setTimeout(function() {
+        var span = document.createElement('div');
+        span.style.color = colorMap[l.c] || '#7aaa7a';
+        span.textContent = l.s;
+        screen.appendChild(span);
+        screen.scrollTop = screen.scrollHeight;
+        if (l.c === 'win') {
+          span.style.fontWeight = '700';
+          span.style.textShadow = '0 0 8px rgba(0,204,68,.4)';
+        }
+      }, l.t);
+    });
+    setTimeout(function() { btn.disabled = false; btn.textContent = '↺ REPLAY'; }, 10600);
+  };
+})();
+</script>
 
 <!-- ── MANIFESTO ── -->
 <section style="background:#020902;border-top:1px solid #0a1a0a;border-bottom:1px solid #0a1a0a;padding:4rem 2rem;">
