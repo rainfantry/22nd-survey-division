@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Policies &amp; Legal Stance — 22nd Survey Division</title>
+<meta name="description" content="Research authorization, responsible disclosure, acceptable use, and legal compliance policies for 22nd Survey Division offensive security research and training.">
+<style>
+:root{
+  --bg:#010901;--bg2:#020c02;--text:#c8d8c8;--text-dim:#7a8a7a;
+  --green:#00cc44;--green-dim:#0a4a1a;--amber:#cc8800;
+  --border:#0a1a0a;--border2:#1a2a1a;--cyan:#00aacc;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Courier New',Courier,monospace;font-size:14px;line-height:1.7;}
+a{color:var(--green);text-decoration:none;}
+a:hover{text-decoration:underline;}
+.nav{position:sticky;top:0;background:rgba(1,9,1,.97);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;gap:2rem;z-index:100;}
+.nav-brand{font-size:.68rem;letter-spacing:.25em;color:#fff;text-decoration:none;text-transform:uppercase;}
+.nav-back{font-size:.6rem;letter-spacing:.15em;color:var(--text-dim);}
+.nav-back:hover{color:var(--green);}
+.container{max-width:860px;margin:0 auto;padding:0 2rem;}
+.page-header{padding:4rem 2rem 3rem;border-bottom:1px solid var(--border);}
+.page-header .eyebrow{font-size:.52rem;letter-spacing:.3em;color:var(--green-dim);margin-bottom:1rem;}
+.page-header h1{font-size:clamp(1.4rem,4vw,2.2rem);letter-spacing:.08em;text-transform:uppercase;color:#fff;margin-bottom:1rem;}
+.page-header .sub{font-size:.76rem;color:var(--text-dim);max-width:600px;line-height:1.8;}
+.toc{padding:2rem;border-bottom:1px solid var(--border);background:var(--bg2);}
+.toc-inner{max-width:860px;margin:0 auto;}
+.toc-label{font-size:.5rem;letter-spacing:.25em;color:var(--text-dim);margin-bottom:.8rem;}
+.toc-links{display:flex;flex-wrap:wrap;gap:.4rem 1.6rem;}
+.toc-links a{font-size:.65rem;letter-spacing:.1em;color:var(--text-dim);}
+.toc-links a:hover{color:var(--green);}
+section.pol{padding:3.5rem 2rem;border-bottom:1px solid var(--border);}
+.pol-eyebrow{font-size:.5rem;letter-spacing:.28em;color:var(--green-dim);margin-bottom:.7rem;}
+.pol-title{font-size:.96rem;letter-spacing:.1em;text-transform:uppercase;color:#e0e8e0;margin-bottom:1.4rem;}
+.pol-body{font-size:.73rem;color:var(--text-dim);line-height:1.95;margin-bottom:1.2rem;}
+.pol-body strong{color:var(--text);}
+.statute{background:#020f02;border:1px solid #0d2a0d;border-left:2px solid var(--green-dim);padding:1rem 1.4rem;margin:1.2rem 0;font-size:.68rem;color:#8aaa8a;line-height:1.8;}
+.statute .cite{font-size:.56rem;letter-spacing:.15em;color:var(--green-dim);display:block;margin-bottom:.4rem;}
+.statute .text{color:#a0baa0;}
+.rule-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:var(--border);margin:1.4rem 0;}
+.rule-card{background:var(--bg2);padding:1.2rem 1.4rem;}
+.rule-card .rc-num{font-size:.5rem;letter-spacing:.2em;color:var(--green-dim);margin-bottom:.4rem;}
+.rule-card .rc-title{font-size:.7rem;color:#d0dcd0;margin-bottom:.5rem;letter-spacing:.06em;text-transform:uppercase;}
+.rule-card .rc-body{font-size:.66rem;color:var(--text-dim);line-height:1.8;}
+.authority-table{width:100%;border-collapse:collapse;margin:1.2rem 0;font-size:.67rem;}
+.authority-table th{text-align:left;padding:.6rem .8rem;font-size:.5rem;letter-spacing:.2em;color:var(--text-dim);border-bottom:1px solid var(--border2);font-weight:normal;}
+.authority-table td{padding:.6rem .8rem;border-bottom:1px solid var(--border);color:var(--text-dim);vertical-align:top;}
+.authority-table td:first-child{color:var(--text);white-space:nowrap;}
+.authority-table tr:hover td{background:#020f02;}
+.footer{padding:2rem;text-align:center;border-top:1px solid var(--border);}
+.footer p{font-size:.58rem;letter-spacing:.12em;color:var(--text-dim);}
+.footer a{color:var(--text-dim);}
+.tag-green{display:inline-block;padding:.2rem .6rem;background:#020f02;border:1px solid #0d2a0d;font-size:.52rem;letter-spacing:.14em;color:var(--green);margin:.2rem;}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">22ND <span style="color:#fff;">SURVEY</span> DIVISION</a>
+  <a href="index.html" class="nav-back">← BACK TO MAIN</a>
+  <span style="margin-left:auto;font-size:.52rem;letter-spacing:.15em;color:var(--text-dim);">POLICIES &amp; LEGAL STANCE</span>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <div class="eyebrow">// LEGAL COMPLIANCE &amp; RESEARCH AUTHORIZATION</div>
+    <h1>Policies &amp; Legal Stance</h1>
+    <p class="sub">22nd Survey Division (OCCUPATION FORCE CALLSIGN GSW PTY LTD, ABN 50 692 429 397) operates under Australian law and international responsible disclosure standards. This document sets out our research authorization, disclosure obligations, and acceptable use policy for course content.</p>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="toc-inner">
+    <div class="toc-label">// CONTENTS</div>
+    <div class="toc-links">
+      <a href="#authorization">Research Authorization</a>
+      <a href="#legislation">Applicable Legislation</a>
+      <a href="#disclosure">Responsible Disclosure</a>
+      <a href="#aup">Acceptable Use</a>
+      <a href="#authorities">Governing Authorities</a>
+      <a href="#contact-legal">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH AUTHORIZATION -->
+<section class="pol" id="authorization">
+  <div class="container">
+    <div class="pol-eyebrow">// SECTION 1</div>
+    <div class="pol-title">Research Authorization Policy</div>
+    <p class="pol-body">All offensive security research conducted by 22nd Survey Division is performed exclusively on <strong>owned hardware</strong> in an isolated test environment, or on <strong>explicitly authorized systems</strong> under written engagement agreements. No research is performed against third-party infrastructure, cloud services, or production systems without documented written authorization from the asset owner.</p>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="rc-num">01 — SCOPE</div>
+        <div class="rc-title">Own Hardware Only</div>
+        <div class="rc-body">All malware development, AV evasion testing, C2 deployment, and exploitation research occurs exclusively on researcher-owned machines (George Wu, 22nd Survey Division) or Raed Ghaleb's explicitly authorized machines under the survey partnership. Isolated network segments. No outbound C2 to third-party hosts without authorization.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">02 — AUTHORIZATION</div>
+        <div class="rc-title">No Unauthorized Access</div>
+        <div class="rc-body">Research does not access, modify, or impair any computer system, network, or data without explicit prior authorization. All test targets are owned or authorized. No mass-targeting tools. No infrastructure scanning beyond authorized scope. This is a hard limit with no exceptions.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">03 — ISOLATION</div>
+        <div class="rc-title">Test Environment Isolation</div>
+        <div class="rc-body">C2 infrastructure (CHEYANNE, ECLIPSE) operated for research runs on isolated local networks or explicitly authorized remote environments. Beacon payloads do not propagate beyond the test environment. GPS and SMS exfiltration research (StarKiller) conducted exclusively against the researcher's own devices.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">04 — RECORDS</div>
+        <div class="rc-title">Research Documentation</div>
+        <div class="rc-body">All research activity is documented: PENTEST_LOG.md per engagement, RESEARCH_LOG.md for ongoing vulnerability research. Research authorization records maintained in github.com/rainfantry/csec-research-authorization (public). MSRC submissions logged with reference numbers. MITRE CVE submissions tracked.</div>
+      </div>
+    </div>
+
+    <p class="pol-body" style="margin-top:1.2rem;">Public research authorization statement: <a href="https://github.com/rainfantry/csec-research-authorization" target="_blank">github.com/rainfantry/csec-research-authorization →</a></p>
+  </div>
+</section>
+
+<!-- APPLICABLE LEGISLATION -->
+<section class="pol" id="legislation" style="background:var(--bg2);">
+  <div class="container">
+    <div class="pol-eyebrow">// SECTION 2</div>
+    <div class="pol-title">Applicable Legislation &amp; Compliance</div>
+    <p class="pol-body">Research and training operations comply with the following Australian and international legal frameworks. Where our research engages techniques that would otherwise constitute computer offences, all applicable authorization and ownership conditions are met.</p>
+
+    <div class="statute">
+      <span class="cite">CRIMINAL CODE ACT 1995 (CTH) — PART 10.7: COMPUTER OFFENCES</span>
+      <div class="text">
+        <strong>s.477.1</strong> — Unauthorized access, modification or impairment with intent to commit a serious Commonwealth offence. <em>22DIV compliance: all access to computer systems is authorized — own hardware or explicit written consent.</em><br><br>
+        <strong>s.477.2</strong> — Unauthorized modification of data to cause impairment. <em>22DIV compliance: no modification of third-party data. Test data is synthetic or owned.</em><br><br>
+        <strong>s.477.3</strong> — Unauthorized impairment of electronic communication. <em>22DIV compliance: no interference with communications infrastructure. C2 beacons operate on owned or authorized systems only.</em><br><br>
+        <strong>s.478.1</strong> — Unauthorized access to, or modification of, restricted data. <em>22DIV compliance: all data accessed during research is owned by or explicitly made available to the researcher.</em>
+      </div>
+    </div>
+
+    <div class="statute">
+      <span class="cite">PRIVACY ACT 1988 (CTH) — AUSTRALIAN PRIVACY PRINCIPLES (APPs)</span>
+      <div class="text">
+        Research involving real device data (GPS coordinates, SMS content in StarKiller testing) is conducted exclusively on devices owned by the researcher. No third-party personal data is collected, stored, or processed during research. Course student data is limited to PIN authentication — no personal data stored beyond session scope.
+      </div>
+    </div>
+
+    <div class="statute">
+      <span class="cite">CORPORATIONS ACT 2001 (CTH) — COMPANY OBLIGATIONS</span>
+      <div class="text">
+        OCCUPATION FORCE CALLSIGN GSW PTY LTD (ACN 692 429 397) is a registered Australian proprietary limited company incorporated 1 November 2025 in New South Wales. All commercial activity (course sales, encrypted source package distribution) conducted under this entity in compliance with Australian Consumer Law (Competition and Consumer Act 2010, Schedule 2).
+      </div>
+    </div>
+
+    <div class="statute">
+      <span class="cite">CYBERCRIME ACT 2001 (CTH) — SCHEDULE TO CRIMINAL CODE</span>
+      <div class="text">
+        The provisions of the Cybercrime Act 2001 are incorporated into the Criminal Code Act 1995. Research activities comply with all carve-outs for authorized computer access. Security research on own hardware with no unauthorized access does not constitute an offence under these provisions.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RESPONSIBLE DISCLOSURE -->
+<section class="pol" id="disclosure">
+  <div class="container">
+    <div class="pol-eyebrow">// SECTION 3</div>
+    <div class="pol-title">Responsible Disclosure Policy</div>
+    <p class="pol-body">22nd Survey Division follows Coordinated Vulnerability Disclosure (CVD) as defined by the Australian Cyber Security Centre (ACSC) and consistent with ISO/IEC 29147:2018 (Vulnerability Disclosure). Novel vulnerabilities are reported to the relevant vendor or authority before any public disclosure.</p>
+
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="rc-num">TIMELINE</div>
+        <div class="rc-title">90-Day Embargo</div>
+        <div class="rc-body">Findings are submitted to the relevant vendor (MSRC, MITRE, CERT/CC, ACSC) and held for 90 days before public disclosure. The embargo clock starts from vendor acknowledgement. If the vendor closes the case without remediation (as with VULN-195458), the embargo is void and findings are published.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">SUBMISSION</div>
+        <div class="rc-title">Vendor-First</div>
+        <div class="rc-body">All submissions go to the vendor's official security disclosure channel first. No bug bounty platform jumping, no social media disclosure, no conference dropping before the vendor has had time to triage. MSRC: msrc.microsoft.com. MITRE CVE: cveform.mitre.org. ACSC: cyber.gov.au/report.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">RECORD</div>
+        <div class="rc-title">Published Disclosures</div>
+        <div class="rc-body">MSRC VULN-195458 — HWBP Tamper Protection bypass (AmsiScanBuffer/NtTraceEvent via DR0+VEH). Submitted before public release. MSRC closed as out-of-scope for Defender; embargo void; technique published. CVE submissions: MITRE case #49, #53 (vader-toctou TOCTOU race condition series).</div>
+      </div>
+      <div class="rule-card">
+        <div class="rc-num">SCOPE</div>
+        <div class="rc-title">What We Report</div>
+        <div class="rc-body">Novel vulnerabilities with confirmed impact: memory corruption, privilege escalation, authentication bypass, defence bypass with persistence. Techniques that bypass security controls without a vulnerability (LOLBAS, HWBP, process hollowing) are documented as attack-surface analysis, not CVE-eligible bugs, and published directly after vendor notification.</div>
+      </div>
+    </div>
+
+    <p class="pol-body" style="margin-top:1.2rem;">Disclosure record and research authorization: <a href="https://github.com/rainfantry/csec-research-authorization" target="_blank">github.com/rainfantry/csec-research-authorization →</a> | Research findings: <a href="https://github.com/rainfantry/22sd-research-findings" target="_blank">github.com/rainfantry/22sd-research-findings →</a></p>
+  </div>
+</section>
+
+<!-- ACCEPTABLE USE -->
+<section class="pol" id="aup" style="background:var(--bg2);">
+  <div class="container">
+    <div class="pol-eyebrow">// SECTION 4</div>
+    <div class="pol-title">Acceptable Use Policy — Course Content &amp; Source Packages</div>
+    <p class="pol-body">Source packages distributed to course students (encrypted 7z archives of private repositories) are provided for <strong>educational and authorized security research purposes only</strong>. By purchasing access and receiving a PIN, students agree to the following terms.</p>
+
+    <table class="authority-table">
+      <thead>
+        <tr>
+          <th>CONDITION</th>
+          <th>PERMITTED</th>
+          <th>PROHIBITED</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Target scope</td>
+          <td>Own hardware, authorized test environments, CTF infrastructure, explicitly engaged pentest targets under signed contract</td>
+          <td>Any system you do not own or have explicit written authorization to test</td>
+        </tr>
+        <tr>
+          <td>Code modification</td>
+          <td>Modification for personal research, learning, and authorized engagements</td>
+          <td>Commercial redistribution, resale, or sublicensing of source code or derived works</td>
+        </tr>
+        <tr>
+          <td>Disclosure</td>
+          <td>Publishing independent research derived from techniques learned in the course with original findings</td>
+          <td>Redistribution of course source code; sharing decryption password; sharing decrypted archives</td>
+        </tr>
+        <tr>
+          <td>Deployment</td>
+          <td>C2 deployment on own infrastructure for research and authorized engagements</td>
+          <td>Deploying CHEYANNE, ECLIPSE, StarKiller or any course tool against unauthorized targets. Deploying as persistent access on any third-party system without authorization.</td>
+        </tr>
+        <tr>
+          <td>VirusTotal / AV telemetry</td>
+          <td>Local AV testing on own machine, offline scanning</td>
+          <td>Uploading binaries to VirusTotal, Hybrid Analysis, Any.run, or any cloud sandbox. This degrades evasion for every user and is explicitly prohibited.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="pol-body">Violation of this policy voids access without refund. Legal action may follow for unauthorized access to third-party systems using course materials — this falls under Criminal Code Act 1995 (Cth) s.477.1 and equivalent state cybercrime legislation. <strong>You are responsible for your own compliance with applicable law in your jurisdiction.</strong></p>
+
+    <div class="statute">
+      <span class="cite">NOTE ON LEGAL USE OF OFFENSIVE TOOLS — AUSTRALIAN JURISDICTION</span>
+      <div class="text">
+        In Australia, possession and use of offensive security tools is not inherently illegal. Criminal liability under the Criminal Code Act 1995 (Cth) Part 10.7 requires unauthorized access or intent to cause impairment. Security researchers, penetration testers, and students using these tools on own or authorized systems are within the law. Students are responsible for obtaining appropriate authorization before deploying any offensive technique and should maintain written records of authorization for all engagements.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOVERNING AUTHORITIES -->
+<section class="pol" id="authorities">
+  <div class="container">
+    <div class="pol-eyebrow">// SECTION 5</div>
+    <div class="pol-title">Governing Authorities &amp; Frameworks</div>
+    <p class="pol-body">22nd Survey Division aligns research and disclosure practices with the following authorities and frameworks.</p>
+
+    <table class="authority-table">
+      <thead>
+        <tr>
+          <th>AUTHORITY / FRAMEWORK</th>
+          <th>RELEVANCE</th>
+          <th>OUR POSITION</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Australian Cyber Security Centre (ACSC)</td>
+          <td>National cybersecurity authority — CVD guidelines, threat intelligence, Essential Eight</td>
+          <td>CVD process follows ACSC guidance. Findings reported via cyber.gov.au/report where applicable.</td>
+        </tr>
+        <tr>
+          <td>Australian Signals Directorate (ASD)</td>
+          <td>Parent of ACSC — signals intelligence and cyber operations doctrine</td>
+          <td>ASD Essential Eight used as defensive benchmark for all evasion research. Bypass techniques documented against E8 controls.</td>
+        </tr>
+        <tr>
+          <td>Microsoft Security Response Center (MSRC)</td>
+          <td>Vendor disclosure channel for Windows vulnerabilities</td>
+          <td>Active submitter. VULN-195458 submitted and closed. Future Windows internals findings submitted to MSRC first.</td>
+        </tr>
+        <tr>
+          <td>MITRE Corporation (CVE Program)</td>
+          <td>CVE numbering authority — formal vulnerability registry</td>
+          <td>CVE submissions for discrete vulnerabilities (vader-toctou series, MITRE cases #49, #53). ATT&amp;CK framework used for technique mapping in course.</td>
+        </tr>
+        <tr>
+          <td>ISO/IEC 29147:2018</td>
+          <td>International standard — Vulnerability Disclosure</td>
+          <td>Disclosure timeline and vendor-first policy consistent with this standard.</td>
+        </tr>
+        <tr>
+          <td>ISO/IEC 30111:2019</td>
+          <td>International standard — Vulnerability Handling Processes</td>
+          <td>Internal research triage and documentation follows this standard's handling process framework.</td>
+        </tr>
+        <tr>
+          <td>CERT/CC (Carnegie Mellon)</td>
+          <td>Original CVD authority — coordination for multi-vendor findings</td>
+          <td>Escalation path for multi-vendor vulnerabilities where single vendor disclosure is insufficient.</td>
+        </tr>
+        <tr>
+          <td>MITRE ATT&amp;CK</td>
+          <td>Adversary tactics and techniques knowledge base</td>
+          <td>All course techniques mapped to ATT&amp;CK TTP IDs. Research findings documented with ATT&amp;CK technique references.</td>
+        </tr>
+        <tr>
+          <td>Criminal Code Act 1995 (Cth) Part 10.7</td>
+          <td>Primary Australian cybercrime legislation</td>
+          <td>All research conducted in compliance. Own hardware. No unauthorized access. Written records maintained.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:.4rem;">
+      <span class="tag-green">ACSC COMPLIANT</span>
+      <span class="tag-green">CRIMINAL CODE ACT 1995 (CTH)</span>
+      <span class="tag-green">ISO/IEC 29147:2018</span>
+      <span class="tag-green">MITRE ATT&amp;CK ALIGNED</span>
+      <span class="tag-green">ASD ESSENTIAL EIGHT</span>
+      <span class="tag-green">MSRC DISCLOSED</span>
+      <span class="tag-green">OWN HARDWARE ONLY</span>
+      <span class="tag-green">NO UNAUTHORIZED ACCESS</span>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="pol" id="contact-legal" style="background:var(--bg2);">
+  <div class="container">
+    <div class="pol-eyebrow">// SECTION 6</div>
+    <div class="pol-title">Legal Contact &amp; Authorization Requests</div>
+    <p class="pol-body">For questions about research scope, authorization requests, disclosure coordination, or concerns about course content use:</p>
+    <table class="authority-table" style="max-width:500px;">
+      <tbody>
+        <tr><td>Entity</td><td>OCCUPATION FORCE CALLSIGN GSW PTY LTD</td></tr>
+        <tr><td>ABN</td><td>50 692 429 397</td></tr>
+        <tr><td>ACN</td><td>692 429 397</td></tr>
+        <tr><td>Jurisdiction</td><td>New South Wales, Australia</td></tr>
+        <tr><td>Email</td><td><a href="mailto:gwu0738@gmail.com">gwu0738@gmail.com</a></td></tr>
+        <tr><td>Disclosure record</td><td><a href="https://github.com/rainfantry/csec-research-authorization" target="_blank">csec-research-authorization (GitHub)</a></td></tr>
+        <tr><td>Portfolio</td><td><a href="https://rainfantry.github.io/22nd-survey-division/">rainfantry.github.io/22nd-survey-division</a></td></tr>
+      </tbody>
+    </table>
+    <p class="pol-body" style="margin-top:1.4rem;">Last updated: June 2026. This document is reviewed when legislation, vendor policies, or research scope changes materially.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>OCCUPATION FORCE CALLSIGN GSW PTY LTD — ABN 50 692 429 397 — ACN 692 429 397 — NSW PTY LTD — EST. NOV 2025</p>
+  <p style="margin-top:.4rem;"><a href="index.html">← Return to Main</a></p>
+</footer>
+
+</body>
+</html>
