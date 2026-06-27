@@ -17,6 +17,59 @@ if (document.cookie.indexOf('22div_gate_auth=1') === -1) {
 <meta property="og:description" content="The course that teaches coders to think like attackers — and attackers to code like engineers.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://rainfantry.github.io/22nd-survey-division/">
+<meta property="og:image" content="https://rainfantry.github.io/showcase/iron_dome_build_complete_154613.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="22nd Survey Division">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="22nd Survey Division — Offensive Security Training">
+<meta name="twitter:description" content="The course that teaches coders to think like attackers — and attackers to code like engineers.">
+<meta name="twitter:image" content="https://rainfantry.github.io/showcase/iron_dome_build_complete_154613.jpg">
+<meta name="keywords" content="offensive security training, red team course, malware development, rootkit course, C2 framework, Windows internals, AMSI bypass, ETW bypass, AV evasion, privilege escalation, exploit development, Android RAT, mobile security, cybersecurity course Australia, security training Sydney, 22nd Survey Division, George Wu, rainfantry">
+<link rel="canonical" href="https://rainfantry.github.io/22nd-survey-division/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "22nd Survey Division",
+  "legalName": "Occupation Force Callsign GSW Pty Ltd",
+  "alternateName": "22DIV",
+  "url": "https://rainfantry.github.io/22nd-survey-division/",
+  "description": "Full-stack offensive security training. MITRE ATT&CK aligned. 22 modules, working tool repos, documented research.",
+  "founder": {
+    "@type": "Person",
+    "name": "George Wu",
+    "jobTitle": "Security Researcher"
+  },
+  "areaServed": "AU",
+  "sameAs": ["https://github.com/rainfantry"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "22nd Survey Division — Offensive Security Training",
+  "description": "22-module kill chain curriculum: recon, exploit development, malware development, rootkits, AV evasion, C2, mobile security. Includes working private repos.",
+  "provider": {
+    "@type": "Organization",
+    "name": "22nd Survey Division",
+    "url": "https://rainfantry.github.io/22nd-survey-division/"
+  },
+  "educationalLevel": "Advanced",
+  "teaches": ["Offensive Security", "Red Teaming", "Malware Development", "Exploit Development", "Windows Internals", "AMSI Bypass", "C2 Frameworks", "Android Security"],
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "online",
+    "offers": {
+      "@type": "Offer",
+      "price": "497",
+      "priceCurrency": "AUD",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+}
+</script>
 <style>
 :root {
   --bg:         #0a0a0a;
@@ -713,7 +766,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/GaySun_ImportTable_Evasion.png" alt="Import table fingerprinting" loading="lazy">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/Defender_Quarantine_GaySun.png" alt="Defender quarantined GaySun.exe — AV detection before evasion" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// MODULE 12 — AV EVASION</div>
           <div class="proof-caption">Import table fingerprinting: Defender matches your binary's API import topology — not just strings. Understanding this is why Layer 2 dynamic API resolution exists. Course teaches both sides.</div>
@@ -722,7 +775,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/builder_v4_build_complete_154222.png" alt="IRON-DOME v4 builder complete" loading="lazy">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/UnDefend_Engine_Unavailable.png" alt="Windows Security engine unavailable — AMSI bypass confirmed" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// MODULE 11 — ROOTKITS</div>
           <div class="proof-caption">IRON-DOME v4 builder output: HWBP AMSI/ETW bypass compiled, 26 binaries generated, SHA256 verified. Hardware debug register breakpoints — zero memory writes, bypasses Tamper Protection entirely.</div>
@@ -776,7 +829,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/flagship_full_stack_ascii_154617.png" alt="FLAGSHIP full stack kill chain" loading="lazy">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/iron_dome_v4_vnc_terminal.png" alt="IRON-DOME VNC callback — shell connected, CHEYANNE WATCH live" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// MODULE 16 — COMMAND AND CONTROL</div>
           <div class="proof-caption">FLAGSHIP full-stack kill chain: C2 connect → AMSI/ETW disabled → recon → persistence. Every stage automated, logged, and verified. This is what an adversary's CI/CD pipeline looks like.</div>
@@ -785,7 +838,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/gui_shell_4_connected_155619.png" alt="FLAGSHIP — reverse shell connected" loading="lazy">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/eclipse_c2_gps_live.png" alt="ECLIPSE C2 — GPS geolocation live + reverse shell active" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// FLAGSHIP — LIVE REVERSE SHELL</div>
           <div class="proof-caption">IRON-SUN TCP reverse shell connecting back to C2. 7-layer evasion stack: XOR payload, dynamic API resolution, sandbox detection, PE stomping, ISUN auth token, jitter, MinGW toolchain. Kaspersky Premium — no alert.</div>
@@ -794,7 +847,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/gui_shell_verdict_pass_155811.png" alt="FLAGSHIP kill chain verdict PASS" loading="lazy">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/Defender_Quarantine_RoguePlanet.png" alt="Defender quarantined RoguePlanet.exe — payload interaction documented" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// FLAGSHIP — VERDICT PASS</div>
           <div class="proof-caption">Full kill chain test verdict: PASS. Automated harness runs build → deploy → connect → recon → exfil → cleanup. 26+ binaries, 0 detections. This is what an adversary's automated QA pipeline looks like.</div>
@@ -803,7 +856,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       </div>
 
       <div class="proof-card">
-        <img class="proof-img" src="https://rainfantry.github.io/showcase/suite_final_results_151327.png" alt="IRON-DOME suite test results" loading="lazy">
+        <img class="proof-img" src="https://rainfantry.github.io/showcase/iron_dome_kill_chain_154619.jpg" alt="Kaspersky Premium active — IRON-DOME running through live AV" loading="lazy">
         <div class="proof-info">
           <div class="proof-tag">// IRON-DOME — SUITE RESULTS</div>
           <div class="proof-caption">IRON-DOME v4.0.0 final test suite output. SHA256 verified, 10/10 evasion layers active, build-to-shell validated. What does a mature offensive platform look like? This. Module 8 covers every layer you're seeing here.</div>
