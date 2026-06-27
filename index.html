@@ -241,7 +241,7 @@ h1.hero-headline .amber{color:var(--amber);}
 ───────────────────────────────────────── */
 section{padding:5rem 2rem;}
 section + section{border-top:1px solid var(--border);}
-.container{max-width:1100px;margin:0 auto;}
+.container{max-width:960px;margin:0 auto;}
 .section-eyebrow{font-size:.58rem;letter-spacing:.4em;color:var(--green-dim);text-transform:uppercase;margin-bottom:.5rem;}
 .section-title{
   font-size:clamp(1.1rem,2.8vw,1.7rem);letter-spacing:.12em;
@@ -676,6 +676,16 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 .demo-blank.fb-err{border-color:var(--red);color:var(--red);background:#0d0000;}
 .demo-hint-link{font-size:.7rem;color:#444;cursor:pointer;margin-left:.8rem;text-decoration:underline dashed;}
 .demo-hint-link:hover{color:#777;}
+/* ── MOBILE PAYMENT LAYOUT ── */
+@media(max-width:640px){
+  .pay-grid{display:flex!important;flex-direction:column!important;gap:8px!important;background:transparent!important;}
+  .pay-card-desc{display:none!important;}
+  .pay-card-title{display:none!important;}
+  .pay-alt-grid{display:flex!important;flex-direction:column!important;background:transparent!important;}
+  .pay-alt-card-desc{display:none!important;}
+}
+/* ── HERO INNER MAX-WIDTH ── */
+.hero-inner{max-width:960px;}
 </style>
 <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 </head>
@@ -744,10 +754,10 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     <div class="pin-acn">ACN 692 429 397 // SYDNEY // AUSTRALIA</div>
     <div class="pin-title">// ACCESS Restricted</div>
     <div class="pin-sub">Enter your access PIN to continue.<br><span style="color:#2a6e2a;">No PIN? Purchase below — emailed within 24h.</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:.8rem 0;">
+    <div class="pay-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:.8rem 0;">
       <div style="background:#020f02;border:1px solid #0d2a0d;padding:.7rem;text-align:center;border-radius:4px;">
-        <div style="font-size:.42rem;letter-spacing:.14em;color:#2a7a2a;margin-bottom:.3rem;">FULL BUNDLE</div>
-        <div style="font-size:.52rem;color:#8aba8a;margin-bottom:.5rem;line-height:1.4;">22 modules + all 5 private repos</div>
+        <div class="pay-card-title" style="font-size:.42rem;letter-spacing:.14em;color:#2a7a2a;margin-bottom:.3rem;">FULL BUNDLE — A$247.50</div>
+        <div class="pay-card-desc" style="font-size:.52rem;color:#8aba8a;margin-bottom:.5rem;line-height:1.4;">22 modules + all 5 private repos</div>
         <div style="display:flex;justify-content:center;">
           <stripe-buy-button
             buy-button-id="buy_btn_1Tmp4iS5K1Ttf6KaIUlvp1xr"
@@ -756,8 +766,8 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         </div>
       </div>
       <div style="background:#020f02;border:1px solid #0d2a0d;padding:.7rem;text-align:center;border-radius:4px;">
-        <div style="font-size:.42rem;letter-spacing:.14em;color:#2a7a2a;margin-bottom:.3rem;">SUPPORT / ALT TIER</div>
-        <div style="font-size:.52rem;color:#8aba8a;margin-bottom:.5rem;line-height:1.4;">Alternative access or support</div>
+        <div class="pay-card-title" style="font-size:.42rem;letter-spacing:.14em;color:#2a7a2a;margin-bottom:.3rem;">SINGLE TRACK / SUPPORT</div>
+        <div class="pay-card-desc" style="font-size:.52rem;color:#8aba8a;margin-bottom:.5rem;line-height:1.4;">Alternative tier — see Stripe for price</div>
         <div style="display:flex;justify-content:center;">
           <stripe-buy-button
             buy-button-id="buy_btn_1Tmp9SS5K1Ttf6KaxgbBvxcw"
@@ -884,6 +894,35 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     </div>
   </div>
 </section>
+
+<!-- ── GOOGLE AI CALLOUT ── -->
+<div style="background:#010f01;border-top:1px solid #0a2a0a;border-bottom:1px solid #0a2a0a;padding:1.2rem 2rem;overflow:hidden;">
+  <div style="max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:1.2rem;justify-content:space-between;">
+    <div style="display:flex;align-items:center;gap:1rem;min-width:0;flex:1;">
+      <span style="font-size:.46rem;letter-spacing:.22em;color:#2a6a2a;white-space:nowrap;flex-shrink:0;">// GOOGLE AI</span>
+      <p style="font-size:.68rem;color:#c0dcc0;line-height:1.6;margin:0;font-style:italic;">"You built a direct technical mirror of a SANS-level syllabus and priced it to disrupt. $8,000+ courses fund buildings and procurement — not knowledge. <strong style="color:var(--green);font-style:normal;">Let the corporate market navigate its own cost structures.</strong>"</p>
+    </div>
+    <div style="display:flex;gap:1.2rem;flex-shrink:0;align-items:center;flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div style="font-size:.44rem;color:#3a6a3a;letter-spacing:.12em;">vs OSCP+</div>
+        <div style="font-size:.82rem;color:#666;font-weight:700;line-height:1;">$1,700</div>
+        <div style="font-size:.38rem;color:#3a5a3a;letter-spacing:.1em;">USD</div>
+      </div>
+      <div style="font-size:.7rem;color:#2a4a2a;">→</div>
+      <div style="text-align:center;">
+        <div style="font-size:.44rem;color:#3a6a3a;letter-spacing:.12em;">vs SANS SEC670</div>
+        <div style="font-size:.82rem;color:#666;font-weight:700;line-height:1;">$8,500</div>
+        <div style="font-size:.38rem;color:#3a5a3a;letter-spacing:.1em;">USD</div>
+      </div>
+      <div style="font-size:.7rem;color:#2a4a2a;">→</div>
+      <div style="text-align:center;">
+        <div style="font-size:.44rem;color:#2a7a2a;letter-spacing:.12em;">22DIV</div>
+        <div style="font-size:.82rem;color:var(--green);font-weight:700;line-height:1;">$497</div>
+        <div style="font-size:.38rem;color:#3a7a3a;letter-spacing:.1em;">AUD</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ── STATS STRIP ── -->
 <div id="stats-strip">
@@ -1768,13 +1807,12 @@ html:not(.course-locked) #course-teaser { display: none !important; }
         <div style="font-size:.46rem;letter-spacing:.22em;color:#2a5a2a;text-align:center;margin-bottom:1rem;">// PAYMENT OPTIONS — CARD · BANK TRANSFER · INVOICE</div>
 
         <!-- STRIPE OPTIONS GRID -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#0d2a0d;margin-bottom:1rem;">
+        <div class="pay-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#0d2a0d;margin-bottom:1rem;">
 
           <!-- OPTION 1: FULL BUNDLE -->
           <div style="background:#020f02;padding:1rem 1.2rem;text-align:center;">
-            <div style="font-size:.48rem;letter-spacing:.18em;color:#2a7a2a;margin-bottom:.4rem;">OPTION 1</div>
-            <div style="font-size:.62rem;color:#d0e8d0;font-weight:700;letter-spacing:.06em;margin-bottom:.3rem;">22DIV FULL BUNDLE</div>
-            <div style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">All 22 modules + 5 private tool repos + lifetime access. Everything. One payment.</div>
+            <div class="pay-card-title" style="font-size:.48rem;letter-spacing:.18em;color:#2a7a2a;margin-bottom:.4rem;">OPTION 1 — FULL BUNDLE</div>
+            <div class="pay-card-desc" style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">All 22 modules + 5 private repos + lifetime access. One payment.</div>
             <div style="display:flex;justify-content:center;">
               <stripe-buy-button
                 buy-button-id="buy_btn_1Tmp4iS5K1Ttf6KaIUlvp1xr"
@@ -1785,9 +1823,8 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
           <!-- OPTION 2: SECOND TIER -->
           <div style="background:#020f02;padding:1rem 1.2rem;text-align:center;">
-            <div style="font-size:.48rem;letter-spacing:.18em;color:#2a7a2a;margin-bottom:.4rem;">OPTION 2</div>
-            <div style="font-size:.62rem;color:#d0e8d0;font-weight:700;letter-spacing:.06em;margin-bottom:.3rem;">SUPPORT / ACCESS TIER</div>
-            <div style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">Support the research. Alternative pricing or single-track access. Check Stripe for what this tier covers.</div>
+            <div class="pay-card-title" style="font-size:.48rem;letter-spacing:.18em;color:#2a7a2a;margin-bottom:.4rem;">OPTION 2 — SINGLE TRACK</div>
+            <div class="pay-card-desc" style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">Single-track access or support tier. Price shown in Stripe checkout.</div>
             <div style="display:flex;justify-content:center;">
               <stripe-buy-button
                 buy-button-id="buy_btn_1Tmp9SS5K1Ttf6KaxgbBvxcw"
@@ -1797,17 +1834,27 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           </div>
         </div>
 
+        <!-- MONTHLY SUBSCRIPTION -->
+        <div class="pay-grid" style="display:grid;grid-template-columns:1fr;gap:1px;background:#0d2a0d;margin-bottom:1rem;">
+          <div style="background:#020f02;padding:1rem 1.2rem;text-align:center;">
+            <div class="pay-card-title" style="font-size:.48rem;letter-spacing:.18em;color:#0d8a4a;margin-bottom:.4rem;">OPTION 3 — MONTHLY SUBSCRIPTION — A$21.99/mo</div>
+            <div class="pay-card-desc" style="font-size:.52rem;color:#6a9a6a;line-height:1.6;margin-bottom:.8rem;">Private repo access forever. All tools updated as research evolves — VADER, Ghost-Encoder, CHEYANNE, IRON-SUN, WinRecon. Cancel anytime. Subscribers get every new push automatically.</div>
+            <a href="mailto:gwu0738@gmail.com?subject=22DIV Monthly Subscription — A$21.99/mo" style="display:inline-block;background:#0d3a1a;border:1px solid #1a6a3a;color:#4aaa6a;font-size:.6rem;letter-spacing:.1em;padding:.5rem 1.2rem;text-decoration:none;font-weight:700;">SUBSCRIBE — A$21.99/mo →</a>
+            <div class="pay-card-desc" style="font-size:.44rem;color:#2a5a3a;margin-top:.5rem;">Stripe recurring billing link coming — reply to confirm subscription. PIN emailed same day.</div>
+          </div>
+        </div>
+
         <!-- ALT PAYMENT METHODS -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#0a1a0a;margin-bottom:.8rem;">
+        <div class="pay-alt-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#0a1a0a;margin-bottom:.8rem;">
           <div style="background:#010901;padding:.8rem 1rem;text-align:center;">
             <div style="font-size:.44rem;letter-spacing:.16em;color:#1a5a3a;margin-bottom:.4rem;">BANK TRANSFER / INTERNATIONAL</div>
             <a href="https://wise.com/pay/business/occupationforcecallsigngswptyltd" target="_blank" style="font-size:.6rem;color:#2a8e6a;font-weight:700;letter-spacing:.08em;text-decoration:none;display:block;margin-bottom:.3rem;">PAY VIA WISE →</a>
-            <div style="font-size:.46rem;color:#3a6a4a;line-height:1.6;">Business bank transfer. AU/INT. No Stripe? Use this. Also fine for corporate invoicing or if you're outside card regions.</div>
+            <div class="pay-alt-card-desc" style="font-size:.46rem;color:#3a6a4a;line-height:1.6;">Business bank transfer. AU/INT. No Stripe? Use this. Also fine for corporate invoicing or if you're outside card regions.</div>
           </div>
           <div style="background:#010901;padding:.8rem 1rem;text-align:center;">
             <div style="font-size:.44rem;letter-spacing:.16em;color:#1a5a3a;margin-bottom:.4rem;">INVOICE / CORPORATE / DEFER</div>
             <a href="mailto:gwu0738@gmail.com?subject=22DIV Invoice Request — $497 AUD" style="font-size:.6rem;color:#3a8a6a;font-weight:700;letter-spacing:.08em;text-decoration:none;display:block;margin-bottom:.3rem;">REQUEST INVOICE →</a>
-            <div style="font-size:.46rem;color:#3a6a4a;line-height:1.6;">Need a formal invoice for your employer, reimbursement, or training budget? Email — invoice issued same day. ABN 50 692 429 397.</div>
+            <div class="pay-alt-card-desc" style="font-size:.46rem;color:#3a6a4a;line-height:1.6;">Need a formal invoice for your employer, reimbursement, or training budget? Email — invoice issued same day. ABN 50 692 429 397.</div>
           </div>
         </div>
 
