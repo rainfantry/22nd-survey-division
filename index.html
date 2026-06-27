@@ -808,6 +808,23 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   </div>
 </div>
 
+<!-- ── CREDENTIALS BAR ── -->
+<div style="background:#020802;border-top:1px solid #0a1a0a;border-bottom:1px solid #0a1a0a;padding:.9rem 0;">
+  <div class="stats-inner" style="flex-wrap:wrap;gap:1.2rem 2.4rem;justify-content:center;align-items:center;">
+    <div style="font-size:.54rem;letter-spacing:.18em;color:#2a6a2a;white-space:nowrap;">OCCUPATION FORCE CALLSIGN GSW PTY LTD</div>
+    <div style="width:1px;height:1rem;background:#0a2a0a;flex-shrink:0;"></div>
+    <div style="font-size:.54rem;letter-spacing:.12em;color:#3a7a3a;white-space:nowrap;">ABN 50 692 429 397</div>
+    <div style="width:1px;height:1rem;background:#0a2a0a;flex-shrink:0;"></div>
+    <div style="font-size:.54rem;letter-spacing:.12em;color:#3a7a3a;white-space:nowrap;">ACN 692 429 397</div>
+    <div style="width:1px;height:1rem;background:#0a2a0a;flex-shrink:0;"></div>
+    <div style="font-size:.54rem;letter-spacing:.12em;color:#3a7a3a;white-space:nowrap;">NSW PTY LTD — EST. NOV 2025</div>
+    <div style="width:1px;height:1rem;background:#0a2a0a;flex-shrink:0;"></div>
+    <div style="font-size:.54rem;letter-spacing:.12em;color:#4a8a4a;white-space:nowrap;">MSRC VULN-195458</div>
+    <div style="width:1px;height:1rem;background:#0a2a0a;flex-shrink:0;"></div>
+    <a href="https://github.com/rainfantry/csec-research-authorization" target="_blank" style="font-size:.54rem;letter-spacing:.12em;color:#2a6a5a;text-decoration:none;white-space:nowrap;">RESPONSIBLE DISCLOSURE →</a>
+  </div>
+</div>
+
 <!-- ── PROOF SECTION ── -->
 <section id="proof">
   <div class="container">
@@ -955,6 +972,94 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           <div class="proof-caption">Steganography engine: shellcode hidden in PNG pixels via LSB channel mixing. 0.002 bits/pixel entropy delta — statistically undetectable. Exfiltrate via Discord CDN, S3, any image host. AV sees an image. You see a covert channel.</div>
           <a class="proof-link" href="https://rainfantry.github.io/books/reader.html?b=18_CRYPTOGRAPHY_EVASION" target="_blank">read module 18 →</a>
         </div>
+      </div>
+
+    </div>
+
+    <!-- RESEARCH RECORD — alongside the screenshots -->
+    <div style="margin-top:2.4rem;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#0a1a0a;">
+
+      <div style="background:#040c04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.28em;color:var(--green-dim);margin-bottom:.9rem;">// PUBLISHED RESEARCH FINDINGS</div>
+        <div style="display:flex;flex-direction:column;gap:.7rem;">
+          <a href="https://github.com/rainfantry/22sd-research-findings/blob/main/findings/F001_wdfilter_scan_on_write.md" target="_blank"
+             style="text-decoration:none;display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:start;padding:.6rem .7rem;border:1px solid #0a1a0a;background:#050f05;"
+             onmouseover="this.style.background='#081408'" onmouseout="this.style.background='#050f05'">
+            <span style="font-size:.52rem;letter-spacing:.1em;color:#2a7a2a;white-space:nowrap;padding-top:.06rem;">F001</span>
+            <span style="font-size:.62rem;color:#aaa;line-height:1.5;">WdFilter scans on IRP_MJ_WRITE, not only IRP_MJ_CLEANUP — invalidates scan-on-close models</span>
+            <span style="font-size:.5rem;color:var(--green);letter-spacing:.08em;white-space:nowrap;padding-top:.1rem;">Published →</span>
+          </a>
+          <a href="https://github.com/rainfantry/22sd-research-findings/blob/main/findings/F002_oplock_fileobject_scope.md" target="_blank"
+             style="text-decoration:none;display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:start;padding:.6rem .7rem;border:1px solid #0a1a0a;background:#050f05;"
+             onmouseover="this.style.background='#081408'" onmouseout="this.style.background='#050f05'">
+            <span style="font-size:.52rem;letter-spacing:.1em;color:#2a7a2a;white-space:nowrap;padding-top:.06rem;">F002</span>
+            <span style="font-size:.62rem;color:#aaa;line-height:1.5;">Batch oplock compatibility is FILE_OBJECT-scoped — single-threaded re-open deadlocks</span>
+            <span style="font-size:.5rem;color:var(--green);letter-spacing:.08em;white-space:nowrap;padding-top:.1rem;">Published →</span>
+          </a>
+          <a href="https://github.com/rainfantry/22sd-research-findings/blob/main/findings/F003_writethrough_oplock_bypass.md" target="_blank"
+             style="text-decoration:none;display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:start;padding:.6rem .7rem;border:1px solid #0a1a0a;background:#050f05;"
+             onmouseover="this.style.background='#081408'" onmouseout="this.style.background='#050f05'">
+            <span style="font-size:.52rem;letter-spacing:.1em;color:#2a7a2a;white-space:nowrap;padding-top:.06rem;">F003</span>
+            <span style="font-size:.62rem;color:#aaa;line-height:1.5;">Writing through the oplock handle does not break the batch oplock — enables payload injection while holding the tripwire</span>
+            <span style="font-size:.5rem;color:var(--green);letter-spacing:.08em;white-space:nowrap;padding-top:.1rem;">Published →</span>
+          </a>
+          <a href="https://github.com/rainfantry/22sd-research-findings/blob/main/findings/F004_hwbp_amsi_etw_zero_write.md" target="_blank"
+             style="text-decoration:none;display:grid;grid-template-columns:auto 1fr auto;gap:.8rem;align-items:start;padding:.6rem .7rem;border:1px solid #0d2a0d;background:#060f06;"
+             onmouseover="this.style.background='#0a1a0a'" onmouseout="this.style.background='#060f06'">
+            <span style="font-size:.52rem;letter-spacing:.1em;color:#4aaa4a;white-space:nowrap;padding-top:.06rem;">F004</span>
+            <span style="font-size:.62rem;color:#ccc;line-height:1.5;">AMSI + ETW defeated via hardware debug registers — zero memory writes, bypasses Tamper Protection entirely. <strong style="color:var(--green);">MSRC VULN-195458</strong></span>
+            <span style="font-size:.5rem;color:#ffb000;letter-spacing:.08em;white-space:nowrap;padding-top:.1rem;">MSRC →</span>
+          </a>
+        </div>
+        <a href="https://github.com/rainfantry/22sd-research-findings" target="_blank"
+           style="display:inline-block;margin-top:1rem;font-size:.54rem;letter-spacing:.14em;color:#2a6a2a;text-decoration:none;border:1px solid #0a2a0a;padding:.35rem .9rem;"
+           onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'"
+           onmouseout="this.style.borderColor='#0a2a0a';this.style.color='#2a6a2a'">FULL FINDINGS REPO →</a>
+      </div>
+
+      <div style="background:#040a04;padding:1.4rem 1.6rem;">
+        <div style="font-size:.52rem;letter-spacing:.28em;color:var(--green-dim);margin-bottom:.9rem;">// COMPANY CREDENTIALS</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.2rem;">
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">LEGAL NAME</span>
+            <span style="color:#ccc;">OCCUPATION FORCE CALLSIGN GSW PTY LTD</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">TRADING AS</span>
+            <span style="color:#ccc;">22nd Survey Division</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">ABN</span>
+            <span style="color:var(--green);">50 692 429 397</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">ACN</span>
+            <span style="color:#ccc;">692 429 397</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">JURISDICTION</span>
+            <span style="color:#ccc;">New South Wales, Australia — Pty Ltd incorporated 1 Nov 2025</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">MSRC</span>
+            <span style="color:#ffb000;">VULN-195458 — HWBP Tamper Protection bypass, submitted Jun 2026</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;border-bottom:1px solid #0a1a0a;padding-bottom:.5rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">CVE SUBMISSIONS</span>
+            <span style="color:#ccc;">3 findings — MITRE #49, #53 + MSRC #36</span>
+          </div>
+          <div style="display:grid;grid-template-columns:8rem 1fr;gap:.5rem;font-size:.64rem;">
+            <span style="color:#2a6a2a;letter-spacing:.08em;font-size:.56rem;">CONTACT</span>
+            <span style="color:#ccc;">gwu0738@gmail.com · Sydney, NSW</span>
+          </div>
+        </div>
+        <div style="font-size:.58rem;color:#1a4a1a;line-height:1.75;border-top:1px solid #0a1a0a;padding-top:.8rem;">
+          All research conducted on owned hardware. No unauthorised access. Findings submitted to vendors before public disclosure. Embargo void on VULN-195458 — Microsoft rejected as outside security boundary; published openly.
+        </div>
+        <a href="https://github.com/rainfantry/csec-research-authorization" target="_blank"
+           style="display:inline-block;margin-top:.9rem;font-size:.54rem;letter-spacing:.14em;color:#2a6a5a;text-decoration:none;border:1px solid #0a2a1a;padding:.35rem .9rem;"
+           onmouseover="this.style.borderColor='#00e5ff';this.style.color='#00e5ff'"
+           onmouseout="this.style.borderColor='#0a2a1a';this.style.color='#2a6a5a'">RESEARCHER ACCESS PITCH →</a>
       </div>
 
     </div>
