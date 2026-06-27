@@ -2233,32 +2233,71 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     }
   }
 
+  var API_URL = 'https://22div.com.au/api/auth.php';
+
+  function doUnlock() {
+    err.textContent = '';
+    btn.textContent = '// ACCESS GRANTED';
+    btn.style.borderColor = 'var(--green)';
+    input.style.borderColor = 'var(--green)';
+    btn.disabled = true;
+    unlock();
+    if (pendingAction) { var pa = pendingAction; pendingAction = null; setTimeout(pa, 380); }
+  }
+
+  function doFail(msg, lock) {
+    btn.disabled = false;
+    btn.textContent = '// ENTER';
+    var fails = bumpFail();
+    input.value = '';
+    input.focus();
+    if (lock || fails >= MAX_FAILS) {
+      err.textContent = msg || '// ACCESS LOCKED — too many attempts. Contact gwu0738@gmail.com';
+      btn.disabled = true;
+      input.disabled = true;
+    } else {
+      err.textContent = msg || ('// WRONG CODE — ' + (MAX_FAILS - fails) + ' attempt' + (MAX_FAILS - fails === 1 ? '' : 's') + ' remaining');
+      input.style.borderColor = 'var(--red)';
+      setTimeout(function() { input.style.borderColor = ''; }, 800);
+    }
+  }
+
   function attempt() {
     var val = (input.value || '').trim();
     if (!val) { input.focus(); return; }
+    if (isLockedOut()) return;
 
-    if (val === CORRECT) {
-      err.textContent = '';
-      btn.textContent = '// ACCESS GRANTED';
-      btn.style.borderColor = 'var(--green)';
-      input.style.borderColor = 'var(--green)';
-      btn.disabled = true;
-      unlock();
-      if (pendingAction) { var pa = pendingAction; pendingAction = null; setTimeout(pa, 380); }
-    } else {
-      var fails = bumpFail();
-      input.value = '';
-      input.focus();
-      if (fails >= MAX_FAILS) {
-        err.textContent = '// ACCESS LOCKED — too many attempts. Contact gwu0738@gmail.com';
-        btn.disabled = true;
-        input.disabled = true;
+    btn.disabled = true;
+    btn.textContent = '// VERIFYING...';
+
+    fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({pin: val})
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.ok) {
+        try { localStorage.setItem('22div_token', data.token || ''); } catch(e) {}
+        if (data.token) document.cookie = '22div_token=' + encodeURIComponent(data.token) + '; path=/; SameSite=Strict';
+        doUnlock();
+      } else if (data.error === 'rate_limited') {
+        doFail('// RATE LIMITED — try again in 15 minutes', true);
       } else {
-        err.textContent = '// WRONG CODE — ' + (MAX_FAILS - fails) + ' attempt' + (MAX_FAILS - fails === 1 ? '' : 's') + ' remaining';
-        input.style.borderColor = 'var(--red)';
-        setTimeout(function() { input.style.borderColor = ''; }, 800);
+        var rem = typeof data.attempts_remaining === 'number' ? data.attempts_remaining : null;
+        doFail(rem !== null ? ('// WRONG CODE — ' + rem + ' attempt' + (rem === 1 ? '' : 's') + ' remaining') : null, false);
       }
-    }
+    })
+    .catch(function() {
+      // API not reachable — temporary client-side fallback
+      btn.disabled = false;
+      btn.textContent = '// ENTER';
+      if (val === CORRECT) {
+        doUnlock();
+      } else {
+        doFail(null, false);
+      }
+    });
   }
 
   btn.addEventListener('click', attempt);
