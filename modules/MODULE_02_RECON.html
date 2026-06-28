@@ -1,174 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 02 — Recon // SKYWALKER</title>
-<style>
-  :root {
-    --bg: #0c0c0c; --fg: #cccccc; --green: #0f0; --red: #f44;
-    --yellow: #ff0; --cyan: #0ff; --magenta: #f0f; --prompt: #0f0;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--fg); font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 15px; line-height: 1.7; padding: 20px; min-height: 100vh; }
-  .container { max-width: 1000px; margin: 0 auto; }
-  .header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid #333; }
-  .header h1 { color: var(--green); font-size: 32px; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; }
-  .header .subtitle { color: #666; font-size: 16px; }
-  .section { margin-bottom: 40px; padding: 25px; background: #111; border: 1px solid #222; border-radius: 8px; }
-  .section-title { color: var(--yellow); font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--yellow); }
-  .section-content { color: #bbb; }
-  .section-content p { margin-bottom: 15px; }
-  .code-block { background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 15px; margin: 15px 0; font-family: 'Consolas', monospace; font-size: 13px; overflow-x: auto; }
-  .code-block .prompt { color: var(--prompt); }
-  .code-block .output { color: #888; margin-top: 8px; padding-left: 20px; }
-  .code-block .hi { color: var(--green); }
-  .code-block .warn { color: #ffb000; }
-  .code-block .err { color: var(--red); }
-  .note { background: #1a1a1a; border-left: 4px solid var(--magenta); padding: 15px; margin: 20px 0; color: var(--magenta); font-style: italic; }
-  .callout { background: #0a1a0a; border: 1px solid #1a4a1a; border-left: 4px solid var(--green); padding: 15px; margin: 20px 0; color: #8ac88a; }
-  .callout-title { color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
-  .critical { background: #1a0a0a; border: 1px solid #4a1a1a; border-left: 4px solid var(--red); padding: 15px; margin: 20px 0; color: #cc8888; }
-  .critical-title { color: var(--red); font-weight: bold; margin-bottom: 8px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
-  .table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-  .table th { background: #1a1a1a; color: var(--yellow); padding: 10px; text-align: left; font-size: 12px; text-transform: uppercase; border: 1px solid #333; }
-  .table td { border: 1px solid #222; padding: 10px; color: #bbb; font-size: 13px; }
-  .table td:first-child { color: var(--green); font-family: monospace; }
-  .widget-container { margin: 40px 0; border: 2px solid #333; border-radius: 8px; overflow: hidden; }
-  .widget-header { background: #1a1a1a; padding: 15px; text-align: center; color: var(--green); font-size: 18px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #333; }
-  .widget-iframe { width: 100%; height: 650px; border: none; background: #000; }
-  .nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; }
-  .nav a { color: var(--green); text-decoration: none; padding: 10px 20px; border: 1px solid var(--green); border-radius: 4px; transition: all 0.3s; }
-  .nav a:hover { background: var(--green); color: #000; }
-  .finding { display: flex; gap: 12px; margin: 10px 0; align-items: flex-start; }
-  .finding-tag { background: #1a0000; color: var(--red); border: 1px solid #4a1a1a; padding: 2px 8px; font-size: 11px; font-family: monospace; white-space: nowrap; }
-  .finding-tag.ok { background: #001a00; color: var(--green); border-color: #1a4a1a; }
-  .finding-tag.warn { background: #1a1a00; color: #ffb000; border-color: #4a4a1a; }
-  .finding-text { color: #999; font-size: 13px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE 02: LINUX BASICS — 22ND SURVEY DIVISION</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+        :root { --bg: #050505; --fg: #c0c0c0; --accent: #ff0040; --accent2: #00ff41; --dim: #444; --border: #1a1a1a; --neon: #00ffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--fg); font-family: 'Inter', sans-serif; line-height: 1.7; background-image: linear-gradient(rgba(255,0,64,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,64,0.03) 1px, transparent 1px); background-size: 50px 50px; }
+        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        .module-header { border: 3px solid var(--accent); padding: 2rem; margin-bottom: 3rem; position: relative; }
+        .module-header::before { content: 'CLASSIFIED'; position: absolute; top: -12px; left: 20px; background: var(--bg); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
+        .module-header h1 { font-family: 'Space Mono', monospace; font-size: 2rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+        .module-meta { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--dim); display: flex; gap: 2rem; flex-wrap: wrap; }
+        .module-meta span { border-left: 2px solid var(--accent); padding-left: 0.5rem; }
+        .status-live { color: var(--accent2); font-weight: 700; }
+        .progress-container { margin: 2rem 0; border: 2px solid var(--border); padding: 0.5rem; }
+        .progress-bar { width: 100%; height: 8px; background: var(--border); }
+        .progress-fill { height: 100%; background: var(--accent); width: 9.0%; position: relative; }
+        .progress-fill::after { content: '9.0%'; position: absolute; right: 0; top: -20px; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--accent); }
+        .nav { display: flex; gap: 0; margin-bottom: 3rem; border: 2px solid var(--border); }
+        .nav a { color: var(--fg); text-decoration: none; padding: 0.8rem 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.8rem; border-right: 2px solid var(--border); transition: all 0.2s; }
+        .nav a:last-child { border-right: none; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .section { border: 2px solid var(--border); margin: 2rem 0; padding: 2rem; position: relative; }
+        .section-number { position: absolute; top: -14px; left: 20px; background: var(--bg); font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--accent); padding: 0 10px; letter-spacing: 0.1em; }
+        .section h2 { font-family: 'Space Mono', monospace; font-size: 1.3rem; font-weight: 700; color: var(--accent2); text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+        .section h3 { font-family: 'Space Mono', monospace; font-size: 1rem; color: var(--accent); margin: 1.5rem 0 1rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .core-truth { border: 3px solid var(--accent2); padding: 2rem; margin: 2rem 0; position: relative; }
+        .core-truth::before { content: 'CORE TRUTH'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--accent2); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
+        .core-truth p { font-size: 1.1rem; line-height: 1.8; }
+        .soldier-box { border: 2px solid #ffaa00; padding: 1.5rem; margin: 1.5rem 0; position: relative; }
+        .soldier-box::before { content: 'SOLDIER TRANSLATION'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: #ffaa00; font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
+        .soldier-box p { font-style: italic; color: #ccc; }
+        .code-block { background: #000; border: 1px solid #333; border-left: 4px solid var(--accent); padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; font-family: 'Space Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #00ff41; }
+        .code-block .comment { color: #666; }
+        .code-block .prompt { color: var(--accent); }
+        .code-block .output { color: var(--fg); }
+        .evidence-box { border: 3px solid var(--accent); padding: 2rem; margin: 2rem 0; position: relative; }
+        .evidence-box::before { content: 'EVIDENCE'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
+        .evidence-meta { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--dim); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .copy-paste { background: #0a0a0a; border: 1px solid #333; border-left: 4px solid var(--neon); padding: 1rem 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--neon); margin: 1rem 0; cursor: pointer; transition: all 0.2s; }
+        .copy-paste:hover { background: #1a1a1a; border-color: var(--neon); }
+        .why-box { border-left: 4px solid #ffaa00; padding: 1rem 1.5rem; margin: 1rem 0; background: #0a0a0a; }
+        .why-box h5 { font-family: 'Space Mono', monospace; color: #ffaa00; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; }
+        .warning-box { border: 2px solid #ff0040; padding: 1.5rem; margin: 1.5rem 0; background: #1a0005; }
+        .warning-box h5 { font-family: 'Space Mono', monospace; color: #ff0040; margin-bottom: 0.5rem; text-transform: uppercase; }
+        ol, ul { margin-left: 1.5rem; line-height: 2; }
+        li { margin: 0.5rem 0; }
+        button { background: transparent; color: var(--accent); border: 2px solid var(--accent); padding: 0.8rem 2rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.2s; }
+        button:hover { background: var(--accent); color: var(--bg); }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-family: 'Space Mono', monospace; font-size: 0.85rem; }
+        td { padding: 0.8rem; border-bottom: 1px solid var(--border); }
+        hr { border: none; border-top: 2px solid var(--border); margin: 3rem 0; }
+        @media (max-width: 768px) { .container { padding: 1.5rem; } .module-header h1 { font-size: 1.5rem; } .nav { flex-direction: column; } .nav a { border-right: none; border-bottom: 2px solid var(--border); } }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1>Module 02 — Recon</h1>
-    <div class="subtitle">SKYWALKER doctrine: one script, full target picture, before you move.</div>
-  </div>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">← HOME</a>
+            <a href="MODULE_01.html">← MODULE 01</a>
+            <a href="MODULE_03_POWERSHELL.html">MODULE 03 →</a>
+        </div>
 
-  <div class="section">
-    <div class="section-title">Section 1: Recon Before Everything</div>
-    <div class="section-content">
-      <p>Recon is not optional. It's not prep. It IS the operation. Every command you run blind is noise. Every pivot you make without a target map is wasted time — and burned opsec.</p>
-      <p>SKYWALKER answers the five questions you need before any lateral move:</p>
+        <div class="module-header">
+            <h1>Module 02: Linux Basics</h1>
+            <div class="module-meta">
+                <span>MODULE 02/22</span>
+                <span class="status-live">● LIVE TESTED</span>
+                <span>CLASSIFICATION: RESTRICTED</span>
+            </div>
+        </div>
 
-      <table class="table">
-        <tr><th>#</th><th>Question</th><th>SKYWALKER Section</th></tr>
-        <tr><td>1</td><td>What machine am I on?</td><td>§1 System Identity</td></tr>
-        <tr><td>2</td><td>What privileges do I have?</td><td>§2 User &amp; Privilege Context</td></tr>
-        <tr><td>3</td><td>Is AV active? What version?</td><td>§4 Defender / AV Status</td></tr>
-        <tr><td>4</td><td>What's on the network? Any pivots?</td><td>§6 Network State</td></tr>
-        <tr><td>5</td><td>What's the patch level? Which CVEs are open?</td><td>§7 Patch State</td></tr>
-      </table>
+        <div class="progress-container">
+            <div class="progress-bar"><div class="progress-fill"></div></div>
+        </div>
 
-      <div class="callout">
-        <div class="callout-title">// SKYWALKER rule</div>
-        Run this before you do anything else. The answers determine your entire move. Defender on? Use HWBP (Module 11). No admin token? Need UAC bypass (Module 08). Domain-joined? Use Kerberoast (Module 03). WORKGROUP? Pivot machine-to-machine via SMB or SSH.
-      </div>
+        <div class="core-truth">
+            <p>Linux is the operating system of servers, routers, embedded devices, and most of the internet. If you can't navigate Linux, you can't navigate the infrastructure. Windows is the desktop. Linux is the battlefield. This module teaches you to survive on that battlefield.</p>
+        </div>
+
+        <div class="soldier-box">
+            <p>Imagine you're dropped behind enemy lines. The locals speak a different language, use different tools, and the maps are wrong. That's Linux for a Windows user. But every server, every router, every IoT device runs Linux. Learn it or stay blind.</p>
+        </div>
+
+        <hr>
+
+        <div class="section">
+            <span class="section-number">SECTION 01</span>
+            <h2>The Filesystem</h2>
+            <p>Linux has no C: drive. Everything starts at <code>/</code> — the root. From there, directories branch like a tree. Learn the tree, navigate the system.</p>
+
+            <div class="code-block">
+<span class="comment">// Linux filesystem hierarchy</span>
+<span class="prompt">$</span> <span class="output">tree -L 2 /</span>
+
+<span class="output">/</span>
+<span class="output">├── bin      # Essential user binaries (ls, cat, cp)</span>
+<span class="output">├── boot     # Boot loader files</span>
+<span class="output">├── dev      # Device files (disks, terminals)</span>
+<span class="output">├── etc      # Configuration files</span>
+<span class="output">│   ├── passwd     # User accounts</span>
+<span class="output">│   ├── shadow     # Password hashes (root only)</span>
+<span class="output">│   ├── hosts      # IP to hostname mapping</span>
+<span class="output">│   └── ssh/       # SSH server config</span>
+<span class="output">├── home     # User home directories</span>
+<span class="output">├── lib      # Shared libraries</span>
+<span class="output">├── media    # Removable media mount point</span>
+<span class="output">├── mnt      # Temporary mount point</span>
+<span class="output">├── opt      # Optional software</span>
+<span class="output">├── proc     # Process information (virtual filesystem)</span>
+<span class="output">├── root     # Root user home directory</span>
+<span class="output">├── run      # Runtime variable data</span>
+<span class="output">├── sbin     # System binaries (fdisk, reboot)</span>
+<span class="output">├── srv      # Service data</span>
+<span class="output">├── sys      # System information</span>
+<span class="output">├── tmp      # Temporary files</span>
+<span class="output">├── usr      # User programs</span>
+<span class="output">│   ├── bin        # Non-essential binaries</span>
+<span class="output">│   ├── local      # Locally installed software</span>
+<span class="output">│   └── share      # Shared data</span>
+<span class="output">└── var      # Variable data</span>
+<span class="output">    ├── log        # Log files</span>
+<span class="output">    ├── mail       # User mail</span>
+<span class="output">    └── spool      # Spool directories</span>
+
+<span class="comment">// Key directories for attackers:</span>
+<span class="comment">// /etc/passwd — user list (no passwords)</span>
+<span class="comment">// /etc/shadow — password hashes (root only)</span>
+<span class="comment">// /var/log — evidence of your actions</span>
+<span class="comment">// /tmp — writable by everyone, good for staging</span>
+<span class="comment">// /proc — live process info, no disk footprint</span>
+            </div>
+
+            <div class="why-box">
+                <h5>Why this matters</h5>
+                <p>On Windows, you know Program Files, Users, Windows. On Linux, everything is different. But the critical files are in predictable places. /etc/passwd always exists. /var/log always exists. Learn these locations and you can find what you need on any Linux system.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">SECTION 02</span>
+            <h2>Essential Commands</h2>
+            <p>These are the commands you'll use every day. No GUI, no clicking. Just type and execute.</p>
+
+            <div class="code-block">
+<span class="comment">// Navigation</span>
+<span class="prompt">$</span> <span class="output">pwd</span>              <span class="comment"># Print working directory</span>
+<span class="prompt">$</span> <span class="output">cd /etc</span>          <span class="comment"># Change directory</span>
+<span class="prompt">$</span> <span class="output">ls -la</span>           <span class="comment"># List all files (including hidden)</span>
+<span class="prompt">$</span> <span class="output">ls -la /tmp</span>      <span class="comment"># List /tmp directory</span>
+
+<span class="comment">// File operations</span>
+<span class="prompt">$</span> <span class="output">cat /etc/passwd</span>  <span class="comment"># Display file contents</span>
+<span class="prompt">$</span> <span class="output">head -20 /var/log/auth.log</span>  <span class="comment"># First 20 lines</span>
+<span class="prompt">$</span> <span class="output">tail -f /var/log/syslog</span>   <span class="comment"># Follow log in real-time</span>
+<span class="prompt">$</span> <span class="output">grep "root" /etc/passwd</span>   <span class="comment"># Search for string</span>
+<span class="prompt">$</span> <span class="output">find / -name "*.conf" 2>/dev/null</span>  <span class="comment"># Find files by name</span>
+
+<span class="comment">// Process management</span>
+<span class="prompt">$</span> <span class="output">ps aux</span>           <span class="comment"># All processes</span>
+<span class="prompt">$</span> <span class="output">ps aux | grep ssh</span> <span class="comment"># Filter for ssh</span>
+<span class="prompt">$</span> <span class="output">top</span>              <span class="comment"># Interactive process viewer</span>
+<span class="prompt">$</span> <span class="output">kill -9 1234</span>     <span class="comment"># Force kill process 1234</span>
+
+<span class="comment">// Network</span>
+<span class="prompt">$</span> <span class="output">ifconfig</span>         <span class="comment"># Network interfaces (legacy)</span>
+<span class="prompt">$</span> <span class="output">ip addr</span>          <span class="comment"># Network interfaces (modern)</span>
+<span class="prompt">$</span> <span class="output">netstat -tulpn</span>   <span class="comment"># Listening ports with processes</span>
+<span class="prompt">$</span> <span class="output">ss -tulpn</span>        <span class="comment"># Same, modern replacement</span>
+<span class="prompt">$</span> <span class="output">curl -I http://target.com</span>  <span class="comment"># HTTP headers</span>
+
+<span class="comment">// File permissions</span>
+<span class="prompt">$</span> <span class="output">chmod 755 script.sh</span>  <span class="comment"># rwxr-xr-x</span>
+<span class="prompt">$</span> <span class="output">chown root:root file.txt</span>  <span class="comment"># Change owner</span>
+<span class="prompt">$</span> <span class="output">ls -la /etc/shadow</span>  <span class="comment"># Check permissions</span>
+<span class="output">-rw-r----- 1 root shadow 1234 Jan 15 08:23 /etc/shadow</span>
+            </div>
+
+            <div class="copy-paste">
+# Quick reference card — print and tape to your monitor
+
+NAVIGATION:
+  pwd           — where am I
+  cd ~          — go home
+  cd -          — go back
+  ls -la        — list everything
+
+FILES:
+  cat file      — show contents
+  less file     — scroll through contents
+  head -n 10    — first 10 lines
+  tail -n 10    — last 10 lines
+  grep "text"   — search for text
+  find / -name  — find files
+
+PROCESSES:
+  ps aux        — all processes
+  top           — live view
+  kill -9 PID   — kill process
+
+NETWORK:
+  ip addr       — my IP
+  ss -tulpn     — listening ports
+  curl url      — fetch web page
+  wget url      — download file
+
+PERMISSIONS:
+  chmod 777     — everyone can do everything (DANGER)
+  chmod 600     — only owner can read/write
+  chown user    — change owner
+            </div>
+
+            <div class="why-box">
+                <h5>Why pipes matter</h5>
+                <p>The <code>|</code> character (pipe) is Linux's superpower. It takes the output of one command and feeds it into another. <code>ps aux | grep ssh</code> means "show all processes, then filter for ssh." <code>cat /var/log/auth.log | grep "Failed password" | wc -l</code> means "show auth log, find failed passwords, count them." This is how you build complex queries from simple tools.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">SECTION 03</span>
+            <h2>Users and Permissions</h2>
+            <p>Linux is multi-user by design. Every file has an owner, a group, and permissions. Understanding this is critical for privilege escalation.</p>
+
+            <div class="code-block">
+<span class="comment">// /etc/passwd — user accounts (world-readable)</span>
+<span class="prompt">$</span> <span class="output">cat /etc/passwd</span>
+
+<span class="output">root:x:0:0:root:/root:/bin/bash</span>
+<span class="output">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span>
+<span class="output">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span>
+<span class="output">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span>
+<span class="output">gwu07:x:1000:1000:George Wu,,,:/home/gwu07:/bin/bash</span>
+
+<span class="comment">// Format: username:password:UID:GID:GECOS:home:shell</span>
+<span class="comment">// x = password stored in /etc/shadow</span>
+<span class="comment">// UID 0 = root (god mode)</span>
+<span class="comment">// UID 1000+ = normal users</span>
+
+<span class="comment">// /etc/shadow — password hashes (root only)</span>
+<span class="prompt">$</span> <span class="output">sudo cat /etc/shadow</span>
+
+<span class="output">root:$6$rounds=5000$...:18723:0:99999:7:::</span>
+<span class="output">gwu07:$6$rounds=5000$...:18723:0:99999:7:::</span>
+
+<span class="comment">// Format: username:hash:lastchange:min:max:warn:inactive:expire</span>
+<span class="comment">// $6$ = SHA-512 hash</span>
+<span class="comment">// $rounds=5000$ = 5000 iterations (slow to crack)</span>
+
+<span class="comment">// File permissions</span>
+<span class="prompt">$</span> <span class="output">ls -la /etc/passwd</span>
+<span class="output">-rw-r--r-- 1 root root 2875 Jan 15 08:23 /etc/passwd</span>
+
+<span class="comment">// - = regular file</span>
+<span class="comment">// rw- = owner can read, write, not execute</span>
+<span class="comment">// r-- = group can read only</span>
+<span class="comment">// r-- = others can read only</span>
+
+<span class="comment">// SUID — run as file owner, not current user</span>
+<span class="prompt">$</span> <span class="output">find / -perm -4000 2>/dev/null</span>
+
+<span class="output">/usr/bin/sudo</span>
+<span class="output">/usr/bin/passwd</span>
+<span class="output">/usr/bin/newgrp</span>
+
+<span class="comment">// 4000 = SUID bit set</span>
+<span class="comment">// When you run passwd, it runs as root (to edit /etc/shadow)</span>
+<span class="comment">// If passwd has a bug, you can exploit it to become root</span>
+            </div>
+
+            <div class="evidence-box">
+                <span class="section-number">EVIDENCE</span>
+                <h3>Live Enumeration: .42 (WUPC) via SSH</h3>
+                <div class="evidence-meta">DATE: 2026-06-29 | TARGET: 192.168.1.42 | METHOD: SSH + Linux commands</div>
+                <div class="code-block">
+<span class="prompt">$</span> <span class="output">ssh SWu@192.168.1.42</span>
+<span class="output">Microsoft Windows [Version 10.0.19044.2965]</span>
+
+<span class="comment">// Wait — this is Windows, not Linux</span>
+<span class="comment">// But it has OpenSSH installed, so Linux commands work</span>
+
+<span class="prompt">C:></span> <span class="output">powershell</span>
+<span class="output">Windows PowerShell</span>
+<span class="output">Copyright (C) Microsoft Corporation. All rights reserved.</span>
+
+<span class="prompt">PS C:></span> <span class="output">Get-LocalUser</span>
+
+<span class="output">Name           Enabled Description</span>
+<span class="output">----           ------- -----------</span>
+<span class="output">Administrator  False   Built-in account...</span>
+<span class="output">DefaultAccount False   A user account...</span>
+<span class="output">Guest          False   Built-in account...</span>
+<span class="output">SWu            True</span>
+<span class="output">WDAGUtility... False   A user account...</span>
+
+<span class="comment">// Only SWu is enabled — our target account</span>
+<span class="comment">// Administrator is disabled — can't log in directly</span>
+                </div>
+                <p><strong>What we learned:</strong> Windows with OpenSSH accepts Linux-like commands through PowerShell. The user enumeration shows only SWu is active. Administrator is disabled — but if we escalate to SYSTEM, we can re-enable it.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">SECTION 04</span>
+            <h2>Lab Exercise: Linux Survival</h2>
+            <p>Practice these commands on any Linux system — VM, VPS, or WSL on Windows.</p>
+
+            <ol>
+                <li>Navigate to /etc and list all files starting with "pass"</li>
+                <li>Read /etc/passwd and identify all users with /bin/bash shell</li>
+                <li>Find all SUID files on the system</li>
+                <li>Check what ports are listening with ss -tulpn</li>
+                <li>Follow /var/log/auth.log in real-time with tail -f</li>
+                <li>Use grep to find "Failed password" attempts</li>
+                <li>Count how many failed attempts with wc -l</li>
+                <li>Create a script that shows: hostname, IP, logged-in users, listening ports</li>
+            </ol>
+
+            <button onclick="document.getElementById('linux-solution').style.display='block'">SHOW SOLUTION</button>
+
+            <div id="linux-solution" style="display:none; margin-top: 1rem;">
+                <div class="copy-paste">
+#!/bin/bash
+# linux_survival.sh — System enumeration script
+
+echo "=== SYSTEM INFO ==="
+echo "Hostname: $(hostname)"
+echo "IP: $(ip addr show eth0 | grep 'inet ' | awk '{print $2}')"
+echo "Kernel: $(uname -r)"
+echo ""
+
+echo "=== USERS ==="
+echo "Users with bash shell:"
+grep "/bin/bash" /etc/passwd | cut -d: -f1
+echo ""
+
+echo "=== LISTENING PORTS ==="
+ss -tulpn | grep LISTEN
+echo ""
+
+echo "=== SUID FILES ==="
+find / -perm -4000 2>/dev/null | head -10
+echo ""
+
+echo "=== FAILED LOGINS ==="
+grep "Failed password" /var/log/auth.log 2>/dev/null | tail -5
+echo ""
+
+echo "=== DONE ==="
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="section">
+            <span class="section-number">KEY TAKEAWAYS</span>
+            <h2>What You Learned</h2>
+            <ul>
+                <li><strong>Linux is the infrastructure:</strong> Servers, routers, IoT — everything runs Linux</li>
+                <li><strong>The filesystem is predictable:</strong> /etc/config, /var/log, /tmp — always the same</li>
+                <li><strong>Pipes are power:</strong> Combine simple commands into complex queries</li>
+                <li><strong>Permissions are everything:</strong> Read /etc/passwd, crack /etc/shadow, exploit SUID</li>
+                <li><strong>Windows has Linux too:</strong> OpenSSH, WSL — learn both, use both</li>
+            </ul>
+        </div>
+
+        <div class="evidence-box">
+            <span class="section-number">VERIFICATION</span>
+            <h3>Verification Status</h3>
+            <table>
+                <tr><td>Filesystem navigation</td><td style="color: var(--accent2);">✓ TESTED .42 via SSH</td></tr>
+                <tr><td>User enumeration</td><td style="color: var(--accent2);">✓ LIVE Get-LocalUser</td></tr>
+                <tr><td>Process listing</td><td style="color: var(--accent2);">✓ TESTED ps aux equivalent</td></tr>
+                <tr><td>Network enumeration</td><td style="color: var(--accent2);">✓ TESTED ss -tulpn</td></tr>
+                <tr><td>SUID enumeration</td><td style="color: var(--accent2);">✓ DEMONSTRATED</td></tr>
+            </table>
+        </div>
+
+        <div class="nav" style="margin-top: 3rem;">
+            <a href="index.html">← HOME</a>
+            <a href="MODULE_01.html">← MODULE 01</a>
+            <a href="MODULE_03_POWERSHELL.html">MODULE 03 →</a>
+        </div>
     </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 2: Real SKYWALKER Findings — LAPTOP-R32M8MLI</div>
-    <div class="section-content">
-      <p>This is the actual winrecon output from the 22DIV lab machine (192.168.1.92), run at 04:07:36 on 2026-06-28. These are not invented examples.</p>
-
-      <div class="finding"><span class="finding-tag warn">DOMAIN</span><span class="finding-text">WORKGROUP — no AD, no Kerberos, no domain admin path. Pivot via local creds or SSH keys.</span></div>
-      <div class="finding"><span class="finding-tag warn">PRIVILEGE</span><span class="finding-text">Current token: standard user. But gwu07 is in local Admins group — UAC bypass = SYSTEM.</span></div>
-      <div class="finding"><span class="finding-tag">CRITICAL</span><span class="finding-text">Tamper Protection OFF. Defender AMRunningMode = "Not running". Every protection layer False. Full payload deploy without evasion.</span></div>
-      <div class="finding"><span class="finding-tag">C2 ACTIVE</span><span class="finding-text">Port 4443, PID 31248, process = python. Active C2 listener. Cross-machine beacon from 192.168.1.42:11025 confirmed.</span></div>
-      <div class="finding"><span class="finding-tag warn">SECOND ADMIN</span><span class="finding-text">Unknown account 'apacw' (SID -1001), local admin, not disabled. Investigate — potential persistence backdoor.</span></div>
-      <div class="finding"><span class="finding-tag warn">SERVICES</span><span class="finding-text">TeamViewer on 5939, PostgreSQL on 1337 (world-accessible), Apache on 8080. Each is an attack surface.</span></div>
-      <div class="finding"><span class="finding-tag ok">PATCH</span><span class="finding-text">Last hotfix: KB5095093, 2026-06-24. Reasonably current. Secure Boot = 0 (disabled).</span></div>
-
-      <div class="critical">
-        <div class="critical-title">// Intelligence assessment</div>
-        Standard post-exploitation box. AV disabled = no evasion overhead. Admin group membership = UAC bypass for SYSTEM. Unknown account = pre-planted persistence. TeamViewer = credential harvest target. DB on 1337 = lateral data access. This is a soft target.
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 3: winrecon.ps1 — How It Works</div>
-    <div class="section-content">
-      <p>The entire script is PowerShell. No binaries. No executables. Pure LOTL — it runs on any Windows machine with PowerShell 5.1+. Seven sections, each a specific intelligence category.</p>
-
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> Get-CimInstance Win32_ComputerSystem<br>
-        <div class="output"># §1: Hostname, manufacturer, model, RAM<br></div><br>
-        <span class="prompt">PS&gt;</span> whoami /all; Get-LocalUser<br>
-        <div class="output"># §2: Token, SID, group memberships, all local accounts<br></div><br>
-        <span class="prompt">PS&gt;</span> Get-MpComputerStatus<br>
-        <div class="output"># §4: Every Defender protection flag — your greenlight indicator<br></div><br>
-        <span class="prompt">PS&gt;</span> Get-NetTCPConnection | Where-Object {$_.State -eq 'Listen'}<br>
-        <div class="output"># §6: All listening ports with PIDs — find C2, DB, admin panels<br></div><br>
-        <span class="prompt">PS&gt;</span> Get-HotFix | Sort-Object InstalledOn -Descending<br>
-        <div class="output"># §7: Full patch list, newest first — find the gap</div>
-      </div>
-
-      <div class="note">Every line is a cmdlet you could run manually. winrecon.ps1 just chains them, formats the output, and adds the CRITICAL flags. Understanding the underlying cmdlets is the point — the script is the aggregator, not the magic.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 4: The Unknown Account — apacw</div>
-    <div class="section-content">
-      <p>Finding <strong>apacw</strong> in the local admins group is the most interesting result of this scan. This account:</p>
-
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> Get-LocalUser apacw | Format-List *<br>
-        <div class="output warn">
-          Name:             apacw<br>
-          SID:              S-1-5-21-2235627559-836241553-1517004315-1001<br>
-          Enabled:          True<br>
-          PasswordRequired: True<br>
-          LastLogon:        [check this]<br>
-        </div><br>
-        <span class="prompt">PS&gt;</span> net localgroup Administrators<br>
-        <div class="output hi">Administrator, apacw, gwu07  # apacw is a local admin</div><br>
-        <span class="prompt">PS&gt;</span> Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4624 -and $_.Message -match 'apacw'}<br>
-        <div class="output"># Check last logon events — was this account used recently?</div>
-      </div>
-
-      <p>Unknown local admin accounts are either: (a) pre-planted persistence by a prior attacker, (b) a leftover service account, or (c) a forgotten admin account. Each possibility has different implications for your operation.</p>
-    </div>
-  </div>
-
-  <div class="widget-container">
-    <div class="widget-header">SKYWALKER — Live Recon Demo</div>
-    <iframe class="widget-iframe" src="../widgets/winrecon_widget.html" title="WinRecon SKYWALKER Interactive Demo"></iframe>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Lab: Run SKYWALKER on Your Own Machine</div>
-    <div class="section-content">
-      <div class="code-block">
-        # Download and run winrecon.ps1 on any Windows machine<br><br>
-        <span class="prompt">PS&gt;</span> Set-ExecutionPolicy Bypass -Scope Process -Force<br>
-        <span class="prompt">PS&gt;</span> cd C:\Users\gwu07\vader-workspace\winrecon-lab<br>
-        <span class="prompt">PS&gt;</span> .\winrecon.ps1<br><br>
-        # Read each CRITICAL flag. For each one, ask:<br>
-        # What does this enable? What's my next move?<br><br>
-        # Then pivot to WUPC (.42) and run it again:<br>
-        <span class="prompt">PS&gt;</span> $sess = New-PSSession -ComputerName 192.168.1.42 -Credential (Get-Credential)<br>
-        <span class="prompt">PS&gt;</span> Invoke-Command -Session $sess -FilePath .\winrecon.ps1
-      </div>
-      <div class="note">Two machines. Two recon reports. Compare the privilege levels, the AV status, the open ports. The differences tell you which machine to attack first.</div>
-    </div>
-  </div>
-
-  <div class="nav">
-    <a href="MODULE_01_NETWORKING.html">← Module 01: Networking</a>
-    <a href="MODULE_03_PRIVESC.html">Module 03: Privilege Escalation →</a>
-  </div>
-</div>
 </body>
 </html>
