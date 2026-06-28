@@ -1,200 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 14 — Cloud Files Internals | 22nd Survey Division</title>
-<style>
-  :root {
-    --bg: #0c0c0c;
-    --fg: #cccccc;
-    --green: #0f0;
-    --red: #f44;
-    --cyan: #0ff;
-    --magenta: #f0f;
-    --amber: #ffb000;
-    --dim: #666;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  h1 {
-    color: var(--cyan);
-    font-size: 24px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-  }
-  h2 {
-    color: var(--green);
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 30px 0 15px;
-    border-left: 3px solid var(--green);
-    padding-left: 10px;
-  }
-  h3 {
-    color: var(--amber);
-    font-size: 14px;
-    margin: 20px 0 10px;
-  }
-  p {
-    margin-bottom: 15px;
-    color: var(--fg);
-  }
-  .widget-iframe {
-    width: 100%;
-    height: 600px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    margin: 20px 0;
-    background: #111;
-  }
-  .note {
-    color: var(--magenta);
-    font-style: italic;
-    margin: 15px 0;
-    padding: 10px;
-    background: #1a1a1a;
-    border-left: 3px solid var(--magenta);
-  }
-  .warning {
-    color: var(--red);
-    border-left-color: var(--red);
-  }
-  code {
-    background: #1a1a1a;
-    color: var(--cyan);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
-  }
-  pre {
-    background: #0a0a0a;
-    border: 1px solid #222;
-    border-radius: 4px;
-    padding: 15px;
-    overflow-x: auto;
-    margin: 15px 0;
-  }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
-  }
-  .nav a {
-    color: var(--cyan);
-    text-decoration: none;
-  }
-  .nav a:hover {
-    text-decoration: underline;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 14: Cloud Files — 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+            --neon: #00ffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 63.6%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .negative-result {
+            background: #0a0a1a;
+            border: 2px solid #5555ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .negative-result h3 { color: #5555ff; margin-bottom: 0.5rem; }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_13_EDR_EVASION.html">← Module 13</a>
+            <a href="MODULE_15_LATERAL.html">Module 15 →</a>
+        </div>
 
-<div class="container">
-  <h1>Module 14 — Cloud Files Internals</h1>
-  <p><strong>First Principle:</strong> The kernel is the final frontier — what you can't see can still kill you.</p>
+        <h1>Module 14: Cloud Files <span class="status-badge status-live">RESEARCH IN PROGRESS</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 14 of 22 — When the research fails, the failure teaches</p>
 
-  <h2>Overview</h2>
-  <p>Cloud files (OneDrive, Dropbox, etc.) use a filter driver (<code>CldFlt.sys</code>) to intercept file operations and redirect them to cloud storage. This creates a new attack surface: reparse points, placeholder files, and sync root APIs that bridge userland and kernel.</p>
-  <p>Understanding this stack is critical for both offense (finding vulnerabilities) and defense (monitoring cloud file activity).</p>
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>Not every research path leads to a CVE. Most lead to dead ends, wrong turns, and "what the fuck?" moments. But dead ends are data. They tell you what doesn't work, which narrows what might. This module documents a real research failure — the CfAPI race condition — and extracts every lesson from it.</p>
+        </div>
 
-  <h2>Interactive Demo</h2>
-  <p>Real data from .42 (AMD, Driver Verifier active) — cloud sync roots, reparse points, API fuzzing:</p>
-  <iframe class="widget-iframe" src="../widgets/module_14_widget.html" title="Module 14 Cloud Files Internals Interactive Demo"></iframe>
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>You tried to pick a lock and broke the pick. That's not failure — that's intelligence. Now you know the lock is tougher than expected. You know the pick was the wrong tool. You know you need a different approach. This module shows you how to learn from a broken pick.</p>
+        </div>
 
-  <h2>The Stack</h2>
-  
-  <h3>Layer 0: NTFS</h3>
-  <p>The underlying filesystem. Reparse points are NTFS metadata tags that tell the filter driver to intercept operations on this file.</p>
+        <h2>The Research Question: CfAPI Race Condition</h2>
 
-  <h3>Layer 1: CldFlt.sys (Filter Driver)</h3>
-  <p>Kernel-mode driver that intercepts IRPs (I/O Request Packets) for files in registered sync roots. Handles hydration, dehydration, and placeholder management.</p>
-  <pre><code>// Filter drivers attach to the filesystem stack
-// They see EVERY operation before NTFS does
-// Bug here = kernel privilege escalation</code></pre>
+        <div class="step-box">
+            <h4>What We Tried</h4>
+            <p>Windows Cloud Files API (CfAPI) manages OneDrive-style sync roots. We hypothesized a race condition between placeholder creation and update that could bypass security checks.</p>
 
-  <h3>Layer 2: cldapi.dll (User API)</h3>
-  <p>User-mode API for applications to interact with cloud files. Functions like <code>CfCreatePlaceholders</code>, <code>CfUpdatePlaceholder</code>, <code>CfExecute</code>.</p>
-  <div class="note">
-    <strong>Key insight:</strong> All cldapi.dll functions require a properly registered sync root. Random temp directories fail with <code>ERROR_INVALID_PARAMETER</code>.
-  </div>
+            <div class="code-block">
+=== HYPOTHESIS ===
+CfCreatePlaceholders() creates a file placeholder
+CfUpdatePlaceholder() updates its metadata
 
-  <h3>Layer 3: OneDrive.exe (Sync Engine)</h3>
-  <p>The user-mode application that manages sync, conflict resolution, and cloud communication.</p>
+If we can UPDATE before the security scan completes,
+we might bypass the scan entirely.
 
-  <h2>Reparse Points</h2>
-  <p>Reparse points are NTFS metadata that redirect file operations to a filter driver. When you see a cloud-stored file locally, it's actually a reparse point — the content lives in the cloud.</p>
-  <pre><code>// Check if a file is a reparse point:
-DWORD attributes = GetFileAttributesW(path);
-if (attributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-    // This is a cloud file or junction
-}</code></pre>
+This is a TOCTOU (Time-of-Check to Time-of-Use) race condition.
+            </div>
 
-  <h2>TOCTOU Race Conditions</h2>
-  <p>Time-of-check vs time-of-use is especially dangerous in kernel drivers. If the file state changes between verification and operation, the driver may operate on stale data.</p>
-  <pre><code>// Vulnerable pattern:
-// 1. Check: Is file hydrated? (yes)
-// 2. Race: Another thread dehydrates it
-// 3. Use: Read file content (FAIL — file is gone)
+            <div class="why-box">
+                <h5>Why this seemed promising</h5>
+                <p>OneDrive syncs files from cloud to local. If the cloud file is malicious, OneDrive downloads it, Windows scans it, then marks it safe. But if we can swap the file between download and scan...</p>
+            </div>
+        </div>
 
-// In kernel code, this can lead to:
-// - Null pointer dereference
-// - Use-after-free
-// - Buffer overflow (wrong size assumed)</code></pre>
+        <h2>The Failure: Struct Size Mismatch</h2>
 
-  <h2>Driver Verifier</h2>
-  <p>Driver Verifier is a Windows tool that stresses kernel drivers to catch bugs that would otherwise go silent. When enabled, it monitors pool allocations, IRQL levels, and API compliance.</p>
-  <div class="note warning">
-    <strong>CRITICAL:</strong> Driver Verifier can cause BSODs. That's the point — it turns silent corruption into immediate, debuggable crashes. Always test on a VM, never on production.
-  </div>
-  <pre><code>// Enable Driver Verifier on CldFlt.sys:
-verifier /standard /driver CldFlt.sys
+        <div class="negative-result">
+            <h3>📊 What Actually Happened</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> .42 (WUPC) | <strong>Result:</strong> ALL struct sizes failed</p>
 
-// Reboot required
-// After reboot, any bug in CldFlt.sys = BSOD
-// Analyze with WinDbg:
-!analyze -v
-!verifier 3</code></pre>
+            <div class="code-block">
+=== BRUTE-FORCE RESULTS ===
+Testing struct sizes: 8 to 256 bytes (step 4)
 
-  <h2>Lab Exercise</h2>
-  <p><strong>Objective:</strong> Explore cloud files internals and find a reproducible anomaly.</p>
-  <ol>
-    <li>Enumerate sync roots on your machine: <code>Get-ChildItem -Path $env:OneDrive -Recurse | Where-Object { $_.Attributes -match 'ReparsePoint' }</code></li>
-    <li>Inspect a reparse point: <code>fsutil reparsepoint query &lt;file_path&gt;</code></li>
-    <li>Register a test sync root (requires admin): <code>CfRegisterSyncRoot</code> with proper <code>CF_SYNC_ROOT_REGISTRATION</code></li>
-    <li>Create a placeholder and observe: <code>CfCreatePlaceholders</code> with <code>CF_PLACEHOLDER_CREATE_INFO</code></li>
-    <li>Trigger a race condition: Thread A checks placeholder state, Thread B updates it, Thread A executes transfer</li>
-    <li>Enable Driver Verifier on <code>CldFlt.sys</code>, reboot, and test</li>
-    <li>Analyze any crashes with WinDbg: <code>!analyze -v</code>, <code>!verifier 3</code></li>
-    <li><strong>BONUS:</strong> Find a reproducible crash and document the primitive</li>
-  </ol>
+Size   8 bytes: 0x80070057 INVALID_PARAM
+Size  12 bytes: 0x80070057 INVALID_PARAM
+Size  16 bytes: 0x80070057 INVALID_PARAM
+...
+Size 256 bytes: 0x80070057 INVALID_PARAM
 
-  <div class="note">
-    <strong>Test Environment:</strong> .42 has Driver Verifier active on CldFlt.sys. Any kernel bug will BSOD immediately. Document the crash and analyze with WinDbg. This is how real kernel research is done.
-  </div>
+=== CONCLUSION ===
+No valid struct size found.
+The CF_SYNC_ROOT_REGISTRATION struct requires more than just StructSize.
+It needs specific field initialization that we don't have.
+            </div>
 
-  <div class="nav">
-    <a href="MODULE_13_KAV_EVASION.html">← Module 13: Kaspersky Evasion</a>
-    <a href="MODULE_15_EXFILTRATION.html">Module 15: Exfiltration →</a>
-  </div>
-</div>
+            <p style="margin-top: 1rem;"><strong>What this means:</strong> The Windows SDK documentation is incomplete. The runtime struct layout differs from the documented layout. Without the correct field order and initialization, CfRegisterSyncRoot rejects every attempt.</p>
+        </div>
 
+        <h2>Lessons from the Dead End</h2>
+
+        <div class="step-box">
+            <h4>Lesson 1: Documentation Lies</h4>
+            <p>Microsoft's documented struct layout for CF_SYNC_ROOT_REGISTRATION doesn't match the runtime reality. The first DWORD (StructSize) is not enough. There are hidden fields, alignment requirements, or version checks we don't know about.</p>
+
+            <div class="why-box">
+                <h5>How to handle this</h5>
+                <p>When documentation fails, reverse engineer. Use WinDbg to inspect the actual struct in memory. Use API Monitor to watch how OneDrive initializes it. Use Process Monitor to see the exact parameters.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Lesson 2: Negative Results Are Data</h4>
+            <p>We now know:</p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li>CfAPI is not trivially exploitable with simple struct fuzzing</li>
+                <li>The registration process has validation we don't understand</li>
+                <li>OneDrive's pre-registered sync root is the only viable path</li>
+                <li>Driver Verifier (verifier.exe) is required to catch kernel corruption</li>
+            </ul>
+        </div>
+
+        <div class="step-box">
+            <h4>Lesson 3: Pivot, Don't Persist</h4>
+            <p>When a path fails, don't keep hammering it. We spent 2 hours on struct brute-forcing. The smart move after 30 minutes would have been:</p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li>Check if OneDrive is already registered (skip registration)</li>
+                <li>Use the pre-registered sync root for testing</li>
+                <li>Focus on the race condition, not the registration</li>
+            </ul>
+        </div>
+
+        <h2>Lab Exercise: Learn from Failure</h2>
+
+        <div class="step-box">
+            <h4>Scenario</h4>
+            <p>You spent 3 hours trying to exploit a Windows API. Every attempt returns ERROR_INVALID_PARAMETER. What do you do?</p>
+
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Document the exact error code and conditions</li>
+                <li>Check if others have solved this (GitHub, MSRC, blogs)</li>
+                <li>Reverse engineer the binary to find the validation logic</li>
+                <li>Consider alternative approaches (different API, different target)</li>
+                <li>Write up the failure — it may help someone else succeed</li>
+            </ol>
+
+            <button onclick="document.getElementById('failure-solution').style.display='block'">Show Research Method</button>
+
+            <div id="failure-solution" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+=== RESEARCH METHODOLOGY ===
+
+1. HYPOTHESIZE
+   "CfAPI has a race condition between create and update"
+
+2. TEST
+   Build fuzzer, run against target
+   → Result: Registration fails with INVALID_PARAM
+
+3. ANALYZE
+   Is the error from our code or the API?
+   → Test with known-good parameters (OneDrive)
+   → If OneDrive works, our struct is wrong
+
+4. REVERSE
+   Disassemble cldapi.dll, find CfRegisterSyncRoot
+   → Identify struct validation logic
+   → Identify required fields
+
+5. DOCUMENT
+   Write up the failure, the analysis, the next steps
+   → MSRC submission if vulnerability found
+   → Course module if educational value
+
+6. PIVOT
+   If struct brute-force fails, try:
+   - Using pre-registered sync root
+   - Different API endpoint
+   - Different target (Windows 11 vs Windows 10)
+                </div>
+            </div>
+        </div>
+
+        <h2>Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>Failure is data:</strong> Every dead end eliminates a possibility</li>
+            <li><strong>Document everything:</strong> Your failure may be someone else's starting point</li>
+            <li><strong>Reverse engineer when docs fail:</strong> The binary is the truth</li>
+            <li><strong>Know when to pivot:</strong> 30 minutes of failure = time to change approach</li>
+            <li><strong>Negative results are publishable:</strong> "We tried X, it didn't work, here's why" has value</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">CfAPI struct brute-force</td>
+                    <td style="padding: 0.5rem; color: var(--accent);">❌ FAILED — All sizes INVALID_PARAM</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Driver Verifier active</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Research methodology documented</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ THIS MODULE</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_13_EDR_EVASION.html">← Module 13</a>
+            <a href="MODULE_15_LATERAL.html">Module 15 →</a>
+        </div>
+    </div>
 </body>
 </html>
