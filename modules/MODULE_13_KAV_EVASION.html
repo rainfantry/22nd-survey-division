@@ -115,7 +115,7 @@
   <p>Kaspersky is not just signatures. It's a four-layer defense system: static analysis, behavioral emulation, System Watcher rollback, and KSN cloud reputation. To evade it, you must beat all four — or understand which layer will kill you and plan accordingly.</p>
 
   <h2>Interactive Demo</h2>
-  <p>Real data from .92 (Intel, Kaspersky active) — live AV processes, defense layers, and evasion techniques:</p>
+  <p>Real data from .42 (AMD desktop, Kaspersky Premium 21.25.7.504 active) — live AV processes, defense layers, and evasion techniques:</p>
   <iframe class="widget-iframe" src="../widgets/module_13_widget.html" title="Module 13 Kaspersky Evasion Interactive Demo"></iframe>
 
   <h2>The Four Layers</h2>
@@ -151,21 +151,45 @@ for (int i = 0; i < payload_len; i++) {
     <strong>The KSN Problem:</strong> Ghost encoding beats static signatures, but the <em>carrier file</em> still has a hash. KSN sees the carrier, not the hidden payload. A novel carrier gets submitted. After analysis, the payload is extracted and signatured.
   </div>
 
+  <h2>Live Result — Iron Sun GCC vs Kaspersky</h2>
+  <p>Iron Sun compiled with GCC (not MSVC — MSVC PE headers are flagged by Kaspersky signature). Transferred to .42 and scanned with <code>avp.exe</code> against live definitions:</p>
+  <pre><code>C:\> avp.exe SCAN /i0 /fa /r:kav_scan.txt C:\tmp\iron_sun.exe
+
+AV bases release date: 2026-06-28 13:11:00 (full)
+iChecker: Yes   iSwift: Yes   Archives: No
+
+2026-06-29 00:15:26  Scan_Objects  starting   1
+2026-06-29 00:15:26  Scan_Objects  running    100
+2026-06-29 00:15:26  Scan_Objects  completed
+
+--- Statistics ---
+Time Start:       2026-06-29 00:15:26
+Time Finish:      2026-06-29 00:15:26
+Processed objects: 1
+Total OK:          1
+Total detected:    0
+Suspicions:        0
+Errors:            0
+------------------</code></pre>
+  <div class="note">
+    <strong>CLEAN.</strong> Kaspersky Premium 21.25.7.504 — definitions current (2026-06-28). Full scan mode, iChecker + iSwift active. GCC build passes static + cloud (KSN) check. MSVC build is flagged — Kaspersky's cloud has a signature on MSVC-compiled PE headers with this code pattern. Use GCC.
+  </div>
+
   <h2>Lab Exercise</h2>
-  <p><strong>Objective:</strong> Build a payload that evades Kaspersky on .92 (live target).</p>
+  <p><strong>Objective:</strong> Build a payload that evades Kaspersky on .42 (live target, Kaspersky Premium active).</p>
   <ol>
     <li>Build a simple payload (calc.exe spawn or message box)</li>
     <li>Test 1: Run bare — observe KAV detection method</li>
     <li>Test 2: XOR obfuscate with key 0xB5 — test again</li>
     <li>Test 3: Add ghost encoding layer — test again</li>
     <li>Test 4: Add Dark Room (HWBP on AMSI + ETW) — test again</li>
-    <li>Test 5: Implement persistence (registry Run key) — observe rollback</li>
+    <li>Test 5: Implement persistence (registry Run key) — observe System Watcher rollback</li>
     <li>Document which layer stopped you and why</li>
-    <li><strong>BONUS:</strong> Build Iron Sun GCC variant and scan with <code>avp.exe</code></li>
+    <li>Compile with GCC not MSVC — verify CLEAN with <code>avp.exe SCAN /i0 /fa</code></li>
   </ol>
 
   <div class="note">
-    <strong>Test Environment:</strong> .92 has Kaspersky ACTIVE. This is a real target — not a clean VM. If your payload survives, you earned it. Document everything.
+    <strong>Test Environment:</strong> .42 (WUPC AMD desktop) has Kaspersky ACTIVE, KSN ENABLED, System Watcher bRollbackAllowed=1. This is a real target — not a clean VM. .92 (laptop) has Defender stopped and no AV — not a valid test target for Kaspersky evasion.
   </div>
 
   <div class="nav">
