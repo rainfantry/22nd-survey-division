@@ -701,11 +701,15 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 }
 /* ── HERO INNER MAX-WIDTH ── */
 .hero-inner{max-width:960px;}
+/* ── SKIP NAV ── */
+.skip-link{position:absolute;top:-999px;left:0;background:var(--green);color:#000;font-family:var(--mono);font-size:.8rem;padding:.5rem 1rem;z-index:10000;text-decoration:none;font-weight:700;}
+.skip-link:focus{top:0;}
 </style>
 <script async src="https://js.stripe.com/v3/buy-button.js"></script>
 </head>
 <body>
 
+<a class="skip-link" href="#curriculum">Skip to course content</a>
 <canvas id="bg-net" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:.55;"></canvas>
 
 
