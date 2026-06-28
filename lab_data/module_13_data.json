@@ -1,0 +1,61 @@
+{
+  "theory": {
+    "commands": [
+      {
+        "command": "Get-Process | Where-Object { $_.Name -like '*avp*' } | Select-Object Name, Id",
+        "output": "Name     Id\n----     --\navp    5612\navp   11692\navpui 16084",
+        "note": "Three Kaspersky processes active on .92 — real-world target with live AV."
+      }
+    ]
+  },
+  "recon": {
+    "commands": [
+      {
+        "command": "Get-Process | Where-Object { $_.Name -like '*avp*' -or $_.Name -like '*kaspersky*' } | Select-Object Name, Id, Path",
+        "output": "Name    Id Path\n----    -- ----\navp   5612\navp  11692\navpui 16084",
+        "note": "avp.exe = main AV engine (x2 for redundancy). avpui.exe = user interface."
+      },
+      {
+        "command": "# Kaspersky defense layers:\n# 1. Static signatures (file hash + byte patterns)\n# 2. Heuristic analysis (behavioral patterns in code)\n# 3. System Watcher (rollback on suspicious behavior)\n# 4. KSN (cloud hash lookup + reputation)",
+        "output": "Defense-in-depth: 4 layers\n\nLayer 1: Static — signature database, heuristic rules\nLayer 2: Behavioral — emulator runs code in sandbox\nLayer 3: System Watcher — monitors file/registry changes,\n         rolls back if threat detected\nLayer 4: KSN — cloud hash lookup, reputation scoring",
+        "note": "Ghost FUD beats Layer 1. Dark Room beats Layer 2. But Layer 3+4 are the killers."
+      }
+    ]
+  },
+  "static": {
+    "commands": [
+      {
+        "command": "# Signature evasion techniques:\n# - XOR obfuscation (key 0xB5 for dropper, 0xBE for shell)\n# - Polymorphism (mutate code structure each build)\n# - Ghost encoding (zero-width Unicode carrier)\n# - Phantom DLL hijack (load via legitimate process)",
+        "output": "Ghost FUD.exe: 0/72 on VirusTotal\nPhantom DLL: loads via Office process\nIron Sun beacon: XOR + AES + ghost wrap\n\nAll bypass static signature scan —\nfile appears as noise, not recognized code.",
+        "note": "Static evasion is the entry fee. It gets you past the door, not past the guard."
+      }
+    ]
+  },
+  "behavioral": {
+    "commands": [
+      {
+        "command": "# System Watcher rollback mechanism:\n# bRollbackAllowed=1 means KAV can undo changes\n# Triggers: file writes, registry changes, process injection\n# Monitors: Run keys, scheduled tasks, startup folders",
+        "output": "System Watcher monitors:\n- Registry Run keys (HKCU/HKLM)\\\n- Scheduled tasks (schtasks)\n- Startup folders (AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup)\n- Service creation (sc.exe)\n- DLL injection (CreateRemoteThread)\n\nIf ANY of these trigger after execution,\nKAV rolls back the changes within seconds.",
+        "note": "Three-vector persistence (registry + task + LNK) is exactly what System Watcher watches."
+      }
+    ]
+  },
+  "cloud": {
+    "commands": [
+      {
+        "command": "# KSN (Kaspersky Security Network) flow:\n# 1. Unknown binary executes\n# 2. KSN sends file hash to cloud\n# 3. Cloud returns reputation score\n# 4. If score < threshold, file is flagged\n# 5. File may be sent for deeper analysis",
+        "output": "KSN First-Run Penalty:\n\nNew file + no reputation = suspicious\nCloud analysis can take 30-60 seconds\nDuring analysis: file may be blocked\nAfter analysis: signature created,\n         all future executions blocked\n\nThe hash is the carrier file's hash —\nnot the extracted payload. Ghost encoding\ndoesn't help here. The file still has a face.",
+        "note": "KSN is the reason 'it worked yesterday but not today' — reputation builds over time."
+      }
+    ]
+  },
+  "lab": {
+    "commands": [
+      {
+        "command": "LAB EXERCISE: Evade Kaspersky on .92",
+        "output": "1. Build a payload (calc.exe spawn or message box)\n2. Test 1: Run bare payload — observe KAV detection\n3. Test 2: XOR obfuscate with key 0xB5 — test again\n4. Test 3: Add ghost encoding layer — test again\n5. Test 4: Add Dark Room (HWBP on AMSI + ETW) — test again\n6. Test 5: Implement persistence (registry Run key)\n   - Observe if System Watcher rolls it back\n7. Document which layer stopped you and why\n8. BONUS: Build Iron Sun GCC variant and scan with avp.exe",
+        "note": ".92 is a REAL target. Kaspersky is ACTIVE. If your payload survives, you earned it."
+      }
+    ]
+  }
+}

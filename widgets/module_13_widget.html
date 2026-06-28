@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaspersky Evasion — 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+    --prompt: #0f0;
+    --dim: #666;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 15px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 950px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0,255,255,0.08);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--cyan);
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .header .subtitle {
+    color: var(--dim);
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .header .principle {
+    color: var(--amber);
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 13px;
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .tab:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .tab.active {
+    background: var(--cyan);
+    color: #000;
+    border-color: var(--cyan);
+    font-weight: bold;
+  }
+  .content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .content.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .cmd-block .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #222;
+    border: 1px solid #444;
+    color: var(--dim);
+    padding: 2px 8px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .cmd-block:hover .copy-btn {
+    opacity: 1;
+  }
+  .cmd-block .copy-btn:hover {
+    background: var(--cyan);
+    color: #000;
+  }
+  .prompt {
+    color: var(--prompt);
+  }
+  .command {
+    color: var(--fg);
+  }
+  .output {
+    color: #888;
+    margin-top: 6px;
+    padding-left: 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .highlight {
+    color: var(--cyan);
+  }
+  .warning {
+    color: var(--red);
+  }
+  .suspicious {
+    color: var(--amber);
+  }
+  .success {
+    color: var(--green);
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+    border-radius: 0 4px 4px 0;
+  }
+  .do-this-now {
+    background: #1a1a1a;
+    border: 1px solid var(--red);
+    border-radius: 4px;
+    padding: 12px;
+    margin: 15px 0;
+  }
+  .do-this-now .title {
+    color: var(--red);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .lab-exercise {
+    background: #0d1f0d;
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+  }
+  .lab-exercise .title {
+    color: var(--green);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .lab-exercise ol {
+    margin-left: 20px;
+    color: var(--fg);
+  }
+  .lab-exercise li {
+    margin-bottom: 8px;
+  }
+  .quick-ref {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .quick-ref-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  .quick-ref-card .cmd {
+    color: var(--cyan);
+    font-size: 12px;
+  }
+  .quick-ref-card .desc {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .machine-tag {
+    display: inline-block;
+    background: #222;
+    border: 1px solid #444;
+    color: var(--dim);
+    padding: 2px 8px;
+    font-size: 10px;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+  .machine-tag.intel { border-color: var(--cyan); color: var(--cyan); }
+  .machine-tag.amd { border-color: var(--amber); color: var(--amber); }
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 2s steps(40, end);
+  }
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  .ghost-appear {
+    opacity: 0;
+    animation: ghostIn 0.6s ease forwards;
+  }
+  @keyframes ghostIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .progress-bar {
+    height: 2px;
+    background: #333;
+    margin: 20px 0;
+    position: relative;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--cyan);
+    width: 0%;
+    transition: width 1s ease;
+  }
+  .status-line {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 15px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Kaspersky Evasion</h1>
+    <div class="subtitle">Module 13 — 22nd Survey Division</div>
+    <div class="principle">The file is invisible, but the hash still has a face.</div>
+  </div>
+
+  <div class="tabs">
+        <button class="tab active" onclick="showTab('tab1')">THEORY</button>
+    <button class="tab " onclick="showTab('tab2')">RECON</button>
+    <button class="tab " onclick="showTab('tab3')">STATIC</button>
+    <button class="tab " onclick="showTab('tab4')">BEHAVIORAL</button>
+    <button class="tab " onclick="showTab('tab5')">CLOUD</button>
+    <button class="tab " onclick="showTab('tab6')">LAB</button>
+  </div>
+
+  <div id="tab1" class="content active">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">Get-Process | Where-Object { $_.Name -like '*avp*' } | Select-Object Name, Id</span>
+      <div class="output">Name     Id
+----     --
+avp    5612
+avp   11692
+avpui 16084</div>
+    </div>
+    <div class="note">Three Kaspersky processes active on .92 — real-world target with live AV.</div>
+  </div>
+
+<div id="tab2" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">Get-Process | Where-Object { $_.Name -like '*avp*' -or $_.Name -like '*kaspersky*' } | Select-Object Name, Id, Path</span>
+      <div class="output">Name    Id Path
+----    -- ----
+avp   5612
+avp  11692
+avpui 16084</div>
+    </div>
+    <div class="note">avp.exe = main AV engine (x2 for redundancy). avpui.exe = user interface.</div>
+<div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># Kaspersky defense layers:
+# 1. Static signatures (file hash + byte patterns)
+# 2. Heuristic analysis (behavioral patterns in code)
+# 3. System Watcher (rollback on suspicious behavior)
+# 4. KSN (cloud hash lookup + reputation)</span>
+      <div class="output">Defense-in-depth: 4 layers
+
+Layer 1: Static — signature database, heuristic rules
+Layer 2: Behavioral — emulator runs code in sandbox
+Layer 3: System Watcher — monitors file/registry changes,
+         rolls back if threat detected
+Layer 4: KSN — cloud hash lookup, reputation scoring</div>
+    </div>
+    <div class="note">Ghost FUD beats Layer 1. Dark Room beats Layer 2. But Layer 3+4 are the killers.</div>
+  </div>
+
+<div id="tab3" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># Signature evasion techniques:
+# - XOR obfuscation (key 0xB5 for dropper, 0xBE for shell)
+# - Polymorphism (mutate code structure each build)
+# - Ghost encoding (zero-width Unicode carrier)
+# - Phantom DLL hijack (load via legitimate process)</span>
+      <div class="output">Ghost FUD.exe: 0/72 on VirusTotal
+Phantom DLL: loads via Office process
+Iron Sun beacon: XOR + AES + ghost wrap
+
+All bypass static signature scan —
+file appears as noise, not recognized code.</div>
+    </div>
+    <div class="note">Static evasion is the entry fee. It gets you past the door, not past the guard.</div>
+  </div>
+
+<div id="tab4" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># System Watcher rollback mechanism:
+# bRollbackAllowed=1 means KAV can undo changes
+# Triggers: file writes, registry changes, process injection
+# Monitors: Run keys, scheduled tasks, startup folders</span>
+      <div class="output">System Watcher monitors:
+- Registry Run keys (HKCU/HKLM)\
+- Scheduled tasks (schtasks)
+- Startup folders (AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup)
+- Service creation (sc.exe)
+- DLL injection (CreateRemoteThread)
+
+If ANY of these trigger after execution,
+KAV rolls back the changes within seconds.</div>
+    </div>
+    <div class="note">Three-vector persistence (registry + task + LNK) is exactly what System Watcher watches.</div>
+  </div>
+
+<div id="tab5" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># KSN (Kaspersky Security Network) flow:
+# 1. Unknown binary executes
+# 2. KSN sends file hash to cloud
+# 3. Cloud returns reputation score
+# 4. If score < threshold, file is flagged
+# 5. File may be sent for deeper analysis</span>
+      <div class="output">KSN First-Run Penalty:
+
+New file + no reputation = suspicious
+Cloud analysis can take 30-60 seconds
+During analysis: file may be blocked
+After analysis: signature created,
+         all future executions blocked
+
+The hash is the carrier file's hash —
+not the extracted payload. Ghost encoding
+doesn't help here. The file still has a face.</div>
+    </div>
+    <div class="note">KSN is the reason 'it worked yesterday but not today' — reputation builds over time.</div>
+  </div>
+
+<div id="tab6" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">LAB EXERCISE: Evade Kaspersky on .92</span>
+      <div class="output">1. Build a payload (calc.exe spawn or message box)
+2. Test 1: Run bare payload — observe KAV detection
+3. Test 2: XOR obfuscate with key 0xB5 — test again
+4. Test 3: Add ghost encoding layer — test again
+5. Test 4: Add Dark Room (HWBP on AMSI + ETW) — test again
+6. Test 5: Implement persistence (registry Run key)
+   - Observe if System Watcher rolls it back
+7. Document which layer stopped you and why
+8. BONUS: Build Iron Sun GCC variant and scan with avp.exe</div>
+    </div>
+    <div class="note">.92 is a REAL target. Kaspersky is ACTIVE. If your payload survives, you earned it.</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="fill" id="progressFill"></div>
+  </div>
+
+  <div class="status-line">
+    <span class="machine-tag intel">.92 Intel</span>
+    <span class="machine-tag amd">.42 AMD</span>
+    Real lab data • Tested live • VIDIMUS OMNIA
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+  updateProgress(tabId);
+}
+
+function updateProgress(tabId) {
+  const tabs = document.querySelectorAll('.tab');
+  const activeIndex = Array.from(tabs).findIndex(t => t.classList.contains('active'));
+  const progress = ((activeIndex + 1) / tabs.length) * 100;
+  document.getElementById('progressFill').style.width = progress + '%';
+}
+
+function copyCommand(btn) {
+  const cmd = btn.parentElement.querySelector('.command').textContent;
+  navigator.clipboard.writeText(cmd).then(() => {
+    btn.textContent = 'COPIED';
+    setTimeout(() => btn.textContent = 'COPY', 1500);
+  });
+}
+
+// Initialize progress
+document.addEventListener('DOMContentLoaded', () => {
+  updateProgress('tab1');
+});
+</script>
+
+</body>
+</html>

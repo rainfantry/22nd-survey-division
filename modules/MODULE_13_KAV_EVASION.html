@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 13 — Kaspersky Evasion | 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+    --dim: #666;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: var(--cyan);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    color: var(--green);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 30px 0 15px;
+    border-left: 3px solid var(--green);
+    padding-left: 10px;
+  }
+  h3 {
+    color: var(--amber);
+    font-size: 14px;
+    margin: 20px 0 10px;
+  }
+  p {
+    margin-bottom: 15px;
+    color: var(--fg);
+  }
+  .widget-iframe {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin: 20px 0;
+    background: #111;
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin: 15px 0;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+  .warning {
+    color: var(--red);
+    border-left-color: var(--red);
+  }
+  code {
+    background: #1a1a1a;
+    color: var(--cyan);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    overflow-x: auto;
+    margin: 15px 0;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+  }
+  .nav a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .nav a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Module 13 — Kaspersky Evasion</h1>
+  <p><strong>First Principle:</strong> The file is invisible, but the hash still has a face.</p>
+
+  <h2>Overview</h2>
+  <p>Kaspersky is not just signatures. It's a four-layer defense system: static analysis, behavioral emulation, System Watcher rollback, and KSN cloud reputation. To evade it, you must beat all four — or understand which layer will kill you and plan accordingly.</p>
+
+  <h2>Interactive Demo</h2>
+  <p>Real data from .92 (Intel, Kaspersky active) — live AV processes, defense layers, and evasion techniques:</p>
+  <iframe class="widget-iframe" src="../widgets/module_13_widget.html" title="Module 13 Kaspersky Evasion Interactive Demo"></iframe>
+
+  <h2>The Four Layers</h2>
+  
+  <h3>Layer 1: Static Signatures</h3>
+  <p>File hash + byte pattern matching. This is what most "AV evasion" tools target. Ghost encoding, XOR obfuscation, polymorphism — all beat this layer.</p>
+  <pre><code>// XOR obfuscation with key 0xB5
+for (int i = 0; i < payload_len; i++) {
+    decoded[i] = encoded[i] ^ 0xB5;
+}</code></pre>
+
+  <h3>Layer 2: Behavioral Emulation</h3>
+  <p>Kaspersky runs suspicious code in a sandbox emulator. If the code does something malicious (allocate executable memory, inject threads), it's flagged before it touches the real system.</p>
+  <div class="note">
+    <strong>Counter:</strong> Dark Room (HWBP on AMSI + ETW) suppresses the telemetry that the emulator watches. No events = no behavioral triggers.
+  </div>
+
+  <h3>Layer 3: System Watcher</h3>
+  <p>Monitors file/registry changes in real-time. If a process writes to a Run key, creates a scheduled task, or drops a DLL, System Watcher can <strong>roll back</strong> the changes.</p>
+  <pre><code>// System Watcher watches:
+- HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+- C:\Users\<user>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+- schtasks /create
+- sc.exe create
+- CreateRemoteThread (DLL injection)</code></pre>
+  <div class="note warning">
+    <strong>CRITICAL:</strong> Three-vector persistence (registry + task + LNK) is exactly what System Watcher is designed to catch. If <code>bRollbackAllowed=1</code>, your persistence may be undone within seconds.
+  </div>
+
+  <h3>Layer 4: KSN (Kaspersky Security Network)</h3>
+  <p>Cloud hash lookup on first execution. Unknown files are sent to Kaspersky's cloud for analysis. If flagged, a signature is created and distributed globally within hours.</p>
+  <div class="note">
+    <strong>The KSN Problem:</strong> Ghost encoding beats static signatures, but the <em>carrier file</em> still has a hash. KSN sees the carrier, not the hidden payload. A novel carrier gets submitted. After analysis, the payload is extracted and signatured.
+  </div>
+
+  <h2>Lab Exercise</h2>
+  <p><strong>Objective:</strong> Build a payload that evades Kaspersky on .92 (live target).</p>
+  <ol>
+    <li>Build a simple payload (calc.exe spawn or message box)</li>
+    <li>Test 1: Run bare — observe KAV detection method</li>
+    <li>Test 2: XOR obfuscate with key 0xB5 — test again</li>
+    <li>Test 3: Add ghost encoding layer — test again</li>
+    <li>Test 4: Add Dark Room (HWBP on AMSI + ETW) — test again</li>
+    <li>Test 5: Implement persistence (registry Run key) — observe rollback</li>
+    <li>Document which layer stopped you and why</li>
+    <li><strong>BONUS:</strong> Build Iron Sun GCC variant and scan with <code>avp.exe</code></li>
+  </ol>
+
+  <div class="note">
+    <strong>Test Environment:</strong> .92 has Kaspersky ACTIVE. This is a real target — not a clean VM. If your payload survives, you earned it. Document everything.
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_12_ETW_BYPASS.html">← Module 12: ETW Bypass</a>
+    <a href="MODULE_14_CLOUD_FILES.html">Module 14: Cloud Files Internals →</a>
+  </div>
+</div>
+
+</body>
+</html>
