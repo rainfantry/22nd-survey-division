@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEO TRANSLATION — 22ND SURVEY DIVISION</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+        
+        :root {
+            --bg: #050505;
+            --fg: #c0c0c0;
+            --accent: #ff0040;
+            --accent2: #00ff41;
+            --dim: #444;
+            --border: #1a1a1a;
+            --neon: #00ffff;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+        }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        
+        .ceo-header {
+            border: 3px solid var(--accent);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .ceo-header::before {
+            content: 'FOR THE BOSS WHO GOT HACKED';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        
+        .ceo-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .ceo-box {
+            border: 2px solid var(--border);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .ceo-box::before {
+            content: 'CEO TRANSLATION';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: #ffaa00;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        
+        .ceo-box h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            color: var(--accent2);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .ceo-box p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .dollar-impact {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        .dollar-impact .amount {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: 700;
+        }
+        
+        .dollar-impact .label {
+            font-size: 0.8rem;
+            color: var(--dim);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .blame-chain {
+            background: #0a0a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .blame-chain h4 {
+            font-family: 'Space Mono', monospace;
+            color: #ffaa00;
+            margin-bottom: 0.5rem;
+        }
+        
+        .module-ceo {
+            border: 2px solid var(--border);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .module-ceo h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.1rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .what-it-is {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .what-it-is h4 {
+            font-family: 'Space Mono', monospace;
+            color: var(--accent2);
+            margin-bottom: 0.5rem;
+        }
+        
+        .why-you-care {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .why-you-care h4 {
+            font-family: 'Space Mono', monospace;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .what-to-do {
+            background: #0a0a1a;
+            border: 2px solid var(--neon);
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .what-to-do h4 {
+            font-family: 'Space Mono', monospace;
+            color: var(--neon);
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ceo-header">
+            <h1>CEO Translation</h1>
+            <p style="font-size: 1.1rem; color: var(--dim);">You got hacked. You don't know why. You don't know what any of this means. This page translates every module into what you actually care about: money, blame, and how to not get fucked again.</p>
+        </div>
+
+        <div class="ceo-box">
+            <h2>The Bottom Line</h2>
+            <p>Your company lost money because someone clicked a link, opened a file, or trusted an email. The technical details don't matter. What matters is: <strong>it happened, it was preventable, and it will happen again unless you fix it.</strong></p>
+            
+            <div class="dollar-impact">
+                <div class="label">AVERAGE COST OF A BREACH</div>
+                <div class="amount">$4.45 MILLION</div>
+                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;">IBM Cost of a Data Breach Report 2023</p>
+            </div>
+            
+            <div class="dollar-impact">
+                <div class="label">AVERAGE TIME TO IDENTIFY</div>
+                <div class="amount">277 DAYS</div>
+                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;">That's 9 months of someone stealing your data before you even know</p>
+            </div>
+        </div>
+
+        <div class="module-ceo">
+            <h3>Module 01: Reconnaissance</h3>
+            <div class="what-it-is">
+                <h4>WHAT IT IS</h4>
+                <p>Before hackers attack you, they Google you. They look at your website, your LinkedIn, your job postings, your employee's Facebook. They learn your tech stack, your vendors, your CEO's dog's name.</p>
+            </div>
+            <div class="why-you-care">
+                <h4>WHY YOU CARE</h4>
+                <p>That information is free and public. Your employees post it. Your website shows it. And hackers use it to craft attacks that look legitimate because they know your business.</p>
+            </div>
+            <div class="what-to-do">
+                <h4>WHAT TO DO</h4>
+                <p>Train employees to shut the fuck up online. Review your website for information leakage. Assume everything public is weaponized against you.</p>
+            </div>
+            <div class="blame-chain">
+                <h4>BLAME CHAIN</h4>
+                <p>Marketing posted detailed tech stack → IT didn't review → HR posted job req with internal system names → Employee posted "working late at [Company] on the new [Vendor] rollout" → Attacker crafted perfect phishing email → Employee clicked → Breach</p>
+            </div>
+        </div>
+
+        <div class="module-ceo">
+            <h3>Module 03: PowerShell</h3>
+            <div class="what-it-is">
+                <h4>WHAT IT IS</h4>
+                <p>PowerShell is a tool built into Windows that lets administrators manage computers remotely. Hackers use it to control your computers without installing anything suspicious.</p>
+            </div>
+            <div class="why-you-care">
+                <h4>WHY YOU CARE</h4>
+                <p>PowerShell is trusted by Windows. It looks like normal administration. Most security tools don't flag it because it's supposed to be there. Hackers live inside it.</p>
+            </div>
+            <div class="what-to-do">
+                <h4>WHAT TO DO</h4>
+                <p>Enable PowerShell logging. Monitor for suspicious commands. Restrict PowerShell to authorized users. Don't let standard employees run it.</p>
+            </div>
+            <div class="blame-chain">
+                <h4>BLAME CHAIN</h4>
+                <p>IT enabled PowerShell for everyone "for convenience" → No logging configured → Employee clicked phishing link → PowerShell script ran silently → Credentials stolen → Lateral movement → Domain admin → All data exfiltrated</p>
+            </div>
+        </div>
+
+        <div class="module-ceo">
+            <h3>Module 08: Privilege Escalation</h3>
+            <div class="what-it-is">
+                <h4>WHAT IT IS</h4>
+                <p>A hacker gets in as a normal user. Then they find a bug in Windows that lets them become an administrator. Then they find another bug that lets them become SYSTEM — the highest level. It's like breaking into the lobby, then finding the master key, then finding the safe combination.</p>
+            </div>
+            <div class="why-you-care">
+                <h4>WHY YOU CARE</h4>
+                <p>Standard users can't do much damage. Administrators can install software, delete files, create accounts. SYSTEM can do anything — read every file, log every keystroke, disable security tools. One escalation and your entire network is compromised.</p>
+            </div>
+            <div class="what-to-do">
+                <h4>WHAT TO DO</h4>
+                <p>Patch Windows immediately. Remove local admin rights from standard users. Monitor for privilege escalation attempts. Assume any standard user account will be compromised.</p>
+            </div>
+            <div class="blame-chain">
+                <h4>BLAME CHAIN</h4>
+                <p>Employee had local admin "to install printers" → Windows patch delayed 30 days "for testing" → Phishing email clicked → Malware installed → Privilege escalation exploit → SYSTEM access → Security tools disabled → 9 months undetected</p>
+            </div>
+        </div>
+
+        <div class="module-ceo">
+            <h3>Module 17: Social Engineering</h3>
+            <div class="what-it-is">
+                <h4>WHAT IT IS</h4>
+                <p>Hackers don't hack computers. They hack people. They send emails that look like they're from IT, your boss, or a vendor. They create urgency: "Your account will be locked." They prey on helpfulness: "I need your help with a system issue." They exploit authority: "This is the CEO."</p>
+            </div>
+            <div class="why-you-care">
+                <h4>WHY YOU CARE</h4>
+                <p>91% of cyberattacks start with a phishing email. Not a technical exploit. A person clicking a link. Your firewall, your antivirus, your million-dollar security suite — all bypassed by one employee who was busy and didn't check the sender.</p>
+            </div>
+            <div class="what-to-do">
+                <h4>WHAT TO DO</h4>
+                <p>Phishing training monthly. Not annually — monthly. Test with real-looking phishing emails. Fire employees who fail three times. Yes, fire them. They're a liability. Implement technical controls: MFA, email filtering, link sandboxing. But know that technical controls fail. People are the last line.</p>
+            </div>
+            <div class="blame-chain">
+                <h4>BLAME CHAIN</h4>
+                <p>CEO announced new security initiative → IT sent real password reset email → Attacker sent fake password reset email 2 hours later → Employee was busy, didn't check sender → Clicked link, entered credentials → Attacker had VPN access → 9 months undetected → $4.45M breach cost</p>
+            </div>
+        </div>
+
+        <div class="module-ceo">
+            <h3>Module 20: Full Kill Chain</h3>
+            <div class="what-it-is">
+                <h4>WHAT IT IS</h4>
+                <p>This is the full attack from start to finish. Reconnaissance → Initial access → Execution → Persistence → Privilege escalation → Defense evasion → Credential access → Lateral movement → Collection → Exfiltration. Ten steps. Each one is a decision. Each one can be stopped.</p>
+            </div>
+            <div class="why-you-care">
+                <h4>WHY YOU CARE</h4>
+                <p>Your attackers are following this playbook. They have time. They have patience. They have your public information. And they only need to succeed at one step to advance. You need to stop them at every step. Defense in depth means multiple layers — not one perfect wall, but many walls.</p>
+            </div>
+            <div class="what-to-do">
+                <h4>WHAT TO DO</h4>
+                <p>Hire people who understand this. Not just IT — offensive security specialists who think like attackers. Run red team exercises. Assume breach. Monitor for lateral movement. Have an incident response plan. Practice it. The 277 days to detection? Cut it to 24 hours. That's the difference between a $4M breach and a $50K incident.</p>
+            </div>
+            <div class="blame-chain">
+                <h4>BLAME CHAIN</h4>
+                <p>No offensive security training → No red team exercises → No incident response plan → No monitoring for lateral movement → Breach detected 277 days later → Customer data leaked → Regulatory fines → Class action lawsuit → CEO resigns → Stock drops 30%</p>
+            </div>
+        </div>
+
+        <div class="ceo-box">
+            <h2>The Final Word</h2>
+            <p>You didn't get hacked because your technology failed. You got hacked because your people failed, your processes failed, and your assumptions failed. Technology is a tool. People are the weapon. Train them. Test them. Fire the ones who can't learn. And never assume you're safe — assume you're already compromised and prove otherwise.</p>
+            
+            <div class="dollar-impact">
+                <div class="label">COST OF THIS COURSE</div>
+                <div class="amount">$497 AUD</div>
+                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;">Cost of one breach: $4.45M. ROI: 8,953x. Don't be the CEO who saved $500 and lost $4M.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
