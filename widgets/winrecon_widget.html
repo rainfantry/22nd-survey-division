@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WINRECON — SKYWALKER — 22nd Survey Division</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#080808;color:#c8c8c8;font-family:'Cascadia Code','Consolas','Courier New',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;}
+
+.term-wrap{width:100%;max-width:820px;}
+.eyebrow{font-size:.52rem;letter-spacing:.38em;color:#1a3a1a;text-transform:uppercase;margin-bottom:.6rem;}
+.term-title{font-size:1.05rem;color:#00ff41;letter-spacing:.08em;margin-bottom:1.4rem;}
+
+.tabs{display:flex;gap:2px;margin-bottom:2px;flex-wrap:wrap;}
+.tab{background:#0a0a0a;border:1px solid #0d1e0d;color:#1a4a1a;font-family:inherit;font-size:.56rem;letter-spacing:.18em;padding:.32rem .75rem;cursor:pointer;text-transform:uppercase;transition:all .15s;border-bottom:none;}
+.tab:hover{color:#00ff41;border-color:#1a4a1a;}
+.tab.active{background:#020f02;color:#00ff41;border-color:#00ff41;}
+
+.term{border:1px solid #0d2a0d;background:#020f02;}
+.titlebar{background:#060d06;padding:.38rem .9rem;display:flex;align-items:center;gap:.55rem;border-bottom:1px solid #0d1e0d;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#2a1010;}.dot.y{background:#2a2a10;}.dot.g{background:#102a10;}
+.titlebar-label{color:#0d2a0d;font-size:.6rem;margin:0 auto;letter-spacing:.12em;}
+
+.body{padding:1rem 1.2rem;min-height:360px;font-size:.7rem;line-height:1.85;overflow-y:auto;max-height:400px;}
+
+.t-line{display:block;}
+.t-prompt{color:#00aa22;}
+.t-cursor{display:inline-block;width:7px;height:13px;background:#00ff41;animation:blink .75s step-end infinite;vertical-align:middle;margin-left:1px;}
+
+.t-out{color:#5a8a5a;display:block;}
+.t-out.dim{color:#1a3a1a;}
+.t-out.hi{color:#00ff41;}
+.t-out.warn{color:#ffb000;}
+.t-out.err{color:#ff4444;}
+.t-out.cyan{color:#00e5ff;}
+.t-out.white{color:#ffffff;}
+.t-out.red{color:#ff4444;}
+.t-out.section{color:#ffff00;letter-spacing:.06em;}
+.t-blank{display:block;height:.5rem;}
+
+@keyframes blink{50%{opacity:0;}}
+.ghost-line{opacity:0;transform:translateX(-4px);animation:ghost-in .18s ease forwards;}
+@keyframes ghost-in{to{opacity:1;transform:translateX(0);}}
+
+.explain{border:1px solid #0d2a0d;border-top:none;background:#02080f;padding:.85rem 1.2rem;font-size:.64rem;line-height:1.8;}
+.explain-head{color:#00ff41;letter-spacing:.08em;margin-bottom:.4rem;font-size:.62rem;}
+.explain-body{color:#3a5a3a;}
+.explain-body strong{color:#5a8a5a;}
+.explain-body code{color:#00ff41;background:#030d03;padding:.05rem .3rem;}
+
+.run-row{border:1px solid #0d2a0d;border-top:none;background:#02070a;padding:.55rem 1.2rem;display:flex;align-items:center;gap:1rem;}
+.run-btn{background:transparent;border:1px solid #0d4a0d;color:#1a6a1a;font-family:inherit;font-size:.58rem;letter-spacing:.16em;padding:.28rem .75rem;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.run-btn:hover:not(:disabled){border-color:#00ff41;color:#00ff41;}
+.run-btn:disabled{opacity:.25;cursor:default;}
+.run-label{font-size:.52rem;color:#0d2a0d;letter-spacing:.1em;}
+
+.footer-note{margin-top:1.2rem;font-size:.52rem;color:#0d2a0d;letter-spacing:.08em;text-align:center;}
+</style>
+</head>
+<body>
+<div class="term-wrap">
+  <div class="eyebrow">// MODULE 02 — RECONNAISSANCE</div>
+  <div class="term-title">WINRECON — SKYWALKER // REAL OUTPUT FROM LAPTOP-R32M8MLI</div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="term">
+    <div class="titlebar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="titlebar-label" id="tab-label">Select a recon section</span>
+    </div>
+    <div class="body" id="term-body">
+      <span class="t-line"><span class="t-prompt">PS&gt;</span> <span class="t-cursor"></span></span>
+    </div>
+  </div>
+
+  <div class="explain" id="explain">
+    <div class="explain-head">// SELECT A SECTION ABOVE</div>
+    <div class="explain-body">This is real winrecon output from <strong>LAPTOP-R32M8MLI (192.168.1.92)</strong> — the 22DIV lab machine. Each tab shows a different section of the SKYWALKER recon script. This is what Module 02 teaches: run one script, get the full target picture before you move laterally.</div>
+  </div>
+
+  <div class="run-row">
+    <button class="run-btn" id="run-btn" onclick="rerun()">▶ RUN AGAIN</button>
+    <span class="run-label" id="run-label">// select a section</span>
+  </div>
+</div>
+
+<div class="footer-note">22ND SURVEY DIVISION — MODULE 02 — SKYWALKER RECON — REAL OUTPUT 2026-06-28 04:07:36</div>
+
+<script>
+var LESSONS = [
+  {
+    tab: 'IDENTITY',
+    label: 'winrecon.ps1 §1 — System Identity',
+    cmd: '.\\winrecon.ps1',
+    output: [
+      {t:'section', s:'=== SECTION 1: SYSTEM IDENTITY ==='},
+      {t:'blank'},
+      {t:'dim',    s:'  Hostname:      LAPTOP-R32M8MLI'},
+      {t:'hi',     s:'  OS:            Microsoft Windows 11 Home 10.0.26200'},
+      {t:'dim',    s:'  Build:         26200'},
+      {t:'dim',    s:'  Architecture:  64-bit'},
+      {t:'dim',    s:'  Domain:        WORKGROUP'},
+      {t:'dim',    s:'  Manufacturer:  ASUSTeK COMPUTER INC.'},
+      {t:'dim',    s:'  Model:         ASUS TUF Gaming F15 FX506HF'},
+      {t:'out',    s:'  CPU:           11th Gen Intel i5-11260H @ 2.60GHz'},
+      {t:'out',    s:'  RAM:           19.7 GB'},
+      {t:'blank'},
+      {t:'dim',    s:'  Last Boot:     06/27/2026 20:27:33'},
+    ],
+    explain: {
+      head: '// SECTION 1: SYSTEM IDENTITY — KNOW YOUR TARGET BEFORE YOU TOUCH IT',
+      body: 'First thing you do on a new target: establish a baseline. <strong>Hostname</strong> = LAPTOP-R32M8MLI (random, not descriptive — consumer machine). <strong>Domain = WORKGROUP</strong> = not joined to Active Directory — no lateral movement via domain creds, pivot has to go machine-to-machine. <strong>Model + BIOS</strong> gives you firmware attack surface. <strong>Last Boot</strong> tells you when the machine was last cleaned — volatile evidence lives in RAM from that timestamp forward. <code>winrecon.ps1</code> captures this in under 2 seconds via <code>Get-CimInstance Win32_ComputerSystem</code>.'
+    }
+  },
+  {
+    tab: 'PRIVILEGES',
+    label: 'winrecon.ps1 §2 — User + Privilege Context',
+    cmd: '.\\winrecon.ps1 --section users',
+    output: [
+      {t:'section', s:'=== SECTION 2: USER & PRIVILEGE CONTEXT ==='},
+      {t:'blank'},
+      {t:'out',    s:'  Username:      LAPTOP-R32M8MLI\\gwu07'},
+      {t:'dim',    s:'  SID:           S-1-5-21-2235627559-836241553-1517004315-1009'},
+      {t:'dim',    s:'  Auth Type:     CloudAP'},
+      {t:'warn',   s:'  Is Admin:      False  (standard user token)'},
+      {t:'blank'},
+      {t:'section', s:'  Local User Accounts:'},
+      {t:'hi',     s:'  Administrator  SID:...-500  Disabled:True [ADMIN]'},
+      {t:'warn',   s:'  apacw          SID:...-1001 Disabled:False [ADMIN]  ← second admin'},
+      {t:'hi',     s:'  gwu07          SID:...-1009 Disabled:False [ADMIN]'},
+      {t:'dim',    s:'  postgres       SID:...-1014 Disabled:False'},
+      {t:'dim',    s:'  sshuser        SID:...-1015 Disabled:False'},
+      {t:'blank'},
+      {t:'dim',    s:'  Token Privileges:  (none — standard user context)'},
+    ],
+    explain: {
+      head: '// SECTION 2: PRIVILEGE CONTEXT — WHO ARE YOU AND WHAT CAN YOU TOUCH?',
+      body: 'Current user = <strong>gwu07</strong>, standard user token (no SeDebugPrivilege, no SeImpersonatePrivilege). But note: <code>gwu07</code> is in the Admins group — meaning an <strong>UAC bypass gets us SYSTEM-level access</strong> without needing a password. More interesting: <strong>apacw</strong> is a second local admin. Unknown account, admin access — a persistence backdoor. <code>postgres</code> and <code>sshuser</code> accounts = service accounts, potential lateral targets. <strong>SID -500</strong> is the built-in Administrator (disabled) — not useful. SID -1001 = <code>apacw</code> = investigate this.'
+    }
+  },
+  {
+    tab: 'DEFENDER',
+    label: 'winrecon.ps1 §4 — AV Status',
+    cmd: '.\\winrecon.ps1 --section av',
+    output: [
+      {t:'section', s:'=== SECTION 4: DEFENDER / AV STATUS ==='},
+      {t:'blank'},
+      {t:'err',    s:'  AMRunningMode:           Not running'},
+      {t:'err',    s:'  RealTimeProtection:      False'},
+      {t:'err',    s:'  BehaviorMonitor:         False'},
+      {t:'err',    s:'  IoavProtection:          False'},
+      {t:'err',    s:'  OnAccessProtection:      False'},
+      {t:'err',    s:'  AntivirusEnabled:        False'},
+      {t:'err',    s:'  AntispywareEnabled:      False'},
+      {t:'err',    s:'  IsTamperProtected:       False'},
+      {t:'blank'},
+      {t:'white',  s:'  AMProductVersion:        4.18.26050.15'},
+      {t:'blank'},
+      {t:'warn',   s:'  [CRITICAL] TAMPER_PROTECT_OFF'},
+      {t:'warn',   s:'  Defender can be stopped programmatically post-SYSTEM'},
+    ],
+    explain: {
+      head: '// SECTION 4: DEFENDER DEAD — THIS IS THE GREENLIGHT',
+      body: 'Every single protection layer is <strong>False</strong>. RealTimeProtection, BehaviorMonitor, IoavProtection, OnAccessProtection — all off. Tamper Protection off means you can <strong>programmatically disable Defender with a one-liner post-SYSTEM</strong> — no driver required. This is the exact config that makes a payload deployment trivial. On a hardened target, all of these would be True and you\'d need HWBP (Module 11) to bypass them. Here? Drop the payload and walk. Engine version <code>4.18.26050.15</code> tells you exactly which signatures are loaded — cross-ref with evasion test results to know what gets flagged.'
+    }
+  },
+  {
+    tab: 'NETWORK',
+    label: 'winrecon.ps1 §6 — Network State',
+    cmd: '.\\winrecon.ps1 --section network',
+    output: [
+      {t:'section', s:'=== SECTION 6: NETWORK STATE ==='},
+      {t:'blank'},
+      {t:'dim',    s:'  --- Adapters ---'},
+      {t:'out',    s:'  WiFi:              192.168.1.92/24 (Up)'},
+      {t:'dim',    s:'  Ethernet 3:        192.168.56.1/24 (Up)   # VirtualBox host-only'},
+      {t:'blank'},
+      {t:'dim',    s:'  Default Gateway:   192.168.1.1'},
+      {t:'dim',    s:'  DNS Servers:       192.168.1.1'},
+      {t:'blank'},
+      {t:'dim',    s:'  --- Listening Ports ---'},
+      {t:'out',    s:'  0.0.0.0:22      PID:7008   sshd'},
+      {t:'warn',   s:'  0.0.0.0:1337    PID:9180   postgres'},
+      {t:'warn',   s:'  0.0.0.0:4443    PID:31248  python         ← C2 listener'},
+      {t:'out',    s:'  0.0.0.0:8080    PID:6464   httpd'},
+      {t:'dim',    s:'  0.0.0.0:9051    PID:10056  java'},
+      {t:'dim',    s:'  0.0.0.0:9052    PID:7548   java'},
+      {t:'hi',     s:'  127.0.0.1:5939  PID:6916   TeamViewer_Service'},
+    ],
+    explain: {
+      head: '// SECTION 6: NETWORK — FIND THE C2 AND THE PIVOTS',
+      body: 'Port <strong>4443</strong> with PID <strong>31248 = python</strong>. That\'s not a production service — that\'s a C2 listener. In an actual engagement, this tells you someone else is already in, or this is the machine you deployed on. <strong>TeamViewer on 5939</strong> = remote access tool, potential credential steal (TeamViewer stores credentials locally). <strong>PostgreSQL on 1337</strong> = database accessible from anywhere (0.0.0.0), not just localhost — likely misconfigured. <strong>SSH on 22</strong> = lateral movement vector if you get creds. Port <code>8080</code> = Apache — check for web apps. Each open port is a question; the answer is your next move.'
+    }
+  },
+  {
+    tab: 'HOTFIXES',
+    label: 'winrecon.ps1 §7 — Installed Hotfixes',
+    cmd: '.\\winrecon.ps1 --section patches',
+    output: [
+      {t:'section', s:'=== SECTION 7: PATCH STATE ==='},
+      {t:'blank'},
+      {t:'dim',    s:'  Installed Hotfixes:'},
+      {t:'out',    s:'  KB5095093  06/24/2026  Update'},
+      {t:'out',    s:'  KB5095182  06/23/2026  Update'},
+      {t:'out',    s:'  KB5092427  05/27/2026  Update'},
+      {t:'out',    s:'  KB5054156  12/26/2025  Update'},
+      {t:'blank'},
+      {t:'dim',    s:'  Last Windows Update: 06/24/2026'},
+      {t:'blank'},
+      {t:'warn',   s:'  # SecureBoot = 0  (disabled)'},
+      {t:'dim',    s:'  # VBS: Running (HVCI active despite Defender off)'},
+    ],
+    explain: {
+      head: '// SECTION 7: PATCH STATE — FIND THE GAPS',
+      body: 'Four hotfixes. Last patch: <strong>KB5095093 on 24 June 2026</strong> — reasonably current, but gaps between patch cycles are your window. <strong>Secure Boot = 0</strong> (disabled) = no firmware signature verification = bootkit opportunity. <strong>HVCI running</strong> despite Defender being off = kernel is partially protected against unsigned drivers. Cross-reference each KB against the NVD: some "Update" KBs patch specific CVEs. The absence of a KB = that CVE is still open. <code>winrecon.ps1</code> extracts this via <code>Get-HotFix</code> — 3 lines of PowerShell, total picture in seconds.'
+    }
+  },
+];
+
+var current=0, running=false, timers=[];
+function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+
+function buildTabs(){
+  var el=document.getElementById('tabs');
+  LESSONS.forEach(function(l,i){
+    var b=document.createElement('button');
+    b.className='tab'+(i===0?' active':'');
+    b.textContent=l.tab;
+    b.onclick=function(){selectTab(i);};
+    el.appendChild(b);
+  });
+}
+
+function selectTab(i){
+  current=i;
+  document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('active',j===i);});
+  clearTimers();running=false;
+  document.getElementById('run-btn').disabled=false;
+  document.getElementById('run-label').textContent='// '+LESSONS[i].tab+' — press RUN';
+  document.getElementById('tab-label').textContent=LESSONS[i].label;
+  var body=document.getElementById('term-body');
+  body.innerHTML='<span class="t-line"><span class="t-prompt">PS&gt;</span> <span class="t-cursor"></span></span>';
+  var ex=LESSONS[i].explain;
+  document.getElementById('explain').innerHTML=
+    '<div class="explain-head">'+ex.head+'</div>'+
+    '<div class="explain-body">'+ex.body+'</div>';
+}
+
+function typeCmd(cmd,cb){
+  var body=document.getElementById('term-body');
+  body.innerHTML='<span class="t-line"><span class="t-prompt">PS&gt;</span> <span id="cmd-txt"></span><span class="t-cursor" id="cursor"></span></span>';
+  var el=document.getElementById('cmd-txt');var i=0;
+  function next(){
+    if(i>=cmd.length){cb();return;}
+    el.textContent+=cmd[i++];
+    timers.push(setTimeout(next,34+Math.random()*24));
+  }
+  next();
+}
+
+function showOutput(lines,delay,cb){
+  var body=document.getElementById('term-body');
+  var cur=document.getElementById('cursor');
+  if(cur)cur.remove();
+  var i=0;
+  function nextLine(){
+    if(i>=lines.length){if(cb)cb();return;}
+    var l=lines[i++];
+    var span=document.createElement('span');
+    if(l.t==='blank'){span.className='t-blank';}
+    else{span.className='t-out '+l.t+' ghost-line';span.textContent=l.s;}
+    body.appendChild(span);
+    body.scrollTop=body.scrollHeight;
+    timers.push(setTimeout(nextLine,delay+Math.random()*30));
+  }
+  timers.push(setTimeout(nextLine,140));
+}
+
+function run(lesson){
+  if(running)return;
+  running=true;
+  document.getElementById('run-btn').disabled=true;
+  document.getElementById('run-label').textContent='// executing...';
+  typeCmd(lesson.cmd,function(){
+    var cur=document.getElementById('cursor');
+    if(cur)cur.style.animation='none';
+    showOutput(lesson.output,90,function(){
+      var body=document.getElementById('term-body');
+      var span=document.createElement('span');
+      span.className='t-line ghost-line';
+      span.innerHTML='<span class="t-blank"></span><span class="t-prompt">PS&gt;</span> <span class="t-cursor"></span>';
+      body.appendChild(span);
+      running=false;
+      document.getElementById('run-btn').disabled=false;
+      document.getElementById('run-label').textContent='// done — press RUN AGAIN or select another section';
+    });
+  });
+}
+
+function rerun(){selectTab(current);timers.push(setTimeout(function(){run(LESSONS[current]);},400));}
+
+buildTabs();
+selectTab(0);
+timers.push(setTimeout(function(){run(LESSONS[0]);},600));
+</script>
+</body>
+</html>

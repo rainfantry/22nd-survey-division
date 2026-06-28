@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 01 — Networking Through the Attack Lens</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --prompt: #0f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #333;
+  }
+  .header h1 { color: var(--cyan); font-size: 32px; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; }
+  .header .subtitle { color: #666; font-size: 16px; }
+  .section { margin-bottom: 40px; padding: 25px; background: #111; border: 1px solid #222; border-radius: 8px; }
+  .section-title { color: var(--yellow); font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--yellow); }
+  .section-content { color: #bbb; }
+  .section-content p { margin-bottom: 15px; }
+  .code-block {
+    background: #0a0a0a; border: 1px solid #333; border-radius: 6px;
+    padding: 15px; margin: 15px 0; font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px; overflow-x: auto;
+  }
+  .code-block .prompt { color: var(--prompt); }
+  .code-block .command { color: var(--fg); }
+  .code-block .output { color: #888; margin-top: 8px; padding-left: 20px; }
+  .code-block .highlight { color: var(--cyan); }
+  .code-block .warning { color: var(--red); }
+  .code-block .amber { color: #ffb000; }
+  .note {
+    background: #1a1a1a; border-left: 4px solid var(--magenta);
+    padding: 15px; margin: 20px 0; color: var(--magenta); font-style: italic;
+  }
+  .callout {
+    background: #0a1a0a; border: 1px solid #1a4a1a; border-left: 4px solid var(--green);
+    padding: 15px; margin: 20px 0; color: #8ac88a;
+  }
+  .callout-title { color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+  .table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  .table th { background: #1a1a1a; color: var(--yellow); padding: 10px; text-align: left; font-size: 12px; text-transform: uppercase; border: 1px solid #333; }
+  .table td { border: 1px solid #222; padding: 10px; color: #bbb; font-size: 13px; }
+  .table td:first-child { color: var(--cyan); font-family: monospace; }
+  .table tr:hover td { background: #141414; }
+  .quick-ref { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+  .quick-ref-item { background: #1a1a1a; padding: 12px; border-radius: 4px; border-left: 3px solid var(--cyan); }
+  .quick-ref-cmd { color: var(--cyan); font-weight: bold; font-family: 'Consolas', monospace; font-size: 12px; }
+  .quick-ref-desc { color: #888; font-size: 12px; margin-top: 4px; }
+  .widget-container { margin: 40px 0; border: 2px solid #333; border-radius: 8px; overflow: hidden; }
+  .widget-header { background: #1a1a1a; padding: 15px; text-align: center; color: var(--cyan); font-size: 18px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #333; }
+  .widget-iframe { width: 100%; height: 620px; border: none; background: #000; }
+  .nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; }
+  .nav a { color: var(--green); text-decoration: none; padding: 10px 20px; border: 1px solid var(--green); border-radius: 4px; transition: all 0.3s; }
+  .nav a:hover { background: var(--green); color: #000; }
+  .packet-diagram { background: #0a0a0a; border: 1px solid #333; border-radius: 4px; padding: 15px; margin: 15px 0; font-family: monospace; white-space: pre; color: #888; font-size: 12px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Module 01 — Networking</h1>
+    <div class="subtitle">Every layer is an attack surface. You don't need to be a network engineer. You need to know where to stab.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 1: The OSI Model Is a Target Map</div>
+    <div class="section-content">
+      <p>Security courses teach you the OSI model to pass a cert. This course teaches it so you know <strong>where attacks live</strong>. Every layer has its own protocols, its own weaknesses, its own tools.</p>
+
+      <table class="table">
+        <tr><th>Layer</th><th>Name</th><th>Protocol examples</th><th>Your attack surface</th></tr>
+        <tr><td>L7</td><td>Application</td><td>HTTP, DNS, SMTP, FTP</td><td>Injection, C2 over HTTP, DNS exfil, credential stuffing</td></tr>
+        <tr><td>L6</td><td>Presentation</td><td>TLS/SSL, encoding</td><td>SSL stripping, cert spoofing, encoding bypass</td></tr>
+        <tr><td>L5</td><td>Session</td><td>NetBIOS, RPC, SMB</td><td>Session hijack, SMB relay, pass-the-hash</td></tr>
+        <tr><td>L4</td><td>Transport</td><td>TCP, UDP</td><td>SYN flood, port scan, service fingerprint</td></tr>
+        <tr><td>L3</td><td>Network</td><td>IP, ICMP, routing</td><td>IP spoof, ICMP tunnel, route poisoning</td></tr>
+        <tr><td>L2</td><td>Data Link</td><td>Ethernet, ARP, MAC</td><td>ARP spoof, MAC flood, VLAN hop</td></tr>
+        <tr><td>L1</td><td>Physical</td><td>Cable, RF, WiFi</td><td>Evil twin AP, packet capture, RF jamming</td></tr>
+      </table>
+
+      <div class="note">You operate at L2, L4, and L7. Everything else is for specialists. Know those three cold.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2: TCP — How Connections Actually Work</div>
+    <div class="section-content">
+      <p>Every TCP connection starts with a 3-way handshake. This matters because <strong>SYN floods</strong> exploit the half-open state and <strong>session hijacking</strong> exploits predictable sequence numbers.</p>
+
+      <div class="packet-diagram">
+CLIENT (192.168.1.42)              SERVER (192.168.1.92:4443)
+        |                                    |
+        |  SYN  seq=1842930124  ──────────►  |   "I want to connect. My ISN."
+        |                                    |
+        |  ◄────  SYN-ACK  seq=3301054821   |   "OK. Got seq+1. Here's mine."
+        |                                    |
+        |  ACK  ack=3301054822  ──────────►  |   "Connected. Got your seq+1."
+        |                                    |
+        |  ◄────────── DATA ───────────────► |   Bidirectional. Beacon active.
+        |                                    |</div>
+
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> <span class="command">Test-NetConnection -ComputerName 192.168.1.42 -Port 4443</span><br>
+        <div class="output">
+          ComputerName     : 192.168.1.42<br>
+          RemoteAddress    : 192.168.1.42<br>
+          RemotePort       : 4443<br>
+          TcpTestSucceeded : <span class="highlight">True</span><br>
+          <span class="amber"># C2 beacon confirmed — .42 is home</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">// Attacker's Use Case</div>
+        <strong>SYN flood:</strong> Send thousands of SYNs, never complete ACK. Server fills its backlog table, stops accepting real connections. DoS in 10 lines of hping3.<br><br>
+        <strong>Session hijack:</strong> Predict ISN (Initial Sequence Number). Inject packets mid-connection. MitM a live session without the original parties knowing.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3: DNS — The Internet's Phone Book and Your Recon Goldmine</div>
+    <div class="section-content">
+      <p>DNS translates names to IPs. It's also your first recon surface and a covert channel for data exfiltration.</p>
+
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> <span class="command">nslookup google.com</span><br>
+        <div class="output">
+          Server:  RT-AC68U-95B0<br>
+          Address:  <span class="highlight">192.168.1.1</span><br><br>
+          Non-authoritative answer:<br>
+          Name:    google.com<br>
+          Address: <span class="highlight">142.250.195.110</span>
+        </div>
+      </div>
+
+      <p>DNS resolution chain: your machine → local DNS (router) → ISP resolver → root servers → .com TLD → google's authoritative NS → IP.</p>
+
+      <table class="table">
+        <tr><th>Technique</th><th>What it does</th><th>Tool</th></tr>
+        <tr><td>DNS enumeration</td><td>Discover all subdomains via brute-force or zone transfer</td><td>subfinder, dnsx</td></tr>
+        <tr><td>Certificate transparency</td><td>crt.sh leaks every cert ever issued — free subdomain recon, no scanning</td><td>curl crt.sh</td></tr>
+        <tr><td>DNS exfiltration</td><td>Encode data in subdomain queries to your controlled NS — bypasses most firewalls</td><td>iodine, dnscat2</td></tr>
+        <tr><td>C2 over DNS</td><td>Commands sent as TXT records. Responses as A/CNAME queries. DNS always allowed out.</td><td>custom NS server</td></tr>
+        <tr><td>DNS poisoning</td><td>Inject forged responses into a resolver's cache — redirect traffic to attacker IP</td><td>Ettercap, dnsspoof</td></tr>
+      </table>
+
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> <span class="command"># Certificate transparency — no scanner needed</span><br>
+        <span class="prompt">PS&gt;</span> <span class="command">curl "https://crt.sh/?q=%.target.com&output=json" | ConvertFrom-Json | Select-Object name_value -Unique</span><br>
+        <div class="output"><span class="amber"># Returns every subdomain ever issued a cert. Free. No noise.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4: Reading Connections — netstat as a Weapon</div>
+    <div class="section-content">
+      <p><code>netstat -ano</code> is both a recon tool and a C2 detection tool. On a compromised machine, the beacon shows up here.</p>
+
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> <span class="command">Get-NetTCPConnection | Where-Object {$_.State -eq 'Established'} | Format-Table -AutoSize</span><br>
+        <div class="output">
+          LocalAddress     LocalPort  RemoteAddress    RemotePort  State        OwningProcess<br>
+          ------------     ---------  -------------    ----------  -----        -------------<br>
+          192.168.1.92     22         192.168.1.42     52891       Established  1092   <span class="highlight"># sshd</span><br>
+          192.168.1.92     <span class="amber">4443</span>       192.168.1.42     11025       Established  31248  <span class="warning"># python C2</span><br>
+          192.168.1.92     49821      52.113.194.132   443         Established  25168  <span class="highlight"># Discord</span>
+        </div>
+      </div>
+
+      <div class="callout">
+        <div class="callout-title">// Blue Team: Spot the C2</div>
+        Port <strong>4443</strong> (HTTPS-alternate) + PID owned by <strong>python</strong> = suspicious. No browser window = no user-initiated connection. This is your IOC.<br>
+        <code>Get-Process -Id 31248 | Select-Object Name, Path, CommandLine</code> — reveals the implant binary.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 5: Port Scanning — First Thing You Do on Any Target</div>
+    <div class="section-content">
+      <div class="code-block">
+        <span class="prompt">$</span> <span class="command">nmap -sV -T4 192.168.1.92</span><br>
+        <div class="output">
+          PORT      STATE  SERVICE       VERSION<br>
+          22/tcp    open   ssh           <span class="highlight">OpenSSH 9.8 (Windows)</span><br>
+          1337/tcp  open   postgresql    <span class="highlight">PostgreSQL 16</span><br>
+          <span class="amber">4443/tcp  open   https?        Python/3.14 (custom)  # C2 listener</span><br>
+          8080/tcp  open   http          <span class="highlight">Apache httpd 2.4</span><br>
+          <span class="amber">9051/tcp  open   unknown       Java/OpenJDK</span>
+        </div>
+      </div>
+
+      <table class="table">
+        <tr><th>Flag</th><th>Meaning</th></tr>
+        <tr><td>-sS</td><td>SYN scan — doesn't complete handshake, harder to log (default)</td></tr>
+        <tr><td>-sV</td><td>Version detection — probe each open port, grab banner</td></tr>
+        <tr><td>-T4</td><td>Aggressive timing — faster, noisier</td></tr>
+        <tr><td>-p-</td><td>Scan all 65535 ports</td></tr>
+        <tr><td>-oN</td><td>Output to file for later analysis</td></tr>
+        <tr><td>--script</td><td>Run NSE scripts (vuln, auth, brute)</td></tr>
+      </table>
+
+      <div class="note">Version number is your CVE lookup key. nmap -sV finds Apache 2.4.49 — you search NVD — you find CVE-2021-41773 (path traversal → RCE). This is the recon → exploit chain.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Quick Reference</div>
+    <div class="section-content">
+      <div class="quick-ref">
+        <div class="quick-ref-item"><div class="quick-ref-cmd">nmap -sV -T4 &lt;IP&gt;</div><div class="quick-ref-desc">Service scan</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">netstat -ano</div><div class="quick-ref-desc">All connections + PIDs</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">nslookup &lt;domain&gt;</div><div class="quick-ref-desc">DNS resolution</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">tracert &lt;IP&gt;</div><div class="quick-ref-desc">Hop-by-hop path</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">curl crt.sh/?q=%.&lt;d&gt;</div><div class="quick-ref-desc">Subdomain enum</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">Get-NetTCPConnection</div><div class="quick-ref-desc">PowerShell netstat</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">arp -a</div><div class="quick-ref-desc">LAN host discovery</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">ipconfig /all</div><div class="quick-ref-desc">Full adapter info</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">nmap -sn 192.168.1.0/24</div><div class="quick-ref-desc">Ping sweep (no ports)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="widget-container">
+    <div class="widget-header">Interactive Networking Demo</div>
+    <iframe class="widget-iframe" src="../widgets/networking_101_widget.html" title="Networking 101 Interactive Demo"></iframe>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Lab: Network Recon Survival</div>
+    <div class="section-content">
+      <p>Run these commands against a machine you control. All must work before you advance.</p>
+      <div class="code-block">
+        1.  nmap -sV 192.168.1.&lt;your-target&gt;<br>
+        2.  netstat -ano | findstr ESTABLISHED<br>
+        3.  arp -a<br>
+        4.  nslookup google.com<br>
+        5.  tracert 8.8.8.8<br>
+        6.  curl "https://crt.sh/?q=%.github.com&amp;output=json" | python -m json.tool | findstr name_value<br>
+        7.  Get-NetTCPConnection | Where-Object {$_.State -eq 'Established'} | Format-Table<br>
+        8.  nmap --script=banner -p22,80,443 192.168.1.&lt;target&gt;<br>
+        9.  netstat -ano | findstr :4443<br>
+        10. ipconfig /all | findstr /i "ipv4 gateway dns"
+      </div>
+      <div class="note">Can you find the C2 session? Can you tell which PID owns it? That's the difference between knowing networking and using it.</div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_00_READER.html">← Module 00: Terminal Warfare</a>
+    <a href="MODULE_02_RECON.html">Module 02: Recon →</a>
+  </div>
+</div>
+</body>
+</html>
