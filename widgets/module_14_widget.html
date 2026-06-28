@@ -492,10 +492,43 @@ function updateProgress(tabId) {
 
 function copyCommand(btn) {
   const cmd = btn.parentElement.querySelector('.command').textContent;
-  navigator.clipboard.writeText(cmd).then(() => {
-    btn.textContent = 'COPIED';
+  
+  // Try modern clipboard API first
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(cmd).then(() => {
+      btn.textContent = 'COPIED';
+      setTimeout(() => btn.textContent = 'COPY', 1500);
+    }).catch(() => {
+      fallbackCopy(cmd, btn);
+    });
+  } else {
+    fallbackCopy(cmd, btn);
+  }
+}
+
+function fallbackCopy(text, btn) {
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+  textarea.select();
+  
+  try {
+    const success = document.execCommand('copy');
+    if (success) {
+      btn.textContent = 'COPIED';
+      setTimeout(() => btn.textContent = 'COPY', 1500);
+    } else {
+      btn.textContent = 'FAILED';
+      setTimeout(() => btn.textContent = 'COPY', 1500);
+    }
+  } catch (err) {
+    btn.textContent = 'FAILED';
     setTimeout(() => btn.textContent = 'COPY', 1500);
-  });
+  }
+  
+  document.body.removeChild(textarea);
 }
 
 // Initialize progress
