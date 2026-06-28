@@ -136,13 +136,13 @@ for (int i = 0; i < payload_len; i++) {
   <h3>Layer 3: System Watcher</h3>
   <p>Monitors file/registry changes in real-time. If a process writes to a Run key, creates a scheduled task, or drops a DLL, System Watcher can <strong>roll back</strong> the changes.</p>
   <pre><code>// System Watcher watches:
-- HKCU\Software\Microsoft\Windows\CurrentVersion\Run
-- C:\Users\<user>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-- schtasks /create
-- sc.exe create
-- CreateRemoteThread (DLL injection)</code></pre>
+- Registry Run keys (HKCU/HKLM)\\
+- Scheduled tasks (schtasks)
+- Startup folders (AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup)
+- Service creation (sc.exe)
+- DLL injection (CreateRemoteThread)</code></pre>
   <div class="note warning">
-    <strong>CRITICAL:</strong> Three-vector persistence (registry + task + LNK) is exactly what System Watcher is designed to catch. If <code>bRollbackAllowed=1</code>, your persistence may be undone within seconds.
+    <strong>CRITICAL:</strong> Three-vector persistence (registry + task + LNK) is exactly what System Watcher is designed to catch. If <code>bRollbackAllowed=1</code>, your persistence may be undone within seconds. <strong>STATUS:</strong> This section is based on Kaspersky documentation. Live trigger data from .92 is pending — the lab exercise will generate real data.
   </div>
 
   <h3>Layer 4: KSN (Kaspersky Security Network)</h3>
