@@ -94,7 +94,7 @@ body{background:#080808;color:#c8c8c8;font-family:'Cascadia Code','Consolas','Co
     <span class="run-label" id="run-label">// select a layer</span>
   </div>
 </div>
-<div class="footer-note">22ND SURVEY DIVISION — MODULE 11-12 — IRON SUN EVASION STACK — TESTED DEFENDER 4.18.26050.15</div>
+<div class="footer-note">22ND SURVEY DIVISION — MODULE 11-12 — IRON SUN EVASION STACK — TESTED: DEFENDER 4.18.26050.15 + KASPERSKY PREMIUM 21.25.7.504 — BOTH CLEAN (gcc build)</div>
 
 <script>
 var LAYERS = [
@@ -202,6 +202,38 @@ var LESSONS = [
     explain: {
       head: '// LIVE SCAN RESULT — DEFENDER WITH RTP ON, BEHAVIORMONITOR ON',
       body: 'All 8 evasion layers combined: <strong>gcc build = CLEAN on Defender 4.18.26050.15</strong> with Real-Time Protection ON, BehaviorMonitor ON, cloud submission ON. Kaspersky flags the MSVC build due to PE signature differences — stick to gcc. <strong>dark_room.exe is CLEAN</strong> because HWBP leaves zero memory writes — Defender\'s memory scanner sees nothing. This isn\'t theory. These are the exact binaries tested on the RADON lab machine (GIGABYTE G7 GD, Win11 26200) on 2026-06-26. The 26 binaries from vader-rootkit campaign: all CLEAN.'
+    }
+  },
+  {
+    tab: 'KAV TEST',
+    label: 'avp.exe SCAN — Kaspersky Premium 21.25 — 2026-06-29',
+    cmd: '"C:\\Program Files (x86)\\Kaspersky Lab\\Kaspersky 21.25\\avp.exe" SCAN C:\\tmp\\iron_sun_test.exe /i0 /fa',
+    output: [
+      {t:'section', s:'; --- Kaspersky Premium 21.25.7.504 ---'},
+      {t:'dim',     s:'; AV bases: 2026-06-28 13:11:00 (full, current)'},
+      {t:'dim',     s:'; KSN: ENABLED  |  System Watcher: ACTIVE  |  HIPS: ON'},
+      {t:'blank'},
+      {t:'dim',     s:'; Settings: Report only, All objects, iChecker+iSwift'},
+      {t:'dim',     s:'; Target: C:\\tmp\\iron_sun_test.exe'},
+      {t:'blank'},
+      {t:'pass',    s:'2026-06-29 00:15:24  Scan_Objects$2852  starting  1'},
+      {t:'pass',    s:'2026-06-29 00:15:24  C:\\tmp\\iron_sun_test.exe  ok'},
+      {t:'pass',    s:'2026-06-29 00:15:24  Scan_Objects$2852  completed'},
+      {t:'blank'},
+      {t:'section', s:'; --- Statistics ---'},
+      {t:'pass',    s:'; Processed objects:  1'},
+      {t:'pass',    s:'; Total OK:           1'},
+      {t:'hi',      s:'; Total detected:     0'},
+      {t:'hi',      s:'; Suspicions:         0'},
+      {t:'pass',    s:'; Errors:             0'},
+      {t:'blank'},
+      {t:'hi',      s:'[RESULT] CLEAN — Kaspersky Premium 21.25 — gcc build'},
+      {t:'warn',    s:'[NOTE]   KSN cloud lookup active — novel file flagged for cloud analysis'},
+      {t:'warn',    s:'[NOTE]   System Watcher: bRollbackAllowed=1 — persistence vectors at risk'},
+    ],
+    explain: {
+      head: '// KAV LIVE SCAN — KASPERSKY PREMIUM 21.25 — REAL OUTPUT 2026-06-29',
+      body: 'Live scan on WUPC (192.168.1.42) running Kaspersky Premium 21.25.7.504 with KSN enabled and System Watcher active. <strong>Total detected: 0. Suspicions: 0.</strong> gcc build passes Kaspersky static + heuristic scan with current definitions (2026-06-28). MSVC build was flagged — gcc PE header profile is different enough to avoid Kaspersky\'s signature. <strong>Two gaps remain:</strong> KSN cloud lookup on novel files (carrier hash → cloud on first run), and System Watcher rollback on post-execution persistence writes. AMSI/ETW bypass via HWBP neutralises runtime scanning — System Watcher is a separate engine and requires fileless persistence or path exclusion to defeat.'
     }
   },
   {
