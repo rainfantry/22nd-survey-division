@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "22nd-survey-division",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8322"],
+      "port": 8322
+    }
+  ]
+}
