@@ -145,7 +145,7 @@ fi
 
 # 4. CEO translation check
 echo "--- CEO CHECK ---"
-if curl -s "$SITE/modules/CEO_TRANSLATION.html?nocache=1" | grep -q "dollar impact"; then
+if curl -s "$SITE/modules/CEO_TRANSLATION.html?nocache=1" | grep -iq "dollar impact"; then
     echo "PASS: CEO translation has dollar impact"
 else
     echo "FAIL: CEO translation missing dollar impact"
