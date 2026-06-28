@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 21: Capstone — 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+            --neon: #00ffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 95.4%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .exam-section {
+            background: #0a0a1a;
+            border: 2px solid #5555ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .exam-section h3 { color: #5555ff; margin-bottom: 0.5rem; }
+        .exam-task {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .exam-task h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .exam-task .points { color: var(--accent2); font-weight: bold; }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_20_KILL_CHAIN.html">← Module 20</a>
+        </div>
+
+        <h1>Module 21: Capstone <span class="status-badge status-live">CERTIFICATION</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 21 of 22 — Prove you can do it alone</p>
+
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>Knowledge is not competence. You can read every module, memorize every command, and still fail when it matters. The capstone is a <strong>live, unassisted exercise</strong> — you against a target network, with a time limit, no hints, and real consequences. Pass, and you earn the 22nd Survey Division certification. Fail, and you know exactly where to study.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>This is the final exercise. No instructor, no hints, no safety net. You have a mission: compromise a target network, escalate privileges, establish persistence, and exfiltrate data. You have 8 hours. Your tools are your own. Your decisions are your own. Your success or failure is your own. This is what separates the operator from the student.</p>
+        </div>
+
+        <h2>Exam Structure</h2>
+
+        <div class="exam-section">
+            <h3>📋 Environment</h3>
+            <p>You are given VPN access to a lab network with three machines:</p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>WEB01</strong> (192.168.100.10) — Web server, standard user access</li>
+                <li><strong>WORKSTATION01</strong> (192.168.100.20) — User workstation, domain joined</li>
+                <li><strong>DC01</strong> (192.168.100.1) — Domain Controller, no direct access</li>
+            </ul>
+            <p style="margin-top: 1rem;"><strong>Your starting position:</strong> VPN access only. No credentials. No prior knowledge.</p>
+        </div>
+
+        <div class="exam-section">
+            <h3>🎯 Objectives</h3>
+            
+            <div class="exam-task">
+                <h4>Task 1: Initial Access <span class="points">(10 points)</span></h4>
+                <p>Gain a foothold on any machine in the network. Document your reconnaissance, the vulnerability identified, and the exploit used.</p>
+                <p style="color: var(--dim); font-size: 0.85rem; margin-top: 0.5rem;">Hint: WEB01 has a web application. What does it do? What does it trust?</p>
+            </div>
+
+            <div class="exam-task">
+                <h4>Task 2: Privilege Escalation <span class="points">(15 points)</span></h4>
+                <p>Escalate from standard user to local administrator or SYSTEM. Document the technique and the verification method.</p>
+            </div>
+
+            <div class="exam-task">
+                <h4>Task 3: Persistence <span class="points">(10 points)</span></h4>
+                <p>Establish at least two persistence mechanisms. Verify they survive reboot.</p>
+            </div>
+
+            <div class="exam-task">
+                <h4>Task 4: Credential Access <span class="points">(15 points)</span></h4>
+                <p>Extract credentials from memory or disk. Document the method and the credentials recovered.</p>
+            </div>
+
+            <div class="exam-task">
+                <h4>Task 5: Lateral Movement <span class="points">(15 points)</span></h4>
+                <p>Move from your initial foothold to at least one other machine. Document the path and the technique.</p>
+            </div>
+
+            <div class="exam-task">
+                <h4>Task 6: Domain Compromise <span class="points">(20 points)</span></h4>
+                <p>Compromise the Domain Controller (DC01). Document the full attack chain from initial access to Domain Admin.</p>
+            </div>
+
+            <div class="exam-task">
+                <h4>Task 7: Exfiltration <span class="points">(10 points)</span></h4>
+                <p>Exfiltrate the flag file from DC01: <code>C:\flag.txt</code>. Document the method and verify the flag hash.</p>
+            </div>
+        </div>
+
+        <div class="exam-section">
+            <h3>⏱️ Time Limit</h3>
+            <p><strong>8 hours</strong> from VPN connection. The exam auto-terminates after 8 hours. Partial submissions are accepted but scored accordingly.</p>
+        </div>
+
+        <div class="exam-section">
+            <h3>📝 Submission Requirements</h3>
+            <p>Submit a report containing:</p>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Executive summary (1 page) — what you did, what you found, what you recommend</li>
+                <li>Technical narrative — step-by-step with screenshots and command output</li>
+                <li>Attack chain diagram — visual flow from initial access to Domain Admin</li>
+                <li>Remediation recommendations — how to fix every vulnerability exploited</li>
+                <li>Flag hash — SHA256 of C:\flag.txt</li>
+            </ol>
+        </div>
+
+        <div class="exam-section">
+            <h3>🏆 Scoring</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">90-100 points</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">PASS with Distinction</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">70-89 points</td>
+                    <td style="padding: 0.5rem; color: #ffaa00;">PASS</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">0-69 points</td>
+                    <td style="padding: 0.5rem; color: var(--accent);">FAIL — Retake required</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>Preparation Checklist</h2>
+
+        <div class="step-box">
+            <h4>Before the Exam</h4>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Complete all 20 modules with hands-on practice</li>
+                <li>Build your own tools (don't rely on copy-paste)</li>
+                <li>Practice time management — 8 hours is tight</li>
+                <li>Prepare report templates in advance</li>
+                <li>Test your VPN connection and tools the day before</li>
+                <li>Sleep. Caffeine is not a substitute for rest.</li>
+            </ol>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Exam Rules</h5>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li>No collaboration — solo work only</li>
+                <li>No automated scanners (Metasploit Pro, Nessus, etc.) — manual exploitation required</li>
+                <li>No DoS attacks — availability must be maintained</li>
+                <li>No attacking the exam infrastructure (VPN, scoring server, etc.)</li>
+                <li>All techniques must be documented — undocumented exploitation = 0 points</li>
+            </ul>
+        </div>
+
+        <h2>Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>The exam is the product:</strong> This is what students pay for — proof of competence</li>
+            <li><strong>Time management is critical:</strong> 8 hours for 7 tasks = ~68 minutes per task</li>
+            <li><strong>Documentation matters:</strong> A successful exploit with no documentation = 0 points</li>
+            <li><strong>Remediation is professional:</strong> Finding bugs is easy; fixing them is the value</li>
+            <li><strong>Failure is data:</strong> If you fail, you know exactly what to study. Retake is free.</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Exam environment</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ 3-machine lab ready</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Scoring rubric</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ 100 points defined</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Time limit</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ 8 hours enforced</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Pass criteria</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ 70+ points required</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_20_KILL_CHAIN.html">← Module 20</a>
+        </div>
+    </div>
+</body>
+</html>
