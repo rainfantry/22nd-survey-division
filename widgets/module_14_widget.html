@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Files Internals — 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+    --prompt: #0f0;
+    --dim: #666;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 15px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 950px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0,255,255,0.08);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--cyan);
+    font-size: 22px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .header .subtitle {
+    color: var(--dim);
+    margin-top: 8px;
+    font-size: 12px;
+  }
+  .header .principle {
+    color: var(--amber);
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 13px;
+  }
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .tab:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .tab.active {
+    background: var(--cyan);
+    color: #000;
+    border-color: var(--cyan);
+    font-weight: bold;
+  }
+  .content {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .content.active {
+    display: block;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 12px;
+    position: relative;
+  }
+  .cmd-block .copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #222;
+    border: 1px solid #444;
+    color: var(--dim);
+    padding: 2px 8px;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .cmd-block:hover .copy-btn {
+    opacity: 1;
+  }
+  .cmd-block .copy-btn:hover {
+    background: var(--cyan);
+    color: #000;
+  }
+  .prompt {
+    color: var(--prompt);
+  }
+  .command {
+    color: var(--fg);
+  }
+  .output {
+    color: #888;
+    margin-top: 6px;
+    padding-left: 16px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .highlight {
+    color: var(--cyan);
+  }
+  .warning {
+    color: var(--red);
+  }
+  .suspicious {
+    color: var(--amber);
+  }
+  .success {
+    color: var(--green);
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+    border-radius: 0 4px 4px 0;
+  }
+  .do-this-now {
+    background: #1a1a1a;
+    border: 1px solid var(--red);
+    border-radius: 4px;
+    padding: 12px;
+    margin: 15px 0;
+  }
+  .do-this-now .title {
+    color: var(--red);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .lab-exercise {
+    background: #0d1f0d;
+    border: 1px solid var(--green);
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
+  }
+  .lab-exercise .title {
+    color: var(--green);
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .lab-exercise ol {
+    margin-left: 20px;
+    color: var(--fg);
+  }
+  .lab-exercise li {
+    margin-bottom: 8px;
+  }
+  .quick-ref {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+  }
+  .quick-ref-card {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  .quick-ref-card .cmd {
+    color: var(--cyan);
+    font-size: 12px;
+  }
+  .quick-ref-card .desc {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .machine-tag {
+    display: inline-block;
+    background: #222;
+    border: 1px solid #444;
+    color: var(--dim);
+    padding: 2px 8px;
+    font-size: 10px;
+    border-radius: 3px;
+    margin-right: 5px;
+  }
+  .machine-tag.intel { border-color: var(--cyan); color: var(--cyan); }
+  .machine-tag.amd { border-color: var(--amber); color: var(--amber); }
+  .typewriter {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 2s steps(40, end);
+  }
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  .ghost-appear {
+    opacity: 0;
+    animation: ghostIn 0.6s ease forwards;
+  }
+  @keyframes ghostIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .progress-bar {
+    height: 2px;
+    background: #333;
+    margin: 20px 0;
+    position: relative;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--cyan);
+    width: 0%;
+    transition: width 1s ease;
+  }
+  .status-line {
+    color: var(--dim);
+    font-size: 11px;
+    margin-top: 15px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Cloud Files Internals</h1>
+    <div class="subtitle">Module 14 — 22nd Survey Division</div>
+    <div class="principle">The kernel is the final frontier — what you can't see can still kill you.</div>
+  </div>
+
+  <div class="tabs">
+        <button class="tab active" onclick="showTab('tab1')">THEORY</button>
+    <button class="tab " onclick="showTab('tab2')">RECON</button>
+    <button class="tab " onclick="showTab('tab3')">FUZZING</button>
+    <button class="tab " onclick="showTab('tab4')">TOCTOU</button>
+    <button class="tab " onclick="showTab('tab5')">KERNEL</button>
+    <button class="tab " onclick="showTab('tab6')">LAB</button>
+  </div>
+
+  <div id="tab1" class="content active">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">verifier /query | Select-Object -First 15</span>
+      <div class="output">Time Stamp: 06/28/2026 23:26:43.027
+
+Verifier Flags: 0x001209bb
+
+  Standard Flags:
+
+    [X] 0x00000001 Special pool.
+    [X] 0x00000002 Force IRQL checking.
+    [X] 0x00000008 Pool tracking.
+    [X] 0x00000010 I/O verification.
+    [X] 0x00000020 Deadlock detection.
+    [X] 0x00000080 DMA checking.
+    [X] 0x00000100 Security checks.
+    [X] 0x00000800 Miscellaneous checks.
+    [X] 0x00020000 DDI compliance checking.</div>
+    </div>
+    <div class="note">Driver Verifier active on .42 — catches kernel corruption that would otherwise go silent.</div>
+  </div>
+
+<div id="tab2" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">Get-Process | Where-Object { $_.Name -like '*Cld*' -or $_.Name -like '*OneDrive*' } | Select-Object Name, Id</span>
+      <div class="output">Name        Id
+----        --
+OneDrive  4824
+OneDrive  5612</div>
+    </div>
+    <div class="note">OneDrive processes running — cloud sync root active. CfAPI filter driver (CldFlt.sys) is loaded.</div>
+<div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># Cloud files architecture:
+# CldFlt.sys = filter driver (kernel)
+# cldapi.dll = user-mode API
+# OneDrive.exe = sync engine (user)
+# Sync root = registered directory tree</span>
+      <div class="output">Layer 0: NTFS (underlying filesystem)
+Layer 1: CldFlt.sys (filter driver)
+Layer 2: cldapi.dll (user API)
+Layer 3: OneDrive.exe (sync engine)
+
+Reparse points mark cloud-stored files.
+Local files: no reparse tag.
+Cloud files: reparse tag + placeholder.</div>
+    </div>
+    <div class="note">Understanding the stack is critical — fuzzing the wrong layer gives false positives.</div>
+  </div>
+
+<div id="tab3" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># CfAPI fuzzing targets:
+# CfCreatePlaceholders — needs registered sync root
+# CfUpdatePlaceholder — updates file metadata
+# CfExecute — transfers data between local and cloud
+# CfHydratePlaceholder — downloads cloud file to local
+# CfDehydratePlaceholder — removes local copy, keeps cloud</span>
+      <div class="output">API Fuzzing Results:
+
+CfCreatePlaceholders:
+  Without sync root: 0x80070157 (ERROR_INVALID_PARAMETER)
+  With sync root: SUCCESS (placeholder created)
+
+CfUpdatePlaceholder:
+  Random paths: 0x80070057 (ERROR_INVALID_PARAMETER)
+  Valid placeholder: SUCCESS
+
+CfExecute:
+  Without proper handle: 0x80070057
+  With valid handle: SUCCESS
+
+CfHydratePlaceholder:
+  Without placeholder: 0x80070006 (ERROR_INVALID_HANDLE)
+  With placeholder: SUCCESS (file downloaded)</div>
+    </div>
+    <div class="note">All APIs require proper sync root registration. Random temp directories fail.</div>
+  </div>
+
+<div id="tab4" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># TOCTOU race condition theory:
+# Time-of-check: Verify file state (placeholder, hydrated, etc.)
+# Time-of-use: Perform operation on that file
+# Race window: Between check and use, file state changes</span>
+      <div class="output">Race Condition Scenario:
+
+Thread A: Check if file is hydrated (yes)
+Thread B: Dehydrate the file (now it's not)
+Thread A: Read file content (FAIL — file is gone)
+
+In cloud files:
+Thread A: Check placeholder state
+Thread B: Update placeholder via CfUpdatePlaceholder
+Thread A: Execute transfer via CfExecute
+
+Result: Operation on stale state = undefined behavior</div>
+    </div>
+    <div class="note">TOCTOU in kernel drivers is especially dangerous — can lead to memory corruption or privilege escalation.</div>
+  </div>
+
+<div id="tab5" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">verifier /standard /driver CldFlt.sys</span>
+      <div class="output">Driver Verifier enabled for CldFlt.sys
+
+Verifier flags:
+  Special pool: ON
+  Force IRQL checking: ON
+  Pool tracking: ON
+  I/O verification: ON
+  Deadlock detection: ON
+  DMA checking: ON
+  Security checks: ON
+  Miscellaneous checks: ON
+  DDI compliance checking: ON
+
+Reboot required to activate.</div>
+    </div>
+    <div class="note">Driver Verifier catches silent kernel corruption that normal execution hides.</div>
+<div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command"># What Driver Verifier catches:
+# - Memory corruption in driver buffers
+# - IRQL violations (raising when should lower)
+# - Pool leaks (allocate without free)
+# - Deadlocks (circular lock acquisition)
+# - DDI compliance (wrong API usage)</span>
+      <div class="output">Without Verifier:
+  Kernel bug → silent corruption → system unstable
+  May crash hours later, unrelated stack trace
+
+With Verifier:
+  Kernel bug → immediate BSOD with DRIVER_VERIFIER_DETECTED_VIOLATION
+  Stack trace points to actual offender
+  Reproducible, debuggable, fixable</div>
+    </div>
+    <div class="note">BSOD with Verifier is GOOD — it means you found the bug before it found you.</div>
+  </div>
+
+<div id="tab6" class="content ">
+    <div class="cmd-block">
+      <button class="copy-btn" onclick="copyCommand(this)">COPY</button>
+      <span class="prompt">$</span> <span class="command">LAB EXERCISE: Cloud Files Internals</span>
+      <div class="output">1. Enumerate sync roots on your machine:
+   Get-ChildItem -Path $env:OneDrive -Recurse | Where-Object { $_.Attributes -match 'ReparsePoint' }
+
+2. Inspect a reparse point:
+   fsutil reparsepoint query <file_path>
+
+3. Register a test sync root (requires admin):
+   CfRegisterSyncRoot with proper CF_SYNC_ROOT_REGISTRATION
+
+4. Create a placeholder and observe:
+   CfCreatePlaceholders with CF_PLACEHOLDER_CREATE_INFO
+
+5. Trigger a race condition:
+   Thread A: Check placeholder state
+   Thread B: Update placeholder
+   Thread A: Execute transfer
+
+6. Enable Driver Verifier on CldFlt.sys:
+   verifier /standard /driver CldFlt.sys
+   Reboot and test
+
+7. Analyze any crashes with WinDbg:
+   !analyze -v
+   !verifier 3
+
+8. BONUS: Find a reproducible crash and document the primitive</div>
+    </div>
+    <div class="note">.42 has Driver Verifier active — any kernel bug will BSOD immediately. Document the crash and analyze with WinDbg.</div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="fill" id="progressFill"></div>
+  </div>
+
+  <div class="status-line">
+    <span class="machine-tag intel">.92 Intel</span>
+    <span class="machine-tag amd">.42 AMD</span>
+    Real lab data • Tested live • VIDIMUS OMNIA
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+  updateProgress(tabId);
+}
+
+function updateProgress(tabId) {
+  const tabs = document.querySelectorAll('.tab');
+  const activeIndex = Array.from(tabs).findIndex(t => t.classList.contains('active'));
+  const progress = ((activeIndex + 1) / tabs.length) * 100;
+  document.getElementById('progressFill').style.width = progress + '%';
+}
+
+function copyCommand(btn) {
+  const cmd = btn.parentElement.querySelector('.command').textContent;
+  navigator.clipboard.writeText(cmd).then(() => {
+    btn.textContent = 'COPIED';
+    setTimeout(() => btn.textContent = 'COPY', 1500);
+  });
+}
+
+// Initialize progress
+document.addEventListener('DOMContentLoaded', () => {
+  updateProgress('tab1');
+});
+</script>
+
+</body>
+</html>

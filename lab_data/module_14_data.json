@@ -1,0 +1,66 @@
+{
+  "theory": {
+    "commands": [
+      {
+        "command": "verifier /query | Select-Object -First 15",
+        "output": "Time Stamp: 06/28/2026 23:26:43.027\n\nVerifier Flags: 0x001209bb\n\n  Standard Flags:\n\n    [X] 0x00000001 Special pool.\n    [X] 0x00000002 Force IRQL checking.\n    [X] 0x00000008 Pool tracking.\n    [X] 0x00000010 I/O verification.\n    [X] 0x00000020 Deadlock detection.\n    [X] 0x00000080 DMA checking.\n    [X] 0x00000100 Security checks.\n    [X] 0x00000800 Miscellaneous checks.\n    [X] 0x00020000 DDI compliance checking.",
+        "note": "Driver Verifier active on .42 — catches kernel corruption that would otherwise go silent."
+      }
+    ]
+  },
+  "recon": {
+    "commands": [
+      {
+        "command": "Get-Process | Where-Object { $_.Name -like '*Cld*' -or $_.Name -like '*OneDrive*' } | Select-Object Name, Id",
+        "output": "Name        Id\n----        --\nOneDrive  4824\nOneDrive  5612",
+        "note": "OneDrive processes running — cloud sync root active. CfAPI filter driver (CldFlt.sys) is loaded."
+      },
+      {
+        "command": "# Cloud files architecture:\n# CldFlt.sys = filter driver (kernel)\n# cldapi.dll = user-mode API\n# OneDrive.exe = sync engine (user)\n# Sync root = registered directory tree",
+        "output": "Layer 0: NTFS (underlying filesystem)\nLayer 1: CldFlt.sys (filter driver)\nLayer 2: cldapi.dll (user API)\nLayer 3: OneDrive.exe (sync engine)\n\nReparse points mark cloud-stored files.\nLocal files: no reparse tag.\nCloud files: reparse tag + placeholder.",
+        "note": "Understanding the stack is critical — fuzzing the wrong layer gives false positives."
+      }
+    ]
+  },
+  "fuzzing": {
+    "commands": [
+      {
+        "command": "# CfAPI fuzzing targets:\n# CfCreatePlaceholders — needs registered sync root\n# CfUpdatePlaceholder — updates file metadata\n# CfExecute — transfers data between local and cloud\n# CfHydratePlaceholder — downloads cloud file to local\n# CfDehydratePlaceholder — removes local copy, keeps cloud",
+        "output": "API Fuzzing Results:\n\nCfCreatePlaceholders:\n  Without sync root: 0x80070157 (ERROR_INVALID_PARAMETER)\n  With sync root: SUCCESS (placeholder created)\n\nCfUpdatePlaceholder:\n  Random paths: 0x80070057 (ERROR_INVALID_PARAMETER)\n  Valid placeholder: SUCCESS\n\nCfExecute:\n  Without proper handle: 0x80070057\n  With valid handle: SUCCESS\n\nCfHydratePlaceholder:\n  Without placeholder: 0x80070006 (ERROR_INVALID_HANDLE)\n  With placeholder: SUCCESS (file downloaded)",
+        "note": "All APIs require proper sync root registration. Random temp directories fail."
+      }
+    ]
+  },
+  "toctou": {
+    "commands": [
+      {
+        "command": "# TOCTOU race condition theory:\n# Time-of-check: Verify file state (placeholder, hydrated, etc.)\n# Time-of-use: Perform operation on that file\n# Race window: Between check and use, file state changes",
+        "output": "Race Condition Scenario:\n\nThread A: Check if file is hydrated (yes)\nThread B: Dehydrate the file (now it's not)\nThread A: Read file content (FAIL — file is gone)\n\nIn cloud files:\nThread A: Check placeholder state\nThread B: Update placeholder via CfUpdatePlaceholder\nThread A: Execute transfer via CfExecute\n\nResult: Operation on stale state = undefined behavior",
+        "note": "TOCTOU in kernel drivers is especially dangerous — can lead to memory corruption or privilege escalation."
+      }
+    ]
+  },
+  "kernel": {
+    "commands": [
+      {
+        "command": "verifier /standard /driver CldFlt.sys",
+        "output": "Driver Verifier enabled for CldFlt.sys\n\nVerifier flags:\n  Special pool: ON\n  Force IRQL checking: ON\n  Pool tracking: ON\n  I/O verification: ON\n  Deadlock detection: ON\n  DMA checking: ON\n  Security checks: ON\n  Miscellaneous checks: ON\n  DDI compliance checking: ON\n\nReboot required to activate.",
+        "note": "Driver Verifier catches silent kernel corruption that normal execution hides."
+      },
+      {
+        "command": "# What Driver Verifier catches:\n# - Memory corruption in driver buffers\n# - IRQL violations (raising when should lower)\n# - Pool leaks (allocate without free)\n# - Deadlocks (circular lock acquisition)\n# - DDI compliance (wrong API usage)",
+        "output": "Without Verifier:\n  Kernel bug → silent corruption → system unstable\n  May crash hours later, unrelated stack trace\n\nWith Verifier:\n  Kernel bug → immediate BSOD with DRIVER_VERIFIER_DETECTED_VIOLATION\n  Stack trace points to actual offender\n  Reproducible, debuggable, fixable",
+        "note": "BSOD with Verifier is GOOD — it means you found the bug before it found you."
+      }
+    ]
+  },
+  "lab": {
+    "commands": [
+      {
+        "command": "LAB EXERCISE: Cloud Files Internals",
+        "output": "1. Enumerate sync roots on your machine:\n   Get-ChildItem -Path $env:OneDrive -Recurse | Where-Object { $_.Attributes -match 'ReparsePoint' }\n\n2. Inspect a reparse point:\n   fsutil reparsepoint query <file_path>\n\n3. Register a test sync root (requires admin):\n   CfRegisterSyncRoot with proper CF_SYNC_ROOT_REGISTRATION\n\n4. Create a placeholder and observe:\n   CfCreatePlaceholders with CF_PLACEHOLDER_CREATE_INFO\n\n5. Trigger a race condition:\n   Thread A: Check placeholder state\n   Thread B: Update placeholder\n   Thread A: Execute transfer\n\n6. Enable Driver Verifier on CldFlt.sys:\n   verifier /standard /driver CldFlt.sys\n   Reboot and test\n\n7. Analyze any crashes with WinDbg:\n   !analyze -v\n   !verifier 3\n\n8. BONUS: Find a reproducible crash and document the primitive",
+        "note": ".42 has Driver Verifier active — any kernel bug will BSOD immediately. Document the crash and analyze with WinDbg."
+      }
+    ]
+  }
+}

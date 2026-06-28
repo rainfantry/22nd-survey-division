@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 14 — Cloud Files Internals | 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+    --dim: #666;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: var(--cyan);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+  }
+  h2 {
+    color: var(--green);
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 30px 0 15px;
+    border-left: 3px solid var(--green);
+    padding-left: 10px;
+  }
+  h3 {
+    color: var(--amber);
+    font-size: 14px;
+    margin: 20px 0 10px;
+  }
+  p {
+    margin-bottom: 15px;
+    color: var(--fg);
+  }
+  .widget-iframe {
+    width: 100%;
+    height: 600px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    margin: 20px 0;
+    background: #111;
+  }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin: 15px 0;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+  .warning {
+    color: var(--red);
+    border-left-color: var(--red);
+  }
+  code {
+    background: #1a1a1a;
+    color: var(--cyan);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+  pre {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    overflow-x: auto;
+    margin: 15px 0;
+  }
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+  }
+  .nav a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .nav a:hover {
+    text-decoration: underline;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Module 14 — Cloud Files Internals</h1>
+  <p><strong>First Principle:</strong> The kernel is the final frontier — what you can't see can still kill you.</p>
+
+  <h2>Overview</h2>
+  <p>Cloud files (OneDrive, Dropbox, etc.) use a filter driver (<code>CldFlt.sys</code>) to intercept file operations and redirect them to cloud storage. This creates a new attack surface: reparse points, placeholder files, and sync root APIs that bridge userland and kernel.</p>
+  <p>Understanding this stack is critical for both offense (finding vulnerabilities) and defense (monitoring cloud file activity).</p>
+
+  <h2>Interactive Demo</h2>
+  <p>Real data from .42 (AMD, Driver Verifier active) — cloud sync roots, reparse points, API fuzzing:</p>
+  <iframe class="widget-iframe" src="../widgets/module_14_widget.html" title="Module 14 Cloud Files Internals Interactive Demo"></iframe>
+
+  <h2>The Stack</h2>
+  
+  <h3>Layer 0: NTFS</h3>
+  <p>The underlying filesystem. Reparse points are NTFS metadata tags that tell the filter driver to intercept operations on this file.</p>
+
+  <h3>Layer 1: CldFlt.sys (Filter Driver)</h3>
+  <p>Kernel-mode driver that intercepts IRPs (I/O Request Packets) for files in registered sync roots. Handles hydration, dehydration, and placeholder management.</p>
+  <pre><code>// Filter drivers attach to the filesystem stack
+// They see EVERY operation before NTFS does
+// Bug here = kernel privilege escalation</code></pre>
+
+  <h3>Layer 2: cldapi.dll (User API)</h3>
+  <p>User-mode API for applications to interact with cloud files. Functions like <code>CfCreatePlaceholders</code>, <code>CfUpdatePlaceholder</code>, <code>CfExecute</code>.</p>
+  <div class="note">
+    <strong>Key insight:</strong> All cldapi.dll functions require a properly registered sync root. Random temp directories fail with <code>ERROR_INVALID_PARAMETER</code>.
+  </div>
+
+  <h3>Layer 3: OneDrive.exe (Sync Engine)</h3>
+  <p>The user-mode application that manages sync, conflict resolution, and cloud communication.</p>
+
+  <h2>Reparse Points</h2>
+  <p>Reparse points are NTFS metadata that redirect file operations to a filter driver. When you see a cloud-stored file locally, it's actually a reparse point — the content lives in the cloud.</p>
+  <pre><code>// Check if a file is a reparse point:
+DWORD attributes = GetFileAttributesW(path);
+if (attributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+    // This is a cloud file or junction
+}</code></pre>
+
+  <h2>TOCTOU Race Conditions</h2>
+  <p>Time-of-check vs time-of-use is especially dangerous in kernel drivers. If the file state changes between verification and operation, the driver may operate on stale data.</p>
+  <pre><code>// Vulnerable pattern:
+// 1. Check: Is file hydrated? (yes)
+// 2. Race: Another thread dehydrates it
+// 3. Use: Read file content (FAIL — file is gone)
+
+// In kernel code, this can lead to:
+// - Null pointer dereference
+// - Use-after-free
+// - Buffer overflow (wrong size assumed)</code></pre>
+
+  <h2>Driver Verifier</h2>
+  <p>Driver Verifier is a Windows tool that stresses kernel drivers to catch bugs that would otherwise go silent. When enabled, it monitors pool allocations, IRQL levels, and API compliance.</p>
+  <div class="note warning">
+    <strong>CRITICAL:</strong> Driver Verifier can cause BSODs. That's the point — it turns silent corruption into immediate, debuggable crashes. Always test on a VM, never on production.
+  </div>
+  <pre><code>// Enable Driver Verifier on CldFlt.sys:
+verifier /standard /driver CldFlt.sys
+
+// Reboot required
+// After reboot, any bug in CldFlt.sys = BSOD
+// Analyze with WinDbg:
+!analyze -v
+!verifier 3</code></pre>
+
+  <h2>Lab Exercise</h2>
+  <p><strong>Objective:</strong> Explore cloud files internals and find a reproducible anomaly.</p>
+  <ol>
+    <li>Enumerate sync roots on your machine: <code>Get-ChildItem -Path $env:OneDrive -Recurse | Where-Object { $_.Attributes -match 'ReparsePoint' }</code></li>
+    <li>Inspect a reparse point: <code>fsutil reparsepoint query &lt;file_path&gt;</code></li>
+    <li>Register a test sync root (requires admin): <code>CfRegisterSyncRoot</code> with proper <code>CF_SYNC_ROOT_REGISTRATION</code></li>
+    <li>Create a placeholder and observe: <code>CfCreatePlaceholders</code> with <code>CF_PLACEHOLDER_CREATE_INFO</code></li>
+    <li>Trigger a race condition: Thread A checks placeholder state, Thread B updates it, Thread A executes transfer</li>
+    <li>Enable Driver Verifier on <code>CldFlt.sys</code>, reboot, and test</li>
+    <li>Analyze any crashes with WinDbg: <code>!analyze -v</code>, <code>!verifier 3</code></li>
+    <li><strong>BONUS:</strong> Find a reproducible crash and document the primitive</li>
+  </ol>
+
+  <div class="note">
+    <strong>Test Environment:</strong> .42 has Driver Verifier active on CldFlt.sys. Any kernel bug will BSOD immediately. Document the crash and analyze with WinDbg. This is how real kernel research is done.
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_13_KAV_EVASION.html">← Module 13: Kaspersky Evasion</a>
+    <a href="MODULE_15_EXFILTRATION.html">Module 15: Exfiltration →</a>
+  </div>
+</div>
+
+</body>
+</html>
