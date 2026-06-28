@@ -141,8 +141,10 @@ for (int i = 0; i < payload_len; i++) {
 - Startup folders (AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup)
 - Service creation (sc.exe)
 - DLL injection (CreateRemoteThread)</code></pre>
-  <div class="note warning">
-    <strong>CRITICAL:</strong> Three-vector persistence (registry + task + LNK) is exactly what System Watcher is designed to catch. If <code>bRollbackAllowed=1</code>, your persistence may be undone within seconds. <strong>STATUS:</strong> This section is based on Kaspersky documentation. Live trigger data from .92 is pending — the lab exercise will generate real data.
+  <div class="note">
+    <strong>Live test — .42 (Kaspersky 21.25, bRollbackAllowed=1):</strong><br>
+    Registry Run key written → iron_sun.exe set as autorun value → process started (PID 29408) → key checked at 3s, 5s, 15s → key survived all checks. Process ran 5s+ with KAV active, no termination, no rollback.<br><br>
+    <strong>Finding:</strong> System Watcher rollback is detection-coupled. It fires when KAV makes a detection and needs to undo changes. If the binary passes static + behavioral scan (iron_sun GCC does), there is no detection event — therefore no rollback trigger. Evade detection → automatically evade System Watcher. <code>bRollbackAllowed=1</code> is live but idle when nothing is flagged.
   </div>
 
   <h3>Layer 4: KSN (Kaspersky Security Network)</h3>
