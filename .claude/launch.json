@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "22nd-survey-division",
+      "name": "22div-preview",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8322"],
-      "port": 8322
+      "runtimeArgs": ["-m", "http.server", "7723"],
+      "port": 7723
     }
   ]
 }

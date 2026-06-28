@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ghost Scraper — OSINT Recon Tool // 22nd Survey Division</title>
+<meta name="description" content="OSINT reconnaissance tool. Domain DNS, ABN/ACN lookup, email/phone enrichment, web scraping, WHOIS, IP geolocation. 22nd Survey Division.">
+<meta name="author" content="George Wu">
+<meta name="robots" content="noindex, nofollow">
+<style>
+:root {
+  --bg:         #0a0a0a;
+  --bg2:        #0f0f0f;
+  --bg3:        #141414;
+  --bg4:        #1a1a1a;
+  --border:     #1e1e1e;
+  --border2:    #2a2a2a;
+  --green:      #00ff41;
+  --green-dim:  #00882a;
+  --green-dark: #003310;
+  --amber:      #ffb000;
+  --amber-dim:  #7a5500;
+  --red:        #ff3333;
+  --cyan:       #00e5ff;
+  --cyan-dim:   #006e7a;
+  --text:       #c8c8c8;
+  --text-dim:   #6a6a6a;
+  --text-mute:  #333333;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Consolas','Courier New',Courier,monospace;line-height:1.6;overflow-x:hidden;}
+body::after{content:'';position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);z-index:9999;}
+
+/* ── PIN GATE ── */
+#pin-gate{position:fixed;inset:0;background:rgba(8,8,8,.99);z-index:99999;display:flex;align-items:center;justify-content:center;}
+#pin-box{border:1px solid #1a3a1a;padding:3rem 3.2rem;max-width:420px;width:92%;text-align:center;background:#070707;}
+.pin-brand{font-size:.52rem;letter-spacing:.42em;color:var(--green);margin-bottom:.25rem;text-transform:uppercase;}
+.pin-acn{font-size:.46rem;letter-spacing:.18em;color:#252525;margin-bottom:2.2rem;}
+.pin-title{font-size:.88rem;color:var(--green);letter-spacing:.14em;margin-bottom:.5rem;}
+.pin-sub{font-size:.62rem;color:#555;letter-spacing:.06em;line-height:1.7;margin-bottom:2rem;}
+#pin-input{width:100%;background:#040404;border:1px solid #1a3a1a;color:var(--green);font-family:inherit;font-size:1.6rem;letter-spacing:.55em;padding:.75rem 1rem;text-align:center;outline:none;margin-bottom:.9rem;-webkit-text-security:disc;}
+#pin-input:focus{border-color:var(--green);}
+#pin-input.shake{animation:shake .3s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+#pin-submit{width:100%;background:transparent;border:1px solid var(--green);color:var(--green);font-family:inherit;font-size:.62rem;letter-spacing:.22em;padding:.65rem 1.5rem;cursor:pointer;text-transform:uppercase;transition:all .2s;margin-bottom:1rem;}
+#pin-submit:hover{background:var(--green);color:#000;}
+#pin-error{font-size:.58rem;color:var(--red);letter-spacing:.1em;min-height:1.2em;margin-bottom:.7rem;}
+.pin-footer-note{font-size:.47rem;color:#1e1e1e;letter-spacing:.05em;line-height:1.7;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(10,10,10,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:.65rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.nav-brand{font-size:.7rem;letter-spacing:.3em;color:var(--green);text-transform:uppercase;white-space:nowrap;text-decoration:none;display:flex;align-items:center;gap:.6rem;}
+.nav-brand .slash{color:var(--text-mute);}
+.nav-links{display:flex;align-items:center;gap:1.5rem;}
+.nav-links a{color:var(--text-dim);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--green);}
+.nav-links a.active{color:var(--green);}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1080px;margin:0 auto;padding:0 2rem;}
+section{padding:5rem 0;}
+.section-tag{font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.5rem;}
+h1{font-size:clamp(1.3rem,3vw,2.2rem);letter-spacing:.06em;text-transform:uppercase;color:#fff;line-height:1.2;margin-bottom:1rem;}
+h2{font-size:clamp(1rem,2.5vw,1.4rem);letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:2rem;}
+p{color:var(--text-dim);font-size:.8rem;line-height:1.9;margin-bottom:1rem;}
+
+/* ── HERO ── */
+#hero{padding-top:8rem;border-top:none;}
+.hero-badge{display:inline-block;font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;padding:.3rem .8rem;border:1px solid var(--green-dark);color:var(--green-dim);margin-bottom:1.5rem;}
+.hero-sub{font-size:.85rem;color:var(--text-dim);line-height:1.8;margin-bottom:2.5rem;max-width:680px;}
+.hero-cta{display:inline-flex;gap:1rem;flex-wrap:wrap;}
+.btn{font-family:inherit;font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;padding:.7rem 1.8rem;text-decoration:none;transition:all .2s;cursor:pointer;border:none;}
+.btn-primary{background:var(--green);color:#000;}
+.btn-primary:hover{background:#00cc33;}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--text-dim);}
+.btn-ghost:hover{border-color:var(--green);color:var(--green);}
+.hero-meta{margin-top:3rem;display:flex;gap:2.5rem;flex-wrap:wrap;}
+.hm-item{font-size:.6rem;letter-spacing:.1em;}
+.hm-item .val{color:#fff;font-size:.75rem;display:block;margin-bottom:.2rem;}
+.hm-item .lbl{color:var(--text-dim);}
+
+/* ── FEATURES GRID ── */
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1px;background:var(--border);}
+.feat-card{background:var(--bg2);padding:1.6rem 1.8rem;transition:background .2s;}
+.feat-card:hover{background:var(--bg3);}
+.fc-icon{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;color:var(--green-dim);margin-bottom:.7rem;display:flex;align-items:center;gap:.6rem;}
+.fc-icon::before{content:'//';color:var(--text-mute);}
+.fc-title{font-size:.85rem;color:#fff;letter-spacing:.04em;margin-bottom:.6rem;}
+.fc-body{font-size:.75rem;color:var(--text-dim);line-height:1.75;}
+
+/* ── TERMINAL DEMO ── */
+.terminal{border:1px solid #1a3a1a;background:#050a05;overflow:hidden;margin:2rem 0;}
+.t-bar{background:#060d06;padding:.45rem 1.1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid #0a1a0a;}
+.t-dot{width:8px;height:8px;border-radius:50%;background:#1a1a1a;}
+.t-title{font-size:.62rem;letter-spacing:.12em;color:#2a4a2a;margin-left:.5rem;}
+.t-body{padding:1.1rem 1.3rem;font-size:.75rem;line-height:1.9;}
+.t-line{display:block;color:#3a5a3a;}
+.t-line.cmd{color:var(--green);}
+.t-line.out{color:#6a9a6a;}
+.t-line.val{color:var(--cyan);}
+.t-line.warn{color:var(--amber);}
+.t-line.blank{height:.8rem;}
+
+/* ── STACK ── */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-top:1.5rem;}
+.stack-card{border:1px solid var(--border);padding:1rem 1.2rem;}
+.sc-label{font-size:.55rem;letter-spacing:.2em;color:var(--green-dim);margin-bottom:.4rem;text-transform:uppercase;}
+.sc-val{font-size:.8rem;color:#fff;}
+
+/* ── LAUNCH BOX ── */
+.launch-box{border:1px solid var(--green-dark);background:#030a03;padding:2.5rem 2rem;text-align:center;margin-top:3rem;}
+.lb-title{font-size:1.1rem;letter-spacing:.1em;text-transform:uppercase;color:#fff;margin-bottom:.5rem;}
+.lb-sub{font-size:.72rem;color:var(--text-dim);margin-bottom:2rem;line-height:1.7;}
+.lb-note{font-size:.6rem;color:var(--text-mute);margin-top:1.2rem;letter-spacing:.05em;}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:2.5rem 0;margin-top:4rem;}
+.ft-inner{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;}
+.ft-brand{font-size:.52rem;letter-spacing:.25em;color:var(--green-dim);}
+.ft-meta{font-size:.5rem;color:var(--text-mute);letter-spacing:.08em;line-height:1.9;text-align:right;}
+
+@media(max-width:600px){
+  nav{padding:.55rem 1rem;}
+  .nav-links{display:none;}
+  section{padding:3rem 0;}
+  .wrap{padding:0 1rem;}
+  .hero-meta{gap:1.5rem;}
+  .ft-inner{flex-direction:column;align-items:flex-start;}
+  .ft-meta{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── PIN GATE ── -->
+<div id="pin-gate">
+  <div id="pin-box">
+    <div class="pin-brand">22nd Survey Division</div>
+    <div class="pin-acn">ACN 692 429 397 // ABN 50 692 429 397</div>
+    <div class="pin-title">// RESTRICTED ACCESS</div>
+    <div class="pin-sub">Ghost Scraper is a proprietary OSINT tool.<br>Enter access PIN to continue.</div>
+    <input type="password" id="pin-input" inputmode="numeric" maxlength="6" placeholder="______" autocomplete="off" autofocus>
+    <button id="pin-submit">AUTHENTICATE</button>
+    <div id="pin-error"></div>
+    <div class="pin-footer-note">OCCUPATION FORCE CALLSIGN GSW PTY LTD<br>Authorised personnel only. All activity logged.</div>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-brand">22ND <span class="slash">/</span> SURVEY DIVISION</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#findings">Findings</a>
+    <a href="index.html#curriculum">Courses</a>
+    <a href="ghost-scraper.html" class="active" style="color:var(--green)">Ghost Scraper</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="wrap">
+    <div class="hero-badge">// OSINT RECON TOOL — AUTHORISED ACCESS</div>
+    <h1>GHOST SCRAPER</h1>
+    <div class="hero-sub">Full-stack web OSINT reconnaissance. Extracts emails, phone numbers, social profiles, DNS records, WHOIS data, and IP geolocation from target domains. ABN/ACN lookup. Contact enrichment. Built for authorised investigations only.</div>
+    <div class="hero-cta">
+      <a href="#launch" id="launch-btn" class="btn btn-primary">LAUNCH APP →</a>
+      <a href="#features" class="btn btn-ghost">View Features</a>
+    </div>
+    <div class="hero-meta">
+      <div class="hm-item"><span class="val">TypeScript</span><span class="lbl">Language</span></div>
+      <div class="hm-item"><span class="val">React + Express</span><span class="lbl">Stack</span></div>
+      <div class="hm-item"><span class="val">Drizzle ORM</span><span class="lbl">Database</span></div>
+      <div class="hm-item"><span class="val">Stripe</span><span class="lbl">Paywall</span></div>
+      <div class="hm-item"><span class="val">22DIV</span><span class="lbl">Author</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section id="features" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <div class="section-tag">// CAPABILITIES</div>
+    <h2>Recon Modules</h2>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="fc-icon">URL Scraper</div>
+        <div class="fc-title">Multi-URL Extraction</div>
+        <div class="fc-body">Scan multiple target URLs in one operation. Extracts emails, phone numbers, and social media profile links from page content.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">DNS</div>
+        <div class="fc-title">DNS Enumeration</div>
+        <div class="fc-body">A, MX, and NS record lookup. Resolve infrastructure. Map hosting relationships and mail server configurations.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">WHOIS / RDAP</div>
+        <div class="fc-title">Domain Intelligence</div>
+        <div class="fc-body">Full WHOIS/RDAP lookup — registrar, registration/expiry dates, registrant details. Passive reconnaissance without touching the target directly.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">IP Geo</div>
+        <div class="fc-title">IP Geolocation</div>
+        <div class="fc-body">Geolocate A record IPs. City, country, ISP, ASN. Direct map links. Identify CDN vs origin server.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">Contact Intel</div>
+        <div class="fc-title">Email Intelligence</div>
+        <div class="fc-body">Domain analysis for each discovered email — corporate/education/free/disposable classification. OSINT search links for follow-on investigation.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">Phone Intel</div>
+        <div class="fc-title">Phone Intelligence</div>
+        <div class="fc-body">Line type detection. OSINT search links. Manual lookup panel for direct phone number queries without running a full site scan.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">Correlation</div>
+        <div class="fc-title">Contact-to-Social</div>
+        <div class="fc-body">Cross-reference discovered emails and phone numbers against social profiles found during the scan. Builds a relationship map automatically.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">ABN / ACN</div>
+        <div class="fc-title">Australian Business Lookup</div>
+        <div class="fc-body">ABN and ACN lookup. Verify business registration, trading name, GST status, and entity type. Useful for AU-based targets.</div>
+      </div>
+      <div class="feat-card">
+        <div class="fc-icon">AI</div>
+        <div class="fc-title">Ghost Coder</div>
+        <div class="fc-body">Built-in AI assistant. Query your collected data, get analysis, generate follow-on OSINT queries, and export findings.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TERMINAL DEMO ── -->
+<section id="demo">
+  <div class="wrap">
+    <div class="section-tag">// EXAMPLE RUN</div>
+    <h2>What It Looks Like</h2>
+    <div class="terminal">
+      <div class="t-bar">
+        <div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div>
+        <span class="t-title">GHOST SCRAPER — RECON SESSION</span>
+      </div>
+      <div class="t-body">
+        <span class="t-line cmd">ghost-scraper > scan --url example.com.au --depth 2</span>
+        <span class="t-line blank"></span>
+        <span class="t-line out">[DNS]    A       203.0.113.42    Sydney, AU — AXIOM HOSTING</span>
+        <span class="t-line out">[DNS]    MX      mail.example.com.au  (10)</span>
+        <span class="t-line out">[DNS]    NS      ns1.example.com.au, ns2.example.com.au</span>
+        <span class="t-line blank"></span>
+        <span class="t-line out">[WHOIS]  Registrar:   CrazyDomains Pty Ltd</span>
+        <span class="t-line out">[WHOIS]  Created:     2019-03-14  Expires: 2026-03-14</span>
+        <span class="t-line out">[WHOIS]  Registrant:  REDACTED (Privacy enabled)</span>
+        <span class="t-line blank"></span>
+        <span class="t-line out">[EMAIL]  contact@example.com.au  → CORPORATE  [LinkedIn] [OSINT]</span>
+        <span class="t-line out">[EMAIL]  admin@example.com.au    → CORPORATE  [LinkedIn] [OSINT]</span>
+        <span class="t-line out">[PHONE]  +61 2 9XXX XXXX          → LANDLINE   [TrueCaller] [OSINT]</span>
+        <span class="t-line blank"></span>
+        <span class="t-line val">[SOCIAL] LinkedIn: /in/john-example</span>
+        <span class="t-line val">[SOCIAL] Twitter:  @example_au</span>
+        <span class="t-line blank"></span>
+        <span class="t-line warn">[ABN]    12 345 678 901  ✓ ACTIVE  "EXAMPLE PTY LTD"  GST: YES</span>
+        <span class="t-line blank"></span>
+        <span class="t-line cmd">[DONE]   3 emails · 1 phone · 2 social · DNS complete · WHOIS complete</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── STACK ── -->
+<section id="stack" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="wrap">
+    <div class="section-tag">// TECH STACK</div>
+    <h2>Architecture</h2>
+    <p>Full-stack Node.js application. Designed for self-hosted deployment on any VPS or local machine. See <a href="https://github.com/rainfantry/Ghost-Scraper" style="color:var(--green-dim);">DEPLOYMENT_GUIDE.md</a> for setup instructions.</p>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="sc-label">Frontend</div><div class="sc-val">React + Vite</div></div>
+      <div class="stack-card"><div class="sc-label">Backend</div><div class="sc-val">Express.js</div></div>
+      <div class="stack-card"><div class="sc-label">Language</div><div class="sc-val">TypeScript</div></div>
+      <div class="stack-card"><div class="sc-label">ORM</div><div class="sc-val">Drizzle</div></div>
+      <div class="stack-card"><div class="sc-label">Styling</div><div class="sc-val">Tailwind CSS</div></div>
+      <div class="stack-card"><div class="sc-label">Payments</div><div class="sc-val">Stripe</div></div>
+      <div class="stack-card"><div class="sc-label">Auth</div><div class="sc-val">Admin PIN + Session</div></div>
+      <div class="stack-card"><div class="sc-label">Deploy</div><div class="sc-val">Node.js / VPS / Replit</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LAUNCH ── -->
+<section id="launch">
+  <div class="wrap">
+    <div class="section-tag">// ACCESS</div>
+    <h2>Launch</h2>
+    <div class="launch-box">
+      <div class="lb-title">Ghost Scraper — Live Instance</div>
+      <div class="lb-sub">The app runs on a Node.js server. Click below to open the live instance.<br>Requires a separate app login. Contact gwu0738@gmail.com for access.</div>
+      <a href="https://github.com/rainfantry/Ghost-Scraper" class="btn btn-primary" target="_blank" id="live-link">OPEN APP →</a>
+      <div class="lb-note">
+        Self-hosting: clone the repo and follow DEPLOYMENT_GUIDE.md.<br>
+        Requires Node.js 18+, PostgreSQL (or SQLite), and API keys for ABN/IP/OSINT services.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="wrap">
+    <div class="ft-inner">
+      <div class="ft-brand">22ND SURVEY DIVISION</div>
+      <div class="ft-meta">
+        OCCUPATION FORCE CALLSIGN GSW PTY. LTD.<br>
+        ABN 50 692 429 397 // ACN 692 429 397<br>
+        Director: George Wu — gwu0738@gmail.com
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  const CORRECT = '668340';
+  const KEY = '22div_gs_auth';
+
+  const gate  = document.getElementById('pin-gate');
+  const input = document.getElementById('pin-input');
+  const btn   = document.getElementById('pin-submit');
+  const err   = document.getElementById('pin-error');
+
+  function unlock() {
+    sessionStorage.setItem(KEY, '1');
+    gate.style.display = 'none';
+  }
+
+  if (sessionStorage.getItem(KEY) === '1') { unlock(); return; }
+
+  function attempt() {
+    if (input.value.trim() === CORRECT) {
+      err.textContent = '';
+      unlock();
+    } else {
+      err.textContent = 'ACCESS DENIED — invalid PIN';
+      input.value = '';
+      input.classList.add('shake');
+      setTimeout(() => input.classList.remove('shake'), 400);
+      input.focus();
+    }
+  }
+
+  btn.addEventListener('click', attempt);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') attempt(); });
+  input.addEventListener('input', () => { if (input.value.length === 6) attempt(); });
+})();
+</script>
+</body>
+</html>
