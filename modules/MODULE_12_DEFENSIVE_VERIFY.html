@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 12: Defensive Verification — 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 54.5%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_11_ROOTKITS.html">← Module 11</a>
+            <a href="MODULE_13_EDR_EVASION.html">Module 13 →</a>
+        </div>
+
+        <h1>Module 12: Defensive Verification <span class="status-badge status-live">LIVE TESTED</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 12 of 22 — Trust but verify</p>
+
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>A scan result is just text until you prove it means something. "0 detections" could mean clean, or it could mean the scanner never ran, or the file was excluded, or the definitions were stale. Verification is the discipline of proving your tools work before you bet your operation on them.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>You wouldn't field a rifle without test-firing it. Same for malware. Before you deploy a tool on a target, you scan it. But how do you know the scan was real? This module teaches you to read scan results like a forensic analyst — not just the headline, but the metadata that proves the scan actually happened.</p>
+        </div>
+
+        <h2>The Method: How to Verify a Scan</h2>
+
+        <div class="step-box">
+            <h4>Step 1: Open Your Terminal</h4>
+            <p>You need a command prompt. Not PowerShell. Not Developer Command Prompt. The standard Windows Command Prompt.</p>
+            
+            <div class="copy-paste">
+                Press Win + R, type "cmd", press Enter
+            </div>
+
+            <div class="why-box">
+                <h5>Why cmd and not PowerShell?</h5>
+                <p>Kaspersky's command-line scanner (avp.exe) is designed for cmd.exe. PowerShell adds extra parsing that can break arguments. When you're verifying, you want the simplest path — no variables, no pipelines, no surprises.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 2: Check the File Exists</h4>
+            <p>Before scanning, confirm the file is where you think it is.</p>
+
+            <div class="copy-paste">
+dir C:\Users\gwu07\phantom_rpc.exe
+            </div>
+
+            <div class="code-block">
+Volume in drive C is Windows
+Volume Serial Number is XXXX-XXXX
+
+Directory of C:\Users\gwu07
+
+06/29/2026  12:16 AM           153,600 phantom_rpc.exe
+               1 File(s)        153,600 bytes
+            </div>
+
+            <div class="why-box">
+                <h5>What am I looking for?</h5>
+                <p><strong>Size:</strong> 153,600 bytes. If this is 0 bytes, the file is empty. If it's missing, wrong path. <strong>Date:</strong> Should match when you compiled it. If the date is old and you just built it, you're looking at the wrong file.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 3: Run the Kaspersky Scan</h4>
+            <p>Now scan the file. This is the exact command with every flag explained.</p>
+
+            <div class="copy-paste">
+"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN C:\Users\gwu07\phantom_rpc.exe /i0
+            </div>
+
+            <div class="why-box">
+                <h5>What does each part mean?</h5>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li><strong>"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe"</strong> — The scanner executable. Quotes needed because of spaces in path.</li>
+                    <li><strong>SCAN</strong> — The command. Tells avp.exe to scan, not update or report.</li>
+                    <li><strong>C:\Users\gwu07\phantom_rpc.exe</strong> — The target file. Full path, no quotes needed (no spaces).</li>
+                    <li><strong>/i0</strong> — Action on detect: 0 = "Ask after scan". Doesn't delete or quarantine. Lets you see the result.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 4: Read the Output Like a Forensic Analyst</h4>
+            <p>This is the real scan output from .92 on 2026-06-29. Every line matters.</p>
+
+            <div class="code-block">
+AV bases release date: 2026-06-28 18:11:00 (full)
+; --- Settings ---
+; Action on detect:	Ask after scan
+; Scan objects:	All objects
+; Use iChecker:	Yes
+; Use iSwift:	Yes
+; Try disinfect:	Yes
+; Try delete:	Yes
+; Try delete container:	No
+; Scan archives:	No
+; Exclude by mask:	No
+; Include by mask:	No
+; Objects to scan:
+; 	"C:\Users\gwu07\phantom_rpc.exe"	Enable = Yes	Recursive = No
+; ------------------
+2026-06-29 07:44:54	Scan_Objects$2997		starting	1
+2026-06-29 07:44:54	C:\Users\gwu07\phantom_rpc.exe//#	ok
+Progress 1%...
+2026-06-29 07:44:54	C:\Users\gwu07\phantom_rpc.exe	ok
+Progress 1%...
+2026-06-29 07:44:56	Scan_Objects$2997		completed
+Info: task 'ods' finished, last error code 0
+;  --- Statistics ---
+; Time Start:	2026-06-29 07:44:54
+; Time Finish:	2026-06-29 07:44:56
+; Processed objects:	2
+; Total OK:	2
+; Total detected:	0
+; Suspicions:	0
+; Total skipped:	0
+; Password protected:	0
+; Corrupted:	0
+; Errors:	0
+;  ------------------
+            </div>
+
+            <div class="why-box">
+                <h5>How do I know this scan was REAL?</h5>
+                <p>Check these 6 verification points:</p>
+                <ol style="margin-left: 1.5rem; line-height: 2;">
+                    <li><strong>AV bases date:</strong> "2026-06-28 18:11:00" — Current definitions, not stale. If this says 2025 or "unknown", the scan is worthless.</li>
+                    <li><strong>iChecker + iSwift:</strong> "Yes" — Both enabled. This means KAV used its full scanning engine, not a cached shortcut. If either says "No", the scan might have skipped parts.</li>
+                    <li><strong>Processed objects:</strong> "2" — The file was actually read and analyzed. If this is 0, the scanner never touched it.</li>
+                    <li><strong>Task completed:</strong> "task 'ods' finished, last error code 0" — No crash, no abort. Clean completion.</li>
+                    <li><strong>Time taken:</strong> 2 seconds for 153KB — Reasonable. If it's 0.1 seconds, suspicious (maybe cached). If it's 60 seconds, maybe hung.</li>
+                    <li><strong>Total detected: 0, Suspicions: 0:</strong> The headline. But only valid if the above 5 checks pass.</li>
+                </ol>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ What would a FAKE or BROKEN scan look like?</h5>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li><strong>"Total skipped: 1"</strong> — File was excluded or unreadable. Scan didn't happen.</li>
+                    <li><strong>"Errors: 1"</strong> — Scanner crashed or file was locked. Result invalid.</li>
+                    <li><strong>"AV bases: unknown"</strong> — Definitions not loaded. Blind scan.</li>
+                    <li><strong>"Total OK: 0"</strong> — File wasn't processed. Maybe wrong path.</li>
+                    <li><strong>No output at all</strong> — avp.exe not found, wrong path, or no permission.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 5: Verify the File State After Scan</h4>
+            <p>A real scan with "0 detections" should leave the file untouched. If the file is gone, the scan lied or the AV auto-deleted.</p>
+
+            <div class="copy-paste">
+dir C:\Users\gwu07\phantom_rpc.exe
+            </div>
+
+            <div class="code-block">
+06/29/2026  12:16 AM           153,600 phantom_rpc.exe
+            </div>
+
+            <div class="why-box">
+                <h5>What am I checking?</h5>
+                <p><strong>File still exists:</strong> If KAV detected something, it might quarantine or delete. File present = no action taken. <strong>Size unchanged:</strong> 153,600 bytes. If size changed, KAV modified it. <strong>Date unchanged:</strong> Still 12:16 AM. If date changed, KAV touched it.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 6: Cross-Machine Verification</strong></h4>
+            <p>One scan on one machine proves nothing. The same file scanned on a different machine with the same AV — that's verification.</p>
+
+            <div class="copy-paste">
+# On .92 (your machine):
+"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN C:\Users\gwu07\phantom_rpc.exe /i0
+
+# On .42 (WUPC, via SSH):
+ssh SWu@192.168.1.42
+"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN C:\Users\swu\phantom_rpc.exe /i0
+            </div>
+
+            <div class="code-block">
+=== .92 RESULT ===
+Total detected:  0
+Suspicions:      0
+Total OK:        2
+
+=== .42 RESULT ===
+Total detected:  0
+Suspicions:      0
+Total OK:        2
+
+=== VERDICT ===
+Same AV version (21.25), same definitions (2026-06-28),
+same result (0 detections). Cross-machine verification: PASSED.
+            </div>
+
+            <div class="why-box">
+                <h5>Why cross-machine matters</h5>
+                <p>A single machine could have a misconfigured exclusion list. A single scan could hit a cached result. Two independent machines with the same AV version and definitions — if both say clean, the file is clean. This is the scientific method: reproducible results.</p>
+            </div>
+        </div>
+
+        <h2>Live Evidence: Full Defensive Stance</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Machine .92 (LAPTOP-R32M8MLI) — Your Machine</h3>
+            
+            <div class="code-block">
+=== WHAT AM I? ===
+whoami /priv
+# Result: Standard user (no admin privileges listed)
+
+=== WHAT'S RUNNING? ===
+tasklist | findstr "avp"
+avp.exe       5612  Services  0  296,100 K
+avp.exe      11692  Services  0   23,388 K
+avpui.exe    16084  Console   0  232,160 K
+# Three KAV processes: service engine, service helper, UI tray
+
+=== WHAT SERVICES? ===
+sc query | findstr "Kaspersky"
+DISPLAY_NAME: Kaspersky Service 21.25
+# KAV 21.25 active and running
+
+=== NETWORK LISTENERS ===
+netstat -ano | findstr "4443 4444"
+TCP  0.0.0.0:4443  0.0.0.0:0  LISTENING  31248
+TCP  192.168.1.92:4443  192.168.1.42:11025  ESTABLISHED  31248
+# C2 listener on 4443, connected to .42
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>Stance:</strong> KAV 21.25 active, standard user, C2 operational. This is your development box — tools built here, scanned here, then deployed to targets.</p>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Machine .42 (WUPC) — Target/Sandbox</h3>
+            
+            <div class="code-block">
+=== WHAT AM I? ===
+whoami /priv
+# Result: ADMIN (SeImpersonatePrivilege Enabled, SeDebugPrivilege Enabled)
+
+=== WHAT'S RUNNING? ===
+Get-Process | Where-Object { $_.ProcessName -match "avp" }
+ProcessName  Id    Path
+-----------  --    ----
+avp          5068
+avp          8428
+avpui       12172
+# KAV 21.25 active, same version as .92
+
+=== WINDOWS DEFENDER ===
+Get-Service WinDefend
+Status: Stopped
+# Defender is OFF. KAV is the only AV.
+
+=== SYSTEM WATCHER ===
+Get-ItemProperty "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25" -Name "bRollbackAllowed"
+# Result: NOT FOUND
+# System Watcher is NOT configured on this machine.
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>Stance:</strong> KAV 21.25 active, admin privileges, Defender OFF, System Watcher NOT FOUND. This is your test environment — privileged, monitored by KAV, but no rollback protection.</p>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Machine .145 (RADON) — Unreachable</h3>
+            
+            <div class="code-block">
+ping 192.168.1.145
+Request timed out.
+Request timed out.
+Packets: Sent = 2, Received = 0, Lost = 2 (100% loss)
+
+nmap -sS -p22,445,3389 192.168.1.145
+# Host appears to be down
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>Stance:</strong> DOWN. Cannot verify. Documented as unreachable. Do not fabricate data for machines you cannot test.</p>
+        </div>
+
+        <h2>Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>A scan is only as good as its metadata:</strong> Bases date, iChecker/iSwift, processed objects, completion status — all matter</li>
+            <li><strong>Verify file state post-scan:</strong> Present, unchanged size, unchanged date = no action taken</li>
+            <li><strong>Cross-machine verification:</strong> Same AV, same defs, same result = reproducible science</li>
+            <li><strong>Document unreachable targets:</strong> "Down" is valid data. Don't fake it.</li>
+            <li><strong>Assume the layman knows nothing:</strong> Every command, every flag, every output line needs explanation</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">KAV scan metadata verification</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">File state post-scan</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92 + .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Cross-machine scan consistency</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92 + .42</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Defensive stance enumeration</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92 + .42</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_11_ROOTKITS.html">← Module 11</a>
+            <a href="MODULE_13_EDR_EVASION.html">Module 13 →</a>
+        </div>
+    </div>
+</body>
+</html>
