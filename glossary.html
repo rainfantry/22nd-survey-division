@@ -3,273 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>22nd Survey Division — Term Glossary & Crash Courses</title>
+    <title>KEYWORD GLOSSARY — 22ND SURVEY DIVISION</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+        
         :root {
-            --bg: #0a0a0f;
-            --fg: #e0e0e0;
-            --accent: #ff3333;
-            --accent2: #00ff88;
-            --dim: #666;
-            --border: #333;
+            --bg: #050505;
+            --fg: #c0c0c0;
+            --accent: #ff0040;
+            --accent2: #00ff41;
+            --dim: #444;
+            --border: #1a1a1a;
             --neon: #00ffff;
         }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background: var(--bg);
             color: var(--fg);
-            font-family: 'Segoe UI', Consolas, monospace;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
-        .term-card {
-            background: #0f0f15;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1rem 0;
-            transition: border-color 0.3s;
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
+        
+        .glossary-header {
+            border: 3px solid var(--accent);
+            padding: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
         }
-        .term-card:hover {
-            border-color: var(--neon);
+        
+        .glossary-header::before {
+            content: 'REFERENCE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--accent);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
         }
-        .term-card h3 {
-            color: var(--neon);
+        
+        .glossary-header h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
-            font-family: Consolas, monospace;
         }
-        .term-card .category {
-            display: inline-block;
-            background: var(--accent);
-            color: var(--bg);
-            padding: 0.2rem 0.6rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        .term-card .category.windows { background: #0078d4; }
-        .term-card .category.linux { background: #ffaa00; color: var(--bg); }
-        .term-card .category.network { background: #aa00ff; }
-        .term-card .category.malware { background: #ff3333; }
-        .term-card .category.crypto { background: #00ff88; color: var(--bg); }
-        .term-card .category.social { background: #ff6600; }
-        .term-card .definition {
-            color: var(--fg);
-            margin: 0.5rem 0;
-        }
-        .term-card .analogy {
-            background: #1a1a1a;
-            border-left: 3px solid var(--accent2);
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            font-style: italic;
-            color: #ccc;
-        }
-        .term-card .usage {
-            background: #1a0a0a;
-            border-left: 3px solid var(--accent);
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            font-family: Consolas, monospace;
-            font-size: 12px;
-        }
-        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
-        .nav a:hover { background: var(--accent); color: var(--bg); }
+        
         .search-box {
-            width: 100%;
+            background: #0a0a0a;
+            border: 2px solid var(--border);
             padding: 1rem;
-            background: #1a1a2e;
-            border: 1px solid var(--border);
-            border-radius: 8px;
+            margin: 2rem 0;
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
             color: var(--fg);
-            font-family: Consolas, monospace;
-            font-size: 16px;
-            margin-bottom: 2rem;
+            width: 100%;
         }
+        
         .search-box:focus {
             outline: none;
-            border-color: var(--neon);
+            border-color: var(--accent);
         }
-        .filter-buttons {
+        
+        .term-card {
+            border: 2px solid var(--border);
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.2s;
+        }
+        
+        .term-card:hover {
+            border-color: var(--accent);
+        }
+        
+        .term-card h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: var(--accent2);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .term-card .category {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--dim);
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+        
+        .term-card .definition {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .term-card .example {
+            background: #0a0a0a;
+            border-left: 4px solid var(--neon);
+            padding: 1rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--neon);
+            margin: 1rem 0;
+        }
+        
+        .term-card .module-link {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .term-card .module-link:hover {
+            color: var(--accent2);
+            border-color: var(--accent2);
+        }
+        
+        .category-filter {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
+            gap: 1rem;
+            margin: 2rem 0;
             flex-wrap: wrap;
         }
-        .filter-btn {
-            background: var(--border);
+        
+        .category-filter button {
+            background: transparent;
+            border: 2px solid var(--border);
             color: var(--fg);
-            border: none;
             padding: 0.5rem 1rem;
-            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
             cursor: pointer;
-            font-size: 0.9rem;
+            transition: all 0.2s;
         }
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--accent);
-            color: var(--bg);
+        
+        .category-filter button:hover,
+        .category-filter button.active {
+            border-color: var(--accent);
+            color: var(--accent);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="nav">
-            <a href="index.html">← Home</a>
-            <a href="modules/MODULE_03_POWERSHELL.html">Module 03 →</a>
+        <div class="glossary-header">
+            <h1>Keyword Glossary</h1>
+            <p style="color: var(--dim); font-size: 0.9rem;">Every technical term in the course, defined in plain English. Click any term to jump to the module where it's used.</p>
         </div>
-
-        <h1>Term Glossary & Crash Courses</h1>
-        <p style="color: var(--dim); margin-bottom: 2rem;">Every neon term in the course links here. 2-minute crash courses. No prerequisites. No assumptions.</p>
-
-        <input type="text" class="search-box" placeholder="Search terms... (e.g., 'token', 'privesc', 'MOTW')" id="searchBox">
-
-        <div class="filter-buttons">
-            <button class="filter-btn active" onclick="filterTerms('all')">All</button>
-            <button class="filter-btn" onclick="filterTerms('windows')">Windows</button>
-            <button class="filter-btn" onclick="filterTerms('linux')">Linux</button>
-            <button class="filter-btn" onclick="filterTerms('network')">Network</button>
-            <button class="filter-btn" onclick="filterTerms('malware')">Malware</button>
-            <button class="filter-btn" onclick="filterTerms('crypto')">Crypto</button>
-            <button class="filter-btn" onclick="filterTerms('social')">Social Engineering</button>
+        
+        <input type="text" class="search-box" placeholder="Search terms..." id="searchBox">
+        
+        <div class="category-filter">
+            <button class="active" onclick="filterCategory('all')">ALL</button>
+            <button onclick="filterCategory('windows')">WINDOWS</button>
+            <button onclick="filterCategory('network')">NETWORK</button>
+            <button onclick="filterCategory('malware')">MALWARE</button>
+            <button onclick="filterCategory('crypto')">CRYPTO</button>
+            <button onclick="filterCategory('social')">SOCIAL</button>
         </div>
-
-        <div id="terms-container">
-            <!-- WINDOWS TERMS -->
-            <div class="term-card" data-category="windows">
-                <span class="category windows">WINDOWS</span>
-                <h3>Token</h3>
-                <p class="definition">A data structure that represents your identity and permissions on a Windows system. Every process has a token that tells the OS "who you are" and "what you can do."</p>
-                <div class="analogy">
-                    💡 Analogy: A token is like your employee ID badge. It has your photo (identity), your department (group membership), and your access level (privileges). Show the badge to the scanner, the door opens. Show a SYSTEM token to Windows, every door opens.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 08 (PrivEsc) — "Steal a SYSTEM token to become SYSTEM." Module 09 (Malware) — "Your token determines what the malware can do."
-                </div>
-            </div>
-
-            <div class="term-card" data-category="windows">
-                <span class="category windows">WINDOWS</span>
-                <h3>SeImpersonatePrivilege</h3>
-                <p class="definition">A Windows privilege that allows a process to impersonate another user. If you have this, you can become anyone — including SYSTEM — by intercepting their authentication.</p>
-                <div class="analogy">
-                    💡 Analogy: SeImpersonatePrivilege is like having a master key that can become any other key. The janitor has it to open all offices. Service accounts have it to act on behalf of users. Attackers want it to become admin.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 08 — "Check whoami /priv. See SeImpersonatePrivilege? You're one exploit away from SYSTEM."
-                </div>
-            </div>
-
-            <div class="term-card" data-category="windows">
-                <span class="category windows">WINDOWS</span>
-                <h3>UAC (User Account Control)</h3>
-                <p class="definition">The "Are you sure?" dialog in Windows. When you try to do something admin-level, UAC pops up asking for confirmation. It's a security boundary — not a security barrier. It can be bypassed.</p>
-                <div class="analogy">
-                    💡 Analogy: UAC is like a speed bump, not a wall. It slows you down but doesn't stop a determined driver. A real wall would require a password every time. UAC just asks "are you sure?" and most users click "yes" without reading.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 08 — "UAC bypass: fodhelper.exe, computerdefaults.exe, sdclt.exe. All signed Microsoft binaries that auto-elevate."
-                </div>
-            </div>
-
-            <!-- MALWARE TERMS -->
-            <div class="term-card" data-category="malware">
-                <span class="category malware">MALWARE</span>
-                <h3>Dropper</h3>
-                <p class="definition">A program that installs malware. It doesn't do the damage itself — it delivers the payload. Like a delivery truck that drops off a bomb, then drives away.</p>
-                <div class="analogy">
-                    💡 Analogy: A dropper is like a UPS driver. The driver (dropper) isn't the thief. They just deliver the package (payload) to your door. The package contains the actual malware. The driver leaves no fingerprints.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 09 — "Build a dropper: download payload, write to disk, execute, self-delete."
-                </div>
-            </div>
-
-            <div class="term-card" data-category="malware">
-                <span class="category malware">MALWARE</span>
-                <h3>IAT (Import Address Table)</h3>
-                <p class="definition">A list in every Windows program that says "I need these functions from these DLLs." AV scanners read this list to detect suspicious imports (like "CreateRemoteThread" or "VirtualAllocEx").</p>
-                <div class="analogy">
-                    💡 Analogy: IAT is like a shopping list. The program says "I need eggs from kernel32.dll, milk from ntdll.dll, and sugar from user32.dll." AV reads the list: "Wait, why does a calculator need lockpicks from advapi32.dll? Suspicious."
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 09 — "Dynamic API resolution: resolve imports at runtime, not in IAT. AV sees an empty shopping list — nothing suspicious."
-                </div>
-            </div>
-
-            <!-- NETWORK TERMS -->
-            <div class="term-card" data-category="network">
-                <span class="category network">NETWORK</span>
-                <h3>C2 (Command and Control)</h3>
-                <p class="definition">The communication channel between attacker and victim. The attacker sends commands; the victim sends results. Like a radio link between headquarters and a spy in the field.</p>
-                <div class="analogy">
-                    💡 Analogy: C2 is like a two-way radio. The attacker (HQ) says "take photos of the documents." The victim (spy) radios back "photos sent." If the radio is discovered, the spy is burned. So spies use disguised radios (DNS, HTTPS, Discord).
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 16 — "Build a C2: HTTP listener, beacon interval, jitter, encrypted commands."
-                </div>
-            </div>
-
-            <!-- SOCIAL ENGINEERING TERMS -->
-            <div class="term-card" data-category="social">
-                <span class="category social">SOCIAL ENGINEERING</span>
-                <h3>Pretext</h3>
-                <p class="definition">The fictional scenario you create to manipulate someone. "I'm IT support." "I'm the new guy." "I'm your boss's assistant." The pretext gives you a reason to ask for what you want.</p>
-                <div class="analogy">
-                    💡 Analogy: Pretext is like a costume. You dress as a plumber to enter the building. You dress as IT support to get passwords. The costume doesn't change who you are — it changes what people believe you are.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 17 — "Build a pretext: urgency + authority + fear + helpfulness. The four horsemen of social engineering."
-                </div>
-            </div>
-
-            <div class="term-card" data-category="social">
-                <span class="category social">SOCIAL ENGINEERING</span>
-                <h3>MOTW (Mark of the Web)</h3>
-                <p class="definition">A hidden flag Windows adds to files downloaded from the internet. It triggers warnings in Office, Edge, and Explorer. "This file came from the internet — are you sure?"</p>
-                <div class="analogy">
-                    💡 Analogy: MOTW is like a customs stamp on your passport. It says "this person came from outside." The stamp triggers extra screening. But if you enter through a trusted channel (diplomatic pouch = .iso file), no stamp, no screening.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 17 — "MOTW bypass: deliver payload inside .iso. Windows mounts it as a local drive. No MOTW. No warning."
-                </div>
-            </div>
-
-            <!-- CRYPTO TERMS -->
-            <div class="term-card" data-category="crypto">
-                <span class="category crypto">CRYPTO</span>
-                <h3>XOR Obfuscation</h3>
-                <p class="definition">A simple encryption method where each byte is combined with a key using XOR. Same operation encrypts and decrypts. Fast, reversible, breaks string signatures in AV.</p>
-                <div class="analogy">
-                    💡 Analogy: XOR is like a secret language where you replace every letter with the letter +3 positions ahead. A→D, B→E. The same rule decrypts: D→A, E→B. Simple, fast, but if the enemy figures out the +3 rule, it's broken.
-                </div>
-                
-                <div class="usage">
-                    <strong>In the course:</strong> Module 09 — "XOR strings at compile time: 'cmd.exe' becomes garbage bytes. AV string scan sees nothing. Runtime: XOR with key 0xB5, restore 'cmd.exe', execute."
-                </div>
-            </div>
+        
+        <div class="term-card" data-category="windows">
+            <h3>AMSI</h3>
+            <div class="category">WINDOWS // DEFENSE</div>
+            <div class="definition">Anti-Malware Scan Interface. A Windows security feature that scans scripts and commands before they run. If it sees something suspicious, it blocks it. Hackers bypass it to run malicious code undetected.</div>
+            <div class="example">Example: PowerShell script downloads a file → AMSI scans it → detects malicious pattern → blocks execution. Bypass: intercept AMSI's scan function and always return "clean".</div>
+            <a href="modules/MODULE_11_ROOTKITS.html" class="module-link">→ Module 11: Rootkits</a>
         </div>
-
-        <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+        
+        <div class="term-card" data-category="windows">
+            <h3>ETW</h3>
+            <div class="category">WINDOWS // LOGGING</div>
+            <div class="definition">Event Tracing for Windows. Microsoft's logging system that records everything happening on a computer — process starts, network connections, file access. Security teams use it to detect attacks. Hackers disable it to hide their tracks.</div>
+            <div class="example">Example: Malware starts → ETW logs "ProcessCreated: malware.exe" → SIEM alerts security team. Bypass: intercept ETW's write function and discard the log entry.</div>
+            <a href="modules/MODULE_11_ROOTKITS.html" class="module-link">→ Module 11: Rootkits</a>
+        </div>
+        
+        <div class="term-card" data-category="malware">
+            <h3>Shellcode</h3>
+            <div class="category">MALWARE // CODE</div>
+            <div class="definition">Small piece of code that does one thing: give the attacker control. It's not a full program — it's a payload, usually injected into another process. Named "shell" because it often opens a command shell (terminal) for the attacker.</div>
+            <div class="example">Example: 300 bytes of machine code that opens a network connection to attacker IP, then executes every command sent over that connection. Injected into Notepad.exe so it looks legitimate.</div>
+            <a href="modules/MODULE_05_SHELLCODE.html" class="module-link">→ Module 05: Shellcode</a>
+        </div>
+        
+        <div class="term-card" data-category="network">
+            <h3>C2</h3>
+            <div class="category">NETWORK // COMMAND</div>
+            <div class="definition">Command and Control. The communication channel between an attacker and their malware. The attacker sends commands ("download this file", "take a screenshot") and the malware sends back results. C2 channels hide in normal traffic — DNS, HTTPS, cloud storage.</div>
+            <div class="example">Example: Malware checks GitHub Gist every 5 minutes for encoded commands. Attacker edits the Gist → malware sees change → executes command. Looks like normal GitHub traffic to firewalls.</div>
+            <a href="modules/MODULE_16_C2.html" class="module-link">→ Module 16: C2 Framework</a>
+        </div>
+        
+        <div class="term-card" data-category="windows">
+            <h3>Privilege Escalation</h3>
+            <div class="category">WINDOWS // ATTACK</div>
+            <div class="definition">Going from a normal user to an administrator, or from administrator to SYSTEM. It's the difference between "can use the computer" and "can do anything to the computer." Most attacks start with normal access and escalate to total control.</div>
+            <div class="example">Example: Employee clicks phishing link → malware runs as standard user → finds Windows bug → exploits bug → becomes SYSTEM → installs rootkit → invisible forever.</div>
+            <a href="modules/MODULE_08_PRIVESC.html" class="module-link">→ Module 08: Privilege Escalation</a>
+        </div>
+        
+        <div class="term-card" data-category="malware">
+            <h3>Rootkit</h3>
+            <div class="category">MALWARE // STEALTH</div>
+            <div class="definition">Malware that hides itself. Not just from the user — from the operating system, from antivirus, from forensic tools. It intercepts system calls and lies: "No, that process isn't running." "No, that file doesn't exist." The most dangerous malware because you can't find what you can't see.</div>
+            <div class="example">Example: Rootkit hooks Windows API function "NtQuerySystemInformation" → when Task Manager asks "what processes are running?" → rootkit removes itself from the list → Task Manager shows everything except the rootkit.</div>
+            <a href="modules/MODULE_11_ROOTKITS.html" class="module-link">→ Module 11: Rootkits</a>
+        </div>
+        
+        <div class="term-card" data-category="social">
+            <h3>Phishing</h3>
+            <div class="category">SOCIAL // ATTACK</div>
+            <div class="definition">Fake email or message designed to steal credentials, install malware, or trick the user into revealing information. The email looks legitimate — same logo, same sender name, same writing style. Only the link is fake.</div>
+            <div class="example">Example: Email from "security@microsoft.com" says "Your account will be locked in 24 hours. Click here to verify." Link goes to attacker-controlled clone of Microsoft login page. User enters credentials → attacker has them.</div>
+            <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html" class="module-link">→ Module 17: Social Engineering</a>
+        </div>
+        
+        <div class="term-card" data-category="network">
+            <h3>Lateral Movement</h3>
+            <div class="category">NETWORK // PIVOT</div>
+            <div class="definition">Moving from one compromised computer to another. The attacker doesn't stop at the first machine — they use it as a stepping stone to reach other machines, especially servers and domain controllers. The goal: from one workstation to the entire network.</div>
+            <div class="example">Example: Compromise HR workstation → find credentials in browser → use credentials to RDP to finance server → find database connection string → connect to SQL server → dump customer database → exfiltrate.</div>
+            <a href="modules/MODULE_15_LATERAL.html" class="module-link">→ Module 15: Lateral Movement</a>
+        </div>
+        
+        <div class="term-card" data-category="crypto">
+            <h3>XOR Obfuscation</h3>
+            <div class="category">CRYPTO // EVASION</div>
+            <div class="definition">Simple encryption where every byte is flipped against a key. Not secure against real cryptanalysis, but enough to hide strings from antivirus signature matching. "malware.exe" XORed with 0x42 becomes "kco{wd.g" — no longer matches the signature.</div>
+            <div class="example">Example: Shellcode contains string "http://evil.com/c2" → XOR with 0xBE → becomes unreadable garbage → antivirus can't match "evil.com" → at runtime, XOR again with 0xBE → original string restored → connection established.</div>
+            <a href="modules/MODULE_13_EDR_EVASION.html" class="module-link">→ Module 13: EDR Evasion</a>
+        </div>
+        
+        <div class="term-card" data-category="windows">
+            <h3>HWBP</h3>
+            <div class="category">WINDOWS // BYPASS</div>
+            <div class="definition">Hardware Breakpoint. A CPU feature that stops execution when a specific memory address is accessed. Used for debugging. Hackers use it to intercept security functions — when AMSI tries to scan, the CPU triggers the breakpoint, the hacker's code runs first, and returns "clean" before AMSI can do its job.</div>
+            <div class="example">Example: Set HWBP on AmsiScanBuffer function → Windows calls AmsiScanBuffer to check if script is malicious → CPU pauses, calls hacker's handler → handler returns S_OK (clean) → Windows thinks script is safe → executes it.</div>
+            <a href="modules/MODULE_11_ROOTKITS.html" class="module-link">→ Module 11: Rootkits</a>
         </div>
     </div>
-
+    
     <script>
-        function filterTerms(category) {
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
             const cards = document.querySelectorAll('.term-card');
-            const buttons = document.querySelectorAll('.filter-btn');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+        
+        // Category filter
+        function filterCategory(category) {
+            const cards = document.querySelectorAll('.term-card');
+            const buttons = document.querySelectorAll('.category-filter button');
             
             buttons.forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
@@ -282,20 +286,6 @@
                 }
             });
         }
-        
-        document.getElementById('searchBox').addEventListener('input', function(e) {
-            const search = e.target.value.toLowerCase();
-            const cards = document.querySelectorAll('.term-card');
-            
-            cards.forEach(card => {
-                const text = card.textContent.toLowerCase();
-                if (text.includes(search)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
     </script>
 </body>
 </html>
