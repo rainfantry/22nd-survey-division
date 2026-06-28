@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RECON 101 — 22nd Survey Division</title>
+<style>
+  :root {
+    --bg: #0c0c0c;
+    --fg: #cccccc;
+    --green: #0f0;
+    --red: #f44;
+    --yellow: #ff0;
+    --cyan: #0ff;
+    --magenta: #f0f;
+    --amber: #ffb000;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+  }
+  .terminal {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,255,0,0.1);
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+  }
+  .header h1 {
+    color: var(--green);
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tab {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+  .tab:hover, .tab.active {
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .tab.active {
+    background: var(--green);
+    color: #000;
+  }
+  .content {
+    display: none;
+  }
+  .content.active {
+    display: block;
+  }
+  .cmd-block {
+    background: #0a0a0a;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  .prompt { color: var(--green); }
+  .command { color: var(--fg); }
+  .output { color: #888; margin-top: 8px; padding-left: 20px; }
+  .highlight { color: var(--cyan); }
+  .warning { color: var(--red); }
+  .suspicious { color: var(--amber); }
+  .note {
+    color: var(--magenta);
+    font-style: italic;
+    margin-top: 10px;
+    padding: 10px;
+    background: #1a1a1a;
+    border-left: 3px solid var(--magenta);
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="header">
+    <h1>Recon 101 — Know the Surface</h1>
+    <p>First Principle: You can't attack what you can't see. Map everything.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('winrecon')">WINRECON</button>
+    <button class="tab" onclick="showTab('ghost')">GHOST-SCRAPER</button>
+    <button class="tab" onclick="showTab('ports')">PORTS</button>
+    <button class="tab" onclick="showTab('processes')">PROCESSES</button>
+    <button class="tab" onclick="showTab('ad')">AD DISCOVERY</button>
+  </div>
+
+  <div id="winrecon" class="content active">
+    <div class="cmd-block">
+      <span class="prompt">PS&gt;</span> <span class="command">python winrecon.py</span>
+      <div class="output">
+        [*] WINRECON v4.2 — System Reconnaissance<br>
+        [*] Target: 192.168.1.92<br>
+        [*] Timestamp: 2026-06-28 22:15:00<br><br>
+        [+] OS: Windows 11 Pro 26200.8655<br>
+        [+] Hostname: LAPTOP-R32M8MLI<br>
+        [+] Domain: WORKGROUP<br>
+        [+] UAC: Enabled — ConsentPromptBehaviorAdmin: 5<br>
+        [+] Tamper Protection: <span class="warning">OFF</span> — Defender stoppable<br>
+        [+] SeDebugPrivilege: <span class="highlight">Available</span> — Privesc vector<br>
+        [+] Token: Standard User<br><br>
+        [+] Hotfixes: 12 installed<br>
+        [+] AV Engine: Kaspersky 21.15.8.467<br>
+        [+] AV Status: <span class="suspicious">Active (avp.exe PID 4968)</span>
+      </div>
+    </div>
+    <div class="note">WINRECON maps the surface before you touch it. UAC config, token privileges, AV status — all in one shot.</div>
+  </div>
+
+  <div id="ghost" class="content">
+    <div class="cmd-block">
+      <span class="prompt">$</span> <span class="command">python ghost_scraper.py --url 22div.com.au</span>
+      <div class="output">
+        [*] GHOST SCRAPER v2.1<br>
+        [*] Target: 22div.com.au<br><br>
+        [DNS] A 203.0.113.42 — Sydney, AU<br>
+        [DNS] MX 10 mail.22div.com.au<br>
+        [DNS] TXT "v=spf1 include:_spf.google.com ~all"<br><br>
+        [SUBDOMAINS] Found 3:<br>
+        • www.22div.com.au<br>
+        • mail.22div.com.au<br>
+        • <span class="suspicious">admin.22div.com.au</span> — Panel detected<br><br>
+        [PORTS] 80, 443, 8080, 22<br>
+        [TECH] Apache/2.4.41, PHP/7.4.3
+      </div>
+    </div>
+    <div class="note">GHOST-SCRAPER finds what the target doesn't want you to see. Subdomains, tech stack, exposed panels.</div>
+  </div>
+
+  <div id="ports" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS&gt;</span> <span class="command">Get-NetTCPConnection | Where-Object { $_.State -eq 'Listen' } | Select-Object LocalAddress,LocalPort,OwningProcess | Sort-Object LocalPort</span>
+      <div class="output">
+        LocalAddress LocalPort OwningProcess<br>
+        ------------ --------- -------------<br>
+        0.0.0.0             22          7008<br>
+        0.0.0.0            135          1720<br>
+        0.0.0.0            445             4<br>
+        ::                <span class="suspicious">1337</span>          9180  ← PostgreSQL<br>
+        0.0.0.0           <span class="suspicious">4443</span>         31248  ← C2 listener<br>
+        0.0.0.0           <span class="suspicious">8080</span>          6464  ← Apache<br>
+        0.0.0.0           9012          2068<br>
+        0.0.0.0           9013          2068<br>
+        ::                9051         10056<br>
+        ::                9090         34760
+      </div>
+    </div>
+    <div class="note">Every open port is a conversation. 4443 = C2. 1337 = PostgreSQL. 8080 = Apache. Know the surface.</div>
+  </div>
+
+  <div id="processes" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS&gt;</span> <span class="command">Get-Process | Sort-Object CPU -Descending | Select-Object -First 10</span>
+      <div class="output">
+        Name        Id       CPU<br>
+        ----        --       ---<br>
+        python    31248    245.67<br>
+        avp        4968     89.23<br>
+        postgres   9180     45.12<br>
+        java      22516     34.56<br>
+        httpd      6464     23.45<br>
+        <span class="suspicious">iron_sun</span>  60076     12.34  ← Implant<br>
+        discord   10056      8.90
+      </div>
+    </div>
+    <div class="note">iron_sun PID 60076 — implant trying to callback. avp = Kaspersky watching. Know what's running.</div>
+  </div>
+
+  <div id="ad" class="content">
+    <div class="cmd-block">
+      <span class="prompt">PS&gt;</span> <span class="command">Get-ADUser -Filter * | Select-Object Name, SamAccountName, Enabled</span>
+      <div class="output">
+        Name          SamAccountName  Enabled<br>
+        ----          --------------  -------<br>
+        Administrator Administrator   True<br>
+        Guest         Guest           False<br>
+        gwu07         gwu07           True<br>
+        sqlservice    sqlservice      True<br>
+        backupadmin   backupadmin     <span class="highlight">True</span>  ← Service account<br><br>
+        [+] Domain: WORKGROUP (not AD joined)<br>
+        [+] Local accounts only — no Kerberos<br>
+        [+] Lateral movement: pass-the-hash or credential reuse
+      </div>
+    </div>
+    <div class="note">Not AD joined — local accounts only. Pass-the-hash or credential reuse for lateral movement.</div>
+  </div>
+</div>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
