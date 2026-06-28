@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 02 — Recon // SKYWALKER</title>
+<style>
+  :root {
+    --bg: #0c0c0c; --fg: #cccccc; --green: #0f0; --red: #f44;
+    --yellow: #ff0; --cyan: #0ff; --magenta: #f0f; --prompt: #0f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--fg); font-family: 'Segoe UI', Tahoma, sans-serif; font-size: 15px; line-height: 1.7; padding: 20px; min-height: 100vh; }
+  .container { max-width: 1000px; margin: 0 auto; }
+  .header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid #333; }
+  .header h1 { color: var(--green); font-size: 32px; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; }
+  .header .subtitle { color: #666; font-size: 16px; }
+  .section { margin-bottom: 40px; padding: 25px; background: #111; border: 1px solid #222; border-radius: 8px; }
+  .section-title { color: var(--yellow); font-size: 20px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; padding-left: 15px; border-left: 4px solid var(--yellow); }
+  .section-content { color: #bbb; }
+  .section-content p { margin-bottom: 15px; }
+  .code-block { background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 15px; margin: 15px 0; font-family: 'Consolas', monospace; font-size: 13px; overflow-x: auto; }
+  .code-block .prompt { color: var(--prompt); }
+  .code-block .output { color: #888; margin-top: 8px; padding-left: 20px; }
+  .code-block .hi { color: var(--green); }
+  .code-block .warn { color: #ffb000; }
+  .code-block .err { color: var(--red); }
+  .note { background: #1a1a1a; border-left: 4px solid var(--magenta); padding: 15px; margin: 20px 0; color: var(--magenta); font-style: italic; }
+  .callout { background: #0a1a0a; border: 1px solid #1a4a1a; border-left: 4px solid var(--green); padding: 15px; margin: 20px 0; color: #8ac88a; }
+  .callout-title { color: var(--green); font-weight: bold; margin-bottom: 8px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+  .critical { background: #1a0a0a; border: 1px solid #4a1a1a; border-left: 4px solid var(--red); padding: 15px; margin: 20px 0; color: #cc8888; }
+  .critical-title { color: var(--red); font-weight: bold; margin-bottom: 8px; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; }
+  .table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+  .table th { background: #1a1a1a; color: var(--yellow); padding: 10px; text-align: left; font-size: 12px; text-transform: uppercase; border: 1px solid #333; }
+  .table td { border: 1px solid #222; padding: 10px; color: #bbb; font-size: 13px; }
+  .table td:first-child { color: var(--green); font-family: monospace; }
+  .widget-container { margin: 40px 0; border: 2px solid #333; border-radius: 8px; overflow: hidden; }
+  .widget-header { background: #1a1a1a; padding: 15px; text-align: center; color: var(--green); font-size: 18px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #333; }
+  .widget-iframe { width: 100%; height: 650px; border: none; background: #000; }
+  .nav { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; }
+  .nav a { color: var(--green); text-decoration: none; padding: 10px 20px; border: 1px solid var(--green); border-radius: 4px; transition: all 0.3s; }
+  .nav a:hover { background: var(--green); color: #000; }
+  .finding { display: flex; gap: 12px; margin: 10px 0; align-items: flex-start; }
+  .finding-tag { background: #1a0000; color: var(--red); border: 1px solid #4a1a1a; padding: 2px 8px; font-size: 11px; font-family: monospace; white-space: nowrap; }
+  .finding-tag.ok { background: #001a00; color: var(--green); border-color: #1a4a1a; }
+  .finding-tag.warn { background: #1a1a00; color: #ffb000; border-color: #4a4a1a; }
+  .finding-text { color: #999; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Module 02 — Recon</h1>
+    <div class="subtitle">SKYWALKER doctrine: one script, full target picture, before you move.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 1: Recon Before Everything</div>
+    <div class="section-content">
+      <p>Recon is not optional. It's not prep. It IS the operation. Every command you run blind is noise. Every pivot you make without a target map is wasted time — and burned opsec.</p>
+      <p>SKYWALKER answers the five questions you need before any lateral move:</p>
+
+      <table class="table">
+        <tr><th>#</th><th>Question</th><th>SKYWALKER Section</th></tr>
+        <tr><td>1</td><td>What machine am I on?</td><td>§1 System Identity</td></tr>
+        <tr><td>2</td><td>What privileges do I have?</td><td>§2 User &amp; Privilege Context</td></tr>
+        <tr><td>3</td><td>Is AV active? What version?</td><td>§4 Defender / AV Status</td></tr>
+        <tr><td>4</td><td>What's on the network? Any pivots?</td><td>§6 Network State</td></tr>
+        <tr><td>5</td><td>What's the patch level? Which CVEs are open?</td><td>§7 Patch State</td></tr>
+      </table>
+
+      <div class="callout">
+        <div class="callout-title">// SKYWALKER rule</div>
+        Run this before you do anything else. The answers determine your entire move. Defender on? Use HWBP (Module 11). No admin token? Need UAC bypass (Module 08). Domain-joined? Use Kerberoast (Module 03). WORKGROUP? Pivot machine-to-machine via SMB or SSH.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 2: Real SKYWALKER Findings — LAPTOP-R32M8MLI</div>
+    <div class="section-content">
+      <p>This is the actual winrecon output from the 22DIV lab machine (192.168.1.92), run at 04:07:36 on 2026-06-28. These are not invented examples.</p>
+
+      <div class="finding"><span class="finding-tag warn">DOMAIN</span><span class="finding-text">WORKGROUP — no AD, no Kerberos, no domain admin path. Pivot via local creds or SSH keys.</span></div>
+      <div class="finding"><span class="finding-tag warn">PRIVILEGE</span><span class="finding-text">Current token: standard user. But gwu07 is in local Admins group — UAC bypass = SYSTEM.</span></div>
+      <div class="finding"><span class="finding-tag">CRITICAL</span><span class="finding-text">Tamper Protection OFF. Defender AMRunningMode = "Not running". Every protection layer False. Full payload deploy without evasion.</span></div>
+      <div class="finding"><span class="finding-tag">C2 ACTIVE</span><span class="finding-text">Port 4443, PID 31248, process = python. Active C2 listener. Cross-machine beacon from 192.168.1.42:11025 confirmed.</span></div>
+      <div class="finding"><span class="finding-tag warn">SECOND ADMIN</span><span class="finding-text">Unknown account 'apacw' (SID -1001), local admin, not disabled. Investigate — potential persistence backdoor.</span></div>
+      <div class="finding"><span class="finding-tag warn">SERVICES</span><span class="finding-text">TeamViewer on 5939, PostgreSQL on 1337 (world-accessible), Apache on 8080. Each is an attack surface.</span></div>
+      <div class="finding"><span class="finding-tag ok">PATCH</span><span class="finding-text">Last hotfix: KB5095093, 2026-06-24. Reasonably current. Secure Boot = 0 (disabled).</span></div>
+
+      <div class="critical">
+        <div class="critical-title">// Intelligence assessment</div>
+        Standard post-exploitation box. AV disabled = no evasion overhead. Admin group membership = UAC bypass for SYSTEM. Unknown account = pre-planted persistence. TeamViewer = credential harvest target. DB on 1337 = lateral data access. This is a soft target.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 3: winrecon.ps1 — How It Works</div>
+    <div class="section-content">
+      <p>The entire script is PowerShell. No binaries. No executables. Pure LOTL — it runs on any Windows machine with PowerShell 5.1+. Seven sections, each a specific intelligence category.</p>
+
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> Get-CimInstance Win32_ComputerSystem<br>
+        <div class="output"># §1: Hostname, manufacturer, model, RAM<br></div><br>
+        <span class="prompt">PS&gt;</span> whoami /all; Get-LocalUser<br>
+        <div class="output"># §2: Token, SID, group memberships, all local accounts<br></div><br>
+        <span class="prompt">PS&gt;</span> Get-MpComputerStatus<br>
+        <div class="output"># §4: Every Defender protection flag — your greenlight indicator<br></div><br>
+        <span class="prompt">PS&gt;</span> Get-NetTCPConnection | Where-Object {$_.State -eq 'Listen'}<br>
+        <div class="output"># §6: All listening ports with PIDs — find C2, DB, admin panels<br></div><br>
+        <span class="prompt">PS&gt;</span> Get-HotFix | Sort-Object InstalledOn -Descending<br>
+        <div class="output"># §7: Full patch list, newest first — find the gap</div>
+      </div>
+
+      <div class="note">Every line is a cmdlet you could run manually. winrecon.ps1 just chains them, formats the output, and adds the CRITICAL flags. Understanding the underlying cmdlets is the point — the script is the aggregator, not the magic.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Section 4: The Unknown Account — apacw</div>
+    <div class="section-content">
+      <p>Finding <strong>apacw</strong> in the local admins group is the most interesting result of this scan. This account:</p>
+
+      <div class="code-block">
+        <span class="prompt">PS&gt;</span> Get-LocalUser apacw | Format-List *<br>
+        <div class="output warn">
+          Name:             apacw<br>
+          SID:              S-1-5-21-2235627559-836241553-1517004315-1001<br>
+          Enabled:          True<br>
+          PasswordRequired: True<br>
+          LastLogon:        [check this]<br>
+        </div><br>
+        <span class="prompt">PS&gt;</span> net localgroup Administrators<br>
+        <div class="output hi">Administrator, apacw, gwu07  # apacw is a local admin</div><br>
+        <span class="prompt">PS&gt;</span> Get-WinEvent -LogName Security | Where-Object {$_.Id -eq 4624 -and $_.Message -match 'apacw'}<br>
+        <div class="output"># Check last logon events — was this account used recently?</div>
+      </div>
+
+      <p>Unknown local admin accounts are either: (a) pre-planted persistence by a prior attacker, (b) a leftover service account, or (c) a forgotten admin account. Each possibility has different implications for your operation.</p>
+    </div>
+  </div>
+
+  <div class="widget-container">
+    <div class="widget-header">SKYWALKER — Live Recon Demo</div>
+    <iframe class="widget-iframe" src="../widgets/winrecon_widget.html" title="WinRecon SKYWALKER Interactive Demo"></iframe>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Lab: Run SKYWALKER on Your Own Machine</div>
+    <div class="section-content">
+      <div class="code-block">
+        # Download and run winrecon.ps1 on any Windows machine<br><br>
+        <span class="prompt">PS&gt;</span> Set-ExecutionPolicy Bypass -Scope Process -Force<br>
+        <span class="prompt">PS&gt;</span> cd C:\Users\gwu07\vader-workspace\winrecon-lab<br>
+        <span class="prompt">PS&gt;</span> .\winrecon.ps1<br><br>
+        # Read each CRITICAL flag. For each one, ask:<br>
+        # What does this enable? What's my next move?<br><br>
+        # Then pivot to WUPC (.42) and run it again:<br>
+        <span class="prompt">PS&gt;</span> $sess = New-PSSession -ComputerName 192.168.1.42 -Credential (Get-Credential)<br>
+        <span class="prompt">PS&gt;</span> Invoke-Command -Session $sess -FilePath .\winrecon.ps1
+      </div>
+      <div class="note">Two machines. Two recon reports. Compare the privilege levels, the AV status, the open ports. The differences tell you which machine to attack first.</div>
+    </div>
+  </div>
+
+  <div class="nav">
+    <a href="MODULE_01_NETWORKING.html">← Module 01: Networking</a>
+    <a href="MODULE_03_PRIVESC.html">Module 03: Privilege Escalation →</a>
+  </div>
+</div>
+</body>
+</html>
