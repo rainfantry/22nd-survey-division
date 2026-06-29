@@ -1,5 +1,5 @@
 # Windows Defender Management — Mentor Reference Document
-# Source: mentor teachings
+# Source: asi dev [HTB] teachings
 # Classification: AUTHORIZED RESEARCH ONLY
 
 ---
