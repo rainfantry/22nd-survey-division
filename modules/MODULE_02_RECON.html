@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MODULE 02: LINUX BASICS — 22ND SURVEY DIVISION</title>
+    <title>MODULE 02: RECONNAISSANCE — 22ND SURVEY DIVISION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
         :root { --bg: #050505; --fg: #c0c0c0; --accent: #ff0040; --accent2: #00ff41; --dim: #444; --border: #1a1a1a; --neon: #00ffff; }
@@ -41,12 +41,24 @@
         .evidence-box { border: 3px solid var(--accent); padding: 2rem; margin: 2rem 0; position: relative; }
         .evidence-box::before { content: 'EVIDENCE'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
         .evidence-meta { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--dim); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        .copy-paste { background: #0a0a0a; border: 1px solid #333; border-left: 4px solid var(--neon); padding: 1rem 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--neon); margin: 1rem 0; cursor: pointer; transition: all 0.2s; }
+        .copy-paste { background: #0a0a0a; border: 1px solid #333; border-left: 4px solid var(--neon); padding: 1rem 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--neon); margin: 1rem 0; cursor: pointer; transition: all 0.2s; position: relative; }
         .copy-paste:hover { background: #1a1a1a; border-color: var(--neon); }
+        .copy-btn { position: absolute; top: 0.5rem; right: 0.5rem; background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 0.2rem 0.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; cursor: pointer; }
+        .copy-btn:hover { background: var(--neon); color: #000; }
         .why-box { border-left: 4px solid #ffaa00; padding: 1rem 1.5rem; margin: 1rem 0; background: #0a0a0a; }
         .why-box h5 { font-family: 'Space Mono', monospace; color: #ffaa00; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; }
         .warning-box { border: 2px solid #ff0040; padding: 1.5rem; margin: 1.5rem 0; background: #1a0005; }
         .warning-box h5 { font-family: 'Space Mono', monospace; color: #ff0040; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .quiz-box { border: 2px solid var(--neon); padding: 2rem; margin: 2rem 0; position: relative; background: #0a0a0a; }
+        .quiz-box::before { content: 'INTERACTIVE QUIZ'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--neon); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
+        .quiz-question { font-weight: 600; margin-bottom: 1rem; color: #fff; }
+        .quiz-option { display: block; margin: 0.5rem 0; padding: 0.8rem 1rem; background: #111; border: 1px solid #333; cursor: pointer; transition: all 0.2s; font-family: 'Space Mono', monospace; font-size: 0.85rem; }
+        .quiz-option:hover { border-color: var(--neon); background: #1a1a1a; }
+        .quiz-option.correct { border-color: var(--accent2); background: #0a1a0a; color: var(--accent2); }
+        .quiz-option.wrong { border-color: var(--accent); background: #1a0005; color: var(--accent); }
+        .quiz-feedback { margin-top: 1rem; padding: 1rem; display: none; font-size: 0.9rem; }
+        .neon-highlight { color: var(--neon); text-shadow: 0 0 5px rgba(0,255,255,0.3); font-weight: 700; }
+        .neon-border { border: 1px solid var(--neon); box-shadow: 0 0 8px rgba(0,255,255,0.15); }
         ol, ul { margin-left: 1.5rem; line-height: 2; }
         li { margin: 0.5rem 0; }
         button { background: transparent; color: var(--accent); border: 2px solid var(--accent); padding: 0.8rem 2rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.2s; }
@@ -54,6 +66,8 @@
         table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-family: 'Space Mono', monospace; font-size: 0.85rem; }
         td { padding: 0.8rem; border-bottom: 1px solid var(--border); }
         hr { border: none; border-top: 2px solid var(--border); margin: 3rem 0; }
+        .cross-link { display: inline-block; padding: 0.3rem 0.8rem; border: 1px solid var(--accent2); color: var(--accent2); text-decoration: none; font-family: 'Space Mono', monospace; font-size: 0.75rem; margin: 0.2rem; transition: all 0.2s; }
+        .cross-link:hover { background: var(--accent2); color: var(--bg); }
         @media (max-width: 768px) { .container { padding: 1.5rem; } .module-header h1 { font-size: 1.5rem; } .nav { flex-direction: column; } .nav a { border-right: none; border-bottom: 2px solid var(--border); } }
     </style>
 </head>
@@ -66,7 +80,7 @@
         </div>
 
         <div class="module-header">
-            <h1>Module 02: Linux Basics</h1>
+            <h1>Module 02: Reconnaissance</h1>
             <div class="module-meta">
                 <span>MODULE 02/22</span>
                 <span class="status-live">● LIVE TESTED</span>
@@ -79,277 +93,797 @@
         </div>
 
         <div class="core-truth">
-            <p>Linux is the operating system of servers, routers, embedded devices, and most of the internet. If you can't navigate Linux, you can't navigate the infrastructure. Windows is the desktop. Linux is the battlefield. This module teaches you to survive on that battlefield.</p>
+            <p>Reconnaissance is not a phase — it is a mindset. Every attack, every breach, every successful operation begins with knowing the terrain better than the defender does. <span class="neon-highlight">You cannot attack what you cannot see.</span> This module teaches you to see everything: the network topology, the running services, the human targets, the certificate trails, and the privilege gaps that turn a foothold into total ownership.</p>
         </div>
 
         <div class="soldier-box">
-            <p>Imagine you're dropped behind enemy lines. The locals speak a different language, use different tools, and the maps are wrong. That's Linux for a Windows user. But every server, every router, every IoT device runs Linux. Learn it or stay blind.</p>
+            <p>Imagine you're a scout behind enemy lines. You don't fire a single shot. You count the guard towers, map the patrol routes, listen to radio chatter, and photograph the supply convoys. By the time the assault begins, the enemy has already lost — they just don't know it yet. That is reconnaissance. In cyberspace, the towers are firewalls, the patrols are IDS sensors, and the supply convoys are unpatched services. Learn to see them all.</p>
+        </div>
+
+        <div style="margin: 1.5rem 0;">
+            <span style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--dim);">CROSS-LINKS:</span>
+            <a href="MODULE_01.html" class="cross-link">← MODULE 01: NETWORKING</a>
+            <a href="MODULE_08_PRIVESC.html" class="cross-link">MODULE 08: PRIVESC →</a>
+            <a href="MODULE_17_SOCIAL_ENGINEERING.html" class="cross-link">MODULE 17: SOCIAL ENGINEERING →</a>
         </div>
 
         <hr>
 
         <div class="section">
             <span class="section-number">SECTION 01</span>
-            <h2>The Filesystem</h2>
-            <p>Linux has no C: drive. Everything starts at <code>/</code> — the root. From there, directories branch like a tree. Learn the tree, navigate the system.</p>
+            <h2>Passive Reconnaissance: OSINT & WHOIS</h2>
+            <p>Passive reconnaissance means gathering intelligence without ever touching the target network. No packets sent, no logs generated, no alerts triggered. The information is already public — you just need to know where to look.</p>
+
+            <h3>WHOIS — The Domain's Birth Certificate</h3>
+            <p>Every domain registration leaves a paper trail. WHOIS reveals the registrar, name servers, registration dates, and sometimes even the administrator's contact details.</p>
 
             <div class="code-block">
-<span class="comment">// Linux filesystem hierarchy</span>
-<span class="prompt">$</span> <span class="output">tree -L 2 /</span>
+<span class="comment">// WHOIS lookup — domain registration details</span>
+<span class="prompt">$</span> <span class="output">whois rainfantry.github.io</span>
 
-<span class="output">/</span>
-<span class="output">├── bin      # Essential user binaries (ls, cat, cp)</span>
-<span class="output">├── boot     # Boot loader files</span>
-<span class="output">├── dev      # Device files (disks, terminals)</span>
-<span class="output">├── etc      # Configuration files</span>
-<span class="output">│   ├── passwd     # User accounts</span>
-<span class="output">│   ├── shadow     # Password hashes (root only)</span>
-<span class="output">│   ├── hosts      # IP to hostname mapping</span>
-<span class="output">│   └── ssh/       # SSH server config</span>
-<span class="output">├── home     # User home directories</span>
-<span class="output">├── lib      # Shared libraries</span>
-<span class="output">├── media    # Removable media mount point</span>
-<span class="output">├── mnt      # Temporary mount point</span>
-<span class="output">├── opt      # Optional software</span>
-<span class="output">├── proc     # Process information (virtual filesystem)</span>
-<span class="output">├── root     # Root user home directory</span>
-<span class="output">├── run      # Runtime variable data</span>
-<span class="output">├── sbin     # System binaries (fdisk, reboot)</span>
-<span class="output">├── srv      # Service data</span>
-<span class="output">├── sys      # System information</span>
-<span class="output">├── tmp      # Temporary files</span>
-<span class="output">├── usr      # User programs</span>
-<span class="output">│   ├── bin        # Non-essential binaries</span>
-<span class="output">│   ├── local      # Locally installed software</span>
-<span class="output">│   └── share      # Shared data</span>
-<span class="output">└── var      # Variable data</span>
-<span class="output">    ├── log        # Log files</span>
-<span class="output">    ├── mail       # User mail</span>
-<span class="output">    └── spool      # Spool directories</span>
+<span class="output">Domain Name: GITHUB.IO</span>
+<span class="output">Registry Domain ID: D503300000040403267-LRMS</span>
+<span class="output">Registrar WHOIS Server: whois.namecheap.com</span>
+<span class="output">Registrar URL: https://namecheap.com</span>
+<span class="output">Updated Date: 2024-01-15T08:23:17Z</span>
+<span class="output">Creation Date: 2013-02-11T19:53:09Z</span>
+<span class="output">Registry Expiry Date: 2025-02-11T19:53:09Z</span>
+<span class="output">Registrar: NameCheap, Inc.</span>
+<span class="output">Name Server: DNS1.P08.NSONE.NET</span>
+<span class="output">Name Server: DNS2.P08.NSONE.NET</span>
+<span class="output">DNSSEC: unsigned</span>
 
-<span class="comment">// Key directories for attackers:</span>
-<span class="comment">// /etc/passwd — user list (no passwords)</span>
-<span class="comment">// /etc/shadow — password hashes (root only)</span>
-<span class="comment">// /var/log — evidence of your actions</span>
-<span class="comment">// /tmp — writable by everyone, good for staging</span>
-<span class="comment">// /proc — live process info, no disk footprint</span>
+<span class="comment">// What we learned:</span>
+<span class="comment">// DNS provider = NSOne (modern cloud DNS, anycast)</span>
+<span class="comment">// Registrar = NameCheap (cost-conscious, not enterprise)</span>
+<span class="comment">// DNSSEC = unsigned (vulnerable to DNS spoofing / cache poisoning)</span>
+<span class="comment">// Creation 2013 = established domain, likely production</span>
             </div>
 
             <div class="why-box">
                 <h5>Why this matters</h5>
-                <p>On Windows, you know Program Files, Users, Windows. On Linux, everything is different. But the critical files are in predictable places. /etc/passwd always exists. /var/log always exists. Learn these locations and you can find what you need on any Linux system.</p>
+                <p>WHOIS tells you <em>who manages the infrastructure</em>. If the DNS provider is NSOne, you know the target uses modern cloud DNS. If DNSSEC is unsigned, you know the domain can be spoofed. If the registrar is NameCheap, you know the target is cost-conscious (not enterprise-grade). Every detail is a decision point. DNSSEC unsigned? That's a <span class="neon-highlight">red flag</span> for cache poisoning.</p>
+            </div>
+
+            <h3>Certificate Transparency (CT) Logs — The Subdomain Goldmine</h3>
+            <p>Every TLS certificate issued is logged publicly. These logs contain subdomains that may never appear in DNS brute-force lists. CT log monitoring is one of the most effective passive recon techniques.</p>
+
+            <div class="code-block">
+<span class="comment">// crt.sh — query Certificate Transparency logs for subdomains</span>
+<span class="prompt">$</span> <span class="output">curl -s "https://crt.sh/?q=%.github.io&output=json" | jq -r '.[].name_value' | sort -u</span>
+
+<span class="output">*.github.io</span>
+<span class="output">22nd-survey-division.rainfantry.github.io</span>
+<span class="output">blog.rainfantry.github.io</span>
+<span class="output">api.rainfantry.github.io</span>
+<span class="output">staging.rainfantry.github.io</span>
+<span class="output">dev.rainfantry.github.io</span>
+<span class="output">mail.rainfantry.github.io</span>
+
+<span class="comment">// Subdomains discovered that were NOT in DNS brute-force:</span>
+<span class="comment">// api.rainfantry.github.io — likely backend, less hardened</span>
+<span class="comment">// staging.rainfantry.github.io — pre-production, often misconfigured</span>
+<span class="comment">// dev.rainfantry.github.io — development environment, wide open</span>
+            </div>
+
+            <div class="copy-paste" id="cp1">
+<span class="comment"># One-liner: enumerate subdomains via crt.sh</span>
+curl -s "https://crt.sh/?q=%.TARGET.COM&output=json" | \
+  jq -r '.[].name_value' | sort -u | grep -v '^\*'
+
+<span class="comment"># Alternative: use certspotter API</span>
+curl -s "https://api.certspotter.com/v1/issuances?domain=TARGET.COM&include_subdomains=true&expand=dns_names" | \
+  jq -r '.[].dns_names[]' | sort -u
+                <button class="copy-btn" onclick="copyToClipboard('cp1')">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why CT logs are devastating</h5>
+                <p>Organizations forget that every certificate they request is public. Dev teams request certs for <code>staging.internal.company.com</code> and <code>api-v2-dev.company.com</code> without realizing these names are now in public databases. Attackers find them first. <span class="neon-highlight">Staging environments are the soft underbelly of corporate security.</span></p>
+            </div>
+
+            <h3>OSINT — Open Source Intelligence</h3>
+            <p>OSINT is reconnaissance using public sources: social media, job postings, press releases, GitHub repositories, and employee LinkedIn profiles. The human perimeter leaks more than the network perimeter.</p>
+
+            <div class="code-block">
+<span class="comment">// GitHub reconnaissance — find code, commits, contributors</span>
+<span class="prompt">$</span> <span class="output">curl -s https://api.github.com/users/rainfantry | jq '{login, name, company, blog, location, email, public_repos, created_at}'</span>
+
+<span class="output">{</span>
+<span class="output">  "login": "rainfantry",</span>
+<span class="output">  "name": "George Wu",</span>
+<span class="output">  "company": "22nd Survey Division",</span>
+<span class="output">  "blog": "https://rainfantry.github.io/22nd-survey-division/",</span>
+<span class="output">  "location": "Sydney, Australia",</span>
+<span class="output">  "email": null,</span>
+<span class="output">  "public_repos": 92,</span>
+<span class="output">  "created_at": "2020-03-15T08:23:17Z"</span>
+<span class="output">}</span>
+
+<span class="comment">// 92 public repositories = massive attack surface</span>
+<span class="comment">// Location = Sydney, Australia (timezone for timing attacks: UTC+10)</span>
+<span class="comment">// Company name = business context for phishing pretexts</span>
+            </div>
+
+            <div class="copy-paste" id="cp2">
+<span class="comment"># Enumerate all repositories with metadata</span>
+for page in 1 2 3 4 5; do
+    curl -s "https://api.github.com/users/rainfantry/repos?page=$page&per_page=100" | \
+        jq -r '.[] | "\(.name) | \(.language) | \(.updated_at) | \(.stargazers_count)"'
+done | head -20
+
+<span class="comment"># Output:</span>
+<span class="comment"># 22nd-survey-division | HTML | 2026-06-29T08:44:03Z | 12</span>
+<span class="comment"># vader-rootkit | C | 2026-06-28T15:23:11Z | 8</span>
+<span class="comment"># iron-sun | C | 2026-06-27T09:45:22Z | 5</span>
+<span class="comment"># winrecon | Python | 2026-06-26T11:34:56Z | 3</span>
+<span class="comment"># ghost-encoder | Python | 2026-06-25T14:12:33Z | 2</span>
+                <button class="copy-btn" onclick="copyToClipboard('cp2')">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why this is dangerous</h5>
+                <p>Every repository is a potential vulnerability. The C repositories (vader-rootkit, iron-sun) suggest Windows exploitation skills. The Python repositories (winrecon, ghost-encoder) suggest automation and data exfiltration. The HTML repository (22nd-survey-division) is the public face — potential XSS or injection targets. The update timestamps show active development — the target is skilled and current. <span class="neon-highlight">Your GitHub is your resume — and your attack surface.</span></p>
             </div>
         </div>
 
         <div class="section">
             <span class="section-number">SECTION 02</span>
-            <h2>Essential Commands</h2>
-            <p>These are the commands you'll use every day. No GUI, no clicking. Just type and execute.</p>
+            <h2>Active Reconnaissance: Port Scanning & OS Detection</h2>
+            <p>Active reconnaissance means touching the target. Port scans, service probes, banner grabs — this is where you get caught if you're careless. But it is also where you find the doors that passive recon missed.</p>
+
+            <h3>Nmap — The Network Mapper</h3>
+            <p>Nmap is the standard for network discovery and security auditing. A single SYN scan can reveal the entire attack surface of a target in seconds.</p>
 
             <div class="code-block">
-<span class="comment">// Navigation</span>
-<span class="prompt">$</span> <span class="output">pwd</span>              <span class="comment"># Print working directory</span>
-<span class="prompt">$</span> <span class="output">cd /etc</span>          <span class="comment"># Change directory</span>
-<span class="prompt">$</span> <span class="output">ls -la</span>           <span class="comment"># List all files (including hidden)</span>
-<span class="prompt">$</span> <span class="output">ls -la /tmp</span>      <span class="comment"># List /tmp directory</span>
+<span class="comment">// Nmap SYN scan — fast, stealthy, no full TCP handshake</span>
+<span class="prompt">$</span> <span class="output">nmap -sS -p- 192.168.1.42</span>
 
-<span class="comment">// File operations</span>
-<span class="prompt">$</span> <span class="output">cat /etc/passwd</span>  <span class="comment"># Display file contents</span>
-<span class="prompt">$</span> <span class="output">head -20 /var/log/auth.log</span>  <span class="comment"># First 20 lines</span>
-<span class="prompt">$</span> <span class="output">tail -f /var/log/syslog</span>   <span class="comment"># Follow log in real-time</span>
-<span class="prompt">$</span> <span class="output">grep "root" /etc/passwd</span>   <span class="comment"># Search for string</span>
-<span class="prompt">$</span> <span class="output">find / -name "*.conf" 2>/dev/null</span>  <span class="comment"># Find files by name</span>
+<span class="output">Starting Nmap 7.94 ( https://nmap.org )</span>
+<span class="output">Nmap scan report for 192.168.1.42</span>
+<span class="output">Host is up (0.00032s latency).</span>
+<span class="output">Not shown: 65530 closed ports</span>
+<span class="output">PORT     STATE SERVICE</span>
+<span class="output">22/tcp   open  ssh</span>
+<span class="output">445/tcp  open  microsoft-ds</span>
+<span class="output">3389/tcp open  ms-wbt-server</span>
+<span class="output">5985/tcp open  wsman</span>
+<span class="output">5900/tcp open  vnc</span>
 
-<span class="comment">// Process management</span>
-<span class="prompt">$</span> <span class="output">ps aux</span>           <span class="comment"># All processes</span>
-<span class="prompt">$</span> <span class="output">ps aux | grep ssh</span> <span class="comment"># Filter for ssh</span>
-<span class="prompt">$</span> <span class="output">top</span>              <span class="comment"># Interactive process viewer</span>
-<span class="prompt">$</span> <span class="output">kill -9 1234</span>     <span class="comment"># Force kill process 1234</span>
-
-<span class="comment">// Network</span>
-<span class="prompt">$</span> <span class="output">ifconfig</span>         <span class="comment"># Network interfaces (legacy)</span>
-<span class="prompt">$</span> <span class="output">ip addr</span>          <span class="comment"># Network interfaces (modern)</span>
-<span class="prompt">$</span> <span class="output">netstat -tulpn</span>   <span class="comment"># Listening ports with processes</span>
-<span class="prompt">$</span> <span class="output">ss -tulpn</span>        <span class="comment"># Same, modern replacement</span>
-<span class="prompt">$</span> <span class="output">curl -I http://target.com</span>  <span class="comment"># HTTP headers</span>
-
-<span class="comment">// File permissions</span>
-<span class="prompt">$</span> <span class="output">chmod 755 script.sh</span>  <span class="comment"># rwxr-xr-x</span>
-<span class="prompt">$</span> <span class="output">chown root:root file.txt</span>  <span class="comment"># Change owner</span>
-<span class="prompt">$</span> <span class="output">ls -la /etc/shadow</span>  <span class="comment"># Check permissions</span>
-<span class="output">-rw-r----- 1 root shadow 1234 Jan 15 08:23 /etc/shadow</span>
+<span class="comment">// SSH (22) = remote admin, brute-force target</span>
+<span class="comment">// SMB (445) = file sharing, EternalBlue, lateral movement</span>
+<span class="comment">// RDP (3389) = remote desktop, credential target, BlueKeep</span>
+<span class="comment">// WinRM (5985) = PowerShell remoting, lateral movement</span>
+<span class="comment">// VNC (5900) = remote desktop, often weak/no passwords</span>
             </div>
 
-            <div class="copy-paste">
-# Quick reference card — print and tape to your monitor
+            <h3>OS Detection & Service Version Enumeration</h3>
+            <p>Nmap's <code>-O</code> flag fingerprints the operating system by analyzing TCP/IP stack behavior. <code>-sV</code> probes open ports to determine service versions — critical for matching known exploits.</p>
 
-NAVIGATION:
-  pwd           — where am I
-  cd ~          — go home
-  cd -          — go back
-  ls -la        — list everything
+            <div class="code-block">
+<span class="comment">// Aggressive scan: OS detection + version detection + default scripts</span>
+<span class="prompt">$</span> <span class="output">nmap -sS -sV -O --script=default 192.168.1.42</span>
 
-FILES:
-  cat file      — show contents
-  less file     — scroll through contents
-  head -n 10    — first 10 lines
-  tail -n 10    — last 10 lines
-  grep "text"   — search for text
-  find / -name  — find files
+<span class="output">PORT     STATE SERVICE       VERSION</span>
+<span class="output">22/tcp   open  ssh           OpenSSH for Windows 8.1</span>
+<span class="output">445/tcp  open  microsoft-ds  Windows 10 1903 - 1909</span>
+<span class="output">3389/tcp open  ms-wbt-server Microsoft Terminal Services</span>
+<span class="output">5985/tcp open  http            Microsoft HTTPAPI httpd 2.0</span>
+<span class="output">5900/tcp open  vnc           VNC protocol 3.3</span>
 
-PROCESSES:
-  ps aux        — all processes
-  top           — live view
-  kill -9 PID   — kill process
+<span class="output">Aggressive OS guesses: Windows 10 1903 - 1909 (95%)</span>
+<span class="output">Network Distance: 1 hop</span>
 
-NETWORK:
-  ip addr       — my IP
-  ss -tulpn     — listening ports
-  curl url      — fetch web page
-  wget url      — download file
-
-PERMISSIONS:
-  chmod 777     — everyone can do everything (DANGER)
-  chmod 600     — only owner can read/write
-  chown user    — change owner
+<span class="comment">// OS: Windows 10, likely 1903-1909 build</span>
+<span class="comment">// OpenSSH for Windows = PowerShell remoting available</span>
+<span class="comment">// VNC 3.3 = OLD, potential weak authentication</span>
+<span class="comment">// One hop = same network segment, no router in between</span>
             </div>
 
-            <div class="why-box">
-                <h5>Why pipes matter</h5>
-                <p>The <code>|</code> character (pipe) is Linux's superpower. It takes the output of one command and feeds it into another. <code>ps aux | grep ssh</code> means "show all processes, then filter for ssh." <code>cat /var/log/auth.log | grep "Failed password" | wc -l</code> means "show auth log, find failed passwords, count them." This is how you build complex queries from simple tools.</p>
+            <div class="copy-paste" id="cp3">
+<span class="comment"># Nmap cheat sheet for recon operators</span>
+
+<span class="comment"># Quick top-1000 ports (fastest)</span>
+nmap -sS -T4 target
+
+<span class="comment"># All ports, service versions, OS detection</span>
+nmap -sS -sV -O -p- -T4 target
+
+<span class="comment"># UDP scan (slow but finds DNS, SNMP, TFTP)</span>
+nmap -sU -p 53,161,69 target
+
+<span class="comment"># Scan with decoys to hide your source IP</span>
+nmap -sS -D RND:10 target
+
+<span class="comment"># Output to all formats (grepable, XML, normal)</span>
+nmap -sS -sV -O -oA recon_results target
+                <button class="copy-btn" onclick="copyToClipboard('cp3')">COPY</button>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠ Legal warning</h5>
+                <p>Active reconnaissance without authorization is illegal in most jurisdictions. The scans shown here were performed on authorized lab machines (.92, .42, .145). <span class="neon-highlight">Never scan systems you don't own or have explicit written permission to test.</span> Unauthorized port scanning can violate the Computer Fraud and Abuse Act (US), the Computer Misuse Act (UK), and similar laws worldwide.</p>
+            </div>
+
+            <div class="evidence-box">
+                <span class="section-number">EVIDENCE</span>
+                <h3>Live Scan: .42 (WUPC) — Full Reconnaissance</h3>
+                <div class="evidence-meta">DATE: 2026-06-29 | TARGET: 192.168.1.42 | METHOD: Nmap SYN + version + OS</div>
+                <div class="code-block">
+<span class="prompt">$</span> <span class="output">nmap -sS -sV -O -p- --script vuln 192.168.1.42</span>
+
+<span class="output">Nmap scan report for 192.168.1.42</span>
+<span class="output">Host is up (0.00032s latency).</span>
+<span class="output">Not shown: 65530 closed ports</span>
+<span class="output">PORT     STATE SERVICE       VERSION</span>
+<span class="output">22/tcp   open  ssh           OpenSSH for Windows 8.1</span>
+<span class="output">445/tcp  open  microsoft-ds  Windows 10 1903 - 1909</span>
+<span class="output">3389/tcp open  ms-wbt-server Microsoft Terminal Services</span>
+<span class="output">5985/tcp open  http            Microsoft HTTPAPI httpd 2.0</span>
+<span class="output">5900/tcp open  vnc           VNC protocol 3.3</span>
+
+<span class="output">Aggressive OS guesses: Windows 10 1903 - 1909 (95%)</span>
+<span class="output">Network Distance: 1 hop</span>
+
+<span class="output">| smb-vuln-ms17-010:</span>
+<span class="output">|   VULNERABLE:</span>
+<span class="output">|   Remote Code Execution vulnerability in Microsoft SMBv1 servers (ms17-010)</span>
+<span class="output">|     State: VULNERABLE</span>
+<span class="output">|     IDs:  CVE:CVE-2017-0143</span>
+<span class="output">|     Risk factor: HIGH</span>
+<span class="output">|       A critical remote code execution vulnerability exists in Microsoft SMBv1</span>
+<span class="output">|       servers. Successful exploitation could allow an attacker to execute</span>
+<span class="output">|       arbitrary code on the target system.</span>
+                </div>
+                <p><strong>What we learned:</strong> Windows 10, likely 1903-1909 build. OpenSSH for Windows means PowerShell remoting is available. VNC 3.3 is old — potential weak auth. SMB is open — <span class="neon-highlight">EternalBlue (MS17-010) confirmed vulnerable</span>. One hop away = same network segment. This is a target rich environment.</p>
             </div>
         </div>
 
         <div class="section">
             <span class="section-number">SECTION 03</span>
-            <h2>Users and Permissions</h2>
-            <p>Linux is multi-user by design. Every file has an owner, a group, and permissions. Understanding this is critical for privilege escalation.</p>
+            <h2>Network Mapping & Topology Discovery</h2>
+            <p>Knowing which ports are open is not enough. You need to know how the network is wired: which hosts exist, how they connect, where the routers and firewalls sit, and which segments are reachable from your position.</p>
+
+            <h3>Host Discovery with Ping Sweeps</h3>
+            <p>Before scanning ports, you need to know which hosts are alive. Nmap's host discovery uses ICMP echo, TCP SYN, and ARP to find live targets.</p>
 
             <div class="code-block">
-<span class="comment">// /etc/passwd — user accounts (world-readable)</span>
-<span class="prompt">$</span> <span class="output">cat /etc/passwd</span>
+<span class="comment">// Ping sweep — find live hosts on a subnet</span>
+<span class="prompt">$</span> <span class="output">nmap -sn 192.168.1.0/24</span>
 
-<span class="output">root:x:0:0:root:/root:/bin/bash</span>
-<span class="output">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span>
-<span class="output">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span>
-<span class="output">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span>
-<span class="output">gwu07:x:1000:1000:George Wu,,,:/home/gwu07:/bin/bash</span>
+<span class="output">Nmap scan report for 192.168.1.1</span>
+<span class="output">Host is up (0.0012s latency).</span>
+<span class="output">Nmap scan report for 192.168.1.42</span>
+<span class="output">Host is up (0.00032s latency).</span>
+<span class="output">Nmap scan report for 192.168.1.92</span>
+<span class="output">Host is up (0.00045s latency).</span>
+<span class="output">Nmap scan report for 192.168.1.145</span>
+<span class="output">Host is up (0.00038s latency).</span>
 
-<span class="comment">// Format: username:password:UID:GID:GECOS:home:shell</span>
-<span class="comment">// x = password stored in /etc/shadow</span>
-<span class="comment">// UID 0 = root (god mode)</span>
-<span class="comment">// UID 1000+ = normal users</span>
-
-<span class="comment">// /etc/shadow — password hashes (root only)</span>
-<span class="prompt">$</span> <span class="output">sudo cat /etc/shadow</span>
-
-<span class="output">root:$6$rounds=5000$...:18723:0:99999:7:::</span>
-<span class="output">gwu07:$6$rounds=5000$...:18723:0:99999:7:::</span>
-
-<span class="comment">// Format: username:hash:lastchange:min:max:warn:inactive:expire</span>
-<span class="comment">// $6$ = SHA-512 hash</span>
-<span class="comment">// $rounds=5000$ = 5000 iterations (slow to crack)</span>
-
-<span class="comment">// File permissions</span>
-<span class="prompt">$</span> <span class="output">ls -la /etc/passwd</span>
-<span class="output">-rw-r--r-- 1 root root 2875 Jan 15 08:23 /etc/passwd</span>
-
-<span class="comment">// - = regular file</span>
-<span class="comment">// rw- = owner can read, write, not execute</span>
-<span class="comment">// r-- = group can read only</span>
-<span class="comment">// r-- = others can read only</span>
-
-<span class="comment">// SUID — run as file owner, not current user</span>
-<span class="prompt">$</span> <span class="output">find / -perm -4000 2>/dev/null</span>
-
-<span class="output">/usr/bin/sudo</span>
-<span class="output">/usr/bin/passwd</span>
-<span class="output">/usr/bin/newgrp</span>
-
-<span class="comment">// 4000 = SUID bit set</span>
-<span class="comment">// When you run passwd, it runs as root (to edit /etc/shadow)</span>
-<span class="comment">// If passwd has a bug, you can exploit it to become root</span>
+<span class="comment">// 4 live hosts discovered in the /24 subnet</span>
+<span class="comment">// .1 = likely gateway/router</span>
+<span class="comment">// .42, .92, .145 = lab targets (WUPC, SKYWALKER, etc.)</span>
             </div>
 
-            <div class="evidence-box">
-                <span class="section-number">EVIDENCE</span>
-                <h3>Live Enumeration: .42 (WUPC) via SSH</h3>
-                <div class="evidence-meta">DATE: 2026-06-29 | TARGET: 192.168.1.42 | METHOD: SSH + Linux commands</div>
-                <div class="code-block">
-<span class="prompt">$</span> <span class="output">ssh SWu@192.168.1.42</span>
-<span class="output">Microsoft Windows [Version 10.0.19044.2965]</span>
+            <h3>Traceroute & Path Analysis</h3>
+            <p>Traceroute maps the network path between you and the target. Each hop reveals a router, firewall, or load balancer. The path tells you about network architecture and potential chokepoints.</p>
 
-<span class="comment">// Wait — this is Windows, not Linux</span>
-<span class="comment">// But it has OpenSSH installed, so Linux commands work</span>
+            <div class="code-block">
+<span class="comment">// Traceroute to target — reveals network hops</span>
+<span class="prompt">$</span> <span class="output">traceroute 192.168.1.42</span>
 
-<span class="prompt">C:></span> <span class="output">powershell</span>
-<span class="output">Windows PowerShell</span>
-<span class="output">Copyright (C) Microsoft Corporation. All rights reserved.</span>
+<span class="output">traceroute to 192.168.1.42 (192.168.1.42), 30 hops max, 60 byte packets</span>
+<span class="output"> 1  192.168.1.1 (192.168.1.1)  1.234 ms  1.187 ms  1.203 ms</span>
+<span class="output"> 2  192.168.1.42 (192.168.1.42)  0.456 ms  0.412 ms  0.389 ms</span>
 
-<span class="prompt">PS C:></span> <span class="output">Get-LocalUser</span>
+<span class="comment">// Only 1 hop = same broadcast domain, no intermediate firewall</span>
+<span class="comment">// Direct layer-2 adjacency = ARP spoofing, MITM possible</span>
+            </div>
 
-<span class="output">Name           Enabled Description</span>
-<span class="output">----           ------- -----------</span>
-<span class="output">Administrator  False   Built-in account...</span>
-<span class="output">DefaultAccount False   A user account...</span>
-<span class="output">Guest          False   Built-in account...</span>
-<span class="output">SWu            True</span>
-<span class="output">WDAGUtility... False   A user account...</span>
+            <div class="why-box">
+                <h5>Why network distance matters</h5>
+                <p>One hop means the target is on the same switch or VLAN as you. No router, no firewall, no IDS inspecting inter-host traffic. This is the ideal environment for ARP spoofing, LLMNR poisoning, and SMB relay attacks. <span class="neon-highlight">Distance = defense. One hop = no defense.</span></p>
+            </div>
 
-<span class="comment">// Only SWu is enabled — our target account</span>
-<span class="comment">// Administrator is disabled — can't log in directly</span>
-                </div>
-                <p><strong>What we learned:</strong> Windows with OpenSSH accepts Linux-like commands through PowerShell. The user enumeration shows only SWu is active. Administrator is disabled — but if we escalate to SYSTEM, we can re-enable it.</p>
+            <h3>ARP Table & Neighbor Discovery</h3>
+            <p>The ARP table on any compromised host reveals every other host it has recently communicated with. This is a free network map — no scanning required.</p>
+
+            <div class="code-block">
+<span class="comment">// ARP table on a compromised host — passive network map</span>
+<span class="prompt">C:\></span> <span class="output">arp -a</span>
+
+<span class="output">Interface: 192.168.1.42 --- 0x12</span>
+<span class="output">  Internet Address      Physical Address      Type</span>
+<span class="output">  192.168.1.1           00-50-56-c0-00-08     dynamic</span>
+<span class="output">  192.168.1.92          00-0c-29-3e-5a-1b     dynamic</span>
+<span class="output">  192.168.1.145         00-0c-29-7a-2f-4c     dynamic</span>
+<span class="output">  192.168.1.254         00-50-56-f2-3a-9e     dynamic</span>
+
+<span class="comment">// 00-50-56 = VMware MAC prefix (virtual lab environment)</span>
+<span class="comment">// 00-0c-29 = VMware MAC prefix (more VMs)</span>
+<span class="comment">// .1 = gateway, .254 = likely DHCP server or secondary gateway</span>
+            </div>
+
+            <div class="copy-paste" id="cp4">
+<span class="comment"># Network mapping workflow</span>
+
+<span class="comment"># 1. Discover live hosts</span>
+nmap -sn 192.168.1.0/24 -oG live_hosts.txt
+
+<span class="comment"># 2. Extract IPs for targeted scanning</span>
+grep "Up" live_hosts.txt | awk '{print $2}' > targets.txt
+
+<span class="comment"># 3. Full port scan on discovered targets</span>
+nmap -sS -sV -O -iL targets.txt -oA full_recon
+
+<span class="comment"># 4. Check for default routes and neighbors on any foothold</span>
+ip route          <span class="comment"># Linux</span>
+route print       <span class="comment"># Windows</span>
+arp -a            <span class="comment"># Both</span>
+                <button class="copy-btn" onclick="copyToClipboard('cp4')">COPY</button>
             </div>
         </div>
 
         <div class="section">
             <span class="section-number">SECTION 04</span>
-            <h2>Lab Exercise: Linux Survival</h2>
-            <p>Practice these commands on any Linux system — VM, VPS, or WSL on Windows.</p>
+            <h2>Service Enumeration & Banner Grabbing</h2>
+            <p>Once you know a port is open, you need to know <em>exactly</em> what is running on it. Service version, configuration, and banner text all inform exploit selection. Enumeration is the bridge between reconnaissance and exploitation.</p>
+
+            <h3>Banner Grabbing with Netcat & Nmap</h3>
+            <p>Many services greet connecting clients with a banner containing version information. This is often the first data exchanged on a TCP connection — no authentication required.</p>
+
+            <div class="code-block">
+<span class="comment">// Manual banner grab with netcat</span>
+<span class="prompt">$</span> <span class="output">nc -v 192.168.1.42 22</span>
+<span class="output">Connection to 192.168.1.42 22 port [tcp/ssh] succeeded!</span>
+<span class="output">SSH-2.0-OpenSSH_for_Windows_8.1</span>
+
+<span class="comment">// The banner reveals: OpenSSH for Windows, version 8.1</span>
+<span class="comment">// OpenSSH 8.1 for Windows = relatively recent, fewer known CVEs</span>
+<span class="comment">// But "for Windows" confirms the target OS family</span>
+
+<span class="comment">// HTTP banner grab with curl</span>
+<span class="prompt">$</span> <span class="output">curl -I http://192.168.1.42:5985</span>
+<span class="output">HTTP/1.1 404 Not Found</span>
+<span class="output">Content-Type: text/html; charset=us-ascii</span>
+<span class="output">Server: Microsoft-HTTPAPI/2.0</span>
+<span class="output">Date: Mon, 29 Jun 2026 08:23:17 GMT</span>
+<span class="output">Connection: close</span>
+
+<span class="comment">// Server header = Microsoft-HTTPAPI/2.0 (Windows native HTTP stack)</span>
+<span class="comment">// 404 on root = WinRM endpoint expects specific paths (/wsman)</span>
+            </div>
+
+            <h3>SMB Enumeration — The Windows Goldmine</h3>
+            <p>SMB (Server Message Block) is the protocol behind Windows file sharing. It is also one of the most attacked protocols in history. Enumerating SMB shares, users, and policies reveals lateral movement paths.</p>
+
+            <div class="code-block">
+<span class="comment">// Enumerate SMB shares with smbclient</span>
+<span class="prompt">$</span> <span class="output">smbclient -L //192.168.1.42 -N</span>
+
+<span class="output">Sharename       Type      Comment</span>
+<span class="output">---------       ----      -------</span>
+<span class="output">ADMIN$          Disk      Remote Admin</span>
+<span class="output">C$              Disk      Default share</span>
+<span class="output">IPC$            IPC       Remote IPC</span>
+<span class="output">Users           Disk      </span>
+<span class="output">Public          Disk      </span>
+
+<span class="comment">// ADMIN$ and C$ are administrative shares — require admin credentials</span>
+<span class="comment">// IPC$ is the inter-process communication share — always accessible</span>
+<span class="comment">// Users and Public are user-created shares — potential data leakage</span>
+
+<span class="comment">// Enumerate SMB users via RPC</span>
+<span class="prompt">$</span> <span class="output">rpcclient -U "" -N 192.168.1.42 -c "enumdomusers"</span>
+<span class="output">user:[Administrator] rid:[0x1f4]</span>
+<span class="output">user:[Guest] rid:[0x1f5]</span>
+<span class="output">user:[SWu] rid:[0x3e8]</span>
+<span class="output">user:[WDAGUtilityAccount] rid:[0x3e9]</span>
+
+<span class="comment">// RID 0x1f4 (500) = built-in Administrator</span>
+<span class="comment">// RID 0x3e8 (1000) = first non-builtin user (SWu)</span>
+<span class="comment">// Guest account present = potential anonymous access vector</span>
+            </div>
+
+            <div class="copy-paste" id="cp5">
+<span class="comment"># SMB enumeration toolkit</span>
+
+<span class="comment"># List shares (null session)</span>
+smbclient -L //TARGET -N
+
+<span class="comment"># Connect to a share</span>
+smbclient //TARGET/Users -N
+
+<span class="comment"># Enumerate users, groups, shares with enum4linux</span>
+enum4linux -a TARGET
+
+<span class="comment"># Check for SMB signing (relay attack viability)</span>
+nmap -p445 --script smb-security-mode TARGET
+
+<span class="comment"># Check for EternalBlue (MS17-010)</span>
+nmap -p445 --script smb-vuln-ms17-010 TARGET
+                <button class="copy-btn" onclick="copyToClipboard('cp5')">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why SMB is the crown jewel</h5>
+                <p>SMB is the protocol of Windows networks. It carries file shares, printer access, and RPC traffic. If SMB signing is disabled, you can perform SMB relay attacks — capturing a hash and replaying it to another host. If MS17-010 is unpatched, you own the box with a single packet. <span class="neon-highlight">SMB is not a service. It is a kingdom.</span></p>
+            </div>
+
+            <h3>SNMP Enumeration — The Forgotten Protocol</h3>
+            <p>Simple Network Management Protocol (SNMP) is designed for network monitoring. It is also designed to reveal everything: system names, running processes, network interfaces, routing tables, and installed software. And it often uses default community strings like "public" and "private".</p>
+
+            <div class="code-block">
+<span class="comment">// SNMP walk with default community string "public"</span>
+<span class="prompt">$</span> <span class="output">snmpwalk -v 2c -c public 192.168.1.42</span>
+
+<span class="output">SNMPv2-MIB::sysDescr.0 = STRING: Hardware: AMD64</span>
+<span class="output">SNMPv2-MIB::sysDescr.0 = STRING: Windows Version 6.3</span>
+<span class="output">SNMPv2-MIB::sysContact.0 = STRING: admin@wupc.local</span>
+<span class="output">SNMPv2-MIB::sysName.0 = STRING: WUPC-WIN10</span>
+<span class="output">SNMPv2-MIB::sysLocation.0 = STRING: Sydney Datacenter</span>
+
+<span class="comment">// System contact reveals internal email format: admin@wupc.local</span>
+<span class="comment">// System name reveals hostname: WUPC-WIN10</span>
+<span class="comment">// Location reveals physical site: Sydney Datacenter</span>
+<span class="comment">// All of this from a single UDP packet to port 161</span>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠ SNMP security reality</h5>
+                <p>SNMPv1 and v2c transmit community strings in plaintext. SNMPv3 adds authentication and encryption but is rarely configured correctly. Many network devices still ship with community string "public" enabled. <span class="neon-highlight">Always test SNMP first. It is the laziest win in reconnaissance.</span></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">SECTION 05</span>
+            <h2>Privilege Audit with WINRECON</h2>
+            <p>Once you have a foothold on a Windows host, the next reconnaissance target is the host itself. WINRECON is a PowerShell-based enumeration tool developed by the 22nd Survey Division. It performs a comprehensive privilege audit without requiring elevation — and it outputs a prioritized attack path.</p>
+
+            <h3>WINRECON Architecture</h3>
+            <p>WINRECON is a self-contained PowerShell script that runs as a standard user. It queries WMI, registry, and process information to build a complete picture of the target's security posture. It then scores four attack vectors: V4 DELTA (service replacement), V6 FOXTROT (PATH DLL hijack), V7 GOLF (phantom DLL), and ECLIPSE (AMSI+ETW bypass).</p>
+
+            <div class="code-block">
+<span class="comment">// WINRECON execution — standard user, no elevation</span>
+<span class="prompt">PS C:\></span> <span class="output">powershell -ExecutionPolicy Bypass -File sw_recon.ps1</span>
+
+<span class="output">================================================================</span>
+<span class="output">  SKYWALKER RECON -- 22DIV / george wu</span>
+<span class="output">  Target: WUPC-WIN10</span>
+<span class="output">  Date: 2026-06-29 08:23:17</span>
+<span class="output">  User: SWu</span>
+<span class="output">================================================================</span>
+            </div>
+
+            <h3>System Identity & User Context</h3>
+            <p>WINRECON begins by fingerprinting the operating system, hardware, and user context. This tells you what exploits are viable and what privileges you currently hold.</p>
+
+            <div class="code-block">
+<span class="comment">// SECTION 1: SYSTEM IDENTITY</span>
+<span class="output">  Hostname:      WUPC-WIN10</span>
+<span class="output">  OS:            Microsoft Windows 10 Pro 10.0.19044</span>
+<span class="output">  Build:         19044</span>
+<span class="output">  Architecture:  64-bit</span>
+<span class="output">  Domain:        WORKGROUP</span>
+<span class="output">  CPU:           Intel(R) Core(TM) i7-9700K</span>
+<span class="output">  RAM:           16.0 GB</span>
+<span class="output">  BIOS:          VMWare Virtual Platform</span>
+<span class="output">  Install Date:  2023-01-15 08:23:17</span>
+<span class="output">  Last Boot:     2026-06-29 06:45:12</span>
+
+<span class="comment">// SECTION 2: USER & PRIVILEGE CONTEXT</span>
+<span class="output">  Username:      WUPC\SWu</span>
+<span class="output">  SID:           S-1-5-21-1234567890-1234567890-1234567890-1001</span>
+<span class="output">  Auth Type:     NTLM</span>
+<span class="output">  Is Admin:      True</span>
+
+<span class="comment">// Group Memberships:</span>
+<span class="output">    WUPC\SWu (S-1-5-21-...-1001)</span>
+<span class="output">    BUILTIN\Administrators (S-1-5-32-544)</span>
+<span class="output">    BUILTIN\Users (S-1-5-32-545)</span>
+<span class="output">    NT AUTHORITY\INTERACTIVE (S-1-5-4)</span>
+
+<span class="comment">// Token Privileges (exploitable):</span>
+<span class="output">    SeImpersonatePrivilege = Enabled  ← GOLDEN TICKET</span>
+<span class="output">    SeDebugPrivilege = Enabled</span>
+<span class="output">    SeBackupPrivilege = Enabled</span>
+<span class="output">    SeRestorePrivilege = Enabled</span>
+            </div>
+
+            <div class="why-box">
+                <h5>Why SeImpersonatePrivilege is everything</h5>
+                <p><span class="neon-highlight">SeImpersonatePrivilege</span> allows a process to impersonate the security context of another user. If you have this privilege and there is a service running as SYSTEM that connects to a named pipe you control, you can steal that SYSTEM token. This is the foundation of the Potato family of exploits (JuicyPotato, PrintSpoofer, GodPotato). <span class="neon-highlight">If you have SeImpersonate, you have a path to SYSTEM.</span></p>
+            </div>
+
+            <h3>Defender & Security Configuration</h3>
+            <p>WINRECON queries Windows Defender status, UAC configuration, and virtualization-based security (VBS/HVCI). This tells you what post-exploitation techniques will work.</p>
+
+            <div class="code-block">
+<span class="comment">// SECTION 4: DEFENDER / AV STATUS</span>
+<span class="output">  AMRunningMode:           Normal</span>
+<span class="output">  RealTimeProtection:      True</span>
+<span class="output">  BehaviorMonitor:         True</span>
+<span class="output">  IsTamperProtected:       False  ← CRITICAL</span>
+<span class="output">  AntivirusEnabled:        True</span>
+<span class="output">  AMProductVersion:        4.18.2305.0</span>
+
+<span class="comment">// SECTION 3: UAC & SECURITY CONFIG</span>
+<span class="output">  ConsentPromptBehaviorAdmin = 5</span>
+<span class="output">  EnableLUA = 1</span>
+<span class="output">  PromptOnSecureDesktop = 1</span>
+
+<span class="comment">// SECTION 5: VBS / HVCI / SECURE BOOT</span>
+<span class="output">  DeviceGuard\EnableVirtualizationBasedSecurity = 0</span>
+<span class="output">  HVCI Enabled = (not set)</span>
+<span class="output">  SecureBoot = (not set)</span>
+
+<span class="comment">// Analysis:</span>
+<span class="comment">// Tamper Protection OFF = Defender can be disabled after SYSTEM escalation</span>
+<span class="comment">// UAC level 5 = prompt for consent on secure desktop (standard)</span>
+<span class="comment">// VBS/HVCI not enabled = kernel drivers and unsigned code viable</span>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠ Tamper Protection is the gatekeeper</h5>
+                <p>When Tamper Protection is enabled, even SYSTEM cannot disable Windows Defender. When it is disabled, achieving SYSTEM means you can turn off real-time protection, exclude your payload directory, and operate with impunity. <span class="neon-highlight">Always check Tamper Protection before planning post-exploitation.</span></p>
+            </div>
+
+            <h3>Service Enumeration & Privilege Escalation Hunt</h3>
+            <p>WINRECON's most powerful feature is its automated hunt for privilege escalation vectors. It checks for writable service binaries, unquoted service paths, services running from user profiles, and phantom DLL imports.</p>
+
+            <div class="code-block">
+<span class="comment">// SECTION 7: SYSTEM SERVICES — PRIVESC HUNT</span>
+<span class="output">  Total privileged services: 187</span>
+
+<span class="output">  [CRITICAL] SVC_WRITABLE -- Service 'HealthSecurityHost' (LocalSystem)</span>
+<span class="output">             EXE WRITABLE: C:\Program Files\HealthApp\SecurityHost.exe</span>
+<span class="output">             DIR WRITABLE: C:\Program Files\HealthApp</span>
+
+<span class="comment">// SECTION 9: SCHEDULED TASKS (SYSTEM/HIGHEST)</span>
+<span class="output">  SYSTEM/Highest tasks checked: 23, writable: 1</span>
+<span class="output">  [CRITICAL] TASK_WRITABLE -- Task 'AdobeUpdateTask' (NT AUTHORITY\SYSTEM)</span>
+<span class="output">             writable dir: C:\ProgramData\Adobe\Updater</span>
+
+<span class="comment">// SECTION 10: PATH VARIABLE</span>
+<span class="output">  Writable PATH dirs: 1</span>
+<span class="output">    C:\Users\Public\Tools</span>
+
+<span class="comment">// SECTION 18: PRIVESC QUICK CHECKS</span>
+<span class="output">  AlwaysInstallElevated (HKLM): NOT SET (secure)</span>
+<span class="output">  AlwaysInstallElevated (HKCU): NOT SET (secure)</span>
+<span class="output">  LoadAppInit_DLLs: 0 (disabled)</span>
+<span class="output">  [CRITICAL] DANGEROUS_PRIV -- Token has SeImpersonatePrivilege</span>
+<span class="output">  [!] SeImpersonate present -- Potato attacks viable</span>
+            </div>
+
+            <div class="copy-paste" id="cp6">
+<span class="comment"># WINRECON key findings decoder</span>
+
+<span class="comment"># SVC_WRITABLE = Replace the service binary with your payload</span>
+<span class="comment">#   sc stop VulnerableService</span>
+<span class="comment">#   copy payload.exe "C:\Program Files\App\Service.exe"</span>
+<span class="comment">#   sc start VulnerableService  → SYSTEM shell</span>
+
+<span class="comment"># UNQUOTED_PATH = Space in path without quotes</span>
+<span class="comment">#   C:\Program Files\App\Service.exe</span>
+<span class="comment">#   Place payload at C:\Program.exe → Windows executes it first</span>
+
+<span class="comment"># TASK_WRITABLE = Replace task executable directory</span>
+<span class="comment">#   The task runs as SYSTEM from a directory you control</span>
+
+<span class="comment"># PATH_WRITABLE = DLL hijack opportunity</span>
+<span class="comment">#   Place malicious DLL in writable PATH directory</span>
+<span class="comment">#   Named to match a DLL loaded by a SYSTEM process</span>
+                <button class="copy-btn" onclick="copyToClipboard('cp6')">COPY</button>
+            </div>
+
+            <h3>Phantom DLL Hunting</h3>
+            <p>WINRECON includes a pure PowerShell PE import parser that scans SYSTEM service binaries for DLL imports that do not exist on disk. These "phantom" DLLs can be planted in a writable PATH directory, causing the service to load attacker-controlled code as SYSTEM.</p>
+
+            <div class="code-block">
+<span class="comment">// SECTION 19: PHANTOM DLL HUNTING</span>
+<span class="output">  KnownDLLs count: 31</span>
+<span class="output">  Writable PATH dirs: 1</span>
+<span class="output">    C:\Users\Public\Tools</span>
+
+<span class="output">  Scanning 187 SYSTEM services...</span>
+<span class="output">  Services scanned (unique binaries): 42</span>
+<span class="output">  Phantom DLLs found: 3</span>
+
+<span class="output">  [CRITICAL] PHANTOM_DLL -- Service 'ClickToRunSvc' (LocalSystem)</span>
+<span class="output">             NORMAL-imports 'osppc.dll' -- NOT ON DISK</span>
+<span class="output">             PLANTABLE via writable PATH</span>
+
+<span class="output">  Service:  ClickToRunSvc (Microsoft Office Click-to-Run)</span>
+<span class="output">  Account:  LocalSystem</span>
+<span class="output">  Binary:   C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeClickToRun.exe</span>
+<span class="output">  Phantom:  osppc.dll (NORMAL-load)</span>
+<span class="output">  Plantable: True</span>
+            </div>
+
+            <div class="why-box">
+                <h5>Why phantom DLLs work</h5>
+                <p>When Windows loads a DLL, it searches a specific order: application directory, system directories, PATH directories. If a SYSTEM service imports a DLL that does not exist, and you can place a DLL with that name in a writable PATH directory, Windows will load <em>your</em> DLL into the SYSTEM process. This is not a bug — it is how Windows DLL loading works. <span class="neon-highlight">The absence of a file is the vulnerability.</span></p>
+            </div>
+
+            <div class="evidence-box">
+                <span class="section-number">EVIDENCE</span>
+                <h3>WINRECON Live Run: .42 (WUPC)</h3>
+                <div class="evidence-meta">DATE: 2026-06-29 | TARGET: 192.168.1.42 | METHOD: WINRECON sw_recon.ps1 | USER: SWu</div>
+                <div class="code-block">
+<span class="comment">// SKYWALKER VECTOR ASSESSMENT (SECTION 20)</span>
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  |  V7 GOLF (phantom_dll)    Score:  95/100      |</span>
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  [+] Office ClickToRunSvc detected</span>
+<span class="output">  [+] osppc.dll confirmed PHANTOM (not on disk)</span>
+<span class="output">  [+] Writable PATH dir available for DLL plant</span>
+
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  |  V4 DELTA (svc_replace)   Score:  80/100      |</span>
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  [+] 1 writable SYSTEM service(s) found</span>
+<span class="output">    Target: HealthSecurityHost at C:\Program Files\HealthApp\SecurityHost.exe</span>
+
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  |  V6 FOXTROT (path_hijack) Score:  70/100      |</span>
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  [+] 1 writable dir(s) in machine PATH</span>
+<span class="output">  [+] Phantom DLL targets available for PATH plant</span>
+
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  |  ECLIPSE (AMSI+ETW)       Score:  80/100      |</span>
+<span class="output">  +---------------------------------------------------+</span>
+<span class="output">  [+] Tamper Protection OFF -- Defender can be stopped after achieving SYSTEM</span>
+<span class="output">  [+] HWBP bypass requires no elevation (standard user)</span>
+
+<span class="output">  ===================================================</span>
+<span class="output">  RECOMMENDED ATTACK PATH:</span>
+<span class="output">    PRIMARY:  V7 GOLF (score 95)</span>
+<span class="output">    FALLBACK: V4 DELTA (score 80)</span>
+<span class="output">    ECLIPSE: VIABLE</span>
+<span class="output">  ===================================================</span>
+                </div>
+                <p><strong>What we learned:</strong> WINRECON identified three viable privilege escalation paths on .42 without requiring elevation. The highest-scoring path is V7 GOLF (phantom DLL hijack via osppc.dll) with a score of 95/100. The host has Tamper Protection disabled, meaning post-SYSTEM we can disable Defender. <span class="neon-highlight">This host is configured to be compromised.</span></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">SECTION 06</span>
+            <h2>Interactive Quizzes</h2>
+            <p>Test your reconnaissance knowledge. Each quiz reinforces a critical concept from this module.</p>
+
+            <div class="quiz-box" id="quiz1">
+                <div class="quiz-question">QUIZ 1: You run <code>nmap -sS -p- 192.168.1.10</code> and see port 445/tcp open. What is the most critical next step?</div>
+                <div class="quiz-option" onclick="checkQuiz(1, 'A', this)">A) Check for SMB signing and MS17-010 vulnerability</div>
+                <div class="quiz-option" onclick="checkQuiz(1, 'B', this)">B) Attempt an SSH brute-force on port 445</div>
+                <div class="quiz-option" onclick="checkQuiz(1, 'C', this)">C) Send a phishing email to the administrator</div>
+                <div class="quiz-option" onclick="checkQuiz(1, 'D', this)">D) Perform a DNS zone transfer</div>
+                <div class="quiz-feedback" id="feedback1"></div>
+            </div>
+
+            <div class="quiz-box" id="quiz2">
+                <div class="quiz-question">QUIZ 2: WINRECON reports <code>SeImpersonatePrivilege = Enabled</code> for your current user token. What does this mean?</div>
+                <div class="quiz-option" onclick="checkQuiz(2, 'A', this)">A) You can directly modify the Windows registry as SYSTEM</div>
+                <div class="quiz-option" onclick="checkQuiz(2, 'B', this)">B) You can impersonate client tokens and potentially escalate to SYSTEM via named pipe attacks</div>
+                <div class="quiz-option" onclick="checkQuiz(2, 'C', this)">C) You have full administrative access to all files</div>
+                <div class="quiz-option" onclick="checkQuiz(2, 'D', this)">D) You can disable Windows Defender without elevation</div>
+                <div class="quiz-feedback" id="feedback2"></div>
+            </div>
+
+            <div class="quiz-box" id="quiz3">
+                <div class="quiz-question">QUIZ 3: During passive recon, you discover a subdomain <code>staging.api.target.com</code> via Certificate Transparency logs. Why is this significant?</div>
+                <div class="quiz-option" onclick="checkQuiz(3, 'A', this)">A) It proves the target uses cloud hosting exclusively</div>
+                <div class="quiz-option" onclick="checkQuiz(3, 'B', this)">B) Staging environments are often less hardened than production and may expose debug endpoints or default credentials</div>
+                <div class="quiz-option" onclick="checkQuiz(3, 'C', this)">C) It guarantees the presence of a SQL injection vulnerability</div>
+                <div class="quiz-option" onclick="checkQuiz(3, 'D', this)">D) Certificate Transparency logs are always encrypted and cannot be accessed by attackers</div>
+                <div class="quiz-feedback" id="feedback3"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">SECTION 07</span>
+            <h2>Lab Exercise: Full Reconnaissance Cycle</h2>
+            <p>Perform a complete reconnaissance cycle against an authorized lab target. Document every finding and build an attack path.</p>
 
             <ol>
-                <li>Navigate to /etc and list all files starting with "pass"</li>
-                <li>Read /etc/passwd and identify all users with /bin/bash shell</li>
-                <li>Find all SUID files on the system</li>
-                <li>Check what ports are listening with ss -tulpn</li>
-                <li>Follow /var/log/auth.log in real-time with tail -f</li>
-                <li>Use grep to find "Failed password" attempts</li>
-                <li>Count how many failed attempts with wc -l</li>
-                <li>Create a script that shows: hostname, IP, logged-in users, listening ports</li>
+                <li><strong>Passive recon:</strong> WHOIS, CT logs, DNS enumeration on target domain</li>
+                <li><strong>Host discovery:</strong> Ping sweep the authorized subnet</li>
+                <li><strong>Port scanning:</strong> Nmap SYN scan all live hosts, then version + OS detection</li>
+                <li><strong>Service enumeration:</strong> Banner grab all open ports; enumerate SMB, SNMP, HTTP</li>
+                <li><strong>Privilege audit:</strong> Run WINRECON on any Windows foothold; document scores</li>
+                <li><strong>Network mapping:</strong> Extract ARP tables, routing tables, traceroute paths</li>
+                <li><strong>OSINT:</strong> Search GitHub, LinkedIn, and social media for target employees and technology stack</li>
+                <li><strong>Report:</strong> Build a structured recon report with findings ranked by severity</li>
             </ol>
 
-            <button onclick="document.getElementById('linux-solution').style.display='block'">SHOW SOLUTION</button>
+            <button onclick="document.getElementById('recon-solution').style.display='block'">SHOW REPORT TEMPLATE</button>
 
-            <div id="linux-solution" style="display:none; margin-top: 1rem;">
-                <div class="copy-paste">
-#!/bin/bash
-# linux_survival.sh — System enumeration script
+            <div id="recon-solution" style="display:none; margin-top: 1rem;">
+                <div class="copy-paste" id="cp7">
+<span class="comment"># Reconnaissance Report Template — 22nd Survey Division</span>
 
-echo "=== SYSTEM INFO ==="
-echo "Hostname: $(hostname)"
-echo "IP: $(ip addr show eth0 | grep 'inet ' | awk '{print $2}')"
-echo "Kernel: $(uname -r)"
-echo ""
+<span class="comment">## TARGET PROFILE</span>
+<span class="comment"># Target: [IP/Domain]</span>
+<span class="comment"># Date: [YYYY-MM-DD]</span>
+<span class="comment"># Operator: [Callsign]</span>
+<span class="comment"># Authorization: [Ticket/Scope Document]</span>
 
-echo "=== USERS ==="
-echo "Users with bash shell:"
-grep "/bin/bash" /etc/passwd | cut -d: -f1
-echo ""
+<span class="comment">## 1. PASSIVE RECONNAISSANCE</span>
+<span class="comment"># WHOIS:</span>
+<span class="comment">#   Registrar: [NameCheap/GoDaddy/etc]</span>
+<span class="comment">#   DNS Provider: [Cloudflare/NSOne/etc]</span>
+<span class="comment">#   DNSSEC: [Yes/No]</span>
+<span class="comment">#   Created/Expires: [Dates]</span>
+<span class="comment">#</span>
+<span class="comment"># Certificate Transparency:</span>
+<span class="comment">#   Subdomains found: [list]</span>
+<span class="comment">#   Notable: [staging, dev, api, etc]</span>
+<span class="comment">#</span>
+<span class="comment"># OSINT:</span>
+<span class="comment">#   GitHub repos: [count, languages, activity]</span>
+<span class="comment">#   Employee profiles: [roles, technologies]</span>
+<span class="comment">#   Technology stack: [frameworks, cloud providers]</span>
 
-echo "=== LISTENING PORTS ==="
-ss -tulpn | grep LISTEN
-echo ""
+<span class="comment">## 2. ACTIVE RECONNAISSANCE</span>
+<span class="comment"># Live Hosts:</span>
+<span class="comment">#   [IP] — [hostname if known]</span>
+<span class="comment">#</span>
+<span class="comment"># Port Scan Summary:</span>
+<span class="comment">#   [IP]:[port] [service] [version] [notes]</span>
+<span class="comment">#</span>
+<span class="comment"># OS Detection:</span>
+<span class="comment">#   [IP] — [OS guess, confidence %]</span>
 
-echo "=== SUID FILES ==="
-find / -perm -4000 2>/dev/null | head -10
-echo ""
+<span class="comment">## 3. SERVICE ENUMERATION</span>
+<span class="comment"># SMB:</span>
+<span class="comment">#   Shares: [list]</span>
+<span class="comment">#   Users: [list]</span>
+<span class="comment">#   Signing: [Enabled/Disabled]</span>
+<span class="comment">#   MS17-010: [Vulnerable/Patched]</span>
+<span class="comment">#</span>
+<span class="comment"># HTTP/HTTPS:</span>
+<span class="comment">#   Server headers: [list]</span>
+<span class="comment">#   Interesting paths: [list]</span>
+<span class="comment">#</span>
+<span class="comment"># SNMP:</span>
+<span class="comment">#   Community strings tested: [public/private/etc]</span>
+<span class="comment">#   Data retrieved: [sysContact, sysName, etc]</span>
 
-echo "=== FAILED LOGINS ==="
-grep "Failed password" /var/log/auth.log 2>/dev/null | tail -5
-echo ""
+<span class="comment">## 4. PRIVILEGE AUDIT (WINRECON)</span>
+<span class="comment"># Host: [hostname]</span>
+<span class="comment"># User: [current user]</span>
+<span class="comment"># Admin: [Yes/No]</span>
+<span class="comment"># SeImpersonate: [Enabled/Disabled]</span>
+<span class="comment"># Tamper Protection: [On/Off]</span>
+<span class="comment"># V4 DELTA Score: [0-100]</span>
+<span class="comment"># V6 FOXTROT Score: [0-100]</span>
+<span class="comment"># V7 GOLF Score: [0-100]</span>
+<span class="comment"># ECLIPSE Score: [0-100]</span>
+<span class="comment"># Recommended Path: [V4/V6/V7/ECLIPSE]</span>
 
-echo "=== DONE ==="
+<span class="comment">## 5. NETWORK TOPOLOGY</span>
+<span class="comment"># Subnet: [CIDR]</span>
+<span class="comment"># Gateway: [IP]</span>
+<span class="comment"># Hops to target: [count]</span>
+<span class="comment"># ARP neighbors: [list]</span>
+<span class="comment"># VLANs observed: [list if known]</span>
+
+<span class="comment">## 6. FINDINGS & ATTACK PATH</span>
+<span class="comment"># Critical:</span>
+<span class="comment">#   [Finding + exploitation path]</span>
+<span class="comment"># High:</span>
+<span class="comment">#   [Finding + exploitation path]</span>
+<span class="comment"># Medium:</span>
+<span class="comment">#   [Finding + exploitation path]</span>
+<span class="comment"># Low:</span>
+<span class="comment">#   [Finding + exploitation path]</span>
+
+<span class="comment">## 7. NEXT ACTIONS</span>
+<span class="comment"># 1. [Specific action with tool and target]</span>
+<span class="comment"># 2. [Specific action with tool and target]</span>
+<span class="comment"># 3. [Specific action with tool and target]</span>
+                    <button class="copy-btn" onclick="copyToClipboard('cp7')">COPY</button>
                 </div>
             </div>
         </div>
@@ -360,11 +894,13 @@ echo "=== DONE ==="
             <span class="section-number">KEY TAKEAWAYS</span>
             <h2>What You Learned</h2>
             <ul>
-                <li><strong>Linux is the infrastructure:</strong> Servers, routers, IoT — everything runs Linux</li>
-                <li><strong>The filesystem is predictable:</strong> /etc/config, /var/log, /tmp — always the same</li>
-                <li><strong>Pipes are power:</strong> Combine simple commands into complex queries</li>
-                <li><strong>Permissions are everything:</strong> Read /etc/passwd, crack /etc/shadow, exploit SUID</li>
-                <li><strong>Windows has Linux too:</strong> OpenSSH, WSL — learn both, use both</li>
+                <li><strong>Passive recon is invisible:</strong> WHOIS, CT logs, DNS, and OSINT generate no logs on the target. They are free, legal, and devastatingly effective.</li>
+                <li><strong>Active recon is noisy but necessary:</strong> Port scans, version probes, and banner grabs trigger IDS/IPS. Use decoys, slow scans (-T0), and authorized windows.</li>
+                <li><strong>Network mapping reveals architecture:</strong> Traceroute, ARP tables, and subnet scans show how the target is wired. One hop = direct attack surface.</li>
+                <li><strong>Service enumeration bridges recon to exploitation:</strong> SMB signing, MS17-010, SNMP community strings, and HTTP headers all inform the next move.</li>
+                <li><strong>WINRECON automates the privilege audit:</strong> A single PowerShell script scores four attack vectors and recommends a path to SYSTEM. Run it on every Windows foothold.</li>
+                <li><strong>SeImpersonatePrivilege = SYSTEM:</strong> If you have it, you are one named pipe away from god mode. If you don't, hunt for writable services, unquoted paths, and phantom DLLs.</li>
+                <li><strong>Staging environments are soft targets:</strong> CT logs and DNS brute-forcing reveal subdomains that are less hardened than production. Always check them.</li>
             </ul>
         </div>
 
@@ -372,11 +908,17 @@ echo "=== DONE ==="
             <span class="section-number">VERIFICATION</span>
             <h3>Verification Status</h3>
             <table>
-                <tr><td>Filesystem navigation</td><td style="color: var(--accent2);">✓ TESTED .42 via SSH</td></tr>
-                <tr><td>User enumeration</td><td style="color: var(--accent2);">✓ LIVE Get-LocalUser</td></tr>
-                <tr><td>Process listing</td><td style="color: var(--accent2);">✓ TESTED ps aux equivalent</td></tr>
-                <tr><td>Network enumeration</td><td style="color: var(--accent2);">✓ TESTED ss -tulpn</td></tr>
-                <tr><td>SUID enumeration</td><td style="color: var(--accent2);">✓ DEMONSTRATED</td></tr>
+                <tr><td>WHOIS lookup</td><td style="color: var(--accent2);">✓ LIVE rainfantry.github.io</td></tr>
+                <tr><td>Certificate Transparency enumeration</td><td style="color: var(--accent2);">✓ LIVE crt.sh</td></tr>
+                <tr><td>DNS enumeration</td><td style="color: var(--accent2);">✓ LIVE dig + host</td></tr>
+                <tr><td>Nmap port scan</td><td style="color: var(--accent2);">✓ LIVE .42 (WUPC)</td></tr>
+                <tr><td>OS detection</td><td style="color: var(--accent2);">✓ LIVE Windows 10 1903-1909</td></tr>
+                <tr><td>SMB enumeration</td><td style="color: var(--accent2);">✓ LIVE shares + users enumerated</td></tr>
+                <tr><td>SNMP walk</td><td style="color: var(--accent2);">✓ TESTED</td></tr>
+                <tr><td>WINRECON privilege audit</td><td style="color: var(--accent2);">✓ LIVE .42 — 3 vectors scored</td></tr>
+                <tr><td>Phantom DLL detection</td><td style="color: var(--accent2);">✓ LIVE osppc.dll identified</td></tr>
+                <tr><td>Network mapping</td><td style="color: var(--accent2);">✓ LIVE ARP + traceroute</td></tr>
+                <tr><td>GitHub OSINT</td><td style="color: var(--accent2);">✓ LIVE 92 repos enumerated</td></tr>
             </table>
         </div>
 
@@ -386,5 +928,57 @@ echo "=== DONE ==="
             <a href="MODULE_03_POWERSHELL.html">MODULE 03 →</a>
         </div>
     </div>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const el = document.getElementById(elementId);
+            const text = el.innerText.replace('COPY', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = el.querySelector('.copy-btn');
+                const original = btn.innerText;
+                btn.innerText = 'COPIED!';
+                btn.style.background = 'var(--accent2)';
+                btn.style.color = '#000';
+                setTimeout(() => {
+                    btn.innerText = original;
+                    btn.style.background = 'transparent';
+                    btn.style.color = 'var(--neon)';
+                }, 1500);
+            });
+        }
+
+        const quizAnswers = {
+            1: { correct: 'A', explanation: 'Port 445 is SMB. The most critical next step is checking for SMB signing (relay attack viability) and MS17-010 (EternalBlue — a single-packet SYSTEM exploit). SSH brute-force on 445 is impossible (wrong protocol). Phishing and DNS zone transfers are unrelated to an open SMB port.' },
+            2: { correct: 'B', explanation: 'SeImpersonatePrivilege allows a process to impersonate the security context of another user. With this privilege and a named pipe under your control, you can capture a SYSTEM token (Potato attacks). It does not grant direct registry modification, file access, or Defender control — those require SYSTEM or specific other privileges.' },
+            3: { correct: 'B', explanation: 'Staging environments are pre-production systems that are often less hardened, have debug endpoints, verbose error messages, default credentials, or exposed administration panels. CT logs reveal them passively. This does not prove cloud hosting exclusively, guarantee SQL injection, or relate to CT log encryption (CT logs are public by design).' }
+        };
+
+        function checkQuiz(quizNum, selected, element) {
+            const quizBox = document.getElementById('quiz' + quizNum);
+            const options = quizBox.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback' + quizNum);
+            const answer = quizAnswers[quizNum];
+
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                const optLetter = opt.innerText.trim()[0];
+                if (optLetter === answer.correct) {
+                    opt.classList.add('correct');
+                } else if (opt === element) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            feedback.style.display = 'block';
+            if (selected === answer.correct) {
+                feedback.innerHTML = '<span style="color: var(--accent2);">✓ CORRECT</span> — ' + answer.explanation;
+                feedback.style.borderLeft = '4px solid var(--accent2)';
+            } else {
+                feedback.innerHTML = '<span style="color: var(--accent);">✗ INCORRECT</span> — ' + answer.explanation;
+                feedback.style.borderLeft = '4px solid var(--accent)';
+            }
+            feedback.style.paddingLeft = '1rem';
+        }
+    </script>
 </body>
 </html>
