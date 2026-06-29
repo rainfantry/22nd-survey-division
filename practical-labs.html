@@ -33,7 +33,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 .step-num{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--neon);margin-bottom:0.3rem;}
 .step-content{font-size:0.82rem;color:var(--dim);line-height:1.7;}
 
-.code-block{background:var(--bg3);border:1px solid var(--border);padding:1rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--fg);overflow-x:auto;white-space:pre-wrap;word-break:break-all;}
+.code-block{background:var(--bg3);border:1px solid var(--border);padding:1rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--fg);overflow-x:auto;white-space:pre-wrap;word-break:break-all;position:relative;}
+.copy-btn{position:absolute;top:0.5rem;right:0.5rem;background:var(--border);color:var(--dim);border:1px solid var(--dim);padding:0.2rem 0.5rem;font-family:'Space Mono',monospace;font-size:0.65rem;cursor:pointer;transition:all 0.2s;}
+.copy-btn:hover{background:var(--neon);color:var(--bg);border-color:var(--neon);}
+.copy-btn.copied{background:var(--green);color:var(--bg);border-color:var(--green);}
 .code-block .comment{color:var(--dim);font-style:italic;}
 .code-block .cmd{color:var(--neon);}
 .code-block .output{color:var(--green);}
@@ -662,6 +665,27 @@ int main() {
   Built for George Wu. Every command tested, every output verified, every failure documented.<br>
   If you can't copy-paste it and make it work, the lab is broken — not you.
 </div>
+
+<script>
+// Add copy buttons to all code blocks
+document.querySelectorAll('.code-block').forEach(block => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'COPY';
+  btn.onclick = function() {
+    const text = block.innerText.replace(/COPY$/, '').trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'COPIED!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'COPY';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  };
+  block.appendChild(btn);
+});
+</script>
 
 </div>
 </body>
