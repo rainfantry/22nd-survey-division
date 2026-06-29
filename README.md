@@ -6,7 +6,7 @@
 
 ## WHAT THIS IS
 
-22nd Survey Division is an Australian offensive security training platform built from **live research** — not sanitized tutorial content. 22 core modules + 3 bonus modules covering Windows internals, malware development, rootkits, C2 frameworks, Android RATs, social engineering, and malware analysis. Every technique taught from first principles with real tools tested against live AV engines.
+22nd Survey Division is an Australian offensive security training platform built from **live research** — not sanitized tutorial content. 22 modules covering Windows internals, malware development, rootkits, C2 frameworks, Android RATs, and social engineering. Every technique taught from first principles with real tools tested against live AV engines.
 
 **Built by:** George Wu (VADER) — Windows security researcher, Sydney  
 **Entity:** OCCUPATION FORCE CALLSIGN GSW PTY LTD (ACN 692 429 397)  
@@ -21,7 +21,7 @@
 | Page | What It Is | Link |
 |------|-----------|------|
 | **Main Site** | Course overview, pricing, proof | [rainfantry.github.io/22nd-survey-division](https://rainfantry.github.io/22nd-survey-division/) |
-| **Crash Course** | 22 core modules + 3 bonus modules + mentor teachings + 8-week plan | [→ Crash Course](https://rainfantry.github.io/22nd-survey-division/crash-course.html) |
+| **Crash Course** | 22 modules + mentor teachings + 8-week plan | [→ Crash Course](https://rainfantry.github.io/22nd-survey-division/crash-course.html) |
 | **Practical Labs** | Step-by-step exercises, SSH tests, defense bypasses | [→ Practical Labs](https://rainfantry.github.io/22nd-survey-division/practical-labs.html) |
 | **Module Tree** | Complete archive — every module, every link | [→ Module Tree](https://rainfantry.github.io/22nd-survey-division/module-tree.html) |
 | **Resources** | Cheat sheets, command reference, mentor documents | [→ Resources](https://rainfantry.github.io/22nd-survey-division/resources.html) |
@@ -33,7 +33,7 @@
 ### If You Know Nothing (Start Here)
 
 1. **Read the Crash Course** → [crash-course.html](https://rainfantry.github.io/22nd-survey-division/crash-course.html)
-   - 22 core modules + 3 bonus modules organized in 5 phases
+   - 22 modules organized in 5 phases
    - Mentor teachings explained in plain English
    - 8-week study plan with deliverables
 
@@ -73,7 +73,6 @@ For people who already know Python, C, or PowerShell but want to learn offensive
 | 12 | [Module 21: Capstone](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_21_CAPSTONE.html) | GeoDefend scenario — full operation from recon to exfil |
 | BONUS | [Module 22: Web Application Hacking](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_22_WEB_HACKING.html) | Recon, auth, SQLi, IDOR, API signature breaking |
 | BONUS | [Module 23: Infostealers](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_23_INFOSTEALERS.html) | Builder, victim, C2, detection rules, incident response |
-| BONUS | [Module 24: Malware Analysis & Backdoor Auditing](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_24_MALWARE_ANALYSIS.html) | Static analysis, IOC extraction, real backdoor discovery |
 
 ### Track B: Operators Learning Code (12-Module Fast Path)
 
@@ -140,7 +139,7 @@ These are the lessons from [HTB] that shape every module:
 
 ---
 
-## COURSE MODULES — 22 CORE + 3 BONUS MODULES, 5 PHASES
+## COURSE MODULES — 22 MODULES, 5 PHASES
 
 ### Phase 1: Foundation (Weeks 1-4)
 | Module | Title | Status |
@@ -185,9 +184,6 @@ These are the lessons from [HTB] that shape every module:
 | 21 | Capstone: GeoDefend | ✅ Live |
 
 **Bonus:** CEO Translation (board-ready risk language)
-**Bonus:** Module 22: Web Application Hacking
-**Bonus:** Module 23: Infostealers
-**Bonus:** Module 24: Malware Analysis & Backdoor Auditing
 
 ---
 
@@ -262,7 +258,7 @@ bash scripts/release.sh v2026.06.29
 - ✅ 27 quiz options: interactive
 - ✅ 28 module tree items: complete
 - ✅ All modules have mentor callouts and copy buttons
-- ✅ Bonus modules: Web Application Hacking, Infostealers, Malware Analysis & Backdoor Auditing
+- ✅ Bonus modules: Web Application Hacking, Infostealers
 ### Deployment
 
 | Target | Details |
