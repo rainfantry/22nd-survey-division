@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defensive Recon — Blue Team Cheat Sheet — 22nd Survey Division</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+:root{--bg:#050505;--bg2:#0a0a0a;--bg3:#111;--fg:#c0c0c0;--accent:#ff0040;--accent2:#00ff41;--dim:#444;--border:#1a1a1a;--neon:#00ffff;--cyan:#00ffff;--amber:#ffaa00;--green:#00ff41;--green-dim:#2a6a2a;--red:#ff0040;--purple:#ff00ff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-height:1.7;background-image:linear-gradient(rgba(255,0,64,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,0,64,0.03) 1px,transparent 1px);background-size:50px 50px;}
+.container{max-width:1100px;margin:0 auto;padding:3rem 2rem;}
+
+.header{border:3px solid var(--accent2);padding:2rem;margin-bottom:3rem;position:relative;box-shadow:0 0 30px rgba(0,255,65,0.15);}
+.header::before{content:'BLUE TEAM FIELD MANUAL';position:absolute;top:-12px;left:20px;background:var(--bg);color:var(--accent2);font-family:'Space Mono',monospace;font-size:0.7rem;padding:0 10px;letter-spacing:0.2em;}
+.header h1{font-family:'Space Mono',monospace;font-size:2.2rem;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:-0.02em;margin-bottom:0.5rem;text-shadow:0 0 15px var(--accent2);}
+.header p{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--dim);margin-bottom:1rem;}
+
+.nav{display:flex;gap:0;margin-bottom:3rem;border:2px solid var(--border);flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:100;}
+.nav a{color:var(--fg);text-decoration:none;padding:0.8rem 1.2rem;font-family:'Space Mono',monospace;font-size:0.75rem;border-right:2px solid var(--border);transition:all 0.2s;}
+.nav a:last-child{border-right:none;}
+.nav a:hover{background:var(--accent2);color:var(--bg);}
+
+.section{border:2px solid var(--border);margin:2rem 0;padding:2rem;position:relative;}
+.section-title{position:absolute;top:-14px;left:20px;background:var(--bg);font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--accent2);padding:0 10px;letter-spacing:0.1em;}
+.section h2{font-family:'Space Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--accent2);text-transform:uppercase;margin-bottom:1.5rem;letter-spacing:0.05em;}
+.section h3{font-family:'Space Mono',monospace;font-size:1rem;color:var(--accent);margin:1.5rem 0 1rem;text-transform:uppercase;letter-spacing:0.05em;}
+
+.intro{font-size:0.95rem;color:var(--fg);margin-bottom:1.5rem;}
+.intro strong{color:var(--accent2);}
+
+.code-block{background:var(--bg2);border:1px solid var(--border);padding:1rem;margin:1rem 0;position:relative;overflow-x:auto;}
+.code-block pre{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--fg);white-space:pre-wrap;word-break:break-word;}
+.copy-btn{position:absolute;top:0.5rem;right:0.5rem;background:var(--bg3);color:var(--accent2);border:1px solid var(--accent2);padding:0.3rem 0.6rem;font-family:'Space Mono',monospace;font-size:0.65rem;cursor:pointer;transition:all 0.2s;}
+.copy-btn:hover{background:var(--accent2);color:var(--bg);}
+
+.evidence-box{border:2px solid var(--accent2);background:rgba(0,255,65,0.05);padding:1.5rem;margin:1.5rem 0;}
+.evidence-header{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--accent2);margin-bottom:0.5rem;letter-spacing:0.1em;}
+.evidence-meta{font-size:0.75rem;color:var(--dim);margin-bottom:1rem;}
+.evidence-box p{font-size:0.9rem;margin-bottom:0.8rem;}
+.evidence-box strong{color:var(--accent2);}
+
+.warning-box{border:1px solid var(--red);padding:1rem;background:rgba(255,0,64,0.05);margin:1rem 0;font-size:0.85rem;}
+.warning-box::before{content:'// WARNING: ';color:var(--red);font-weight:700;font-family:'Space Mono',monospace;}
+
+.note-box{border:1px solid var(--amber);padding:1rem;background:rgba(255,170,0,0.05);margin:1rem 0;font-size:0.85rem;}
+.note-box::before{content:'// NOTE: ';color:var(--amber);font-weight:700;font-family:'Space Mono',monospace;}
+
+.red-team{color:var(--red);}
+.blue-team{color:var(--accent2);}
+.both-teams{color:var(--neon);}
+
+.tag{display:inline-block;padding:0.2rem 0.5rem;font-family:'Space Mono',monospace;font-size:0.65rem;margin-right:0.5rem;margin-bottom:0.5rem;border:1px solid var(--dim);}
+.tag-red{border-color:var(--red);color:var(--red);}
+.tag-green{border-color:var(--accent2);color:var(--accent2);}
+.tag-cyan{border-color:var(--neon);color:var(--neon);}
+
+.category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin:1.5rem 0;}
+.category-card{border:1px solid var(--border);padding:1rem;background:var(--bg2);}
+.category-card h4{font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);margin-bottom:0.5rem;}
+.category-card p{font-size:0.8rem;color:var(--dim);}
+
+.footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
+
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+::-webkit-scrollbar-thumb:hover{background:var(--dim);}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>DEFENSIVE RECON // BLUE TEAM CHEAT SHEET</h1>
+  <p>Find what the red team left behind. Situational awareness for Windows defenders.</p>
+</div>
+
+<div class="nav">
+  <a href="index.html">← HOME</a>
+  <a href="module-tree.html">MODULE TREE</a>
+  <a href="resources.html">RESOURCES</a>
+  <a href="crash-course.html">CRASH COURSE</a>
+  <a href="practical-labs.html">PRACTICAL LABS</a>
+  <a href="#identity">IDENTITY</a>
+  <a href="#network">NETWORK</a>
+  <a href="#processes">PROCESSES</a>
+  <a href="#persistence">PERSISTENCE</a>
+  <a href="#av">AV/EDR</a>
+  <a href="#files">FILES</a>
+  <a href="#vectors">VECTORS</a>
+</div>
+
+<div class="intro">
+  <p><strong>This page is dual-purpose.</strong> Red team operators use it to understand what defenders will see. Blue team defenders use it to hunt intruders. The same command reveals both perspectives — what matters is who runs it first.</p>
+  <p style="margin-top:1rem;">Every command is copy-paste ready. Each section includes a <span class="blue-team">blue team</span> use case, a <span class="red-team">red team</span> counter-thought, and a <span class="both-teams">live example</span> from authorized lab testing.</p>
+</div>
+
+<div class="evidence-box">
+  <div class="evidence-header">// LIVE CASE STUDY — C2 DISCOVERED ON RADON (.145)</div>
+  <div class="evidence-meta">2026-06-30 | Host: RADON_LAPTOP1 (192.168.1.145) | Operator: George Wu (VADER)</div>
+  <p><strong>What happened:</strong> A routine <code>netstat -ano</code> scan revealed a python.exe process listening on <code>0.0.0.0:5000</code> and <code>0.0.0.0:8667</code>. This was the operator's own C2 script (<code>c2_web.py --no-adb</code>), proving that defensive recon catches real backdoors.</p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>PS C:\Users\Ghaleb Jomma&gt; netstat -ano | findstr "LISTENING"
+
+  TCP    0.0.0.0:5000           0.0.0.0:0              LISTENING       13628
+  TCP    0.0.0.0:8667           0.0.0.0:0              LISTENING       13628
+
+PS C:\Users\Ghaleb Jomma&gt; tasklist /fi "pid eq 13628"
+
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+python.exe                   13628 Console                    2      7,476 K
+
+PS C:\Users\Ghaleb Jomma&gt; Get-CimInstance Win32_Process -Filter "ProcessId = 13628" | Select-Object CommandLine | Format-List
+
+CommandLine : "C:\Users\Ghaleb Jomma\scoop\apps\python\current\python.exe" c2_web.py --no-adb
+
+PS C:\Users\Ghaleb Jomma&gt; Get-CimInstance Win32_Process -Filter "ProcessId = 13628" | Select-Object CreationDate
+
+CreationDate
+------------
+27/06/2026 11:40:03 PM
+
+PS C:\Users\Ghaleb Jomma&gt; taskkill /pid 13628 /f
+SUCCESS: The process with PID 13628 has been terminated.</pre>
+  </div>
+  <p><strong>What this proves:</strong> A single <code>netstat</code> command found an unauthorized listener. The follow-up chain — PID → process name → command line → creation time → kill — is the exact workflow defenders need. This is why situational awareness wins.</p>
+  <p><strong>Mentor says:</strong> "Real attacks are carried remotely. If you can't see the network, you can't see the attack."</p>
+</div>
+
+<div class="section" id="identity">
+  <div class="section-title">// WHO ARE YOU</div>
+  <h2>Identity & Context</h2>
+  <p class="intro">Before you hunt, know what account you're running as, what privileges you have, and what machine you're on. This baseline prevents false assumptions.</p>
+
+  <span class="tag tag-green">BLUE TEAM</span>
+  <span class="tag tag-red">RED TEAM</span>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Current user and privileges
+whoami /all
+whoami /priv
+whoami /user
+
+# Environment variables
+$env:USERNAME; $env:USERDOMAIN; $env:COMPUTERNAME; $env:USERPROFILE
+
+# OS and system info
+systeminfo | findstr /C:"OS Name" /C:"OS Version" /C:"System Type" /C:"Domain" /C:"Boot Time" /C:"Hotfix"
+
+# One-liner baseline
+whoami /all && systeminfo | findstr /C:"OS" /C:"Domain" /C:"Boot" && ipconfig /all && net localgroup administrators</pre>
+  </div>
+
+  <div class="note-box">
+    <strong>Red team thought:</strong> If you land as a low-priv user, <code>whoami /priv</code> shows what you can escalate with. If you see <code>SeImpersonatePrivilege</code>, a Potato attack may be possible. If you see <code>SeDebugPrivilege</code>, you can dump LSASS.
+  </div>
+</div>
+
+<div class="section" id="network">
+  <div class="section-title">// NETWORK AWARENESS</div>
+  <h2>Network Recon</h2>
+  <p class="intro">The network never lies. Listening ports, established connections, and routing tables reveal persistence, C2, and lateral movement.</p>
+
+  <span class="tag tag-green">BLUE TEAM</span>
+  <span class="tag tag-red">RED TEAM</span>
+
+  <h3>Public IP & Interfaces</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Public IP
+powershell -c "(Invoke-WebRequest -UseBasicParsing https://api.ipify.org).Content"
+
+# All network config
+ipconfig /all
+
+# Routing table
+route print
+
+# DNS cache (recent lookups)
+ipconfig /displaydns | findstr "Record Name"</pre>
+  </div>
+
+  <h3>Listening Ports</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Classic netstat
+netstat -ano | findstr "LISTENING"
+
+# PowerShell equivalent with process names
+Get-NetTCPConnection | Where-Object State -eq Listen | Select-Object LocalAddress, LocalPort, OwningProcess, @{Name="ProcessName";Expression={(Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue).ProcessName}} | Format-Table -AutoSize
+
+# Established connections to external hosts
+Get-NetTCPConnection -State Established | Where-Object { $_.RemoteAddress -ne '127.0.0.1' -and $_.RemoteAddress -ne '::1' } | Select-Object LocalAddress, LocalPort, RemoteAddress, RemotePort, OwningProcess, @{Name="ProcessName";Expression={(Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue).ProcessName}} | Format-Table -AutoSize</pre>
+  </div>
+
+  <h3>What to Suspect</h3>
+  <div class="category-grid">
+    <div class="category-card">
+      <h4>🚨 HIGH RISK</h4>
+      <p>Python, PowerShell, or cmd.exe listening on any port. Unknown services on high ports. Processes listening on 0.0.0.0 from user profiles.</p>
+    </div>
+    <div class="category-card">
+      <h4>⚠️ MEDIUM RISK</h4>
+      <p>TeamViewer, AnyDesk, ScreenConnect, Chrome Remote Desktop. Legitimate tools used as RATs. Check ownership and context.</p>
+    </div>
+    <div class="category-card">
+      <h4>🔍 INVESTIGATE</h4>
+      <p>Repeated connections to uncommon IPs. DNS queries to DGA-like domains. Heavy outbound traffic from non-browser processes.</p>
+    </div>
+    <div class="category-card">
+      <h4>✅ USUALLY NORMAL</h4>
+      <p>Browser traffic to Google, Microsoft, CDN edges. Dropbox, OneDrive, Discord, Spotify. Correlate with installed software.</p>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <strong>Red team counter:</strong> Use common ports (443, 80) and process injection into explorer.exe or a browser to blend in. The case study above was caught because python.exe was listening directly — a rookie mistake.
+  </div>
+</div>
+
+<div class="section" id="processes">
+  <div class="section-title">// RUNNING PROCESSES</div>
+  <h2>Process Hunting</h2>
+  <p class="intro">Processes reveal execution. The goal is not just to list them, but to find the odd one out — wrong parent, wrong path, wrong time.</p>
+
+  <span class="tag tag-green">BLUE TEAM</span>
+  <span class="tag tag-red">RED TEAM</span>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Top CPU consumers
+Get-Process | Sort-Object CPU -Descending | Select-Object -First 20 Name, Id, Path, Company
+
+# Detailed tasklist
+tasklist /v /fo table
+
+# Process with command line
+Get-CimInstance Win32_Process | Select-Object Name, ProcessId, CommandLine | Where-Object { $_.CommandLine -ne $null } | Format-Table -AutoSize
+
+# Find process by PID and kill
+Get-Process -Id 13628 | Select-Object Name, Path, StartTime
+Get-CimInstance Win32_Process -Filter "ProcessId = 13628" | Select-Object CommandLine, CreationDate
+Stop-Process -Id 13628 -Force
+# or
+taskkill /pid 13628 /f</pre>
+  </div>
+
+  <h3>Parent-Child Analysis</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Show process tree
+Get-CimInstance Win32_Process | Select-Object Name, ProcessId, ParentProcessId | Sort-Object ParentProcessId, ProcessId | Format-Table -AutoSize
+
+# Find suspicious parents (e.g., Word spawning PowerShell)
+Get-CimInstance Win32_Process | Where-Object { $_.Name -match "powershell|cmd|wscript|cscript|mshta" } | Select-Object Name, ProcessId, ParentProcessId, @{Name="ParentName";Expression={(Get-Process -Id $_.ParentProcessId -ErrorAction SilentlyContinue).Name}}, CommandLine | Format-Table -AutoSize</pre>
+  </div>
+
+  <div class="note-box">
+    <strong>Blue team tip:</strong> Office apps spawning cmd.exe, powershell.exe, or wscript.exe is a classic macro/ phishing indicator. Investigate immediately.
+  </div>
+</div>
+
+<div class="section" id="persistence">
+  <div class="section-title">// PERSISTENCE HUNTING</div>
+  <h2>Users, Services & Scheduled Tasks</h2>
+  <p class="intro">Attackers need to survive reboots. They add users, modify services, and schedule tasks. These commands find the hooks.</p>
+
+  <span class="tag tag-green">BLUE TEAM</span>
+  <span class="tag tag-red">RED TEAM</span>
+
+  <h3>Local Users & Groups</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Local users
+net user
+Get-LocalUser | Select-Object Name, Enabled, LastLogon, SID
+
+# Admin group members
+net localgroup administrators
+Get-LocalGroupMember -Group "Administrators"
+
+# RDP users
+net localgroup "Remote Desktop Users"
+Get-LocalGroupMember -Group "Remote Desktop Users"</pre>
+  </div>
+
+  <h3>Services</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Running services
+Get-Service | Where-Object Status -eq Running | Select-Object Name, DisplayName, StartType
+
+# Services with non-standard paths or unsigned binaries
+Get-CimInstance Win32_Service | Where-Object { $_.PathName -notmatch "^\"?C:\\(Windows|Program Files)" } | Select-Object Name, StartMode, State, PathName</pre>
+  </div>
+
+  <h3>Scheduled Tasks</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># List all scheduled tasks
+schtasks /query /fo LIST /v
+
+# Find tasks running scripts
+schtasks /query /fo LIST /v | Select-String -Pattern "\.ps1|\.bat|\.vbs|\.cmd"
+
+# PowerShell view
+Get-ScheduledTask | Where-Object { $_.TaskPath -notlike "\Microsoft\*" } | Select-Object TaskName, TaskPath, Author, Date, State</pre>
+  </div>
+
+  <h3>Registry Run Keys</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Common persistence locations
+Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+Get-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+Get-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce"
+Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" | Select-Object Shell, Userinit</pre>
+  </div>
+</div>
+
+<div class="section" id="av">
+  <div class="section-title">// SECURITY PRODUCTS</div>
+  <h2>AV / EDR Status</h2>
+  <p class="intro">Know what protects the machine. If it's disabled, missing, or excluded, that's either an attack or a dangerous misconfiguration.</p>
+
+  <span class="tag tag-green">BLUE TEAM</span>
+  <span class="tag tag-red">RED TEAM</span>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Installed security products
+Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntiVirusProduct | Select-Object displayName, pathToSignedProductExe, productState
+
+# Windows Defender status
+Get-MpComputerStatus | Select-Object AMRunningMode, RealTimeProtectionEnabled, AntivirusEnabled, NISEnabled, SignatureUpdateDateTime
+
+# Defender preferences and exclusions
+Get-MpPreference | Select-Object ExclusionPath, ExclusionProcess, ExclusionExtension
+
+# Recent threats
+Get-MpThreat | Sort-Object LastDetectedTime -Descending
+Get-MpThreatDetection | Sort-Object InitialDetectionTime -Descending | Select-Object -First 10 ThreatName, Resources, InitialDetectionTime
+
+# Find security product services
+Get-Service | Where-Object { $_.DisplayName -match 'defender|crowd|sentinel|carbon|amp|fireeye|kaspersky|symantec|mcafee|trend|eset|sophos|avast|avg|bitdefender' }</pre>
+  </div>
+
+  <div class="warning-box">
+    <strong>Critical:</strong> Empty or broad exclusions (like <code>$env:APPDATA</code> or <code>.exe</code> extensions) are often signs of compromise or deliberate weakening. Red teams hunt for these first.
+  </div>
+</div>
+
+<div class="section" id="files">
+  <div class="section-title">// FILE SYSTEM HUNTING</div>
+  <h2>Interesting Files & Locations</h2>
+  <p class="intro">Credentials, scripts, and payloads hide in predictable places. Quick scans of high-value directories catch lazy attackers.</p>
+
+  <span class="tag tag-green">BLUE TEAM</span>
+  <span class="tag tag-red">RED TEAM</span>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Drives and filesystem
+Get-PSDrive -PSProvider FileSystem
+
+# Desktop and Downloads
+Get-ChildItem "$env:USERPROFILE\Desktop" -File | Select-Object Name, Length, LastWriteTime
+Get-ChildItem "$env:USERPROFILE\Downloads" -File -ErrorAction SilentlyContinue
+
+# AppData for scripts, configs, credentials
+Get-ChildItem "$env:APPDATA" -Recurse -File -ErrorAction SilentlyContinue | Where-Object Name -match '\.rdp|\.kdbx|\.xml|\.ini|\.config|\.txt|\.ps1|\.bat|\.vbs'
+
+# LocalAppData for credential artifacts
+Get-ChildItem "$env:LOCALAPPDATA" -Recurse -File -ErrorAction SilentlyContinue | Where-Object Name -match 'pass|cred|key|token|secret'
+
+# Recently created executables in user profile
+Get-ChildItem "$env:USERPROFILE" -Recurse -Include *.exe -ErrorAction SilentlyContinue | Where-Object CreationTime -gt (Get-Date).AddDays(-7) | Select-Object FullName, CreationTime, Length
+
+# PowerShell history (often contains credentials or commands)
+Get-History
+Get-Content (Get-PSReadlineOption).HistorySavePath -ErrorAction SilentlyContinue -Tail 80</pre>
+  </div>
+
+  <div class="note-box">
+    <strong>Red team counter:</strong> Don't drop payloads in Downloads or Desktop. Use %TEMP%, %APPDATA% subdirectories, or legitimate program folders. Clear PowerShell history with <code>Remove-Item (Get-PSReadlineOption).HistorySavePath -Force</code>.
+  </div>
+</div>
+
+<div class="section" id="vectors">
+  <div class="section-title">// ATTACK VECTORS TO SUSPECT</div>
+  <h2>What Else to Hunt For</h2>
+  <p class="intro">Defenders often miss vectors that don't look like malware. These are the sneaky ones.</p>
+
+  <div class="category-grid">
+    <div class="category-card">
+      <h4>🎣 PHISHING RESIDUE</h4>
+      <p>Suspicious .htm, .html, .zip attachments in Downloads. Browser downloads from unknown domains. Outlook rules forwarding email externally.</p>
+    </div>
+    <div class="category-card">
+      <h4>💾 USB / REMOVABLE MEDIA</h4>
+      <p>Autorun.inf files, LNK files pointing to powershell, suspicious executables on USB drives. Check SetupAPI logs for device insertions.</p>
+    </div>
+    <div class="category-card">
+      <h4>🌐 BROWSER EXTENSIONS</h4>
+      <p>Malicious Chrome/Edge extensions with excessive permissions. Check extension folders in %LOCALAPPDATA%.</p>
+    </div>
+    <div class="category-card">
+      <h4>🔑 CREDENTIAL THEFT</h4>
+      <p>LSASS access, SAM/SECURITY hives copied, Kerberos tickets exported. Monitor for Mimikatz-style access patterns.</p>
+    </div>
+    <div class="category-card">
+      <h4>📡 WIRELESS / BLUETOOTH</h4>
+      <p>Unknown WiFi profiles, Bluetooth pairings, rogue access points. Check <code>netsh wlan show profiles</code>.</p>
+    </div>
+    <div class="category-card">
+      <h4>☁️ CLOUD SYNC ABUSE</h4>
+      <p>OneDrive, Dropbox, Google Drive used for exfiltration. Large or unusual file uploads outside business hours.</p>
+    </div>
+    <div class="category-card">
+      <h4>🖥️ REMOTE ACCESS TOOLS</h4>
+      <p>TeamViewer, AnyDesk, ScreenConnect, Splashtop, Chrome Remote Desktop. Check for unauthorized installations.</p>
+    </div>
+    <div class="category-card">
+      <h4>🧩 DLL SIDELOADING</h4>
+      <p>Legitimate executables loading DLLs from unusual paths. Check DLLs in application directories.</p>
+    </div>
+  </div>
+
+  <h3>Quick Checks for Hidden Vectors</h3>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># WiFi profiles (could be rogue AP or stolen credentials)
+netsh wlan show profiles
+
+# Recent USB devices
+Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR\*" | Select-Object FriendlyName, DeviceDesc
+
+# Browser extensions (Chrome example)
+Get-ChildItem "$env:LOCALAPPDATA\Google\Chrome\User Data\*\Extensions" -Recurse -Directory -ErrorAction SilentlyContinue | Select-Object FullName, LastWriteTime
+
+# Startup folder
+Get-ChildItem "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup"
+Get-ChildItem "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp"
+
+# Recent files
+Get-ChildItem "$env:APPDATA\Microsoft\Windows\Recent" | Select-Object Name, LastWriteTime -First 20</pre>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">// MENTOR DOCTRINE</div>
+  <h2>How This Hooks to Offense</h2>
+  <p class="intro">Every defensive command is also an offensive recon command. The difference is timing and intent.</p>
+
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># Red team: Run these after landing to understand the environment
+whoami /priv
+net user
+net localgroup administrators
+Get-MpPreference | Select-Object ExclusionPath, ExclusionProcess
+Get-NetTCPConnection | Where-Object State -eq Listen
+Get-Process | Sort-Object CPU -Descending | Select-Object -First 10</pre>
+  </div>
+
+  <p>Cross-links:</p>
+  <ul style="margin-left:1.5rem;font-size:0.9rem;">
+    <li><a href="modules/MODULE_02_RECON.html" style="color:var(--neon);">Module 02: Reconnaissance</a> — active/passive recon fundamentals</li>
+    <li><a href="modules/MODULE_03_POWERSHELL.html" style="color:var(--neon);">Module 03: PowerShell Warfare</a> — these commands in offensive context</li>
+    <li><a href="modules/MODULE_11_ROOTKITS.html" style="color:var(--neon);">Module 11: Rootkits & Persistence</a> — how attackers hide</li>
+    <li><a href="modules/MODULE_12_DEFENSIVE_VERIFY.html" style="color:var(--neon);">Module 12: Defensive Verification</a> — testing your evasion</li>
+    <li><a href="modules/MODULE_16_C2.html" style="color:var(--neon);">Module 16: C2 Frameworks</a> — what C2 looks like on the wire</li>
+    <li><a href="modules/MODULE_17_SOCIAL_ENGINEERING.html" style="color:var(--neon);">Module 17: Social Engineering</a> — the human vector this page doesn't directly see</li>
+  </ul>
+
+  <p style="margin-top:1.5rem;"><strong>Mentor says:</strong> "Privilege escalation is easy. Real attacks are carried remotely. Save every rung. Eventually all comes to networking." This page is the networking-aware defender's starting point.</p>
+</div>
+
+<div class="footer">
+  // 22ND SURVEY DIVISION // DEFENSIVE RECON // BLUE TEAM FIELD MANUAL //<br>
+  Live evidence from authorized lab testing. Use only on systems you own or have permission to test.
+</div>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.parentElement.querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerText = 'COPIED';
+    setTimeout(() => btn.innerText = 'COPY', 1500);
+  });
+}
+</script>
+
+</body>
+</html>
