@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESOURCES — 22nd Survey Division</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+:root{--bg:#050505;--bg2:#0a0a0a;--bg3:#111;--fg:#c0c0c0;--accent:#ff0040;--accent2:#00ff41;--dim:#444;--border:#1a1a1a;--neon:#00ffff;--green:#00ff41;--green-dim:#2a6a2a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-height:1.7;background-image:linear-gradient(rgba(255,0,64,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,0,64,0.03) 1px,transparent 1px);background-size:50px 50px;}
+.container{max-width:1100px;margin:0 auto;padding:3rem 2rem;}
+.header{border:3px solid var(--neon);padding:2rem;margin-bottom:3rem;position:relative;box-shadow:0 0 20px rgba(0,255,255,0.1);}
+.header::before{content:'FREE ACCESS';position:absolute;top:-12px;left:20px;background:var(--bg);color:var(--neon);font-family:'Space Mono',monospace;font-size:0.7rem;padding:0 10px;letter-spacing:0.2em;}
+.header h1{font-family:'Space Mono',monospace;font-size:2rem;font-weight:700;color:var(--neon);text-transform:uppercase;letter-spacing:-0.02em;margin-bottom:0.5rem;text-shadow:0 0 10px var(--neon);}
+.header p{font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--dim);}
+.nav{display:flex;gap:0;margin-bottom:3rem;border:2px solid var(--border);flex-wrap:wrap;}
+.nav a{color:var(--fg);text-decoration:none;padding:0.8rem 1.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;border-right:2px solid var(--border);transition:all 0.2s;}
+.nav a:last-child{border-right:none;}
+.nav a:hover{background:var(--neon);color:var(--bg);}
+.section{border:2px solid var(--border);margin:2rem 0;padding:2rem;position:relative;}
+.section-number{position:absolute;top:-14px;left:20px;background:var(--bg);font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--neon);padding:0 10px;letter-spacing:0.1em;}
+.section h2{font-family:'Space Mono',monospace;font-size:1.3rem;font-weight:700;color:var(--accent2);text-transform:uppercase;margin-bottom:1.5rem;letter-spacing:0.05em;}
+.module-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.module-card{border:1px solid var(--border);padding:1rem;background:var(--bg2);transition:all 0.2s;}
+.module-card:hover{border-color:var(--neon);box-shadow:0 0 10px rgba(0,255,255,0.1);}
+.module-card a{color:var(--fg);text-decoration:none;}
+.module-num{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--neon);margin-bottom:0.3rem;}
+.module-title{font-family:'Space Mono',monospace;font-size:0.9rem;font-weight:700;color:var(--fg);margin-bottom:0.5rem;}
+.module-desc{font-size:0.75rem;color:var(--dim);line-height:1.5;}
+.module-status{font-family:'Space Mono',monospace;font-size:0.6rem;margin-top:0.5rem;padding:0.2rem 0.5rem;display:inline-block;}
+.status-live{background:rgba(0,255,65,0.1);color:var(--green);border:1px solid var(--green-dim);}
+.status-beta{background:rgba(255,160,0,0.1);color:#ff9900;border:1px solid #ff9900;}
+.status-soon{background:rgba(255,0,64,0.1);color:var(--accent);border:1px solid var(--accent);}
+.resource-list{list-style:none;}
+.resource-list li{border-bottom:1px solid var(--border);padding:0.8rem 0;}
+.resource-list li:last-child{border-bottom:none;}
+.resource-list a{color:var(--neon);text-decoration:none;font-family:'Space Mono',monospace;font-size:0.8rem;}
+.resource-list a:hover{text-decoration:underline;}
+.resource-list .desc{font-size:0.7rem;color:var(--dim);margin-top:0.2rem;}
+.note{border:1px solid var(--green-dim);padding:1rem;background:rgba(0,255,65,0.05);margin:1rem 0;font-size:0.8rem;color:var(--green-dim);}
+.note::before{content:'// NOTE: ';color:var(--green);font-weight:700;}
+.footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>RESOURCES // FULL COURSE ACCESS</h1>
+  <p>All course modules are free for self-learning. Tools and source code are paywalled. Study the theory, build the tools, understand the tradecraft.</p>
+</div>
+
+<div class="nav">
+  <a href="index.html">← HOME</a>
+  <a href="#modules">MODULES</a>
+  <a href="#asi-lessons">ASI DEV LESSONS</a>
+  <a href="#tools">TOOLS</a>
+  <a href="#quick-ref">QUICK REF</a>
+</div>
+
+<!-- MODULES SECTION -->
+<div class="section" id="modules">
+  <div class="section-number">// COURSE MODULES</div>
+  <h2>22 MODULES — ZERO TO OPERATOR</h2>
+  
+  <div class="note">Modules 00-21 are free for self-study. Tools, source code, and private repos require purchase. Click any module to start learning.</div>
+
+  <div class="module-grid">
+    <div class="module-card">
+      <a href="modules/MODULE_00_READER.html">
+        <div class="module-num">MODULE 00</div>
+        <div class="module-title">READER GUIDE</div>
+        <div class="module-desc">How to use this course. Prerequisites. Study methodology. Expectation setting.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_01_NETWORKING.html">
+        <div class="module-num">MODULE 01</div>
+        <div class="module-title">NETWORKING FUNDAMENTALS</div>
+        <div class="module-desc">TCP/IP, sockets, ports, protocols. The foundation everything builds on. "Eventually all comes to networking." — asi dev</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_02_RECON.html">
+        <div class="module-num">MODULE 02</div>
+        <div class="module-title">RECON & OSINT</div>
+        <div class="module-desc">Windows recon framework. WMI enumeration, AD discovery, privilege audit, CWE scanner. WINRECON tool.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_03_POWERSHELL.html">
+        <div class="module-num">MODULE 03</div>
+        <div class="module-title">POWERSHELL WARFARE</div>
+        <div class="module-desc">Execution policies, AMSI bypass, remoting, obfuscation. "Linux terminal is way easier, it's almost like English." — asi dev</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_04_CODING_BASICS.html">
+        <div class="module-num">MODULE 04</div>
+        <div class="module-title">CODING BASICS</div>
+        <div class="module-desc">C, Python, PowerShell fundamentals for security tooling. No prior coding required.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_05_SHELLCODE.html">
+        <div class="module-num">MODULE 05</div>
+        <div class="module-title">SHELLCODE DEVELOPMENT</div>
+        <div class="module-desc">Position-independent code, syscalls, encoding. Build payloads from scratch.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_06_MEMORY.html">
+        <div class="module-num">MODULE 06</div>
+        <div class="module-title">MEMORY FORENSICS</div>
+        <div class="module-desc">Volatility, memory dumps, injected code detection. Find the needle in the haystack.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_07_REGISTRY.html">
+        <div class="module-num">MODULE 07</div>
+        <div class="module-title">REGISTRY ANALYSIS</div>
+        <div class="module-desc">Windows registry deep-dive. Persistence locations, forensic artifacts, hidden keys.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_08_PRIVESC.html">
+        <div class="module-num">MODULE 08</div>
+        <div class="module-title">PRIVILEGE ESCALATION</div>
+        <div class="module-desc">Token abuse, service hijacking, UAC bypass. "Privilege escalation is easy." — asi dev</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_09_MALWARE.html">
+        <div class="module-num">MODULE 09</div>
+        <div class="module-title">MALWARE DEVELOPMENT</div>
+        <div class="module-desc">Dropper architecture, payload delivery, execution methods. Build IRON-DOME from scratch.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_10_CODE_INJECTION.html">
+        <div class="module-num">MODULE 10</div>
+        <div class="module-title">CODE INJECTION</div>
+        <div class="module-desc">DLL injection, process hollowing, APC injection. Get your code into another process.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_11_ROOTKITS.html">
+        <div class="module-num">MODULE 11</div>
+        <div class="module-title">ROOTKITS & PERSISTENCE</div>
+        <div class="module-desc">Kernel drivers, bootkits, firmware. Hide at the deepest level. "Save every rung." — asi dev</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_12_DEFENSIVE_VERIFY.html">
+        <div class="module-num">MODULE 12</div>
+        <div class="module-title">DEFENSIVE VERIFICATION</div>
+        <div class="module-desc">Verify your evasion. Test against live AV. Document results honestly. Build GeoDefend.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_13_EDR_EVASION.html">
+        <div class="module-num">MODULE 13</div>
+        <div class="module-title">EDR EVASION</div>
+        <div class="module-desc">Bypass CrowdStrike, SentinelOne, Carbon Black. Kernel callbacks, ETW, AM-PPL.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_14_CLOUD_FILES.html">
+        <div class="module-num">MODULE 14</div>
+        <div class="module-title">CLOUD FILES & EXFIL</div>
+        <div class="module-desc">Steganography, covert channels, dead drops. Hide data in plain sight. Ghost-Encoder.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_15_LATERAL.html">
+        <div class="module-num">MODULE 15</div>
+        <div class="module-title">LATERAL MOVEMENT</div>
+        <div class="module-desc">Pass-the-Hash, WMI, PSExec, RDP hijacking. Move through the network.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_16_C2.html">
+        <div class="module-num">MODULE 16</div>
+        <div class="module-title">C2 FRAMEWORKS</div>
+        <div class="module-desc">Build CHEYANNE from scratch. Beacon, listener, encryption, Discord bridge. "Reverse shell is the basic for everything." — asi dev</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html">
+        <div class="module-num">MODULE 17</div>
+        <div class="module-title">SOCIAL ENGINEERING</div>
+        <div class="module-desc">Phishing, pretexting, payload delivery. The human is the weakest link. "Real attacks are carried remotely."</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_18_ANDROID.html">
+        <div class="module-num">MODULE 18</div>
+        <div class="module-title">ANDROID RAT</div>
+        <div class="module-desc">StarKiller RAT in Kotlin. GPS, SMS, camera, Play Protect bypass. Mobile attack surface.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_19_AD.html">
+        <div class="module-num">MODULE 19</div>
+        <div class="module-title">ACTIVE DIRECTORY</div>
+        <div class="module-desc">Kerberoasting, DCSync, Golden Ticket, ACL abuse. The crown jewels.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_20_KILL_CHAIN.html">
+        <div class="module-num">MODULE 20</div>
+        <div class="module-title">FULL KILL CHAIN</div>
+        <div class="module-desc">Recon → Weaponize → Deliver → Exploit → Install → C2 → Action on Objectives. Put it all together.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/MODULE_21_CAPSTONE.html">
+        <div class="module-num">MODULE 21</div>
+        <div class="module-title">CAPSTONE: GEODEFEND</div>
+        <div class="module-desc">Build an automated defensive platform. Detect the techniques you learned. Blue team perspective.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+
+    <div class="module-card">
+      <a href="modules/CEO_TRANSLATION.html">
+        <div class="module-num">BONUS</div>
+        <div class="module-title">CEO TRANSLATION</div>
+        <div class="module-desc">Dollar impact of every technique. Board-ready language. Risk quantification. Compliance mapping.</div>
+        <div class="module-status status-live">✓ LIVE</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ASI DEV LESSONS SECTION -->
+<div class="section" id="asi-lessons">
+  <div class="section-number">// ASI DEV LESSONS</div>
+  <h2>SUPPLEMENTARY MATERIAL — FROM THE FIELD</h2>
+  
+  <div class="note">These documents are compiled from operational conversations with experienced practitioners. They represent real-world tradecraft, not sanitized theory.</div>
+
+  <ul class="resource-list">
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_HAVE.md" target="_blank">WHAT_I_HAVE.md</a>
+      <div class="desc">Verified capabilities — what I can do now. Complete technique matrix with evidence.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_NEED.md" target="_blank">WHAT_I_NEED.md</a>
+      <div class="desc">Knowledge gaps — 8-week study schedule with priorities. "Eventually all comes to networking."</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">QUICK_CHEAT_SHEET.md</a>
+      <div class="desc">Windows recon one-liners for live engagement. "You should have your notes organized with commands."</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/DEFENDER_MANAGEMENT.md" target="_blank">DEFENDER_MANAGEMENT.md</a>
+      <div class="desc">Defender exclusions, disabling, destructive removal, cleanup. Full AV evasion arsenal.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">SYSTEM_SETTINGS.md</a>
+      <div class="desc">PowerShell execution policies, Explorer settings, Defender checks. System configuration for operations.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">PRIVESC_LADDER.md</a>
+      <div class="desc">User → Admin → System kill chain with persistence at each level. "Save every rung."</div>
+    </li>
+  </ul>
+</div>
+
+<!-- TOOLS SECTION -->
+<div class="section" id="tools">
+  <div class="section-number">// TOOLS</div>
+  <h2>WORKING TOOLS — TESTED ON LIVE AV</h2>
+  
+  <div class="note">Tools are paywalled ($497 AUD full bundle). Public repos are free. Private repos require purchase.</div>
+
+  <ul class="resource-list">
+    <li>
+      <a href="https://github.com/rainfantry/winrecon" target="_blank">winrecon (PUBLIC)</a>
+      <div class="desc">Windows recon framework — WMI enumeration, AD discovery, privilege audit, CWE scanner.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/vader-rootkit" target="_blank">vader-rootkit (PRIVATE)</a>
+      <div class="desc">HWBP AMSI+ETW bypass. 26 clean binaries. MSRC VULN-195458.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/iron-sun" target="_blank">iron-sun (PRIVATE)</a>
+      <div class="desc">8-layer Windows evasion stack. TCP reverse shell. 0 detections on Kaspersky Premium.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/ghost-encoder" target="_blank">ghost-encoder (PRIVATE)</a>
+      <div class="desc">Zero-width Unicode steganography. Hide payloads in plain text. 0 AV detections.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/cheyanne" target="_blank">cheyanne (PRIVATE)</a>
+      <div class="desc">C2 framework — C beacon, Python listener, Discord bridge, AES-256 encryption.</div>
+    </li>
+  </ul>
+</div>
+
+<!-- QUICK REF SECTION -->
+<div class="section" id="quick-ref">
+  <div class="section-number">// QUICK REFERENCE</div>
+  <h2>CHEAT SHEETS & ONE-LINERS</h2>
+
+  <ul class="resource-list">
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">Windows Recon One-Liners</a>
+      <div class="desc">Situational awareness commands: whoami, systeminfo, netstat, tasklist, service enumeration.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/DEFENDER_MANAGEMENT.md" target="_blank">Defender Management</a>
+      <div class="desc">Check exclusions, disable real-time monitoring, delete Defender files, clear logs.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">System Settings</a>
+      <div class="desc">PowerShell execution policies, Explorer view settings, Defender threat checks.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">Privilege Escalation Ladder</a>
+      <div class="desc">User → Admin → System. Persistence matrix. PowerUp, WinPEAS, LinPEAS.</div>
+    </li>
+  </ul>
+</div>
+
+<div class="footer">
+  // 22ND SURVEY DIVISION // RESOURCES // FREE FOR SELF-STUDY //<br>
+  Tools and source code require purchase. Theory and methodology are free.
+</div>
+
+</body>
+</html>
