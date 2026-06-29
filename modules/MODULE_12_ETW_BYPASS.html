@@ -451,7 +451,7 @@
 
         <!-- MENTOR CALLOUT: ETW is Windows' CCTV -->
         <div class="mentor-callout">
-            <div class="mentor-title">// Mentor: asi dev [HTB]</div>
+            <div class="mentor-title">// Mentor: mentor</div>
             <p class="mentor-quote">"ETW is Windows' CCTV — blind it and you become invisible."</p>
             <p class="layman"><strong>Layman:</strong> Windows is a building covered in security cameras. ETW is every one of those cameras feeding a central recording desk. If you can turn off the feed or point the cameras at a blank wall, you can walk through the building and leave no footage behind.</p>
             <p class="redblue"><strong>For red team:</strong> Disabling or tampering with ETW before you run tools removes the evidence chain that EDR and SOC analysts rely on. Run your bypass first, then execute.</p>
@@ -460,7 +460,7 @@
 
         <!-- MENTOR CALLOUT: Bypass telemetry before you run tools -->
         <div class="mentor-callout">
-            <div class="mentor-title">// Mentor: asi dev [HTB]</div>
+            <div class="mentor-title">// Mentor: mentor</div>
             <p class="mentor-quote">"Bypass telemetry before you run tools."</p>
             <p class="layman"><strong>Layman:</strong> You don't rob a bank while the alarm is armed. You disable the alarm, then open the vault. Running Mimikatz, Rubeus, or a custom injector before you silence ETW is like triggering every alarm in the building on purpose.</p>
             <p class="redblue"><strong>For red team:</strong> Make ETW bypass part of your initial staging, not an afterthought. The order of operations is: gain execution → disable telemetry → run offensive tools → clean up.</p>
@@ -469,7 +469,7 @@
 
         <!-- MENTOR CALLOUT: Evasion is temporary, detection is forever -->
         <div class="mentor-callout">
-            <div class="mentor-title">// Mentor: asi dev [HTB]</div>
+            <div class="mentor-title">// Mentor: mentor</div>
             <p class="mentor-quote">"Evasion is temporary, detection is forever."</p>
             <p class="layman"><strong>Layman:</strong> A disguise gets you past the guard once. But the guard will eventually learn what to look for. The evidence of the disguise — the fake mustache, the changed clothes — is what gets you caught next time. Evasion buys minutes; detection signatures last years.</p>
             <p class="redblue"><strong>For red team:</strong> Treat every bypass as disposable. Microsoft patches ETW tampering vectors regularly. Have a fallback, test in a lab that mirrors the target, and never assume yesterday's bypass works tomorrow.</p>

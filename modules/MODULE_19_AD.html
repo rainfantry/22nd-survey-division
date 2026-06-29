@@ -373,7 +373,7 @@
         </div>
 
         <div class="mentor-callout" style="background: #1a0a1a; border: 2px solid var(--purple); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 0 15px rgba(255, 0, 255, 0.15);">
-            <h3 style="color: var(--purple); margin-bottom: 0.75rem; text-shadow: 0 0 10px var(--purple);">🎓 Mentor Callout — asi dev [HTB]</h3>
+            <h3 style="color: var(--purple); margin-bottom: 0.75rem; text-shadow: 0 0 10px var(--purple);">🎓 Mentor Callout — mentor</h3>
             <blockquote style="font-size: 1.15rem; font-style: italic; color: var(--fg); border-left: 4px solid var(--purple); padding-left: 1rem; margin: 0.75rem 0;">"Active Directory is the keys to the kingdom."</blockquote>
             <p style="margin-top: 0.75rem;"><strong>Translation:</strong> AD doesn't just store passwords — it decides who can log in, access files, run commands, and manage systems. If an attacker gets Domain Admin, every door in the organization unlocks. For defenders, this means AD must be treated as a <span class="neon-purple">crown jewel</span>: hardened, monitored, segmented, and backed by privileged access management. For red teamers, AD is rarely the first step, but it is almost always the last.</p>
             <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Your objective in most internal assessments is to reach Domain Admin or equivalent. Everything before that is reconnaissance and escalation.</p>
@@ -481,7 +481,7 @@ corp.example.com
         </div>
 
         <div class="mentor-callout" style="background: #0a0a1a; border: 2px solid #5555ff; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 0 15px rgba(85, 85, 255, 0.15);">
-            <h3 style="color: #5555ff; margin-bottom: 0.75rem; text-shadow: 0 0 10px #5555ff;">🎓 Mentor Callout — asi dev [HTB]</h3>
+            <h3 style="color: #5555ff; margin-bottom: 0.75rem; text-shadow: 0 0 10px #5555ff;">🎓 Mentor Callout — mentor</h3>
             <blockquote style="font-size: 1.15rem; font-style: italic; color: var(--fg); border-left: 4px solid #5555ff; padding-left: 1rem; margin: 0.75rem 0;">"You don't attack AD, you abuse trust."</blockquote>
             <p style="margin-top: 0.75rem;"><strong>Translation:</strong> Active Directory is designed around trust relationships — between domains, forests, users, groups, computers, and services. The protocol isn't usually broken; the configuration is. Kerberos, delegation, and ACLs are all legitimate features that become weapons when misconfigured. A red teamer's job is to find the trust relationship that shouldn't exist and walk through the open door it creates.</p>
             <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Stop looking for "AD exploits." Start mapping trust chains: parent-child, external, forest, delegation, and ACL trusts. Abuse is quieter and more reliable than exploitation.</p>
@@ -739,7 +739,7 @@ SharpHound.exe --CollectionMethod All --Domain corp.example.com
         </div>
 
         <div class="mentor-callout" style="background: #0a1a0a; border: 2px solid var(--accent2); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; box-shadow: 0 0 15px rgba(0, 255, 136, 0.15);">
-            <h3 style="color: var(--accent2); margin-bottom: 0.75rem; text-shadow: 0 0 10px var(--accent2);">🎓 Mentor Callout — asi dev [HTB]</h3>
+            <h3 style="color: var(--accent2); margin-bottom: 0.75rem; text-shadow: 0 0 10px var(--accent2);">🎓 Mentor Callout — mentor</h3>
             <blockquote style="font-size: 1.15rem; font-style: italic; color: var(--fg); border-left: 4px solid var(--accent2); padding-left: 1rem; margin: 0.75rem 0;">"BloodHound shows the path."</blockquote>
             <p style="margin-top: 0.75rem;"><strong>Translation:</strong> Active Directory attack paths are too complex for humans to trace by hand. BloodHound turns the domain into a graph and finds the shortest route from your current access to Domain Admin. It reveals chains of abuse that cross users, groups, computers, ACLs, sessions, and trusts — paths that would take hours or days to discover manually. Before you attack, you map. Before you map, you collect.</p>
             <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Run SharpHound as soon as you have domain credentials. Let BloodHound tell you where to go instead of guessing. The path it finds is often shorter and quieter than you expect.</p>

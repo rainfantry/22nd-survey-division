@@ -339,7 +339,7 @@
         </div>
 
         <div class="warning-box">
-            <h5>🎖️ Mentor Callout — asi dev [HTB]</h5>
+            <h5>🎖️ Mentor Callout — mentor</h5>
             <p><em>"Memory is the battlefield."</em></p>
             <p style="margin-top: 0.5rem;"><strong>Layman:</strong> Every fight in malware and forensics happens inside RAM. It's where the code runs, where secrets sit unencrypted, and where attackers plant their payloads. If you control memory, you control the machine.</p>
             <p style="margin-top: 0.5rem;"><strong>Red/Blue relevance:</strong> Red — every injection, hook, and payload lives here. Blue — every detection, dump, and forensic artifact is recovered from here. Memory is ground zero for both offense and defense.</p>
@@ -664,7 +664,7 @@ VirtualProtect(payload, 0x1000, PAGE_EXECUTE_READ, &oldProtect);
         </div>
 
         <div class="warning-box">
-            <h5>🎖️ Mentor Callout — asi dev [HTB]</h5>
+            <h5>🎖️ Mentor Callout — mentor</h5>
             <p><em>"If you understand the heap and stack, you understand crashes."</em></p>
             <p style="margin-top: 0.5rem;"><strong>Layman:</strong> The stack is scratch paper for the current function call — fast but small. The heap is a big storage room you rent manually. Misuse either and the program falls over: stack overflows, heap corruption, and use-after-free bugs are all crashes born here.</p>
             <p style="margin-top: 0.5rem;"><strong>Red/Blue relevance:</strong> Red — overflows and corruption become exploits (ROP, shellcode, arbitrary write). Blue — crash dumps and memory forensics reveal the exact state of stack and heap, telling you what failed and whether it was an accident or an attack.</p>
@@ -872,7 +872,7 @@ VirtualProtectEx(hTarget, remoteMem2, payloadSize, PAGE_EXECUTE_READ, &old);
         </div>
 
         <div class="warning-box">
-            <h5>🎖️ Mentor Callout — asi dev [HTB]</h5>
+            <h5>🎖️ Mentor Callout — mentor</h5>
             <p><em>"Every injection technique is just memory manipulation."</em></p>
             <p style="margin-top: 0.5rem;"><strong>Layman:</strong> DLL injection, process hollowing, APC injection, thread hijacking — they all boil down to the same recipe: open a process, allocate or find memory, write malicious bytes, and make the CPU run them. The names sound fancy, but the action is always memory manipulation.</p>
             <p style="margin-top: 0.5rem;"><strong>Red/Blue relevance:</strong> Red — master VirtualAllocEx, WriteProcessMemory, and VirtualProtect and you can implement most injection techniques. Blue — monitor those same APIs, scan for RWX regions, and compare VADs to disk images to catch every variant.</p>

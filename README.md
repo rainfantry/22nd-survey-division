@@ -296,7 +296,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for full details.
 | 2026-06-29 | `36135c2` | Test scripts, link checker, release pipeline |
 | 2026-06-29 | `e199d7b` | Interactive quizzes, module-tree.html, copy buttons |
 | 2026-06-29 | `7d3641e` | Copy buttons on practical-labs + resources |
-| 2026-06-29 | `88201d0` | Mentor redaction (asi dev → mentor), HTML comments cleaned |
+| 2026-06-29 | `88201d0` | Mentor redaction (mentor → mentor), HTML comments cleaned |
 | 2026-06-29 | `4051288` | Resources: Quick reference cheat sheets, KILL_CHAIN_LAB_EVIDENCE |
 | 2026-06-29 | `47ef0eb` | Practical Labs: SSH tests, defense bypasses, simulations, widgets |
 | 2026-06-29 | `69483d5` | Crash course expanded with detailed mentor explanations |
