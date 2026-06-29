@@ -1,113 +1,259 @@
 # 22nd Survey Division
-## Offensive Security Training — Windows Internals, AV Evasion, C2 Frameworks
+## Offensive Security Training — From Zero to Nation-State Tradecraft
 ### Classification: PUBLIC COURSE SITE
 
 ---
 
 ## WHAT THIS IS
 
-22nd Survey Division is an Australian offensive security training platform built from live research — not sanitized tutorial content. 22 modules covering Windows internals, malware development, rootkits, C2 frameworks, Android RATs, and social engineering. Every technique taught from first principles with real tools tested against live AV engines.
+22nd Survey Division is an Australian offensive security training platform built from **live research** — not sanitized tutorial content. 22 modules covering Windows internals, malware development, rootkits, C2 frameworks, Android RATs, and social engineering. Every technique taught from first principles with real tools tested against live AV engines.
 
 **Built by:** George Wu (VADER) — Windows security researcher, Sydney  
 **Entity:** OCCUPATION FORCE CALLSIGN GSW PTY LTD (ACN 692 429 397)  
 **Research:** MSRC VULN-195458 (Windows Defender Tamper Protection bypass, responsibly disclosed)
 
----
-
-## COURSE OVERVIEW
-
-| Module | Title | Tool Repo | Price |
-|--------|-------|-----------|-------|
-| 01 | Offensive Mindset | — | $29 |
-| 02 | Recon & Footprinting | winrecon | $39 |
-| 03 | Vulnerability Research | csec-research-authorization | $49 |
-| 04 | Mitigations | — | $29 |
-| 05 | Exploit Development | — | $49 |
-| 06 | Windows Internals | — | $39 |
-| 07 | Exploit Primitives | — | $49 |
-| 08 | Privilege Escalation | winrecon | $69 |
-| 09 | Malware Development | iron-sun + eclipse | $79 |
-| 10 | Code Injection | iron-sun | $69 |
-| 11 | Rootkits | vader-rootkit | $79 |
-| 12 | Antivirus Evasion | iron-sun + eclipse + vader-rootkit | $79 |
-| 13 | Memory Forensics | flagship | $59 |
-| 14 | Reverse Engineering | — | $49 |
-| 15 | Post-Exploitation | flagship | $79 |
-| 16 | Command & Control | cheyanne | $79 |
-| 17 | Network Warfare | winrecon | $59 |
-| 18 | Cryptography Evasion | iron-sun + eclipse | $59 |
-| 19 | Living Off the Land | — | $39 |
-| 20 | Active Directory | winrecon | $69 |
-| 21 | Mobile Security | starkiller | $79 |
-| 22 | OSINT & Social Engineering | — | $39 |
-
-**Full Bundle:** $497 AUD (all 22 modules + 5 private repos + lifetime access)  
-**Monthly:** $21.99 AUD/mo (private repo access, cancel anytime)
+**Mentor:** [HTB] — Israeli offensive security specialist, former anti-virus engineer, IDF soldier. Teaches: "Save every rung." "Privilege escalation is easy." "Real attacks are carried remotely."
 
 ---
 
-## THE TOOLS (Included in Full Bundle)
+## QUICK LINKS — START HERE
+
+| Page | What It Is | Link |
+|------|-----------|------|
+| **Main Site** | Course overview, pricing, proof | [rainfantry.github.io/22nd-survey-division](https://rainfantry.github.io/22nd-survey-division/) |
+| **Crash Course** | 22 modules + mentor teachings + 8-week plan | [→ Crash Course](https://rainfantry.github.io/22nd-survey-division/crash-course.html) |
+| **Practical Labs** | Step-by-step exercises, SSH tests, defense bypasses | [→ Practical Labs](https://rainfantry.github.io/22nd-survey-division/practical-labs.html) |
+| **Module Tree** | Complete archive — every module, every link | [→ Module Tree](https://rainfantry.github.io/22nd-survey-division/module-tree.html) |
+| **Resources** | Cheat sheets, command reference, mentor documents | [→ Resources](https://rainfantry.github.io/22nd-survey-division/resources.html) |
+
+---
+
+## HOW TO USE THIS COURSE — LAYMAN PATH
+
+### If You Know Nothing (Start Here)
+
+1. **Read the Crash Course** → [crash-course.html](https://rainfantry.github.io/22nd-survey-division/crash-course.html)
+   - 22 modules organized in 5 phases
+   - Mentor teachings explained in plain English
+   - 8-week study plan with deliverables
+
+2. **Do the Practical Labs** → [practical-labs.html](https://rainfantry.github.io/22nd-survey-division/practical-labs.html)
+   - Copy-paste commands
+   - Expected outputs shown
+   - "If this fails" troubleshooting for every step
+   - Interactive quizzes with right/wrong feedback
+
+3. **Check the Module Tree** → [module-tree.html](https://rainfantry.github.io/22nd-survey-division/module-tree.html)
+   - See all modules at once
+   - Click any module to jump to it
+   - Status shows what's live vs pending
+
+4. **Reference the Resources** → [resources.html](https://rainfantry.github.io/22nd-survey-division/resources.html)
+   - Command cheat sheets (recon, privesc, persistence, defender, C2)
+   - Mentor's original documents
+   - Quick reference one-liners
+
+### The 8-Week Study Plan (From the Mentor)
+
+| Week | Focus | Deliverable |
+|------|-------|-------------|
+| 1-2 | Socket programming + reverse shells | Working C reverse shell (Windows + Linux) |
+| 3-4 | OpenSSH persistence + VNC | .42 with SSH + VNC, documented |
+| 5-6 | PowerShell remoting + AMSI bypass | Lateral movement lab, obfuscated scripts |
+| 7-8 | AD advanced (BloodHound, DCSync, tickets) | AD lab attack path report |
+| 9-10 | Linux privilege escalation | 10 THM boxes completed |
+| 11-12 | Cloud persistence (AWS, Azure) | Cloud-based C2 proof of concept |
+| 13-14 | EDR deep-dive | Research paper: "EDR evasion beyond HWBP" |
+| 15-16 | iOS + Flutter | Jailbreak persistence, Flutter RE report |
+
+**Mentor's rule:** "Organized notes > memorization. Cheat sheets > textbooks."
+
+---
+
+## MENTOR TEACHINGS — THE CORE LESSONS
+
+These are the lessons from [HTB] that shape every module:
+
+| Lesson | What It Means | Where to Learn |
+|--------|-------------|--------------|
+| **"Reverse shell is basic"** | The foundation everything builds on | Module 16 (C2), Practical Labs Exercise 7 |
+| **"Organized notes > memorize"** | Build cheat sheets, not memory | Resources page, Module 02 (Recon) |
+| **"Privilege escalation is easy"** | Misconfigurations, not 0days | Module 08 (Privesc), Practical Labs Sim 2 |
+| **"Save every rung"** | Persistence at every level | Module 11 (Persistence), Practical Labs Widget 3 |
+| **"Real attacks are remote"** | Physical access is niche; remote is money | Module 17 (Social Engineering) |
+| **"Defender management"** | Full spectrum from silent to nuclear | Practical Labs Exercise 3-6 |
+| **"System settings"** | Attack surface lives in configuration | Module 03 (PowerShell), Resources Quick Ref |
+| **"Eventually all comes to networking"** | Every technique needs a channel | Module 01 (Networking) |
+| **"Linux terminal is way easier"** | Learn both, use both | Module 03 (PowerShell) |
+
+---
+
+## COURSE MODULES — 22 MODULES, 5 PHASES
+
+### Phase 1: Foundation (Weeks 1-4)
+| Module | Title | Status |
+|--------|-------|--------|
+| 00 | Reader Guide — How to Use This Course | ✅ Live |
+| 01 | Networking Fundamentals | ✅ Live |
+| 02 | Recon & OSINT | ✅ Live |
+| 03 | PowerShell Warfare | ✅ Live |
+| 04 | Coding Basics | ✅ Live |
+
+### Phase 2: Weaponization (Weeks 5-8)
+| Module | Title | Status |
+|--------|-------|--------|
+| 05 | Shellcode Development | ✅ Live |
+| 06 | Memory Forensics | ✅ Live |
+| 07 | Registry Analysis | ✅ Live |
+| 08 | Privilege Escalation | ✅ Live |
+
+### Phase 3: Evasion (Weeks 9-12)
+| Module | Title | Status |
+|--------|-------|--------|
+| 09 | Malware Development | ✅ Live |
+| 10 | Code Injection | ✅ Live |
+| 11 | Rootkits & Persistence | ✅ Live |
+| 12 | Defensive Verification | ✅ Live |
+| 13 | EDR Evasion | ✅ Live |
+
+### Phase 4: Operations (Weeks 13-16)
+| Module | Title | Status |
+|--------|-------|--------|
+| 14 | Cloud Files & Exfil | ✅ Live |
+| 15 | Lateral Movement | ✅ Live |
+| 16 | C2 Frameworks | ✅ Live |
+| 17 | Social Engineering | ✅ Live |
+
+### Phase 5: Advanced (Weeks 17-22)
+| Module | Title | Status |
+|--------|-------|--------|
+| 18 | Android RAT | ✅ Live |
+| 19 | Active Directory | ✅ Live |
+| 20 | Full Kill Chain | ✅ Live |
+| 21 | Capstone: GeoDefend | ✅ Live |
+
+**Bonus:** CEO Translation (board-ready risk language)
+
+---
+
+## THE TOOLS (Tested on Live Hardware)
 
 ### VADER-ROOTKIT
 Hardware breakpoint bypass for AMSI + ETW. Zero memory writes. 26 Defender-clean binaries. MSRC VULN-195458 research.
 
-**Wartime test:** Windows 11, Defender RTP + cloud + BehaviorMonitor — CLEAN. Kaspersky Premium — CLEAN. 0/72 VirusTotal projection.
+**Test:** Windows 11, Defender RTP + cloud + BehaviorMonitor — CLEAN. Kaspersky Premium — CLEAN.
 
 ### IRON-SUN
-8-layer AV evasion stack. TCP reverse shell. XOR obfuscation, dynamic API resolution, anti-sandbox timing, PE header stomping, ISUN auth gate, beacon jitter, MinGW compile, HWBP bypass.
+8-layer AV evasion stack. TCP reverse shell. XOR obfuscation, dynamic API resolution, anti-sandbox timing, PE header stomping.
 
-**Wartime test:** 10/10 POCs verified on live machine (192.168.1.92). Kaspersky Premium 21.25 — 0 detections. All layers active.
+**Test:** 10/10 POCs verified on live machine (192.168.1.92). Kaspersky Premium 21.25 — 0 detections.
 
 ### CHEYANNE C2
 Full C2 framework. Browser-based operator panel. GPS exfil, VNC shell, AES-256-CBC beacon, Discord bridge, service persistence.
 
-**Wartime test:** 2 agents live. GPS polling 5s. SMS dump 47 messages. Play Protect bypassed. Built in Kotlin.
+**Test:** 2 agents live. GPS polling 5s. SMS dump 47 messages. Play Protect bypassed.
 
 ### GHOST-ENCODER
-Zero-width Unicode steganography. Covert channel framework. 16-character invisible alphabet. PNG carrier implementation.
+Zero-width Unicode steganography. Covert channel framework. 16-character invisible alphabet.
 
-**Wartime test:** Payload hidden in Discord message. Entropy 0.12 (normal text range). 0/72 VirusTotal. Kaspersky CLEAN.
+**Test:** Payload hidden in Discord message. Entropy 0.12. Kaspersky CLEAN.
 
 ### WINRECON
-Windows reconnaissance framework. Process enumeration, privilege escalation checks, network mapping, service enumeration.
+Windows reconnaissance framework. Process enumeration, privilege escalation checks, network mapping.
 
-**Wartime test:** 1229 lines of output. Standard user context. Defender OFF, Kaspersky ACTIVE. 2 writable SYSTEM services found.
-
----
-
-## LIVE WIDGETS
-
-15 interactive widgets demonstrating techniques in real-time:
-
-| Widget | Demo |
-|--------|------|
-| VADER | HWBP bypass runtime — DR0/DR1 set, AMSI/ETW silenced |
-| IRON-DOME | 8-layer compile + AV scan simulation + kill chain |
-| Networking 101 | OSI model ↔ TCP/IP stack switching |
-| Recon | WINRECON ↔ GHOST-SCRAPER tab switching |
-| Terminal 101 | IPCONFIG ↔ PROCESSES live output |
-| Privesc | TOKENS ↔ JUICYPOTATO privilege escalation |
-| Kill Chain | All 7 phases: Recon → Weaponize → Deliver → Exploit → Install → C2 → Actions |
-| Shellcode | Assembly BUILD with runtime compilation |
-| WinRecon | IDENTITY ↔ PRIVILEGES enumeration |
+**Test:** 1229 lines of output. Standard user context. 2 writable SYSTEM services found.
 
 ---
 
-## INFRASTRUCTURE
+## LIVE LAB EVIDENCE
 
-**Current:** GitHub Pages (free, fast, CDN)  
-**Domain:** rainfantry.github.io/22nd-survey-division  
-**Target:** Custom domain + cPanel when revenue justifies ($500+/mo)  
-**Payment:** Stripe (cards) + Wise (bank transfer) + Invoice (corporate)  
-**Delivery:** AES-256 encrypted 7z archive, PIN emailed within 24h
+| Lab | IP | Status | Key Finding |
+|-----|-----|--------|-------------|
+| **WUPC** | 192.168.1.42 | ✅ SSH_OK | SeImpersonatePrivilege + writable service |
+| **HOST** | 192.168.1.92 | ✅ SSH_OK | Kaspersky active, real-world target |
+| **RADON** | 192.168.1.145 | ⏳ Timeout | C2 beacon SYN_SENT |
 
-**Migration roadmap:** See [22sd-battle-plan](https://github.com/rainfantry/22sd-battle-plan) (private repo)
+**Verified 2026-06-29:** WUPC .42 — SSH_OK, Admin context, SeImpersonatePrivilege ENABLED. HealthSecurityHost service with Authenticated Users:(M) permissions → SYSTEM in one restart.
+
+---
+
+## TESTING & DEPLOYMENT
+
+### Automated Testing
+
+Every push is validated by the test suite:
+
+```bash
+# Run all tests
+bash scripts/test-all.sh
+
+# Check site health
+bash scripts/validate-site.sh
+
+# Check all links
+python3 scripts/check_links.py .
+
+# Performance audit (ad-hoc — quota limited)
+bash scripts/perf-check.sh
+
+# Create release
+bash scripts/release.sh v2026.06.29
+```
+
+**Test Results (Latest):**
+- ✅ 5/5 main pages: 200 OK
+- ✅ 27/27 module pages: 200 OK
+- ✅ 284/284 internal links: valid
+- ✅ 27 quiz options: interactive
+- ✅ 25 module tree items: complete
+
+### Deployment
+
+| Target | Details |
+|--------|---------|
+| **Production** | GitHub Pages (auto-deploy from `main`) |
+| **URL** | `https://rainfantry.github.io/22nd-survey-division/` |
+| **Staging** | `http://192.168.1.92:18080/` (local server) |
+| **Type** | Static HTML — no DB, no env, no backend |
+
+### Rollback
+
+```bash
+# If release breaks something:
+git revert HEAD && git push origin main
+# GitHub Pages redeploys in ~2 minutes
+```
+
+### Migration
+
+To move to a new host:
+1. Copy all files from repo
+2. Update `CNAME` if using custom domain
+3. Run `bash scripts/test-all.sh`
+4. Done — no database migration needed
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for full details.
+
+---
+
+## SITREPS — DEVELOPMENT LOG
+
+| Date | Commit | What Changed |
+|------|--------|--------------|
+| 2026-06-29 | `ded05d0` | Automated testing suite, DEPLOYMENT.md, perf-check.sh |
+| 2026-06-29 | `36135c2` | Test scripts, link checker, release pipeline |
+| 2026-06-29 | `e199d7b` | Interactive quizzes, module-tree.html, copy buttons |
+| 2026-06-29 | `7d3641e` | Copy buttons on practical-labs + resources |
+| 2026-06-29 | `88201d0` | Mentor redaction (asi dev → mentor), HTML comments cleaned |
+| 2026-06-29 | `4051288` | Resources: Quick reference cheat sheets, KILL_CHAIN_LAB_EVIDENCE |
+| 2026-06-29 | `47ef0eb` | Practical Labs: SSH tests, defense bypasses, simulations, widgets |
+| 2026-06-29 | `69483d5` | Crash course expanded with detailed mentor explanations |
 
 ---
 
 ## HONESTY POLICY
 
-This course teaches authorized security testing only. Every tool is tested on own hardware or authorized lab environments. MSRC responsible disclosure filed for all Microsoft-related findings.
+This course teaches **authorized security testing only**. Every tool is tested on own hardware or authorized lab environments. MSRC responsible disclosure filed for all Microsoft-related findings.
 
 **No false claims:**
 - Every AV result is from live testing, not speculation
