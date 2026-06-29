@@ -343,6 +343,16 @@
             <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — stop hunting for CVEs and start harvesting tokens, hashes, and tickets. Blue — monitor authentication anomalies, not just malware; the attacker looks like a legitimate user because they are using legitimate trust.</p>
         </div>
 
+        <div class="method-card" style="border-color: var(--amber);">
+            <h4 style="color: var(--amber);">🎙️ Mentor Callout — asi dev [HTB]</h4>
+            <p style="font-style: italic; color: var(--amber); text-shadow: 0 0 8px rgba(255,170,0,0.3);">"You don't move laterally with exploits, you move with credentials."</p>
+            <div class="layman-term" style="margin: 1rem 0 0 0;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>Exploits are battering rams — loud, fragile, and patched tomorrow. Credentials are skeleton keys — quiet, reusable, and the locks were built to accept them. Once you have a username and hash, you don't need a zero-day; you simply log in the way IT does every day.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — prioritize credential harvesting over vulnerability scanning; mimikatz and token theft beat exploit chains in mature environments. Blue — harden credential storage (Credential Guard, LAPS) and detect credential access behaviors, because blocking every exploit is impossible but controlling identity is not.</p>
+        </div>
+
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>You breached the perimeter. One host is yours. Now what? The network is the battlefield. Lateral movement is flanking maneuver — you don't assault the fortress head-on, you move through the supply lines, the communication trenches, the maintenance tunnels. SSH, WMI, SMB — these are your supply lines.</p>
@@ -465,6 +475,16 @@
                 <p>At the bottom of every technique is a packet crossing a wire. Credentials, tickets, and tunnels are just ways to make that packet look normal. Learn the protocols — TCP, SMB, RPC, Kerberos, SSH — and you will see that lateral movement is not magic; it is networking with borrowed identity.</p>
             </div>
             <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — when a technique fails, read the network error; it tells you more than the tool output. Blue — network logs (Zeek, PCAP, firewall flows) often reveal lateral movement before endpoint logs do, because the protocol cannot lie about where it goes.</p>
+        </div>
+
+        <div class="method-card" style="border-color: var(--amber);">
+            <h4 style="color: var(--amber);">🎙️ Mentor Callout — asi dev [HTB]</h4>
+            <p style="font-style: italic; color: var(--amber); text-shadow: 0 0 8px rgba(255,170,0,0.3);">"Pass-the-hash is the bread and butter of lateral movement."</p>
+            <div class="layman-term" style="margin: 1rem 0 0 0;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>If lateral movement were a meal, pass-the-hash would be the daily ration. It is not fancy, but it works everywhere Windows speaks NTLM. You steal the scrambled version of a password and use it to prove you are someone else — no cracking, no guessing, just replay and walk through the door.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — learn sekurlsa::pth, CrackMapExec, and Impacket; if you only master one lateral technique, make it this one. Blue — assume hashes will leak; segment networks, rotate local admin passwords with LAPS, and enable Credential Guard so stolen hashes become useless paperweights.</p>
         </div>
 
         <div class="method-card" id="pass-the-hash">

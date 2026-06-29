@@ -397,6 +397,20 @@
             <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Red:</strong> Blend into baseline activity — parent processes, command lines, and domains should look mundane. <strong>Blue:</strong> Baseline normal user behavior so outliers stand out.</p>
         </div>
 
+        <div class="first-principle">
+            <h3>🧠 Mentor Note — asi dev [HTB]</h3>
+            <p><span class="neon-highlight">"EDR vendors buy time, not invincibility."</span></p>
+            <p style="margin-top: 0.5rem;">An EDR is a business product shipped on a deadline. It catches what its engineers thought of, tested, and had budget to detect. Every rule is a trade-off between performance and coverage; every update is a reaction to something already seen. You are not fighting magic — you are racing a patch cycle.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Red:</strong> Use novel or lightly-monitored techniques to outrun signature and behavioral updates. <strong>Blue:</strong> Treat EDR as a speed bump, not a fortress — layer detection, response playbooks, and human analysis behind it.</p>
+        </div>
+
+        <div class="first-principle">
+            <h3>🧠 Mentor Note — asi dev [HTB]</h3>
+            <p><span class="neon-highlight">"The best bypass is not triggering the EDR in the first place."</span></p>
+            <p style="margin-top: 0.5rem;">You can spend weeks unhooking NTDLL, or you can simply use a workflow the EDR was trained to trust. A signed binary running from a normal path, touching expected registry keys, and talking to a whitelisted domain will sail past behavioral models that only know how to spot "malware-shaped" actions.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Red:</strong> Prioritize living-off-the-land and trusted execution chains over flashy hook bypasses. <strong>Blue:</strong> Hunt for anomalies in trusted binaries, parent-child relationships, and outbound destinations — not just obvious malware patterns.</p>
+        </div>
+
         <div class="toc">
             <h4>📋 Table of Contents</h4>
             <a href="#edr-arch">1. EDR Architecture — How the Watcher Works</a>
