@@ -336,45 +336,6 @@ th { color: var(--neon); font-weight: bold; }
 }
 .section-content { color: #bbb; }
 .section-content p { margin-bottom: 15px; }
-.mentor-callout {
-    background: #0a0a0a;
-    border: 2px solid var(--amber);
-    border-left: 4px solid var(--amber);
-    border-radius: 0 8px 8px 0;
-    padding: 1.5rem;
-    margin: 1.5rem 0;
-    color: #e0c080;
-}
-.mentor-callout .mentor-title {
-    color: var(--amber);
-    font-weight: bold;
-    margin-bottom: 0.75rem;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 0 0 5px rgba(255,170,0,0.3);
-}
-.mentor-callout .mentor-quote {
-    font-style: italic;
-    color: var(--amber);
-    margin-bottom: 1rem;
-    font-size: 1.05rem;
-    text-shadow: 0 0 8px rgba(255,170,0,0.2);
-}
-.mentor-callout .layman,
-.mentor-callout .redblue {
-    margin-top: 0.75rem;
-    color: #bbb;
-}
-.mentor-callout .layman strong {
-    color: var(--neon);
-}
-.mentor-callout .redblue strong {
-    color: var(--accent2);
-}
-.mentor-callout .redblue strong.red {
-    color: var(--accent);
-}
 </style>
 </head>
 <body>
@@ -455,15 +416,6 @@ th { color: var(--neon); font-weight: bold; }
     <div class="why-box">
         <h5>Why Android dominates red team mobile operations</h5>
         <p>Android's open ecosystem, self-signed APK acceptance, and ease of sideloading make it the <span class="neon-highlight">primary target for mobile RATs</span>. iOS requires either a $99/year developer account, an enterprise certificate (easily revoked), or a full jailbreak chain — each of which raises the barrier significantly. For red teams, Android offers the path of least resistance.</p>
-    </div>
-
-    <!-- MENTOR CALLOUT: iOS is harder than Android because the garden has walls -->
-    <div class="mentor-callout">
-        <div class="mentor-title">// Mentor: asi dev [HTB]</div>
-        <p class="mentor-quote">"iOS is harder than Android because the garden has walls."</p>
-        <p class="layman"><strong>Layman:</strong> Think of Android as a public market where anyone can set up a stall and sell whatever they want. iOS is a private club with a bouncer at the door — every member needs a sponsor, every bag gets checked, and the walls keep most trouble out. That bouncer is Apple, and the walls are code signing, sandboxing, and the App Store gatekeeper.</p>
-        <p class="redblue"><strong>For red team:</strong> iOS attacks require more planning. You need a developer account, an enterprise certificate, a jailbreak chain, or a zero-click exploit. Android lets you build, sign, and sideload a RAT in minutes. Choose your target platform based on time, budget, and acceptable risk.</p>
-        <p class="redblue"><strong class="red">For blue team:</strong> Apple's walls are not perfect, but they dramatically reduce the attack surface. Enforce iOS for high-risk users, block enterprise sideloading profiles you don't recognize, and monitor for jailbreak indicators. Android devices need stricter app-source policies and MDM controls.</p>
     </div>
 
     <div class="code-block">
@@ -995,24 +947,6 @@ $ frida -U -f com.target.app -l ios_ssl_bypass.js --no-pause
     <h2>🦠 Section 8: Mobile Malware — Families and Techniques</h2>
 
     <p>Mobile malware is a mature ecosystem. Understanding existing families reveals proven techniques for stealth, persistence, and data exfiltration.</p>
-
-    <!-- MENTOR CALLOUT: Mobile malware is just malware on a smaller computer -->
-    <div class="mentor-callout">
-        <div class="mentor-title">// Mentor: asi dev [HTB]</div>
-        <p class="mentor-quote">"Mobile malware is just malware on a smaller computer."</p>
-        <p class="layman"><strong>Layman:</strong> A phone is a computer that fits in your pocket. It has a processor, memory, storage, an operating system, and apps — just like a laptop. Malware on a phone does the same things malware does anywhere else: it hides, it persists, it steals data, and it phones home. The screen is smaller, but the principles are identical.</p>
-        <p class="redblue"><strong>For red team:</strong> Don't treat mobile as magic. Your existing tradecraft — social engineering, persistence, C2, data staging, and exfiltration — all apply. The only difference is the API surface and the distribution model. Learn the mobile APIs, then apply what you already know.</p>
-        <p class="redblue"><strong class="red">For blue team:</strong> Defend phones with the same rigor as endpoints. EDR for mobile, app inventory, network telemetry, and behavioral detection all translate directly. If you wouldn't trust a Windows binary from a random website, don't trust an APK from a Telegram channel either.</p>
-    </div>
-
-    <!-- MENTOR CALLOUT: App store review is not a security guarantee -->
-    <div class="mentor-callout">
-        <div class="mentor-title">// Mentor: asi dev [HTB]</div>
-        <p class="mentor-quote">"App store review is not a security guarantee."</p>
-        <p class="layman"><strong>Layman:</strong> The app store is a customs checkpoint that checks your luggage for obvious contraband. It does not read your mind or know your plans. A spy with a clean passport and a hidden microphone still gets through. Joker, XcodeGhost, and countless fleeceware apps proved that bad code passes review every day.</p>
-        <p class="redblue"><strong>For red team:</strong> App store review is an obstacle, not a wall. Use delayed execution, encrypted payloads, remote configuration, and legitimate service abuse to look benign at review time. The payload wakes up after installation, not before.</p>
-        <p class="redblue"><strong class="red">For blue team:</strong> Never whitelist apps just because they came from an official store. Review permissions, network behavior, and developer reputation. A weather app that requests SMS access and contacts is suspicious regardless of where it was downloaded.</p>
-    </div>
 
     <div class="method-card" id="mobile-malware-families">
         <h4>Notable Mobile Malware Families <span class="difficulty diff-medium">MEDIUM</span></h4>
