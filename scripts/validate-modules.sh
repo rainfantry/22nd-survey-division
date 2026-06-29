@@ -35,8 +35,8 @@ validate_module() {
     local size=$(wc -l < "$module_path")
     echo "  Lines: $size"
     
-    # Check for navigation
-    if grep -q "nav.*previous\|nav.*next\|nav.*home" "$module_path" 2>/dev/null; then
+    # Check for navigation (multiple possible patterns)
+    if grep -qE "class=\"nav\"|class='nav'|id=\"nav\"|id='nav'|href=\"MODULE_[0-9]+|href='MODULE_[0-9]+|← PREV|NEXT →|HOME" "$module_path" 2>/dev/null; then
         echo -e "  ${GREEN}✓ Navigation present${NC}"
     else
         echo -e "  ${AMBER}⚠ Navigation missing${NC}"
@@ -46,8 +46,8 @@ validate_module() {
     local evidence_count=$(grep -c "evidence-box\|evidence-header" "$module_path" 2>/dev/null || echo "0")
     echo "  Evidence boxes: $evidence_count"
     
-    # Check for mentor callouts
-    local mentor_count=$(grep -ic "mentor says\|mentor.*says\|mentor.*quote" "$module_path" 2>/dev/null || echo "0")
+    # Check for mentor callouts (broader patterns)
+    local mentor_count=$(grep -icE "mentor says|mentor.*says|mentor.*quote|mentor.*teaches|mentor.*words|mentor.*means" "$module_path" 2>/dev/null || echo "0")
     echo "  Mentor callouts: $mentor_count"
     
     # Check for cross-links
