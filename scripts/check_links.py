@@ -21,9 +21,14 @@ def find_html_files(repo_dir):
     return html_files
 
 def extract_links(html_path, repo_dir):
-    """Extract all href/src links from an HTML file."""
+    """Extract all href/src links from an HTML file, excluding code blocks."""
     with open(html_path, 'r', encoding='utf-8', errors='ignore') as f:
         content = f.read()
+    
+    # Remove code blocks to avoid false positives on code snippets
+    content = re.sub(r'<pre.*?</pre>', '', content, flags=re.DOTALL)
+    content = re.sub(r'<code.*?</code>', '', content, flags=re.DOTALL)
+    content = re.sub(r'<div class="code-block".*?</div>', '', content, flags=re.DOTALL)
     
     # Find href and src attributes
     links = re.findall(r'(?:href|src)=["\']([^"\']+)["\']', content)

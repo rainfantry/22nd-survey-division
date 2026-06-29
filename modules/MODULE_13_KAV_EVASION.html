@@ -453,9 +453,9 @@
     <a href="../index.html">← Home</a>
     <a href="MODULE_09_MALWARE.html">← Module 09</a>
     <a href="MODULE_10_CODE_INJECTION.html">← Module 10</a>
-    <a href="MODULE_11_AMSI_BYPASS.html">← Module 11</a>
+    <a href="MODULE_11_AMSI.html">← Module 11</a>
     <a href="MODULE_12_ETW_BYPASS.html">← Module 12</a>
-    <a href="MODULE_14_EDR_EVASION.html">Module 14 →</a>
+    <a href="MODULE_13_EDR_EVASION.html">Module 14 →</a>
   </div>
 
   <h1>Module 13: KAV Evasion <span class="status-badge status-live">LIVE TESTED</span></h1>
@@ -824,7 +824,7 @@ Malware → NtAllocateVirtualMemory (syscall) → Kernel
 // No user-mode hook is triggered because we never call VirtualAllocEx</pre>
   </div>
 
-  <p>See <a class="cross-link" href="MODULE_10_CODE_INJECTION.html">Module 10: Code Injection</a> for direct syscall techniques and <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11: AMSI Bypass</a> for hook removal strategies.</p>
+  <p>See <a class="cross-link" href="MODULE_10_CODE_INJECTION.html">Module 10: Code Injection</a> for direct syscall techniques and <a class="cross-link" href="MODULE_11_AMSI.html">Module 11: AMSI Bypass</a> for hook removal strategies.</p>
 
   <h3>Behavioral Indicators Monitored</h3>
   <table>
@@ -872,11 +872,11 @@ Malware → NtAllocateVirtualMemory (syscall) → Kernel
     <li><strong>ETW (Event Tracing for Windows):</strong> Kernel-level event collection for security monitoring</li>
   </ul>
 
-  <p>Both are covered in detail in <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11: AMSI Bypass</a> and <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12: ETW Bypass</a>. The key insight: if you disable AMSI and ETW, the AV's behavioral engine goes blind.</p>
+  <p>Both are covered in detail in <a class="cross-link" href="MODULE_11_AMSI.html">Module 11: AMSI Bypass</a> and <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12: ETW Bypass</a>. The key insight: if you disable AMSI and ETW, the AV's behavioral engine goes blind.</p>
 
   <div class="warning-box">
     <h5>⚠️ Critical Warning</h5>
-    <p>Disabling AMSI and ETW is <span class="neon-highlight">extremely suspicious</span> behavior. Modern EDR (Endpoint Detection and Response) monitors for these bypasses specifically. See <a class="cross-link" href="MODULE_14_EDR_EVASION.html">Module 14: EDR Evasion</a> for techniques that evade both AV and EDR simultaneously.</p>
+    <p>Disabling AMSI and ETW is <span class="neon-highlight">extremely suspicious</span> behavior. Modern EDR (Endpoint Detection and Response) monitors for these bypasses specifically. See <a class="cross-link" href="MODULE_13_EDR_EVASION.html">Module 14: EDR Evasion</a> for techniques that evade both AV and EDR simultaneously.</p>
   </div>
 
   <!-- SECTION 5: SANDBOX EVASION -->
@@ -1297,7 +1297,7 @@ Errors:            0
     </div>
     <div class="method-card">
       <h4>AMSI + ETW Suppression</h4>
-      <p>Kaspersky's behavioral layer relies on AMSI and ETW. Suppressing these with hardware breakpoints (Dark Room) blinds the behavioral engine. See <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11</a> and <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12</a>.</p>
+      <p>Kaspersky's behavioral layer relies on AMSI and ETW. Suppressing these with hardware breakpoints (Dark Room) blinds the behavioral engine. See <a class="cross-link" href="MODULE_11_AMSI.html">Module 11</a> and <a class="cross-link" href="MODULE_12_ETW_BYPASS.html">Module 12</a>.</p>
     </div>
     <div class="method-card">
       <h4>KSN Delay Tactics</h4>
@@ -1585,7 +1585,7 @@ powershell Get-AuthenticodeSignature payload.exe | Format-List</pre>
     <div class="lotl-card">
       <h5>powershell.exe</h5>
       <p class="binary">powershell -enc [Base64EncodedCommand]</p>
-      <p>The classic LOTL tool. Encoded commands bypass simple string matching. See <a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11</a> for AMSI bypass techniques.</p>
+      <p>The classic LOTL tool. Encoded commands bypass simple string matching. See <a class="cross-link" href="MODULE_11_AMSI.html">Module 11</a> for AMSI bypass techniques.</p>
     </div>
     <div class="lotl-card">
       <h5>rundll32.exe</h5>
@@ -1657,7 +1657,7 @@ reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v "OneDriveUpdate" /
       <p>Inject into a trusted process to inherit its reputation. If notepad.exe is trusted, your code inside notepad.exe is trusted. Direct syscalls bypass API hooks used by behavioral detection.</p>
     </div>
     <div class="method-card">
-      <h4><a class="cross-link" href="MODULE_11_AMSI_BYPASS.html">Module 11: AMSI Bypass</a></h4>
+      <h4><a class="cross-link" href="MODULE_11_AMSI.html">Module 11: AMSI Bypass</a></h4>
       <p>AMSI is the Windows interface that AV uses to scan scripts and memory. Bypassing AMSI blinds the AV's script scanner and behavioral engine. Hardware breakpoint technique (Dark Room) works against both AMSI and ETW.</p>
     </div>
     <div class="method-card">
@@ -1665,7 +1665,7 @@ reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v "OneDriveUpdate" /
       <p>ETW provides kernel-level telemetry that AV and EDR consume. Disabling ETW removes the data feed that behavioral detection relies on. Combine with AMSI bypass for complete blindness.</p>
     </div>
     <div class="method-card">
-      <h4><a class="cross-link" href="MODULE_14_EDR_EVASION.html">Module 14: EDR Evasion</a></h4>
+      <h4><a class="cross-link" href="MODULE_13_EDR_EVASION.html">Module 14: EDR Evasion</a></h4>
       <p>EDR is AV's big brother. It monitors the same behaviors but with more persistence and better analytics. Techniques that evade EDR will almost certainly evade AV, but the reverse is not always true.</p>
     </div>
   </div>
@@ -1796,7 +1796,7 @@ reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run /v "OneDriveUpdate" /
 
   <div class="nav">
     <a href="MODULE_12_ETW_BYPASS.html">← Module 12: ETW Bypass</a>
-    <a href="MODULE_14_EDR_EVASION.html">Module 14: EDR Evasion →</a>
+    <a href="MODULE_13_EDR_EVASION.html">Module 14: EDR Evasion →</a>
   </div>
 </div>
 
