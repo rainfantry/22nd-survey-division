@@ -131,6 +131,115 @@ SUCCESS: The process with PID 13628 has been terminated.</pre>
   <p><strong>Mentor says:</strong> "Real attacks are carried remotely. If you can't see the network, you can't see the attack."</p>
 </div>
 
+<div class="evidence-box">
+  <div class="evidence-header">// LAB BASELINE — WUPC .42 (CLEAN SANDBOX)</div>
+  <div class="evidence-meta">2026-06-30 01:35 UTC | Host: WUPC (192.168.1.42) | Access: SSH as SWu (admin)</div>
+  <p><strong>System:</strong> Windows 11 Home, build 26200, WORKGROUP, 5 hotfixes.</p>
+  <p><strong>Listening ports:</strong> SSH on :22 (PID 5348), Steam on :27036/:27060 (PID 22064), standard Windows RPC/SMB on :135/:445.</p>
+  <p><strong>AV status:</strong> Windows Defender DISABLED (RealTimeProtectionEnabled: False, AntivirusEnabled: False). This is expected for a sandbox used to test payloads.</p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>PS C:\Users\SWu&gt; whoami /all | findstr Administrators
+BUILTIN\Administrators
+
+PS C:\Users\SWu&gt; systeminfo | findstr /C:"OS" /C:"Domain" /C:"Hotfix"
+OS Name:                       Microsoft Windows 11 Home
+OS Version:                    10.0.26200 N/A Build 26200
+Domain:                        WORKGROUP
+Hotfix(s):                     5 Hotfix(s) Installed.
+
+PS C:\Users\SWu&gt; Get-MpComputerStatus | Select-Object RealTimeProtectionEnabled, AntivirusEnabled
+RealTimeProtectionEnabled AntivirusEnabled
+------------------------- ----------------
+                    False            False</pre>
+  </div>
+  <p><strong>What this teaches:</strong> A clean sandbox has a predictable baseline. When you run exploits here, any NEW listener or process is immediately suspicious. Compare against this baseline.</p>
+</div>
+
+<div class="evidence-box">
+  <div class="evidence-header">// LAB BASELINE — HOST .92 (REAL MACHINE WITH KASPERSKY)</div>
+  <div class="evidence-meta">2026-06-30 01:40 UTC | Host: LAPTOP-R32M8MLI (192.168.1.92) | Access: SSH as gwu07
+</div>
+  <p><strong>System:</strong> Real daily driver. Kaspersky active. Windows Defender disabled because third-party AV replaced it.</p>
+  <p><strong>AV status:</strong></p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>PS C:\Users\gwu07&gt; Get-MpComputerStatus | Select-Object RealTimeProtectionEnabled, AntivirusEnabled
+RealTimeProtectionEnabled AntivirusEnabled
+------------------------- ----------------
+                    False            False
+
+PS C:\Users\gwu07&gt; Get-Process | Where-Object {$_.ProcessName -match 'avp|kaspersky'} | Select-Object Name, Id
+Name     Id
+----     --
+avp    5612
+avp   11692
+avpui 16084</pre>
+  </div>
+  <p><strong>Interesting listeners:</strong> Ollama on :11434, PostgreSQL on :1337, Python on :18080 and :9090, SSH on :22. Process IDs mapped to legitimate binaries.</p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre>PS C:\Users\gwu07&gt; Get-Process -Id 29384,9180,34760,37152 | Select-Object Name, Id, Path
+
+Name          Id Path
+----          -- ----
+ollama     29384 C:\Users\gwu07\AppData\Local\Programs\Ollama\ollama.exe
+postgres    9180 C:\Program Files\PostgreSQL\18\bin\postgres.exe
+python     34760 C:\Python314\python.exe
+python3.13 37152 C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_...</pre>
+  </div>
+  <p><strong>What this teaches:</strong> Real machines have many legitimate listeners. The defender's job is to <em>baseline</em> them. A new python.exe listener on a high port (like RADON's c2_web.py) would stand out immediately.</p>
+</div>
+
+<div class="evidence-box">
+  <div class="evidence-header">// ATTACK/DETECT LOOP — FAKE SCHEDULED TASK PERSISTENCE ON WUPC .42</div>
+  <div class="evidence-meta">2026-06-30 02:00 UTC | Host: WUPC (192.168.1.42) | Action: Created benign persistence, hunted it, removed it
+</div>
+  <p><strong>Attack:</strong> Created a scheduled task named <code>svc_host_update</code> under <code>\Microsoft\Windows\WindowsUpdate\</code>, running PowerShell with <code>-WindowStyle Hidden</code> every 5 minutes as SYSTEM. This mimics a common attacker persistence pattern: hide in a trusted folder with a legitimate-sounding name.</p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># ATTACK: Create fake persistence task
+schtasks /create /tn 'Microsoft\Windows\WindowsUpdate\svc_host_update' `
+  /tr 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Hidden -Command Start-Sleep 10' `
+  /sc minute /mo 5 /ru SYSTEM /f
+
+SUCCESS: The scheduled task "Microsoft\Windows\WindowsUpdate\svc_host_update" has successfully been created.</pre>
+  </div>
+  <p><strong>Detection:</strong> Two commands found it. First, list tasks in trusted folders authored by non-Microsoft accounts. Second, grep schtasks output for hidden-window PowerShell patterns.</p>
+  <div class="code-block">
+    <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+    <pre># DETECT: Tasks in trusted folders NOT authored by Microsoft
+Get-ScheduledTask | Where-Object {
+  $_.TaskPath -like '*WindowsUpdate*' -and $_.Author -notlike '*Microsoft*'
+} | Select-Object TaskName, TaskPath, Author, Date
+
+TaskName        TaskPath                          Author   Date
+--------        --------                          ------   ----
+svc_host_update \Microsoft\Windows\WindowsUpdate\ WuPC\SWu 2026-06-30T01:48:29
+
+# DETECT: Tasks running hidden PowerShell / scripts
+schtasks /query /fo LIST /v | Select-String -Pattern 'powershell.exe|cmd.exe|\.ps1|\.bat|\.vbs' -Context 2,0
+
+  Last Result:                          267011
+  Author:                               WuPC\SWu
+&gt; Task To Run:                          C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle Hidden
+  -Command Start-Sleep 10
+
+# CLEANUP: Remove the fake task
+Unregister-ScheduledTask -TaskName 'svc_host_update' `
+  -TaskPath '\Microsoft\Windows\WindowsUpdate\' -Confirm:$false</pre>
+  </div>
+  <p><strong>What makes this suspicious:</strong></p>
+  <ul style="margin-left:1.5rem;font-size:0.9rem;">
+    <li>Task name mimics a system service (<code>svc_host_update</code>) but is not a known Windows task.</li>
+    <li>Runs under <code>\Microsoft\Windows\WindowsUpdate\</code> — attackers hide in trusted folders.</li>
+    <li>Author is <code>WuPC\SWu</code>, not Microsoft Corporation or a vendor.</li>
+    <li>Uses <code>-WindowStyle Hidden</code> — legitimate admin scripts rarely need hidden windows.</li>
+    <li>Runs as SYSTEM every 5 minutes — high frequency + high privilege is a red flag.</li>
+  </ul>
+  <p><strong>Mentor says:</strong> "Save every rung." For defenders, that means check every persistence mechanism — registry, tasks, services, WMI — because attackers save rungs too.</p>
+</div>
+
 <div class="section" id="identity">
   <div class="section-title">// WHO ARE YOU</div>
   <h2>Identity & Context</h2>
