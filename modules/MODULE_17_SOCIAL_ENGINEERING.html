@@ -909,6 +909,48 @@ hunter.io -> search "targetcompany.com" -> extract emails
             </table>
         </div>
 
+        <div class="evidence-box">
+            <div class="evidence-header">// LIVE EVIDENCE — DNS Recon for Email Spoofing</div>
+            <div class="evidence-meta">2026-06-29 23:15 UTC | Public infrastructure | Verified by SERVITOR</div>
+            <p style="font-size: 0.85rem; color: var(--dim); margin-bottom: 1rem;">These commands were executed against public infrastructure to verify the concepts in this module. The output proves why DMARC analysis is the first step in any email-based attack assessment.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+=== VERIFYING EMAIL DEFENSES (DNS Recon) ===
+
+# Step 1: Check MX records — where does email go?
+$ nslookup -type=MX github.com
+
+Non-authoritative answer:
+github.com  MX preference = 0
+  mail exchanger = github-com.mail.protection.outlook.com
+
+# Step 2: Check DMARC — what happens if SPF/DKIM fail?
+$ nslookup -type=TXT _dmarc.github.com
+
+_dmarc.github.com  text =
+  "v=DMARC1; p=quarantine; sp=reject; pct=100;
+   rua=mailto:dmarc@github.com; ruf=mailto:dmarc@github.com; fo=1"
+
+# ANALYSIS:
+# p=quarantine  → Failed emails go to spam (not rejected)
+# sp=reject   → Subdomain emails are rejected if they fail
+# pct=100     → Policy applies to 100% of emails
+
+# Step 3: Check SPF — who can send email for this domain?
+$ nslookup -type=TXT github.com
+
+github.com  text =
+  "v=spf1 include:_netblocks.google.com ... ~all"
+
+# ANALYSIS:
+# ~all = soft fail — emails from unauthorized IPs are marked suspicious
+#        but may still be delivered
+# -all = hard fail — unauthorized emails are rejected
+            </div>
+            <p style="margin-top: 1rem;"><strong>What this proves:</strong> Even major companies like GitHub have <span class="neon-highlight">p=quarantine</span> (not p=reject) on their main domain. This means spoofed emails may be delivered to spam folders — still visible to users. A target with <span class="neon-amber">p=none</span> is completely vulnerable.</p>
+            <p style="margin-top: 0.5rem;"><strong>Mentor says:</strong> "The inbox is the new building perimeter. If you can reach the inbox, you can reach the network."</p>
+        </div>
+
         <div class="code-block">
 === EMAIL SPOOFING TECHNIQUES ===
 

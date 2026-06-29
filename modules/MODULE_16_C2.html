@@ -783,8 +783,9 @@ response = requests.post(
             </div>
 
             <div class="warning-box">
-                <h5>⚠️ Cloud providers have patched this</h5>
-                <p>AWS and Google now validate Host headers against the TLS SNI. Domain fronting still works on some CDNs and in certain regions. The technique is worth knowing because <span class="neon-amber">new fronting techniques appear constantly</span> — the principle (abuse shared infrastructure) is eternal.</p>
+                <h5>⚠️ DEPRECATED: Major CDNs Have Patched This</h5>
+                <p><strong>Domain fronting is largely dead as of 2020-2021.</strong> AWS CloudFront, Azure Front Door, and Google Cloud CDN all added Host header validation against the TLS SNI. This section is preserved for historical understanding and because <span class="neon-amber">new fronting techniques appear constantly</span> — the principle (abuse shared infrastructure) is eternal.</p>
+                <p style="margin-top: 0.5rem;"><strong>Current status:</strong> Major CDNs block this. Some regional CDNs and alternative providers may still be vulnerable. Always verify before relying on this technique in operations. <span class="neon-highlight">Do not build operational C2 assuming domain fronting works.</span></p>
             </div>
         </div>
 
