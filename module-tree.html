@@ -38,8 +38,9 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 .module-links{display:flex;gap:0.5rem;flex-wrap:wrap;}
 .module-links a{color:var(--neon);text-decoration:none;font-family:'Space Mono',monospace;font-size:0.65rem;padding:0.2rem 0.5rem;border:1px solid var(--neon);transition:all 0.2s;}
 .module-links a:hover{background:var(--neon);color:var(--bg);}
-.module-status{font-size:0.7rem;padding:0.2rem 0.5rem;margin-left:auto;}
+.module-status{font-size:0.7rem;padding:0.2rem 0.5rem;margin-left:auto;white-space:nowrap;}
 .status-live{background:rgba(0,255,65,0.1);color:var(--green);border:1px solid var(--green-dim);}
+.status-validated{background:rgba(0,255,65,0.2);color:var(--green);border:1px solid var(--green);box-shadow:0 0 8px rgba(0,255,65,0.2);}
 .status-pending{background:rgba(255,170,0,0.1);color:var(--amber);border:1px solid var(--amber);}
 .status-missing{background:rgba(255,0,64,0.1);color:var(--red);border:1px solid var(--red);}
 
@@ -48,6 +49,9 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 
 .info-box{border:1px solid var(--amber);padding:1rem;background:rgba(255,170,0,0.05);margin:1rem 0;font-size:0.85rem;}
 .info-box::before{content:'// NOTE: ';color:var(--amber);font-weight:700;font-family:'Space Mono',monospace;}
+
+.legend{display:flex;gap:1rem;flex-wrap:wrap;margin:1rem 0;font-size:0.75rem;font-family:'Space Mono',monospace;}
+.legend-item{display:flex;align-items:center;gap:0.3rem;}
 
 .footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
 
@@ -79,8 +83,13 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 </div>
 
 <div class="info-box">
-  <strong>How to use this page:</strong> Each module links to its HTML file. Status shows if navigation (next/prev) works. 
-  "✓ LIVE" = complete with navigation. "○ PENDING" = exists but missing links. "✗ MISSING" = not found.
+  <strong>How to use this page:</strong> Each module links to its HTML file. Status shows if navigation (next/prev) works and whether the module has been fact-checked against live research.
+  <div class="legend">
+    <span class="legend-item"><span class="module-status status-validated">✓ VALIDATED</span> = Fact-checked + evidence added</span>
+    <span class="legend-item"><span class="module-status status-live">✓ LIVE</span> = Complete with navigation</span>
+    <span class="legend-item"><span class="module-status status-pending">○ PENDING</span> = Exists but needs work</span>
+    <span class="legend-item"><span class="module-status status-missing">✗ MISSING</span> = Not found</span>
+  </div>
 </div>
 
 <div class="tree" id="phase1">
@@ -94,7 +103,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">00</span>
       <div class="module-info">
         <div class="module-name">READER GUIDE</div>
-        <div class="module-desc">How to use this course. Prerequisites. Study methodology. Expectation setting.</div>
+        <div class="module-desc">How to use this course. Lab setup. Study methodology. Expectation setting.</div>
         <div class="module-links">
           <a href="modules/MODULE_00_READER.html">VIEW →</a>
         </div>
@@ -105,10 +114,9 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">01</span>
       <div class="module-info">
         <div class="module-name">NETWORKING FUNDAMENTALS</div>
-        <div class="module-desc">TCP/IP, sockets, ports, protocols. "Eventually all comes to networking." — mentor</div>
+        <div class="module-desc">TCP/IP, sockets, ports, protocols, Wireshark, tunneling. "Eventually all comes to networking." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_01_NETWORKING.html">VIEW →</a>
-          <a href="modules/MODULE_01.html">ALT →</a>
         </div>
       </div>
       <span class="module-status status-live">✓ LIVE</span>
@@ -117,18 +125,18 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">02</span>
       <div class="module-info">
         <div class="module-name">RECON & OSINT</div>
-        <div class="module-desc">WMI enumeration, AD discovery, privilege audit, CWE scanner. WINRECON tool.</div>
+        <div class="module-desc">Active/passive recon, network mapping, service enumeration, OSINT targeting. "You cannot attack what you cannot see." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_02_RECON.html">VIEW →</a>
         </div>
       </div>
-      <span class="module-status status-pending">○ PENDING (no nav)</span>
+      <span class="module-status status-live">✓ LIVE</span>
     </li>
     <li class="module-item">
       <span class="module-num">03</span>
       <div class="module-info">
         <div class="module-name">POWERSHELL WARFARE</div>
-        <div class="module-desc">Execution policies, AMSI bypass, remoting, obfuscation. "Linux terminal is way easier." — mentor</div>
+        <div class="module-desc">Cmdlets, pipeline, remoting, WMI, AMSI bypass basics, LOLBAS. "PowerShell is the Windows attacker's native language." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_03_POWERSHELL.html">VIEW →</a>
         </div>
@@ -139,7 +147,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">04</span>
       <div class="module-info">
         <div class="module-name">CODING BASICS</div>
-        <div class="module-desc">C, Python, PowerShell fundamentals for security tooling. No prior coding required.</div>
+        <div class="module-desc">C, Python, Windows API fundamentals for security tooling. No prior coding required.</div>
         <div class="module-links">
           <a href="modules/MODULE_04_CODING_BASICS.html">VIEW →</a>
         </div>
@@ -160,18 +168,18 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">05</span>
       <div class="module-info">
         <div class="module-name">SHELLCODE DEVELOPMENT</div>
-        <div class="module-desc">Position-independent code, syscalls, encoding. Build payloads from scratch.</div>
+        <div class="module-desc">Assembly, registers, PIC, PEB walking, encoding. Build payloads from scratch.</div>
         <div class="module-links">
           <a href="modules/MODULE_05_SHELLCODE.html">VIEW →</a>
         </div>
       </div>
-      <span class="module-status status-pending">○ PENDING (no nav)</span>
+      <span class="module-status status-live">✓ LIVE</span>
     </li>
     <li class="module-item">
       <span class="module-num">06</span>
       <div class="module-info">
-        <div class="module-name">MEMORY FORENSICS</div>
-        <div class="module-desc">Volatility, memory dumps, injected code detection. Find the needle.</div>
+        <div class="module-name">MEMORY ARCHITECTURE</div>
+        <div class="module-desc">Virtual memory, paging, heap vs stack, protection flags, EPROCESS. The battlefield.</div>
         <div class="module-links">
           <a href="modules/MODULE_06_MEMORY.html">VIEW →</a>
         </div>
@@ -182,7 +190,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">07</span>
       <div class="module-info">
         <div class="module-name">REGISTRY ANALYSIS</div>
-        <div class="module-desc">Windows registry deep-dive. Persistence locations, forensic artifacts.</div>
+        <div class="module-desc">Windows registry deep-dive. Persistence locations, forensic artifacts, offline analysis.</div>
         <div class="module-links">
           <a href="modules/MODULE_07_REGISTRY.html">VIEW →</a>
         </div>
@@ -193,7 +201,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">08</span>
       <div class="module-info">
         <div class="module-name">PRIVILEGE ESCALATION</div>
-        <div class="module-desc">Token abuse, service hijacking, UAC bypass. "Privilege escalation is easy." — mentor</div>
+        <div class="module-desc">Token abuse, service misconfig, unquoted paths, UAC bypass. "Privilege escalation is easy." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_08_PRIVESC.html">VIEW →</a>
         </div>
@@ -214,7 +222,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">09</span>
       <div class="module-info">
         <div class="module-name">MALWARE DEVELOPMENT</div>
-        <div class="module-desc">Dropper architecture, payload delivery, execution methods. IRON-DOME.</div>
+        <div class="module-desc">Shellcode construction, XOR obfuscation, dynamic API resolution, anti-sandbox.</div>
         <div class="module-links">
           <a href="modules/MODULE_09_MALWARE.html">VIEW →</a>
         </div>
@@ -225,7 +233,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">10</span>
       <div class="module-info">
         <div class="module-name">CODE INJECTION</div>
-        <div class="module-desc">DLL injection, process hollowing, APC injection. Get your code into another process.</div>
+        <div class="module-desc">DLL injection, process hollowing, APC, thread hijacking, atom bombing, reflective DLL.</div>
         <div class="module-links">
           <a href="modules/MODULE_10_CODE_INJECTION.html">VIEW →</a>
         </div>
@@ -236,10 +244,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">11</span>
       <div class="module-info">
         <div class="module-name">ROOTKITS & PERSISTENCE</div>
-        <div class="module-desc">Kernel drivers, bootkits, firmware. "Save every rung." — mentor</div>
+        <div class="module-desc">Userland/kernel rootkits, persistence mechanisms, tri-vector persistence. "Save every rung." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_11_ROOTKITS.html">VIEW →</a>
-          <a href="modules/MODULE_11_AMSI.html">AMSI →</a>
+          <a href="modules/MODULE_11_AMSI.html">AMSI BONUS →</a>
         </div>
       </div>
       <span class="module-status status-live">✓ LIVE</span>
@@ -248,10 +256,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">12</span>
       <div class="module-info">
         <div class="module-name">DEFENSIVE VERIFICATION</div>
-        <div class="module-desc">Verify your evasion. Test against live AV. Build GeoDefend.</div>
+        <div class="module-desc">Memory scanning, behavioral analysis, EDR testing, parent/child relationships.</div>
         <div class="module-links">
           <a href="modules/MODULE_12_DEFENSIVE_VERIFY.html">VIEW →</a>
-          <a href="modules/MODULE_12_ETW_BYPASS.html">ETW →</a>
+          <a href="modules/MODULE_12_ETW_BYPASS.html">ETW BONUS →</a>
         </div>
       </div>
       <span class="module-status status-live">✓ LIVE</span>
@@ -260,10 +268,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">13</span>
       <div class="module-info">
         <div class="module-name">EDR EVASION</div>
-        <div class="module-desc">Bypass CrowdStrike, SentinelOne, Carbon Black. Kernel callbacks, ETW, AM-PPL.</div>
+        <div class="module-desc">Direct syscalls, syscall proxying, HWBP bypass, unhooking, AMSI/ETW bypass.</div>
         <div class="module-links">
           <a href="modules/MODULE_13_EDR_EVASION.html">VIEW →</a>
-          <a href="modules/MODULE_13_KAV_EVASION.html">KAV →</a>
+          <a href="modules/MODULE_13_KAV_EVASION.html">KAV BONUS →</a>
         </div>
       </div>
       <span class="module-status status-live">✓ LIVE</span>
@@ -282,7 +290,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">14</span>
       <div class="module-info">
         <div class="module-name">CLOUD FILES & EXFIL</div>
-        <div class="module-desc">Steganography, covert channels, dead drops. Ghost-Encoder.</div>
+        <div class="module-desc">AWS S3, Azure Blob, GCS, dead drops, pre-signed URLs, covert channels.</div>
         <div class="module-links">
           <a href="modules/MODULE_14_CLOUD_FILES.html">VIEW →</a>
         </div>
@@ -293,7 +301,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">15</span>
       <div class="module-info">
         <div class="module-name">LATERAL MOVEMENT</div>
-        <div class="module-desc">Pass-the-Hash, WMI, PSExec, RDP hijacking. Move through the network.</div>
+        <div class="module-desc">Pass-the-Hash, Kerberoasting, WMI, PSExec, RDP hijacking, DCOM.</div>
         <div class="module-links">
           <a href="modules/MODULE_15_LATERAL.html">VIEW →</a>
         </div>
@@ -304,23 +312,23 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">16</span>
       <div class="module-info">
         <div class="module-name">C2 FRAMEWORKS</div>
-        <div class="module-desc">Build CHEYANNE from scratch. Beacon, listener, encryption. "Reverse shell is basic." — mentor</div>
+        <div class="module-desc">Beacon vs interactive, jitter, encryption, Discord bridge. "Reverse shell is basic." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_16_C2.html">VIEW →</a>
         </div>
       </div>
-      <span class="module-status status-live">✓ LIVE</span>
+      <span class="module-status status-validated">✓ VALIDATED</span>
     </li>
     <li class="module-item">
       <span class="module-num">17</span>
       <div class="module-info">
         <div class="module-name">SOCIAL ENGINEERING</div>
-        <div class="module-desc">Phishing, pretexting, payload delivery. "Real attacks are carried remotely." — mentor</div>
+        <div class="module-desc">Phishing, pretexting, OSINT targeting, payload delivery. "Real attacks are carried remotely." — mentor</div>
         <div class="module-links">
           <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html">VIEW →</a>
         </div>
       </div>
-      <span class="module-status status-pending">○ PENDING (no nav)</span>
+      <span class="module-status status-validated">✓ VALIDATED</span>
     </li>
   </ul>
 </div>
@@ -336,7 +344,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">18</span>
       <div class="module-info">
         <div class="module-name">ANDROID RAT</div>
-        <div class="module-desc">StarKiller RAT in Kotlin. GPS, SMS, camera, Play Protect bypass.</div>
+        <div class="module-desc">APK structure, smali, JADX, Frida, SSL pinning bypass, StarKiller RAT.</div>
         <div class="module-links">
           <a href="modules/MODULE_18_ANDROID.html">VIEW →</a>
         </div>
@@ -347,7 +355,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">19</span>
       <div class="module-info">
         <div class="module-name">ACTIVE DIRECTORY</div>
-        <div class="module-desc">Kerberoasting, DCSync, Golden Ticket, ACL abuse. The crown jewels.</div>
+        <div class="module-desc">Kerberos, TGT/TGS, SPN, delegation, BloodHound, DCSync, Golden Ticket.</div>
         <div class="module-links">
           <a href="modules/MODULE_19_AD.html">VIEW →</a>
         </div>
@@ -358,7 +366,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">20</span>
       <div class="module-info">
         <div class="module-name">FULL KILL CHAIN</div>
-        <div class="module-desc">Recon → Weaponize → Deliver → Exploit → Install → C2 → Action on Objectives.</div>
+        <div class="module-desc">MITRE ATT&CK, TTP mapping, purple teaming, full chain walkthrough.</div>
         <div class="module-links">
           <a href="modules/MODULE_20_KILL_CHAIN.html">VIEW →</a>
         </div>
@@ -369,10 +377,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
       <span class="module-num">21</span>
       <div class="module-info">
         <div class="module-name">CAPSTONE: GEODEFEND</div>
-        <div class="module-desc">Build an automated defensive platform. Blue team perspective.</div>
+        <div class="module-desc">Full kill chain walkthrough, blue team detection, GeoDefend scenario.</div>
         <div class="module-links">
           <a href="modules/MODULE_21_CAPSTONE.html">VIEW →</a>
-          <a href="modules/MODULE_21_MOBILE.html">MOBILE →</a>
+          <a href="modules/MODULE_21_MOBILE.html">MOBILE BONUS →</a>
         </div>
       </div>
       <span class="module-status status-live">✓ LIVE</span>
@@ -386,19 +394,14 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
           <a href="modules/CEO_TRANSLATION.html">VIEW →</a>
         </div>
       </div>
-      <span class="module-status status-pending">○ PENDING (no nav)</span>
+      <span class="module-status status-live">✓ LIVE</span>
     </li>
   </ul>
 </div>
 
-<div class="warning-box">
-  <strong>MODULES MISSING NAVIGATION:</strong> MODULE_02_RECON, MODULE_05_SHELLCODE, MODULE_17_SOCIAL_ENGINEERING, CEO_TRANSLATION.
-  These pages exist but have no next/prev links. You can view them but can't navigate between them.
-</div>
-
 <div class="info-box">
-  <strong>INTERACTIVE QUIZZES:</strong> Currently there are no interactive quizzes with right/wrong feedback on any module.
-  The practical-labs.html page has text-based simulations with questions and answers, but no interactive checking.
+  <strong>VALIDATION STATUS:</strong> Modules marked <span class="module-status status-validated">✓ VALIDATED</span> have been fact-checked against live research and include evidence boxes with real command output. All other modules are complete with navigation and quizzes but await full lab validation.<br><br>
+  <strong>Validation log:</strong> <a href="scripts/lab_evidence_2026-06-29.log" style="color:var(--neon);">scripts/lab_evidence_2026-06-29.log</a>
 </div>
 
 <div class="footer">
