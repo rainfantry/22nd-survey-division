@@ -59,7 +59,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 
 .simulation{border:2px solid var(--purple);padding:1.5rem;margin:1.5rem 0;background:rgba(255,0,255,0.05);}
 .simulation-title{font-family:'Space Mono',monospace;font-size:0.9rem;color:var(--purple);margin-bottom:0.5rem;}
-.simulation-desc{font-size:0.82rem;color:var(--fg);line-height:1.7;}
+.simulation-desc{font-size:0.82rem;color:var(--fg);line-height:1.7;margin-bottom:1rem;}
+.sim-question{margin:1rem 0;padding:1rem;background:var(--bg3);border:1px solid var(--border);}
+.sim-q{font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--neon);margin-bottom:0.5rem;}
+.sim-option{padding:0.5rem;margin:0.3rem 0;border:1px solid var(--border);cursor:pointer;transition:all 0.2s;font-size:0.8rem;}
+.sim-option:hover{border-color:var(--neon);background:rgba(0,255,255,0.05);}
 
 .footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
 
@@ -367,70 +371,107 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     <div class="simulation-title">SIMULATION 1: Reverse Shell Handshake</div>
     <div class="simulation-desc">
       You are the attacker (192.168.1.92). Your target is 192.168.1.42. You need to establish a reverse shell.
-      <br><br>
-      <strong>Your machine:</strong> Start a listener on port 4444.
-      <br>
-      <strong>Target machine:</strong> Execute a payload that connects back to you.
-      <br><br>
-      <strong>Question 1:</strong> On your machine, what command starts the listener? (Hint: nc -lvnp 4444)
-      <br>
-      <strong>Question 2:</strong> On the target, what does the payload need to know? (Hint: your IP and port)
-      <br>
-      <strong>Question 3:</strong> Why does the target connect OUT to you instead of you connecting IN? (Hint: firewalls block inbound, allow outbound)
-      <br><br>
-      <strong>Answers:</strong> See Module 01 (Networking) and Module 16 (C2).
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q1: On your machine, what command starts the listener?</div>
+      <div class="sim-option" data-correct="false">nc 192.168.1.42 4444</div>
+      <div class="sim-option" data-correct="true">nc -lvnp 4444</div>
+      <div class="sim-option" data-correct="false">ssh -p 4444 192.168.1.42</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> <code>nc -lvnp 4444</code> = netcat listen (-l), verbose (-v), no DNS (-n), port (-p) 4444. The attacker LISTENS. The target connects OUT.
+      </div>
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q2: Why does the target connect OUT to you instead of you connecting IN?</div>
+      <div class="sim-option" data-correct="false">Because inbound connections are faster</div>
+      <div class="sim-option" data-correct="true">Because firewalls block inbound, allow outbound</div>
+      <div class="sim-option" data-correct="false">Because the target has a public IP</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> Firewalls default-deny inbound. But users need web, email, DNS — so outbound is allowed. The target connects OUT to you, bypassing the firewall.
+      </div>
     </div>
   </div>
 
   <div class="simulation">
     <div class="simulation-title">SIMULATION 2: Privilege Escalation Decision Tree</div>
     <div class="simulation-desc">
-      You have a shell as a standard user on a Windows machine. You run "whoami /priv" and see:
-      <br><br>
-      <div class="code-block">SeImpersonatePrivilege        Enabled
-SeDebugPrivilege              Disabled
-SeBackupPrivilege             Disabled</div>
-      <br>
-      <strong>Question 1:</strong> Which privilege is immediately useful? (Hint: SeImpersonatePrivilege)
-      <br>
-      <strong>Question 2:</strong> What tool can you use to exploit this? (Hint: PrintSpoofer, RoguePotato, JuicyPotato)
-      <br>
-      <strong>Question 3:</strong> After getting SYSTEM, what's the FIRST thing you do? (Hint: persistence)
-      <br><br>
-      <strong>Answers:</strong> See Module 08 (Privilege Escalation) and Module 11 (Persistence).
+      You have a shell as a standard user. You run <code>whoami /priv</code> and see <code>SeImpersonatePrivilege</code> is Enabled.
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q1: Which tool exploits SeImpersonatePrivilege?</div>
+      <div class="sim-option" data-correct="false">Mimikatz</div>
+      <div class="sim-option" data-correct="true">PrintSpoofer / RoguePotato / JuicyPotato</div>
+      <div class="sim-option" data-correct="false">BloodHound</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> PrintSpoofer/RoguePotato/JuicyPotato abuse the SeImpersonatePrivilege to impersonate SYSTEM. Mimikatz dumps credentials. BloodHound maps AD.
+      </div>
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q2: After getting SYSTEM, what's the FIRST thing you do?</div>
+      <div class="sim-option" data-correct="false">Delete all logs</div>
+      <div class="sim-option" data-correct="true">Install persistence</div>
+      <div class="sim-option" data-correct="false">Start exfiltrating data</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> The mentor: "Save every rung." If you lose the shell, you need a way back. Persistence FIRST. Logs and exfil come later.
+      </div>
     </div>
   </div>
 
   <div class="simulation">
     <div class="simulation-title">SIMULATION 3: AV Evasion Scenario</div>
     <div class="simulation-desc">
-      You have a working payload (cheyanne beacon) that was clean 6 days ago. Today, Kaspersky detects it.
-      <br>>br>
-      <strong>Question 1:</strong> Why was it detected? (Hint: Kaspersky learned the signature)
-      <br>
-      <strong>Question 2:</strong> What can you change to evade again? (Hint: XOR key, payload structure, delivery method)
-      <br>
-      <strong>Question 3:</strong> How long will your new evasion last? (Hint: until they learn again)
-      <br><br>
-      <strong>Answers:</strong> See SERVITOR_ASSESSMENT.md and Module 09 (Malware Development).
+      Your payload was clean 6 days ago. Today Kaspersky detects it.
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q1: Why was it detected?</div>
+      <div class="sim-option" data-correct="false">You changed the XOR key</div>
+      <div class="sim-option" data-correct="true">Kaspersky learned the signature from behavior analysis</div>
+      <div class="sim-option" data-correct="false">The payload expired</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> Published exploits = dead in 24h. AV vendors reverse-engineer samples and push signatures. Kaspersky also uses behavioral analysis — it learned what your payload DOES.
+      </div>
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q2: How do you evade again?</div>
+      <div class="sim-option" data-correct="false">Use the same payload but rename it</div>
+      <div class="sim-option" data-correct="true">Change XOR key, payload structure, and delivery method</div>
+      <div class="sim-option" data-correct="false">Email Kaspersky and ask them to whitelist you</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> Evasion requires changing what the AV sees AND what it detects. New XOR key = new signature. New structure = new behavior. New delivery = new entry point.
+      </div>
     </div>
   </div>
 
   <div class="simulation">
     <div class="simulation-title">SIMULATION 4: The Chain Architecture</div>
     <div class="simulation-desc">
-      You need to attack a target. You have:
-      <ul style="margin:0.5rem 0 0.5rem 1.5rem;">
-        <li>A phishing email with a malicious PDF</li>
-        <li>A 0day in the PDF renderer</li>
-        <li>A sandbox escape technique</li>
-        <li>A kernel LPE</li>
-        <li>A persistence mechanism</li>
-        <li>A C2 beacon</li>
-      </ul>
-      <strong>Question:</strong> Arrange these in order. What happens if any ONE link is published and signature'd?
-      <br><br>
-      <strong>Answer:</strong> See SERVITOR_ASSESSMENT.md — "The chain is only as strong as its most secret link."
+      You have: phishing email → PDF 0day → sandbox escape → kernel LPE → persistence → C2 beacon.
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q1: What happens if the PDF 0day is published and signature'd?</div>
+      <div class="sim-option" data-correct="false">The whole chain still works</div>
+      <div class="sim-option" data-correct="true">The first link breaks — you need a new entry point</div>
+      <div class="sim-option" data-correct="false">Only the PDF part breaks, the rest is fine</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> SERVITOR: "The chain is only as strong as its most secret link." If the PDF 0day is published, every AV will block it. You need a NEW entry point — a different 0day or a different vector.
+      </div>
+    </div>
+    <div class="sim-question">
+      <div class="sim-q">Q2: Why do nation-states use chains instead of single exploits?</div>
+      <div class="sim-option" data-correct="false">Because chains are easier to build</div>
+      <div class="sim-option" data-correct="true">Because each link is a separate 0day — if one burns, the rest stay secret</div>
+      <div class="sim-option" data-correct="false">Because chains look cooler in reports</div>
+      <div class="sim-feedback" style="display:none;margin-top:0.5rem;font-family:'Space Mono',monospace;font-size:0.8rem;"></div>
+      <div class="sim-explanation" style="display:none;font-size:0.8rem;color:var(--dim);">
+        <strong>Why:</strong> Pegasus wasn't one bug — it was a chain. iMessage GIF parser → sandbox escape → kernel exploit → persistence. Each link a separate 0day. If the GIF parser is burned, the kernel exploit stays secret for the next chain.
+      </div>
     </div>
   </div>
 </div>
@@ -684,6 +725,63 @@ document.querySelectorAll('.code-block').forEach(block => {
     });
   };
   block.appendChild(btn);
+});
+
+// Interactive quiz functionality for simulations
+document.querySelectorAll('.simulation').forEach(sim => {
+  const questions = sim.querySelectorAll('.sim-question');
+  questions.forEach((q, idx) => {
+    const options = q.querySelectorAll('.sim-option');
+    const feedback = q.querySelector('.sim-feedback');
+    const explanation = q.querySelector('.sim-explanation');
+    
+    if (!options.length) return;
+    
+    options.forEach(opt => {
+      opt.style.cursor = 'pointer';
+      opt.style.padding = '0.5rem';
+      opt.style.margin = '0.3rem 0';
+      opt.style.border = '1px solid var(--border)';
+      opt.style.transition = 'all 0.2s';
+      
+      opt.addEventListener('click', function() {
+        // Reset all options
+        options.forEach(o => {
+          o.style.background = 'var(--bg3)';
+          o.style.borderColor = 'var(--border)';
+          o.style.color = 'var(--fg)';
+        });
+        
+        const isCorrect = this.dataset.correct === 'true';
+        
+        if (isCorrect) {
+          this.style.background = 'rgba(0,255,65,0.1)';
+          this.style.borderColor = 'var(--green)';
+          this.style.color = 'var(--green)';
+          if (feedback) {
+            feedback.innerHTML = '<span style="color:var(--green)">✓ CORRECT</span>';
+            feedback.style.display = 'block';
+          }
+        } else {
+          this.style.background = 'rgba(255,0,64,0.1)';
+          this.style.borderColor = 'var(--red)';
+          this.style.color = 'var(--red)';
+          if (feedback) {
+            feedback.innerHTML = '<span style="color:var(--red)">✗ WRONG</span> — Try again.';
+            feedback.style.display = 'block';
+          }
+        }
+        
+        if (explanation) {
+          explanation.style.display = 'block';
+          explanation.style.marginTop = '0.5rem';
+          explanation.style.padding = '0.5rem';
+          explanation.style.background = 'rgba(255,170,0,0.05)';
+          explanation.style.borderLeft = '3px solid var(--amber)';
+        }
+      });
+    });
+  });
 });
 </script>
 

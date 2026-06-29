@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MODULE TREE — Complete Course Archive — 22nd Survey Division</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+:root{--bg:#050505;--bg2:#0a0a0a;--bg3:#111;--fg:#c0c0c0;--accent:#ff0040;--accent2:#00ff41;--dim:#444;--border:#1a1a1a;--neon:#00ffff;--cyan:#00ffff;--amber:#ffaa00;--green:#00ff41;--green-dim:#2a6a2a;--red:#ff0040;--purple:#ff00ff;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-height:1.7;background-image:linear-gradient(rgba(255,0,64,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,0,64,0.03) 1px,transparent 1px);background-size:50px 50px;}
+.container{max-width:1200px;margin:0 auto;padding:3rem 2rem;}
+
+.header{border:3px solid var(--green);padding:2rem;margin-bottom:3rem;position:relative;box-shadow:0 0 30px rgba(0,255,65,0.15);}
+.header::before{content:'COMPLETE ARCHIVE';position:absolute;top:-12px;left:20px;background:var(--bg);color:var(--green);font-family:'Space Mono',monospace;font-size:0.7rem;padding:0 10px;letter-spacing:0.2em;}
+.header h1{font-family:'Space Mono',monospace;font-size:2.2rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:-0.02em;margin-bottom:0.5rem;text-shadow:0 0 15px var(--green);}
+.header p{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--dim);margin-bottom:1rem;}
+
+.nav{display:flex;gap:0;margin-bottom:3rem;border:2px solid var(--border);flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:100;}
+.nav a{color:var(--fg);text-decoration:none;padding:0.8rem 1.2rem;font-family:'Space Mono',monospace;font-size:0.75rem;border-right:2px solid var(--border);transition:all 0.2s;}
+.nav a:last-child{border-right:none;}
+.nav a:hover{background:var(--green);color:var(--bg);}
+
+.tree{border:2px solid var(--border);margin:2rem 0;padding:2rem;position:relative;}
+.tree-title{position:absolute;top:-14px;left:20px;background:var(--bg);font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--green);padding:0 10px;letter-spacing:0.1em;}
+
+.phase{margin:2rem 0;padding-left:1.5rem;border-left:3px solid var(--neon);}
+.phase-header{font-family:'Space Mono',monospace;font-size:1rem;color:var(--neon);margin-bottom:1rem;display:flex;align-items:center;gap:1rem;}
+.phase-weeks{font-size:0.7rem;color:var(--dim);border:1px solid var(--dim);padding:0.2rem 0.5rem;}
+
+.module-list{list-style:none;}
+.module-item{border:1px solid var(--border);padding:1rem;margin:0.5rem 0;background:var(--bg2);display:flex;align-items:flex-start;gap:1rem;transition:all 0.2s;}
+.module-item:hover{border-color:var(--neon);box-shadow:0 0 10px rgba(0,255,255,0.1);}
+.module-num{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--neon);min-width:3rem;}
+.module-info{flex:1;}
+.module-name{font-family:'Space Mono',monospace;font-size:0.9rem;color:var(--fg);margin-bottom:0.3rem;}
+.module-desc{font-size:0.8rem;color:var(--dim);margin-bottom:0.5rem;}
+.module-links{display:flex;gap:0.5rem;flex-wrap:wrap;}
+.module-links a{color:var(--neon);text-decoration:none;font-family:'Space Mono',monospace;font-size:0.65rem;padding:0.2rem 0.5rem;border:1px solid var(--neon);transition:all 0.2s;}
+.module-links a:hover{background:var(--neon);color:var(--bg);}
+.module-status{font-size:0.7rem;padding:0.2rem 0.5rem;margin-left:auto;}
+.status-live{background:rgba(0,255,65,0.1);color:var(--green);border:1px solid var(--green-dim);}
+.status-pending{background:rgba(255,170,0,0.1);color:var(--amber);border:1px solid var(--amber);}
+.status-missing{background:rgba(255,0,64,0.1);color:var(--red);border:1px solid var(--red);}
+
+.warning-box{border:1px solid var(--red);padding:1rem;background:rgba(255,0,64,0.05);margin:1rem 0;font-size:0.85rem;}
+.warning-box::before{content:'// WARNING: ';color:var(--red);font-weight:700;font-family:'Space Mono',monospace;}
+
+.info-box{border:1px solid var(--amber);padding:1rem;background:rgba(255,170,0,0.05);margin:1rem 0;font-size:0.85rem;}
+.info-box::before{content:'// NOTE: ';color:var(--amber);font-weight:700;font-family:'Space Mono',monospace;}
+
+.footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
+
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+::-webkit-scrollbar-thumb:hover{background:var(--dim);}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>MODULE TREE // COMPLETE ARCHIVE</h1>
+  <p>Every module, every link, every status — nothing hidden, nothing lost</p>
+</div>
+
+<div class="nav">
+  <a href="index.html">← HOME</a>
+  <a href="crash-course.html">CRASH COURSE</a>
+  <a href="practical-labs.html">PRACTICAL LABS</a>
+  <a href="resources.html">RESOURCES</a>
+  <a href="#phase1">PHASE 1</a>
+  <a href="#phase2">PHASE 2</a>
+  <a href="#phase3">PHASE 3</a>
+  <a href="#phase4">PHASE 4</a>
+  <a href="#phase5">PHASE 5</a>
+</div>
+
+<div class="info-box">
+  <strong>How to use this page:</strong> Each module links to its HTML file. Status shows if navigation (next/prev) works. 
+  "✓ LIVE" = complete with navigation. "○ PENDING" = exists but missing links. "✗ MISSING" = not found.
+</div>
+
+<div class="tree" id="phase1">
+  <div class="tree-title">// PHASE 1 — FOUNDATION</div>
+  <div class="phase-header">
+    WEEKS 1-4: THE BASICS
+    <span class="phase-weeks">NETWORKING → RECON → POWERSHELL → CODING</span>
+  </div>
+  <ul class="module-list">
+    <li class="module-item">
+      <span class="module-num">00</span>
+      <div class="module-info">
+        <div class="module-name">READER GUIDE</div>
+        <div class="module-desc">How to use this course. Prerequisites. Study methodology. Expectation setting.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_00_READER.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">01</span>
+      <div class="module-info">
+        <div class="module-name">NETWORKING FUNDAMENTALS</div>
+        <div class="module-desc">TCP/IP, sockets, ports, protocols. "Eventually all comes to networking." — mentor</div>
+        <div class="module-links">
+          <a href="modules/MODULE_01_NETWORKING.html">VIEW →</a>
+          <a href="modules/MODULE_01.html">ALT →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">02</span>
+      <div class="module-info">
+        <div class="module-name">RECON & OSINT</div>
+        <div class="module-desc">WMI enumeration, AD discovery, privilege audit, CWE scanner. WINRECON tool.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_02_RECON.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-pending">○ PENDING (no nav)</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">03</span>
+      <div class="module-info">
+        <div class="module-name">POWERSHELL WARFARE</div>
+        <div class="module-desc">Execution policies, AMSI bypass, remoting, obfuscation. "Linux terminal is way easier." — mentor</div>
+        <div class="module-links">
+          <a href="modules/MODULE_03_POWERSHELL.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">04</span>
+      <div class="module-info">
+        <div class="module-name">CODING BASICS</div>
+        <div class="module-desc">C, Python, PowerShell fundamentals for security tooling. No prior coding required.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_04_CODING_BASICS.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+  </ul>
+</div>
+
+<div class="tree" id="phase2">
+  <div class="tree-title">// PHASE 2 — WEAPONIZATION</div>
+  <div class="phase-header">
+    WEEKS 5-8: BUILDING THE CHAIN
+    <span class="phase-weeks">SHELLCODE → MEMORY → REGISTRY → PRIVESC</span>
+  </div>
+  <ul class="module-list">
+    <li class="module-item">
+      <span class="module-num">05</span>
+      <div class="module-info">
+        <div class="module-name">SHELLCODE DEVELOPMENT</div>
+        <div class="module-desc">Position-independent code, syscalls, encoding. Build payloads from scratch.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_05_SHELLCODE.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-pending">○ PENDING (no nav)</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">06</span>
+      <div class="module-info">
+        <div class="module-name">MEMORY FORENSICS</div>
+        <div class="module-desc">Volatility, memory dumps, injected code detection. Find the needle.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_06_MEMORY.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">07</span>
+      <div class="module-info">
+        <div class="module-name">REGISTRY ANALYSIS</div>
+        <div class="module-desc">Windows registry deep-dive. Persistence locations, forensic artifacts.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_07_REGISTRY.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">08</span>
+      <div class="module-info">
+        <div class="module-name">PRIVILEGE ESCALATION</div>
+        <div class="module-desc">Token abuse, service hijacking, UAC bypass. "Privilege escalation is easy." — mentor</div>
+        <div class="module-links">
+          <a href="modules/MODULE_08_PRIVESC.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+  </ul>
+</div>
+
+<div class="tree" id="phase3">
+  <div class="tree-title">// PHASE 3 — EVASION</div>
+  <div class="phase-header">
+    WEEKS 9-12: STAYING ALIVE
+    <span class="phase-weeks">MALWARE → INJECTION → ROOTKITS → DEFENSE → EDR</span>
+  </div>
+  <ul class="module-list">
+    <li class="module-item">
+      <span class="module-num">09</span>
+      <div class="module-info">
+        <div class="module-name">MALWARE DEVELOPMENT</div>
+        <div class="module-desc">Dropper architecture, payload delivery, execution methods. IRON-DOME.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_09_MALWARE.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">10</span>
+      <div class="module-info">
+        <div class="module-name">CODE INJECTION</div>
+        <div class="module-desc">DLL injection, process hollowing, APC injection. Get your code into another process.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_10_CODE_INJECTION.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">11</span>
+      <div class="module-info">
+        <div class="module-name">ROOTKITS & PERSISTENCE</div>
+        <div class="module-desc">Kernel drivers, bootkits, firmware. "Save every rung." — mentor</div>
+        <div class="module-links">
+          <a href="modules/MODULE_11_ROOTKITS.html">VIEW →</a>
+          <a href="modules/MODULE_11_AMSI.html">AMSI →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">12</span>
+      <div class="module-info">
+        <div class="module-name">DEFENSIVE VERIFICATION</div>
+        <div class="module-desc">Verify your evasion. Test against live AV. Build GeoDefend.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_12_DEFENSIVE_VERIFY.html">VIEW →</a>
+          <a href="modules/MODULE_12_ETW_BYPASS.html">ETW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">13</span>
+      <div class="module-info">
+        <div class="module-name">EDR EVASION</div>
+        <div class="module-desc">Bypass CrowdStrike, SentinelOne, Carbon Black. Kernel callbacks, ETW, AM-PPL.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_13_EDR_EVASION.html">VIEW →</a>
+          <a href="modules/MODULE_13_KAV_EVASION.html">KAV →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+  </ul>
+</div>
+
+<div class="tree" id="phase4">
+  <div class="tree-title">// PHASE 4 — OPERATIONS</div>
+  <div class="phase-header">
+    WEEKS 13-16: MOVING THROUGH THE NETWORK
+    <span class="phase-weeks">EXFIL → LATERAL → C2 → SOCIAL ENGINEERING</span>
+  </div>
+  <ul class="module-list">
+    <li class="module-item">
+      <span class="module-num">14</span>
+      <div class="module-info">
+        <div class="module-name">CLOUD FILES & EXFIL</div>
+        <div class="module-desc">Steganography, covert channels, dead drops. Ghost-Encoder.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_14_CLOUD_FILES.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">15</span>
+      <div class="module-info">
+        <div class="module-name">LATERAL MOVEMENT</div>
+        <div class="module-desc">Pass-the-Hash, WMI, PSExec, RDP hijacking. Move through the network.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_15_LATERAL.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">16</span>
+      <div class="module-info">
+        <div class="module-name">C2 FRAMEWORKS</div>
+        <div class="module-desc">Build CHEYANNE from scratch. Beacon, listener, encryption. "Reverse shell is basic." — mentor</div>
+        <div class="module-links">
+          <a href="modules/MODULE_16_C2.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">17</span>
+      <div class="module-info">
+        <div class="module-name">SOCIAL ENGINEERING</div>
+        <div class="module-desc">Phishing, pretexting, payload delivery. "Real attacks are carried remotely." — mentor</div>
+        <div class="module-links">
+          <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-pending">○ PENDING (no nav)</span>
+    </li>
+  </ul>
+</div>
+
+<div class="tree" id="phase5">
+  <div class="tree-title">// PHASE 5 — ADVANCED</div>
+  <div class="phase-header">
+    WEEKS 17-22: THE REAL WEAPON
+    <span class="phase-weeks">ANDROID → AD → KILL CHAIN → CAPSTONE</span>
+  </div>
+  <ul class="module-list">
+    <li class="module-item">
+      <span class="module-num">18</span>
+      <div class="module-info">
+        <div class="module-name">ANDROID RAT</div>
+        <div class="module-desc">StarKiller RAT in Kotlin. GPS, SMS, camera, Play Protect bypass.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_18_ANDROID.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">19</span>
+      <div class="module-info">
+        <div class="module-name">ACTIVE DIRECTORY</div>
+        <div class="module-desc">Kerberoasting, DCSync, Golden Ticket, ACL abuse. The crown jewels.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_19_AD.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">20</span>
+      <div class="module-info">
+        <div class="module-name">FULL KILL CHAIN</div>
+        <div class="module-desc">Recon → Weaponize → Deliver → Exploit → Install → C2 → Action on Objectives.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_20_KILL_CHAIN.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">21</span>
+      <div class="module-info">
+        <div class="module-name">CAPSTONE: GEODEFEND</div>
+        <div class="module-desc">Build an automated defensive platform. Blue team perspective.</div>
+        <div class="module-links">
+          <a href="modules/MODULE_21_CAPSTONE.html">VIEW →</a>
+          <a href="modules/MODULE_21_MOBILE.html">MOBILE →</a>
+        </div>
+      </div>
+      <span class="module-status status-live">✓ LIVE</span>
+    </li>
+    <li class="module-item">
+      <span class="module-num">BONUS</span>
+      <div class="module-info">
+        <div class="module-name">CEO TRANSLATION</div>
+        <div class="module-desc">Dollar impact of every technique. Board-ready language. Risk quantification.</div>
+        <div class="module-links">
+          <a href="modules/CEO_TRANSLATION.html">VIEW →</a>
+        </div>
+      </div>
+      <span class="module-status status-pending">○ PENDING (no nav)</span>
+    </li>
+  </ul>
+</div>
+
+<div class="warning-box">
+  <strong>MODULES MISSING NAVIGATION:</strong> MODULE_02_RECON, MODULE_05_SHELLCODE, MODULE_17_SOCIAL_ENGINEERING, CEO_TRANSLATION.
+  These pages exist but have no next/prev links. You can view them but can't navigate between them.
+</div>
+
+<div class="info-box">
+  <strong>INTERACTIVE QUIZZES:</strong> Currently there are no interactive quizzes with right/wrong feedback on any module.
+  The practical-labs.html page has text-based simulations with questions and answers, but no interactive checking.
+</div>
+
+<div class="footer">
+  // 22ND SURVEY DIVISION // MODULE TREE // COMPLETE ARCHIVE //<br>
+  Nothing hidden. Nothing lost. Every module linked, every status known.
+</div>
+
+</div>
+</body>
+</html>
