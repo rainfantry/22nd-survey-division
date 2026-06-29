@@ -36,8 +36,9 @@ run_test "Site Validation" "bash $SCRIPTS_DIR/validate-site.sh"
 # Test 2: Link checker
 run_test "Link Checker" "python3 $SCRIPTS_DIR/check_links.py $REPO_DIR"
 
-# Test 3: Lighthouse (non-blocking — quota issues)
-run_test "Lighthouse CI" "bash $SCRIPTS_DIR/lighthouse-ci.sh" || true
+# Test 3: Lighthouse — SKIPPED in regular CI (quota issues)
+# Run ad-hoc: bash scripts/perf-check.sh
+echo "  ⚠ Lighthouse skipped in regular CI — run 'bash scripts/perf-check.sh' for performance audit"
 
 # Test 4: Module count
 run_test "Module Count" "test $(ls $REPO_DIR/modules/MODULE_*.html | wc -l) -ge 22"

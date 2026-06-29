@@ -40,28 +40,34 @@ echo "[3/4] Generating release notes..."
 cat > "$NOTES_FILE" << EOF
 # Release $VERSION — 22nd Survey Division
 
-## Site Status
-- $(date -u +"%Y-%m-%d %H:%M UTC")
-- All modules: $(ls modules/MODULE_*.html | wc -l) HTML files
+## Deployment
+- **Target:** GitHub Pages (auto-deploy from main branch)
+- **URL:** https://rainfantry.github.io/22nd-survey-division/
+- **Staging:** http://192.168.1.92:18080/ (local python http.server)
+- **Type:** Static HTML — no database, no env vars, no backend
+
+## Rollback Plan
+If this release breaks something:
+```bash
+# Option 1: Revert commit
+git revert HEAD
+git push origin main
+
+# Option 2: Reset to previous tag
+git reset --hard $PREV_TAG
+git push --force origin main
+
+# Option 3: Emergency fix
+# Edit files directly, commit, push
+```
+GitHub Pages deploys within ~2 minutes of push.
+
+## Test Results
+$(date -u +"%Y-%m-%d %H:%M UTC")
+- All modules: $(ls modules/MODULE_*.html 2>/dev/null | wc -l) HTML files
 - Navigation: Complete (all modules linked)
 - Interactive quizzes: $(grep -c 'sim-option' practical-labs.html 2>/dev/null || echo 0) options
 - Copy buttons: Enabled on practical-labs + resources
-
-## Test Results
-$(cat lighthouse-reports/*.json 2>/dev/null | python3 -c "
-import sys, json, glob
-for f in glob.glob('lighthouse-reports/*-desktop.json'):
-    try:
-        d = json.load(open(f))
-        name = f.split('/')[-1].replace('-desktop.json', '')
-        perf = round(d['lighthouseResult']['categories']['performance']['score']*100)
-        a11y = round(d['lighthouseResult']['categories']['accessibility']['score']*100)
-        best = round(d['lighthouseResult']['categories']['best-practices']['score']*100)
-        seo = round(d['lighthouseResult']['categories']['seo']['score']*100)
-        print(f'- {name}: Performance {perf} | Accessibility {a11y} | Best Practices {best} | SEO {seo}')
-    except:
-        pass
-" 2>/dev/null || echo "- Lighthouse reports pending")
 
 ## What's Included
 - Complete 22-module course (Modules 00-21 + Capstone)
@@ -77,7 +83,8 @@ To migrate to a new domain:
 1. Copy all files from this repo to the new hosting
 2. Update CNAME if using GitHub Pages custom domain
 3. No database required — all static HTML
-4. Test with: bash scripts/validate-site.sh
+4. No env vars — everything is self-contained
+5. Test with: bash scripts/test-all.sh
 
 EOF
 
