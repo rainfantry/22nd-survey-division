@@ -407,6 +407,30 @@
             <p class="relevance"><strong>Red:</strong> Stop treating malware like a black box. Read the source. The techniques are boring, repeatable, and powerful. <strong>Blue:</strong> If your detection only looks for "evil" APIs, you will miss everything. Look for abnormal sequences of normal operations.</p>
         </div>
 
+        <h2>🎮 Interactive Demonstration: The Stealer Protocol</h2>
+        <p>Before reading the code, watch the attack unfold. The widget below simulates the exact three-step protocol a real infostealer uses to phone home. No data is real — every password, cookie, and file is synthetic.</p>
+
+        <div class="warning-box">
+            <h5>⚠️ What you are watching</h5>
+            <p>This is a browser simulation of the <a href="https://github.com/rainfantry/22div-stealer-lab" class="cross-link">22DIV Stealer Lab</a>. The real lab runs Python on your own machine. This widget only shows the protocol so you can see the shape of the attack without running malware.</p>
+        </div>
+
+        <div style="margin: 1.5rem 0; border: 1px solid var(--border);">
+            <iframe src="../widgets/stealer_lab_widget.html" style="width: 100%; height: 700px; border: none; display: block;"></iframe>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 What just happened? (Layman)</h4>
+            <p>Think of the stealer as a burglar and the C2 server as the burglar's PO box. The burglar breaks in, gathers your valuables, and mails them to the PO box. The PO box then opens the package and writes a list of everything stolen.</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><strong>Check-in (<code>/create_log</code>):</strong> The burglar calls the PO box and says "I have a package with 2 passwords and 5 cookies." The PO box assigns a tracking number.</li>
+                <li><strong>Send data (<code>/log_data</code>):</strong> The burglar mails the actual passwords and cookies.</li>
+                <li><strong>Upload files (<code>/log_files</code>):</strong> The burglar mails a zip file with photos of your documents.</li>
+                <li><strong>Report:</strong> The PO box opens everything and writes a receipt — the exfiltration report.</li>
+            </ul>
+            <p style="margin-top: 0.5rem; color: var(--dim);">In the real world, the "package" contains your Gmail password, your bank session cookie, your Discord token, and your wallet seed phrase. The format is identical.</p>
+        </div>
+
         <h2>📚 Prerequisites — What You Need First</h2>
         <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
         

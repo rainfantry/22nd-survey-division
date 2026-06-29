@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>22DIV Stealer Lab — Interactive Demo</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --panel: #111118;
+            --border: #2a2a35;
+            --green: #00ff88;
+            --red: #ff4444;
+            --cyan: #00d4ff;
+            --dim: #6b7280;
+            --text: #e0e0e0;
+            --font: 'Segoe UI', 'Inter', system-ui, sans-serif;
+            --mono: 'Space Mono', 'Consolas', monospace;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        .header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .header h1 {
+            margin: 0 0 0.5rem 0;
+            font-family: var(--mono);
+            font-size: 1.4rem;
+            color: var(--red);
+            text-transform: uppercase;
+        }
+        .header p {
+            margin: 0;
+            color: var(--dim);
+            font-size: 0.9rem;
+        }
+        .warning {
+            background: rgba(255, 68, 68, 0.08);
+            border: 1px solid var(--red);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        .panel {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            padding: 1rem;
+        }
+        .panel h3 {
+            margin: 0 0 0.75rem 0;
+            font-family: var(--mono);
+            font-size: 0.95rem;
+            color: var(--cyan);
+            text-transform: uppercase;
+        }
+        .terminal {
+            background: #050508;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            min-height: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            color: var(--green);
+        }
+        .terminal .dim { color: var(--dim); }
+        .terminal .red { color: var(--red); }
+        .terminal .cyan { color: var(--cyan); }
+        .controls {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        button {
+            background: transparent;
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 0.6rem 1rem;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background: var(--cyan);
+            color: var(--bg);
+        }
+        button:disabled {
+            border-color: var(--dim);
+            color: var(--dim);
+            cursor: not-allowed;
+        }
+        button:disabled:hover {
+            background: transparent;
+            color: var(--dim);
+        }
+        .report {
+            background: #050508;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            font-family: var(--font);
+            font-size: 0.85rem;
+            min-height: 280px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .report h4 {
+            margin: 0 0 0.75rem 0;
+            color: var(--red);
+            font-family: var(--mono);
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .stat-row {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1rem;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 1.6rem;
+            color: var(--red);
+            font-weight: bold;
+            font-family: var(--mono);
+        }
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--dim);
+            text-transform: uppercase;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.4rem;
+            text-align: left;
+        }
+        th {
+            background: #1a1a25;
+            color: var(--cyan);
+            font-family: var(--mono);
+        }
+        .redacted {
+            color: var(--red);
+            font-family: var(--mono);
+        }
+        .step-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem 0;
+        }
+        .step-list li {
+            padding: 0.4rem 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .step-list li::before {
+            content: "□";
+            color: var(--dim);
+            font-family: var(--mono);
+        }
+        .step-list li.done::before {
+            content: "✓";
+            color: var(--green);
+        }
+        .repo-link {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--dim);
+        }
+        .repo-link a {
+            color: var(--cyan);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>// 22DIV Stealer Lab — Interactive Demo</h1>
+            <p>A safe, browser-based simulation of how credential-stealing malware phones home to a C2 server. No real data is accessed.</p>
+        </div>
+
+        <div class="warning">
+            <strong>EDUCATIONAL USE ONLY.</strong> This widget simulates the network protocol used by real infostealers. The full lab code is available in the private <a href="https://github.com/rainfantry/22div-stealer-lab" style="color: var(--cyan);">22div-stealer-lab</a> repository for authorized 22DIV students.
+        </div>
+
+        <div class="grid">
+            <div class="panel">
+                <h3>Attack Timeline</h3>
+                <ul class="step-list" id="steps">
+                    <li id="step-1">Victim machine comes online</li>
+                    <li id="step-2">Stealer kills browser process</li>
+                    <li id="step-3">Stealer reads Login Data / Cookies</li>
+                    <li id="step-4">Stealer checks in with C2 (<code>POST /create_log</code>)</li>
+                    <li id="step-5">Stealer sends credentials (<code>POST /log_data</code>)</li>
+                    <li id="step-6">Stealer uploads files (<code>POST /log_files</code>)</li>
+                    <li id="step-7">C2 generates exfiltration report</li>
+                </ul>
+                <div class="controls">
+                    <button id="btn-run" onclick="runSimulation()">Run Simulation</button>
+                    <button id="btn-reset" onclick="resetSimulation()">Reset</button>
+                </div>
+                <div class="repo-link">
+                    Want to run this yourself? Clone the private repo:
+                    <br>
+                    <code>https://github.com/rainfantry/22div-stealer-lab</code>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h3>C2 Server Log</h3>
+                <div class="terminal" id="terminal">[*] C2 receiver ready. Click "Run Simulation" to begin.</div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top: 1rem;">
+            <h3>Exfiltration Report</h3>
+            <div class="report" id="report">
+                <p style="color: var(--dim); text-align: center; margin-top: 4rem;">No data yet. Run the simulation to generate the report.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const report = document.getElementById('report');
+        const btnRun = document.getElementById('btn-run');
+        const logUuid = 'LAB_TEST_' + Date.now() + '-' + Date.now();
+
+        function sleep(ms) {
+            return new Promise(r => setTimeout(r, ms));
+        }
+
+        function log(msg, cls = '') {
+            terminal.innerHTML += '\n' + (cls ? `<span class="${cls}">${msg}</span>` : msg);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function markStep(n) {
+            document.getElementById('step-' + n).classList.add('done');
+        }
+
+        function resetSimulation() {
+            terminal.innerHTML = '[*] C2 receiver ready. Click "Run Simulation" to begin.';
+            report.innerHTML = '<p style="color: var(--dim); text-align: center; margin-top: 4rem;">No data yet. Run the simulation to generate the report.</p>';
+            for (let i = 1; i <= 7; i++) {
+                document.getElementById('step-' + i).classList.remove('done');
+            }
+            btnRun.disabled = false;
+        }
+
+        async function runSimulation() {
+            btnRun.disabled = true;
+            terminal.innerHTML = '[*] Starting local C2 receiver...';
+            log('[*] Receiver listening on 127.0.0.1:5050', 'cyan');
+            log('[*] Waiting for victim check-in...', 'dim');
+
+            await sleep(600);
+            markStep(1);
+            log('[*] New victim connection from 127.0.0.1');
+
+            await sleep(500);
+            markStep(2);
+            log('[!] Browser process terminated on victim', 'red');
+
+            await sleep(500);
+            markStep(3);
+            log('[*] Reading Chrome Login Data and Network/Cookies');
+
+            await sleep(600);
+            markStep(4);
+            log(`[NEW LOG] uuid=${logUuid} | passwords=2 cookies=5 discord=0 files=[synthetic_exfil.zip]`);
+
+            await sleep(600);
+            markStep(5);
+            log('[DATA RECEIVED] uuid=' + logUuid + ' | passwords=2 cookies=5 discord=0 tokens=0');
+
+            await sleep(600);
+            markStep(6);
+            log('[FILE UPLOAD] uuid=' + logUuid + ' | files=[synthetic_exfil.zip]');
+
+            await sleep(600);
+            markStep(7);
+            log('[REPORT] saved to ./reports/' + logUuid + '/report.html', 'cyan');
+            log('[*] Receiver stopped.', 'dim');
+
+            renderReport();
+        }
+
+        function renderReport() {
+            report.innerHTML = `
+                <h4>INFOSTEALER EXFILTRATION REPORT</h4>
+                <div style="text-align:center; color: var(--dim); font-size: 0.8rem; margin-bottom: 1rem;">
+                    Log UUID: ${logUuid}<br>
+                    Captured: ${new Date().toISOString()}<br>
+                    Attacker User ID: LAB_TEST_USER
+                </div>
+                <div class="stat-row">
+                    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Passwords</div></div>
+                    <div class="stat"><div class="stat-num">5</div><div class="stat-label">Cookies</div></div>
+                    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Discord Tokens</div></div>
+                    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Files Stolen</div></div>
+                </div>
+
+                <h4 style="color: var(--cyan); text-align: left; font-size: 0.85rem;">Stolen Passwords</h4>
+                <table>
+                    <tr><th>Browser</th><th>URL</th><th>Username</th><th>Password</th></tr>
+                    <tr><td>Chrome (synthetic)</td><td>https://example.com</td><td>lab_user</td><td class="redacted">[REDACTED - SYNTHETIC]</td></tr>
+                    <tr><td>Edge (synthetic)</td><td>https://test.local</td><td>demo</td><td class="redacted">[REDACTED - SYNTHETIC]</td></tr>
+                </table>
+
+                <h4 style="color: var(--cyan); text-align: left; font-size: 0.85rem; margin-top: 1rem;">Stolen Cookies</h4>
+                <table>
+                    <tr><th>Browser</th><th>Profile</th><th>Count</th><th>Preview</th></tr>
+                    <tr><td>Chrome (synthetic)</td><td>Default</td><td>1</td><td class="redacted">session=[REDACTED_COOKIE]</td></tr>
+                    <tr><td>Edge (synthetic)</td><td>Default</td><td>1</td><td class="redacted">auth=[REDACTED_COOKIE]</td></tr>
+                </table>
+
+                <h4 style="color: var(--cyan); text-align: left; font-size: 0.85rem; margin-top: 1rem;">Stolen Files</h4>
+                <table>
+                    <tr><th>Filename</th><th>Content</th></tr>
+                    <tr><td>synthetic_wallet_info.txt</td><td>This is a synthetic file for lab demonstration only. No real wallet data is present.</td></tr>
+                    <tr><td>synthetic_notes.txt</td><td>Lab test note: passwords would normally be here, redacted for safety.</td></tr>
+                </table>
+            `;
+        }
+    </script>
+</body>
+</html>
