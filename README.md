@@ -71,8 +71,6 @@ For people who already know Python, C, or PowerShell but want to learn offensive
 | 10 | [Module 16: C2](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_16_C2.html) | Beacon vs interactive, jitter, encryption, Discord bridge |
 | 11 | [Module 20: Kill Chain](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_20_KILL_CHAIN.html) | MITRE ATT&CK, TTP mapping, purple teaming |
 | 12 | [Module 21: Capstone](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_21_CAPSTONE.html) | GeoDefend scenario — full operation from recon to exfil |
-| BONUS | [Module 22: Web Application Hacking](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_22_WEB_HACKING.html) | Recon, auth, SQLi, IDOR, API signature breaking |
-| BONUS | [Module 23: Infostealers](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_23_INFOSTEALERS.html) | Builder, victim, C2, detection rules, incident response |
 
 ### Track B: Operators Learning Code (12-Module Fast Path)
 
@@ -253,12 +251,11 @@ bash scripts/release.sh v2026.06.29
 
 **Test Results (Latest):**
 - ✅ 5/5 main pages: 200 OK
-- ✅ 29/29 module pages: 200 OK
-- ✅ 756/756 internal links: valid
+- ✅ 27/27 module pages: 200 OK
+- ✅ 284/284 internal links: valid
 - ✅ 27 quiz options: interactive
-- ✅ 28 module tree items: complete
-- ✅ All modules have mentor callouts and copy buttons
-- ✅ Bonus modules: Web Application Hacking, Infostealers
+- ✅ 25 module tree items: complete
+
 ### Deployment
 
 | Target | Details |
