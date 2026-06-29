@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>IRON-DOME v4.0.0 — AV Evasion Suite</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRON-DOME v4 — Runtime Evasion Simulation</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:#000;color:#00ff41;font-family:'Courier New',monospace;min-height:100vh;display:flex;align-items:center;justify-content:center;}
@@ -29,116 +29,129 @@ body{background:#000;color:#00ff41;font-family:'Courier New',monospace;min-heigh
 .layer-num{color:#006820;width:1.5rem;flex-shrink:0;}
 .layer-name{color:#fff;width:12rem;flex-shrink:0;}
 .layer-status{color:#00ff41;}
-.progress{display:flex;gap:.1rem;margin:.6rem 0;}
-.bar{height:4px;flex:1;background:#006820;transition:background .3s;}
-.bar.done{background:#00ff41;}
-.stat-row{display:flex;justify-content:space-between;padding:.1rem 0;}
-.stat-label{color:#666;}
-.stat-val{color:#00ff41;}
-.verdict{text-align:center;padding:.8rem;border:1px solid #00ff41;margin-top:1rem;background:#001a00;}
-.verdict-big{font-size:1.4rem;font-weight:700;letter-spacing:.3em;color:#00ff41;}
-.verdict-sub{font-size:.6rem;color:#666;margin-top:.2rem;letter-spacing:.15em;}
+.layer-status.fail{color:#ff3333;}
+.log-line{opacity:0;animation:fadeIn .3s forwards;}
+@keyframes fadeIn{to{opacity:1;}}
+.controls{display:flex;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid #0d2a0d;}
+.btn{background:#0a1a0a;border:1px solid #006820;color:#00ff41;padding:.4rem 1rem;font-family:inherit;font-size:.65rem;cursor:pointer;}
+.btn:hover{background:#006820;}
+.status-bar{display:flex;gap:2rem;font-size:.65rem;color:#2a7a2a;margin-top:.5rem;}
 </style>
 </head>
 <body>
 <div class="term">
   <div class="titlebar">
     <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-    <span class="title">IRON-DOME v4.0.0 — FULL PLATFORM</span>
+    <div class="title">IRON-DOME v4 — 8-Layer Evasion Runtime</div>
   </div>
-  <div class="body">
-<pre class="banner" id="banner"></pre>
-<div class="dim">// AV EVASION SUITE — 8-LAYER STACK — MODULE 12</div>
-<hr class="line">
+  <div class="body" id="terminal">
+    <div class="banner">  ___ ____ _____ ___  _   _ ___  ___
+ |_ _|  _ \_   _/ _ \| | | |_ _|/ _ \
+  | || |_) || || | | | |_| || || | | |
+ |___|____/ |_| |_| |_|\___/|___|_| |_|
 
-<div id="layers"></div>
-
-<hr class="line">
-<div class="progress" id="progress"></div>
-
-<div class="stat-row"><span class="stat-label">TARGET:</span><span class="stat-val" id="target">initialising...</span></div>
-<div class="stat-row"><span class="stat-label">AV ACTIVE:</span><span class="stat-val amber">Kaspersky Premium + Windows Defender</span></div>
-<div class="stat-row"><span class="stat-label">DETECTIONS:</span><span class="stat-val" id="detections">scanning...</span></div>
-<div class="stat-row"><span class="stat-label">AMSI STATUS:</span><span class="stat-val" id="amsi">armed</span></div>
-<div class="stat-row"><span class="stat-label">BUILD:</span><span class="stat-val">MinGW-w64 cross-compile — no MSVC signature</span></div>
-
-<div class="verdict" id="verdict" style="display:none">
-  <div class="verdict-big">0 / 1 DETECTIONS</div>
-  <div class="verdict-sub">KASPERSKY PREMIUM ACTIVE — IRON-DOME RUNNING — ALL LAYERS PASSED</div>
-</div>
-
-<div style="margin-top:.8rem;font-size:.65rem;color:#333;">
-  22ND SURVEY DIVISION — MODULE 12 — rainfantry.github.io/22nd-survey-division
-</div>
+IRON-DOME v4.0.0 — AV EVASION SUITE
+8-LAYER STACK — KASPERSKY + DEFENDER + MALWAREBYTES TESTED</div>
+    <div id="log"></div>
+    <div class="controls">
+      <button class="btn" onclick="runBuild()">▶ COMPILE PAYLOAD</button>
+      <button class="btn" onclick="runScan()">▶ AV SCAN SIM</button>
+      <button class="btn" onclick="runKillChain()">▶ KILL CHAIN</button>
+    </div>
+    <div class="status-bar" id="status">
+      <span>STATUS: <span class="amber">READY</span></span>
+      <span>LAYER 1: <span class="dim">OFF</span></span>
+      <span>LAYER 2: <span class="dim">OFF</span></span>
+      <span>LAYER 3: <span class="dim">OFF</span></span>
+      <span>LAYER 4: <span class="dim">OFF</span></span>
+      <span>LAYER 5: <span class="dim">OFF</span></span>
+      <span>LAYER 6: <span class="dim">OFF</span></span>
+      <span>LAYER 7: <span class="dim">OFF</span></span>
+      <span>LAYER 8: <span class="dim">OFF</span></span>
+    </div>
   </div>
 </div>
 
 <script>
-var BANNER = `
-██╗██████╗  ██████╗ ███╗   ██╗      ██████╗  ██████╗ ███╗   ███╗███████╗
-██║██╔══██╗██╔═══██╗████╗  ██║      ██╔══██╗██╔═══██╗████╗ ████║██╔════╝
-██║██████╔╝██║   ██║██╔██╗ ██║█████╗██║  ██║██║   ██║██╔████╔██║█████╗
-██║██╔══██╗██║   ██║██║╚██╗██║╚════╝██║  ██║██║   ██║██║╚██╔╝██║██╔══╝
-██║██║  ██║╚██████╔╝██║ ╚████║      ██████╔╝╚██████╔╝██║ ╚═╝ ██║███████╗
-╚═╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝      ╚═════╝  ╚═════╝ ╚═╝     ╚═╝╚══════╝`.trim();
+const log = document.getElementById('log');
+const status = document.getElementById('status');
 
-var LAYERS = [
-  ['01', 'XOR ENCODING', 'per-binary key — payload unrecognisable at rest'],
-  ['02', 'DYNAMIC API RESOLVE', 'no import table — GetProcAddress at runtime'],
-  ['03', 'ANTI-SANDBOX', 'timing + CPU count + GPU presence check'],
-  ['04', 'PE HEADER STOMP', 'MZ/PE magic bytes zeroed after load'],
-  ['05', 'ISUN GATE', 'invalid instruction trap — terminates in sandbox'],
-  ['06', 'EXECUTION JITTER', 'randomised sleep — breaks timing heuristics'],
-  ['07', 'MINGW CROSS-COMPILE', 'removes MSVC compiler signature patterns'],
-  ['08', 'AMSI/ETW BYPASS', 'vader-rootkit HWBP — scanner sees clean'],
-];
-
-document.getElementById('banner').textContent = BANNER;
-
-var layerEl = document.getElementById('layers');
-var progressEl = document.getElementById('progress');
-var bars = [];
-
-LAYERS.forEach(function(l, i) {
-  var row = document.createElement('div');
-  row.className = 'layer';
-  row.style.opacity = '0.2';
-  row.innerHTML = '<span class="layer-num">['+l[0]+']</span><span class="layer-name">'+l[1]+'</span><span class="layer-status dim" id="ls'+i+'">pending</span>';
-  layerEl.appendChild(row);
-  row._el = row;
-
-  var b = document.createElement('div');
-  b.className = 'bar';
-  progressEl.appendChild(b);
-  bars.push({row:row, bar:b, status:document.getElementById('ls'+i)});
-});
-
-var i = 0;
-function runLayer() {
-  if (i >= bars.length) {
-    document.getElementById('detections').textContent = '0 / 1';
-    document.getElementById('detections').style.color = '#00ff41';
-    document.getElementById('amsi').textContent = 'BYPASSED — vader-rootkit HWBP active';
-    document.getElementById('amsi').style.color = '#00ff41';
-    document.getElementById('target').textContent = 'RoguePlanet.exe — CLEAN — Kaspersky did not flag';
-    document.getElementById('verdict').style.display = 'block';
-    return;
-  }
-  var cur = bars[i];
-  cur.row.style.opacity = '1';
-  cur.status.textContent = 'loading...';
-  cur.status.style.color = '#ffb000';
-  setTimeout(function() {
-    cur.status.textContent = '✓ PASS';
-    cur.status.style.color = '#00ff41';
-    cur.bar.classList.add('done');
-    i++;
-    setTimeout(runLayer, 220 + Math.random()*180);
-  }, 280 + Math.random()*220);
+function addLine(text, color='green', delay=0) {
+  setTimeout(() => {
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="${color}">${text}</span>`;
+    log.appendChild(line);
+    log.scrollTop = log.scrollHeight;
+  }, delay);
 }
 
-document.getElementById('target').textContent = 'RoguePlanet.exe — building...';
-setTimeout(runLayer, 800);
+function updateStatus(layers) {
+  let html = '<span>STATUS: <span class="green">RUNNING</span></span>';
+  for (let i = 0; i < 8; i++) {
+    html += `<span>LAYER ${i+1}: <span class="${layers[i] ? 'green' : 'dim'}">${layers[i] ? 'ACTIVE' : 'OFF'}</span></span>`;
+  }
+  status.innerHTML = html;
+}
+
+function runBuild() {
+  log.innerHTML = '';
+  addLine('[*] IRON-DOME Builder — MinGW Cross-Compile', 'cyan', 0);
+  addLine('[*] Target: Windows 11 x64', 'dim', 200);
+  addLine('[*] Compiler: x86_64-w64-mingw32-gcc', 'dim', 400);
+  addLine('[+] Layer 1: XOR obfuscation (key 0xB5)', 'green', 600);
+  addLine('[+] Layer 2: Dynamic API resolution', 'green', 800);
+  addLine('[+] Layer 3: Anti-sandbox timing gates', 'green', 1000);
+  addLine('[+] Layer 4: PE header stomping', 'green', 1200);
+  addLine('[+] Layer 5: ISUN auth token gate', 'green', 1400);
+  addLine('[+] Layer 6: Beacon jitter (30-300s)', 'green', 1600);
+  addLine('[+] Layer 7: MinGW compile (no MSVC sigs)', 'green', 1800);
+  addLine('[+] Layer 8: HWBP AMSI+ETW bypass', 'green', 2000);
+  addLine('[+] Build complete: RoguePlanet.exe (64KB)', 'green', 2200);
+  addLine('[+] SHA-256: a3f7c2... (truncated)', 'dim', 2400);
+  addLine('[*] Ready for deployment', 'cyan', 2600);
+  
+  setTimeout(() => updateStatus([1,1,1,1,1,1,1,1]), 2600);
+}
+
+function runScan() {
+  log.innerHTML = '';
+  addLine('[*] AV Scan Simulation — 3-Engine Test', 'cyan', 0);
+  addLine('[*] Target: RoguePlanet.exe', 'dim', 200);
+  addLine('[*] Engine 1: Kaspersky Premium 21.25', 'dim', 400);
+  addLine('[*] Engine 2: Windows Defender 4.18.26050', 'dim', 600);
+  addLine('[*] Engine 3: MalwareBytes 5.2.1', 'dim', 800);
+  addLine('[!] Scanning...', 'amber', 1000);
+  addLine('[!] Static analysis: NO MATCH (signature mutated)', 'green', 1400);
+  addLine('[!] Behavioral analysis: NO ANOMALY (timing gates passed)', 'green', 1800);
+  addLine('[!] Heuristic: NO SUSPICION (IAT clean, entropy normal)', 'green', 2200);
+  addLine('[+] Kaspersky: CLEAN (0 detections)', 'green', 2600);
+  addLine('[+] Defender: CLEAN (0 detections)', 'green', 2800);
+  addLine('[+] MalwareBytes: CLEAN (0 detections)', 'green', 3000);
+  addLine('[+] VirusTotal projection: 0/72', 'green', 3200);
+  addLine('[*] Payload undetectable — all engines blind', 'cyan', 3400);
+}
+
+function runKillChain() {
+  log.innerHTML = '';
+  addLine('[*] Kill Chain Execution — 10/10 Verification', 'cyan', 0);
+  addLine('[1] C2 connect: CHEYANNE beacon established', 'green', 200);
+  addLine('[2] AMSI disabled: HWBP redirect active', 'green', 400);
+  addLine('[3] ETW silenced: no telemetry exfil', 'green', 600);
+  addLine('[4] Recon: winrecon.py executed (1229 lines)', 'green', 800);
+  addLine('[5] Privesc: SeImpersonatePrivilege → SYSTEM', 'green', 1000);
+  addLine('[6] Persistence: SCM service + registry Run key', 'green', 1200);
+  addLine('[7] Injection: reflective DLL into svchost.exe', 'green', 1400);
+  addLine('[8] Exfil: ghost-encoder steg → Discord CDN', 'green', 1600);
+  addLine('[9] VNC: CHEYANNE WATCH stream active', 'green', 1800);
+  addLine('[10] Cleanup: logs erased, timestamps randomized', 'green', 2000);
+  addLine('[+] Kill chain: 10/10 COMPLETE', 'green', 2200);
+  addLine('[+] Target: FULLY COMPROMISED', 'green', 2400);
+  addLine('[*] Evidence logged for MSRC submission', 'cyan', 2600);
+}
+
+// Auto-run on load
+setTimeout(runBuild, 500);
 </script>
 </body>
 </html>
