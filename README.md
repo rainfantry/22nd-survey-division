@@ -1,182 +1,156 @@
-# 22nd Survey Division — Course Site
-
-**Live URL:** https://rainfantry.github.io/22nd-survey-division/
-**Repo:** rainfantry/22nd-survey-division (this repo)
-**Reader:** https://rainfantry.github.io/books/reader.html (lives in rainfantry/rainfantry.github.io)
-
-Offensive security training. 22 modules, 8 interactive labs. $497 AUD full course.
+# 22nd Survey Division
+## Offensive Security Training — Windows Internals, AV Evasion, C2 Frameworks
+### Classification: PUBLIC COURSE SITE
 
 ---
 
-## How the site works (for when you're learning to code)
+## WHAT THIS IS
 
-The site is a single HTML file (`index.html`) — no framework, no build step, no npm. Everything is plain HTML, CSS, and vanilla JavaScript written inline. GitHub Pages serves it directly. Push to `main` → live in ~60 seconds.
+22nd Survey Division is an Australian offensive security training platform built from live research — not sanitized tutorial content. 22 modules covering Windows internals, malware development, rootkits, C2 frameworks, Android RATs, and social engineering. Every technique taught from first principles with real tools tested against live AV engines.
 
-### The PIN gate
-
-The site has a gate that blocks access to course content until a PIN is entered. Here's how it works technically:
-
-**On page load:**
-```javascript
-// Top of <head>, runs before the page renders
-if (sessionStorage.getItem('22div_gate_auth') !== '1') {
-  document.documentElement.classList.add('course-locked');
-}
-```
-`sessionStorage` is a browser API that stores key-value pairs for the lifetime of a tab. When the tab closes, `sessionStorage` clears. This means every new tab or browser session re-challenges with the PIN.
-
-`document.documentElement` is the `<html>` element. Adding `course-locked` to it triggers CSS rules like:
-```css
-html.course-locked .mod-card { pointer-events: none; opacity: 0.3; }
-html.course-locked #curriculum { filter: blur(4px); }
-```
-So the content is visible but non-interactive and blurred until auth.
-
-**The PIN modal (`#pin-gate`):**
-A `<div>` with `position: fixed; inset: 0` — covers the entire viewport at z-index 99999. It's invisible (`display: none`) until `showGate()` is called.
-
-On page load, the gate IIFE calls `showGate()` automatically if not authenticated:
-```javascript
-if (!isAuthed()) { showGate(); }
-```
-
-**When PIN is entered correctly:**
-```javascript
-function unlock() {
-  sessionStorage.setItem('22div_gate_auth', '1');  // mark auth for this session
-  gate.style.opacity = '0';
-  setTimeout(() => gate.style.display = 'none', 350);  // fade out
-  document.documentElement.classList.remove('course-locked');  // reveal content
-}
-```
-
-**The PIN verification has two paths:**
-1. **API path** — POST to `https://22div.com.au/api/auth.php` with `{pin: val}`. If the server responds `{ok: true}`, unlock. If API is down, fall through.
-2. **Fallback** — `if (val === CORRECT)` where `CORRECT = '668340'` is hardcoded in the JS. This is visible in page source — a determined person can read it. It's a temporary measure until the backend is live.
-
-**Rate limiting:** 5 wrong attempts (tracked in `sessionStorage`) locks the input and shows a contact message. Resets on tab close.
-
-### Module progression
-
-The 22 module cards (`#mod-01` through `#mod-22`) have classes `mod-locked`, `mod-unlocked`, or `mod-done`. Progress is tracked in `localStorage` as JSON (`22div_progress`). Completing Module 1's MCQ unlocks Module 2, etc. The cards link to reader.html with a `?b=MODULE_ID` query param.
-
-### Ghost Scraper (`ghost-scraper.html`)
-
-Separate page with its own PIN gate. Already uses `sessionStorage` properly. No backend dependency — the OSINT tool runs in-browser.
+**Built by:** George Wu (VADER) — Windows security researcher, Sydney  
+**Entity:** OCCUPATION FORCE CALLSIGN GSW PTY LTD (ACN 692 429 397)  
+**Research:** MSRC VULN-195458 (Windows Defender Tamper Protection bypass, responsibly disclosed)
 
 ---
 
-## Repo structure
+## COURSE OVERVIEW
 
-```
-index.html              — landing page + PIN gate + all 22 module cards
-ghost-scraper.html      — OSINT tool with own PIN gate
-ads.html                — advertising/campaign page
-HANDOFF.md              — operational handoff (auth, reader, deployment)
-PAYMENT_INTEGRATION.md  — Stripe/Square webhook setup
-SOCIAL_MEDIA_CAMPAIGN.md — 12 LinkedIn + 8 Instagram posts ready to copy
-campaign/               — ad creative assets
-widgets/                — embeddable widget components
-```
+| Module | Title | Tool Repo | Price |
+|--------|-------|-----------|-------|
+| 01 | Offensive Mindset | — | $29 |
+| 02 | Recon & Footprinting | winrecon | $39 |
+| 03 | Vulnerability Research | csec-research-authorization | $49 |
+| 04 | Mitigations | — | $29 |
+| 05 | Exploit Development | — | $49 |
+| 06 | Windows Internals | — | $39 |
+| 07 | Exploit Primitives | — | $49 |
+| 08 | Privilege Escalation | winrecon | $69 |
+| 09 | Malware Development | iron-sun + eclipse | $79 |
+| 10 | Code Injection | iron-sun | $69 |
+| 11 | Rootkits | vader-rootkit | $79 |
+| 12 | Antivirus Evasion | iron-sun + eclipse + vader-rootkit | $79 |
+| 13 | Memory Forensics | flagship | $59 |
+| 14 | Reverse Engineering | — | $49 |
+| 15 | Post-Exploitation | flagship | $79 |
+| 16 | Command & Control | cheyanne | $79 |
+| 17 | Network Warfare | winrecon | $59 |
+| 18 | Cryptography Evasion | iron-sun + eclipse | $59 |
+| 19 | Living Off the Land | — | $39 |
+| 20 | Active Directory | winrecon | $69 |
+| 21 | Mobile Security | starkiller | $79 |
+| 22 | OSINT & Social Engineering | — | $39 |
 
----
-
-## Session Log
-
-### 2026-06-27 — PIN Gate Hardened (5 changes to index.html)
-
-**Problem:** The PIN gate was using `document.cookie` for auth state. Browser cookies persist across sessions by default. Once a visitor entered the PIN, the cookie stayed set and they never saw the gate again on return visits. The gate was also dismissible by clicking the dark backdrop outside the PIN box.
-
-**What was changed and why:**
-
-**1. Initial lock check (top of `<head>`, line ~12):**
-```javascript
-// BEFORE
-if (document.cookie.indexOf('22div_gate_auth=1') === -1) {
-
-// AFTER
-if (sessionStorage.getItem('22div_gate_auth') !== '1') {
-```
-`sessionStorage` clears when the browser tab closes. Cookies persist until expiry or manual clear. Using `sessionStorage` means every new browser session requires PIN re-entry.
-
-**2. `unlock()` function — removed cookie and localStorage writes:**
-```javascript
-// BEFORE
-document.cookie = AUTH_KEY + '=1; path=/; SameSite=Strict';
-try { localStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
-
-// AFTER
-try { sessionStorage.setItem(AUTH_KEY, '1'); } catch(e) {}
-```
-`localStorage` also persists until manually cleared. Removed both. Only `sessionStorage` now.
-
-**3. `isAuthed()` — now reads sessionStorage:**
-```javascript
-// BEFORE
-return document.cookie.indexOf(AUTH_KEY + '=1') > -1;
-
-// AFTER
-try { return sessionStorage.getItem(AUTH_KEY) === '1'; } catch(e) { return false; }
-```
-The `try/catch` is because `sessionStorage` can throw in some browser privacy modes.
-
-**4. Token storage (API auth path) — removed cookie write:**
-```javascript
-// BEFORE
-if (data.token) document.cookie = '22div_token=' + encodeURIComponent(data.token) + '...';
-
-// AFTER
-if (data.token) try { sessionStorage.setItem('22div_token', data.token); } catch(e) {}
-```
-When `22div.com.au/api/auth.php` is live, it returns a HMAC token. Now stored in sessionStorage instead of a persistent cookie.
-
-**5. Backdrop-click dismiss — removed:**
-```javascript
-// BEFORE (deleted entirely)
-gate.addEventListener('click', function(e) {
-  if (e.target === gate) {
-    gate.style.display = 'none';  // closed gate without PIN — bypass
-  }
-});
-```
-This was a bypass. Clicking outside the PIN box hid the gate without any auth. Content was still CSS-locked (the `course-locked` class was still on `<html>`) so the content wasn't readable, but the overlay was gone and it was confusing. Removed. Gate is now inescapable — you either enter the PIN or close the tab.
-
-**6. Auto-show gate on page load (added):**
-```javascript
-// NEW — at end of gate IIFE
-if (!isAuthed()) { showGate(); }
-```
-Previously the gate only appeared when you clicked a CTA (like "START LEARNING"). A visitor could scroll the entire landing page — hero, pricing, curriculum — without ever seeing the PIN prompt. Now it shows immediately on load if not authed in this session. Still allows scrolling the landing page because clicking the backdrop no longer closes it — but it's clearly there.
-
-**Current state:** Commit `a5547fe`, pushed to `main`. GitHub Pages: live.
-
-**What to do next:**
-
-1. **Payment gateway (the real fix):**
-   - Set up Stripe Checkout or Square. When payment succeeds, Stripe sends a webhook to `22div.com.au/api/purchase.php`.
-   - The backend generates a customer-specific PIN (or re-uses `668340` for now) and emails it to the buyer.
-   - See `PAYMENT_INTEGRATION.md` for the full Stripe webhook flow.
-
-2. **Remove the hardcoded PIN:**
-   - Once the backend (`22div.com.au/api/auth.php`) is live and PIN validation goes server-side, remove `var CORRECT = '668340'` from `index.html`.
-   - The fallback client-side check is a security hole — it's visible in page source.
-
-3. **SQL backend (ready to deploy):**
-   - Files at `C:\Users\gwu07\Desktop\repos\22div-backend\` — PHP + MySQL.
-   - Argon2id hashed PINs, rate limiting per IP, HMAC session tokens.
-   - cPanel: `https://S06ee.syd5.hostingplatform.net.au:2083` — login: `divcom22`.
-   - See `HANDOFF.md` → Option B for 7-step cPanel deployment.
+**Full Bundle:** $497 AUD (all 22 modules + 5 private repos + lifetime access)  
+**Monthly:** $21.99 AUD/mo (private repo access, cancel anytime)
 
 ---
 
-## TODO — Release Blackops
+## THE TOOLS (Included in Full Bundle)
 
-_Automated read-only assessment — what a full public-release pass would do for this repo. Suggestions only; nothing above has been changed or removed._
+### VADER-ROOTKIT
+Hardware breakpoint bypass for AMSI + ETW. Zero memory writes. 26 Defender-clean binaries. MSRC VULN-195458 research.
 
-- [ ] Audit git history for AI/Claude attribution; scrub if any is found.
-- [ ] Add a `LICENSE` file (MIT or your choice + holder).
-- [ ] Add discovery topics for SEO (`gh repo edit --add-topic ...`, up to 20).
-- [ ] Add a screenshot or diagram to the README if there's a GUI or visual output.
-- [ ] Verify a clean from-scratch build/run against the README quick start (produce a real artifact, don't trust the docs).
+**Wartime test:** Windows 11, Defender RTP + cloud + BehaviorMonitor — CLEAN. Kaspersky Premium — CLEAN. 0/72 VirusTotal projection.
 
-<sub>Workflow: https://github.com/rainfantry/release-blackops-skill</sub>
+### IRON-SUN
+8-layer AV evasion stack. TCP reverse shell. XOR obfuscation, dynamic API resolution, anti-sandbox timing, PE header stomping, ISUN auth gate, beacon jitter, MinGW compile, HWBP bypass.
+
+**Wartime test:** 10/10 POCs verified on live machine (192.168.1.92). Kaspersky Premium 21.25 — 0 detections. All layers active.
+
+### CHEYANNE C2
+Full C2 framework. Browser-based operator panel. GPS exfil, VNC shell, AES-256-CBC beacon, Discord bridge, service persistence.
+
+**Wartime test:** 2 agents live. GPS polling 5s. SMS dump 47 messages. Play Protect bypassed. Built in Kotlin.
+
+### GHOST-ENCODER
+Zero-width Unicode steganography. Covert channel framework. 16-character invisible alphabet. PNG carrier implementation.
+
+**Wartime test:** Payload hidden in Discord message. Entropy 0.12 (normal text range). 0/72 VirusTotal. Kaspersky CLEAN.
+
+### WINRECON
+Windows reconnaissance framework. Process enumeration, privilege escalation checks, network mapping, service enumeration.
+
+**Wartime test:** 1229 lines of output. Standard user context. Defender OFF, Kaspersky ACTIVE. 2 writable SYSTEM services found.
+
+---
+
+## LIVE WIDGETS
+
+15 interactive widgets demonstrating techniques in real-time:
+
+| Widget | Demo |
+|--------|------|
+| VADER | HWBP bypass runtime — DR0/DR1 set, AMSI/ETW silenced |
+| IRON-DOME | 8-layer compile + AV scan simulation + kill chain |
+| Networking 101 | OSI model ↔ TCP/IP stack switching |
+| Recon | WINRECON ↔ GHOST-SCRAPER tab switching |
+| Terminal 101 | IPCONFIG ↔ PROCESSES live output |
+| Privesc | TOKENS ↔ JUICYPOTATO privilege escalation |
+| Kill Chain | All 7 phases: Recon → Weaponize → Deliver → Exploit → Install → C2 → Actions |
+| Shellcode | Assembly BUILD with runtime compilation |
+| WinRecon | IDENTITY ↔ PRIVILEGES enumeration |
+
+---
+
+## INFRASTRUCTURE
+
+**Current:** GitHub Pages (free, fast, CDN)  
+**Domain:** rainfantry.github.io/22nd-survey-division  
+**Target:** Custom domain + cPanel when revenue justifies ($500+/mo)  
+**Payment:** Stripe (cards) + Wise (bank transfer) + Invoice (corporate)  
+**Delivery:** AES-256 encrypted 7z archive, PIN emailed within 24h
+
+**Migration roadmap:** See [22sd-battle-plan](https://github.com/rainfantry/22sd-battle-plan) (private repo)
+
+---
+
+## HONESTY POLICY
+
+This course teaches authorized security testing only. Every tool is tested on own hardware or authorized lab environments. MSRC responsible disclosure filed for all Microsoft-related findings.
+
+**No false claims:**
+- Every AV result is from live testing, not speculation
+- Every screenshot is from real execution, not mockups
+- Every module teaches why it works, not just how to copy it
+- Every tool includes honest limitations and detection vectors
+
+**What you won't learn here:**
+- How to hack random people (illegal and immoral)
+- How to evade law enforcement (impossible and stupid)
+- How to get rich quick (this is a trade, not a lottery)
+
+**What you will learn:**
+- How Windows actually works under the hood
+- How AV/EDR detects threats and how to engineer around it
+- How to build tools from first principles
+- How to think like an attacker so you can defend like one
+
+---
+
+## DEDICATION
+
+This project is dedicated to my parents, who came from nothing and gave me everything. To Cheyanne — the fighter who never stops battling for her health, whose defiance against the odds inspired every bypass that beats Defender and KAV. And to [RADON Associates](https://radonassociates.com.au) — for their partnership and support throughout my years growing up, turning a kid with a laptop into someone who could build things that matter.
+
+---
+
+## LEGAL
+
+**Entity:** OCCUPATION FORCE CALLSIGN GSW PTY LTD  
+**ABN:** 50 692 429 397  
+**ACN:** 692 429 397  
+**MSRC:** VULN-195458 (responsible disclosure)  
+**Location:** Sydney, NSW, Australia
+
+---
+
+## CONTACT
+
+- **Email:** gwu0738@gmail.com
+- **LinkedIn:** [linkedin.com/in/georgewu108](https://linkedin.com/in/georgewu108)
+- **GitHub:** [github.com/rainfantry](https://github.com/rainfantry)
+- **Discord:** The Coalition (invite via email)
+
+---
+
+*VIDIMUS OMNIA — We see everything.*
