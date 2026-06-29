@@ -23,6 +23,7 @@
 | **Main Site** | Course overview, pricing, proof | [rainfantry.github.io/22nd-survey-division](https://rainfantry.github.io/22nd-survey-division/) |
 | **Crash Course** | 22 modules + mentor teachings + 8-week plan | [→ Crash Course](https://rainfantry.github.io/22nd-survey-division/crash-course.html) |
 | **Practical Labs** | Step-by-step exercises, SSH tests, defense bypasses | [→ Practical Labs](https://rainfantry.github.io/22nd-survey-division/practical-labs.html) |
+| **Defensive Recon** | Blue team cheat sheet with live lab evidence | [→ Defensive Recon](https://rainfantry.github.io/22nd-survey-division/defensive-recon.html) |
 | **Module Tree** | Complete archive — every module, every link | [→ Module Tree](https://rainfantry.github.io/22nd-survey-division/module-tree.html) |
 | **Resources** | Cheat sheets, command reference, mentor documents | [→ Resources](https://rainfantry.github.io/22nd-survey-division/resources.html) |
 
@@ -252,9 +253,10 @@ bash scripts/release.sh v2026.06.29
 **Test Results (Latest):**
 - ✅ 5/5 main pages: 200 OK
 - ✅ 27/27 module pages: 200 OK
-- ✅ 284/284 internal links: valid
+- ✅ 712/712 internal links: valid
 - ✅ 27 quiz options: interactive
-- ✅ 25 module tree items: complete
+- ✅ 26 module tree items: complete
+- ✅ All modules have mentor callouts and copy buttons
 
 ### Deployment
 
@@ -289,6 +291,7 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for full details.
 
 | Date | Commit | What Changed |
 |------|--------|--------------|
+| 2026-06-30 | `84884c7` | Defensive Recon cheat sheet live, mentor callouts in all modules, validation auto-discovery |
 | 2026-06-29 | `ded05d0` | Automated testing suite, DEPLOYMENT.md, perf-check.sh |
 | 2026-06-29 | `36135c2` | Test scripts, link checker, release pipeline |
 | 2026-06-29 | `e199d7b` | Interactive quizzes, module-tree.html, copy buttons |
