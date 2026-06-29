@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRASH COURSE — George's Personal Learning Path — 22nd Survey Division</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
+:root{--bg:#050505;--bg2:#0a0a0a;--bg3:#111;--fg:#c0c0c0;--accent:#ff0040;--accent2:#00ff41;--dim:#444;--border:#1a1a1a;--neon:#00ffff;--cyan:#00ffff;--amber:#ffaa00;--green:#00ff41;--green-dim:#2a6a2a;--red:#ff0040;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-height:1.7;background-image:linear-gradient(rgba(255,0,64,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,0,64,0.03) 1px,transparent 1px);background-size:50px 50px;}
+.container{max-width:1000px;margin:0 auto;padding:3rem 2rem;}
+
+/* Header */
+.header{border:3px solid var(--neon);padding:2rem;margin-bottom:3rem;position:relative;box-shadow:0 0 30px rgba(0,255,255,0.15);}
+.header::before{content:'PERSONAL PATH';position:absolute;top:-12px;left:20px;background:var(--bg);color:var(--neon);font-family:'Space Mono',monospace;font-size:0.7rem;padding:0 10px;letter-spacing:0.2em;}
+.header h1{font-family:'Space Mono',monospace;font-size:2.2rem;font-weight:700;color:var(--neon);text-transform:uppercase;letter-spacing:-0.02em;margin-bottom:0.5rem;text-shadow:0 0 15px var(--neon);}
+.header p{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--dim);margin-bottom:1rem;}
+.header .meta{display:flex;gap:2rem;flex-wrap:wrap;font-size:0.75rem;color:var(--dim);}
+.header .meta span{border-left:2px solid var(--neon);padding-left:0.5rem;}
+
+/* Navigation */
+.nav{display:flex;gap:0;margin-bottom:3rem;border:2px solid var(--border);flex-wrap:wrap;position:sticky;top:0;background:var(--bg);z-index:100;}
+.nav a{color:var(--fg);text-decoration:none;padding:0.8rem 1.2rem;font-family:'Space Mono',monospace;font-size:0.75rem;border-right:2px solid var(--border);transition:all 0.2s;}
+.nav a:last-child{border-right:none;}
+.nav a:hover{background:var(--neon);color:var(--bg);}
+.nav a.active{background:var(--neon);color:var(--bg);}
+
+/* Progress bar */
+.progress-container{margin:2rem 0;border:2px solid var(--border);padding:0.5rem;}
+.progress-bar{width:100%;height:12px;background:var(--border);position:relative;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green-dim),var(--green));width:5%;position:relative;transition:width 0.5s;}
+.progress-fill::after{content:'5%';position:absolute;right:0;top:-22px;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--green);}
+.progress-label{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--dim);margin-top:0.5rem;}
+
+/* Sections */
+.section{border:2px solid var(--border);margin:2rem 0;padding:2rem;position:relative;}
+.section-number{position:absolute;top:-14px;left:20px;background:var(--bg);font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--neon);padding:0 10px;letter-spacing:0.1em;}
+.section h2{font-family:'Space Mono',monospace;font-size:1.4rem;font-weight:700;color:var(--accent2);text-transform:uppercase;margin-bottom:1.5rem;letter-spacing:0.05em;}
+.section h3{font-family:'Space Mono',monospace;font-size:1rem;color:var(--accent);margin:1.5rem 0 1rem;text-transform:uppercase;letter-spacing:0.05em;}
+
+/* Phase blocks */
+.phase{border-left:3px solid var(--neon);padding-left:1.5rem;margin:1.5rem 0;}
+.phase-title{font-family:'Space Mono',monospace;font-size:0.9rem;color:var(--neon);margin-bottom:0.5rem;}
+.phase-desc{font-size:0.85rem;color:var(--fg);line-height:1.8;margin-bottom:1rem;}
+
+/* Lesson cards */
+.lesson-card{border:1px solid var(--border);padding:1.2rem;margin:1rem 0;background:var(--bg2);transition:all 0.2s;}
+.lesson-card:hover{border-color:var(--neon);box-shadow:0 0 10px rgba(0,255,255,0.1);}
+.lesson-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem;}
+.lesson-num{font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--neon);}
+.lesson-status{font-family:'Space Mono',monospace;font-size:0.6rem;padding:0.2rem 0.5rem;}
+.status-pending{background:rgba(255,160,0,0.1);color:#ff9900;border:1px solid #ff9900;}
+.status-active{background:rgba(0,255,255,0.1);color:var(--neon);border:1px solid var(--neon);}
+.status-done{background:rgba(0,255,65,0.1);color:var(--green);border:1px solid var(--green-dim);}
+.lesson-title{font-family:'Space Mono',monospace;font-size:0.95rem;font-weight:700;color:var(--fg);margin-bottom:0.5rem;}
+.lesson-content{font-size:0.82rem;color:var(--dim);line-height:1.7;}
+.lesson-links{margin-top:0.8rem;display:flex;gap:0.8rem;flex-wrap:wrap;}
+.lesson-links a{color:var(--neon);text-decoration:none;font-family:'Space Mono',monospace;font-size:0.7rem;padding:0.3rem 0.6rem;border:1px solid var(--neon);transition:all 0.2s;}
+.lesson-links a:hover{background:var(--neon);color:var(--bg);}
+
+/* Quote blocks */
+.quote{border-left:3px solid var(--amber);padding-left:1rem;margin:1rem 0;font-style:italic;color:var(--fg);font-size:0.85rem;}
+.quote-author{display:block;margin-top:0.5rem;font-style:normal;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--amber);}
+
+/* Evidence blocks */
+.evidence{border:1px solid var(--green-dim);padding:1rem;background:rgba(0,255,65,0.05);margin:1rem 0;font-size:0.8rem;}
+.evidence::before{content:'// LIVE EVIDENCE: ';color:var(--green);font-weight:700;font-family:'Space Mono',monospace;}
+
+/* Warning blocks */
+.warning{border:1px solid var(--red);padding:1rem;background:rgba(255,0,64,0.05);margin:1rem 0;font-size:0.8rem;}
+.warning::before{content:'// WARNING: ';color:var(--red);font-weight:700;font-family:'Space Mono',monospace;}
+
+/* Tool list */
+.tool-list{list-style:none;}
+.tool-list li{border-bottom:1px solid var(--border);padding:0.6rem 0;display:flex;justify-content:space-between;}
+.tool-list li:last-child{border-bottom:none;}
+.tool-name{font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--fg);}
+.tool-status{font-size:0.7rem;padding:0.1rem 0.4rem;}
+
+/* Footer */
+.footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:8px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);}
+::-webkit-scrollbar-thumb:hover{background:var(--dim);}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="header">
+  <h1>CRASH COURSE // PERSONAL PATH</h1>
+  <p>George Wu's integrated learning roadmap — 22SD modules + asi dev teachings + SERVITOR strategy + live lab evidence</p>
+  <div class="meta">
+    <span>TRACK: A (Coder → Attacker)</span>
+    <span>PROGRESS: 5% (Module 00-01)</span>
+    <span>LAST UPDATED: 2026-06-29</span>
+    <span>LABS: .42 (WUPC) + .92 (HOST)</span>
+  </div>
+</div>
+
+<div class="nav">
+  <a href="index.html">← HOME</a>
+  <a href="#phase1" class="active">PHASE 1</a>
+  <a href="#phase2">PHASE 2</a>
+  <a href="#phase3">PHASE 3</a>
+  <a href="#phase4">PHASE 4</a>
+  <a href="#phase5">PHASE 5</a>
+  <a href="#asi-lessons">ASI DEV</a>
+  <a href="#servitor">SERVITOR</a>
+  <a href="#labs">LABS</a>
+</div>
+
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-fill"></div>
+  </div>
+  <div class="progress-label">
+    <span>START</span>
+    <span>MODULE 07</span>
+    <span>MODULE 14</span>
+    <span>MODULE 21</span>
+    <span>OPERATOR</span>
+  </div>
+</div>
+
+<!-- PHASE 1: FOUNDATION -->
+<div class="section" id="phase1">
+  <div class="section-number">// PHASE 1 — FOUNDATION (WEEKS 1-4)</div>
+  <h2>THE BASICS — NO ASSUMED KNOWLEDGE</h2>
+  
+  <div class="quote">
+    "Eventually all comes to networking."
+    <span class="quote-author">— asi dev [HTB]</span>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 00</span>
+      <span class="lesson-status status-done">✓ COMPLETE</span>
+    </div>
+    <div class="lesson-title">READER GUIDE — How to Use This Course</div>
+    <div class="lesson-content">
+      What a CPU, RAM, and disk actually do. What a process is and why attackers care. 
+      What the Windows API is and why it's the attacker's toolkit. How to set up every tool.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_00_READER.html">START MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 01</span>
+      <span class="lesson-status status-active">→ CURRENT</span>
+    </div>
+    <div class="lesson-title">NETWORKING FUNDAMENTALS</div>
+    <div class="lesson-content">
+      TCP/IP, sockets, ports, protocols. The foundation everything builds on. 
+      <strong>asi dev:</strong> "Linux terminal is way easier, it's almost like English."
+      Set up bashrc aliases. Learn sudo. This is the base layer.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_01_NETWORKING.html">START MODULE →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_NEED.md" target="_blank">STUDY PLAN →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 02</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">RECON & OSINT</div>
+    <div class="lesson-content">
+      Windows recon framework. WMI enumeration, AD discovery, privilege audit. 
+      <strong>asi dev:</strong> "You should have your notes organized with commands, you shouldn't memorize."
+      Build your cheat sheet first.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_02_RECON.html">VIEW MODULE →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">CHEAT SHEET →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 03</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">POWERSHELL WARFARE</div>
+    <div class="lesson-content">
+      Execution policies, AMSI bypass, remoting, obfuscation. 
+      <strong>asi dev:</strong> "PowerShell and cmd yes, Linux terminal way easier."
+      Learn both. Windows is the target, Linux is the tool.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_03_POWERSHELL.html">VIEW MODULE →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">SYSTEM SETTINGS →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 04</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">CODING BASICS</div>
+    <div class="lesson-content">
+      C, Python, PowerShell fundamentals. No prior coding required. 
+      Build tools from scratch — don't just use them.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_04_CODING_BASICS.html">VIEW MODULE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 2: WEAPONIZATION -->
+<div class="section" id="phase2">
+  <div class="section-number">// PHASE 2 — WEAPONIZATION (WEEKS 5-8)</div>
+  <h2>BUILDING THE CHAIN — EACH LINK A SEPARATE SKILL</h2>
+  
+  <div class="quote">
+    "Pegasus wasn't one bug -- it was a fucking chain. iMessage GIF parser → sandbox escape → kernel exploit → persistence. Each link a separate 0day."
+    <span class="quote-author">— SERVITOR</span>
+  </div>
+
+  <div class="warning">
+    Our tools (iron-sun, cheyanne) are training wheels — learning the chain, not the weapon. 
+    Real power comes from finding 0days, chaining them, and never publishing.
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 05</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">SHELLCODE DEVELOPMENT</div>
+    <div class="lesson-content">
+      Position-independent code, syscalls, encoding. Build payloads from scratch. 
+      Understanding how the chain starts.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_05_SHELLCODE.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 06</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">MEMORY FORENSICS</div>
+    <div class="lesson-content">
+      Volatility, memory dumps, injected code detection. Find the needle in the haystack. 
+      Understand how defenders catch you.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_06_MEMORY.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 07</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">REGISTRY ANALYSIS</div>
+    <div class="lesson-content">
+      Windows registry deep-dive. Persistence locations, forensic artifacts, hidden keys. 
+      Where the chain hides.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_07_REGISTRY.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 08</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">PRIVILEGE ESCALATION</div>
+    <div class="lesson-content">
+      Token abuse, service hijacking, UAC bypass. <strong>asi dev:</strong> "Privilege escalation is easy."
+      Live evidence: WUPC .42 had SeImpersonatePrivilege ENABLED + writable service.
+    </div>
+    <div class="evidence">
+      WUPC .42: HealthSecurityHost service with Authenticated Users:(M) permissions → SYSTEM in one restart
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_08_PRIVESC.html">VIEW MODULE →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">PRIVESC LADDER →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/KILL_CHAIN_LAB_EVIDENCE.md" target="_blank">LAB EVIDENCE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3: EVASION -->
+<div class="section" id="phase3">
+  <div class="section-number">// PHASE 3 — EVASION (WEEKS 9-12)</div>
+  <h2>STAYING ALIVE — TEMPORARY ADVANTAGE</h2>
+  
+  <div class="quote">
+    "Published exploit = dead in 24 hours, signature'd by every AV. 0day = your private weapon, no signatures, no detection."
+    <span class="quote-author">— SERVITOR</span>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 09</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">MALWARE DEVELOPMENT</div>
+    <div class="lesson-content">
+      Dropper architecture, payload delivery, execution methods. Build IRON-DOME from scratch. 
+      <strong>WARNING:</strong> Last tested 2026-06-23 (6 days ago). Probably detected now. Re-test before use.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_09_MALWARE.html">VIEW MODULE →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SERVITOR_ASSESSMENT.md" target="_blank">HONEST STATUS →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 10</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">CODE INJECTION</div>
+    <div class="lesson-content">
+      DLL injection, process hollowing, APC injection. Get your code into another process. 
+      The chain's delivery mechanism.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_10_CODE_INJECTION.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 11</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">ROOTKITS & PERSISTENCE</div>
+    <div class="lesson-content">
+      Kernel drivers, bootkits, firmware. Hide at the deepest level. 
+      <strong>asi dev:</strong> "Save every rung." Install persistence at user, admin, and system levels.
+    </div>
+    <div class="evidence">
+      WUPC .42 verified: User HKCU Run key → Admin service hijack → SYSTEM service install. All three rungs cemented.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_11_ROOTKITS.html">VIEW MODULE →</a>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/widgets/persistence_installer.ps1" target="_blank">PERSISTENCE WIDGET →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 12</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">DEFENSIVE VERIFICATION</div>
+    <div class="lesson-content">
+      Verify your evasion. Test against live AV. Document results honestly. Build GeoDefend. 
+      <strong>Rule:</strong> Assume everything is detected. Test against latest AV, not last week's.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_12_DEFENSIVE_VERIFY.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 13</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">EDR EVASION</div>
+    <div class="lesson-content">
+      Bypass CrowdStrike, SentinelOne, Carbon Black. Kernel callbacks, ETW, AM-PPL. 
+      <strong>MSRC VULN-195458:</strong> HWBP bypass disclosed. May be patched. Research only.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_13_EDR_EVASION.html">VIEW MODULE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 4: OPERATIONS -->
+<div class="section" id="phase4">
+  <div class="section-number">// PHASE 4 — OPERATIONS (WEEKS 13-16)</div>
+  <h2>MOVING THROUGH THE NETWORK — THE CHAIN IN ACTION</h2>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 14</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">CLOUD FILES & EXFIL</div>
+    <div class="lesson-content">
+      Steganography, covert channels, dead drops. Hide data in plain sight. Ghost-Encoder. 
+      Zero-width Unicode — still viable, needs re-test.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_14_CLOUD_FILES.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 15</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">LATERAL MOVEMENT</div>
+    <div class="lesson-content">
+      Pass-the-Hash, WMI, PSExec, RDP hijacking. Move through the network. 
+      The chain's expansion phase.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_15_LATERAL.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 16</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">C2 FRAMEWORKS</div>
+    <div class="lesson-content">
+      Build CHEYANNE from scratch. Beacon, listener, encryption, Discord bridge. 
+      <strong>asi dev:</strong> "Reverse shell is the basic for everything."
+      <strong>WARNING:</strong> cheyanne commit 5057de3 "EVADED KAV" was 6 days ago. Probably detected now.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_16_C2.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 17</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">SOCIAL ENGINEERING</div>
+    <div class="lesson-content">
+      Phishing, pretexting, payload delivery. The human is the weakest link. 
+      <strong>asi dev:</strong> "Real attacks are carried remotely." Physical attacks (WiFi, BadUSB) are niche.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html">VIEW MODULE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 5: ADVANCED -->
+<div class="section" id="phase5">
+  <div class="section-number">// PHASE 5 — ADVANCED (WEEKS 17-22)</div>
+  <h2>THE REAL WEAPON — 0DAY RESEARCH</h2>
+  
+  <div class="quote">
+    "Script kiddies use published exploits. Operators build chains. Nation states hoard 0days like nuclear weapons. We're not nation states. But we understand the game now."
+    <span class="quote-author">— SERVITOR</span>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 18</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">ANDROID RAT</div>
+    <div class="lesson-content">
+      StarKiller RAT in Kotlin. GPS, SMS, camera, Play Protect bypass. Mobile attack surface. 
+      The chain's mobile link.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_18_ANDROID.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 19</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">ACTIVE DIRECTORY</div>
+    <div class="lesson-content">
+      Kerberoasting, DCSync, Golden Ticket, ACL abuse. The crown jewels. 
+      The chain's enterprise target.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_19_AD.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 20</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">FULL KILL CHAIN</div>
+    <div class="lesson-content">
+      Recon → Weaponize → Deliver → Exploit → Install → C2 → Action on Objectives. 
+      Put it all together. The chain complete.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_20_KILL_CHAIN.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">MODULE 21</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">CAPSTONE: GEODEFEND</div>
+    <div class="lesson-content">
+      Build an automated defensive platform. Detect the techniques you learned. Blue team perspective. 
+      Understanding both sides of the chain.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/MODULE_21_CAPSTONE.html">VIEW MODULE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">BONUS</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">CEO TRANSLATION</div>
+    <div class="lesson-content">
+      Dollar impact of every technique. Board-ready language. Risk quantification. Compliance mapping. 
+      Translate the chain into business value.
+    </div>
+    <div class="lesson-links">
+      <a href="modules/CEO_TRANSLATION.html">VIEW MODULE →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ASI DEV LESSONS -->
+<div class="section" id="asi-lessons">
+  <div class="section-number">// ASI DEV TEACHINGS</div>
+  <h2>THE FIELD MANUAL — ORGANIZED BY TOPIC</h2>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 1</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">REVERSE SHELL IS THE FOUNDATION</div>
+    <div class="lesson-content">
+      "Reverse shell is the basic for everything because even if you will find a massive bug or vulnerability, 
+      you will still need to push your reverse shell payload to make it work."
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_HAVE.md" target="_blank">CAPABILITIES →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 2</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">ORGANIZED NOTES > MEMORIZATION</div>
+    <div class="lesson-content">
+      "You should have your notes organized with commands, you shouldn't memorize." 
+      Build cheat sheets. Dump commands you need. Evaluate and add to readme.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">CHEAT SHEET →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 3</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">PRIVILEGE ESCALATION IS EASY</div>
+    <div class="lesson-content">
+      "On Linux it's so fucking easy. Also on Windows is easy." 
+      It's not about 0days. It's about misconfigurations — what the admin fucked up.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">PRIVESC LADDER →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 4</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">SAVE EVERY RUNG</div>
+    <div class="lesson-content">
+      "You get initial access as user, you install persistence to save that. You privilege escalated to admin, 
+      you install persistence as admin, to save that. You got to system, you install persistence as system to save that."
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/widgets/persistence_installer.ps1" target="_blank">PERSISTENCE WIDGET →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 5</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">REAL ATTACKS ARE REMOTE</div>
+    <div class="lesson-content">
+      "You only need [WiFi/monitor mode] for physical network attacks. Real attacks are being carried remotely."
+      Phishing, RDP, VPN, web shells — the actual vectors.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/KILL_CHAIN_LAB_EVIDENCE.md" target="_blank">LAB EVIDENCE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 6</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">DEFENDER MANAGEMENT</div>
+    <div class="lesson-content">
+      Full arsenal: exclusions, disabling, destructive removal, cleanup. 
+      PowerShell unrestricted mode. Event log clearing.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/DEFENDER_MANAGEMENT.md" target="_blank">DEFENDER MANAGEMENT →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LESSON 7</span>
+      <span class="lesson-status status-done">✓ ARCHIVED</span>
+    </div>
+    <div class="lesson-title">SYSTEM SETTINGS & POLICIES</div>
+    <div class="lesson-content">
+      PowerShell execution policies, Explorer settings, Defender checks. 
+      The configuration knowledge for operations.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">SYSTEM SETTINGS →</a>
+    </div>
+  </div>
+</div>
+
+<!-- SERVITOR STRATEGY -->
+<div class="section" id="servitor">
+  <div class="section-number">// SERVITOR'S STRATEGY</div>
+  <h2>THE CHAIN REALITY — HONEST ASSESSMENT</h2>
+
+  <div class="warning">
+    <strong>THE HARD TRUTH:</strong> Our tools are training wheels. iron-sun's "PE header stomp + XOR encoding" 
+    was clean on 2026-06-23. Now? Probably detected. Kaspersky learns. The moment a technique hits public research, 
+    it's signature'd. We don't have 0days. We have known techniques documented in MITRE.
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">STRATEGY 1</span>
+      <span class="lesson-status status-active">→ ACTIVE</span>
+    </div>
+    <div class="lesson-title">UNDERSTAND THE CHAIN</div>
+    <div class="lesson-content">
+      Pegasus: iMessage GIF parser → sandbox escape → kernel exploit → persistence. 
+      Each link a separate 0day. One public link = whole chain rots. 
+      <strong>Our current chain:</strong> Known techniques, MITRE documented, signature'd by EDR.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SERVITOR_ASSESSMENT.md" target="_blank">FULL ASSESSMENT →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">STRATEGY 2</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">BUILD SKILLS, NOT TOOLS</div>
+    <div class="lesson-content">
+      The real weapon is finding the unknown — fuzzing, reversing, discovering. 
+      Path: Fuzzing → Reversing → Exploit Dev → Responsible Disclosure → Keep Secrets.
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_NEED.md" target="_blank">STUDY PLAN →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">STRATEGY 3</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">HONEST COURSE VALUE</div>
+    <div class="lesson-content">
+      Don't claim "undetectable." Don't claim "0day." Teach chain architecture. 
+      Teach evasion layers and why they fail. Teach detection methodology. 
+      Teach skill building paths. The honest value is real.
+    </div>
+  </div>
+</div>
+
+<!-- LABS -->
+<div class="section" id="labs">
+  <div class="section-number">// LIVE LABS</div>
+  <h2>TEST ENVIRONMENTS — APPLY WHAT YOU LEARN</h2>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LAB 1</span>
+      <span class="lesson-status status-active">→ ACTIVE</span>
+    </div>
+    <div class="lesson-title">WUPC (192.168.1.42)</div>
+    <div class="lesson-content">
+      <strong>OS:</strong> Windows 10/11 | <strong>User:</strong> SWu (Admin) | <strong>Defender:</strong> OFF | <strong>Firewall:</strong> OFF<br>
+      <strong>Key Findings:</strong> SeImpersonatePrivilege ENABLED, HealthSecurityHost writable service (Authenticated Users:(M))<br>
+      <strong>Use:</strong> Privilege escalation practice, persistence testing, service hijacking
+    </div>
+    <div class="evidence">
+      Verified: SSH_OK, Admin context, SYSTEM vector confirmed via writable service
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/KILL_CHAIN_LAB_EVIDENCE.md" target="_blank">FULL EVIDENCE →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LAB 2</span>
+      <span class="lesson-status status-active">→ ACTIVE</span>
+    </div>
+    <div class="lesson-title">HOST (192.168.1.92)</div>
+    <div class="lesson-content">
+      <strong>OS:</strong> Windows 11 | <strong>User:</strong> gwu07 (Standard) | <strong>Defender:</strong> OFF | <strong>Kaspersky:</strong> ACTIVE<br>
+      <strong>Use:</strong> AV evasion testing, real-world detection validation, C2 beacon testing
+    </div>
+    <div class="lesson-links">
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SERVITOR_ASSESSMENT.md" target="_blank">TEST STATUS →</a>
+    </div>
+  </div>
+
+  <div class="lesson-card">
+    <div class="lesson-header">
+      <span class="lesson-num">LAB 3</span>
+      <span class="lesson-status status-pending">○ PENDING</span>
+    </div>
+    <div class="lesson-title">RADON (192.168.1.145)</div>
+    <div class="lesson-content">
+      <strong>Status:</strong> SSH timeout, C2 beacon SYN_SENT to :4443 not completing<br>
+      <strong>Use:</strong> When available — lateral movement target, real enterprise environment
+    </div>
+  </div>
+</div>
+
+<!-- QUICK LINKS -->
+<div class="section">
+  <div class="section-number">// ALL URLS</div>
+  <h2>NAVIGATION — EVERYTHING YOU NEED</h2>
+
+  <h3>Main Site</h3>
+  <div class="lesson-links">
+    <a href="https://rainfantry.github.io/22nd-survey-division/">HOME</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/resources.html">RESOURCES</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/#courses">COURSES</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/#proof">PROOF</a>
+  </div>
+
+  <h3>Course Modules (Free)</h3>
+  <div class="lesson-links">
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_00_READER.html">00</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_01_NETWORKING.html">01</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_02_RECON.html">02</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_03_POWERSHELL.html">03</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_04_CODING_BASICS.html">04</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_05_SHELLCODE.html">05</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_06_MEMORY.html">06</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_07_REGISTRY.html">07</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_08_PRIVESC.html">08</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_09_MALWARE.html">09</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_10_CODE_INJECTION.html">10</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_11_ROOTKITS.html">11</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_12_DEFENSIVE_VERIFY.html">12</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_13_EDR_EVASION.html">13</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_14_CLOUD_FILES.html">14</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_15_LATERAL.html">15</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_16_C2.html">16</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_17_SOCIAL_ENGINEERING.html">17</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_18_ANDROID.html">18</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_19_AD.html">19</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_20_KILL_CHAIN.html">20</a>
+    <a href="https://rainfantry.github.io/22nd-survey-division/modules/MODULE_21_CAPSTONE.html">21</a>
+  </div>
+
+  <h3>Private Lessons Repo</h3>
+  <div class="lesson-links">
+    <a href="https://github.com/rainfantry/lessons-from-teacher">lessons-from-teacher</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_HAVE.md">WHAT_I_HAVE</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_NEED.md">WHAT_I_NEED</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md">CHEAT_SHEET</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/DEFENDER_MANAGEMENT.md">DEFENDER</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md">SYSTEM</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md">PRIVESC</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/KILL_CHAIN_LAB_EVIDENCE.md">EVIDENCE</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SERVITOR_ASSESSMENT.md">SERVITOR</a>
+  </div>
+
+  <h3>Widgets (POC Code)</h3>
+  <div class="lesson-links">
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/widgets/privilege_checker.c">PRIV_CHECKER</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/widgets/service_auditor.c">SVC_AUDITOR</a>
+    <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/widgets/persistence_installer.ps1">PERSISTENCE</a>
+  </div>
+</div>
+
+<div class="footer">
+  // 22ND SURVEY DIVISION // CRASH COURSE // PERSONAL PATH //<br>
+  Built for George Wu. Integrates 22SD modules + asi dev teachings + SERVITOR strategy + live lab evidence.<br>
+  Start at Module 00. Follow the phases. Apply on labs. Document everything.
+</div>
+
+</div>
+
+</body>
+</html>
