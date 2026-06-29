@@ -47,7 +47,8 @@ validate_module() {
     echo "  Evidence boxes: $evidence_count"
     
     # Check for mentor callouts (broader patterns)
-    local mentor_count=$(grep -icE "mentor says|mentor.*says|mentor.*quote|mentor.*teaches|mentor.*words|mentor.*means" "$module_path" 2>/dev/null || echo "0")
+    local mentor_count
+    mentor_count=$(grep -icE "mentor says|mentor.*says|mentor.*quote|mentor.*teaches|mentor.*words|mentor.*means" "$module_path" 2>/dev/null) || mentor_count=0
     echo "  Mentor callouts: $mentor_count"
     
     # Check for cross-links
