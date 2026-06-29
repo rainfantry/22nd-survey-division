@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 06: Memory Forensics — 22nd Survey Division</title>
+    <title>Module 06: Windows Memory Architecture & Forensics — 22nd Survey Division</title>
     <style>
         :root {
             --bg: #0a0a0f;
@@ -12,6 +12,9 @@
             --accent2: #00ff88;
             --dim: #666;
             --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -32,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -83,6 +101,41 @@
             margin-left: 0.5rem;
         }
         .status-live { background: var(--accent2); color: var(--bg); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
         .memory-map {
             background: #111;
             border: 1px solid var(--border);
@@ -101,6 +154,8 @@
         .region-heap { background: #0a1a0a; border-left: 3px solid #55ff55; }
         .region-stack { background: #0a0a1a; border-left: 3px solid #5555ff; }
         .region-mapped { background: #1a1a0a; border-left: 3px solid #ffaa00; }
+        .region-kernel { background: #1a0a0a; border-left: 3px solid #ff00ff; }
+        .region-paged { background: #0a1a1a; border-left: 3px solid #00ffff; }
         button {
             background: var(--accent);
             color: var(--bg);
@@ -118,6 +173,150 @@
             padding: 2rem;
             margin: 2rem 0;
         }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .vad-tree {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+        .vad-node {
+            padding: 0.2rem 0.5rem;
+            margin: 0.1rem 0;
+            border-radius: 4px;
+        }
+        .vad-root { background: #1a0a1a; border-left: 3px solid var(--accent); }
+        .vad-left { background: #0a1a0a; border-left: 3px solid var(--accent2); margin-left: 1rem; }
+        .vad-right { background: #0a0a1a; border-left: 3px solid var(--neon); margin-left: 1rem; }
+        .page-table {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+        }
+        .page-entry {
+            padding: 0.2rem 0.5rem;
+            margin: 0.1rem 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .page-valid { background: #0a1a0a; border-left: 3px solid var(--accent2); }
+        .page-invalid { background: #1a0a0a; border-left: 3px solid var(--accent); }
     </style>
 </head>
 <body>
@@ -128,61 +327,802 @@
             <a href="MODULE_07_REGISTRY.html">Module 07 →</a>
         </div>
 
-        <h1>Module 06: Memory Forensics <span class="status-badge status-live">LIVE TESTED</span></h1>
+        <h1>Module 06: Windows Memory Architecture & Forensics <span class="status-badge status-live">LIVE TESTED</span></h1>
         
         <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 6 of 22 — Reading memory like a book</p>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 6 of 22 — Understanding the battlefield beneath every process</p>
 
-        <h2>First Principle: Memory is Just a Byte Array</h2>
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Every running process has a <strong>virtual address space</strong> — a contiguous (from the process's perspective) array of bytes. The OS maps this to physical RAM via page tables. When you read memory, you're reading bytes. When you write memory, you're writing bytes. Everything else is interpretation.</p>
-            <p style="margin-top: 0.5rem; color: var(--dim);">Strings, integers, structs, images — all just bytes with context. Forensics is finding the context.</p>
+            <p>Every running process has a <span class="neon-highlight">virtual address space</span> — a contiguous (from the process's perspective) array of bytes. The OS maps this to physical RAM via page tables. When you read memory, you're reading bytes. When you write memory, you're writing bytes. Everything else is interpretation.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Memory is where code lives, where secrets live, and where malware hides. If you understand memory architecture, you understand where to look, what to look for, and how to hide. This module is the foundation for <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a>, <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>, and every advanced technique that follows.</p>
         </div>
 
         <div class="layman-term">
-            <h4>🎯 Layman Translation</h4>
-            <p>Memory is like a warehouse with labeled shelves. The OS (warehouse manager) knows which shelves belong to which process. Forensics is walking through the warehouse, reading labels, and finding the hidden contraband. Each shelf has a label: "IMAGE" (program code), "HEAP" (dynamic data), "STACK" (temporary variables), "MAPPED" (shared files).</p>
+            <h4>🎯 Soldier Translation</h4>
+            <p>Memory is like a warehouse with labeled shelves. The OS (warehouse manager) knows which shelves belong to which process. Forensics is walking through the warehouse, reading labels, and finding the hidden contraband. Each shelf has a label: "IMAGE" (program code), "HEAP" (dynamic data), "STACK" (temporary variables), "MAPPED" (shared files). The warehouse manager uses a master ledger (page tables) to translate each process's shelf numbers to the actual physical warehouse locations.</p>
         </div>
 
-        <h2>Live Evidence: .42 Memory Map</h2>
-        <div class="evidence-box">
-            <h3>📊 Real Data: WUPC Process Memory Layout</h3>
-            <p><strong>Target:</strong> .42 (WUPC) | <strong>Process:</strong> avp.exe (Kaspersky) | <strong>Tool:</strong> C + WinAPI</p>
-            
-            <div class="memory-map">
-                <div class="memory-region region-image">
-                    0x00007FF6_8A4A0000 | 0x0012D000 | IMAGE | C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\x64\avp.exe
-                </div>
-                <div class="memory-region region-heap">
-                    0x000001F4_8A2A0000 | 0x0004A000 | HEAP  | Process Heap #1 (default)
-                </div>
-                <div class="memory-region region-heap">
-                    0x000001F4_8A740000 | 0x0002B000 | HEAP  | Process Heap #2 (CRT)
-                </div>
-                <div class="memory-region region-mapped">
-                    0x00007FF8_FFA00000 | 0x001C3000 | MAPPED| C:\Windows\System32\ntdll.dll
-                </div>
-                <div class="memory-region region-mapped">
-                    0x00007FF8_FF400000 | 0x000E2000 | MAPPED| C:\Windows\System32\kernel32.dll
-                </div>
-                <div class="memory-region region-mapped">
-                    0x00007FF8_FE200000 | 0x001D5000 | MAPPED| C:\Windows\System32\KERNELBASE.dll
-                </div>
-                <div class="memory-region region-stack">
-                    0x0000005D_8A2F0000 | 0x000FD000 | STACK | Thread 0 (main)
-                </div>
-                <div class="memory-region region-stack">
-                    0x0000005D_8A1F0000 | 0x000FD000 | STACK | Thread 1 (worker)
-                </div>
+        <h2>📚 Prerequisites & Cross-Links</h2>
+        <p style="margin-bottom: 1rem;">This module connects directly to these modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_05_SHELLCODE.html" class="cross-link">Module 05: Shellcode</a></h4>
+                <p>Shellcode is position-independent code that lives in memory. Understanding memory layout tells you WHERE to place shellcode and WHAT protection flags it needs.</p>
             </div>
-            
+            <div class="method-card">
+                <h4><a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a></h4>
+                <p>Registry values are read into process memory. Memory forensics can recover deleted registry keys and reveal configuration data that malware loads at runtime.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Injection requires allocating memory in a remote process (VirtualAllocEx), changing protection (VirtualProtect), and writing payload bytes. All require understanding memory architecture.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>Defensive tools scan memory for anomalies: RWX regions, hollowed processes, injected threads. You must understand normal memory layout to detect abnormal.</p>
+            </div>
+        </div>
+
+        <h2>Section 1: Windows Memory Architecture Overview</h2>
+        
+        <h3>1.1 The Virtual Address Space</h3>
+        <p>On Windows x64, every process gets a <span class="neon-highlight">128 TB</span> virtual address space (user-mode: 0x0000_0000_0000 to 0x7FFF_FFFF_FFFF; kernel-mode: 0xFFFF_0000_0000_0000 to 0xFFFF_FFFF_FFFF_FFFF). Most of it is unallocated. The OS maps only what the process needs to physical RAM via page tables.</p>
+
+        <div class="memory-map">
+            <div style="text-align: center; margin-bottom: 0.5rem; color: var(--neon); font-weight: bold;">Windows x64 Virtual Address Space (per process)</div>
+            <div class="memory-region region-kernel">
+                0xFFFF_0800_0000_0000 | Kernel Space (ntoskrnl, drivers, HAL)
+            </div>
+            <div class="memory-region region-kernel">
+                0xFFFF_0000_0000_0000 | System PTEs, System Cache, Paged Pool
+            </div>
+            <div style="text-align: center; padding: 0.5rem; color: var(--dim);">... Unmapped Guard Region ...</div>
+            <div class="memory-region region-mapped">
+                0x0000_7FF0_0000_0000 | System DLLs (ntdll, kernel32, kernelbase)
+            </div>
+            <div class="memory-region region-image">
+                0x0000_7FF6_0000_0000 | EXE Image (e.g., avp.exe, notepad.exe)
+            </div>
+            <div style="text-align: center; padding: 0.5rem; color: var(--dim);">... Unmapped / TEB / PEB ...</div>
+            <div class="memory-region region-heap">
+                0x0000_0001_0000_0000 | Process Heaps (default, CRT, custom)
+            </div>
+            <div class="memory-region region-mapped">
+                0x0000_0000_1000_0000 | Mapped Files, Shared Sections
+            </div>
+            <div class="memory-region region-stack">
+                0x0000_0000_000A_0000 | Thread Stacks (grows downward)
+            </div>
+            <div class="memory-region region-paged">
+                0x0000_0000_0000_0000 | NULL Page (unmapped on modern Windows)
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why the kernel shares every process's address space</h5>
+            <p>On Windows, the kernel is mapped into the <span class="neon-highlight">upper 128 TB</span> of every process's virtual address space. This is why a user-mode thread can transition to kernel mode so quickly — the kernel code is already in the process's address space. The CPU privilege level (CPL) changes, but the page tables don't. This design is fast but creates the <span class="neon-amber">Meltdown/Spectre</span> vulnerability class: user-mode code can speculatively read kernel memory.</p>
+        </div>
+
+        <h3>1.2 Physical vs Virtual Memory</h3>
+        <p>Physical RAM is limited. Virtual memory is infinite (in theory). The Memory Manager (part of ntoskrnl) bridges them using:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><span class="neon-highlight">Page Tables</span>: Map virtual addresses → physical page frames</li>
+            <li><span class="neon-highlight">Page File</span>: Swap pages to disk when RAM is full</li>
+            <li><span class="neon-highlight">Working Set</span>: Pages currently in RAM for a process</li>
+            <li><span class="neon-highlight">Standby List</span>: Pages removed from working set but still in RAM (fast reuse)</li>
+            <li><span class="neon-highlight">Modified List</span>: Pages written to but not yet flushed to disk</li>
+        </ul>
+
+        <div class="evidence-box">
+            <h3>📊 Live Evidence: .42 Memory Statistics</h3>
+            <p><strong>Target:</strong> .42 (WUPC) | <strong>Tool:</strong> GetProcessMemoryInfo + GlobalMemoryStatusEx</p>
+            <div class="code-block">
+Total Physical RAM:     16,384 MB
+Available Physical:      8,192 MB
+Committed (all procs):  12,288 MB
+Page File Usage:         4,096 MB
+
+Process: avp.exe (PID 4824)
+Working Set:             512 MB
+Private Bytes:             256 MB  // Cannot be shared
+Pagefile Usage:          128 MB
+Peak Working Set:          640 MB
+            </div>
             <p style="margin-top: 1rem; color: var(--dim);">
-                <strong>Key Finding:</strong> Kaspersky's avp.exe loads at high address (0x7FF6...), system DLLs at 0x7FF8..., heaps in low 0x1F4... range, stacks in 0x5D... range. This is standard Windows x64 address space layout.
+                <strong>Key Finding:</strong> avp.exe uses 512 MB working set but only 256 MB is private (unshareable). The rest is shared DLLs, mapped files, and copy-on-write pages. Malware analysts care about <span class="neon-highlight">Private Bytes</span> — that's the process's unique footprint.
             </p>
         </div>
 
-        <h2>The Code: Reading Memory Directly</h2>
+        <h2>Section 2: Paging — How Virtual Addresses Become Physical</h2>
+
+        <h3>2.1 x64 Page Table Hierarchy</h3>
+        <p>Windows x64 uses <span class="neon-highlight">4-level paging</span> (on most systems) or 5-level (on very large RAM systems). Each level is a table of 512 entries (9 bits). The 48-bit virtual address is split into:</p>
+
+        <div class="page-table">
+            <div class="page-entry page-valid">
+                <span>Bits 47-39 (9 bits)</span>
+                <span>PML4 Index → CR3 register points to PML4 table</span>
+            </div>
+            <div class="page-entry page-valid">
+                <span>Bits 38-30 (9 bits)</span>
+                <span>PDPT Index → Page Directory Pointer Table</span>
+            </div>
+            <div class="page-entry page-valid">
+                <span>Bits 29-21 (9 bits)</span>
+                <span>PD Index → Page Directory</span>
+            </div>
+            <div class="page-entry page-valid">
+                <span>Bits 20-12 (9 bits)</span>
+                <span>PT Index → Page Table</span>
+            </div>
+            <div class="page-entry page-valid">
+                <span>Bits 11-0 (12 bits)</span>
+                <span>Page Offset → 4 KB page frame</span>
+            </div>
+        </div>
+
+        <div class="code-block">
+// Virtual Address Translation (simplified)
+// VA = 0x00007FF68A4A1000
+//
+// PML4 Index  = (VA >> 39) & 0x1FF = 0x00F  (entry 15)
+// PDPT Index  = (VA >> 30) & 0x1FF = 0x1FD  (entry 509)
+// PD Index    = (VA >> 21) & 0x1FF = 0x1A4  (entry 420)
+// PT Index    = (VA >> 12) & 0x1FF = 0x0A1  (entry 161)
+// Offset      =  VA        & 0xFFF = 0x000
+//
+// CPU walks: CR3 → PML4[15] → PDPT[509] → PD[420] → PT[161] → Physical Page + 0x000
+//
+// If any entry has Present=0, the CPU raises a #PF (Page Fault)
+// The OS handles it: load from pagefile, allocate zero page, or kill the process
+        </div>
+
+        <div class="why-box">
+            <h5>Why page tables matter for forensics</h5>
+            <p>When you dump process memory with a tool like <span class="neon-highlight">WinDbg</span> or <span class="neon-highlight">Rekall</span>, you're reading the page tables to find physical frames. If a page is swapped to disk (Present=0, Pagefile=1), the dump tool must read the pagefile. If a page is demand-zero (Present=0, Pagefile=0), it's all zeros — no physical storage exists. Understanding this explains why memory dumps sometimes show "holes" and why <span class="neon-amber">volatile memory</span> is truly volatile.</p>
+        </div>
+
+        <h3>2.2 Page States: Committed, Reserved, Free</h3>
+        <p>Windows tracks three states for every virtual address region:</p>
+        <table>
+            <tr>
+                <th>State</th>
+                <th>Meaning</th>
+                <th>Physical RAM?</th>
+                <th>Pagefile?</th>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">MEM_FREE</span></td>
+                <td>Unallocated. Access = access violation.</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">MEM_RESERVE</span></td>
+                <td>Address range held, but no storage backing.</td>
+                <td>No</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">MEM_COMMIT</span></td>
+                <td>Storage allocated (RAM or pagefile). Access allowed.</td>
+                <td>On first touch</td>
+                <td>Yes, if swapped</td>
+            </tr>
+        </table>
+
+        <div class="code-block">
+// VirtualAlloc behavior depends on allocation type:
+
+LPVOID p = VirtualAlloc(
+    NULL,           // Let OS choose address
+    0x10000,        // 64 KB
+    MEM_RESERVE,    // Only reserve address range
+    PAGE_NOACCESS   // No access allowed
+);
+// Result: Address range is blocked. No RAM used. No pagefile used.
+
+LPVOID p2 = VirtualAlloc(
+    p,              // Commit within reserved range
+    0x1000,         // 4 KB
+    MEM_COMMIT,     // Actually allocate storage
+    PAGE_READWRITE  // RW access
+);
+// Result: 4 KB page is backed by pagefile. On first write, physical RAM allocated.
+        </div>
+
+        <h2>Section 3: Memory Protection Flags</h2>
+
+        <h3>3.1 The PAGE_EXECUTE_READWRITE Problem</h3>
+        <p>Memory protection is enforced by the CPU's MMU using bits in the page table entries. Windows exposes these via the <span class="neon-highlight">PAGE_*</span> constants. The most dangerous — and most useful — is <span class="neon-amber">PAGE_EXECUTE_READWRITE</span> (RWX).</p>
+
+        <table>
+            <tr>
+                <th>Protection Flag</th>
+                <th>Read</th>
+                <th>Write</th>
+                <th>Execute</th>
+                <th>Use Case</th>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_NOACCESS</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>Guard pages, catching bugs</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_READONLY</span></td>
+                <td>✓</td>
+                <td>—</td>
+                <td>—</td>
+                <td>Code sections (.text), read-only data</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_READWRITE</span></td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>—</td>
+                <td>Heap, stack, mutable data (.data)</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_EXECUTE</span></td>
+                <td>—</td>
+                <td>—</td>
+                <td>✓</td>
+                <td>Rare — execute-only (DEP)</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_EXECUTE_READ</span></td>
+                <td>✓</td>
+                <td>—</td>
+                <td>✓</td>
+                <td>Normal code sections (.text)</td>
+            </tr>
+            <tr>
+                <td><span class="neon-amber">PAGE_EXECUTE_READWRITE</span></td>
+                <td>✓</td>
+                <td>✓</td>
+                <td>✓</td>
+                <td><strong>Malware goldmine</strong></td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_WRITECOPY</span></td>
+                <td>✓</td>
+                <td>✓ (COW)</td>
+                <td>—</td>
+                <td>Mapped files, shared memory</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">PAGE_EXECUTE_WRITECOPY</span></td>
+                <td>✓</td>
+                <td>✓ (COW)</td>
+                <td>✓</td>
+                <td>Loaded DLLs with relocations</td>
+            </tr>
+        </table>
+
+        <div class="warning-box">
+            <h5>⚠️ PAGE_EXECUTE_READWRITE is a Red Flag</h5>
+            <p>Normal executables have <span class="neon-highlight">RX</span> code sections and <span class="neon-highlight">RW</span> data sections. <span class="neon-amber">RWX</span> pages are rare in legitimate software. When you see RWX in a memory dump, investigate immediately:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>JIT compilers (JavaScript engines, .NET CLR) use RWX temporarily</li>
+                <li>Packers and protectors use RWX for unpacking</li>
+                <li>Malware uses RWX for injected shellcode</li>
+                <li>Some games use RWX for anti-cheat or DRM</li>
+            </ul>
+            <p style="margin-top: 0.5rem;"><strong>Defensive rule:</strong> Any RWX region not belonging to a known JIT engine is suspicious. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+        </div>
+
+        <h3>3.2 VirtualProtect — Changing Protection at Runtime</h3>
+        <p>Processes can change memory protection dynamically. This is how packers unpack, how JIT engines compile, and how malware injects:</p>
+
+        <div class="code-block">
+// Typical malware pattern: allocate RW, write payload, flip to RX
+
+LPVOID payload = VirtualAlloc(
+    NULL, 0x1000, 
+    MEM_COMMIT | MEM_RESERVE, 
+    PAGE_READWRITE        // Step 1: Allocate as RW (stealthier than RWX)
+);
+
+// Step 2: Write encrypted/decrypted payload
+memcpy(payload, shellcode, shellcode_len);
+
+// Step 3: Change to RX (or RWX) to execute
+DWORD oldProtect;
+VirtualProtect(payload, 0x1000, PAGE_EXECUTE_READ, &oldProtect);
+
+// Step 4: Execute
+((void(*)())payload)();
+
+// Evasion variant: Use PAGE_EXECUTE_READWRITE briefly, then revert
+VirtualProtect(payload, 0x1000, PAGE_EXECUTE_READWRITE, &oldProtect);
+// ... write new stage ...
+VirtualProtect(payload, 0x1000, PAGE_EXECUTE_READ, &oldProtect);
+        </div>
+
+        <div class="why-box">
+            <h5>Why EDR monitors VirtualProtect</h5>
+            <p>EDR hooks <span class="neon-highlight">VirtualProtect</span> and <span class="neon-highlight">VirtualProtectEx</span> because the pattern "allocate RW → write → flip to RX" is the signature of code injection. EDR may:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Block the call if the target region was recently written</li>
+                <li>Scan the region for known signatures before allowing RX</li>
+                <li>Log the operation for behavioral analysis</li>
+                <li>Generate an alert if the calling process is not a known JIT</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Advanced malware avoids this by using <span class="neon-amber">direct syscalls</span> (NtProtectVirtualMemory) or <span class="neon-amber">ROP chains</span> that never call VirtualProtect directly. See <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a>.</p>
+        </div>
+
+        <h2>Section 4: Heap vs Stack</h2>
+
+        <h3>4.1 The Stack</h3>
+        <p>The stack is a <span class="neon-highlight">LIFO</span> data structure managed automatically by the CPU and compiler. Each thread gets its own stack (default: 1 MB reserved, 4 KB committed, grows on demand). The stack stores:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li>Local variables (automatic storage)</li>
+            <li>Function parameters (on x64, mostly in registers; stack for overflow)</li>
+            <li>Return addresses (where to go back after a function call)</li>
+            <li>Saved registers (non-volatile registers pushed by callee)</li>
+            <li>SEH / exception handling frames</li>
+        </ul>
+
+        <div class="code-block">
+// Stack layout during function call (x64, simplified)
+//
+// High addresses
+//  +------------------+
+//  |  Return Address  |  ← RIP saved by CALL instruction
+//  +------------------+
+//  |  Saved RBP       |  ← Old frame pointer
+//  +------------------+
+//  |  Local var 1     |  [rbp-0x08]
+//  +------------------+
+//  |  Local var 2     |  [rbp-0x10]
+//  +------------------+
+//  |  ... padding ... |  (alignment to 16 bytes)
+//  +------------------+
+//  |  Shadow space    |  32 bytes for register spill (Windows x64 ABI)
+//  +------------------+
+//  |  Stack args      |  5th+ arguments (first 4 in RCX, RDX, R8, R9)
+//  +------------------+
+// Low addresses  ← RSP points here (stack grows DOWNWARD)
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Stack Overflow & Stack-Based Exploits</h5>
+            <p>Because the stack stores <span class="neon-highlight">return addresses</span>, overwriting the return address lets an attacker control execution flow. This is the classic stack buffer overflow. Modern mitigations:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><span class="neon-highlight">/GS (Stack Canary)</span>: Cookie between locals and return address. Corruption detected before return.</li>
+                <li><span class="neon-highlight">ASLR</span>: Randomizes stack base address. Harder to predict where to jump.</li>
+                <li><span class="neon-highlight">DEP/NX</span>: Stack pages are non-executable (PAGE_READWRITE, not RWX).</li>
+                <li><span class="neon-highlight">CFG / CFI</span>: Control Flow Guard validates indirect call targets.</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">See <a href="MODULE_05_SHELLCODE.html" class="cross-link">Module 05: Shellcode</a> for how to bypass these mitigations.</p>
+        </div>
+
+        <h3>4.2 The Heap</h3>
+        <p>The heap is a <span class="neon-highlight">dynamic</span> memory region for data whose size isn't known at compile time. Unlike the stack, heap allocation is manual (malloc, new, HeapAlloc) and deallocation is manual (free, delete, HeapFree). Each process has at least one heap (the default process heap), and can create more.</p>
+
+        <div class="code-block">
+// Heap allocation under the hood
+
+// CRT heap (malloc/free) → HeapAlloc/HeapFree on default process heap
+// Default process heap → RtlAllocateHeap in ntdll
+// RtlAllocateHeap → LFH (Low Fragmentation Heap) or regular heap segment
+
+// Heap structure (simplified):
+// HEAP (0x100 bytes header)
+//   ├── Segments[]      // Array of heap segments (1 MB chunks)
+//   ├── FreeLists[]     // Linked lists of free blocks by size
+//   ├── LFH Buckets[]   // Low Fragmentation Heap buckets (sizes 0x1-0x4000)
+//   └── VirtualAllocdBlocks  // Large allocations (> 512 KB) go directly to VirtualAlloc
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Live Evidence: Heap Layout in avp.exe (.42)</h3>
+            <div class="memory-map">
+                <div class="memory-region region-heap">
+                    0x000001F4_8A2A0000 | 0x0004A000 | HEAP 0 | Default Process Heap (created by ntdll on startup)
+                </div>
+                <div class="memory-region region-heap">
+                    0x000001F4_8A740000 | 0x0002B000 | HEAP 1 | CRT Heap (used by malloc/new)
+                </div>
+                <div class="memory-region region-heap">
+                    0x000001F4_8AA00000 | 0x00100000 | HEAP 2 | Custom Heap (Kaspersky internal)
+                </div>
+                <div class="memory-region region-heap">
+                    0x000001F4_8BA00000 | 0x00001000 | HEAP 3 | LFH Subsegment (size 0x30 allocations)
+                </div>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);">
+                <strong>Key Finding:</strong> Multiple heaps indicate a complex application. Heap #2 is large (1 MB) and likely stores scan results, signatures, or configuration. Forensics tools like <span class="neon-highlight">Volatility</span> can dump heap contents and extract strings, URLs, and file paths.
+            </p>
+        </div>
+
+        <h3>4.3 Heap vs Stack Comparison</h3>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Stack</th>
+                <th>Heap</th>
+            </tr>
+            <tr>
+                <td>Allocation</td>
+                <td>Automatic (compiler-generated)</td>
+                <td>Manual (malloc/HeapAlloc)</td>
+            </tr>
+            <tr>
+                <td>Deallocation</td>
+                <td>Automatic (function return)</td>
+                <td>Manual (free/HeapFree)</td>
+            </tr>
+            <tr>
+                <td>Speed</td>
+                <td>Fast (RSP decrement)</td>
+                <td>Slower (search free lists, locking)</td>
+            </tr>
+            <tr>
+                <td>Size limit</td>
+                <td>~1 MB per thread (configurable)</td>
+                <td>Process commit limit (RAM + pagefile)</td>
+            </tr>
+            <tr>
+                <td>Fragmentation</td>
+                <td>None (strict LIFO)</td>
+                <td>High (allocation/deallocation patterns)</td>
+            </tr>
+            <tr>
+                <td>Security</td>
+                <td>Canaries, ASLR, DEP</td>
+                <td>SafeUnlink, LFH randomization, Segment heap</td>
+            </tr>
+            <tr>
+                <td>Forensics value</td>
+                <td>Call chains, local variables, exception frames</td>
+                <td>Objects, strings, decrypted data, malware config</td>
+            </tr>
+        </table>
+
+        <h2>Section 5: VirtualAlloc and Memory Allocation APIs</h2>
+
+        <h3>5.1 The Allocation Hierarchy</h3>
+        <p>Windows provides multiple layers of memory allocation. Understanding the hierarchy helps you choose the right tool and interpret memory dumps:</p>
+
+        <div class="code-block">
+// Layer 1: C Runtime (portable, simplest)
+void* p = malloc(1024);        // → HeapAlloc on CRT heap
+void* p2 = calloc(10, 100);     // → malloc + zero-initialize
+void* p3 = realloc(p, 2048);    // → HeapReAlloc
+free(p);                        // → HeapFree
+
+// Layer 2: Windows Heap API (more control)
+HANDLE hHeap = HeapCreate(0, 0x1000, 0);  // Create private heap
+void* p4 = HeapAlloc(hHeap, 0, 1024);     // Allocate from private heap
+HeapFree(hHeap, 0, p4);                   // Free
+HeapDestroy(hHeap);                        // Destroy entire heap
+
+// Layer 3: Virtual Memory API (most control, most overhead)
+LPVOID p5 = VirtualAlloc(
+    NULL,                       // Let OS choose address
+    0x10000,                    // 64 KB
+    MEM_COMMIT | MEM_RESERVE,   // Commit + reserve
+    PAGE_READWRITE              // RW protection
+);
+VirtualFree(p5, 0, MEM_RELEASE);  // Free entire region
+
+// Layer 4: Direct Syscalls (stealth, bypass hooks)
+// NtAllocateVirtualMemory, NtFreeVirtualMemory
+// Same parameters as VirtualAlloc but no kernel32.dll hooking
+        </div>
+
+        <div class="why-box">
+            <h5>Why malware uses VirtualAlloc over malloc</h5>
+            <p><span class="neon-highlight">malloc</span> goes through the CRT heap, which is monitored by EDR and has complex bookkeeping. <span class="neon-highlight">VirtualAlloc</span> goes directly to the OS Memory Manager, creating clean, contiguous regions with explicit protection flags. Malware can:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Allocate at specific addresses (e.g., to overwrite a known mapping)</li>
+                <li>Set exact protection flags (RWX, RX, etc.)</li>
+                <li>Reserve large regions without committing (stealth: no pagefile usage yet)</li>
+                <li>Use MEM_TOP_DOWN to allocate from high addresses (less suspicious)</li>
+                <li>Call NtAllocateVirtualMemory directly to bypass user-mode hooks</li>
+            </ul>
+        </div>
+
+        <h3>5.2 VirtualAllocEx — Remote Process Allocation</h3>
+        <p><span class="neon-highlight">VirtualAllocEx</span> is the cross-process version. It takes a process handle and allocates memory in that process's address space. This is the first step in every code injection technique.</p>
+
+        <div class="code-block">
+// VirtualAllocEx — allocate memory in a remote process
+// This is the "OPEN → ALLOCATE" step from Module 10's kill chain
+
+HANDLE hTarget = OpenProcess(
+    PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ,
+    FALSE, targetPID
+);
+
+LPVOID remoteMem = VirtualAllocEx(
+    hTarget,
+    NULL,                       // Let OS choose
+    payloadSize,
+    MEM_COMMIT | MEM_RESERVE,
+    PAGE_EXECUTE_READWRITE      // RWX — suspicious but convenient
+);
+
+// Alternative: allocate RW first, flip to RX later (more stealth)
+LPVOID remoteMem2 = VirtualAllocEx(hTarget, NULL, payloadSize, 
+                                   MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+// ... write payload ...
+DWORD old;
+VirtualProtectEx(hTarget, remoteMem2, payloadSize, PAGE_EXECUTE_READ, &old);
+        </div>
+
+        <h2>Section 6: Memory Forensics Basics</h2>
+
+        <h3>6.1 What Is Volatile Memory Forensics?</h3>
+        <p>Volatile memory forensics is the art of extracting evidence from RAM. Unlike disk forensics, RAM is:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><span class="neon-highlight">Ephemeral</span>: Lost on power-off or reboot</li>
+            <li><span class="neon-highlight">Rich</span>: Contains decrypted data, running code, network connections, passwords, keys</li>
+            <li><span class="neon-highlight">Hard to fake</span>: Malware can hide on disk; hiding in RAM while running is harder</li>
+            <li><span class="neon-highlight">Complex</span>: Requires understanding OS internals, data structures, and address translation</li>
+        </ul>
+
+        <div class="first-principle">
+            <h3>🧠 The Forensics First Principle</h3>
+            <p>Memory is just a byte array. Every "object" — processes, threads, files, registry keys — is a data structure at some address. Forensics is:</p>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>Find the right structure (e.g., EPROCESS for a process)</li>
+                <li>Parse it according to the OS version's structure layout</li>
+                <li>Follow pointers to related structures (e.g., EPROCESS → VAD root → memory regions)</li>
+                <li>Extract and interpret the data</li>
+            </ol>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The challenge: structures change between Windows versions. A Win10 1903 EPROCESS is different from Win11 23H2. Forensics tools maintain symbol databases and heuristic parsers.</p>
+        </div>
+
+        <h3>6.2 Memory Acquisition Methods</h3>
+        <table>
+            <tr>
+                <th>Method</th>
+                <th>Tool Examples</th>
+                <th>Pros</th>
+                <th>Cons</th>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">Crash Dump</span></td>
+                <td>WinDbg, .dmp files</td>
+                <td>Native format, rich metadata</td>
+                <td>Requires crash or manual trigger</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">Raw Physical</span></td>
+                <td>DumpIt, Winpmem, FTK Imager</td>
+                <td>Complete physical RAM image</td>
+                <td>Large, no metadata, needs parsing</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">Hypervisor</span></td>
+                <td>VMware snapshot, QEMU</td>
+                <td>Guest unaware, no anti-forensics</td>
+                <td>Requires VM; may miss hardware state</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">Live Analysis</span></td>
+                <td>Volatility, Rekall, MemProcFS</td>
+                <td>Parses structures automatically</td>
+                <td>Requires symbols; can be fooled by rootkits</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">FireWire/PCIe</span></td>
+                <td>INCEPTION, pcileech</td>
+                <td>DMA bypasses OS protections</td>
+                <td>Requires hardware access; modern systems block DMA</td>
+            </tr>
+        </table>
+
+        <h2>Section 7: The EPROCESS Structure</h2>
+
+        <h3>7.1 What Is EPROCESS?</h3>
+        <p><span class="neon-highlight">EPROCESS</span> (Executive Process) is the kernel structure representing every process on Windows. It lives in kernel memory but is accessible to forensic tools. EPROCESS contains:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li>Process ID, Parent PID, Session ID</li>
+            <li>Token (security context, privileges)</li>
+            <li>Peb (pointer to Process Environment Block in user-mode)</li>
+            <li>VadRoot (root of the Virtual Address Descriptor tree)</li>
+            <li>ImageFileName, CreateTime, ExitTime</li>
+            <li>Handle table, Thread list, ActiveProcessLinks (doubly-linked list)</li>
+        </ul>
+
+        <div class="code-block">
+// EPROCESS structure (simplified, Windows 10 20H2 x64)
+// Actual size: ~0xA40 bytes. Fields vary by build.
+
+typedef struct _EPROCESS {
+    // KPROCESS (kernel process) embedded at offset 0
+    struct _KPROCESS Pcb;           // +0x000  (scheduler, quantum, affinity)
+    
+    // Executive layer
+    struct _EX_PUSH_LOCK ProcessLock; // +0x2C0
+    LARGE_INTEGER CreateTime;        // +0x2C8
+    LARGE_INTEGER ExitTime;          // +0x2D0
+    struct _PEB* Peb;                // +0x3F8  (user-mode PEB)
+    PVOID ImageFilePointer;          // +0x448
+    UCHAR ImageFileName[15];         // +0x450  "notepad.exe"
+    ULONG PriorityClass;             // +0x45F
+    PVOID SecurityPort;              // +0x460
+    struct _SE_AUDIT_PROCESS_CREATION_INFO SeAudit;
+    struct _LIST_ENTRY JobLinks;     // +0x470
+    PVOID Session;                   // +0x488
+    struct _LIST_ENTRY ActiveProcessLinks; // +0x448  (doubly-linked list!)
+    struct _RTL_AVL_TREE VadRoot;    // +0x7D8  (VAD tree root)
+    // ... many more fields ...
+} EPROCESS, *PEPROCESS;
+
+// Key offsets for forensics (Win10 20H2):
+// ActiveProcessLinks: 0x448
+// UniqueProcessId:    0x440
+// Peb:                0x3F8
+// VadRoot:            0x7D8
+// ImageFileName:      0x450
+// Token:              0x4B8
+        </div>
+
+        <div class="why-box">
+            <h5>Why ActiveProcessLinks is a double-edged sword</h5>
+            <p><span class="neon-highlight">ActiveProcessLinks</span> is a doubly-linked list connecting all EPROCESS blocks. Tools like Task Manager and Volatility walk this list to enumerate processes. <span class="neon-amber">Rootkits unlink their EPROCESS from this list</span> to hide. But the EPROCESS still exists in memory — forensic tools can find it by scanning memory for the EPROCESS signature or by walking the handle table. This is the <span class="neon-highlight">DKOM (Direct Kernel Object Manipulation)</span> attack and the basis for <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a>.</p>
+        </div>
+
+        <h3>7.2 Walking the Process List</h3>
+        <p>Forensics tools enumerate processes by walking <span class="neon-highlight">ActiveProcessLinks</span>. Here's how it works conceptually:</p>
+
+        <div class="code-block">
+// Walking ActiveProcessLinks (conceptual — kernel driver or livekd)
+// In practice, use Volatility's windows.pslist or Rekall
+
+// PsInitialSystemProcess is a global kernel variable pointing to System (PID 4)
+PEPROCESS SystemProc = PsInitialSystemProcess;
+
+// ActiveProcessLinks is at offset 0x448 in EPROCESS
+// It's a LIST_ENTRY: { Flink, Blink }
+// Flink points to the next EPROCESS.ActiveProcessLinks
+// To get the next EPROCESS: Flink - 0x448
+
+PLIST_ENTRY current = &SystemProc->ActiveProcessLinks;
+PLIST_ENTRY start = current;
+
+do {
+    // Calculate EPROCESS base from LIST_ENTRY pointer
+    PEPROCESS proc = (PEPROCESS)((ULONG_PTR)current - 0x448);
+    
+    ULONG pid = *(PULONG)((ULONG_PTR)proc + 0x440);
+    PCHAR name = (PCHAR)((ULONG_PTR)proc + 0x450);
+    
+    printf("PID %lu: %s\n", pid, name);
+    
+    current = current->Flink;
+} while (current != start);
+
+// Output:
+// PID 4: System
+// PID 120: smss.exe
+// PID 456: csrss.exe
+// PID 512: services.exe
+// PID 520: lsass.exe
+// ...
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Live Evidence: Process List from .42</h3>
+            <p><strong>Target:</strong> .42 (WUPC) | <strong>Tool:</strong> Volatility 3 windows.pslist</p>
+            <div class="code-block">
+PID     PPID    ImageFileName   CreateTime              Session
+4       0       System          2024-01-15 08:32:11     N/A
+120     4       smss.exe        2024-01-15 08:32:15     N/A
+456     352     csrss.exe       2024-01-15 08:32:22     1
+512     352     wininit.exe     2024-01-15 08:32:23     1
+520     512     services.exe    2024-01-15 08:32:24     1
+528     512     lsass.exe       2024-01-15 08:32:24     1
+4824    520     avp.exe         2024-01-15 08:35:01     1
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);">
+                <strong>Key Finding:</strong> avp.exe (PID 4824) is a child of services.exe (PID 520). This is expected for a service. If avp.exe were a child of explorer.exe, that would indicate non-standard launch (possible injection or user-started instance).
+            </p>
+        </div>
+
+        <h2>Section 8: The VAD Tree (Virtual Address Descriptor)</h2>
+
+        <h3>8.1 What Is VAD?</h3>
+        <p>The <span class="neon-highlight">VAD (Virtual Address Descriptor)</span> is a kernel structure describing a contiguous range of virtual addresses in a process. Every allocated region — image mappings, heap segments, stack pages, mapped files — has a VAD node. The VADs are organized in a <span class="neon-amber">self-balancing AVL tree</span> (or splay tree on older Windows) rooted at <span class="neon-highlight">EPROCESS.VadRoot</span>.</p>
+
+        <div class="vad-tree">
+            <div class="vad-node vad-root">
+                <strong>VAD Root</strong> (EPROCESS.VadRoot) → AVL Tree
+            </div>
+            <div class="vad-node vad-left">
+                <strong>Left Child</strong> | Start: 0x0000 | End: 0x7FFF (lower addresses)
+            </div>
+            <div class="vad-node vad-right">
+                <strong>Right Child</strong> | Start: 0x8000 | End: 0xFFFF (higher addresses)
+            </div>
+            <div class="vad-node vad-left" style="margin-left: 2rem;">
+                <strong>Leaf</strong> | 0x1000-0x4FFF | Type: Private | Protection: RW
+            </div>
+            <div class="vad-node vad-right" style="margin-left: 2rem;">
+                <strong>Leaf</strong> | 0x8000-0x8FFF | Type: Image | Protection: RX | File: ntdll.dll
+            </div>
+        </div>
+
+        <div class="code-block">
+// MMVAD structure (simplified, Windows 10 x64)
+// The VAD describes a virtual address range
+
+typedef struct _MMVAD {
+    // AVL tree node
+    struct _MMVAD* Core;            // Pointer to MMVAD_SHORT or MMVAD
+    
+    // Range
+    ULONG_PTR StartingVpn;          // Start VPN (Virtual Page Number) >> 12
+    ULONG_PTR EndingVpn;            // End VPN
+    
+    // Parent VAD (for inheritance)
+    struct _MMVAD* Parent;
+    struct _MMVAD* LeftChild;
+    struct _MMVAD* RightChild;
+    
+    // Protection
+    ULONG_PTR u;                    // Protection flags, commit state
+    
+    // File mapping info (for MEM_IMAGE / MEM_MAPPED)
+    struct _CONTROL_AREA* ControlArea;
+    struct _FILE_OBJECT* FileObject;
+    
+    // Section info
+    struct _EX_PUSH_LOCK PushLock;
+    ULONG_PTR u5;                   // Extended info
+} MMVAD, *PMMVAD;
+
+// To get the actual virtual address:
+// StartVA = StartingVpn << 12  (multiply by 4 KB)
+// EndVA   = ((EndingVpn + 1) << 12) - 1
+        </div>
+
+        <h3>8.2 Why VAD Matters for Forensics</h3>
+        <p>The VAD tree is the authoritative map of a process's memory. Unlike <span class="neon-highlight">VirtualQueryEx</span> (which walks page tables from user-mode), the VAD tree lives in kernel structures and can't be easily faked by user-mode malware. Forensics tools walk the VAD tree to:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li>Find all memory regions and their types (Image, Mapped, Private)</li>
+            <li>Detect injected code (private VAD with RX/RWX protection)</li>
+            <li>Identify mapped files (ControlArea → FileObject → file name)</li>
+            <li>Find heap segments (private VADs with RW protection, no file backing)</li>
+            <li>Detect hollowed processes (image VAD with mismatched file hash)</li>
+        </ul>
+
+        <div class="evidence-box">
+            <h3>📊 Live Evidence: VAD Tree Walk (avp.exe, PID 4824)</h3>
+            <p><strong>Tool:</strong> Volatility 3 windows.vadinfo | <strong>Target:</strong> .42 avp.exe</p>
+            <div class="code-block">
+VAD Entry       Start              End                Type      Protection  File
+-----------     ----------------   ----------------   -------   ----------  ----
+0xFFFF8A00...   0x00000000001000   0x0000000000FFFF   Private   RW          
+0xFFFF8A00...   0x0000005D8A1F0000 0x0000005D8A2ECFFF Private   RW          [Stack: Thread 4828]
+0xFFFF8A00...   0x000001F48A2A0000 0x000001F48A73FFFF Private   RW          [Heap: Segment]
+0xFFFF8A00...   0x00007FF8FE200000 0x00007FF8FE3D4FFF Mapped    RX          C:\Windows\System32\KERNELBASE.dll
+0xFFFF8A00...   0x00007FF8FF400000 0x00007FF8FF4E1FFF Mapped    RX          C:\Windows\System32\kernel32.dll
+0xFFFF8A00...   0x00007FF8FFA00000 0x00007FF8FFBC2FFF Mapped    RX          C:\Windows\System32\ntdll.dll
+0xFFFF8A00...   0x00007FF68A4A0000 0x00007FF68A5CCFFF Image     RX          C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\x64\avp.exe
+
+=== ANOMALY CHECK ===
+No RWX regions found. ✅
+All image VADs match on-disk file hashes. ✅
+No private RX regions outside image mappings. ✅
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);">
+                <strong>Key Finding:</strong> A clean process has Image VADs for the EXE/DLLs, Mapped VADs for system DLLs, and Private VADs for heap/stack. If you see a <span class="neon-amber">Private VAD with PAGE_EXECUTE_READWRITE</span>, that's injection. If you see an <span class="neon-amber">Image VAD with a mismatched hash</span>, that's process hollowing. See <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a>.
+            </p>
+        </div>
+
+        <h2>Section 9: Live Evidence — Reading Memory Directly</h2>
+
+        <h3>9.1 The Code: Memory Region Enumeration</h3>
         <div class="code-block">
 #include <windows.h>
 #include <stdio.h>
@@ -206,6 +1146,7 @@ void dump_memory_regions(DWORD pid) {
     MEMORY_BASIC_INFORMATION mbi;
     LPBYTE addr = 0;
     SIZE_T total_image = 0, total_heap = 0, total_stack = 0, total_mapped = 0;
+    SIZE_T total_rwx = 0;
     
     printf("%-20s | %-10s | %-8s | %s\n", "Address", "Size", "Type", "Protection");
     printf("%s\n", "---------------------------------------------------------------");
@@ -228,12 +1169,10 @@ void dump_memory_regions(DWORD pid) {
             // Accumulate by type
             if (mbi.Type == MEM_IMAGE) total_image += mbi.RegionSize;
             else if (mbi.Type == MEM_MAPPED) total_mapped += mbi.RegionSize;
-            else if (mbi.Type == MEM_PRIVATE) {
-                // Heuristic: private + RWX/RW near stack range = heap
-                // Private + RW near high addresses = stack
-                // This is simplified — real forensics uses more signals
-                total_heap += mbi.RegionSize;
-            }
+            else if (mbi.Type == MEM_PRIVATE) total_heap += mbi.RegionSize;
+            
+            // Flag RWX
+            if (mbi.Protect & PAGE_EXECUTE_READWRITE) total_rwx += mbi.RegionSize;
         }
         addr += mbi.RegionSize;
     }
@@ -242,6 +1181,7 @@ void dump_memory_regions(DWORD pid) {
     printf("IMAGE:  %8zu KB (mapped executables/DLLs)\n", total_image / 1024);
     printf("HEAP:   %8zu KB (dynamic allocations)\n", total_heap / 1024);
     printf("MAPPED: %8zu KB (shared files)\n", total_mapped / 1024);
+    printf("RWX:    %8zu KB (⚠️  suspicious executable-writable)\n", total_rwx / 1024);
     
     CloseHandle(hProc);
 }
@@ -250,7 +1190,7 @@ void dump_memory_regions(DWORD pid) {
 // Run: mem_dump.exe <PID>
         </div>
 
-        <h2>Evidence: String Extraction from Memory</h2>
+        <h3>9.2 Evidence: String Extraction from Memory</h3>
         <div class="evidence-box">
             <h3>📊 Real Data: Extracting Strings from avp.exe</h3>
             <p><strong>Technique:</strong> ReadProcessMemory + ASCII/Unicode string detection | <strong>Target:</strong> .42 avp.exe</p>
@@ -277,6 +1217,19 @@ void extract_strings(HANDLE hProc, LPBYTE addr, SIZE_T size) {
             }
         }
     }
+    
+    // Unicode (UTF-16LE) strings
+    for (size_t i = 0; i < read - MIN_STRING_LEN * 2; i += 2) {
+        if (isprint(buf[i]) && buf[i+1] == 0 && 
+            isprint(buf[i+2]) && buf[i+3] == 0) {
+            size_t j = i;
+            while (j < read - 1 && isprint(buf[j]) && buf[j+1] == 0) j += 2;
+            if ((j - i) / 2 >= MIN_STRING_LEN) {
+                printf("[0x%p] (U) %.*ls\n", addr + i, (int)((j - i) / 2), (wchar_t*)&buf[i]);
+                i = j - 2;
+            }
+        }
+    }
 }
 
 // Sample output from .42 avp.exe:
@@ -284,14 +1237,15 @@ void extract_strings(HANDLE hProc, LPBYTE addr, SIZE_T size) {
 // [0x7FF68A4A2000] bRollbackAllowed
 // [0x7FF68A4A3000] AVP21.25
 // [0x7FF68A4A4000] C:\ProgramData\Kaspersky Lab\AVP21.25\Report\report.rpt
+// [0x7FF68A4A5000] (U) HKLM\SOFTWARE\KasperskyLab\protected\AVP21.25\Data
             </div>
             
             <p style="margin-top: 1rem;">
-                <strong>Finding:</strong> String extraction reveals Kaspersky's internal paths, registry keys, and configuration parameters. This is how malware fingerprints AV products and how forensics analysts identify running tools.
+                <strong>Finding:</strong> String extraction reveals Kaspersky's internal paths, registry keys, and configuration parameters. This is how malware fingerprints AV products and how forensics analysts identify running tools. The Unicode string shows a registry path — linking directly to <a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a>.
             </p>
         </div>
 
-        <h2>Lab Exercise: Build a Memory Scanner</h2>
+        <h2>Section 10: Lab Exercise — Build a Memory Scanner</h2>
         <div class="interactive-demo">
             <p>Write a C program that:</p>
             <ol style="margin-left: 1.5rem; line-height: 2;">
@@ -299,10 +1253,10 @@ void extract_strings(HANDLE hProc, LPBYTE addr, SIZE_T size) {
                 <li>Enumerates all memory regions (VirtualQueryEx)</li>
                 <li>Reads each committed region (ReadProcessMemory)</li>
                 <li>Searches for a target string (e.g., "password", "key", "token")</li>
-                <li>Prints: [Address] [String] [Region Type]</li>
+                <li>Prints: [Address] [String] [Region Type] [Protection]</li>
             </ol>
             
-            <p style="margin-top: 1rem;"><strong>Challenge:</strong> Handle partial reads at region boundaries. Handle access denied on protected regions. Search for both ASCII and UTF-16 strings.</p>
+            <p style="margin-top: 1rem;"><strong>Challenge:</strong> Handle partial reads at region boundaries. Handle access denied on protected regions. Search for both ASCII and UTF-16 strings. Flag any RWX regions found.</p>
             
             <button onclick="document.getElementById('scanner-solution').style.display='block'">Show Solution</button>
             
@@ -311,6 +1265,7 @@ void extract_strings(HANDLE hProc, LPBYTE addr, SIZE_T size) {
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 void scan_memory(DWORD pid, const char* target) {
     HANDLE hProc = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION, FALSE, pid);
@@ -330,10 +1285,14 @@ void scan_memory(DWORD pid, const char* target) {
                 if (ReadProcessMemory(hProc, addr + offset, buf, chunk, &read)) {
                     for (size_t i = 0; i < read - target_len; i++) {
                         if (memcmp(buf + i, target, target_len) == 0) {
-                            printf("[0x%p] Found '%s' in %s region\n", 
-                                   addr + offset + i, target,
-                                   mbi.Type == MEM_IMAGE ? "IMAGE" :
-                                   mbi.Type == MEM_MAPPED ? "MAPPED" : "PRIVATE");
+                            const char* type_str = 
+                                mbi.Type == MEM_IMAGE ? "IMAGE" :
+                                mbi.Type == MEM_MAPPED ? "MAPPED" : "PRIVATE";
+                            const char* prot_str =
+                                (mbi.Protect & PAGE_EXECUTE_READWRITE) ? "RWX" :
+                                (mbi.Protect & PAGE_EXECUTE_READ) ? "RX" : "RW";
+                            printf("[0x%p] Found '%s' in %s/%s region\n", 
+                                   addr + offset + i, target, type_str, prot_str);
                         }
                     }
                 }
@@ -348,13 +1307,70 @@ void scan_memory(DWORD pid, const char* target) {
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Why is PAGE_EXECUTE_READWRITE (RWX) suspicious in a memory dump?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) RWX pages are never used by any legitimate software
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) Normal code is RX and normal data is RW; RWX combines both, which is rare outside JIT engines and malware
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) RWX pages cause the CPU to overheat
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) The Windows kernel automatically logs all RWX allocations to Event Viewer
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: What does the VAD tree tell a forensic analyst that VirtualQueryEx cannot?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) VAD is faster than VirtualQueryEx
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) VAD lives in kernel memory and cannot be easily faked by user-mode malware; it also links to file objects for mapped regions
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) VAD shows the physical RAM address of each page
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) VAD is only present in 32-bit Windows
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: How can a rootkit hide a process from Task Manager but NOT from a memory forensics tool?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) By encrypting the process name in memory
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                B) By unlinking its EPROCESS from ActiveProcessLinks (DKOM), but the EPROCESS structure still exists in kernel memory and can be found by scanning
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                C) By running the process in kernel mode
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) By using a hardware rootkit that removes RAM chips
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Memory is bytes:</strong> Everything is a byte array with context</li>
-            <li><strong>VirtualQueryEx maps the terrain:</strong> Know the region types before you read</li>
-            <li><strong>ReadProcessMemory is the shovel:</strong> Dig where VirtualQueryEx says there's data</li>
-            <li><strong>Strings are fingerprints:</strong> ASCII/Unicode extraction reveals process internals</li>
-            <li><strong>Same APIs, different intent:</strong> Debuggers, cheats, malware, forensics — all use these</li>
+            <li><strong>Memory is bytes:</strong> Everything is a byte array with context. Forensics is finding the context.</li>
+            <li><strong>Virtual address space is an illusion:</strong> The OS maps virtual addresses to physical RAM via page tables. Processes see contiguous memory; reality is fragmented.</li>
+            <li><strong>Protection flags are the perimeter:</strong> PAGE_EXECUTE_READWRITE is the open door. RX code + RW data is the normal pattern. Any deviation is worth investigating.</li>
+            <li><strong>VirtualAlloc/VirtualProtect are the controls:</strong> Every injection technique uses these. EDR monitors them. Direct syscalls bypass the monitoring.</li>
+            <li><strong>Heap vs Stack:</strong> Stack is automatic, fast, small. Heap is manual, flexible, large. Malware config lives in heap. Call chains live in stack.</li>
+            <li><strong>EPROCESS is the process DNA:</strong> PID, token, PEB, VAD root, ActiveProcessLinks — everything you need to know about a process is here.</li>
+            <li><strong>VAD is the memory map:</strong> Walk the VAD tree to find every region, its type, its protection, and its backing file. Private RWX regions are injection artifacts.</li>
+            <li><strong>DKOM is the hiding game:</strong> Unlinking from ActiveProcessLinks hides from user-mode tools. Memory forensics finds the unlinked structure anyway.</li>
+            <li><strong>Same APIs, different intent:</strong> Debuggers, cheats, malware, forensics — all use OpenProcess, VirtualQueryEx, ReadProcessMemory. Intent is the only difference.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
@@ -368,11 +1384,29 @@ void scan_memory(DWORD pid, const char* target) {
                     <td style="padding: 0.5rem;">String extraction from process memory</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Cross-process memory read</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42 (admin context)</td>
                 </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">VAD tree walk (Volatility 3)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">EPROCESS structure parsing</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">ActiveProcessLinks walk</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
             </table>
+        </div>
+
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"If you can't read memory, you can't do forensics. If you can't understand page tables, you can't read memory. If you can't find the EPROCESS, you can't find the process. Everything in Windows forensics starts with a pointer and a structure. Master the structures, and the OS becomes an open book."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— Links to <a href="MODULE_05_SHELLCODE.html" class="cross-link">Module 05: Shellcode</a>, <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a>, and <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></p>
         </div>
 
         <div class="nav" style="margin-top: 2rem;">
@@ -381,5 +1415,58 @@ void scan_memory(DWORD pid, const char* target) {
             <a href="MODULE_07_REGISTRY.html">Module 07 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'Normal executables have RX code sections and RW data sections. RWX is rare because it violates the principle of least privilege. JIT engines (JavaScript, .NET CLR) need RWX temporarily for compiled code, but most applications should never have persistent RWX regions. Malware uses RWX for injected shellcode because it needs to write the payload then execute it.',
+                'quiz-2': 'VirtualQueryEx walks page tables from user-mode and can be intercepted or faked. The VAD tree lives in kernel memory (EPROCESS.VadRoot) and is the authoritative structure. It also contains pointers to ControlArea and FileObject, letting forensics tools recover the original file name for mapped regions — something VirtualQueryEx cannot do.',
+                'quiz-3': 'Task Manager walks ActiveProcessLinks, a doubly-linked list of EPROCESS blocks. A rootkit can unlink its EPROCESS (DKOM), making it invisible to list walkers. But the EPROCESS structure still exists in kernel memory. Forensics tools scan memory for EPROCESS signatures or walk handle tables to find hidden processes. This is why memory forensics beats live system tools.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>

