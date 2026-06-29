@@ -415,6 +415,69 @@
             color: var(--dim);
             font-size: 0.8rem;
         }
+        .mentor-callout {
+            background: #0f0f15;
+            border: 2px solid var(--amber);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .mentor-callout::before {
+            content: '👤 MENTOR: asi dev [HTB]';
+            position: absolute;
+            top: -0.7rem;
+            left: 1rem;
+            background: var(--bg);
+            color: var(--amber);
+            padding: 0 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+        }
+        .mentor-callout h4 {
+            color: var(--amber);
+            margin-bottom: 0.75rem;
+            margin-top: 0.25rem;
+        }
+        .mentor-quote {
+            font-style: italic;
+            color: var(--fg);
+            border-left: 3px solid var(--amber);
+            padding-left: 1rem;
+            margin: 0.75rem 0;
+        }
+        .mentor-quote::before {
+            content: '"';
+            color: var(--amber);
+            font-size: 1.5rem;
+            line-height: 0;
+            vertical-align: middle;
+            margin-right: 0.25rem;
+        }
+        .mentor-quote::after {
+            content: '"';
+            color: var(--amber);
+            font-size: 1.5rem;
+            line-height: 0;
+            vertical-align: middle;
+            margin-left: 0.25rem;
+        }
+        .rb-relevance {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .rb-pill {
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .rb-red { background: #3a0a0a; color: var(--accent); border: 1px solid var(--accent); }
+        .rb-blue { background: #0a0a3a; color: #5555ff; border: 1px solid #5555ff; }
+        .rb-purple { background: #3a0a3a; color: var(--purple); border: 1px solid var(--purple); }
     </style>
 </head>
 <body>
@@ -440,6 +503,18 @@
             <h4>🎯 Soldier Translation</h4>
             <p>This is the final exercise. No instructor, no hints, no safety net. You have a mission: compromise a target network, escalate privileges, establish persistence, and exfiltrate data. You have 8 hours. Your tools are your own. Your decisions are your own. Your success or failure is your own. This is what separates the operator from the student.</p>
             <p style="margin-top: 0.5rem; color: var(--dim);">Think of it as a live-fire exercise. The targets are real. The defenses are real. The only difference is that nobody dies if you fail — but your reputation does.</p>
+        </div>
+
+        <div class="mentor-callout">
+            <h4>🔗 Chaining Is the Real Skill</h4>
+            <p class="mentor-quote">The capstone is where you prove you can chain it.</p>
+            <p>Knowing how to run nmap or Mimikatz in isolation is not enough. The capstone forces you to string reconnaissance, exploitation, privilege escalation, lateral movement, and exfiltration into one continuous operation. One tool gets you a foothold; the chain gets you the domain.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Layman terms:</strong> Anyone can swing a hammer. The test is whether you can build the whole house.</p>
+            <div class="rb-relevance">
+                <span class="rb-pill rb-red">🔴 Red: Map every phase into the next</span>
+                <span class="rb-pill rb-blue">🔵 Blue: Break the chain at any link</span>
+                <span class="rb-pill rb-purple">🟣 Purple: Validate chain coverage together</span>
+            </div>
         </div>
 
         <h2>📚 Capstone Overview</h2>
@@ -481,6 +556,18 @@
         <div class="why-box">
             <h5>Why GeoDefend?</h5>
             <p>GeoDefend represents a typical <span class="neon-amber">high-value target</span> in the defense industrial base (DIB). They are not a Fortune 500 with unlimited security budget, nor are they a small business with no defenses. They are the <span class="neon-highlight">sweet spot</span> for adversaries: valuable data, moderate defenses, and realistic attack surface. If you can compromise GeoDefend, you can compromise thousands of real companies just like it.</p>
+        </div>
+
+        <div class="mentor-callout">
+            <h4>🛠️ One Tool Does Not Make a Hacker</h4>
+            <p class="mentor-quote">A single tool doesn't make you a hacker, chaining does.</p>
+            <p>Metasploit, BloodHound, and Cobalt Strike are force multipliers, not replacements for judgment. The capstone will hand you nothing. You must decide which tool fits each phase, when to abandon a failing approach, and how to recover when your favorite technique is blocked by EDR or segmentation.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Layman terms:</strong> A race car doesn't make you a champion driver — knowing when to brake, accelerate, and overtake does.</p>
+            <div class="rb-relevance">
+                <span class="rb-pill rb-red">🔴 Red: Combine tools into a workflow, not a checklist</span>
+                <span class="rb-pill rb-blue">🔵 Blue: Detect the gaps between tools, not just the tools</span>
+                <span class="rb-pill rb-purple">🟣 Purple: Share tool telemetry so blue sees what red uses</span>
+            </div>
         </div>
 
         <h2>⚔️ Full Kill Chain Walkthrough</h2>
@@ -874,6 +961,18 @@ sha256sum C:\flag.txt
                 <li><strong>DC01</strong> (192.168.100.1) — Domain Controller, no direct access</li>
             </ul>
             <p style="margin-top: 1rem;"><strong>Your starting position:</strong> VPN access only. No credentials. No prior knowledge.</p>
+        </div>
+
+        <div class="mentor-callout">
+            <h4>📝 Document Everything or It Did Not Happen</h4>
+            <p class="mentor-quote">Document everything.</p>
+            <p>In the capstone, an undocumented exploit is worth zero points. In the field, undocumented findings are indistinguishable from imagination. Screenshot commands, save output, timestamp actions, and write the narrative while you work. Your report is the product — the compromise is just evidence.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Layman terms:</strong> A detective can solve a case, but without a case file the prosecutor has nothing. Write it down.</p>
+            <div class="rb-relevance">
+                <span class="rb-pill rb-red">🔴 Red: Every command, screenshot, and pivot must be logged</span>
+                <span class="rb-pill rb-blue">🔵 Blue: Logs are the evidence chain for incident response</span>
+                <span class="rb-pill rb-purple">🟣 Purple: Compare red notes with blue telemetry to close gaps</span>
+            </div>
         </div>
 
         <div class="exam-section">

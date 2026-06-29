@@ -304,6 +304,46 @@
         .tag-gcp { background: #1a1a3a; color: #4285f4; border: 1px solid #4285f4; }
         .tag-attack { background: #3a0a0a; color: var(--accent); border: 1px solid var(--accent); }
         .tag-defense { background: #0a3a0a; color: var(--accent2); border: 1px solid var(--accent2); }
+        .mentor-box {
+            background: #0a0a0a;
+            border: 2px solid var(--neon);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--neon);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        .mentor-quote {
+            font-family: 'Space Mono', monospace;
+            color: var(--neon);
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 5px rgba(0,255,255,0.2);
+        }
+        .mentor-box p { color: #ccc; margin-bottom: 0.6rem; }
+        .mentor-box .team-note {
+            border-left: 3px solid var(--accent);
+            padding-left: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        .mentor-box .team-note.red { border-left-color: var(--accent); }
+        .mentor-box .team-note.blue { border-left-color: #0088ff; }
+        .mentor-box .team-note strong {
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -323,6 +363,13 @@
             <h3>🧠 The Core Truth</h3>
             <p>Cloud storage is not magic. It's <span class="neon-highlight">HTTP endpoints</span> serving <span class="neon-highlight">blobs of data</span> behind <span class="neon-highlight">identity tokens</span>. When you understand that S3, Azure Blob, and GCS are just REST APIs with different authentication headers, every "cloud attack" becomes a web attack with extra steps. The primitives are the same: enumerate, authenticate, authorize, exfiltrate.</p>
             <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Organizations dump petabytes of sensitive data into cloud buckets with misconfigured permissions. A single <span class="neon-amber">public-read</span> ACL or overly permissive IAM policy is often the shortest path from "external recon" to "domain admin." Cloud storage is the new shadow IT — and it's full of shadows.</p>
+        </div>
+
+        <div class="mentor-box">
+            <div class="mentor-quote">"Cloud storage is just someone else's computer."</div>
+            <p>Every file you "put in the cloud" lives on a hard drive in a data center you don't control. That means someone else's locks, someone else's admins, and someone else's bugs. The cloud doesn't make your data safer by default — it just moves the target to a bigger warehouse with more doors.</p>
+            <div class="team-note red"><strong>Red team:</strong> Treat cloud storage like any other remote file share. Enumerate endpoints, abuse credentials, and pivot through misconfigured permissions just as you would on-prem.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> You are still responsible for your data even when it lives on someone else's hardware. Audit permissions, enable logging, and assume the provider will not save you from your own mistakes.</div>
         </div>
 
         <div class="layman-term">
@@ -914,6 +961,13 @@ dir "%USERPROFILE%\Dropbox"
             <button class="copy-btn" onclick="copyCode(this)">COPY</button>
             </div>
 
+            <div class="mentor-box">
+                <div class="mentor-quote">"If it syncs, it can exfiltrate."</div>
+                <p>Every sync client is a background uploader with trusted network access. If you can write to a sync folder or hijack the client process, you have a stealthy exfil channel that blends with normal user behavior. The cloud provider's domain is already allowed, the traffic is encrypted, and the user expects large file uploads.</p>
+                <div class="team-note red"><strong>Red team:</strong> Stage files in sync folders, inject into sync processes, or steal OAuth tokens to upload directly. The exfil looks like routine cloud activity.</div>
+                <div class="team-note blue"><strong>Blue team:</strong> Monitor sync client file velocity, unexpected OAuth grants, and endpoints uploading files outside business hours. A syncing endpoint is a potential exfil endpoint.</div>
+            </div>
+
             <div class="cross-link" style="margin-top: 1rem;">
                 <a href="MODULE_10_CODE_INJECTION.html">→ Cross-link: Module 10 — Code Injection into sync clients</a>
             </div>
@@ -1100,6 +1154,13 @@ aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,Attribut
 <span class="neon-highlight"># If CloudTrail is not logging S3 data events,</span>
 <span class="neon-highlight"># object-level access (GET/PUT) is invisible.</span>
             <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="mentor-box">
+                <div class="mentor-quote">"Cloud logs are forensics gold."</div>
+                <p>Cloud storage generates a log entry for almost every action: who accessed what, from where, when, and with which identity. When logging is enabled and protected, those logs reconstruct the entire attack. When logging is disabled or stored in the same bucket as the data, the attacker walks away with the evidence.</p>
+                <div class="team-note red"><strong>Red team:</strong> Check whether logging is enabled before you act. If logs exist, know where they go and whether you can tamper with them. Prefer techniques that use legitimate credentials so the logs look normal.</div>
+                <div class="team-note blue"><strong>Blue team:</strong> Enable data-event logging, send logs to a separate immutable store, and alert on unusual read/write patterns. The logs you don't keep are the incidents you can't investigate.</div>
             </div>
         </div>
 

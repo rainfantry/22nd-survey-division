@@ -299,6 +299,16 @@
             <p style="margin-top: 1rem;"><strong>Why this matters:</strong> If you inject into a process running as <span class="neon-amber">SYSTEM</span>, your code runs as SYSTEM. If you inject into a browser, your code can see all network traffic. If you inject into Explorer, your code looks like Windows itself.</p>
         </div>
 
+        <div class="mentor-callout" style="background: #1a0a1a; border: 2px solid var(--purple); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+            <h3 style="color: var(--purple); margin-bottom: 0.5rem;">🎙️ Mentor: asi dev [HTB]</h3>
+            <p style="font-style: italic; color: var(--fg);">"Code injection is just making another process do your work."</p>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>You don't storm the gate yourself. You hand your orders to a guard who already has the keys. The process runs your code, the OS trusts the process, and the work gets done under someone else's name.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>🔴 Red:</strong> Inject into a high-integrity process to inherit its privileges and blend into normal traffic.<br><strong>🔵 Blue:</strong> Monitor for cross-process activity, unusual memory allocations, and threads spawned in processes that shouldn't have them.</p>
+        </div>
+
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>Imagine a courier delivering a package. The courier (legitimate process) has access to the building (system resources). You swap the package contents (inject code) without the courier knowing. The courier delivers your package, the recipient opens it, and your code executes — wearing the courier's uniform, using the courier's ID badge.</p>
@@ -500,6 +510,16 @@ int main() {
         <div class="method-card" id="process-hollowing">
             <h4>Method 2: Process Hollowing <span class="difficulty diff-hard">HARD</span></h4>
             <p>Instead of injecting into a running process, you create a <span class="neon-highlight">suspended</span> process, replace its entire memory with your code, then resume it. The process looks legitimate (signed binary) but runs your payload.</p>
+
+            <div class="mentor-callout" style="background: #1a0a1a; border: 2px solid var(--purple); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                <h3 style="color: var(--purple); margin-bottom: 0.5rem;">🎙️ Mentor: asi dev [HTB]</h3>
+                <p style="font-style: italic; color: var(--fg);">"Process hollowing is the classic technique."</p>
+                <div class="layman-term" style="margin-top: 1rem;">
+                    <h4>🎯 Soldier Translation</h4>
+                    <p>You walk into the barracks wearing a friendly uniform you stole. Everyone salutes because you look official. Underneath the uniform, you're carrying your own mission. The trick isn't the attack — it's that nobody questions the uniform.</p>
+                </div>
+                <p style="margin-top: 1rem; color: var(--dim);"><strong>🔴 Red:</strong> Hollow a trusted Windows binary like svchost.exe to bypass reputation-based AV and parent-child scrutiny.<br><strong>🔵 Blue:</strong> Validate image-to-memory consistency; a hollowed process has mismatched PE headers, suspicious memory protections, or no legitimate parent.</p>
+            </div>
 
             <div class="why-box">
                 <h5>Why this is stealthier than DLL injection</h5>
@@ -831,6 +851,16 @@ C:\> injector.exe
         </div>
 
         <h2>🛡️ How EDR Detects Injection (And How to Evade It)</h2>
+
+        <div class="mentor-callout" style="background: #1a0a1a; border: 2px solid var(--purple); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+            <h3 style="color: var(--purple); margin-bottom: 0.5rem;">🎙️ Mentor: asi dev [HTB]</h3>
+            <p style="font-style: italic; color: var(--fg);">"If you can write to memory and change execution, you own the box."</p>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>Ownership isn't about having the strongest password or the loudest exploit. It's about control. Once you can reshape what a process remembers and where it goes next, the machine is playing your tune, not its owner's.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>🔴 Red:</strong> Every injection technique reduces to Open → Allocate → Write → Execute; master memory primitives and you can invent new variants on the fly.<br><strong>🔵 Blue:</strong> Protect the primitives: enforce least privilege, enable exploit guard rules, and alert on sequences that lead to writable-then-executable memory in remote processes.</p>
+        </div>
 
         <div class="step-box">
             <h4>EDR Detection Methods</h4>

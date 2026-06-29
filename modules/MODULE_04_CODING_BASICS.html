@@ -300,6 +300,13 @@
             </ul>
         </div>
 
+        <div class="evidence-box">
+            <h3>🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <p style="font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 0.5rem 0;">"You don't need to be a programmer to be an operator."</p>
+            <p><strong>What it means:</strong> You don't have to write a compiler from scratch or ship production software. An operator needs to read code, tweak it, and know what each line does under pressure — not win a coding olympiad.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><span class="neon-highlight">Red/Blue relevance:</span> <span class="neon-amber">Red</span> — modify public POCs and tooling without reinventing them. <span class="neon-highlight">Blue</span> — read detection scripts and understand what a hunt is actually doing.</p>
+        </div>
+
         <h2>Section 1: Programming Fundamentals</h2>
         
         <h3>1.1 What is a Program?</h3>
@@ -414,6 +421,13 @@ void* buffer = NULL;      // 8 bytes (x64), points to nothing
         <div class="layman-term">
             <h4>🎯 What Just Happened?</h4>
             <p>Each variable is a box in memory with a label (name), size (type), and contents (value). The <span class="neon-highlight">&amp;</span> operator gives you the box's address. The <span class="neon-highlight">*</span> operator (in pointer context) opens the box at a given address.</p>
+        </div>
+
+        <div class="evidence-box">
+            <h3>🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <p style="font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 0.5rem 0;">"Understand enough to modify tools."</p>
+            <p><strong>What it means:</strong> You don't need to architect a full framework. You need to read someone else's exploit, change the target offset, swap the shellcode, adjust the syscall, and make it work in your environment.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><span class="neon-highlight">Red/Blue relevance:</span> <span class="neon-amber">Red</span> — adapt public BOF/COFF/RDI tools to bypass current EDR. <span class="neon-highlight">Blue</span> — customize Sigma/Yara/Detection-as-Code rules to match your telemetry.</p>
         </div>
 
         <h2>Section 2: C Basics for Security</h2>
@@ -1284,6 +1298,13 @@ Get-Process |
         <div class="layman-term">
             <h4>🎯 What Just Happened?</h4>
             <p>PowerShell called the same Windows APIs as C, but through .NET's <code>System.Diagnostics.Process</code> class. The result is objects with typed properties, not raw text. We filtered, sorted, and formatted declaratively.</p>
+        </div>
+
+        <div class="evidence-box">
+            <h3>🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <p style="font-style: italic; border-left: 3px solid var(--accent); padding-left: 1rem; margin: 0.5rem 0;">"Borrow code, understand it, make it yours."</p>
+            <p><strong>What it means:</strong> The best operators are curators, not inventors. Take working code, trace through it until you understand every moving part, then rewrite it to fit your TTPs, OPSEC, and target environment.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><span class="neon-highlight">Red/Blue relevance:</span> <span class="neon-amber">Red</span> — port a public C2 stager into your own loader after stripping signatures. <span class="neon-highlight">Blue</span> — fork an open-source detection script and tune it to your SIEM fields.</p>
         </div>
 
         <h2>Performance Comparison: Live Evidence</h2>

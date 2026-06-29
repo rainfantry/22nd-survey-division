@@ -34,6 +34,14 @@
         .soldier-box { border: 2px solid #ffaa00; padding: 1.5rem; margin: 1.5rem 0; position: relative; }
         .soldier-box::before { content: 'SOLDIER TRANSLATION'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: #ffaa00; font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
         .soldier-box p { font-style: italic; color: #ccc; }
+        .mentor-box { border: 2px solid var(--neon); padding: 1.5rem; margin: 1.5rem 0; position: relative; background: #0a0a0a; }
+        .mentor-box::before { content: 'MENTOR NOTE — asi dev [HTB]'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--neon); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
+        .mentor-quote { font-family: 'Space Mono', monospace; color: var(--neon); font-size: 1.05rem; margin-bottom: 0.75rem; text-shadow: 0 0 5px rgba(0,255,255,0.2); }
+        .mentor-box p { color: #ccc; margin-bottom: 0.6rem; }
+        .mentor-box .team-note { border-left: 3px solid var(--accent); padding-left: 0.75rem; margin-top: 0.75rem; }
+        .mentor-box .team-note.red { border-left-color: var(--accent); }
+        .mentor-box .team-note.blue { border-left-color: #0088ff; }
+        .mentor-box .team-note strong { font-family: 'Space Mono', monospace; text-transform: uppercase; font-size: 0.8rem; }
         .code-block { background: #000; border: 1px solid #333; border-left: 4px solid var(--accent); padding: 1.5rem; margin: 1.5rem 0; overflow-x: auto; font-family: 'Space Mono', monospace; font-size: 0.85rem; line-height: 1.6; color: #00ff41; }
         .code-block .comment { color: #666; }
         .code-block .prompt { color: var(--accent); }
@@ -100,6 +108,13 @@
             <p>Imagine you're a scout behind enemy lines. You don't fire a single shot. You count the guard towers, map the patrol routes, listen to radio chatter, and photograph the supply convoys. By the time the assault begins, the enemy has already lost — they just don't know it yet. That is reconnaissance. In cyberspace, the towers are firewalls, the patrols are IDS sensors, and the supply convoys are unpatched services. Learn to see them all.</p>
         </div>
 
+        <div class="mentor-box">
+            <div class="mentor-quote">"You cannot attack what you cannot see."</div>
+            <p>If you don't know a target exists, you can't exploit it. Reconnaissance is the work of making the invisible visible — subdomains, live hosts, open ports, user accounts, and misconfigurations. Every attack path starts with a discovery.</p>
+            <div class="team-note red"><strong>Red team:</strong> Map everything before touching anything. The best exploits target assets the blue team forgot they owned.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> You can't defend what you don't know you have. Asset inventory and attack surface monitoring are your first lines of defense.</div>
+        </div>
+
         <div style="margin: 1.5rem 0;">
             <span style="font-family: 'Space Mono', monospace; font-size: 0.75rem; color: var(--dim);">CROSS-LINKS:</span>
             <a href="MODULE_01.html" class="cross-link">← MODULE 01: NETWORKING</a>
@@ -143,6 +158,13 @@
             <div class="why-box">
                 <h5>Why this matters</h5>
                 <p>WHOIS tells you <em>who manages the infrastructure</em>. If the DNS provider is NSOne, you know the target uses modern cloud DNS. If DNSSEC is unsigned, you know the domain can be spoofed. If the registrar is NameCheap, you know the target is cost-conscious (not enterprise-grade). Every detail is a decision point. DNSSEC unsigned? That's a <span class="neon-highlight">red flag</span> for cache poisoning.</p>
+            </div>
+
+            <div class="mentor-box">
+                <div class="mentor-quote">"Real attacks are carried remotely."</div>
+                <p>You don't need to be inside the building to break in. Most successful attacks start from the public internet — a leaked certificate, an exposed port, a public GitHub repo, or a misconfigured cloud service. Remote recon lets you map a target's weaknesses from anywhere in the world.</p>
+                <div class="team-note red"><strong>Red team:</strong> Start every engagement from the outside. Passive remote recon builds a target picture without ever triggering an alert.</div>
+                <div class="team-note blue"><strong>Blue team:</strong> Audit your external footprint continuously. If you can find it on the internet, so can an attacker.</div>
             </div>
 
             <h3>Certificate Transparency (CT) Logs — The Subdomain Goldmine</h3>
@@ -421,6 +443,13 @@ ip route          <span class="comment"># Linux</span>
 route print       <span class="comment"># Windows</span>
 arp -a            <span class="comment"># Both</span>
                 <button class="copy-btn" onclick="copyToClipboard('cp4')">COPY</button>
+            </div>
+
+            <div class="mentor-box">
+                <div class="mentor-quote">"Organized notes beat memorization."</div>
+                <p>You will drown in data during recon: IPs, ports, subdomains, users, hashes, and findings. Memory fails under pressure. A clean, repeatable note system — with commands, outputs, and timestamps — lets you spot patterns, compare scans, and hand off work without losing the picture.</p>
+                <div class="team-note red"><strong>Red team:</strong> Document every command and output. Your notes become the attack chain evidence and the foundation for reporting.</div>
+                <div class="team-note blue"><strong>Blue team:</strong> Standardize how your team records indicators and findings. Consistent notes speed up incident response and post-mortems.</div>
             </div>
         </div>
 

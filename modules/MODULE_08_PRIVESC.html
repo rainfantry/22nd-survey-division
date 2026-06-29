@@ -288,6 +288,44 @@
         .ladder-system { border-left: 4px solid var(--accent); }
         .ladder-admin { border-left: 4px solid var(--amber); }
         .ladder-user { border-left: 4px solid var(--accent2); }
+        .mentor-box {
+            border: 2px solid var(--purple);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            background: #0a0a0a;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--purple);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.1em;
+        }
+        .mentor-box .quote {
+            font-family: 'Space Mono', monospace;
+            color: var(--purple);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+        }
+        .mentor-box .layman {
+            color: var(--fg);
+            margin-bottom: 0.75rem;
+        }
+        .mentor-box .relevance {
+            color: var(--amber);
+            font-size: 0.9rem;
+        }
+        .mentor-box .relevance strong {
+            color: var(--accent2);
+        }
     </style>
 </head>
 <body>
@@ -307,6 +345,12 @@
             <h3>🧠 The Core Truth</h3>
             <p>Windows is not a wall — it's a series of doors. Some doors are locked for standard users. But every door has a key, and every key has a weakness. <span class="neon-highlight">Privilege escalation</span> is the art of finding the weakest door and kicking it open.</p>
             <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Initial access gives you a foothold. Privilege escalation turns that foothold into total control. Without it, you're a civilian in a military base — with it, you're the base commander.</p>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"Privilege escalation is easy."</p>
+            <p class="layman">Most Windows machines are not locked down by design; they are locked down by hope. Admins forget quotes around service paths, leave binaries writable, or hand out impersonation privileges to every service account. You are not breaking a fortress — you are walking through doors someone left propped open.</p>
+            <p class="relevance"><strong>Red:</strong> Stop hunting for 0-days. Run the automation, read the output, and exploit the first misconfiguration that spits back SYSTEM. <strong>Blue:</strong> The absence of a CVE does not mean you are secure. Audit service permissions, token privileges, and installer policies before an attacker does.</p>
         </div>
 
         <div class="layman-term">
@@ -372,7 +416,19 @@
             <p>Each rung requires different techniques. You don't jump from user to SYSTEM in one step — you escalate, persist, then escalate again. <span class="neon-amber">Save every rung.</span> If you lose SYSTEM, you fall back to your admin persistence. If you lose admin, you fall back to your user persistence. This is the kill chain philosophy.</p>
         </div>
 
+        <div class="mentor-box">
+            <p class="quote">"Save every rung."</p>
+            <p class="layman">When you climb from user to admin to SYSTEM, stop at each level and install a backup plan. A user-level foothold, an admin service, a SYSTEM scheduled task — each one is a safety net. If the defenders burn one level, you still have the level below to climb back up.</p>
+            <p class="relevance"><strong>Red:</strong> After every successful escalation, create persistence before moving on. User, admin, SYSTEM — each gets its own lifeline. <strong>Blue:</strong> Removing one privileged account is not enough. Hunt persistence at every level, because an attacker who saved each rung can recover from almost any cleanup.</p>
+        </div>
+
         <h2>🔬 Automated Enumeration — Start Here</h2>
+
+        <div class="mentor-box">
+            <p class="quote">"Always run automated tools first. PowerUp, WinPEAS, LinPEAS — run them first."</p>
+            <p class="layman">Manual enumeration is slow and your eyes will miss things. Automated tools check hundreds of misconfigurations in seconds: weak services, missing quotes, modifiable registry keys, and installer policies. They are not cheating; they are force multipliers.</p>
+            <p class="relevance"><strong>Red:</strong> Run PowerUp and WinPEAS before you touch a keyboard. If a tool finds a path to SYSTEM in ten seconds, take it. <strong>Blue:</strong> If your hardening program does not account for what these tools report, you are only defending against attackers who are less prepared than a script.</p>
+        </div>
 
         <div class="method-card">
             <h4>Step 0: PowerUp <span class="difficulty diff-easy">EASY</span></h4>

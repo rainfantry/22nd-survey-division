@@ -366,6 +366,18 @@
             <p>The registry is like a building's maintenance log. Every tenant (program) writes what they changed: "I installed a new lock," "I changed the thermostat," "I made a copy of the key." Even if the tenant moves out, the log remains. Forensics is reading that log. But it's more than a log — it's the building's wiring diagram, security camera schedule, and key inventory all in one.</p>
         </div>
 
+        <!-- MENTOR CALLOUT: Memory Between Reboots -->
+        <div class="evidence-box" style="border-color: var(--neon);">
+            <h3 style="color: var(--neon);">🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <blockquote style="font-style: italic; border-left: 4px solid var(--neon); padding-left: 1rem; margin: 1rem 0; color: var(--amber);">"The registry is Windows' memory between reboots. RAM forgets when the power dies; the registry remembers forever."</blockquote>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 What the mentor means</h4>
+                <p>When you turn off a computer, everything in RAM vanishes. But the registry is written to disk, so it survives shutdowns, restarts, and even power failures. It is where Windows stores the state it needs to pick up exactly where it left off: who can log in, what programs start automatically, what hardware is installed, and what the user last did. For an investigator, that means the registry holds a historical record that volatile memory cannot.</p>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Persistence mechanisms target the registry because changes survive reboots. One well-placed Run key or service configuration keeps access alive across power cycles.</p>
+            <p style="color: var(--accent);"><strong>🔵 Blue:</strong> Even if malware is removed from disk or memory, registry artifacts often remain. Offline hive analysis can recover deleted keys, transaction logs, and shadow copies that reveal the full timeline.</p>
+        </div>
+
         <h2>📚 Prerequisites — What You Need First</h2>
         <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
         
@@ -693,6 +705,18 @@ int main() {
         <h2>🐍 Registry Persistence Mechanisms</h2>
         <p>Malware needs to survive reboots. The registry offers <span class="neon-amber">dozens of persistence locations</span>. A defender who only checks Run keys is missing 90% of the attack surface. This section covers the critical persistence mechanisms every analyst must know.</p>
 
+        <!-- MENTOR CALLOUT: Persistence Lives in the Registry -->
+        <div class="evidence-box" style="border-color: var(--purple);">
+            <h3 style="color: var(--purple);">🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <blockquote style="font-style: italic; border-left: 4px solid var(--purple); padding-left: 1rem; margin: 1rem 0; color: var(--neon);">"Persistence lives in the registry. If you want to survive a reboot, you write yourself into the hive."</blockquote>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 What the mentor means</h4>
+                <p>Malware that only runs in memory disappears when the system restarts. To keep coming back, attackers store launch instructions in registry keys that Windows reads at boot or logon: Run keys, services, Winlogon values, scheduled tasks, and more. The registry is the address book Windows consults every time it starts up, so hiding there guarantees the payload is invited back.</p>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Enumerate every persistence location, not just Run keys. Services, IFEO, Winlogon, Boot Execute, AppInit_DLLs, and COM hijacking all offer reboot-survivable execution.</p>
+            <p style="color: var(--accent);"><strong>🔵 Blue:</strong> Baseline known-good autostart entries and monitor for changes to high-value keys. Tools like Autoruns and RegRipper's persistence plugins help catch registry-based persistence.</p>
+        </div>
+
         <div class="persistence-card">
             <h4>Run / RunOnce Keys <span class="severity sev-critical">CRITICAL</span></h4>
             <p>The most common persistence mechanism. Programs listed here execute at user logon (HKCU) or system boot (HKLM).</p>
@@ -1006,6 +1030,18 @@ ProfileLoadTimeLow  : 0x8F3C2A00
 
         <h2>🕵️ Registry Forensics: The Analyst's Playbook</h2>
         <p>Registry forensics is the art of extracting evidence from hive files. Unlike live analysis (which sees only the current state), offline forensics reveals <span class="neon-amber">historical data, deleted keys, and transaction logs</span> that the running system hides.</p>
+
+        <!-- MENTOR CALLOUT: Read the Registry -->
+        <div class="evidence-box" style="border-color: var(--amber);">
+            <h3 style="color: var(--amber);">🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <blockquote style="font-style: italic; border-left: 4px solid var(--amber); padding-left: 1rem; margin: 1rem 0; color: var(--neon);">"If you want to know what happened, read the registry. Users lie. Logs lie. The registry forgets slowly."</blockquote>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 What the mentor means</h4>
+                <p>Attackers can delete files, clear event logs, and wipe browser history, but the registry keeps backup copies, transaction logs, and shadow copies of itself. It records program execution, USB connections, folder access, user logons, and autostart changes. When other evidence sources have been cleaned, the registry often still tells the story.</p>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Understand that registry artifacts outlive your payload. Clean your tracks by considering transaction logs, USN journals, shadow copies, and backup hives — not just the live keys.</p>
+            <p style="color: var(--accent);"><strong>🔵 Blue:</strong> Make registry hive acquisition a priority in incident response. UserAssist, ShimCache, USBSTOR, Shellbags, and service configurations routinely answer "what happened" when everything else has been erased.</p>
+        </div>
 
         <div class="forensics-box">
             <h4>🔍 Key Forensic Registry Locations</h4>

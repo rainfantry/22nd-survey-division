@@ -327,6 +327,37 @@
         .lab-evidence .cmd { color: var(--neon); }
         .lab-evidence .out { color: var(--fg); }
         .lab-evidence .err { color: var(--accent); }
+        .mentor-box {
+            border: 2px solid var(--purple);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            background: #0a0a0a;
+            border-radius: 8px;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--purple);
+            font-family: 'Space Mono', Consolas, monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.1em;
+        }
+        .mentor-box .quote {
+            font-family: 'Space Mono', Consolas, monospace;
+            color: var(--purple);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+        }
+        .mentor-box .layman { color: var(--fg); margin-bottom: 0.75rem; }
+        .mentor-box .relevance { color: var(--amber); font-size: 0.9rem; }
+        .mentor-box .relevance strong { color: var(--accent2); }
     </style>
 </head>
 <body>
@@ -338,9 +369,15 @@
         </div>
 
         <h1>Module 11: Rootkits <span class="status-badge status-live">LIVE TESTED</span></h1>
-        
+
         <div class="progress-bar"><div class="progress-fill"></div></div>
         <p style="color: var(--dim); font-size: 0.9rem;">Module 11 of 22 — Hiding in plain sight, persisting across reboots</p>
+
+        <div class="mentor-box">
+            <p class="quote">"Rootkits hide, they don't attack."</p>
+            <p class="layman">A rootkit is the ghillie suit, not the sniper. It doesn't steal data, encrypt files, or move laterally — it makes all of those things invisible. The bomb and the cloak are two separate tools. A loud payload with no hiding dies fast; a perfect cloak with no payload is just a weird blanket.</p>
+            <p class="relevance"><strong>Red:</strong> Build stealth first. If your process is flashing in Task Manager, nobody cares how clever your payload is. <strong>Blue:</strong> When you find malicious behavior, assume there is a cloak somewhere. The malware you see may only be the part that failed to hide.</p>
+        </div>
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
@@ -406,6 +443,12 @@
                 <p style="font-size: 0.85rem; color: var(--dim); margin-top: 0.5rem;"><strong>Example:</strong> HWBP on DR0/DR1 to intercept AMSI/ETW without memory writes. UEFI bootkit persists before the OS loads.</p>
                 <p style="font-size: 0.85rem; color: var(--dim);"><strong>Detection:</strong> Nearly impossible from within the OS. Requires external hardware analysis, firmware integrity checks, or trusted boot (Secure Boot, TPM).</p>
             </div>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"The deeper you hide, the harder you are to remove."</p>
+            <p class="layman">A user-mode rootkit is like hiding under a bedsheet — easy to pull off. A kernel rootkit is like hiding inside the wall — you have to tear the house apart. A firmware rootkit is like hiding in the foundation — even if you rebuild the house, it's still there. Each layer down buys you more time and more pain for the defender.</p>
+            <p class="relevance"><strong>Red:</strong> Push down the stack whenever you can. User-mode hooks are fine for a quick op; firmware or kernel hooks are for long-term persistence. <strong>Blue:</strong> If a user-mode cleanup keeps failing, the rootkit has likely gone deeper. Escalate to memory forensics, firmware integrity checks, and offline analysis.</p>
         </div>
 
         <h2>🔧 Method 1: HWBP AMSI+ETW Bypass (Hardware Layer)</h2>
@@ -742,6 +785,12 @@ schtasks /delete /tn "Microsoft\Windows\Security\UpdateCheck" /f
                 <h5>Why scheduled tasks are powerful</h5>
                 <p>Tasks can trigger on <span class="neon-highlight">any Windows event</span>. Event ID 4624 (successful logon) means your payload runs every time someone logs in. Event ID 4688 (process creation) means your payload runs when a specific process starts. Event ID 7045 (service installation) means your payload runs when a defender installs a new service — perfect for detecting and countering blue-team actions.</p>
             </div>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"Save every rung."</p>
+            <p class="layman">A ladder with one rung is a stick. A rootkit with one persistence mechanism is a one-shot tool. If the defender cuts your registry key, your service, or your file, you need another way back in. Plant rungs at different heights — registry, service, WMI, scheduled task, DLL sideload — so losing one just means climbing the next.</p>
+            <p class="relevance"><strong>Red:</strong> Never rely on a single persistence method. Build redundant restoration paths that monitor and rebuild each other. <strong>Blue:</strong> Removing one artifact is not cleanup. Hunt for the whole ladder: registry watchers, WMI subscriptions, hidden tasks, and phantom DLLs often travel together.</p>
         </div>
 
         <h2>🎯 Tri-Vector Persistence in Action</h2>

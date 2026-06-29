@@ -315,6 +315,18 @@
         <div class="progress-bar"><div class="progress-fill" style="width: 13.6%;"></div></div>
         <p style="color: var(--dim); font-size: 0.9rem;">Module 3 of 22 — PowerShell fundamentals, offensive techniques, and evasion</p>
 
+        <!-- MENTOR CALLOUT: Native Language -->
+        <div class="evidence-box" style="border-color: var(--purple);">
+            <h3 style="color: var(--purple);">🎙️ Mentor Callout — asi dev</h3>
+            <blockquote style="font-style: italic; border-left: 4px solid var(--purple); padding-left: 1rem; margin: 1rem 0; color: var(--neon);">"PowerShell is the Windows attacker's native language. If you're attacking Windows and you're not fluent in PowerShell, you're fighting with one hand tied behind your back."</blockquote>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 What the mentor means</h4>
+                <p>Windows was built to be managed through PowerShell. Every service, process, registry key, event log, and network setting is exposed as a programmable object. As an attacker, you don't need to drop noisy third-party tools — you speak the same language the operating system speaks. Native commands blend in, inherit trust, and leave fewer artifacts than foreign binaries.</p>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Use PowerShell for recon, lateral movement, payload delivery, and persistence. It is pre-installed, trusted, and powerful.</p>
+            <p style="color: var(--accent);"><strong>🔵 Blue:</strong> PowerShell activity is heavily logged (Event IDs 4103, 4104, 4688). Enable script block logging, transcription, and AMSI to catch abuse of this "native language."</p>
+        </div>
+
         <!-- FIRST PRINCIPLE -->
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
@@ -497,6 +509,18 @@ Enter-PSSession -Session $sess  # Interactive remote shell</span>
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>PowerShell remoting is like having a secure phone line to every machine in the network. You dial the number (Invoke-Command), speak your order (ScriptBlock), and the soldier on the other end executes it and reports back. You never have to physically enter the building. The phone call is encrypted, so eavesdroppers (network monitoring) only hear static.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: Linux vs PowerShell -->
+        <div class="evidence-box" style="border-color: var(--amber);">
+            <h3 style="color: var(--amber);">🎙️ Mentor Callout — asi dev</h3>
+            <blockquote style="font-style: italic; border-left: 4px solid var(--amber); padding-left: 1rem; margin: 1rem 0; color: var(--neon);">"Look, the Linux terminal is way easier — it's almost like English. PowerShell is clunky, verbose, and object-obsessed. But on Windows, you don't get to choose. Learn it anyway."</blockquote>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 What the mentor means</h4>
+                <p>Bash commands are short, composable, and text-based: <code>ps aux | grep evil</code> reads like a sentence. PowerShell feels heavier because every command is a <code>Verb-Noun</code> cmdlet and the pipeline carries objects, not text. The mentor is admitting PowerShell is awkward — but on a Windows target it is unavoidable. Fluency beats comfort.</p>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Don't avoid PowerShell because it is verbose. Shorten with aliases and variables when needed, but master the object pipeline — it is the source of PowerShell's power.</p>
+            <p style="color: var(--accent);"><strong>🔵 Blue:</strong> Attackers may alias or obfuscate cmdlets. Baseline normal PowerShell usage in your environment so anomalies like <code>IEX</code>, <code>DownloadString</code>, and <code>Invoke-Expression</code> stand out.</p>
         </div>
 
         <!-- SECTION 4: WMI -->
@@ -959,6 +983,18 @@ cscript //E:JScript C:\Windows\Temp\run.js</span>
         <div class="why-box">
             <h5>Why LOLBAS Is Effective</h5>
             <p>LOLBAS techniques exploit the <strong>trust boundary</strong> between operating system components and third-party security tools. Windows trusts its own binaries. EDR trusts what Windows trusts. By using Windows-native tools for malicious purposes, you inherit that trust. The activity looks like system administration, not malware.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: LOLBAS -->
+        <div class="evidence-box" style="border-color: var(--accent2);">
+            <h3 style="color: var(--accent2);">🎙️ Mentor Callout — asi dev</h3>
+            <blockquote style="font-style: italic; border-left: 4px solid var(--accent2); padding-left: 1rem; margin: 1rem 0; color: var(--neon);">"LOLBAS and built-in tools are king. Why bring a crowbar when the building already gave you the keys? If you're dropping binaries on Windows in 2026, you're doing it wrong."</blockquote>
+            <div class="layman-term" style="margin-top: 1rem;">
+                <h4>🎯 What the mentor means</h4>
+                <p>Every binary you upload to a target is a chance to get caught by AV, EDR, or file hashes. Windows already ships with dozens of tools that can download files, execute code, encode payloads, and move laterally. Using <code>certutil</code>, <code>mshta</code>, <code>powershell</code>, or <code>regsvr32</code> means you never have to smuggle a weapon past the gate — you are using the gatekeeper's own tools.</p>
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--accent2);"><strong>🔴 Red:</strong> Prefer built-in tools at every stage: download with certutil, execute with mshta, persist with WMI. Minimize dropped artifacts.</p>
+            <p style="color: var(--accent);"><strong>🔵 Blue:</strong> Focus detection on behavior, not binaries. Alert when certutil contacts remote URLs, mshta spawns PowerShell, or regsvr32 loads remote .sct files.</p>
         </div>
 
         <div class="warning-box">

@@ -333,6 +333,16 @@
             <p style="margin-top: 1rem;"><strong>Why this matters:</strong> A single compromised host is an island. The network is the continent. Lateral movement turns a beachhead into an empire. You don't attack the domain controller head-on; you move through workstations, harvest credentials, and let the domain trust you.</p>
         </div>
 
+        <div class="method-card" style="border-color: var(--amber);">
+            <h4 style="color: var(--amber);">🎙️ Mentor Callout — asi dev [HTB]</h4>
+            <p style="font-style: italic; color: var(--amber); text-shadow: 0 0 8px rgba(255,170,0,0.3);">"Lateral movement is about trust, not exploits."</p>
+            <div class="layman-term" style="margin: 1rem 0 0 0;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>You aren't breaking down doors. You're walking through doors that already recognize you. The network trusts valid credentials, signed tickets, and familiar protocols. Your job is to borrow that trust — become the user the system already believes in.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — stop hunting for CVEs and start harvesting tokens, hashes, and tickets. Blue — monitor authentication anomalies, not just malware; the attacker looks like a legitimate user because they are using legitimate trust.</p>
+        </div>
+
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>You breached the perimeter. One host is yours. Now what? The network is the battlefield. Lateral movement is flanking maneuver — you don't assault the fortress head-on, you move through the supply lines, the communication trenches, the maintenance tunnels. SSH, WMI, SMB — these are your supply lines.</p>
@@ -409,6 +419,16 @@
             <p>Windows networks are built for administration. The same protocols that let IT manage 10,000 workstations let you move between them. <span class="neon-amber">The OS can't distinguish between a domain admin and an attacker using stolen domain admin credentials.</span> The authentication is identical. The protocols are identical. The only difference is intent — and the OS doesn't read minds.</p>
         </div>
 
+        <div class="method-card" style="border-color: var(--amber);">
+            <h4 style="color: var(--amber);">🎙️ Mentor Callout — asi dev [HTB]</h4>
+            <p style="font-style: italic; color: var(--amber); text-shadow: 0 0 8px rgba(255,170,0,0.3);">"Use what the network already trusts."</p>
+            <div class="layman-term" style="margin: 1rem 0 0 0;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>Don't bring your own ladder when the building has elevators. SMB, WMI, WinRM, RDP, SSH, DCOM — these are already installed, already allowed, and already logged in. The network trusts them. Hijack them, and you move like a ghost through infrastructure that was designed to help you.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — map the allowed protocols first; your path is whatever the firewall permits and the user uses. Blue — allowlisting and micro-segmentation beat signature detection; if you can't block a protocol, force it through a monitored jump host.</p>
+        </div>
+
         <h2>🎯 The Attacker's Decision Tree</h2>
 
         <div class="method-box">
@@ -436,6 +456,16 @@
         </div>
 
         <h2>🔥 Technique 1: Pass-the-Hash (PtH) <span class="difficulty diff-easy">EASY</span></h2>
+
+        <div class="method-card" style="border-color: var(--amber);">
+            <h4 style="color: var(--amber);">🎙️ Mentor Callout — asi dev [HTB]</h4>
+            <p style="font-style: italic; color: var(--amber); text-shadow: 0 0 8px rgba(255,170,0,0.3);">"Eventually all comes to networking."</p>
+            <div class="layman-term" style="margin: 1rem 0 0 0;">
+                <h4>🎯 Soldier Translation</h4>
+                <p>At the bottom of every technique is a packet crossing a wire. Credentials, tickets, and tunnels are just ways to make that packet look normal. Learn the protocols — TCP, SMB, RPC, Kerberos, SSH — and you will see that lateral movement is not magic; it is networking with borrowed identity.</p>
+            </div>
+            <p style="margin-top: 1rem; color: var(--dim);"><strong>Red/Blue Relevance:</strong> Red — when a technique fails, read the network error; it tells you more than the tool output. Blue — network logs (Zeek, PCAP, firewall flows) often reveal lateral movement before endpoint logs do, because the protocol cannot lie about where it goes.</p>
+        </div>
 
         <div class="method-card" id="pass-the-hash">
             <h4>Pass-the-Hash: Authentication Without Passwords</h4>

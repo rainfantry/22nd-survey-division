@@ -45,9 +45,9 @@ validate_module() {
     # Check for evidence boxes
     local evidence_count=$(grep -c "evidence-box\|evidence-header" "$module_path" 2>/dev/null || echo "0")
     echo "  Evidence boxes: $evidence_count"
-    
     # Check for mentor callouts (broader patterns)
-    local mentor_count=$(grep -icE "mentor says|mentor.*says|mentor.*quote|mentor.*teaches|mentor.*words|mentor.*means" "$module_path" 2>/dev/null || echo "0")
+    local mentor_count
+    mentor_count=$(grep -icE "mentor|asi dev|lessons-from-teacher|mentor note|mentor says|mentor.*teaches|mentor.*words|mentor.*means" "$module_path" 2>/dev/null || echo "0")
     echo "  Mentor callouts: $mentor_count"
     
     # Check for cross-links

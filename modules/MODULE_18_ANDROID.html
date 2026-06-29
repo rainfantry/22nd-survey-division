@@ -340,6 +340,43 @@
         .rat-feature .icon { font-size: 2rem; }
         .rat-feature h5 { color: var(--accent); margin-bottom: 0.3rem; }
         .rat-feature p { font-size: 0.9rem; color: var(--dim); }
+        .mentor-box {
+            border: 2px solid var(--neon);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            background: #0a0a0a;
+            border-radius: 8px;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--neon);
+            font-family: Consolas, monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.2em;
+        }
+        .mentor-quote {
+            font-family: Consolas, monospace;
+            color: var(--neon);
+            font-size: 1.05rem;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 5px rgba(0,255,255,0.2);
+            font-style: italic;
+        }
+        .mentor-box p { color: #ccc; margin-bottom: 0.6rem; }
+        .mentor-box .team-note {
+            border-left: 3px solid var(--accent);
+            padding-left: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        .mentor-box .team-note.red { border-left-color: var(--accent); }
+        .mentor-box .team-note.blue { border-left-color: #0088ff; }
+        .mentor-box .team-note strong { font-family: Consolas, monospace; text-transform: uppercase; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -365,6 +402,14 @@
             <h4>🎯 Soldier Translation</h4>
             <p>Everyone carries a radio, camera, microphone, and GPS tracker in their pocket. They call it a phone. If you can install software on it, you own the radio, the camera, the microphone, and the GPS. This module teaches you to turn their phone into your eyes and ears.</p>
             <p style="margin-top: 0.5rem; color: var(--dim);">The security guard (Google Play Protect) sees a normal app and waves it through. They never check what the app actually does.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: Mobile is just another endpoint -->
+        <div class="mentor-box">
+            <div class="mentor-quote">"Mobile is just another endpoint."</div>
+            <p>Stop treating phones like magic appliances. An Android device is a Linux computer with a touchscreen: it has processes, a filesystem, network sockets, and user permissions. The same tradecraft you use on Windows and Linux still applies — reconnaissance, exploitation, persistence, and exfiltration just happen through different APIs.</p>
+            <div class="team-note red"><strong>Red team:</strong> Your mobile payload is still a process that needs a C2 route, persistence, and data staging. Build it like any other implant, but account for battery-saving Doze mode and app sandboxing.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> Apply endpoint detection principles to mobile. Monitor for abnormal network beacons, excessive permission usage, and apps running foreground services with no visible UI.</div>
         </div>
 
         <h2>📚 Prerequisites — What You Need First</h2>
@@ -425,6 +470,14 @@
         <div class="why-box">
             <h5>Why the architecture matters</h5>
             <p>Your malicious app lives at the <span class="neon-highlight">Application layer</span>. It calls the <span class="neon-amber">Application Framework</span> APIs to access GPS, SMS, camera. The framework talks to <span class="neon-purple">Native Libraries</span> and the <span class="neon-purple">Linux Kernel</span>. If you want to bypass permissions, you need to go deeper — either exploit a native library vulnerability or gain root access to the kernel.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: Android is easier to play with than iOS -->
+        <div class="mentor-box">
+            <div class="mentor-quote">"Android is easier to play with than iOS."</div>
+            <p>Android is open: you can sideload APKs, unlock bootloaders, flash custom recoveries, and run a full Linux shell over ADB. iOS keeps the gates locked with code signing, sideloading restrictions, and a heavily sandboxed runtime. Android gives you room to experiment, which means it also gives attackers room to operate.</p>
+            <div class="team-note red"><strong>Red team:</strong> Use Android's openness to your advantage. Test on emulators, root devices for deep analysis, and distribute payloads via sideloading instead of fighting Apple's walled garden.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> Android's flexibility is a double-edged sword. Enforce device policy controls, restrict unknown sources, and detect bootloader unlocks or rooted devices before they join corporate resources.</div>
         </div>
 
         <h2>📦 APK Structure — The Android Package</h2>
@@ -540,6 +593,14 @@
         <div class="warning-box">
             <h5>⚠️ Permission Pre-Texting</h5>
             <p>A flashlight app that asks for camera, microphone, and location seems suspicious — but a <span class="neon-amber">"COVID-19 Tracker"</span> or <span class="neon-amber">"Dating App"</span> that asks for contacts, location, and SMS seems reasonable. The pretext justifies the permissions. The user complies. This is social engineering at the permission level.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: Permissions are the attack surface -->
+        <div class="mentor-box">
+            <div class="mentor-quote">"Permissions are the attack surface."</div>
+            <p>On Android, the user — not a firewall or EDR — is the gatekeeper. Every sensitive capability is gated behind a permission dialog that most people tap through without reading. If you can craft a believable reason for the user to grant location, SMS, microphone, and storage access, you have won before a single exploit is fired.</p>
+            <div class="team-note red"><strong>Red team:</strong> Design your pretext around the permissions you need, not the other way around. A "System Update" app justifies broad access; a "Flashlight" app does not. Request dangerous permissions gradually and only when contextually appropriate.</div>
+            <div class="team-note blue"><strong>Blue team:</strong> Review permission usage, not just permission requests. An app that declares ten dangerous permissions is suspicious; an app that actually uses camera and microphone in the background is a compromise signal. Use runtime permission telemetry and behavioral analysis to catch abuse.</div>
         </div>
 
         <h2>🎯 Intent Filters — The Inter-App Communication</h2>

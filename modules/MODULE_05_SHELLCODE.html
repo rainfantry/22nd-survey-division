@@ -51,6 +51,12 @@
         .soldier-box { border: 2px solid #ffaa00; padding: 1.5rem; margin: 1.5rem 0; position: relative; }
         .soldier-box::before { content: 'SOLDIER TRANSLATION'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: #ffaa00; font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.2em; }
         .soldier-box p { font-style: italic; color: #ccc; }
+        .mentor-box { border: 2px solid var(--purple); padding: 1.5rem; margin: 1.5rem 0; position: relative; }
+        .mentor-box::before { content: 'MENTOR NOTE — asi dev [HTB]'; position: absolute; top: -14px; left: 20px; background: var(--bg); color: var(--purple); font-family: 'Space Mono', monospace; font-size: 0.7rem; padding: 0 10px; letter-spacing: 0.1em; }
+        .mentor-box .quote { font-family: 'Space Mono', monospace; color: var(--purple); font-size: 1.05rem; font-weight: 700; margin-bottom: 0.75rem; text-shadow: 0 0 8px rgba(255, 0, 255, 0.3); }
+        .mentor-box .layman { color: var(--fg); margin-bottom: 0.75rem; }
+        .mentor-box .relevance { color: var(--amber); font-size: 0.9rem; }
+        .mentor-box .relevance strong { color: var(--accent2); }
         .code-block {
             background: #000;
             border: 1px solid #333;
@@ -252,6 +258,12 @@
 
         <div class="core-truth">
             <p>Shellcode is not a program. It's a parasite. It doesn't have a window, a menu, or a file. It exists only in memory, injected into another process, and executes invisibly. The smaller it is, the harder it is to detect. The simpler it is, the more reliable it is. This module teaches you to write, encode, inject, and execute shellcode — the purest form of malware. You will learn assembly from the ground up, master the stack and registers, walk the PEB to find APIs dynamically, encode payloads to evade detection, and build custom position-independent code that works on any Windows system.</p>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"Shellcode is just instructions."</p>
+            <p class="layman">At the CPU level there is no such thing as a "program file" — only bytes that the processor reads, decodes, and executes one by one. Shellcode is simply a sequence of those bytes chosen to do something useful, like open a socket or launch a program. It does not need a linker, a loader, or an installer.</p>
+            <p class="relevance"><strong>Red:</strong> If you can turn your goal into raw CPU instructions, you can run it anywhere you can write memory. <strong>Blue:</strong> Detection that only looks at files or processes misses code that never touches disk.</p>
         </div>
 
         <div class="soldier-box">
@@ -500,6 +512,12 @@
                 <p>PIC is like a soldier who doesn't know which building he's in, but he knows the layout is always the same. He measures distances from where he stands, not from a fixed landmark. If he's in the kitchen, the armory is always three doors to the left — regardless of which building he's in. Shellcode uses the same principle: everything is relative to the instruction pointer (EIP/RIP).</p>
             </div>
 
+            <div class="mentor-box">
+                <p class="quote">"Position-independent code is the goal."</p>
+                <p class="layman">Normal programs assume they will be loaded at one specific address. Shellcode cannot assume that, because it is injected into memory by an exploit and may land anywhere. PIC means the code never hardcodes addresses; it figures out where it is and computes everything relative to that point.</p>
+                <p class="relevance"><strong>Red:</strong> PIC lets one payload work across reboots, processes, and ASLR without modification. <strong>Blue:</strong> Look for code that calls into itself, uses FS/GS to find the PEB, or avoids absolute pointers — these are hallmarks of injected shellcode.</p>
+            </div>
+
             <h3>5.1 The Problem: No Absolute Addresses</h3>
             <div class="code-block">
 <span class="comment">; BAD: Hardcoded data address — fails when injected elsewhere</span>
@@ -547,6 +565,12 @@
             <div class="why-box">
                 <h5>Why PIC is mandatory for shellcode</h5>
                 <p>When you inject shellcode via <span class="neon-highlight">VirtualAllocEx</span> + <span class="neon-highlight">WriteProcessMemory</span>, the target address is determined by the OS. It could be anywhere in the 2-4GB user-mode address space. If your shellcode references absolute addresses, it will access random memory and crash. PIC ensures your code works regardless of where it lands.</p>
+            </div>
+
+            <div class="mentor-box">
+                <p class="quote">"If you can write memory and execute it, you win."</p>
+                <p class="layman">Modern operating systems separate reading, writing, and executing memory for safety. If an attacker can find or create a region that is both writable and executable, they can place their own instructions there and jump to them. That is the whole game in a nutshell: get your bytes into memory, point the CPU at them, and let it run.</p>
+                <p class="relevance"><strong>Red:</strong> Your exploit chain usually ends with allocating RWX memory, copying shellcode, and creating a thread. <strong>Blue:</strong> Monitor for VirtualAlloc/VirtualProtect calls that mark memory as PAGE_EXECUTE_READWRITE, especially from unusual callers.</p>
             </div>
         </div>
 

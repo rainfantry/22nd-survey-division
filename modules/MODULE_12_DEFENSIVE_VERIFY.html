@@ -311,6 +311,36 @@
         .tag-green { background: #0a3a0a; color: var(--accent2); border: 1px solid var(--accent2); }
         .tag-amber { background: #3a3a0a; color: var(--amber); border: 1px solid var(--amber); }
         .tag-neon { background: #0a2a2a; color: var(--neon); border: 1px solid var(--neon); }
+        .mentor-box {
+            border: 2px solid var(--purple);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            background: #0f0a0f;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--purple);
+            font-family: Consolas, monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.1em;
+        }
+        .mentor-box .quote {
+            font-family: Consolas, monospace;
+            color: var(--purple);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+        }
+        .mentor-box .layman { color: var(--fg); margin-bottom: 0.75rem; }
+        .mentor-box .relevance { color: var(--amber); font-size: 0.9rem; }
+        .mentor-box .relevance strong { color: var(--accent2); }
     </style>
 </head>
 <body>
@@ -336,6 +366,12 @@
             <h4>🎯 Soldier Translation</h4>
             <p>You wouldn't field a rifle without test-firing it. Same for malware. Before you deploy a tool on a target, you scan it. But how do you know the scan was real? This module teaches you to read scan results like a forensic analyst — not just the headline, but the metadata that proves the scan actually happened.</p>
             <p style="margin-top: 0.5rem; color: var(--dim);">More than that: you learn to verify memory, detect API hooks, analyze parent-child relationships, and test EDR/AMSI/ETW — so you know what the defender sees when you run your tools.</p>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"If you can't detect it, you can't defend against it."</p>
+            <p class="layman">A defender trying to stop something they cannot see is just guessing. Detection is the prerequisite for every other control: blocking, quarantining, alerting, hunting, and responding. If your sensor misses the technique, the policy behind it is dead code.</p>
+            <p class="relevance"><strong>Red:</strong> Before you trust an evasion, prove the target control can actually see the baseline technique. If it cannot, your "bypass" is theater. <strong>Blue:</strong> Every defensive rule, signature, and behavioral model must be exercised with a known-bad sample. A silent sensor is worse than no sensor because it gives false confidence.</p>
         </div>
 
         <h2>📚 Prerequisites — What You Need First</h2>
@@ -406,6 +442,12 @@
         <div class="why-box">
             <h5>Why this pattern is universal</h5>
             <p>Every security control — AV, EDR, firewall, DLP — can be verified with the same five steps. The payload changes (malware, injection, data exfiltration), but the verification methodology never does. <span class="neon-amber">This is the scientific method applied to offensive security.</span></p>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"Test your evasion honestly."</p>
+            <p class="layman">It is easy to make a bypass look good by testing it against a sensor that is already broken, misconfigured, or disabled. Honest verification means assuming the defense is healthy until you prove otherwise, running the baseline attack first, and only then measuring how well your evasion holds up.</p>
+            <p class="relevance"><strong>Red:</strong> Confirm the EDR actually catches plain-vanilla injection before you claim your unhooked syscalls evade it. Otherwise you are celebrating a win against a blind opponent. <strong>Blue:</strong> Run Atomic Red Team tests unmodified before tuning custom detections. If a stock MITRE technique does not alert, your custom logic is not the problem — visibility is.</p>
         </div>
 
         <h2>🎯 Section 1: Memory Scanning Verification</h2>
@@ -816,6 +858,12 @@ int main() {
 
         <h2>🎯 Section 3: Behavioral Analysis Verification</h2>
         <p>Signature-based detection looks for known bytes. Behavioral analysis looks for <em>actions</em> — process creation, memory allocation patterns, network connections. Behavioral verification proves your EDR catches suspicious patterns even when the bytes are unknown.</p>
+
+        <div class="mentor-box">
+            <p class="quote">"The defender's advantage is knowing the environment."</p>
+            <p class="layman">An attacker sees a target from the outside and must discover what is normal. A defender already lives inside the environment and knows which processes should talk to which hosts, which users run which tools, and what "weird" looks like on this specific network. Verification turns that local knowledge into a test: if something abnormal happens here, does the control notice?</p>
+            <p class="relevance"><strong>Red:</strong> Blend into the environment's normal rhythm. A PowerShell script at 2 PM from an admin workstation is noise; the same script at 2 AM from a finance laptop is a siren. <strong>Blue:</strong> Build detections around your own baselines, not generic threat intelligence. The value is not the rule — it is the context the rule is written for.</p>
+        </div>
 
         <div class="method-card" id="behavioral-verify">
             <h4>Technique 1: Process Spawn Chain Analysis <span class="difficulty diff-medium">MEDIUM</span></h4>

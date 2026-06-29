@@ -140,6 +140,30 @@
             margin: 1rem 0;
         }
         .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .mentor-callout {
+            background: #0a1a0a;
+            border: 1px solid #1a4a1a;
+            border-left: 4px solid var(--green);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            color: #8ac88a;
+        }
+        .mentor-callout .mentor-title {
+            color: var(--green);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .mentor-callout .mentor-quote {
+            font-style: italic;
+            color: var(--green);
+            margin-bottom: 0.75rem;
+        }
+        .mentor-callout .layman { margin-top: 0.75rem; }
+        .mentor-callout .redblue { margin-top: 0.5rem; }
+        .mentor-callout strong { color: #c8f8c8; }
         .note {
             color: var(--magenta);
             font-style: italic;
@@ -423,6 +447,33 @@
             <h4>🎯 Soldier Translation</h4>
             <p>Imagine a military base with security cameras everywhere. ETW is the camera system — it records every door opened, every vehicle entering, every person moving through the base. The Dark Room technique is like cutting the camera feed <span class="neon-highlight">without touching the cameras</span>. You don't break the cameras (that would trigger an alarm). You intercept the signal between the camera and the recorder. The cameras still work. The recorder sees nothing. The guards reviewing footage tomorrow see an empty base.</p>
             <p style="margin-top: 0.5rem; color: var(--dim);">The security team (EDR) checks the cameras — they're fine. They check the recorder — it's running. They never think to check the cable between them.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: ETW is Windows' CCTV -->
+        <div class="mentor-callout">
+            <div class="mentor-title">// Mentor: asi dev [HTB]</div>
+            <p class="mentor-quote">"ETW is Windows' CCTV — blind it and you become invisible."</p>
+            <p class="layman"><strong>Layman:</strong> Windows is a building covered in security cameras. ETW is every one of those cameras feeding a central recording desk. If you can turn off the feed or point the cameras at a blank wall, you can walk through the building and leave no footage behind.</p>
+            <p class="redblue"><strong>For red team:</strong> Disabling or tampering with ETW before you run tools removes the evidence chain that EDR and SOC analysts rely on. Run your bypass first, then execute.</p>
+            <p class="redblue"><strong>For blue team:</strong> ETW tampering is itself a signal. Watch for suspicious writes to <code>ntdll.dll</code>, unexpected calls to <code>EtwEventWrite</code>, and missing telemetry from processes that should be noisy.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: Bypass telemetry before you run tools -->
+        <div class="mentor-callout">
+            <div class="mentor-title">// Mentor: asi dev [HTB]</div>
+            <p class="mentor-quote">"Bypass telemetry before you run tools."</p>
+            <p class="layman"><strong>Layman:</strong> You don't rob a bank while the alarm is armed. You disable the alarm, then open the vault. Running Mimikatz, Rubeus, or a custom injector before you silence ETW is like triggering every alarm in the building on purpose.</p>
+            <p class="redblue"><strong>For red team:</strong> Make ETW bypass part of your initial staging, not an afterthought. The order of operations is: gain execution → disable telemetry → run offensive tools → clean up.</p>
+            <p class="redblue"><strong>For blue team:</strong> If you see a process patch <code>EtwEventWrite</code> or load a DLL that hooks logging APIs, assume the follow-up action is the real attack. The bypass is the preamble.</p>
+        </div>
+
+        <!-- MENTOR CALLOUT: Evasion is temporary, detection is forever -->
+        <div class="mentor-callout">
+            <div class="mentor-title">// Mentor: asi dev [HTB]</div>
+            <p class="mentor-quote">"Evasion is temporary, detection is forever."</p>
+            <p class="layman"><strong>Layman:</strong> A disguise gets you past the guard once. But the guard will eventually learn what to look for. The evidence of the disguise — the fake mustache, the changed clothes — is what gets you caught next time. Evasion buys minutes; detection signatures last years.</p>
+            <p class="redblue"><strong>For red team:</strong> Treat every bypass as disposable. Microsoft patches ETW tampering vectors regularly. Have a fallback, test in a lab that mirrors the target, and never assume yesterday's bypass works tomorrow.</p>
+            <p class="redblue"><strong>For blue team:</strong> Build detections for the <em>behavior</em> of bypassing, not just the specific byte pattern. Even when the exploit changes, the need to silence telemetry remains constant — and that is your lasting detection opportunity.</p>
         </div>
 
         <h2>📚 Prerequisites — What You Need First</h2>
