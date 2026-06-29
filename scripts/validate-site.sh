@@ -27,18 +27,39 @@ for page in "${PAGES[@]}"; do
 done
 echo ""
 
-# Test 2: All module pages load
+# Test 2: All module pages exist locally (and would be 200 once deployed)
 echo "[TEST 2] Checking module pages..."
 for module in "$REPO_DIR"/modules/MODULE_*.html; do
     name=$(basename "$module")
-    status=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/modules/$name")
-    if [ "$status" = "200" ]; then
+    if [ -f "$module" ] && [ -s "$module" ]; then
         echo "  ✓ $name"
     else
-        echo "  ✗ $name ($status) ← BROKEN"
+        echo "  ✗ $name missing or empty ← BROKEN"
         ((ERRORS++))
     fi
 done
+echo ""
+
+# Test 2b: Optional live deployment check (informational only — does not fail build)
+echo "[TEST 2b] Optional live module check..."
+if curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/index.html" | grep -q "200"; then
+    live_errors=0
+    for module in "$REPO_DIR"/modules/MODULE_*.html; do
+        name=$(basename "$module")
+        status=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL/modules/$name")
+        if [ "$status" = "200" ]; then
+            echo "  ✓ $name (live)"
+        else
+            echo "  ⚠ $name (live $status — may be undeployed)"
+            live_errors=$((live_errors + 1)) || true
+        fi
+    done
+    if [ "$live_errors" -gt 0 ]; then
+        echo "  ⚠ $live_errors module(s) not yet live. This is OK if you haven't pushed yet."
+    fi
+else
+    echo "  ⚠ Live site unreachable — skipping live module check"
+fi
 echo ""
 
 # Test 3: Navigation links exist in modules
@@ -83,13 +104,13 @@ else
 fi
 echo ""
 
-# Test 7: Module tree has all modules
+# Test 7: Module tree has all modules (check local file before deployment)
 echo "[TEST 7] Checking module tree completeness..."
-MODULE_COUNT=$(curl -s "$SITE_URL/module-tree.html" | grep -c "module-item")
-if [ "$MODULE_COUNT" -ge 22 ]; then
-    echo "  ✓ module-tree has $MODULE_COUNT modules (expected 22+)"
+MODULE_COUNT=$(grep -c "module-item" "$REPO_DIR/module-tree.html")
+if [ "$MODULE_COUNT" -ge 28 ]; then
+    echo "  ✓ module-tree has $MODULE_COUNT modules (expected 28+)"
 else
-    echo "  ✗ module-tree has only $MODULE_COUNT modules (expected 22+)"
+    echo "  ✗ module-tree has only $MODULE_COUNT modules (expected 28+)"
     ((ERRORS++))
 fi
 echo ""

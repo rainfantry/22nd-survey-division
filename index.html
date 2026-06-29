@@ -745,6 +745,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     </a>
   </div>
   <a href="#pricing" class="nav-cta" style="background:#0a2a0a;border-color:#2a7a2a;animation:fbpulse 2.2s infinite;">BUY NOW</a>
+  <a href="https://www.buymeacoffee.com/rainfantry" target="_blank" class="nav-cta" style="background:#ffdd00;color:#000;border-color:#ffdd00;animation:none;">☕ BUY ME A COFFEE</a>
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -755,11 +756,12 @@ html:not(.course-locked) #course-teaser { display: none !important; }
   <a href="#curriculum" onclick="closeMobile()">Curriculum</a>
   <a href="#about-section" onclick="closeMobile()">About</a>
   <a href="#contact" onclick="closeMobile()">Contact</a>
+  <a href="https://www.buymeacoffee.com/rainfantry" target="_blank" onclick="closeMobile()">☕ Buy Me A Coffee</a>
   <a href="#curriculum" onclick="closeMobile()">Start Learning →</a>
 </div>
 
 <!-- ── FLOATING BUY BUTTON ── -->
-<a id="float-buy" href="#pricing">BUY NOW — A$247.50 →</a>
+<a id="float-buy" href="https://www.buymeacoffee.com/rainfantry" target="_blank" style="background:#ffdd00;color:#000;">☕ SUPPORT THE WORK</a>
 
 <!-- ── HERO ── -->
 <main id="main-content">
@@ -2224,9 +2226,9 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 <!-- ── COURSE TEASER ── -->
 <section id="course-teaser" style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
   <div class="section-inner" style="text-align:center;padding:4rem 1.5rem;">
-    <div class="teaser-label">// 22 MODULES — FULL CURRICULUM BELOW</div>
+    <div class="teaser-label">// 22 CORE MODULES + 2 BONUS TRACKS — FULL CURRICULUM BELOW</div>
     <div class="teaser-headline">DOCTRINE LIBRARY — ALL OPEN</div>
-    <div class="teaser-sub">22 field manual chapters. C, PowerShell, Python, Assembly. Real tradecraft against live Windows 11 defences. From attacker psychology to rootkits, C2 frameworks, and Android RATs. Buy to get the tools.</div>
+    <div class="teaser-sub">22 field manual chapters plus bonus deep-dives into web application hacking and infostealer malware. C, PowerShell, Python, Assembly. Real tradecraft against live Windows 11 defences. From attacker psychology to rootkits, C2 frameworks, Android RATs, and real-world web/API attacks. Buy to get the tools.</div>
     <div class="teaser-modules">
       <span class="teaser-chip">01 OFFENSIVE MINDSET</span>
       <span class="teaser-chip">02 RECON</span>
@@ -2250,6 +2252,8 @@ html:not(.course-locked) #course-teaser { display: none !important; }
       <span class="teaser-chip">20 ACTIVE DIRECTORY</span>
       <span class="teaser-chip">21 MOBILE</span>
       <span class="teaser-chip">22 OSINT</span>
+      <span class="teaser-chip" style="border-color:var(--purple);color:var(--purple);">BONUS: WEB HACKING</span>
+      <span class="teaser-chip" style="border-color:var(--purple);color:var(--purple);">BONUS: INFOSTEALERS</span>
     </div>
   </div>
 </section>
@@ -2280,6 +2284,8 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           <a href="modules/MODULE_16_C2.html" class="btn btn-ghost" style="border-color:var(--dim);color:var(--dim);text-align:left;font-size:0.8rem;">10. Module 16: C2 Frameworks</a>
           <a href="modules/MODULE_20_KILL_CHAIN.html" class="btn btn-ghost" style="border-color:var(--dim);color:var(--dim);text-align:left;font-size:0.8rem;">11. Module 20: Kill Chain & TTPs</a>
           <a href="modules/MODULE_21_CAPSTONE.html" class="btn btn-ghost" style="border-color:var(--dim);color:var(--dim);text-align:left;font-size:0.8rem;">12. Module 21: Capstone</a>
+          <a href="modules/MODULE_22_WEB_HACKING.html" class="btn btn-ghost" style="border-color:var(--purple);color:var(--purple);text-align:left;font-size:0.8rem;">BONUS: Module 22: Web Application Hacking →</a>
+          <a href="modules/MODULE_23_INFOSTEALERS.html" class="btn btn-ghost" style="border-color:var(--purple);color:var(--purple);text-align:left;font-size:0.8rem;">BONUS: Module 23: Infostealers →</a>
         </div>
       </div>
 
@@ -2301,6 +2307,8 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           <a href="modules/MODULE_15_LATERAL.html" class="btn btn-ghost" style="border-color:var(--dim);color:var(--dim);text-align:left;font-size:0.8rem;">10. Module 15: Lateral Movement</a>
           <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html" class="btn btn-ghost" style="border-color:var(--dim);color:var(--dim);text-align:left;font-size:0.8rem;">11. Module 17: Social Engineering</a>
           <a href="modules/MODULE_21_CAPSTONE.html" class="btn btn-ghost" style="border-color:var(--dim);color:var(--dim);text-align:left;font-size:0.8rem;">12. Module 21: Capstone</a>
+          <a href="modules/MODULE_22_WEB_HACKING.html" class="btn btn-ghost" style="border-color:var(--purple);color:var(--purple);text-align:left;font-size:0.8rem;">BONUS: Module 22: Web Application Hacking →</a>
+          <a href="modules/MODULE_23_INFOSTEALERS.html" class="btn btn-ghost" style="border-color:var(--purple);color:var(--purple);text-align:left;font-size:0.8rem;">BONUS: Module 23: Infostealers →</a>
         </div>
       </div>
     </div>
@@ -2323,7 +2331,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 <section id="curriculum">
   <div class="container">
     <div class="section-eyebrow">// FIELD MANUALS</div>
-    <div class="section-title">CURRICULUM <span class="slash">//</span> 22DIV <span class="accent">DOCTRINE LIBRARY</span></div>
+    <div class="section-title">CURRICULUM <span class="slash">//</span> 22DIV <span class="accent">DOCTRINE LIBRARY</span> <span style="font-size:0.6rem;color:var(--dim);">(22 CORE + 2 BONUS)</span></div>
 
     <!-- Open banner -->
     <div id="curriculum-lock-banner" style="background:#070a07;border:1px solid #0a2a0a;padding:1.1rem 1.5rem;margin-bottom:1.5rem;text-align:center;">
@@ -2357,7 +2365,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
     </div>
     <div class="progress-bar-wrap">
       <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
-      <div class="progress-text" id="progress-text">0 / 22 MODULES COMPLETE</div>
+      <div class="progress-text" id="progress-text">0 / 24 MODULES COMPLETE</div>
     </div>
 
     <div class="curriculum-grid" id="curriculum-grid">
@@ -2835,7 +2843,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
             <span class="mod-check">&#10003;</span>
           </div>
         </div>
-        <div class="mod-title">OSINT &amp; Social Engineering</div>
+        <div class="mod-title">OSINT & Social Engineering</div>
         <div class="mod-desc">Recon, phishing, pretexting</div>
         <div class="mod-detail">You build a complete <strong>target intelligence dossier</strong> from public sources only — OSINT beyond Google. LinkedIn scraping, certificate transparency logs, GitHub leak hunting, breach databases, social graph mapping. Then: phishing campaign anatomy, GoPhish setup on Windows, pretexting scripts, vishing call flows. You understand why the human is always the weakest link — and how to harden yourself against the same techniques.</div>
         <div class="mod-tags">
@@ -2843,6 +2851,46 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           <span class="mod-tag tag-mcq">MCQ</span>
         </div>
         <div class="mod-locked-overlay">Complete module 21 to unlock</div>
+      </a>
+
+      <!-- BONUS: 22 Web Hacking -->
+      <a class="mod-card mod-unlocked" id="mod-22-web"
+         href="modules/MODULE_22_WEB_HACKING.html"
+         data-mod="22-web">
+        <div class="mod-header">
+          <div class="mod-num" style="color:var(--purple);">22+</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#9650;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title" style="color:var(--purple);">Web Application Hacking</div>
+        <div class="mod-desc">Recon, auth, SQLi, IDOR, API signatures</div>
+        <div class="mod-detail"><strong>Bonus deep-dive.</strong> Built from the TAFE pentest course and a real diudream.com assessment. You learn web reconnaissance, authentication/session attacks, SQL injection, IDOR, mass assignment, and API signature breaking. Includes a vulnerable Flask mock portal lab, Python probe scripts, and real findings from a live web app assessment.</div>
+        <div class="mod-tags">
+          <span class="mod-tag" style="background:#1a0a1a;color:var(--purple);border:1px solid #4a004a;">Bonus</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
+      </a>
+
+      <!-- BONUS: 23 Infostealers -->
+      <a class="mod-card mod-unlocked" id="mod-23-stealer"
+         href="modules/MODULE_23_INFOSTEALERS.html"
+         data-mod="23-stealer">
+        <div class="mod-header">
+          <div class="mod-num" style="color:var(--purple);">23+</div>
+          <div class="mod-status">
+            <span class="mod-lock">&#9650;</span>
+            <span class="mod-check">&#10003;</span>
+          </div>
+        </div>
+        <div class="mod-title" style="color:var(--purple);">Infostealers — How They Work</div>
+        <div class="mod-desc">Builder, victim, C2, detection, IR</div>
+        <div class="mod-detail"><strong>Bonus deep-dive.</strong> Line-by-line analysis of a real Windows credential stealer. Three-machine architecture: builder, victim, C2 receiver. Covers process injection into suspended browser processes, decryption of Chrome app-bound keys via named pipe, theft of 30+ browsers, 50+ crypto wallets, Discord tokens, Telegram, and sensitive files. Includes Sigma/YARA detection rules and incident response playbooks.</div>
+        <div class="mod-tags">
+          <span class="mod-tag" style="background:#1a0a1a;color:var(--purple);border:1px solid #4a004a;">Bonus</span>
+          <span class="mod-tag tag-lab">Lab</span>
+        </div>
       </a>
 
     </div>
@@ -2882,8 +2930,23 @@ html:not(.course-locked) #course-teaser { display: none !important; }
           </tr>
           <tr>
             <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/eclipse</td>
-            <td style="padding:.5rem .6rem;color:#888;">GPS C2 operator panel — AES beacon, service persistence, reverse shell</td>
+            <td style="padding:.5rem .6rem;color:#888;"><code style="color:#aaa;font-size:.58rem;">gps_c2.py</code>, <code style="color:#aaa;font-size:.58rem;">operator_panel.html</code> — AES beacon, service persistence, reverse shell</td>
             <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - eclipse&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">GET PACKAGE →</a></td>
+          </tr>
+          <tr style="border-top:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/tafe-pentest-course</td>
+            <td style="padding:.5rem .6rem;color:#888;"><code style="color:#aaa;font-size:.58rem;">portal_probe.py</code>, <code style="color:#aaa;font-size:.58rem;">devtools_probe.js</code> — vulnerable Flask portal lab + web attack probes</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - tafe-pentest-course&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">GET PACKAGE →</a></td>
+          </tr>
+          <tr style="border-top:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/diudream-pentest</td>
+            <td style="padding:.5rem .6rem;color:#888;">API signature-breaking scripts, recon methodology, real assessment findings</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - diudream-pentest&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">GET PACKAGE →</a></td>
+          </tr>
+          <tr style="border-top:1px solid #040f04;">
+            <td style="padding:.5rem .6rem;color:var(--green);font-family:monospace;">rainfantry/infostealer-poc-analysis</td>
+            <td style="padding:.5rem .6rem;color:#888;">Builder, stealer template, receiver, detection rules, incident response manual</td>
+            <td style="padding:.5rem .6rem;"><a href="mailto:gwu0738@gmail.com?subject=22DIV Contributor Access - infostealer-poc-analysis&body=My GitHub username: " style="color:var(--cyan);font-size:.58rem;letter-spacing:.08em;">GET PACKAGE →</a></td>
           </tr>
         </tbody>
       </table>
@@ -3331,8 +3394,7 @@ html:not(.course-locked) #course-teaser { display: none !important; }
 
   // ── MODULE ORDER (sequential, 19 is redacted/skipped) ──
   var MODULE_ORDER = ['00','01','02','03','04','05','06','07','08','09','10',
-                      '11','12','13','14','15','16','17','18','19','20','21','22'];
-  var TOTAL = 23;
+                      '11','12','13','14','15','16','17','18','19','20','21','22','22-web','23-stealer'];
 
   // ── LOCALSTORAGE KEY ──
   var STORE_KEY = '22div_progress';
