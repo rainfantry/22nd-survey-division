@@ -94,7 +94,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 
 <div class="header">
   <h1>CRASH COURSE // PERSONAL PATH</h1>
-  <p>George Wu's integrated learning roadmap — 22SD modules + asi dev teachings + SERVITOR strategy + live lab evidence</p>
+  <p>George Wu's integrated learning roadmap — 22SD modules + mentor teachings + SERVITOR strategy + live lab evidence</p>
   <div class="meta">
     <span>TRACK: A (Coder → Attacker)</span>
     <span>PROGRESS: 5% (Module 00-01)</span>
@@ -110,7 +110,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
   <a href="#phase3">PHASE 3</a>
   <a href="#phase4">PHASE 4</a>
   <a href="#phase5">PHASE 5</a>
-  <a href="#asi-lessons">ASI DEV</a>
+  <a href="#mentor">MENTOR</a>
   <a href="#servitor">SERVITOR</a>
   <a href="#labs">LABS</a>
 </div>
@@ -135,7 +135,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
   
   <div class="quote">
     "Eventually all comes to networking."
-    <span class="quote-author">— asi dev [HTB]</span>
+    <span class="quote-author">— mentor [HTB]</span>
   </div>
 
   <div class="lesson-card">
@@ -160,9 +160,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">NETWORKING FUNDAMENTALS</div>
     <div class="lesson-content">
-      TCP/IP, sockets, ports, protocols. The foundation everything builds on. 
-      <strong>asi dev:</strong> "Linux terminal is way easier, it's almost like English."
-      Set up bashrc aliases. Learn sudo. This is the base layer.
+      <strong>What the mentor means:</strong> "Eventually all comes to networking." Every attack, every payload, every C2 beacon — it all rides on TCP/IP. If you don't understand sockets, ports, byte order, and how data actually moves across a wire, you're just copy-pasting commands you don't understand.<br><br>
+      <strong>What to do:</strong> Build a raw TCP client/server in C. No libraries. Just Winsock2 on Windows, sys/socket.h on Linux. Understand why connect() is the victim reaching OUT. Understand why bind() vs listen() vs accept() matters for attacker vs victim perspective. Learn htons/htonl because IP addresses and ports must be in network byte order.<br><br>
+      <strong>Key concept:</strong> STDIN/STDOUT/STDERR redirection over a socket — this is how reverse shells actually work. Replace all 3 file descriptors with the socket handle, and suddenly cmd.exe thinks it's talking to a terminal when it's talking to your listener.<br><br>
+      <strong>mentor:</strong> "Linux terminal is way easier, it's almost like English." Set up bashrc aliases. Learn sudo. This is the base layer.
     </div>
     <div class="lesson-links">
       <a href="modules/MODULE_01_NETWORKING.html">START MODULE →</a>
@@ -174,7 +175,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
   <div class="lesson-card" style="border-color:var(--amber);background:rgba(255,170,0,0.05);">
     <div class="lesson-header">
       <span class="lesson-num">STUDY PLAN</span>
-      <span class="lesson-status status-active" style="color:var(--amber);border-color:var(--amber);">→ FROM ASI DEV</span>
+      <span class="lesson-status status-active" style="color:var(--amber);border-color:var(--amber);">→ FROM MENTOR</span>
     </div>
     <div class="lesson-title">8-WEEK SCHEDULE — WHAT TO STUDY AND WHEN</div>
     <div class="lesson-content">
@@ -199,9 +200,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">RECON & OSINT</div>
     <div class="lesson-content">
-      Windows recon framework. WMI enumeration, AD discovery, privilege audit. 
-      <strong>asi dev:</strong> "You should have your notes organized with commands, you shouldn't memorize."
-      Build your cheat sheet first.
+      <strong>What the mentor means:</strong> "You should have your notes organized with commands, you shouldn't memorize." Recon isn't about running tools — it's about knowing what to look for and having the commands at your fingertips. Build cheat sheets. Dump commands you need. Evaluate and add to readme.<br><br>
+      <strong>What to do:</strong> Start with Windows recon framework. WMI enumeration for system info. AD discovery for domain context. Privilege audit for attack paths. The mentor's approach: dump the output, evaluate what matters, organize by category.<br><br>
+      <strong>Key concept:</strong> Recon is iterative. First pass: what OS, what patches, what users. Second pass: what services, what permissions, what misconfigurations. Third pass: what can I exploit right now. Document each pass.<br><br>
+      <strong>mentor:</strong> "Why use script for it? Why not just dump commands you need. Take that, evaluate and add to readme."
     </div>
     <div class="lesson-links">
       <a href="modules/MODULE_02_RECON.html">VIEW MODULE →</a>
@@ -216,9 +218,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">POWERSHELL WARFARE</div>
     <div class="lesson-content">
-      Execution policies, AMSI bypass, remoting, obfuscation. 
-      <strong>asi dev:</strong> "PowerShell and cmd yes, Linux terminal way easier."
-      Learn both. Windows is the target, Linux is the tool.
+      <strong>What the mentor means:</strong> "PowerShell and cmd yes, Linux terminal way easier." Windows is the target, Linux is the tool. But you need both. PowerShell is the native Windows automation engine — if you can't use it, you can't operate on Windows effectively.<br><br>
+      <strong>What to do:</strong> Learn execution policies (and how to bypass them). Learn AMSI (and how to bypass it). Learn remoting via WinRM for lateral movement. The mentor's approach: send commands to PowerShell, don't just type them manually. Automate everything.<br><br>
+      <strong>Key concept:</strong> PowerShell without powershell.exe — use dotnet, msbuild, installutil. These are LOLBAS (Living Off The Land Binaries and Scripts) techniques. The defender watches powershell.exe. They don't watch msbuild.exe loading a .csproj that contains PowerShell code.<br><br>
+      <strong>mentor:</strong> "Send this to PowerShell." Automate. Script. Don't do manually what you can do programmatically.
     </div>
     <div class="lesson-links">
       <a href="modules/MODULE_03_POWERSHELL.html">VIEW MODULE →</a>
@@ -309,8 +312,10 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">PRIVILEGE ESCALATION</div>
     <div class="lesson-content">
-      Token abuse, service hijacking, UAC bypass. <strong>asi dev:</strong> "Privilege escalation is easy."
-      Live evidence: WUPC .42 had SeImpersonatePrivilege ENABLED + writable service.
+      <strong>What the mentor means:</strong> "Privilege escalation is easy. On Linux it's so fucking easy. Also on Windows is easy." It's not about 0days. It's about misconfigurations — what the admin fucked up. Weak service permissions, unquoted paths, missing patches, token abuse. The system is already broken; you just need to find where.<br><br>
+      <strong>What to do:</strong> Run automated enumeration first — PowerUp, WinPEAS, PrivescCheck. These find the holes automatically. Then verify manually. The mentor's approach: automated enum → manual verification → exploit → save the rung.<br><br>
+      <strong>Key concept:</strong> Privilege escalation is a ladder, not a single jump. User → Admin → SYSTEM. At each level, install persistence so you never lose ground. The mentor: "You get initial access as user, you install persistence to save that. You privilege escalated to admin, you install persistence as admin, to save that. You got to system, you install persistence as system to save that."<br><br>
+      <strong>Live evidence:</strong> WUPC .42 (192.168.1.42) — SeImpersonatePrivilege ENABLED. HealthSecurityHost service with Authenticated Users:(M) permissions. SYSTEM in one service restart. Verified via SSH, documented in KILL_CHAIN_LAB_EVIDENCE.md.
     </div>
     <div class="evidence">
       WUPC .42: HealthSecurityHost service with Authenticated Users:(M) permissions → SYSTEM in one restart
@@ -371,8 +376,13 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">ROOTKITS & PERSISTENCE</div>
     <div class="lesson-content">
-      Kernel drivers, bootkits, firmware. Hide at the deepest level. 
-      <strong>asi dev:</strong> "Save every rung." Install persistence at user, admin, and system levels.
+      <strong>What the mentor means:</strong> "Save every rung." You don't just escalate privileges and move on. You cement each level so you never lose ground. User persistence (registry Run key). Admin persistence (scheduled task or service). SYSTEM persistence (WMI event subscription or boot execute). If you lose one shell, you have three backups at different privilege levels.
+      <br><br>
+      <strong>What to do:</strong> Install multiple persistence mechanisms at each level. Registry Run keys for user-level. Services or scheduled tasks for admin-level. WMI event subscriptions or boot execute for SYSTEM-level. The mentor's approach: SSH server + VNC + registry + service + WMI = five ways back in.
+      <br><br>
+      <strong>Key concept:</strong> Persistence is insurance. The mentor: "I establish persistence with SSH... then I install VNC." Legitimate services (OpenSSH server) are hard to detect because they're supposed to be there. Add-WindowsCapability -Online -Name OpenSSH.Server — this is a built-in Windows feature, not a hack.
+      <br><br>
+      <strong>Live evidence:</strong> WUPC .42 verified: User HKCU Run key → Admin service hijack → SYSTEM service install. All three rungs cemented. Documented in KILL_CHAIN_LAB_EVIDENCE.md.
     </div>
     <div class="evidence">
       WUPC .42 verified: User HKCU Run key → Admin service hijack → SYSTEM service install. All three rungs cemented.
@@ -456,9 +466,13 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">C2 FRAMEWORKS</div>
     <div class="lesson-content">
-      Build CHEYANNE from scratch. Beacon, listener, encryption, Discord bridge. 
-      <strong>asi dev:</strong> "Reverse shell is the basic for everything."
-      <strong>WARNING:</strong> cheyanne commit 5057de3 "EVADED KAV" was 6 days ago. Probably detected now.
+      <strong>What the mentor means:</strong> "Reverse shell is the basic for everything." Even if you find a massive bug or vulnerability, you still need to push your reverse shell payload to make it work. The reverse shell is the bridge between your machine and the target. Without it, your exploit is just a crash.
+      <br><br>
+      <strong>What to do:</strong> Build a C2 from scratch. Not a tool — understand every component. The beacon (client on target). The listener (server on your machine). The protocol (how they talk). The encryption (so defenders can't read the traffic). The jitter (random sleep intervals so the traffic doesn't look mechanical). The mentor's approach: build it, test it, burn it, build it better.
+      <br><br>
+      <strong>Key concept:</strong> C2 is not just a connection — it's a control system. You need: initial beacon, command execution, file upload/download, screenshot, persistence check, and a kill switch. The mentor: "Why use script for it? Build it yourself." Understanding every byte that crosses the wire.
+      <br><br>
+      <strong>Warning:</strong> cheyanne commit 5057de3 said "EVADED KAV" — but that was 2026-06-23 (6 days ago). Probably detected now. Kaspersky updates daily. Re-test before claiming evasion.
     </div>
     <div class="lesson-links">
       <a href="modules/MODULE_16_C2.html">VIEW MODULE →</a>
@@ -472,8 +486,13 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">SOCIAL ENGINEERING</div>
     <div class="lesson-content">
-      Phishing, pretexting, payload delivery. The human is the weakest link. 
-      <strong>asi dev:</strong> "Real attacks are carried remotely." Physical attacks (WiFi, BadUSB) are niche.
+      <strong>What the mentor means:</strong> "Real attacks are carried remotely." Physical network attacks (WiFi, BadUSB, monitor mode) are niche. The money is in remote access: phishing, RDP, VPN, web shells, C2. You don't need to be in the building. You need to be in the inbox.
+      <br><br>
+      <strong>What to do:</strong> Learn initial access vectors. Phishing with malicious attachments (Office macros, PDF exploits, ISO files). Credential stuffing with leaked databases. RDP compromise with weak passwords or NLA bypass. VPN exploitation with known CVEs (Fortinet, Pulse Secure). Web shell deployment on IIS, Apache, Tomcat. The mentor's approach: find the weakest remote entry point, not the strongest physical one.
+      <br><br>
+      <strong>Key concept:</strong> The human is the weakest link, but the network is the widest attack surface. The mentor: "You only need [WiFi/monitor mode] for physical network attacks. Real attacks are being carried remotely." Focus on what works at scale: email, credentials, remote services.
+      <br><br>
+      <strong>Practical:</strong> Build a phishing payload. Not a fake login page — a real malicious document that executes code when opened. Test it in a VM. Document what AV catches and what it misses. This is how you learn what works.
     </div>
     <div class="lesson-links">
       <a href="modules/MODULE_17_SOCIAL_ENGINEERING.html">VIEW MODULE →</a>
@@ -568,8 +587,8 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 </div>
 
 <!-- ASI DEV LESSONS -->
-<div class="section" id="asi-lessons">
-  <div class="section-number">// ASI DEV TEACHINGS</div>
+<div class="section" id="mentor">
+  <div class="section-number">// MENTOR TEACHINGS</div>
   <h2>THE FIELD MANUAL — ORGANIZED BY TOPIC</h2>
 
   <div class="lesson-card">
@@ -579,8 +598,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">REVERSE SHELL IS THE FOUNDATION</div>
     <div class="lesson-content">
-      "Reverse shell is the basic for everything because even if you will find a massive bug or vulnerability, 
-      you will still need to push your reverse shell payload to make it work."
+      <strong>What the mentor means:</strong> "Reverse shell is the basic for everything because even if you will find a massive bug or vulnerability, you will still need to push your reverse shell payload to make it work." The exploit gets you execution. The reverse shell gets you control. Without the shell, your exploit is just a crash report.
+      <br><br>
+      <strong>What to do:</strong> Build a reverse shell in C for both Windows (Winsock2) and Linux (sys/socket.h). Understand every function: socket(), connect(), dup2(), execve() / CreateProcess(). The mentor's approach: don't use a tool, build the tool. When you understand every byte, you can modify it, obfuscate it, and evade detection.
+      <br><br>
+      <strong>Key concept:</strong> The reverse shell is the bridge. The victim connects OUT to you (reverse) rather than you connecting IN to the victim (bind). This bypasses firewalls because outbound connections are usually allowed. The mentor: "connect = victim reaches OUT" — this is why reverse shells work when bind shells fail.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/WHAT_I_HAVE.md" target="_blank">CAPABILITIES →</a>
@@ -594,8 +616,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">ORGANIZED NOTES > MEMORIZATION</div>
     <div class="lesson-content">
-      "You should have your notes organized with commands, you shouldn't memorize." 
-      Build cheat sheets. Dump commands you need. Evaluate and add to readme.
+      <strong>What the mentor means:</strong> "You should have your notes organized with commands, you shouldn't memorize." The brain is for understanding, not for storage. Storage is what files are for. Build cheat sheets, organized by category, searchable, with examples.
+      <br><br>
+      <strong>What to do:</strong> Create structured notes: Networking, Recon, Privesc, Persistence, Evasion, C2. Under each: commands, what they do, when to use them, example output. The mentor's approach: dump commands, evaluate, add to readme. Don't memorize — organize.
+      <br><br>
+      <strong>Key concept:</strong> When you're in an engagement, you don't have time to remember. You need to find. A well-organized cheat sheet lets you copy-paste and modify in seconds. The mentor: "Take that, evaluate and add to readme." Continuous improvement of your personal knowledge base.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">CHEAT SHEET →</a>
@@ -609,8 +634,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">PRIVILEGE ESCALATION IS EASY</div>
     <div class="lesson-content">
-      "On Linux it's so fucking easy. Also on Windows is easy." 
-      It's not about 0days. It's about misconfigurations — what the admin fucked up.
+      <strong>What the mentor means:</strong> "On Linux it's so fucking easy. Also on Windows is easy." It's not about 0days. It's about misconfigurations — what the admin fucked up. Weak service permissions, unquoted paths, missing patches, token abuse. The system is already broken; you just need to find where.
+      <br><br>
+      <strong>What to do:</strong> Run automated enumeration first — PowerUp, WinPEAS, PrivescCheck. These find the holes automatically. Then verify manually. The mentor's approach: automated enum → manual verification → exploit → save the rung. Don't look for fancy 0days. Look for what the admin forgot to patch.
+      <br><br>
+      <strong>Key concept:</strong> Privilege escalation is a ladder, not a single jump. User → Admin → SYSTEM. At each level, install persistence so you never lose ground. The mentor: "I have a 0day that you just paste to the fucken terminal and it gives you root." But even without 0days, misconfigurations are everywhere.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">PRIVESC LADDER →</a>
@@ -624,8 +652,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">SAVE EVERY RUNG</div>
     <div class="lesson-content">
-      "You get initial access as user, you install persistence to save that. You privilege escalated to admin, 
-      you install persistence as admin, to save that. You got to system, you install persistence as system to save that."
+      <strong>What the mentor means:</strong> "You get initial access as user, you install persistence to save that. You privilege escalated to admin, you install persistence as admin, to save that. You got to system, you install persistence as system to save that." Each level of access is fragile. Persistence makes it permanent.
+      <br><br>
+      <strong>What to do:</strong> At each privilege level, install multiple persistence mechanisms. User: registry Run keys, scheduled tasks, startup folders. Admin: services, scheduled tasks with SYSTEM privileges, WMI events. SYSTEM: boot execute, kernel drivers, firmware. The mentor's approach: SSH server + VNC + registry + service + WMI = five ways back in.
+      <br><br>
+      <strong>Key concept:</strong> Persistence is insurance. If you lose one shell, you have three backups at different privilege levels. The mentor: "I establish persistence with SSH... then I install VNC." Legitimate services (OpenSSH server) are hard to detect because they're supposed to be there. Add-WindowsCapability -Online -Name OpenSSH.Server — this is a built-in Windows feature, not a hack.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/widgets/persistence_installer.ps1" target="_blank">PERSISTENCE WIDGET →</a>
@@ -639,8 +670,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">REAL ATTACKS ARE REMOTE</div>
     <div class="lesson-content">
-      "You only need [WiFi/monitor mode] for physical network attacks. Real attacks are being carried remotely."
-      Phishing, RDP, VPN, web shells — the actual vectors.
+      <strong>What the mentor means:</strong> "You only need [WiFi/monitor mode] for physical network attacks. Real attacks are being carried remotely." Physical network attacks (WiFi, BadUSB, monitor mode) are niche. The money is in remote access: phishing, RDP, VPN, web shells, C2. You don't need to be in the building. You need to be in the inbox.
+      <br><br>
+      <strong>What to do:</strong> Learn initial access vectors. Phishing with malicious attachments (Office macros, PDF exploits, ISO files). Credential stuffing with leaked databases. RDP compromise with weak passwords or NLA bypass. VPN exploitation with known CVEs (Fortinet, Pulse Secure). Web shell deployment on IIS, Apache, Tomcat. The mentor's approach: find the weakest remote entry point, not the strongest physical one.
+      <br><br>
+      <strong>Key concept:</strong> The human is the weakest link, but the network is the widest attack surface. The mentor: "Real attacks are carried remotely." Focus on what works at scale: email, credentials, remote services. Physical attacks require proximity. Remote attacks require an internet connection.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/KILL_CHAIN_LAB_EVIDENCE.md" target="_blank">LAB EVIDENCE →</a>
@@ -654,8 +688,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">DEFENDER MANAGEMENT</div>
     <div class="lesson-content">
-      Full arsenal: exclusions, disabling, destructive removal, cleanup. 
-      PowerShell unrestricted mode. Event log clearing.
+      <strong>What the mentor means:</strong> Full arsenal of AV evasion techniques. Not just "disable Defender" — that's noisy. Learn exclusions (silent), disabling (moderate), destructive removal (nuclear), and cleanup (covering tracks). Each has a time and place.
+      <br><br>
+      <strong>What to do:</strong> Learn the full spectrum: Add-MpPreference -ExclusionPath (silent, works even with tamper protection). Set-MpPreference -DisableRealtimeMonitoring $true (moderate, visible in logs). Uninstall-WindowsFeature Windows-Defender (nuclear, requires reboot). Event log clearing after the fact (cleanup, but also a detection signal). The mentor's approach: use the least destructive method that achieves the goal.
+      <br><br>
+      <strong>Key concept:</strong> AV is not an impenetrable wall. It's a speed bump. The mentor worked for Elastic (an AV company). He knows how defenders think. "I used to work for anti-virus companies." He knows the blind spots because he built the eyes.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/DEFENDER_MANAGEMENT.md" target="_blank">DEFENDER MANAGEMENT →</a>
@@ -669,8 +706,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </div>
     <div class="lesson-title">SYSTEM SETTINGS & POLICIES</div>
     <div class="lesson-content">
-      PowerShell execution policies, Explorer settings, Defender checks. 
-      The configuration knowledge for operations.
+      <strong>What the mentor means:</strong> PowerShell execution policies, Explorer settings, Defender checks — these are the configuration details that make or break an operation. You need to know how to check and modify system settings programmatically.
+      <br><br>
+      <strong>What to do:</strong> Learn to check execution policy (Get-ExecutionPolicy), modify it (Set-ExecutionPolicy Unrestricted), check Defender status (Get-MpComputerStatus), and modify Explorer settings (Show hidden files, show extensions). The mentor's approach: script everything. Don't click through GUIs when you can type one command.
+      <br><br>
+      <strong>Key concept:</strong> System settings are attack surface. Hidden files hide payloads. Hidden extensions hide .exe as .txt. Execution policies block scripts. The mentor: "Get-WindowsCapability -Online -Name OpenSSH.Server" — one command to install a full SSH server. This is PowerShell warfare.
     </div>
     <div class="lesson-links">
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">SYSTEM SETTINGS →</a>
@@ -848,7 +888,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 
 <div class="footer">
   // 22ND SURVEY DIVISION // CRASH COURSE // PERSONAL PATH //<br>
-  Built for George Wu. Integrates 22SD modules + asi dev teachings + SERVITOR strategy + live lab evidence.<br>
+  Built for George Wu. Integrates 22SD modules + mentor teachings + SERVITOR strategy + live lab evidence.<br>
   Start at Module 00. Follow the phases. Apply on labs. Document everything.
 </div>
 
