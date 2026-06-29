@@ -569,58 +569,6 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 <span class="cmd">sc query | findstr /i "WindowsSecurity"</span></div>
     </div>
   </div>
-
-  <div class="exercise">
-    <div class="exercise-title">WIDGET 4: Infostealer C2 Lab (Python)</div>
-    <div class="exercise-desc">
-      Safe, synthetic infostealer + receiver. Demonstrates the exact HTTP protocol real stealers use to exfiltrate passwords, cookies, and files. No real data is accessed.
-    </div>
-
-    <div class="prereq">
-      You need: Python 3.10+, Git, and access to the private <code>22div-stealer-lab</code> repository (22DIV students only).
-    </div>
-
-    <div class="step">
-      <div class="step-num">STEP 1: Clone the private lab repo</div>
-      <div class="code-block"><span class="cmd">git clone https://github.com/rainfantry/22div-stealer-lab.git</span>
-<span class="cmd">cd 22div-stealer-lab</span></div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">STEP 2: Create a virtual environment and install dependencies</div>
-      <div class="code-block"><span class="cmd">python3 -m venv venv</span>
-<span class="cmd">source venv/bin/activate  # Linux/Mac</span>
-<span class="comment"># On Windows: venv\Scripts\activate</span>
-<span class="cmd">pip install -r requirements.txt</span></div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">STEP 3: Run the one-click lab test</div>
-      <div class="code-block"><span class="cmd">python lab_test_orchestrator.py</span></div>
-      <div class="expected">
-        [*] Starting local C2 receiver...
-        [+] Receiver listening on 127.0.0.1:5050
-        [*] Running safe test stealer...
-        [+] Checked in. Log UUID: LAB_TEST_1782773260-1782773260
-        [+] Sent synthetic credentials and cookies.
-        [+] Uploaded synthetic zip.
-        [*] View report at: http://127.0.0.1:5050/reports/LAB_TEST_1782773260-1782773260/report.html
-        [*] Safe lab stealer finished.
-      </div>
-    </div>
-
-    <div class="step">
-      <div class="step-num">STEP 4: Open the exfiltration report</div>
-      <div class="code-block"><span class="comment"># The report shows stolen passwords, cookies, and files — all synthetic/redacted</span>
-<span class="cmd">start reports/LAB_TEST_1782773260-1782773260/report.html  # Windows</span>
-<span class="cmd">open reports/LAB_TEST_1782773260-1782773260/report.html   # Mac</span>
-<span class="cmd">xdg-open reports/LAB_TEST_1782773260-1782773260/report.html # Linux</span></div>
-    </div>
-
-    <div class="evidence">
-      VERIFIED 2026-06-30: Local Flask receiver accepted check-in, credentials, and file upload. Generated HTML exfiltration report with synthetic data. Full evidence in <a href="modules/MODULE_23_INFOSTEALERS.html" class="cross-link">Module 23: Infostealers</a>.
-    </div>
-  </div>
 </div>
 
 <!-- EXERCISES -->
