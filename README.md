@@ -254,10 +254,11 @@ bash scripts/release.sh v2026.06.29
 **Test Results (Latest):**
 - ✅ 5/5 main pages: 200 OK
 - ✅ 29/29 module pages: 200 OK
-- ✅ 756/756 internal links: valid
+- ✅ 761/761 internal links: valid
 - ✅ 27 quiz options: interactive
 - ✅ 28 module tree items: complete
-- ✅ All modules have mentor callouts and copy buttons
+- ✅ All module pages have navigation
+- ✅ Mobile viewport meta + responsive CSS on all modules
 - ✅ Bonus modules: Web Application Hacking, Infostealers
 ### Deployment
 

