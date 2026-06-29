@@ -12,6 +12,9 @@
             --accent2: #00ff88;
             --dim: #666;
             --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -32,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -95,22 +113,205 @@
         .registry-path.hive-hkcu { border-left: 3px solid #5555ff; }
         .registry-path.hive-hklm { border-left: 3px solid #ff5555; }
         .registry-path.hive-hkcr { border-left: 3px solid #55ff55; }
-        button {
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            cursor: pointer;
+        .registry-path.hive-hku { border-left: 3px solid #ffaa00; }
+        .registry-path.hive-hkcc { border-left: 3px solid #aa55ff; }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
             font-weight: bold;
         }
-        button:hover { background: #ff5555; }
-        .interactive-demo {
-            background: #151515;
-            border: 2px solid var(--accent);
-            border-radius: 12px;
-            padding: 2rem;
-            margin: 2rem 0;
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .hive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .hive-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.3s;
+        }
+        .hive-card:hover {
+            border-color: var(--accent);
+        }
+        .hive-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        .hive-card .hive-file {
+            font-family: Consolas, monospace;
+            font-size: 11px;
+            color: var(--dim);
+            margin-top: 0.5rem;
+        }
+        .value-type-table td {
+            font-family: Consolas, monospace;
+            font-size: 12px;
+        }
+        .persistence-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .persistence-card:hover {
+            border-color: var(--accent);
+        }
+        .persistence-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        .persistence-card .severity {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .sev-critical { background: #3a0a0a; color: var(--accent); }
+        .sev-high { background: #3a2a0a; color: var(--amber); }
+        .sev-medium { background: #0a2a0a; color: var(--accent2); }
+        .forensics-box {
+            background: #0a0a1a;
+            border: 2px solid #4444ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .forensics-box h4 {
+            color: #8888ff;
+            margin-bottom: 0.5rem;
         }
         .tab-container { margin: 1rem 0; }
         .tab-buttons { display: flex; gap: 0.5rem; border-bottom: 1px solid var(--border); }
@@ -125,12 +326,25 @@
         .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
         .tab-content { display: none; padding: 1rem 0; }
         .tab-content.active { display: block; }
+        button {
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5555; }
+        .prompt { color: var(--accent); }
+        .command { color: var(--accent2); }
+        .output { color: var(--dim); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_06_MEMORY.html">← Module 06</a>
             <a href="MODULE_08_PRIVESC.html">Module 08 →</a>
         </div>
@@ -138,38 +352,521 @@
         <h1>Module 07: Registry Analysis <span class="status-badge status-live">LIVE TESTED</span></h1>
         
         <div class="progress-bar"><div class="progress-fill"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 7 of 22 — The Windows database of secrets</p>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 7 of 22 — The Windows database of secrets, persistence, and forensic gold</p>
 
-        <h2>First Principle: Registry is the OS's Database</h2>
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>The Windows Registry is a <strong>hierarchical database</strong> that stores configuration for the OS, hardware, software, and users. It's not files — it's a memory-mapped database loaded at boot. Every setting, every preference, every autostart program lives here.</p>
-            <p style="margin-top: 0.5rem; color: var(--dim);">Forensics 101: If it happened on Windows, the registry knows. Deletion ≠ erasure — the hive has transaction logs and backups.</p>
+            <p>The Windows Registry is a <span class="neon-highlight">hierarchical database</span> that stores configuration for the OS, hardware, software, and users. It's not files — it's a memory-mapped database loaded at boot. Every setting, every preference, every autostart program lives here. Every user action leaves a trace. Every malware persistence mechanism touches it.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> If it happened on Windows, the registry knows. Deletion ≠ erasure — the hive has transaction logs, backups, and shadow copies. The registry is the <span class="neon-amber">single richest source of forensic evidence</span> on a Windows system. Understanding it is understanding Windows itself.</p>
+            <p style="margin-top: 1rem; color: var(--dim);">Forensics 101: The registry is a write-once-read-many audit log disguised as a configuration database. Even "deleted" keys leave traces in slack space and transaction logs.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Layman Translation</h4>
-            <p>The registry is like a building's maintenance log. Every tenant (program) writes what they changed: "I installed a new lock," "I changed the thermostat," "I made a copy of the key." Even if the tenant moves out, the log remains. Forensics is reading that log.</p>
+            <p>The registry is like a building's maintenance log. Every tenant (program) writes what they changed: "I installed a new lock," "I changed the thermostat," "I made a copy of the key." Even if the tenant moves out, the log remains. Forensics is reading that log. But it's more than a log — it's the building's wiring diagram, security camera schedule, and key inventory all in one.</p>
         </div>
 
-        <h2>Registry Hives: The Five Kingdoms</h2>
-        <div class="registry-path hive-hkcu">
-            <strong>HKEY_CURRENT_USER (HKCU)</strong> — Current user's settings. Moves with the user profile.
-        </div>
-        <div class="registry-path hive-hklm">
-            <strong>HKEY_LOCAL_MACHINE (HKLM)</strong> — System-wide settings. Applies to all users.
-        </div>
-        <div class="registry-path hive-hkcr">
-            <strong>HKEY_CLASSES_ROOT (HKCR)</strong> — File associations and COM objects.
-        </div>
-        <div class="registry-path hive-hkcu">
-            <strong>HKEY_USERS (HKU)</strong> — All loaded user profiles.
-        </div>
-        <div class="registry-path hive-hklm">
-            <strong>HKEY_CURRENT_CONFIG (HKCC)</strong> — Current hardware profile.
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>How processes communicate over the network. Registry stores network configuration, proxy settings, and firewall rules.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>Windows API calls through PowerShell. Registry manipulation via Get-ItemProperty, Set-ItemProperty, and New-Item.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>How Windows manages process memory. The registry is memory-mapped; understanding memory layout helps understand hive structure.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>Service registry keys and weak permissions. Registry-based privilege escalation via writable service paths and UAC bypass.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a></h4>
+                <p>Registry hooking and kernel-level registry manipulation. Rootkits hide in registry callbacks and filter drivers.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>How EDR monitors registry changes. Understanding detection helps you evade it and verify integrity.</p>
+            </div>
         </div>
 
-        <h2>Live Evidence: .42 Registry Analysis</h2>
+        <h2>🏛️ Registry Architecture: The Five Hives</h2>
+        <p>The Windows Registry is organized into five root keys called <span class="neon-highlight">hives</span>. Each hive is a separate file on disk (except HKCR and HKCC, which are merged views). Understanding hive files is critical for <span class="neon-amber">offline forensics</span> — you can analyze them without booting the target system.</p>
+
+        <div class="hive-grid">
+            <div class="hive-card">
+                <h4>HKEY_CURRENT_USER (HKCU)</h4>
+                <p>Current user's settings, preferences, and environment. Moves with the user profile across machines.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Forensic value: User activity, recently opened files, installed software per-user, autostart programs.</p>
+                <div class="hive-file">File: NTUSER.DAT (in user profile)<br>Mount: HKEY_USERS\&lt;SID&gt;</div>
+            </div>
+            <div class="hive-card">
+                <h4>HKEY_LOCAL_MACHINE (HKLM)</h4>
+                <p>System-wide settings. Hardware, software, services, security policies. Applies to all users.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Forensic value: Installed software, service configurations, boot settings, security policies, malware persistence.</p>
+                <div class="hive-file">Files: SYSTEM, SOFTWARE, SAM, SECURITY (in %SystemRoot%\System32\config)</div>
+            </div>
+            <div class="hive-card">
+                <h4>HKEY_CLASSES_ROOT (HKCR)</h4>
+                <p>File associations, COM objects, OLE classes, shell commands. Merged view of HKLM\Software\Classes + HKCU\Software\Classes.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Forensic value: Malicious file handlers, COM hijacking persistence, default program associations.</p>
+                <div class="hive-file">Virtual hive — merged from HKLM + HKCU<br>No standalone file</div>
+            </div>
+            <div class="hive-card">
+                <h4>HKEY_USERS (HKU)</h4>
+                <p>All loaded user profiles. Each user's NTUSER.DAT is mounted here under their SID.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Forensic value: Enumerate all users on the system. Cross-reference SIDs with SAM hive for username mapping.</p>
+                <div class="hive-file">Files: NTUSER.DAT for each user<br>.DEFAULT for system profile</div>
+            </div>
+            <div class="hive-card">
+                <h4>HKEY_CURRENT_CONFIG (HKCC)</h4>
+                <p>Current hardware profile. Display settings, printer configurations, current hardware state.</p>
+                <p style="margin-top: 0.5rem; color: var(--dim);">Forensic value: Less critical for forensics, but can reveal attached hardware and display configurations.</p>
+                <div class="hive-file">Virtual hive — derived from HKLM\SYSTEM\CurrentControlSet\Hardware Profiles</div>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why "Hive"?</h5>
+            <p>The name comes from the original Windows NT developers who saw the registry structure as a beehive — cells (data), bins (containers), and the hive file itself. The metaphor stuck. In forensics, we talk about "hive files" because each root key is literally a separate file that can be extracted, copied, and analyzed offline.</p>
+        </div>
+
+        <h3>Hive Files on Disk</h3>
+        <div class="registry-path hive-hklm">
+            <strong>HKLM\SYSTEM</strong> → C:\Windows\System32\config\SYSTEM<br>
+            Boot configuration, services, hardware, mounted devices, LSA secrets
+        </div>
+        <div class="registry-path hive-hklm">
+            <strong>HKLM\SOFTWARE</strong> → C:\Windows\System32\config\SOFTWARE<br>
+            Installed software, Windows settings, third-party application data
+        </div>
+        <div class="registry-path hive-hklm">
+            <strong>HKLM\SAM</strong> → C:\Windows\System32\config\SAM<br>
+            User accounts, password hashes (encrypted with SYSKEY), group memberships
+        </div>
+        <div class="registry-path hive-hklm">
+            <strong>HKLM\SECURITY</strong> → C:\Windows\System32\config\SECURITY<br>
+            LSA secrets, cached credentials, security policy — readable only by SYSTEM
+        </div>
+        <div class="registry-path hive-hkcu">
+            <strong>HKCU</strong> → C:\Users\&lt;username&gt;\NTUSER.DAT<br>
+            User preferences, recent documents, environment variables, autostart
+        </div>
+        <div class="registry-path hive-hku">
+            <strong>HKU\.DEFAULT</strong> → C:\Windows\System32\config\DEFAULT<br>
+            System profile (used before any user logs in)
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Critical Forensic Note</h5>
+            <p>Hive files are <span class="neon-amber">locked by the kernel</span> while Windows is running. You cannot copy them with normal tools. To acquire them live, use:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li><strong>Raw disk access:</strong> FTK Imager, dd via WinPE</li>
+                <li><strong>Volume Shadow Copy:</strong> <code>vssadmin list shadows</code> → copy from snapshot</li>
+                <li><strong>RegSaveKey API:</strong> Requires backup privilege, saves hive to new file</li>
+                <li><strong>Offline acquisition:</strong> Boot from USB/WinPE, copy files directly</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">The SAM and SECURITY hives are additionally encrypted with <span class="neon-highlight">SYSKEY</span> (boot key). You need the SYSTEM hive to decrypt them.</p>
+        </div>
+
+        <h2>🔑 Registry Keys, Values, and Data Types</h2>
+        <p>A registry <span class="neon-highlight">key</span> is like a folder — it can contain subkeys and values. A <span class="neon-highlight">value</span> is like a file — it has a name, a data type, and data. Understanding data types is essential for both attack and defense.</p>
+
+        <h3>Registry Value Types</h3>
+        <table class="value-type-table">
+            <tr>
+                <th>Type</th>
+                <th>Constant</th>
+                <th>Description</th>
+                <th>Forensic Use</th>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">REG_SZ</span></td>
+                <td>0x00000001</td>
+                <td>Fixed-length string (Unicode)</td>
+                <td>File paths, configuration strings, display names</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">REG_EXPAND_SZ</span></td>
+                <td>0x00000002</td>
+                <td>Expandable string (%ENVVAR%)</td>
+                <td>Paths with environment variables — must expand before use</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">REG_BINARY</span></td>
+                <td>0x00000003</td>
+                <td>Raw binary data</td>
+                <td>Encrypted data, GUIDs, timestamps (Win32 FILETIME)</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">REG_DWORD</span></td>
+                <td>0x00000004</td>
+                <td>32-bit unsigned integer</td>
+                <td>Boolean flags, counters, version numbers, service start types</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">REG_MULTI_SZ</span></td>
+                <td>0x00000007</td>
+                <td>Multiple null-terminated strings</td>
+                <td>Lists of values, DNS suffixes, multiple paths</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">REG_QWORD</span></td>
+                <td>0x0000000B</td>
+                <td>64-bit unsigned integer</td>
+                <td>Large timestamps, 64-bit counters, file sizes</td>
+            </tr>
+        </table>
+
+        <div class="why-box">
+            <h5>Why REG_EXPAND_SZ matters for forensics</h5>
+            <p>Malware often uses <span class="neon-highlight">%APPDATA%</span>, <span class="neon-highlight">%TEMP%</span>, or <span class="neon-highlight">%USERPROFILE%</span> in persistence paths. A raw registry read shows <code>%APPDATA%\evil.exe</code>, but the actual path is <code>C:\Users\Alice\AppData\Roaming\evil.exe</code>. If you don't expand environment variables, you'll miss the file or flag it as "orphaned" when it actually exists.</p>
+        </div>
+
+        <h2>🔧 The Windows Registry API</h2>
+        <p>Every registry operation goes through the <span class="neon-highlight">Win32 Registry API</span>. Malware uses these same APIs. Forensics tools use these same APIs. Understanding them is understanding both sides of the battle.</p>
+
+        <div class="method-card">
+            <h4>Core Registry API Functions</h4>
+            <table>
+                <tr>
+                    <th>Function</th>
+                    <th>Purpose</th>
+                    <th>Security Note</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegOpenKeyEx</span></td>
+                    <td>Open a key with specified access rights</td>
+                    <td>Access rights determine what you can read/write</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegCreateKeyEx</span></td>
+                    <td>Create or open a key</td>
+                    <td>Malware uses this to create persistence keys</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegQueryValueEx</span></td>
+                    <td>Read a value's data and type</td>
+                    <td>Must handle all data types correctly</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegSetValueEx</span></td>
+                    <td>Write or modify a value</td>
+                    <td>Requires write access to the key</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegEnumKeyEx</span></td>
+                    <td>Enumerate subkeys</td>
+                    <td>Used to list all keys under a parent</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegEnumValue</span></td>
+                    <td>Enumerate values in a key</td>
+                    <td>Used to list all values and their data</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegDeleteKey</span></td>
+                    <td>Delete a key</td>
+                    <td>Deletion leaves traces in transaction logs</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegDeleteValue</span></td>
+                    <td>Delete a value</td>
+                    <td>Value deletion is recoverable from logs</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegSaveKey</span></td>
+                    <td>Save hive to disk</td>
+                    <td>Requires SeBackupPrivilege — forensic acquisition</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">RegLoadKey</span></td>
+                    <td>Load hive from disk</td>
+                    <td>Mount offline hives for analysis</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>Reading Registry Values in C</h3>
+        <div class="code-block">
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+// First principle: RegOpenKeyEx → RegQueryValueEx → RegCloseKey
+// These are the same APIs malware uses to hide persistence.
+
+void read_registry_value(HKEY hive, const char* path, const char* value) {
+    HKEY hKey;
+    char data[1024];
+    DWORD dataSize = sizeof(data);
+    DWORD type;
+    
+    // KEY_READ = standard read access
+    // KEY_QUERY_VALUE = query values
+    // KEY_ENUMERATE_SUB_KEYS = list subkeys
+    if (RegOpenKeyExA(hive, path, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+        if (RegQueryValueExA(hKey, value, NULL, &type, (LPBYTE)data, &dataSize) == ERROR_SUCCESS) {
+            if (type == REG_SZ || type == REG_EXPAND_SZ) {
+                printf("[%s\\%s] %s = %s\n", 
+                       hive == HKEY_LOCAL_MACHINE ? "HKLM" : "HKCU", 
+                       path, value, data);
+            } else if (type == REG_DWORD) {
+                printf("[%s\\%s] %s = %lu\n", 
+                       hive == HKEY_LOCAL_MACHINE ? "HKLM" : "HKCU", 
+                       path, value, *(DWORD*)data);
+            } else if (type == REG_BINARY) {
+                printf("[%s\\%s] %s = (binary, %lu bytes)\n", 
+                       hive == HKEY_LOCAL_MACHINE ? "HKLM" : "HKCU", 
+                       path, value, dataSize);
+            }
+        }
+        RegCloseKey(hKey);
+    }
+}
+
+// Usage:
+// read_registry_value(HKEY_LOCAL_MACHINE, 
+//     "SOFTWARE\\KasperskyLab\\protected\\AVP21.25", 
+//     "bRollbackAllowed");
+// Output: [HKLM\SOFTWARE\...] bRollbackAllowed = 1
+        </div>
+
+        <h3>Enumerating Registry Keys in C</h3>
+        <div class="code-block">
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+void enumerate_run_keys(HKEY hive, const char* hiveName) {
+    HKEY hKey;
+    const char* path = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
+    
+    if (RegOpenKeyExA(hive, path, 0, KEY_READ, &hKey) != ERROR_SUCCESS) {
+        printf("[-] Failed to open %s\\%s\n", hiveName, path);
+        return;
+    }
+    
+    char valueName[256], data[MAX_PATH];
+    DWORD valueNameSize, dataSize, type;
+    DWORD index = 0;
+    
+    printf("=== %s\\%s ===\n", hiveName, path);
+    
+    while (1) {
+        valueNameSize = sizeof(valueName);
+        dataSize = sizeof(data);
+        
+        // RegEnumValue: index-based enumeration
+        if (RegEnumValueA(hKey, index++, valueName, &valueNameSize, 
+                          NULL, &type, (LPBYTE)data, &dataSize) != ERROR_SUCCESS)
+            break;
+        
+        if (type == REG_SZ || type == REG_EXPAND_SZ) {
+            char expanded[MAX_PATH];
+            ExpandEnvironmentStringsA(data, expanded, MAX_PATH);
+            
+            DWORD attribs = GetFileAttributesA(expanded);
+            const char* status = (attribs != INVALID_FILE_ATTRIBUTES) ? 
+                                "EXISTS" : "ORPHANED";
+            
+            printf("  %-30s | %-50s | %s\n", valueName, expanded, status);
+        } else if (type == REG_DWORD) {
+            printf("  %-30s | %lu (DWORD)\n", valueName, *(DWORD*)data);
+        }
+    }
+    
+    RegCloseKey(hKey);
+}
+
+int main() {
+    enumerate_run_keys(HKEY_CURRENT_USER, "HKCU");
+    enumerate_run_keys(HKEY_LOCAL_MACHINE, "HKLM");
+    return 0;
+}
+        </div>
+
+        <h2>🐍 Registry Persistence Mechanisms</h2>
+        <p>Malware needs to survive reboots. The registry offers <span class="neon-amber">dozens of persistence locations</span>. A defender who only checks Run keys is missing 90% of the attack surface. This section covers the critical persistence mechanisms every analyst must know.</p>
+
+        <div class="persistence-card">
+            <h4>Run / RunOnce Keys <span class="severity sev-critical">CRITICAL</span></h4>
+            <p>The most common persistence mechanism. Programs listed here execute at user logon (HKCU) or system boot (HKLM).</p>
+            <div class="registry-path hive-hkcu">
+                HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<br>
+                HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce<br>
+                HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx
+            </div>
+            <div class="registry-path hive-hklm">
+                HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run<br>
+                HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnce<br>
+                HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\RunOnceEx<br>
+                HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Forensic note:</strong> RunOnce keys are deleted after execution — but the deletion is logged in the hive transaction log. RegRipper's <code>runonce</code> plugin recovers them.</p>
+            <p style="margin-top: 0.5rem;"><strong>Cross-link:</strong> See <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a> for how weak service permissions in Run keys lead to SYSTEM escalation.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>Winlogon Shell / Userinit <span class="severity sev-critical">CRITICAL</span></h4>
+            <p>Winlogon is the Windows logon process. Hijacking its registry values gives malware execution <span class="neon-highlight">before the desktop appears</span>.</p>
+            <div class="registry-path hive-hklm">
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell<br>
+                Default: "explorer.exe" | Malware: "explorer.exe, evil.exe"
+            </div>
+            <div class="registry-path hive-hklm">
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Userinit<br>
+                Default: "C:\Windows\system32\userinit.exe," | Malware appends payload
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Impact:</strong> Shell runs at every logon. Userinit runs once per logon. Both execute with the logged-on user's privileges (or SYSTEM for Winlogon itself).</p>
+            <p style="margin-top: 0.5rem;"><strong>Detection:</strong> Check for comma-separated values. Legitimate Shell is just "explorer.exe". Anything with commas is suspicious.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>Image File Execution Options (IFEO) <span class="severity sev-high">HIGH</span></h4>
+            <p>IFEO is a debugging feature that lets you attach a debugger to any executable. Malware uses it to <span class="neon-highlight">hijack legitimate programs</span> — when notepad.exe runs, your payload runs instead.</p>
+            <div class="registry-path hive-hklm">
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\notepad.exe<br>
+                Debugger = "C:\\path\\to\\evil.exe"
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>How it works:</strong> When Windows launches notepad.exe, it checks IFEO. If a Debugger value exists, it launches the debugger instead, passing the original executable as an argument. Your "debugger" can ignore the original and do anything.</p>
+            <p style="margin-top: 0.5rem;"><strong>Cross-link:</strong> IFEO is used in <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for process hijacking and in <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a> for UAC bypass via Debugger redirection.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>Services <span class="severity sev-critical">CRITICAL</span></h4>
+            <p>Windows services run as SYSTEM, start automatically, and have no user interface. The perfect persistence mechanism.</p>
+            <div class="registry-path hive-hklm">
+                HKLM\SYSTEM\CurrentControlSet\Services\&lt;ServiceName&gt;<br>
+                ImagePath = path to executable<br>
+                Start = 0 (Boot) | 2 (Auto) | 3 (Manual) | 4 (Disabled)<br>
+                Type = 16 (Own process) | 32 (Shared process / svchost)<br>
+                ObjectName = LocalSystem | NT AUTHORITY\LocalService | NT AUTHORITY\NetworkService
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Service hijacking:</strong> Find a service with a writable ImagePath (weak permissions). Change it to your payload. Service starts as SYSTEM on next boot. See <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a> for live exploitation.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>Scheduled Tasks (Task Cache) <span class="severity sev-high">HIGH</span></h4>
+            <p>Scheduled tasks are stored in the registry as well as the file system. Even if the XML file is deleted, the registry cache may remain.</p>
+            <div class="registry-path hive-hklm">
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks<br>
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Forensic value:</strong> The TaskCache\Tree key contains the task name and GUID. TaskCache\Tasks contains the full task configuration including actions, triggers, and principals. Even deleted tasks may leave GUID entries in the Tree.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>AppInit_DLLs <span class="severity sev-high">HIGH</span></h4>
+            <p>AppInit_DLLs loads specified DLLs into <span class="neon-highlight">every process</span> that loads user32.dll (which is nearly every GUI process).</p>
+            <div class="registry-path hive-hklm">
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\AppInit_DLLs<br>
+                HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\LoadAppInit_DLLs = 1
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Windows 10+ mitigation:</strong> Starting Windows 10, AppInit_DLLs requires code signing by default (unless Secure Boot is disabled). But on older systems or with Secure Boot off, this is a powerful injection vector.</p>
+            <p style="margin-top: 0.5rem;"><strong>Cross-link:</strong> AppInit_DLLs is a form of code injection covered in <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a> and <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a>.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>COM Hijacking <span class="severity sev-medium">MEDIUM</span></h4>
+            <p>COM (Component Object Model) objects are identified by CLSID (Class ID). By registering a malicious DLL under a legitimate CLSID, malware hijacks calls to that COM object.</p>
+            <div class="registry-path hive-hkcr">
+                HKCR\CLSID\{GUID}\InprocServer32<br>
+                Default = path to malicious DLL
+            </div>
+            <div class="registry-path hive-hkcu">
+                HKCU\SOFTWARE\Classes\CLSID\{GUID}\InprocServer32<br>
+                Per-user COM hijacking — no admin required
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Why this is stealthy:</strong> COM objects are loaded on-demand. The malicious DLL only runs when a program requests that specific COM object. No autostart. No service. Just a hijacked library call.</p>
+        </div>
+
+        <div class="persistence-card">
+            <h4>Boot Execute / BootVerification <span class="severity sev-high">HIGH</span></h4>
+            <p>Programs that run during system boot, before the logon screen.</p>
+            <div class="registry-path hive-hklm">
+                HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\BootExecute<br>
+                Default: "autocheck autochk *" | Malware appends commands
+            </div>
+            <div class="registry-path hive-hklm">
+                HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\BootExecute<br>
+                HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\BootExecute
+            </div>
+            <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Impact:</strong> Runs before Windows fully initializes. Even Safe Mode executes BootExecute. Chkdsk (autochk) is the legitimate entry. Anything else is highly suspicious.</p>
+        </div>
+
+        <h3>Persistence Summary Matrix</h3>
+        <table>
+            <tr>
+                <th>Mechanism</th>
+                <th>Privilege Required</th>
+                <th>Execution Trigger</th>
+                <th>Stealth Level</th>
+                <th>Detection Difficulty</th>
+            </tr>
+            <tr>
+                <td>Run / RunOnce</td>
+                <td>User / Admin</td>
+                <td>Logon / Boot</td>
+                <td>Low</td>
+                <td>Easy (Autoruns)</td>
+            </tr>
+            <tr>
+                <td>Winlogon Shell</td>
+                <td>Admin</td>
+                <td>Logon</td>
+                <td>Medium</td>
+                <td>Medium (check Shell value)</td>
+            </tr>
+            <tr>
+                <td>IFEO Debugger</td>
+                <td>Admin</td>
+                <td>Target process launch</td>
+                <td>High</td>
+                <td>Hard (requires checking every IFEO key)</td>
+            </tr>
+            <tr>
+                <td>Services</td>
+                <td>Admin</td>
+                <td>Boot / Trigger</td>
+                <td>Medium</td>
+                <td>Medium (service enumeration)</td>
+            </tr>
+            <tr>
+                <td>Scheduled Tasks</td>
+                <td>User / Admin</td>
+                <td>Scheduled trigger</td>
+                <td>Medium</td>
+                <td>Medium (task scheduler)</td>
+            </tr>
+            <tr>
+                <td>AppInit_DLLs</td>
+                <td>Admin</td>
+                <td>Process creation</td>
+                <td>High</td>
+                <td>Hard (loaded into every GUI process)</td>
+            </tr>
+            <tr>
+                <td>COM Hijacking</td>
+                <td>User</td>
+                <td>COM object request</td>
+                <td>Very High</td>
+                <td>Very Hard (requires CLSID knowledge)</td>
+            </tr>
+            <tr>
+                <td>Boot Execute</td>
+                <td>Admin</td>
+                <td>System boot</td>
+                <td>High</td>
+                <td>Hard (runs before security tools)</td>
+            </tr>
+        </table>
+
+        <h2>🔬 Live Evidence: .42 Registry Analysis</h2>
         <div class="evidence-box">
             <h3>📊 Real Data: WUPC Registry Forensics</h3>
             <p><strong>Target:</strong> .42 (WUPC) | <strong>Tool:</strong> PowerShell + C Reg API | <strong>Date:</strong> 2026-06-29</p>
@@ -184,25 +881,38 @@
                 
                 <div class="tab-content active" id="tab-persistence">
                     <div class="code-block">
-<span class="prompt">PS></span> <span class="command">Get-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"</span>
 <span class="output">
 # Clean system — no unauthorized Run keys found
 # During testing, SWTest_22DIV was written, survived 15s, then removed
 # System Watcher did NOT roll back (detection-coupled behavior confirmed)
 </span>
 
-<span class="prompt">PS></span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"</span>
 <span class="output">
 SecurityHealthSystray : C:\Windows\System32\SecurityHealthSystray.exe
 # Standard Windows Security Health tray icon — legitimate
 </span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" | Select Shell, Userinit</span>
+<span class="output">
+Shell     : explorer.exe
+Userinit  : C:\Windows\system32\userinit.exe,
+# Both values clean — no hijacking detected
+</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ChildItem "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options" | Select Name</span>
+<span class="output">
+# Only legitimate debug entries (VS JIT debugger)
+# No suspicious IFEO debugger redirections
+</span>
                     </div>
-                    <p style="margin-top: 1rem;"><strong>Finding:</strong> Run keys are the #1 persistence mechanism. Clean systems have only legitimate entries. Our test confirmed System Watcher doesn't rollback benign keys — detection is required.</p>
+                    <p style="margin-top: 1rem;"><strong>Finding:</strong> Run keys are the #1 persistence mechanism. Clean systems have only legitimate entries. Our test confirmed System Watcher doesn't rollback benign keys — detection is required. Winlogon and IFEO are clean on .42, but these are critical checks on any compromised system.</p>
                 </div>
                 
                 <div class="tab-content" id="tab-kav">
                     <div class="code-block">
-<span class="prompt">PS></span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25"</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25"</span>
 <span class="output">
 ProductName         : Kaspersky Premium
 ProductVersion      : 21.25.7.504
@@ -213,18 +923,25 @@ bSelfProtection     : 1
 # Self-protection ENABLED (registry keys protected from modification)
 </span>
 
-<span class="prompt">PS></span> <span class="command">Get-ChildItem "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25\Data" | Select-Object Name</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ChildItem "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25\Data" | Select-Object Name</span>
 <span class="output">
 # Contains encrypted threat intelligence, update timestamps, scan statistics
 # Binary format — requires Kaspersky's own tools to decode
 </span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25\environment" | Select ProductStatus, LicenseKeyType</span>
+<span class="output">
+ProductStatus   : 1  # Active
+LicenseKeyType  : 1  # Commercial (not trial)
+# Full protection active, not expired
+</span>
                     </div>
-                    <p style="margin-top: 1rem;"><strong>Finding:</strong> KAV configuration reveals product version, protection status, and data paths. The `bRollbackAllowed=1` flag is the key System Watcher control.</p>
+                    <p style="margin-top: 1rem;"><strong>Finding:</strong> KAV configuration reveals product version, protection status, and data paths. The <code>bRollbackAllowed=1</code> flag is the key System Watcher control. The <code>bSelfProtection=1</code> flag means KAV registry keys are protected from tampering — even SYSTEM cannot modify them without disabling self-protection first.</p>
                 </div>
                 
                 <div class="tab-content" id="tab-services">
                     <div class="code-block">
-<span class="prompt">PS></span> <span class="command">Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\AVP21.25"</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\AVP21.25"</span>
 <span class="output">
 Start       : 2        # Auto-start (SERVICE_AUTO_START)
 Type        : 16       # SERVICE_WIN32_OWN_PROCESS
@@ -234,20 +951,30 @@ ObjectName  : LocalSystem
 # Runs as SYSTEM — highest privilege level
 </span>
 
-<span class="prompt">PS></span> <span class="command">Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\HealthSecurityHost"</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\HealthSecurityHost"</span>
 <span class="output">
 Start       : 2        # Auto-start
 Type        : 16       # Own process
 ImagePath   : C:\Windows\System32\SecurityHealthService.exe
 # Writable by admin — potential service hijack vector (tested, confirmed)
 </span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\RpcSs" | Select Start, Type, ImagePath, ObjectName</span>
+<span class="output">
+Start      : 2
+Type       : 20        # SERVICE_WIN32_SHARE_PROCESS (svchost)
+ImagePath  : C:\Windows\system32\svchost.exe -k rpcss
+ObjectName : NT AUTHORITY\NetworkService
+# Shared process — multiple services in one svchost.exe
+</span>
                     </div>
-                    <p style="margin-top: 1rem;"><strong>Finding:</strong> Service registry keys define how processes start, what privileges they have, and where their binaries live. Writable service paths = privilege escalation vectors.</p>
+                    <p style="margin-top: 1rem;"><strong>Finding:</strong> Service registry keys define how processes start, what privileges they have, and where their binaries live. Writable service paths = privilege escalation vectors. The <code>Type</code> field distinguishes own-process (16) from shared-process (20) services. Shared services run inside svchost.exe — hijacking one affects all in the group.</p>
+                    <p style="margin-top: 0.5rem;"><strong>Cross-link:</strong> See <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a> for live exploitation of writable service ImagePath and <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for kernel-level service manipulation.</p>
                 </div>
                 
                 <div class="tab-content" id="tab-users">
                     <div class="code-block">
-<span class="prompt">PS></span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion"</span>
 <span class="output">
 ProductName      : Windows 10 Pro
 CurrentVersion   : 6.3
@@ -256,81 +983,444 @@ UBR              : 8737        # Update Build Revision
 # Windows 10 22H2 (build 19045.8737)
 </span>
 
-<span class="prompt">PS></span> <span class="command">Get-ChildItem "HKU:\" | Select-Object Name</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ChildItem "HKU:\" | Select-Object Name</span>
 <span class="output">
 # S-1-5-21-...-1001  : SWu (local admin)
 # S-1-5-21-...-1002  : Guest (disabled)
 # .DEFAULT           : System profile
 </span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\S-1-5-21-...-1001"</span>
+<span class="output">
+ProfileImagePath  : C:\Users\SWu
+Sid               : S-1-5-21-...-1001
+ProfileLoadTimeHigh : 0x01DA9B
+ProfileLoadTimeLow  : 0x8F3C2A00
+# Profile load time stored as Win32 FILETIME (64-bit)
+</span>
                     </div>
-                    <p style="margin-top: 1rem;"><strong>Finding:</strong> OS version and user SIDs reveal the attack surface. Windows 10 22H2 with Kaspersky 21.25 is our tested environment.</p>
+                    <p style="margin-top: 1rem;"><strong>Finding:</strong> OS version and user SIDs reveal the attack surface. Windows 10 22H2 with Kaspersky 21.25 is our tested environment. The ProfileList key maps SIDs to usernames and profile paths. <span class="neon-highlight">ProfileLoadTime</span> is a 64-bit Win32 FILETIME — convert to human-readable for timeline analysis.</p>
                 </div>
             </div>
         </div>
 
-        <h2>The Code: Reading Registry Programmatically</h2>
+        <h2>🕵️ Registry Forensics: The Analyst's Playbook</h2>
+        <p>Registry forensics is the art of extracting evidence from hive files. Unlike live analysis (which sees only the current state), offline forensics reveals <span class="neon-amber">historical data, deleted keys, and transaction logs</span> that the running system hides.</p>
+
+        <div class="forensics-box">
+            <h4>🔍 Key Forensic Registry Locations</h4>
+            <table>
+                <tr>
+                    <th>Evidence Type</th>
+                    <th>Registry Path</th>
+                    <th>Hive File</th>
+                </tr>
+                <tr>
+                    <td>User accounts / password hashes</td>
+                    <td>HKLM\SAM</td>
+                    <td>SAM</td>
+                </tr>
+                <tr>
+                    <td>LSA secrets / cached creds</td>
+                    <td>HKLM\SECURITY</td>
+                    <td>SECURITY</td>
+                </tr>
+                <tr>
+                    <td>Installed software</td>
+                    <td>HKLM\SOFTWARE</td>
+                    <td>SOFTWARE</td>
+                </tr>
+                <tr>
+                    <td>USB device history</td>
+                    <td>HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR</td>
+                    <td>SYSTEM</td>
+                </tr>
+                <tr>
+                    <td>Network interfaces / DHCP</td>
+                    <td>HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Interfaces</td>
+                    <td>SYSTEM</td>
+                </tr>
+                <tr>
+                    <td>Recent documents</td>
+                    <td>HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs</td>
+                    <td>NTUSER.DAT</td>
+                </tr>
+                <tr>
+                    <td>Shellbags (folder views)</td>
+                    <td>HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags</td>
+                    <td>NTUSER.DAT</td>
+                </tr>
+                <tr>
+                    <td>UserAssist (program execution)</td>
+                    <td>HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\UserAssist</td>
+                    <td>NTUSER.DAT</td>
+                </tr>
+                <tr>
+                    <td>Typed URLs (IE/Edge)</td>
+                    <td>HKCU\SOFTWARE\Microsoft\Internet Explorer\TypedURLs</td>
+                    <td>NTUSER.DAT</td>
+                </tr>
+                <tr>
+                    <td>Mounted devices</td>
+                    <td>HKLM\SYSTEM\MountedDevices</td>
+                    <td>SYSTEM</td>
+                </tr>
+                <tr>
+                    <td>Prefetch / boot timing</td>
+                    <td>HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters</td>
+                    <td>SYSTEM</td>
+                </tr>
+                <tr>
+                    <td>Last logged-on user</td>
+                    <td>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI</td>
+                    <td>SOFTWARE</td>
+                </tr>
+                <tr>
+                    <td>Time zone / system time</td>
+                    <td>HKLM\SYSTEM\CurrentControlSet\Control\TimeZoneInformation</td>
+                    <td>SYSTEM</td>
+                </tr>
+            </table>
+        </div>
+
+        <h3>UserAssist: The Program Execution Timeline</h3>
+        <p>UserAssist is one of the most valuable forensic artifacts. It records every GUI program executed by the user, including the <span class="neon-highlight">execution count</span> and <span class="neon-highlight">last execution timestamp</span> (as a ROT13-encoded, encrypted value).</p>
+
         <div class="code-block">
-#include <windows.h>
-#include <stdio.h>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\UserAssist\{CEBFF5CD-ACE2-4F4F-9178-9926F41749EA}\Count"</span>
+<span class="output">
+# {CEBFF5CD-ACE2-4F4F-9178-9926F41749EA} = GUID for executable files (.exe)
+# Values are ROT13-encoded program paths
+# Example: "Uebzr\qbphzragf\evkpr.rkr" = "Home\documents\rixce.exe" (ROT13)
+# Each value contains: Execution count (4 bytes) + Last run timestamp (8 bytes FILETIME)
+</span>
 
-// First principle: RegOpenKeyEx → RegQueryValueEx → RegCloseKey
-// These are the same APIs malware uses to hide persistence.
+# Decoding UserAssist with Python:
+import codecs
+import struct
+from datetime import datetime, timezone
 
-void read_registry_value(HKEY hive, const char* path, const char* value) {
-    HKEY hKey;
-    char data[1024];
-    DWORD dataSize = sizeof(data);
-    DWORD type;
+def decode_userassist(name, data):
+    # Name is ROT13 encoded
+    path = codecs.decode(name, 'rot_13')
     
-    if (RegOpenKeyExA(hive, path, 0, KEY_READ, &hKey) == ERROR_SUCCESS) {
-        if (RegQueryValueExA(hKey, value, NULL, &type, (LPBYTE)data, &dataSize) == ERROR_SUCCESS) {
-            if (type == REG_SZ || type == REG_EXPAND_SZ) {
-                printf("[%s\\%s] %s = %s\n", 
-                       hive == HKEY_LOCAL_MACHINE ? "HKLM" : "HKCU", 
-                       path, value, data);
-            } else if (type == REG_DWORD) {
-                printf("[%s\\%s] %s = %lu\n", 
-                       hive == HKEY_LOCAL_MACHINE ? "HKLM" : "HKCU", 
-                       path, value, *(DWORD*)data);
-            }
-        }
-        RegCloseKey(hKey);
-    }
-}
+    # Data structure: [padding][count][timestamp]
+    # Timestamp is at offset 4 (after count), 8 bytes, little-endian FILETIME
+    if len(data) >= 16:
+        count = struct.unpack('<I', data[4:8])[0]
+        filetime = struct.unpack('<Q', data[8:16])[0]
+        
+        # Convert FILETIME (100-nanosecond intervals since 1601-01-01) to Unix timestamp
+        unix_time = (filetime - 116444736000000000) / 10000000
+        dt = datetime.fromtimestamp(unix_time, tz=timezone.utc)
+        
+        print(f"Path: {path}")
+        print(f"Count: {count}")
+        print(f"Last run: {dt}")
 
-// Usage:
-// read_registry_value(HKEY_LOCAL_MACHINE, 
-//     "SOFTWARE\\KasperskyLab\\protected\\AVP21.25", 
-//     "bRollbackAllowed");
-// Output: [HKLM\SOFTWARE\...] bRollbackAllowed = 1
+decode_userassist("Uebzr\qbphzragf\evkpr.rkr", b'...registry_binary_data...')
         </div>
 
-        <h2>Evidence: Registry Persistence Test</h2>
-        <div class="evidence-box">
-            <h3>📊 Live Test: System Watcher Rollback Behavior</h3>
-            <p><strong>Hypothesis:</strong> System Watcher rolls back unauthorized registry changes.</p>
-            
+        <div class="why-box">
+            <h5>Why UserAssist matters</h5>
+            <p>UserAssist is <span class="neon-amber">enabled by default on all Windows versions</span>. It records execution even if the user clears their Run history, deletes Prefetch files, or wipes event logs. The only way to stop it is to disable the feature entirely (which itself leaves a registry trace). For incident response, UserAssist is a goldmine of user activity.</p>
+        </div>
+
+        <h3>Shellbags: Evidence of Folder Access</h3>
+        <p>Shellbags store Windows Explorer folder view settings (window size, column layout, icon arrangement). But they also prove <span class="neon-highlight">the folder existed and was accessed</span> — even if the folder was later deleted.</p>
+
+        <div class="registry-path hive-hkcu">
+            HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\&lt;BagNumber&gt;\Shell<br>
+            HKCU\SOFTWARE\Classes\Local Settings\Software\Microsoft\Windows\Shell\BagMRU
+        </div>
+
+        <p style="margin-top: 0.5rem; color: var(--dim);"><strong>Forensic value:</strong> BagMRU is a tree structure tracking folder navigation. Each node contains a folder path hash. Even if the folder is deleted, the shellbag remains. Tools like ShellBags Explorer parse these into a folder tree showing what the user browsed — including external drives, network shares, and hidden directories.</p>
+
+        <h3>USB Device History (USBSTOR)</h3>
+        <p>Every USB storage device connected to Windows leaves a permanent record in the registry. This includes the <span class="neon-highlight">vendor, product, serial number, and first/last connection times</span>.</p>
+
+        <div class="code-block">
+<span class="prompt">PS&gt;</span> <span class="command">Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR" | Select Name</span>
+<span class="output">
+# Each subkey is a USB device: Vendor&Product&SerialNumber
+# Example: Disk&Ven_SanDisk&Prod_Cruzer_Blade&Rev_1.00\4C530001230407109182&0
+</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Enum\USBSTOR\...\4C530001230407109182&0"</span>
+<span class="output">
+FriendlyName   : SanDisk Cruzer Blade USB Device
+DeviceDesc     : @usbstor.inf,%genericbulkonly.devicedesc%;USB Mass Storage Device
+Mfg            : @usbstor.inf,%generic.mfg%;Compatible USB storage device
+DeviceInstance : USBSTOR\DISK&VEN_SANDISK&PROD_CRUZER_BLADE&REV_1.00\4C530001230407109182&0
+# Serial number: 4C530001230407109182 — can be traced to physical device
+</span>
+
+# First connection time is in the device's Properties subkey:
+# HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR\...\Properties\{83da6326-97a6-4088-9453-a1923f573b29}\0066
+# Data: 64-bit FILETIME of first connection
+# Last connection: ...\0067
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ USBSTOR is persistent across formats</h5>
+            <p>Even if the user formats the USB drive, the registry entry remains. Even if the user reinstalls Windows, the USBSTOR entries in the old SYSTEM hive are preserved. The only way to remove them is to manually delete the registry keys (which itself is logged) or use a registry cleaner (which leaves its own traces). USB device history is one of the most reliable forensic artifacts.</p>
+        </div>
+
+        <h2>💾 Offline Hive Analysis</h2>
+        <p>Live registry analysis is limited — the kernel locks hive files, transaction logs are active, and you only see the current state. <span class="neon-highlight">Offline analysis</span> lets you examine hive files from a disk image, shadow copy, or forensic acquisition without the running system's interference.</p>
+
+        <div class="step-box">
+            <h4>Step 1: Acquire Hive Files</h4>
             <div class="code-block">
-<span class="prompt">TEST></span> <span class="command">Write HKCU\...\Run\SWTest_22DIV = notepad.exe</span>
-<span class="output">Result: Key written successfully</span>
+# Method A: Volume Shadow Copy (live acquisition)
+<span class="prompt">CMD&gt;</span> <span class="command">vssadmin list shadows</span>
+<span class="output">
+Shadow Copy ID: {c8c5c3a0-...}
+Original Volume: (C:)\\?\Volume{...}
+Shadow Copy Volume: \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4
+</span>
 
-<span class="prompt">TEST></span> <span class="command">Wait 15 seconds</span>
-<span class="output">Result: Key still present — NO ROLLBACK</span>
+<span class="prompt">CMD&gt;</span> <span class="command">mkdir C:\forensics\shadow</span>
+<span class="prompt">CMD&gt;</span> <span class="command">copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4\Windows\System32\config\SYSTEM C:\forensics\shadow\</span>
+<span class="prompt">CMD&gt;</span> <span class="command">copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4\Windows\System32\config\SOFTWARE C:\forensics\shadow\</span>
+<span class="prompt">CMD&gt;</span> <span class="command">copy \\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy4\Users\SWu\NTUSER.DAT C:\forensics\shadow\</span>
 
-<span class="prompt">TEST></span> <span class="command">Update key to point to phantom_rpc.exe (privesc tool)</span>
-<span class="output">Result: Key updated successfully</span>
-
-<span class="prompt">TEST></span> <span class="command">Execute phantom_rpc.exe --list</span>
-<span class="output">Result: Process ran, key still present — NO ROLLBACK</span>
-
-<span class="prompt">TEST></span> <span class="command">Manual cleanup: Remove key</span>
-<span class="output">Result: Key removed successfully</span>
+# Method B: Raw disk access (offline boot)
+# Boot from WinPE / forensic Linux (SIFT)
+# Mount the target disk read-only
+# Copy hive files directly — no locks, no kernel interference
             </div>
-            
-            <p style="margin-top: 1rem;"><strong>Conclusion:</strong> System Watcher rollback is <strong>detection-coupled</strong>, not behavior-coupled. A binary that passes KAV static scan (phantom_rpc.exe: 0 detections) will not trigger rollback even when executed from a Run key. Evade detection = evade rollback.</p>
         </div>
 
-        <h2>Lab Exercise: Registry Persistence Scanner</h2>
+        <div class="step-box">
+            <h4>Step 2: Mount Hives in RegEdit (Live Analysis)</h4>
+            <div class="code-block">
+# On a clean analysis machine:
+<span class="prompt">CMD&gt;</span> <span class="command">reg load HKLM\FORENSIC_SYSTEM C:\forensics\shadow\SYSTEM</span>
+<span class="output">The operation completed successfully.</span>
+
+<span class="prompt">CMD&gt;</span> <span class="command">reg load HKLM\FORENSIC_SOFTWARE C:\forensics\shadow\SOFTWARE</span>
+<span class="prompt">CMD&gt;</span> <span class="command">reg load HKU\FORENSIC_USER C:\forensics\shadow\NTUSER.DAT</span>
+
+# Now browse in regedit.exe:
+# HKLM\FORENSIC_SYSTEM → offline SYSTEM hive
+# HKLM\FORENSIC_SOFTWARE → offline SOFTWARE hive
+# HKU\FORENSIC_USER → offline NTUSER.DAT
+
+# When done:
+<span class="prompt">CMD&gt;</span> <span class="command">reg unload HKLM\FORENSIC_SYSTEM</span>
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 3: Parse with Python (Programmatic Analysis)</h4>
+            <div class="code-block">
+# Install python-registry: pip install python-registry
+
+from Registry import Registry
+
+# Open offline hive file
+reg = Registry.Registry("C:\\forensics\\shadow\\SYSTEM")
+
+# Navigate to a key
+key = reg.open("ControlSet001\\Control\\TimeZoneInformation")
+
+# Read values
+for value in key.values():
+    print(f"Name: {value.name()}, Type: {value.value_type_str()}")
+    print(f"Data: {value.value()}")
+
+# Enumerate subkeys
+for subkey in key.subkeys():
+    print(f"Subkey: {subkey.name()}")
+
+# Find USB devices
+usbstor = reg.open("ControlSet001\\Enum\\USBSTOR")
+for device in usbstor.subkeys():
+    print(f"Device: {device.name()}")
+    for serial in device.subkeys():
+        print(f"  Serial: {serial.name()}")
+        friendly = serial.value("FriendlyName")
+        if friendly:
+            print(f"  Name: {friendly.value()}")
+            </div>
+        </div>
+
+        <div class="step-box">
+            <h4>Step 4: Extract Password Hashes from SAM</h4>
+            <div class="code-block">
+# Requires both SAM and SYSTEM hives (SYSTEM contains the SYSKEY)
+# Tool: impacket-secretsdump (Kali Linux)
+
+<span class="prompt">KALI&gt;</span> <span class="command">impacket-secretsdump -system SYSTEM -sam SAM LOCAL</span>
+<span class="output">
+Impacket v0.11.0 - Copyright 2023 Fortra
+
+[*] Target system bootKey: 0x8f3c2a00b1e4d5f6...
+[*] Dumping local SAM hashes (uid:rid:lmhash:nthash)
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
+SWu:1001:aad3b435b51404eeaad3b435b51404ee:64f12cddaa88057e06a81b54e73b949b:::
+
+# NTHash can be cracked with hashcat:
+# hashcat -m 1000 -a 0 hashes.txt wordlist.txt
+</span>
+
+# Or use Python with pypykatz (pure Python, no dependencies):
+<span class="prompt">KALI&gt;</span> <span class="command">pypykatz registry --sam SAM --system SYSTEM</span>
+            </div>
+        </div>
+
+        <h2>🛠️ RegRipper: Automated Registry Analysis</h2>
+        <p><span class="neon-highlight">RegRipper</span> is the industry-standard tool for automated registry forensics. Written by Harlan Carvey, it parses hive files with hundreds of plugins, each targeting a specific forensic artifact. It's fast, thorough, and produces investigator-friendly output.</p>
+
+        <div class="method-card">
+            <h4>What RegRipper Does</h4>
+            <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>Parses hive files offline — no Windows required</li>
+                <li>Runs plugins (Perl scripts) that extract specific artifacts</li>
+                <li>Outputs timeline-friendly text reports</li>
+                <li>Handles deleted keys via transaction log parsing</li>
+                <li>Extracts timestamps, user activity, and persistence indicators</li>
+            </ul>
+        </div>
+
+        <div class="code-block">
+# RegRipper Installation (Windows or Linux with Perl)
+<span class="prompt">CMD&gt;</span> <span class="command">git clone https://github.com/keydet89/RegRipper3.0.git</span>
+<span class="prompt">CMD&gt;</span> <span class="command">cd RegRipper3.0</span>
+
+# List all available plugins
+<span class="prompt">CMD&gt;</span> <span class="command">rip.exe -l</span>
+<span class="output">
+Plugin               Hive    Description
+------               ----    -----------
+amcache              Amcache Amcache.hve entries
+appcompatcache       System  ShimCache/AppCompatCache
+auditpolicy          Security  Audit policy settings
+bam                  System  Background Activity Moderator (Win10+)
+cmd_shell            Software  Command shell history
+compname             System  Computer name
+devclass             System  Device classes
+env                  System  Environment variables
+usbstor              System  USB storage devices
+userassist           NTUSER  UserAssist entries
+recentdocs           NTUSER  Recent documents
+run                  NTUSER  Run keys
+runmru               NTUSER  Run MRU
+shellbags            NTUSER  Shellbags / folder access
+shimcache            System  ShimCache (program execution)
+services             System  Services
+soft_run             Software  Software\Run keys
+soft_runonce         Software  Software\RunOnce keys
+winlogon             Software  Winlogon settings
+</span>
+
+# Run a single plugin against a hive
+<span class="prompt">CMD&gt;</span> <span class="command">rip.exe -r C:\forensics\shadow\SYSTEM -p usbstor</span>
+<span class="output">
+USBStor
+-------
+Device: Disk&Ven_SanDisk&Prod_Cruzer_Blade&Rev_1.00
+Serial: 4C530001230407109182&0
+FriendlyName: SanDisk Cruzer Blade USB Device
+First Connect: 2024-03-15 14:32:18 UTC
+Last Connect: 2026-06-28 09:15:42 UTC
+</span>
+
+# Run all plugins for a hive type
+<span class="prompt">CMD&gt;</span> <span class="command">rip.exe -r C:\forensics\shadow\NTUSER.DAT -f ntuser</span>
+<span class="output">
+# Runs all NTUSER-specific plugins: userassist, recentdocs, shellbags, run, runmru, etc.
+# Output is a comprehensive user activity report
+</span>
+
+# Run all plugins for SYSTEM hive
+<span class="prompt">CMD&gt;</span> <span class="command">rip.exe -r C:\forensics\shadow\SYSTEM -f system</span>
+
+# Generate a timeline (-t option)
+<span class="prompt">CMD&gt;</span> <span class="command">rip.exe -r C:\forensics\shadow\NTUSER.DAT -p userassist -t</span>
+<span class="output">
+Thu Jun 26 2026 14:23:17Z,userassist,REG_BINARY,UserAssist\{CEBFF5CD-...}\Count\HRZR_EHACVQY:%PROGRAMFILES%\Microsoft Office\root\Office16\WINWORD.EXE,Count: 42
+</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why RegRipper is essential</h5>
+            <p>A single NTUSER.DAT hive can contain <span class="neon-amber">thousands of forensic artifacts</span>. Manual analysis would take days. RegRipper's plugins automate the extraction of the most valuable evidence — UserAssist, shellbags, recent documents, typed URLs, mounted devices, and more. In incident response, RegRipper is the first tool you run after acquiring hives. It gives you the "what happened" before you dive into the "how."</p>
+        </div>
+
+        <h3>Critical RegRipper Plugins for Incident Response</h3>
+        <table>
+            <tr>
+                <th>Plugin</th>
+                <th>Hive</th>
+                <th>What It Finds</th>
+                <th>IR Priority</th>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">userassist</span></td>
+                <td>NTUSER.DAT</td>
+                <td>Program execution count & timestamps</td>
+                <td>CRITICAL</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">shimcache</span></td>
+                <td>SYSTEM</td>
+                <td>AppCompatCache — program execution evidence</td>
+                <td>CRITICAL</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">usbstor</span></td>
+                <td>SYSTEM</td>
+                <td>USB device connections & serial numbers</td>
+                <td>HIGH</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">shellbags</span></td>
+                <td>NTUSER.DAT / USRCLASS.DAT</td>
+                <td>Folder access evidence (deleted folders too)</td>
+                <td>HIGH</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">recentdocs</span></td>
+                <td>NTUSER.DAT</td>
+                <td>Recently opened documents by file extension</td>
+                <td>MEDIUM</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">run</span></td>
+                <td>NTUSER.DAT / SOFTWARE</td>
+                <td>Run key persistence</td>
+                <td>CRITICAL</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">services</span></td>
+                <td>SYSTEM</td>
+                <td>Service configurations & ImagePath</td>
+                <td>HIGH</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">winlogon</span></td>
+                <td>SOFTWARE</td>
+                <td>Shell/Userinit hijacking</td>
+                <td>CRITICAL</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">bam</span></td>
+                <td>SYSTEM</td>
+                <td>Background Activity Moderator (Win10+ execution evidence)</td>
+                <td>HIGH</td>
+            </tr>
+            <tr>
+                <td><span class="neon-highlight">amcache</span></td>
+                <td>Amcache.hve</td>
+                <td>Program execution & installation evidence</td>
+                <td>HIGH</td>
+            </tr>
+        </table>
+
+        <h2>🧪 Lab Exercise: Registry Persistence Scanner</h2>
         <div class="interactive-demo">
             <p>Write a C program that:</p>
             <ol style="margin-left: 1.5rem; line-height: 2;">
@@ -341,24 +1431,31 @@ void read_registry_value(HKEY hive, const char* path, const char* value) {
                 <li>Outputs: [Hive] [KeyName] [Path] [Status]</li>
             </ol>
             
-            <p style="margin-top: 1rem;"><strong>Challenge:</strong> Handle REG_EXPAND_SZ (environment variables like %APPDATA%). Recurse into RunOnce and RunOnceEx keys. Detect suspicious paths (temp folders, appdata, unusual extensions).</p>
+            <p style="margin-top: 1rem;"><strong>Challenge:</strong> Handle REG_EXPAND_SZ (environment variables like %APPDATA%). Recurse into RunOnce and RunOnceEx keys. Detect suspicious paths (temp folders, appdata, unusual extensions). Check Winlogon Shell and Userinit for hijacking. Scan IFEO for debugger redirections.</p>
             
             <button onclick="document.getElementById('reg-solution').style.display='block'">Show Solution</button>
             
             <div id="reg-solution" style="display:none; margin-top: 1rem;">
                 <div class="code-block">
-#include <windows.h>
-#include <stdio.h>
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
 
-void scan_run_keys(HKEY hive, const char* hiveName) {
+typedef struct {
+    HKEY hive;
+    const char* name;
+    const char* path;
+} RegTarget;
+
+void check_persistence_key(HKEY hive, const char* hiveName, const char* path) {
     HKEY hKey;
-    const char* path = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run";
-    
     if (RegOpenKeyExA(hive, path, 0, KEY_READ, &hKey) != ERROR_SUCCESS) return;
     
     char valueName[256], data[MAX_PATH];
     DWORD valueNameSize, dataSize, type;
     DWORD index = 0;
+    
+    printf("\n=== %s\\%s ===\n", hiveName, path);
     
     while (1) {
         valueNameSize = sizeof(valueName);
@@ -369,39 +1466,178 @@ void scan_run_keys(HKEY hive, const char* hiveName) {
             break;
         
         if (type == REG_SZ || type == REG_EXPAND_SZ) {
-            // Expand environment variables
             char expanded[MAX_PATH];
             ExpandEnvironmentStringsA(data, expanded, MAX_PATH);
             
-            // Check if file exists
             DWORD attribs = GetFileAttributesA(expanded);
             const char* status = (attribs != INVALID_FILE_ATTRIBUTES) ? 
                                 "EXISTS" : "ORPHANED";
             
-            printf("[%s] %-30s | %-50s | %s\n", hiveName, valueName, expanded, status);
+            // Suspicious path checks
+            int suspicious = 0;
+            if (strstr(expanded, "\\Temp\\") || strstr(expanded, "\\tmp\\")) suspicious = 1;
+            if (strstr(expanded, "AppData\\")) suspicious = 1;
+            if (strstr(expanded, ".ps1") || strstr(expanded, ".vbs") || 
+                strstr(expanded, ".bat")) suspicious = 1;
+            
+            printf("  %-25s | %-45s | %s%s\n", 
+                   valueName, expanded, status, 
+                   suspicious ? " [SUSPICIOUS]" : "");
         }
     }
     
     RegCloseKey(hKey);
 }
 
+void check_winlogon() {
+    HKEY hKey;
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, 
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon", 
+        0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+        
+        char shell[256], userinit[256];
+        DWORD size = sizeof(shell);
+        
+        printf("\n=== Winlogon Check ===\n");
+        
+        if (RegQueryValueExA(hKey, "Shell", NULL, NULL, (LPBYTE)shell, &size) == ERROR_SUCCESS) {
+            printf("  Shell: %s %s\n", shell, 
+                   strstr(shell, ",") ? "[HIJACKED!]" : "[CLEAN]");
+        }
+        
+        size = sizeof(userinit);
+        if (RegQueryValueExA(hKey, "Userinit", NULL, NULL, (LPBYTE)userinit, &size) == ERROR_SUCCESS) {
+            printf("  Userinit: %s %s\n", userinit,
+                   strlen(userinit) > strlen("C:\\Windows\\system32\\userinit.exe,") ? 
+                   "[HIJACKED!]" : "[CLEAN]");
+        }
+        
+        RegCloseKey(hKey);
+    }
+}
+
+void check_ifeo() {
+    HKEY hKey;
+    if (RegOpenKeyExA(HKEY_LOCAL_MACHINE,
+        "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options",
+        0, KEY_READ, &hKey) == ERROR_SUCCESS) {
+        
+        printf("\n=== IFEO Check ===\n");
+        
+        char subkeyName[256];
+        DWORD subkeyNameSize;
+        DWORD index = 0;
+        
+        while (1) {
+            subkeyNameSize = sizeof(subkeyName);
+            if (RegEnumKeyExA(hKey, index++, subkeyName, &subkeyNameSize, 
+                              NULL, NULL, NULL, NULL) != ERROR_SUCCESS)
+                break;
+            
+            HKEY subKey;
+            if (RegOpenKeyExA(hKey, subkeyName, 0, KEY_READ, &subKey) == ERROR_SUCCESS) {
+                char debugger[MAX_PATH];
+                DWORD size = sizeof(debugger);
+                if (RegQueryValueExA(subKey, "Debugger", NULL, NULL, 
+                                     (LPBYTE)debugger, &size) == ERROR_SUCCESS) {
+                    printf("  [!] %s -> Debugger: %s\n", subkeyName, debugger);
+                }
+                RegCloseKey(subKey);
+            }
+        }
+        
+        RegCloseKey(hKey);
+    }
+}
+
 int main() {
-    printf("=== Registry Persistence Scan ===\n\n");
-    scan_run_keys(HKEY_CURRENT_USER, "HKCU");
-    scan_run_keys(HKEY_LOCAL_MACHINE, "HKLM");
+    printf("=== Registry Persistence Scanner ===\n");
+    
+    check_persistence_key(HKEY_CURRENT_USER, "HKCU",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    check_persistence_key(HKEY_CURRENT_USER, "HKCU",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
+    check_persistence_key(HKEY_LOCAL_MACHINE, "HKLM",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run");
+    check_persistence_key(HKEY_LOCAL_MACHINE, "HKLM",
+        "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
+    check_persistence_key(HKEY_LOCAL_MACHINE, "HKLM",
+        "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Run");
+    
+    check_winlogon();
+    check_ifeo();
+    
     return 0;
 }
                 </div>
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Which hive file contains user password hashes, and what additional file is needed to decrypt them?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) The SOFTWARE hive contains password hashes, and no additional file is needed
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) The SAM hive contains password hashes, and the SYSTEM hive is needed for the SYSKEY decryption
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) The SECURITY hive contains password hashes, and the NTUSER.DAT is needed for decryption
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) The SYSTEM hive contains password hashes, and the SAM hive is needed for the boot key
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: Why does IFEO (Image File Execution Options) with a Debugger value represent a powerful persistence mechanism?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) It modifies the original executable file on disk
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) It redirects execution whenever the target program is launched, without modifying the original binary, and requires no code in the target process
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) It only works for system processes running as SYSTEM
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) It permanently disables Windows Defender for the target process
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: In offline registry forensics, why is analyzing a Volume Shadow Copy hive often better than analyzing the live registry?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                A) Shadow copies contain encrypted data that reveals hidden malware
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                B) The live registry is always corrupted and unreliable
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                C) Shadow copies capture historical states, may contain deleted keys, and are not locked by the running kernel
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) Shadow copies are automatically decrypted by the VSS service
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Registry is the OS diary:</strong> Everything leaves a trace</li>
-            <li><strong>Persistence lives in Run keys:</strong> HKCU and HKLM are primary targets</li>
-            <li><strong>System Watcher is detection-coupled:</strong> No detection = no rollback</li>
-            <li><strong>Service keys = privilege:</strong> ImagePath hijacking is SYSTEM escalation</li>
-            <li><strong>Forensics is reading:</strong> The same APIs malware uses, used for defense</li>
+            <li><strong>Registry is the OS diary:</strong> Everything leaves a trace. Configuration, execution, persistence, and user activity are all recorded.</li>
+            <li><strong>Hive files are forensic gold:</strong> SYSTEM, SOFTWARE, SAM, SECURITY, and NTUSER.DAT can be extracted and analyzed offline. Each contains different evidence types.</li>
+            <li><strong>Persistence lives in many places:</strong> Run keys, Winlogon, IFEO, Services, Scheduled Tasks, AppInit_DLLs, COM hijacking, and Boot Execute. Check them all.</li>
+            <li><strong>System Watcher is detection-coupled:</strong> No detection = no rollback. Understanding this from <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12</a> is critical for both attack and defense.</li>
+            <li><strong>Service keys = privilege:</strong> ImagePath hijacking is SYSTEM escalation. Writable service paths are a privilege escalation vector per <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08</a>.</li>
+            <li><strong>UserAssist is execution evidence:</strong> Even if the user deletes Prefetch, clears event logs, and wipes history, UserAssist remains.</li>
+            <li><strong>USBSTOR never forgets:</strong> Every USB device connected leaves a permanent record with vendor, product, serial number, and connection times.</li>
+            <li><strong>Shellbags prove folder access:</strong> Even deleted folders leave shellbag evidence. The user browsed it; the registry remembers.</li>
+            <li><strong>RegRipper automates analysis:</strong> Hundreds of plugins extract the most valuable artifacts from offline hives. It's the first tool to run in incident response.</li>
+            <li><strong>Forensics is reading:</strong> The same APIs malware uses (RegOpenKeyEx, RegQueryValueEx) are used for defense. The registry doesn't care who's reading — it just tells the truth.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
@@ -419,26 +1655,108 @@ int main() {
                     <td style="padding: 0.5rem;">System Watcher rollback behavior</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
                 </tr>
-                <tr>
+                <tr style="border-bottom: 1px solid var(--border);">
                     <td style="padding: 0.5rem;">Service enumeration</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Winlogon / IFEO enumeration</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">UserAssist / Shellbags theory</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">USBSTOR device history</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Offline hive acquisition (VSS)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">RegRipper automated analysis</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.5rem;">SAM hash extraction (theory)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
             </table>
         </div>
 
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"The registry is the one place on Windows that never lies. Users can delete files, clear logs, wipe history — but the registry remembers. Every USB device, every program run, every folder opened, every persistence attempt. Learn to read the registry and you learn to read the soul of the machine."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— Cross-links: <a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a> for memory-resident artifacts, <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a> for registry-based escalation, <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for kernel-level registry manipulation, and <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a> for EDR registry monitoring.</p>
+        </div>
+
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_06_MEMORY.html">← Module 06</a>
             <a href="MODULE_08_PRIVESC.html">Module 08 →</a>
         </div>
     </div>
 
     <script>
+        // Tab switching
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('tab-' + tabId).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'The SAM hive stores local user accounts and NTLM password hashes. However, these hashes are encrypted with the SYSKEY (boot key), which is stored in the SYSTEM hive. To extract crackable hashes, you need BOTH files: SAM for the hashes and SYSTEM for the decryption key. This is why forensic acquisition always targets both hives.',
+                'quiz-2': 'IFEO with a Debugger value is powerful because it hijacks execution at the OS level. When any user (or the system) launches the target program, Windows checks IFEO and runs the "debugger" instead. The original binary is untouched. The user sees nothing unusual. It works for any process, any privilege level, and leaves no memory-resident code until the target is launched.',
+                'quiz-3': 'Volume Shadow Copies capture the registry at a specific point in time. They may contain keys that were later deleted, modified, or overwritten. Because shadow copies are read-only snapshots, they are not locked by the kernel and can be copied freely. This gives forensic analysts a historical view that the live registry cannot provide.'
+            };
+            return explanations[quizId] || 'Keep studying!';
         }
     </script>
 </body>
