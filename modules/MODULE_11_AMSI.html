@@ -373,6 +373,32 @@
         .toc li { margin: 0.5rem 0; }
         .toc a { color: var(--accent2); text-decoration: none; }
         .toc a:hover { color: var(--neon); }
+        .mentor-callout {
+            background: #1a0a0a;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .mentor-callout h4 {
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .mentor-callout p em {
+            color: #ffcccc;
+            font-style: italic;
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+        .mentor-callout .layman-term {
+            margin: 1rem 0;
+            background: #1a1a1a;
+        }
+        .mentor-callout .why-box {
+            margin: 1rem 0 0 0;
+        }
     </style>
 </head>
 <body>
@@ -451,6 +477,19 @@
                     <p>Think of AMSI like a security guard at the entrance of a building. Every person (script) must pass through the guard before entering. The guard checks their ID against a watchlist. But the guard works <em>inside</em> the building — not in a separate fortress. If you can reach the guard's desk, you can swap the watchlist, blindfold the guard, or make the guard always say "all clear."</p>
                 </div>
 
+                <div class="mentor-callout">
+                    <h4>🎖️ Mentor Note — asi dev [HTB]</h4>
+                    <p><em>"AMSI is just a scanner in memory."</em></p>
+                    <div class="layman-term">
+                        <h4>💡 In Plain English</h4>
+                        <p>AMSI isn't a magic wall around your script. It's a function loaded into the same process memory as your code. A scanner in memory can be inspected, modified, or silenced by anything else running in that same memory space — including your payload.</p>
+                    </div>
+                    <div class="why-box">
+                        <h5>🎯 Red / Blue Relevance</h5>
+                        <p><strong>Red:</strong> Treat AMSI as a memory target, not an impenetrable gate. Patching, unloading, or blinding it are all viable because it lives in-process. <strong>Blue:</strong> Memory integrity monitoring and behavioral detection matter more than trusting AMSI's verdict, since an attacker with code execution can manipulate the scanner itself.</p>
+                    </div>
+                </div>
+
                 <div class="cross-link">
                     <a href="MODULE_03_PowerShell.html" class="cross-link">🔗 Cross-Link: Module 03 — PowerShell Fundamentals</a>
                 </div>
@@ -519,6 +558,19 @@ unsigned char patch[] = { 0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3 };
                 <div class="warning-box">
                     <h5>⚠️ Critical Note</h5>
                     <p>The patch bytes above return <code>E_INVALIDARG</code> (0x80070057), not <code>AMSI_RESULT_CLEAN</code>. PowerShell's error handling treats a failed AMSI scan as "allow execution" rather than blocking. This is a subtle but important distinction — you are not faking "clean," you are causing the scan to error out.</p>
+                </div>
+
+                <div class="mentor-callout">
+                    <h4>🎖️ Mentor Note — asi dev [HTB]</h4>
+                    <p><em>"If you can patch memory, you can bypass AMSI."</em></p>
+                    <div class="layman-term">
+                        <h4>💡 In Plain English</h4>
+                        <p>Once you have the ability to write to a process's memory, AMSI becomes just another function to edit. Change a few bytes at the start of <code>AmsiScanBuffer</code> so it always returns "clean," and the scanner becomes a rubber stamp.</p>
+                    </div>
+                    <div class="why-box">
+                        <h5>🎯 Red / Blue Relevance</h5>
+                        <p><strong>Red:</strong> Memory patching is reliable but noisy; pair it with injection or obfuscation to avoid detection. <strong>Blue:</strong> Monitor for <code>VirtualProtect</code> calls making AMSI memory writable/executable, and alert on in-memory DLL hashes that no longer match disk.</p>
+                    </div>
                 </div>
 
                 <div class="code-block">
@@ -941,6 +993,19 @@ $policy["ScriptBlockLogging"] = @{"EnableScriptBlockLogging" = 0}
 
                 <div class="note">
                     <strong>Historical Note:</strong> The original AMSI bypass was discovered by Matt Graeber in 2016. Microsoft patched it. Then researchers found 10 more. Microsoft patched those. The cycle continues. AMSI is a cat-and-mouse game — the key insight is that because AMSI is client-side, it can never be fully secure against a determined attacker with admin/code-execution rights.
+                </div>
+
+                <div class="mentor-callout">
+                    <h4>🎖️ Mentor Note — asi dev [HTB]</h4>
+                    <p><em>"Script blocking is not execution blocking."</em></p>
+                    <div class="layman-term">
+                        <h4>💡 In Plain English</h4>
+                        <p>Stopping a script from running is not the same as stopping the attacker. If AMSI blocks one PowerShell command, the attacker can patch AMSI, run from a different process, or use a compiled binary. The real battle is over execution and persistence, not whether a specific script was allowed.</p>
+                    </div>
+                    <div class="why-box">
+                        <h5>🎯 Red / Blue Relevance</h5>
+                        <p><strong>Red:</strong> Don't rely on a single script — have fallback execution methods ready if AMSI kills your initial payload. <strong>Blue:</strong> A block event is a detection, not a victory. Investigate what happened before and after the block, and assume the attacker will try again with a different technique.</p>
+                    </div>
                 </div>
 
                 <div class="cross-link">

@@ -340,6 +340,15 @@
             <p style="margin-top: 0.5rem; color: var(--dim);">The enemy (blue team) is listening to all radio frequencies. Your satellite phone must look like a civilian call, change channels randomly, and speak in a code only HQ understands.</p>
         </div>
 
+        <div class="mentor-callout" style="background: #1a0a0a; border: 2px solid var(--accent); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+            <h3 style="color: var(--accent); margin-bottom: 0.5rem;">🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <blockquote style="border-left: 4px solid var(--accent); padding-left: 1rem; margin: 0.5rem 0; color: #ffcccc; font-style: italic;">
+                "C2 is just a way to talk to your implant."
+            </blockquote>
+            <p><strong>Layman explanation:</strong> Your implant is the soldier in enemy territory. C2 is the radio. It doesn't shoot, steal, or sabotage — it carries orders and reports. If the radio breaks, the soldier is cut off. If the radio is obvious, the enemy jams it and triangulates your position.</p>
+            <p style="margin-top: 0.5rem;"><strong>Red/blue relevance:</strong> Red — stop over-engineering payloads and start engineering the conversation. Blue — the implant is already inside; your win is detecting or severing the lifeline, not just the malware.</p>
+        </div>
+
         <h2>📚 Prerequisites — What You Need First</h2>
         <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
         
@@ -684,6 +693,15 @@ Pattern: None. Random distribution.
             </div>
         </div>
 
+        <div class="mentor-callout" style="background: #0a1a0a; border: 2px solid var(--accent2); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+            <h3 style="color: var(--accent2); margin-bottom: 0.5rem;">🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <blockquote style="border-left: 4px solid var(--accent2); padding-left: 1rem; margin: 0.5rem 0; color: #ccffdd; font-style: italic;">
+                "Jitter and encryption keep C2 alive."
+            </blockquote>
+            <p><strong>Layman explanation:</strong> A guard watching a gate notices a car that passes every 30 seconds exactly. Random arrivals at 18, 35, 22, and 41 seconds look like normal traffic. Encryption means even if the guard opens the trunk, he can't read the map inside.</p>
+            <p style="margin-top: 0.5rem;"><strong>Red/blue relevance:</strong> Red — never beacon on a fixed interval; never send plaintext. Blue — time-series analysis of connection intervals and TLS fingerprinting are your best friends against naive beacons.</p>
+        </div>
+
         <h2>🌐 Protocol Selection: HTTP, DNS, HTTPS</h2>
 
         <p>Your choice of protocol determines your visibility, reliability, and speed. No protocol is perfect — each is a trade-off.</p>
@@ -787,6 +805,15 @@ response = requests.post(
                 <p><strong>Domain fronting is largely dead as of 2020-2021.</strong> AWS CloudFront, Azure Front Door, and Google Cloud CDN all added Host header validation against the TLS SNI. This section is preserved for historical understanding and because <span class="neon-amber">new fronting techniques appear constantly</span> — the principle (abuse shared infrastructure) is eternal.</p>
                 <p style="margin-top: 0.5rem;"><strong>Current status:</strong> Major CDNs block this. Some regional CDNs and alternative providers may still be vulnerable. Always verify before relying on this technique in operations. <span class="neon-highlight">Do not build operational C2 assuming domain fronting works.</span></p>
             </div>
+        </div>
+
+        <div class="mentor-callout" style="background: #1a1a0a; border: 2px solid #ffaa00; border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+            <h3 style="color: #ffaa00; margin-bottom: 0.5rem;">🎙️ Mentor Callout — asi dev [HTB]</h3>
+            <blockquote style="border-left: 4px solid #ffaa00; padding-left: 1rem; margin: 0.5rem 0; color: #ffeebb; font-style: italic;">
+                "Domain fronting is dead, use legitimate infrastructure."
+            </blockquote>
+            <p><strong>Layman explanation:</strong> Old smuggling routes got shut down, so don't plan a heist through them. Instead, drive the getaway car through normal traffic: a rented cloud server, a Discord webhook, or a GitHub Gist. The trick isn't hiding the destination anymore — it's looking like everyone else.</p>
+            <p style="margin-top: 0.5rem;"><strong>Red/blue relevance:</strong> Red — audit your infrastructure assumptions; shared CDNs are hostile now. Blue — monitor for anomalous use of trusted platforms (Discord, GitHub, Pastebin) just as closely as suspicious domains.</p>
         </div>
 
         <h2>💀 Dead Drops</h2>

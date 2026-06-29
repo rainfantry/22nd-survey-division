@@ -350,6 +350,37 @@
             font-family: Consolas, monospace;
             font-size: 12px;
         }
+        .mentor-box {
+            border: 2px solid var(--purple);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            position: relative;
+            background: #0a0a0a;
+            border-radius: 8px;
+        }
+        .mentor-box::before {
+            content: 'MENTOR NOTE — asi dev [HTB]';
+            position: absolute;
+            top: -14px;
+            left: 20px;
+            background: var(--bg);
+            color: var(--purple);
+            font-family: 'Space Mono', Consolas, monospace;
+            font-size: 0.7rem;
+            padding: 0 10px;
+            letter-spacing: 0.1em;
+        }
+        .mentor-box .quote {
+            font-family: 'Space Mono', Consolas, monospace;
+            color: var(--purple);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+        }
+        .mentor-box .layman { color: var(--fg); margin-bottom: 0.75rem; }
+        .mentor-box .relevance { color: var(--amber); font-size: 0.9rem; }
+        .mentor-box .relevance strong { color: var(--accent2); }
     </style>
 </head>
 <body>
@@ -375,6 +406,12 @@
             <h4>🎯 Soldier Translation</h4>
             <p>Imagine a guard at a checkpoint. The gate is reinforced steel, the walls are concrete, the cameras are HD. But the guard is human. You wear the right uniform, speak the right jargon, act with the right urgency — the guard opens the gate. You didn't break the gate. You didn't climb the wall. You convinced the guard to let you in. That's social engineering.</p>
             <p style="margin-top: 0.5rem; color: var(--dim);">The most expensive security system in the world is useless if the person operating it believes you belong there.</p>
+        </div>
+
+        <div class="mentor-box">
+            <p class="quote">"People are easier to hack than computers."</p>
+            <p class="layman">You can patch software, update firewalls, and harden servers for years, but you can't patch a human with a single click. A computer follows rules; a person follows feelings, habits, and social pressure. The weakest door in any network is the one a person opens for you.</p>
+            <p class="relevance"><strong>Red:</strong> Stop obsessing over the latest exploit. If you can craft a believable story, the target will hand you the keys. <strong>Blue:</strong> Technical controls alone won't save you. Train people to recognize manipulation and make verification easy, not embarrassing.</p>
         </div>
 
         <h2>📚 Prerequisites — What You Need First</h2>
@@ -951,6 +988,12 @@ github.com  text =
             <p style="margin-top: 0.5rem;"><strong>Mentor says:</strong> "The inbox is the new building perimeter. If you can reach the inbox, you can reach the network."</p>
         </div>
 
+        <div class="mentor-box">
+            <p class="quote">"The inbox is the new perimeter."</p>
+            <p class="layman">Once upon a time, attackers had to breach firewalls, scan ports, and tunnel through networks to reach a target. Today, they just send an email. If it lands in the inbox, the battle is already half won — the user is inside the perimeter, and a single click can open the gate.</p>
+            <p class="relevance"><strong>Red:</strong> Invest in email infrastructure that looks legitimate. DMARC analysis, lookalike domains, and convincing pretexts turn a message into a foothold. <strong>Blue:</strong> Treat every external inbox as a hostile border. DMARC p=reject, external banners, URL rewriting, and attachment sandboxing are your firewall rules for email.</p>
+        </div>
+
         <div class="code-block">
 === EMAIL SPOOFING TECHNIQUES ===
 
@@ -1115,10 +1158,10 @@ a.href = url;
 a.download = 'Q3_Financial_Report.xlsx';
 document.body.appendChild(a);
 a.click();
-</script>
-<p>Loading document... Please enable content if download doesn't start.</p>
-</body>
-</html>
+&lt;/script&gt;
+&lt;p&gt;Loading document... Please enable content if download doesn't start.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 
 # The user receives an HTML file. They open it.
 # The browser decodes the payload and downloads it automatically.
@@ -1249,6 +1292,12 @@ setoolkit
         </div>
 
         <p><strong>Cross-link:</strong> Harvested credentials enable access for <a href="MODULE_16_C2.html" class="cross-link">Module 16: C2</a> beacons and <a href="MODULE_19_AD.html" class="cross-link">Module 19: Active Directory</a> domain compromise.</p>
+
+        <div class="mentor-box">
+            <p class="quote">"Credential stuffing works because people reuse passwords."</p>
+            <p class="layman">Most people use the same password — or a tiny variation of it — for work, personal email, banking, and that sketchy forum they signed up for in 2014. When one site leaks its database, attackers get a key that unlocks dozens of other doors. The password isn't guessed; it's recycled.</p>
+            <p class="relevance"><strong>Red:</strong> Always test harvested credentials against other services and internal portals. A single LinkedIn password from 2019 may still open a corporate VPN. <strong>Blue:</strong> Enforce unique passwords, monitor breach dumps, and deploy MFA everywhere. Password reuse is a user habit; make it technically impossible with a password manager and breached-password detection.</p>
+        </div>
 
         <h2>🧠 Psychological Principles of Social Engineering</h2>
         <p>Social engineering is <span class="neon-highlight">applied psychology</span>. Understanding the cognitive biases and emotional triggers that make people vulnerable is as important as understanding the technical tools. The best social engineers are amateur psychologists.</p>
