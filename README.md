@@ -50,12 +50,61 @@
 
 4. **Reference the Resources** → [resources.html](https://rainfantry.github.io/22nd-survey-division/resources.html)
    - Command cheat sheets (recon, privesc, persistence, defender, C2)
-   - Mentor's original documents
-   - Quick reference one-liners
+   - Mentor documents (WHAT_I_HAVE.md, PRIVESC_LADDER.md)
+   - Tool downloads and build instructions
 
-### The 8-Week Study Plan (From the Mentor)
+### Track A: Coders Learning Attack (12-Module Fast Path)
 
-| Week | Focus | Deliverable |
+For people who already know Python, C, or PowerShell but want to learn offensive security.
+
+| Order | Module | What You Learn |
+|-------|--------|----------------|
+| 1 | [Module 00: Reader](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_00_READER.html) | Course guide, lab setup, study methodology |
+| 2 | [Module 01: Networking](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_01_NETWORKING.html) | OSI model, TCP/IP, ports, protocols, Wireshark |
+| 3 | [Module 02: Recon](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_02_RECON.html) | Active/passive recon, OSINT, network mapping |
+| 4 | [Module 04: Coding Basics](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_04_CODING_BASICS.html) | C, Python, Windows API for security |
+| 5 | [Module 06: Memory](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_06_MEMORY.html) | Virtual memory, paging, heap vs stack, EPROCESS |
+| 6 | [Module 10: Code Injection](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_10_CODE_INJECTION.html) | DLL injection, process hollowing, APC, reflective DLL |
+| 7 | [Module 08: Privilege Escalation](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_08_PRIVESC.html) | Token abuse, service misconfig, unquoted paths, UAC bypass |
+| 8 | [Module 09: Malware Development](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_09_MALWARE.html) | Shellcode, XOR encoding, API hashing, anti-sandbox |
+| 9 | [Module 13: EDR Evasion](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_13_EDR_EVASION.html) | Direct syscalls, HWBP bypass, AMSI/ETW bypass, unhooking |
+| 10 | [Module 16: C2](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_16_C2.html) | Beacon vs interactive, jitter, encryption, Discord bridge |
+| 11 | [Module 20: Kill Chain](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_20_KILL_CHAIN.html) | MITRE ATT&CK, TTP mapping, purple teaming |
+| 12 | [Module 21: Capstone](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_21_CAPSTONE.html) | GeoDefend scenario — full operation from recon to exfil |
+
+### Track B: Operators Learning Code (12-Module Fast Path)
+
+For people who know pentest tools and the kill chain but want to build their own tooling.
+
+| Order | Module | What You Learn |
+|-------|--------|----------------|
+| 1 | [Module 00: Reader](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_00_READER.html) | Course guide, lab setup, study methodology |
+| 2 | [Module 01: Networking](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_01_NETWORKING.html) | Protocols, ports, packet analysis, tunneling |
+| 3 | [Module 02: Recon](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_02_RECON.html) | Active/passive reconnaissance, OSINT targeting |
+| 4 | [Module 03: PowerShell](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_03_POWERSHELL.html) | Cmdlets, remoting, WMI, AMSI bypass basics, LOLBAS |
+| 5 | [Module 04: Coding Basics](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_04_CODING_BASICS.html) | C, Python, Windows API, compilation, debugging |
+| 6 | [Module 05: Shellcode](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_05_SHELLCODE.html) | Assembly, registers, PIC, PEB walking, encoding |
+| 7 | [Module 07: Registry](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_07_REGISTRY.html) | Hives, persistence, forensics, offline analysis |
+| 8 | [Module 11: Rootkits](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_11_ROOTKITS.html) | Persistence mechanisms, DLL sideloading, API hooking |
+| 9 | [Module 12: Defensive Verify](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_12_DEFENSIVE_VERIFY.html) | Memory scanning, behavioral analysis, EDR testing |
+| 10 | [Module 15: Lateral Movement](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_15_LATERAL.html) | Pass-the-Hash, Kerberoasting, WMI, PSExec, DCOM |
+| 11 | [Module 17: Social Engineering](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_17_SOCIAL_ENGINEERING.html) | Phishing, pretexting, OSINT targeting, payload delivery |
+| 12 | [Module 21: Capstone](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_21_CAPSTONE.html) | Full operation — recon, exploit, persist, exfil |
+
+### 🎯 Mentor Priority: Social Engineering
+
+Your mentor's words: **"Real attacks are carried remotely. Physical access is niche. The inbox is the new building perimeter."**
+
+Social engineering is the highest-ROI skill for independent operators. It requires no zero-days, no expensive tools, and no physical access. It requires understanding human psychology, building credible pretext, and delivering payloads through trust.
+
+**Start here for social engineering:**
+- [Module 17: Social Engineering](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_17_SOCIAL_ENGINEERING.html) — The full course on phishing, pretexting, OSINT targeting, and payload delivery
+- [Module 02: Recon](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_02_RECON.html) — OSINT for building target profiles
+- [Module 16: C2](https://rainfantry.github.io/22nd-survey-division/modules/MODULE_16_C2.html) — Payload delivery and command infrastructure
+
+---
+
+## 22 MODULES — FULL CURRICULUM
 |------|-------|-------------|
 | 1-2 | Socket programming + reverse shells | Working C reverse shell (Windows + Linux) |
 | 3-4 | OpenSSH persistence + VNC | .42 with SSH + VNC, documented |
