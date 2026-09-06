@@ -4,6 +4,12 @@
 
 ---
 
+https://buymeacoffee.com/rainfantry
+
+consider even $1 if ur taking this i dont have a job im struggling to find one, if i keep getting people forking or taking this I’m going to private all my work. im literally losing money/time for all and not even a thank you.
+
+if i get any more forks or whatever, and not even a thank u or $1 when I have nothing im sick of IT. i really wanted to help but im afraid I’ll take this whole portfolio down so the next person can have you to thank. all i ask is for appreciation if $1 is too much for u to take all my work
+
 ## WHAT THIS IS
 
 22nd Survey Division is an Australian offensive security training platform built from **live research** — not sanitized tutorial content. 22 core modules + 3 bonus modules covering Windows internals, malware development, rootkits, C2 frameworks, Android RATs, social engineering, and malware analysis. Every technique taught from first principles with real tools tested against live AV engines.
